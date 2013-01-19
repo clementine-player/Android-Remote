@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="30dp"
+    android:paddingTop="30dp" 
+    android:background="@drawable/background" >
+
+    <ImageView
+        android:id="@+id/imgClementineIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="0dip"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.58"
+        android:contentDescription="@string/connect_desc_icon"
+        android:src="@drawable/icon_large" />
+
+    <LinearLayout
+        style="@style/WhiteBackground"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:orientation="vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp" >
+
+        <EditText
+            android:id="@+id/etIp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/edittext_bg"
+            android:ems="10"
+            android:gravity="center_vertical|center_horizontal"
+            android:inputType="textUri|textNoSuggestions"
+            android:maxLength="20" />
+
+        <Button
+            android:id="@+id/btnConnect"
+            style="@style/GreenButton.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/connectdialog_connect" />
+
+        <CheckBox
+            android:id="@+id/cbAutoconnect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:checked="false"
+            android:text="@string/connectdialog_autoconnect"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:button="@drawable/checkbox"
+            android:textStyle="italic" />
+
+    </LinearLayout>
+
+</LinearLayout>

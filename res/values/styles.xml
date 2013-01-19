@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="GreenButton.Button" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/orange_button</item>
+    </style>
+    <style name="WhiteBackground" >
+        <item name="android:background">@drawable/white_background</item>
+    </style>
+    <style name="ImgCoverWhiteBorder" >
+        <item name="android:background">@drawable/img_cover_bg</item>
+    </style>
+    <style name="PreferencesTheme" parent="@android:style/Theme.Light.NoTitleBar">
+        <!-- <item name="android:windowBackground">@drawable/background</item> -->
+    </style>
+</resources>

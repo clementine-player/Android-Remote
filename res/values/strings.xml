@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Clementine Remote</string>
+    <string name="connectdialog_connect">Connect</string>
+    <string name="connectdialog_autoconnect">Auto-Connect</string>
+    <string name="connectdialog_clementine_found">Found Clementine!</string>
+    <string name="connectdialog_connecting">Connecting to Clementine</string>
+    <string name="connectdialog_connected">Connected</string>
+    <string name="connectdialog_error">Could not reach host</string>
+    <string name="menu_disconnect">Disconnect</string>
+    <string name="player_nosong">No Song playing right now</string>
+    <string name="player_disconnected">Disconnected</string>
+    <string name="menu_shuffle">Shuffle</string>
+    <string name="menu_settings">Settings</string>
+    <string name="pref_volume_title">Use Volume Keys</string>
+    <string name="pref_volume_summary">Use volume keys to control the volume of clementine.</string>
+    <string name="pref_cat_behavior">Behavior</string>
+    <string name="pref_cat_info">Information</string>
+    <string name="pref_version_summary">Click to visit project website</string>
+    <string name="app_versionName">Version 0.1</string>
+    <string name="pref_license_title">License</string>
+    <string name="pref_license_summary">GNU GPLv3</string>
+    <string name="pref_about_title">About</string>
+    <string name="pref_about_summary">People working on this project</string>
+    <string name="dialog_about_header">About</string>
+    <string name="dialog_about_authors">Authors</string>
+    <string name="dialog_about_supporters">Supporters</string>
+    <string name="close">Close</string>
+    <string name="dialog_about_authors_people">Andreas M.</string>
+    <string name="dialog_about_authors_supporters_people">David S. (Clementine Dev)\nJohn M. (Clementine Dev) \n\nThank you very much!</string>
+    <string name="dialog_license_top"> This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY</string>
+    <string name="pref_clementine_title">Clementine</string>
+    <string name="pref_clementine_summary">Visit Clementine website</string>
+    <string name="pref_port_title">Port</string>
+    <string name="pref_port_summary">Current Port:</string>
+    <string name="pref_port_default">5500</string>
+    <string name="pref_port_error">Illegal Port!</string>
+</resources>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory 
+        android:title="@string/pref_cat_behavior">
+	    <CheckBoxPreference 
+	        android:key="pref_volumekey"
+	        android:title="@string/pref_volume_title"
+	        android:summary="@string/pref_volume_summary"
+	        android:defaultValue="true"/>
+	    <CheckBoxPreference
+	        android:key="pref_autoconnect"
+	        android:title="@string/connectdialog_autoconnect"
+	        android:defaultValue="false" />
+	    <EditTextPreference 
+	        android:key="pref_port"
+	        android:title="@string/pref_port_title"
+	        android:summary="@string/pref_port_summary"
+	        android:dialogTitle="@string/pref_port_title"
+	        android:inputType="numberDecimal"
+	        android:defaultValue="@string/pref_port_default"/>
+    </PreferenceCategory> 
+    <PreferenceCategory 
+        android:title="@string/pref_cat_info">
+        <Preference 
+            android:title="@string/app_versionName"
+            android:summary="@string/pref_version_summary">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="https://code.google.com/p/clementine-remote-android"/>
+        </Preference>
+        <Preference 
+            android:title="@string/pref_clementine_title"
+            android:summary="@string/pref_clementine_summary">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="http://www.clementine-player.org/"/>
+        </Preference>
+        <Preference
+            android:key="pref_key_license"
+            android:title="@string/pref_license_title"
+            android:summary="@string/pref_license_summary" />
+        <Preference 
+            android:key="pref_key_about"
+            android:title="@string/pref_about_title"
+            android:summary="@string/pref_about_summary"/> 
+    </PreferenceCategory>  
+</PreferenceScreen>
