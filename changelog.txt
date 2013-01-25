@@ -6,6 +6,7 @@ Version 0.2:
     - Added Notifications
   Bugfix:
     - Ip was eventually overlayed by the keyboard.
+    - ActionBar is now shown on Android 3.0 and above
 
 Version 0.1:
   - Initial release

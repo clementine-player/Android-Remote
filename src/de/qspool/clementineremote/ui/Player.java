@@ -192,8 +192,6 @@ public class Player extends Activity {
 	    stackBuilder.addNextIntent(resultIntent);
 	    PendingIntent resultPendingintent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 	    mNotifyBuilder.setContentIntent(resultPendingintent);
-	    
-	    setResult(20);
 	}
 	
 	/**
