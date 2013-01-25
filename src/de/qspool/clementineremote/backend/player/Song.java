@@ -32,7 +32,8 @@ public class Song {
 	private String artist;
 	private String album;
 	private String albumartist;
-	private String length;
+	private String prettyLength;
+	private int length;
 	private String genre;
 	private String year;
 	private int track;
@@ -76,10 +77,16 @@ public class Song {
 	public void setAlbumartist(String albumartist) {
 		this.albumartist = albumartist;
 	}
-	public String getLength() {
+	public String getPrettyLength() {
+		return prettyLength;
+	}
+	public void setPrettyLength(String prettyLength) {
+		this.prettyLength = prettyLength;
+	}
+	public int getLength() {
 		return length;
 	}
-	public void setLength(String length) {
+	public void setLength(int length) {
 		this.length = length;
 	}
 	public String getGenre() {

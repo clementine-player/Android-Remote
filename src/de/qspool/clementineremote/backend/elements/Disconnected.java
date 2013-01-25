@@ -18,8 +18,16 @@
 package de.qspool.clementineremote.backend.elements;
 
 public class Disconnected extends ClementineElement {
+	public static enum DisconnectReason {CLIENT_CLOSE, SERVER_CLOSE, WRONG_PROTO, WRONG_AUTH_CODE}; 
 
-	public Disconnected() {
+	private DisconnectReason mReason;
+	
+	public Disconnected(DisconnectReason reason) {
 		super();
+		mReason = reason;
+	}
+
+	public DisconnectReason getReason() {
+		return mReason;
 	}
 }

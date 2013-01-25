@@ -26,9 +26,12 @@ import java.net.SocketAddress;
 import java.net.UnknownHostException;
 
 import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.backend.elements.ClementineElement;
 import de.qspool.clementineremote.backend.elements.Disconnected;
+import de.qspool.clementineremote.backend.elements.Disconnected.DisconnectReason;
 import de.qspool.clementineremote.backend.elements.InvalidData;
 import de.qspool.clementineremote.backend.elements.NoConnection;
+import de.qspool.clementineremote.backend.elements.OldProtoVersion;
 import de.qspool.clementineremote.backend.pb.ClementinePbCreator;
 import de.qspool.clementineremote.backend.pb.ClementinePbParser;
 import de.qspool.clementineremote.backend.requests.CheckForData;
@@ -150,7 +153,14 @@ public class ClementineConnection extends Thread {
 	 */
 	private void processProtocolBuffer(byte[] bs) {
 		// Send the parsed Message to the ui thread
-		sendUiMessage(mClementinePbParser.parse(bs));
+		ClementineElement clementineElement = mClementinePbParser.parse(bs);
+		sendUiMessage(clementineElement);
+		
+		// Close the connection if we have an old proto verion
+		if (clementineElement instanceof OldProtoVersion) {
+			closeConnection();
+			sendUiMessage(new Disconnected(DisconnectReason.WRONG_PROTO));
+		}
 	}
 	
 	/**
@@ -206,7 +216,7 @@ public class ClementineConnection extends Thread {
 		}
 		
 		// Send the result to the ui thread
-		sendUiMessage(new Disconnected());
+		sendUiMessage(new Disconnected(DisconnectReason.CLIENT_CLOSE));
 	}
 	
 	/**

@@ -2,16 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     android:orientation="vertical"
     android:paddingBottom="30dp"
-    android:paddingTop="30dp" 
-    android:background="@drawable/background" >
+    android:paddingTop="30dp" >
 
     <ImageView
         android:id="@+id/imgClementineIcon"
         android:layout_width="wrap_content"
         android:layout_height="0dip"
         android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_weight="0.58"
         android:contentDescription="@string/connect_desc_icon"
         android:src="@drawable/icon_large" />
@@ -30,31 +32,54 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="4dp"
             android:background="@drawable/edittext_bg"
             android:ems="10"
             android:gravity="center_vertical|center_horizontal"
+            android:hint="@string/connectdialog_ip_hint"
             android:inputType="textUri|textNoSuggestions"
             android:maxLength="20" />
 
-        <Button
-            android:id="@+id/btnConnect"
-            style="@style/GreenButton.Button"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/connectdialog_connect" />
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_weight="1" >
+
+            <Button
+                android:id="@+id/btnConnect"
+                style="@style/OrangeButton.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:minHeight="0dp"
+                android:text="@string/connectdialog_connect" />
+
+            <ImageButton
+                android:id="@+id/btnSettings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:background="@android:color/transparent"
+                android:src="@android:drawable/ic_menu_preferences" />
+
+        </RelativeLayout>
 
         <CheckBox
             android:id="@+id/cbAutoconnect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_marginTop="4dp"
+            android:button="@drawable/checkbox"
             android:checked="false"
             android:text="@string/connectdialog_autoconnect"
             android:textColor="@android:color/black"
             android:textSize="14sp"
-            android:button="@drawable/checkbox"
             android:textStyle="italic" />
 
     </LinearLayout>

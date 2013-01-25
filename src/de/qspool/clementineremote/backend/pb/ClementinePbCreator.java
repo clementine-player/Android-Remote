@@ -50,6 +50,7 @@ public class ClementinePbCreator {
 		// on the request
 		if (r instanceof RequestConnect) {
 			msg.setType(MsgType.CONNECT);
+			msg.setRequestConnect(buildConnectMessage(msg, (RequestConnect)r));
 		} else if (r instanceof RequestDisconnect) {
 			msg.setType(MsgType.DISCONNECT);
 		} else if (r instanceof RequestControl) {
@@ -91,5 +92,19 @@ public class ClementinePbCreator {
 		RequestSetVolume.Builder requestSetVolume = msg.getRequestSetVolumeBuilder();
 		requestSetVolume.setVolume(r.getVolume());
 		return requestSetVolume;
+	}
+	
+	/**
+	 * Create the connect specific message
+	 * @param msg The Message itself
+	 * @param r The Request
+	 * @return the connect message part
+	 */
+	private ClementineRemoteProtocolBuffer.RequestConnect.Builder
+			buildConnectMessage(Message.Builder msg, RequestConnect r) {
+		ClementineRemoteProtocolBuffer.RequestConnect.Builder 
+			requestConnect = msg.getRequestConnectBuilder();
+		requestConnect.setAuthCode(r.getAuthCode());
+		return requestConnect;
 	}
 }

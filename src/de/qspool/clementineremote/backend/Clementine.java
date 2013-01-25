@@ -32,6 +32,17 @@ public class Clementine {
 	private boolean isConnected;
 	private int volume;
 	private State state;
+	private int songPosition;
+
+	public int getSongPosition() {
+		return songPosition;
+	}
+
+
+	public void setSongPosition(int songPosition) {
+		this.songPosition = songPosition;
+	}
+
 
 	public Clementine() {
 		Version = "";

@@ -21,11 +21,10 @@ import java.lang.ref.WeakReference;
 
 import android.os.Message;
 import android.os.Handler;
-import android.widget.Toast;
-import de.qspool.clementineremote.ClementineRemoteControlActivity;
-import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.elements.Connected;
+import de.qspool.clementineremote.backend.elements.Disconnected;
 import de.qspool.clementineremote.backend.elements.NoConnection;
+import de.qspool.clementineremote.backend.elements.OldProtoVersion;
 
 /**
  * This class is used to handle the messages sent from the
@@ -43,11 +42,13 @@ public class ConnectDialogHandler extends Handler {
 		ConnectDialog cd = mDialog.get();
 		cd.mPdConnect.dismiss();
 		if (msg.obj instanceof Connected) {
-			Toast.makeText(cd, R.string.connectdialog_connected, Toast.LENGTH_SHORT).show();
-			cd.setResult(ClementineRemoteControlActivity.RESULT_CONNECT);
-			cd.finish();
+			cd.connected();
 		} else if (msg.obj instanceof NoConnection) {
-			Toast.makeText(cd, R.string.connectdialog_error, Toast.LENGTH_SHORT).show();
+			cd.noConnection();
+		} else if (msg.obj instanceof OldProtoVersion) {
+			cd.oldProtoVersion();
+		} else if (msg.obj instanceof Disconnected) {
+			cd.disconnected((Disconnected) msg.obj);
 		}
 	}
 }

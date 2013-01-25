@@ -15,30 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package de.qspool.clementineremote.backend.requests;
+package de.qspool.clementineremote.backend.elements;
 
-public class RequestConnect extends RequestToThread {
+public class OldProtoVersion extends ClementineElement {
 
-	private String mIp;
-	private int mPort;
-	private int mAuthCode;
-	
-	public RequestConnect(String ip, int port, int authCode) {
+	public OldProtoVersion() {
 		super();
-		mIp = ip;
-		mPort = port;
-		mAuthCode = authCode;
-	}
-
-	public String getIp() {
-		return mIp;
-	}
-
-	public int getPort() {
-		return mPort;
-	}
-
-	public int getAuthCode() {
-		return mAuthCode;
 	}
 }

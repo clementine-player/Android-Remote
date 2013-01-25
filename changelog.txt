@@ -1,2 +1,11 @@
+Version 0.2:
+  Features:
+    - Added authentication code support
+    - Current track position is now displayed
+    - Improved disconnect handling
+    - Added Notifications
+  Bugfix:
+    - Ip was eventually overlayed by the keyboard.
+
 Version 0.1:
   - Initial release

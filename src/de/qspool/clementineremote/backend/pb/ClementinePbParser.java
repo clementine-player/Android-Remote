@@ -22,13 +22,19 @@ import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.elements.ClementineElement;
 import de.qspool.clementineremote.backend.elements.Connected;
+import de.qspool.clementineremote.backend.elements.Disconnected;
+import de.qspool.clementineremote.backend.elements.Disconnected.DisconnectReason;
 import de.qspool.clementineremote.backend.elements.InvalidData;
+import de.qspool.clementineremote.backend.elements.OldProtoVersion;
 import de.qspool.clementineremote.backend.elements.Reload;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.EngineState;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ReasonDisconnect;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseClementineInfo;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseCurrentMetadata;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseDisconnect;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseUpdateTrackPosition;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata;
 import de.qspool.clementineremote.backend.player.Song;
 
@@ -48,7 +54,13 @@ public class ClementinePbParser {
 		
 		try {
 			msg = Message.parseFrom(bs);
-			parsedElement = parseMsg(msg);
+			
+			// First check the proto version
+			if (msg.getVersion() < Message.getDefaultInstance().getVersion()) {
+				parsedElement = new OldProtoVersion();
+			} else {
+				parsedElement = parseMsg(msg);
+			}
 		} catch (InvalidProtocolBufferException e) {
 			msg = null;
 			parsedElement = new InvalidData();
@@ -72,6 +84,9 @@ public class ClementinePbParser {
 			Song s = parseSong(msg.getResponseCurrentMetadata());
 			App.mClementine.setCurrentSong(s);
 			parsedElement = new Reload(); 
+		} else if (msg.getType().equals(MsgType.UPDATE_TRACK_POSITION)) {
+			parseUpdateTrackPosition(msg.getResponseUpdateTrackPosition());
+			parsedElement = new Reload(); 
 		} else if (msg.getType().equals(MsgType.KEEP_ALIVE)) {
 			App.mClementineConnection.setLastKeepAlive(System.currentTimeMillis());
 		} else if (msg.getType().equals(MsgType.SET_VOLUME)) {
@@ -85,11 +100,13 @@ public class ClementinePbParser {
 		} else if (msg.getType().equals(MsgType.STOP)) {
 			App.mClementine.setState(Clementine.State.STOP);
 			parsedElement = new Reload(); 
+		} else if (msg.getType().equals(MsgType.DISCONNECT)) {
+			parsedElement = parseDisconnect(msg.getResponseDisconnect());
 		}
 		
 		return parsedElement;
 	}
-	
+
 	/**
 	 * Parse a song message
 	 * @param responseCurrentMetadata The song message
@@ -114,7 +131,8 @@ public class ClementinePbParser {
 		song.setTitle (songMetadata.getTitle());
 		song.setAlbum (songMetadata.getAlbum());
 		song.setAlbumartist(songMetadata.getAlbumartist());
-		song.setLength(songMetadata.getPrettyLength());
+		song.setPrettyLength(songMetadata.getPrettyLength());
+		song.setLength(songMetadata.getLength());
 		song.setGenre (songMetadata.getGenre());
 		song.setYear  (songMetadata.getPrettyYear());
 		song.setTrack (songMetadata.getTrack());
@@ -142,5 +160,35 @@ public class ClementinePbParser {
 										break;
 		default: 						App.mClementine.setState(Clementine.State.STOP);
 		}
+	}
+	
+	/**
+	 * Sets the current position of the track
+	 * @param responseUpdateTrackPosition The message
+	 */
+	private void parseUpdateTrackPosition(ResponseUpdateTrackPosition responseUpdateTrackPosition) {
+		App.mClementine.setSongPosition(responseUpdateTrackPosition.getPosition());
+	}
+	
+	/**
+	 * Parse the Disconnect message
+	 * @param responseDisconnect The response from Clementine
+	 * @return The parsed Element
+	 */
+	private ClementineElement parseDisconnect(
+			ResponseDisconnect responseDisconnect) {
+		Disconnected disconnected = null;
+		
+		switch (responseDisconnect.getReasonDisconnect().getNumber()) {
+		case ReasonDisconnect.Server_Shutdown_VALUE:
+				 disconnected = new Disconnected(DisconnectReason.SERVER_CLOSE);
+			     break;
+		case ReasonDisconnect.Wrong_Auth_Code_VALUE:
+			 disconnected = new Disconnected(DisconnectReason.WRONG_AUTH_CODE);
+		     break;
+		default: disconnected = new Disconnected(DisconnectReason.SERVER_CLOSE);
+				 break;
+		}
+		return disconnected;
 	}
 }

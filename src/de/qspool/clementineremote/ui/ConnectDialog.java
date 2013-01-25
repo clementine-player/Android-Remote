@@ -18,12 +18,17 @@
 package de.qspool.clementineremote.ui;
 
 import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.ClementineRemoteControlActivity;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.Clementine;
+import de.qspool.clementineremote.backend.elements.Disconnected;
+import de.qspool.clementineremote.backend.elements.Disconnected.DisconnectReason;
 import de.qspool.clementineremote.backend.requests.RequestConnect;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -33,25 +38,27 @@ import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.view.View.OnClickListener;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 /**
  * The connect dialog
  */
 public class ConnectDialog extends Activity {
 	private Button mBtnConnect;
+	private ImageButton mBtnSettings;
 	private EditText mEtIp;
 	private CheckBox mCbAutoConnect;
 	ProgressDialog mPdConnect;
 	private SharedPreferences mSharedPref;
     private ConnectDialogHandler mHandler = new ConnectDialogHandler(this);
+    private int mAuthCode = 0;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -69,6 +76,9 @@ public class ConnectDialog extends Activity {
 	    mBtnConnect = (Button) findViewById(R.id.btnConnect);
 	    mBtnConnect.setOnClickListener(oclConnect);
 	    mBtnConnect.requestFocus();
+	    
+	    mBtnSettings = (ImageButton) findViewById(R.id.btnSettings);
+	    mBtnSettings.setOnClickListener(oclSettings);
 	    
 	    // Ip and Autoconnect
 	    mEtIp = (EditText) findViewById(R.id.etIp);
@@ -89,43 +99,30 @@ public class ConnectDialog extends Activity {
 	    mEtIp.setSelection(mEtIp.length());
 	    mCbAutoConnect.setChecked(mSharedPref.getBoolean(App.SP_KEY_AC, false));
 	    
+	    // Get the last auth code
+	    mAuthCode = mSharedPref.getInt(App.SP_LAST_AUTH_CODE, 0);
+	    
 	    // Check if Autoconnect is enabled
 	    if (mCbAutoConnect.isChecked() && extras.getBoolean(App.SP_KEY_AC)) {
 	    	connect();
 	    }
-	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inf = getMenuInflater();
-		inf.inflate(R.menu.connectdialog_menu, menu);
-		return true;
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId())
-		{
-		case R.id.settings:		Intent settingsIntent = new Intent(this, ClementineRemoteSettings.class);
-								startActivity(settingsIntent);
-								break;
-		default: break;
-		}
-		return true;
 	}
 
 	private OnClickListener oclConnect = new OnClickListener() {
 		
 		@Override
 		public void onClick(View v) {
-			// Save the data
-			SharedPreferences.Editor editor = mSharedPref.edit();
-			editor.putBoolean(App.SP_KEY_AC, mCbAutoConnect.isChecked());
-			editor.putString(App.SP_KEY_IP, mEtIp.getText().toString());
-			editor.commit();
-			
 			// And connect
 			connect();
+		}
+	};
+	
+	private OnClickListener oclSettings = new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			Intent settingsIntent = new Intent(ConnectDialog.this, ClementineRemoteSettings.class);
+			startActivity(settingsIntent);
 		}
 	};
 	
@@ -149,12 +146,19 @@ public class ConnectDialog extends Activity {
 	 * Connect to clementine
 	 */
 	private void connect() {
+		// Save the data
+		SharedPreferences.Editor editor = mSharedPref.edit();
+		editor.putBoolean(App.SP_KEY_AC, mCbAutoConnect.isChecked());
+		editor.putString(App.SP_KEY_IP, mEtIp.getText().toString());
+		editor.putInt(App.SP_LAST_AUTH_CODE, mAuthCode);
+		editor.commit();
+		
 		mPdConnect.show();
 		// Get the port to connect to			
 		int port = Integer.valueOf(mSharedPref.getString(App.SP_KEY_PORT, String.valueOf(Clementine.DefaultPort)));
 					
 		// Create a new connect request
-		RequestConnect r = new RequestConnect(mEtIp.getText().toString(), port);
+		RequestConnect r = new RequestConnect(mEtIp.getText().toString(), port, mAuthCode);
 		
 		// Move the request to the message
 		Message msg = Message.obtain();
@@ -162,5 +166,73 @@ public class ConnectDialog extends Activity {
 		
 		// Send the request to the thread
 		App.mClementineConnection.mHandler.sendMessage(msg);
+	}
+	
+	/**
+	 * Show the user the dialog to enter the auth code
+	 */
+	void showAuthCodePromt() {
+		Dialog authCodeDialog = new Dialog(this, R.style.Dialog_Transparent);
+		authCodeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		authCodeDialog.setContentView(R.layout.dialog_auth_code);
+		
+		// Set the Views
+		Button connectButton = (Button) authCodeDialog.findViewById(R.id.btnConnectAuth);
+		final EditText etAuthCode = (EditText) authCodeDialog.findViewById(R.id.etAuthCode);
+		connectButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				try {
+					mAuthCode = Integer.parseInt(etAuthCode.getText().toString());
+	        	    connect();
+				} catch (NumberFormatException e) {
+					Toast.makeText(ConnectDialog.this, R.string.invalid_code, Toast.LENGTH_SHORT).show();
+				}
+			}
+	    });
+		// Show the keyboard directly
+		authCodeDialog.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+		authCodeDialog.show();
+	}
+	
+	/**
+	 * We connected to clementine successfully. Now open other view
+	 */
+	void connected() {
+		Toast.makeText(this, R.string.connectdialog_connected, Toast.LENGTH_SHORT).show();
+		setResult(ClementineRemoteControlActivity.RESULT_CONNECT);
+		finish();
+	}
+	
+	/**
+	 * We couldn't connect to clementine. Inform the user
+	 */
+	void noConnection() {
+		Toast.makeText(this, R.string.connectdialog_error, Toast.LENGTH_SHORT).show();
+	}
+	
+	/**
+	 * We have an old Proto version. User has to update Clementine
+	 */
+	void oldProtoVersion() {
+		AlertDialog.Builder errorDialog = new AlertDialog.Builder(this);
+		errorDialog.setTitle(R.string.error);
+		errorDialog.setMessage(R.string.old_proto);
+		errorDialog.setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
+	           public void onClick(DialogInterface dialog, int id) {
+	               // User clicked OK button
+	           }
+	       });
+		errorDialog.create().show();
+	}
+	
+	/**
+	 * Clementine closed the connection
+	 * @param disconnected The object to work with
+	 */
+	void disconnected(Disconnected disconnected) {
+		if (disconnected.getReason() == DisconnectReason.WRONG_AUTH_CODE) {
+			showAuthCodePromt();
+		}
 	}
 }

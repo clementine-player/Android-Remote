@@ -26,12 +26,19 @@ import de.qspool.clementineremote.backend.requests.RequestControl;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
 import de.qspool.clementineremote.backend.requests.RequestVolume;
 import de.qspool.clementineremote.backend.requests.RequestControl.Request;
+import de.qspool.clementineremote.utils.Utilities;
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -62,13 +69,17 @@ public class Player extends Activity {
 	private SharedPreferences mSharedPref;
 	private PlayerHandler mHandler = new PlayerHandler(this);
 	
+	private NotificationCompat.Builder mNotifyBuilder;
+	private NotificationManager mNotificationManager;
+	private int mNotifyId = 1;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    
-	    // Remove title bar
-	    this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-    	
+	    // Remove title bar and set the view
+	    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
+	    	this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 	    setContentView(R.layout.player);
 	    
 	    // Get the Views
@@ -96,6 +107,9 @@ public class Player extends Activity {
 	    
 	    // Get the shared preferences
 	    mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+	    
+	    // Get the notification manager
+	    setupNotification();
 	    
 	    // Reload the player ui
 	    reloadInfo();
@@ -163,10 +177,30 @@ public class Player extends Activity {
 		return super.onKeyDown(keyCode, event);
 	}
 	
+	private void setupNotification() {
+		mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+	    mNotifyBuilder = new NotificationCompat.Builder(this);
+	    mNotifyBuilder.setSmallIcon(R.drawable.ic_launcher);
+	    mNotifyBuilder.setOngoing(true);
+	    
+	    // Set the result intent
+	    Intent resultIntent = new Intent(this, Player.class);
+	    resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+	    // Create a TaskStack, so the app navigates correctly backwards
+	    TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+	    stackBuilder.addParentStack(Player.class);
+	    stackBuilder.addNextIntent(resultIntent);
+	    PendingIntent resultPendingintent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+	    mNotifyBuilder.setContentIntent(resultPendingintent);
+	    
+	    setResult(20);
+	}
+	
 	/**
 	 * Disconnect was finished, now finish this activity
 	 */
 	void disconnect() {
+		mNotificationManager.cancel(mNotifyId);
 		Toast.makeText(this, R.string.player_disconnected, Toast.LENGTH_SHORT).show();
 		setResult(ClementineRemoteControlActivity.RESULT_DISCONNECT);
 		finish();
@@ -218,7 +252,7 @@ public class Player extends Activity {
 	    	
 	    	mTvGenre. setText(currentSong.getGenre());
 	    	mTvYear.  setText(currentSong.getYear());
-	    	mTvLength.setText(currentSong.getLength());
+	    	mTvLength.setText(buildTrackPosition());
 	    	
 	    	// Check if a coverart is valid
 	    	if (currentSong.getArt() == null) {
@@ -227,6 +261,24 @@ public class Player extends Activity {
 	    		mImgArt.setImageBitmap(currentSong.getArt());
 	    	}
     	}
+    	
+    	// Now update the notification
+    	mNotifyBuilder.setLargeIcon(mImgArt.getDrawingCache());
+    	mNotifyBuilder.setContentTitle(mTvArtist.getText().toString());
+    	mNotifyBuilder.setContentText(mTvTitle.getText().toString() + 
+    								  " / " + 
+    								  mTvAlbum.getText().toString());
+    	mNotificationManager.notify(mNotifyId, mNotifyBuilder.build());
+    	
+    }
+    
+    private String buildTrackPosition() {
+    	StringBuilder sb = new StringBuilder();
+    	sb.append(Utilities.PrettyTime(App.mClementine.getSongPosition()));
+    	sb.append("/");
+    	sb.append(Utilities.PrettyTime(App.mClementine.getCurrentSong().getLength()));
+    	
+    	return sb.toString();
     }
 	
 	private OnClickListener oclControl = new OnClickListener() {

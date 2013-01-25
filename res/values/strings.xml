@@ -7,6 +7,7 @@
     <string name="connectdialog_connecting">Connecting to Clementine</string>
     <string name="connectdialog_connected">Connected</string>
     <string name="connectdialog_error">Could not reach host</string>
+    <string name="connectdialog_ip_hint">Enter Ip address</string>
     <string name="menu_disconnect">Disconnect</string>
     <string name="player_nosong">No Song playing right now</string>
     <string name="player_disconnected">Disconnected</string>
@@ -35,4 +36,8 @@
     <string name="pref_port_summary">Current Port:</string>
     <string name="pref_port_default">5500</string>
     <string name="pref_port_error">Illegal Port!</string>
+    <string name="error">Error</string>
+    <string name="old_proto">Incompatible versions! Please update Clementine!</string>
+    <string name="input_auth_code">Authentication Code</string>
+    <string name="invalid_code">Invalid Code</string>
 </resources>

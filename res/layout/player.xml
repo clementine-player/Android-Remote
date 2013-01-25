@@ -10,10 +10,35 @@
     android:paddingRight="5dp"
     android:paddingTop="5dp" >
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="15dp"
+        android:layout_weight="1" >
+
+        <ImageView android:id="@+id/imgArt" 
+            style="@style/ImgCoverWhiteBorder" 
+            android:layout_width="match_parent" 
+            android:layout_height="match_parent" 
+            android:contentDescription="@string/player_desc_img" 
+            android:paddingBottom="5dp" 
+            android:paddingLeft="5dp" 
+            android:paddingRight="5dp" 
+            android:paddingTop="5dp" 
+            android:scaleType="centerInside"
+            android:src="@drawable/icon_large" />
+
+    </FrameLayout>
+    
     <LinearLayout
         style="@style/WhiteBackground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
@@ -86,7 +111,7 @@
 
             <ImageButton
                 android:id="@+id/btnPrev"
-                style="@style/GreenButton.Button"
+                style="@style/OrangeButton.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -96,18 +121,19 @@
 
             <ImageButton
                 android:id="@+id/btnPlaypause"
-                style="@style/GreenButton.Button"
+                style="@style/OrangeButton.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="17dp"
                 android:layout_marginRight="17dp"
                 android:layout_weight="1"
+                android:src="@drawable/ic_media_play"
                 android:contentDescription="@string/player_desc_buttons" />
 
             <ImageButton
                 android:id="@+id/btnNext"
-                style="@style/GreenButton.Button"
+                style="@style/OrangeButton.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -118,26 +144,6 @@
         </LinearLayout>
     </LinearLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="15dp" >
-
-        <ImageView
-            android:id="@+id/imgArt"
-            style="@style/ImgCoverWhiteBorder"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/player_desc_img"
-            android:paddingBottom="5dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:paddingTop="5dp"
-            android:src="@drawable/icon_large" />
-
-    </FrameLayout>
+    
 
 </LinearLayout>

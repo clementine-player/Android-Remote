@@ -16,6 +16,7 @@
         <activity
             android:name=".ClementineRemoteControlActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:launchMode="singleTop"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,6 +28,7 @@
                   android:windowSoftInputMode="adjustPan"
                   android:screenOrientation="portrait"></activity>
         <activity android:name=".ui.Player"
+                  android:launchMode="singleTop"
                   android:screenOrientation="portrait"></activity>
         <activity android:name=".ui.ClementineRemoteSettings"
                   android:screenOrientation="portrait"

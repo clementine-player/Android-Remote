@@ -47,7 +47,7 @@ public class ClementineRemoteControlActivity extends Activity {
 	        App.mClementineConnection.start();
         }
         
-        // First start the connectDialog with autoconnect
+     // First start the connectDialog with autoconnect
         if (App.mClementine.isConnected()) {
         	startPlayerDialog();
         } else {
@@ -95,6 +95,7 @@ public class ClementineRemoteControlActivity extends Activity {
      */
     private void startPlayerDialog() {
     	Intent playerDialog = new Intent(this, Player.class);
+    	playerDialog.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
     	startActivityForResult(playerDialog, ID_PLAYER_DIALOG);
     }
 }

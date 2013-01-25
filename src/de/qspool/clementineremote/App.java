@@ -31,6 +31,7 @@ public class App {
 	public final static String SP_KEY_AC = "pref_autoconnect";
 	public final static String SP_KEY_USE_VOLUMEKEYS = "pref_volumekey";
 	public final static String SP_KEY_PORT = "pref_port";
+	public final static String SP_LAST_AUTH_CODE = "last_auth_code";
 	
 	// Other statics
 	public final static int PROTOCOL_BUFFER_VERSION = 1;
