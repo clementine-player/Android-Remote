@@ -32,6 +32,8 @@ public class ClementineRemoteControlActivity extends Activity {
 	public final static int RESULT_CONNECT = 1;
 	public final static int RESULT_DISCONNECT = 2;
 	
+	Intent mServiceIntent;
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,13 +43,9 @@ public class ClementineRemoteControlActivity extends Activity {
         App.mApp = getApplication();
         
         // Create the main background objects
-        if (App.mClementine == null) {
-	        App.mClementine = new Clementine();
-	        Intent service = new Intent(this, ClementineService.class);
-	        startService(service);
-        }
+        checkBackend();
         
-     // First start the connectDialog with autoconnect
+        // First start the connectDialog with autoconnect
         if (App.mClementine.isConnected()) {
         	startPlayerDialog();
         } else {
@@ -56,10 +54,16 @@ public class ClementineRemoteControlActivity extends Activity {
     }
     
     @Override
+    public void onResume() {
+    	super.onResume();
+    	checkBackend();
+    }
+    
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     	// Check what acivity has finished. Depending on that, another activity 
     	// is called or the app closes
-    	if (requestCode == ID_CONNECT_DIALOG) {
+     	if (requestCode == ID_CONNECT_DIALOG) {
     		if (resultCode == Activity.RESULT_CANCELED) {
         		finish();
         	}
@@ -80,11 +84,21 @@ public class ClementineRemoteControlActivity extends Activity {
     	}
     }
     
+    private void checkBackend() {
+    	if (App.mClementine == null) {
+	        App.mClementine = new Clementine();
+        }
+        if (App.mClementineConnection == null) {
+	    	mServiceIntent = new Intent(this, ClementineService.class);
+	        startService(mServiceIntent);
+        }
+    }
+    
     /**
      * Open the connect dialog
      * @param useAutoConnect true if the application should connect directly to clementine, false if not
      */
-    private void startConnectDialog(boolean useAutoConnect) {
+    private void startConnectDialog(boolean useAutoConnect) {        
     	Intent connectDialog = new Intent(this, ConnectDialog.class);
     	connectDialog.putExtra(App.SP_KEY_AC, useAutoConnect);
         startActivityForResult(connectDialog, ID_CONNECT_DIALOG);

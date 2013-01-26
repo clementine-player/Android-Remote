@@ -102,13 +102,6 @@ public class Player extends Activity {
 	    mBtnPrev.setOnClickListener(oclControl);
 	    mBtnPlayPause.setOnClickListener(oclControl);
 	    
-	    // Check if we still have a connection.
-	    // Otherwise finish
-	    if (App.mClementineConnection == null) {
-	    	disconnect();
-	    	return;
-	    }
-	    
 	    // Set the handler
 	    mHandler = new PlayerHandler(this);
 	    App.mClementineConnection.setUiHandler(mHandler);
