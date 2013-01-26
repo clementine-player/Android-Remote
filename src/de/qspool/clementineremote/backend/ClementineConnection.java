@@ -159,6 +159,7 @@ public class ClementineConnection extends Thread {
 		// Close the connection if we have an old proto verion
 		if (clementineElement instanceof OldProtoVersion) {
 			closeConnection();
+			App.mClementine.setConnected(false);
 			sendUiMessage(new Disconnected(DisconnectReason.WRONG_PROTO));
 		}
 	}

@@ -27,7 +27,6 @@ import de.qspool.clementineremote.backend.requests.RequestConnect;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -45,6 +44,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -172,7 +172,7 @@ public class ConnectDialog extends Activity {
 	 * Show the user the dialog to enter the auth code
 	 */
 	void showAuthCodePromt() {
-		Dialog authCodeDialog = new Dialog(this, R.style.Dialog_Transparent);
+		final Dialog authCodeDialog = new Dialog(this, R.style.Dialog_Transparent);
 		authCodeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		authCodeDialog.setContentView(R.layout.dialog_auth_code);
 		
@@ -184,6 +184,7 @@ public class ConnectDialog extends Activity {
 			public void onClick(View v) {
 				try {
 					mAuthCode = Integer.parseInt(etAuthCode.getText().toString());
+					authCodeDialog.cancel();
 	        	    connect();
 				} catch (NumberFormatException e) {
 					Toast.makeText(ConnectDialog.this, R.string.invalid_code, Toast.LENGTH_SHORT).show();
@@ -215,15 +216,25 @@ public class ConnectDialog extends Activity {
 	 * We have an old Proto version. User has to update Clementine
 	 */
 	void oldProtoVersion() {
-		AlertDialog.Builder errorDialog = new AlertDialog.Builder(this);
-		errorDialog.setTitle(R.string.error);
-		errorDialog.setMessage(R.string.old_proto);
-		errorDialog.setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
-	           public void onClick(DialogInterface dialog, int id) {
-	               // User clicked OK button
-	           }
-	       });
-		errorDialog.create().show();
+		final Dialog errorDialog = new Dialog(this, R.style.Dialog_Transparent);
+		errorDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		errorDialog.setContentView(R.layout.dialog_message);
+		
+		// Set the ViewsButton connectButton = (Button) authCodeDialog.findViewById(R.id.btnConnectAuth);
+		final TextView title = (TextView) errorDialog.findViewById(R.id.tvTitle);
+		final TextView message = (TextView) errorDialog.findViewById(R.id.tvMessage);
+		title.setText(R.string.error_versions);
+		message.setText(R.string.old_proto);
+		
+		Button connectButton = (Button) errorDialog.findViewById(R.id.btnClose);
+				connectButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				errorDialog.cancel();
+			}
+	    });
+		
+		errorDialog.show();
 	}
 	
 	/**

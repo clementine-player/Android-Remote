@@ -67,7 +67,7 @@ public class Player extends Activity {
 	private ImageView mImgArt;
 	
 	private SharedPreferences mSharedPref;
-	private PlayerHandler mHandler = new PlayerHandler(this);
+	private PlayerHandler mHandler;
 	
 	private NotificationCompat.Builder mNotifyBuilder;
 	private NotificationManager mNotificationManager;
@@ -102,7 +102,15 @@ public class Player extends Activity {
 	    mBtnPrev.setOnClickListener(oclControl);
 	    mBtnPlayPause.setOnClickListener(oclControl);
 	    
+	    // Check if we still have a connection.
+	    // Otherwise finish
+	    if (App.mClementineConnection == null) {
+	    	disconnect();
+	    	return;
+	    }
+	    
 	    // Set the handler
+	    mHandler = new PlayerHandler(this);
 	    App.mClementineConnection.setUiHandler(mHandler);
 	    
 	    // Get the shared preferences

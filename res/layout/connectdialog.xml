@@ -11,7 +11,6 @@
         android:id="@+id/imgClementineIcon"
         android:layout_width="wrap_content"
         android:layout_height="0dip"
-        android:layout_gravity="center_horizontal"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_weight="0.58"
@@ -32,13 +31,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="6dp"
             android:background="@drawable/edittext_bg"
             android:ems="10"
             android:gravity="center_vertical|center_horizontal"
             android:hint="@string/connectdialog_ip_hint"
             android:inputType="textUri|textNoSuggestions"
-            android:maxLength="20" />
+            android:maxLength="20"
+            android:textColor="@android:color/black" />
 
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -61,11 +61,13 @@
                 android:id="@+id/btnSettings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="false"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center_vertical"
                 android:background="@android:color/transparent"
-                android:src="@android:drawable/ic_menu_preferences" />
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_menu_preferences" />
 
         </RelativeLayout>
 
@@ -74,7 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="1dp"
             android:button="@drawable/checkbox"
             android:checked="false"
             android:text="@string/connectdialog_autoconnect"

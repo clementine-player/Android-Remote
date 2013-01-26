@@ -36,8 +36,8 @@
     <string name="pref_port_summary">Current Port:</string>
     <string name="pref_port_default">5500</string>
     <string name="pref_port_error">Illegal Port!</string>
-    <string name="error">Error</string>
-    <string name="old_proto">Incompatible versions! Please update Clementine!</string>
+    <string name="error_versions">Incompatible version</string>
+    <string name="old_proto">Please update Clementine!</string>
     <string name="input_auth_code">Authentication Code</string>
     <string name="invalid_code">Invalid Code</string>
 </resources>

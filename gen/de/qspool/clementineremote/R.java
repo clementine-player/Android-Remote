@@ -22,45 +22,46 @@ public final class R {
         public static final int ic_media_pause=0x7f020008;
         public static final int ic_media_play=0x7f020009;
         public static final int ic_media_previous=0x7f02000a;
-        public static final int icon_grey=0x7f02000b;
+        public static final int ic_menu_preferences=0x7f02000b;
         public static final int icon_large=0x7f02000c;
-        public static final int icon_large_grey=0x7f02000d;
-        public static final int img_cover_bg=0x7f02000e;
-        public static final int orange_button=0x7f02000f;
-        public static final int white_background=0x7f020010;
-        public static final int white_background_border=0x7f020011;
+        public static final int img_cover_bg=0x7f02000d;
+        public static final int orange_button=0x7f02000e;
+        public static final int white_background=0x7f02000f;
+        public static final int white_background_border=0x7f020010;
     }
     public static final class id {
         public static final int ScrollView01=0x7f080007;
         public static final int TextView02=0x7f080005;
         public static final int View01=0x7f080006;
+        public static final int btnClose=0x7f080014;
         public static final int btnCloseAbout=0x7f08000c;
         public static final int btnCloseLicense=0x7f080011;
         public static final int btnConnect=0x7f080002;
         public static final int btnConnectAuth=0x7f08000f;
-        public static final int btnNext=0x7f08001b;
-        public static final int btnPlaypause=0x7f08001a;
-        public static final int btnPrev=0x7f080019;
+        public static final int btnNext=0x7f08001d;
+        public static final int btnPlaypause=0x7f08001c;
+        public static final int btnPrev=0x7f08001b;
         public static final int btnSettings=0x7f080003;
         public static final int cbAutoconnect=0x7f080004;
-        public static final int disconnect=0x7f08001e;
+        public static final int disconnect=0x7f080020;
         public static final int etAuthCode=0x7f08000e;
         public static final int etIp=0x7f080001;
-        public static final int imgArt=0x7f080012;
+        public static final int imgArt=0x7f080015;
         public static final int imgClementineIcon=0x7f080000;
         public static final int scrollView1=0x7f080010;
-        public static final int settings=0x7f08001c;
-        public static final int shuffle=0x7f08001d;
+        public static final int settings=0x7f08001e;
+        public static final int shuffle=0x7f08001f;
         public static final int textView1=0x7f080008;
         public static final int textView2=0x7f08000a;
         public static final int textView3=0x7f080009;
         public static final int textView4=0x7f08000b;
-        public static final int tvAlbum=0x7f080015;
-        public static final int tvArtist=0x7f080013;
-        public static final int tvGenre=0x7f080016;
-        public static final int tvLength=0x7f080018;
-        public static final int tvTitle=0x7f080014;
-        public static final int tvYear=0x7f080017;
+        public static final int tvAlbum=0x7f080017;
+        public static final int tvArtist=0x7f080016;
+        public static final int tvGenre=0x7f080018;
+        public static final int tvLength=0x7f08001a;
+        public static final int tvMessage=0x7f080013;
+        public static final int tvTitle=0x7f080012;
+        public static final int tvYear=0x7f080019;
         public static final int view1=0x7f08000d;
     }
     public static final class layout {
@@ -68,7 +69,8 @@ public final class R {
         public static final int dialog_about=0x7f030001;
         public static final int dialog_auth_code=0x7f030002;
         public static final int dialog_license=0x7f030003;
-        public static final int player=0x7f030004;
+        public static final int dialog_message=0x7f030004;
+        public static final int player=0x7f030005;
     }
     public static final class menu {
         public static final int player_menu=0x7f070000;
@@ -91,7 +93,7 @@ public final class R {
         public static final int dialog_about_header=0x7f05001b;
         public static final int dialog_about_supporters=0x7f05001d;
         public static final int dialog_license_top=0x7f050021;
-        public static final int error=0x7f050028;
+        public static final int error_versions=0x7f050028;
         public static final int gpl=0x7f050003;
         public static final int input_auth_code=0x7f05002a;
         public static final int invalid_code=0x7f05002b;

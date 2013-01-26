@@ -18,7 +18,7 @@
 package de.qspool.clementineremote;
 
 import de.qspool.clementineremote.backend.Clementine;
-import de.qspool.clementineremote.backend.ClementineConnection;
+import de.qspool.clementineremote.backend.ClementineService;
 import de.qspool.clementineremote.ui.ConnectDialog;
 import de.qspool.clementineremote.ui.Player;
 import android.app.Activity;
@@ -43,8 +43,8 @@ public class ClementineRemoteControlActivity extends Activity {
         // Create the main background objects
         if (App.mClementine == null) {
 	        App.mClementine = new Clementine();
-	        App.mClementineConnection = new ClementineConnection();
-	        App.mClementineConnection.start();
+	        Intent service = new Intent(this, ClementineService.class);
+	        startService(service);
         }
         
      // First start the connectDialog with autoconnect

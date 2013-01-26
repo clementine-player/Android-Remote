@@ -33,6 +33,7 @@
         <activity android:name=".ui.ClementineRemoteSettings"
                   android:screenOrientation="portrait"
                   android:theme="@style/PreferencesTheme"></activity>
+        <service android:name=".backend.ClementineService"></service>
     </application>
 
 </manifest>
