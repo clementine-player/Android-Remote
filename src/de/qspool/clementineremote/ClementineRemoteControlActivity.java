@@ -86,9 +86,7 @@ public class ClementineRemoteControlActivity extends Activity {
     
     private void checkBackend() {
     	if (App.mClementine == null) {
-	        App.mClementine = new Clementine();
-        }
-        if (App.mClementineConnection == null) {
+    		App.mClementine = new Clementine();
 	    	mServiceIntent = new Intent(this, ClementineService.class);
 	        startService(mServiceIntent);
         }

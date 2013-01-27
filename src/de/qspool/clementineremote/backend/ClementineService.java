@@ -9,11 +9,18 @@ import android.os.Message;
 
 public class ClementineService extends Service {
 	ClementineConnection mClementineConnection = null;
+	Clementine mClementine = null;
 	
 	@Override
 	public void onCreate() {
+		// We don't need this Object in here directly, but this will
+		// prevent it from being garbage collected. Because after some time
+		// Android destroyes inactive activities, the reference to this
+		// Object gets lost. So we save it here.
+		mClementine = App.mClementine;
 		mClementineConnection = new ClementineConnection();
 		App.mClementineConnection = mClementineConnection;
+		
 	}
 	
 	@Override
