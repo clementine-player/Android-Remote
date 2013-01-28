@@ -78,6 +78,7 @@ public class ClementineConnection extends Thread {
 	void createConnection(RequestConnect r) {
 		// Reset the connected flag
 		App.mClementine.setConnected(false);
+		mLastKeepAlive = 0;
 		try {
 			// Now try to connect and set the input and output streams
 			SocketAddress socketAddress = new InetSocketAddress(r.getIp(), r.getPort());
