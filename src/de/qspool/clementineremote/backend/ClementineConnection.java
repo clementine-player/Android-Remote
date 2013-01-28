@@ -85,15 +85,6 @@ public class ClementineConnection extends Thread {
 			mClient = new Socket();
 			mClient.connect(socketAddress, 3000);
 			
-			// Check if the streams are in an invalid state an reset them
-			if (mIn != null) {
-				mIn.close();
-				mIn = null;
-			}
-			if (mOut != null) {
-				mOut.close();
-				mOut = null;
-			}
 			mIn  = new DataInputStream(mClient.getInputStream());
 			mOut = new DataOutputStream(mClient.getOutputStream());
 			
