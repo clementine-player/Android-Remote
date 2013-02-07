@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/playlist" 
+          android:title="@string/menu_playlist"
+          android:showAsAction="always"
+          android:icon="@drawable/ab_playlist"></item>
+    <item android:id="@+id/random" 
+          android:title="@string/menu_random"
+          android:showAsAction="always"
+          android:icon="@drawable/ab_random"></item>
+    <item android:id="@+id/repeat" 
+          android:title="@string/menu_repeat"
+          android:showAsAction="always"
+          android:icon="@drawable/ab_replay"></item>
     <item android:id="@+id/settings"
           android:title="@string/menu_settings"
-          android:icon="@android:drawable/ic_menu_preferences"></item>
-    <item android:id="@+id/shuffle" 
-          android:title="@string/menu_shuffle"
-          android:icon="@android:drawable/ic_popup_sync"></item>
+          android:showAsAction="ifRoom|withText"
+          android:icon="@drawable/ab_settings"></item>
     <item android:id="@+id/disconnect"
           android:title="@string/menu_disconnect"
-          android:icon="@android:drawable/ic_lock_power_off">
+          android:showAsAction="ifRoom|withText"
+          android:icon="@drawable/ab_disconnect">
     </item>
 </menu>

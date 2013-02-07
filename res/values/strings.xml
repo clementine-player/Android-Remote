@@ -11,14 +11,19 @@
     <string name="menu_disconnect">Disconnect</string>
     <string name="player_nosong">No Song playing right now</string>
     <string name="player_disconnected">Disconnected</string>
+    <string name="player_playlist">Playlist:</string>
+    <string name="player_download_playlists">Downloading Playlists</string>
     <string name="menu_shuffle">Shuffle</string>
+    <string name="menu_repeat">Repeat</string>
+    <string name="menu_random">Random</string>
     <string name="menu_settings">Settings</string>
+    <string name="menu_playlist">Playlists</string>
     <string name="pref_volume_title">Use Volume Keys</string>
     <string name="pref_volume_summary">Use volume keys to control the volume of clementine.</string>
     <string name="pref_cat_behavior">Behavior</string>
     <string name="pref_cat_info">Information</string>
     <string name="pref_version_summary">Click to visit project website</string>
-    <string name="app_versionName">Version 0.2</string>
+    <string name="pref_version_title">Version</string>
     <string name="pref_license_title">License</string>
     <string name="pref_license_summary">GNU GPLv3</string>
     <string name="pref_about_title">About</string>
@@ -26,9 +31,8 @@
     <string name="dialog_about_header">About</string>
     <string name="dialog_about_authors">Authors</string>
     <string name="dialog_about_supporters">Supporters</string>
+    <string name="dialog_about_others">Others</string>
     <string name="close">Close</string>
-    <string name="dialog_about_authors_people">Andreas M.</string>
-    <string name="dialog_about_authors_supporters_people">David S. (Clementine Dev)\nJohn M. (Clementine Dev) \n\nThank you very much!</string>
     <string name="dialog_license_top"> This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY</string>
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Visit Clementine website</string>
@@ -40,4 +44,12 @@
     <string name="old_proto">Please update Clementine!</string>
     <string name="input_auth_code">Authentication Code</string>
     <string name="invalid_code">Invalid Code</string>
+    <string name="repeat_off">Repeat Off</string>
+    <string name="repeat_track">Repeat Track</string>
+    <string name="repeat_album">Repeat Album</string>
+    <string name="repeat_playlist">Repeat Playlist</string>
+    <string name="random_off">Random Off</string>
+    <string name="random_all">Random All</string>
+    <string name="random_inside_album">Random Inside Album</string>
+    <string name="random_albums">Random Albums</string>
 </resources>

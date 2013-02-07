@@ -36,6 +36,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.text.InputType;
 import android.view.View.OnClickListener;
 import android.view.View;
 import android.view.Window;
@@ -82,6 +83,7 @@ public class ConnectDialog extends Activity {
 	    
 	    // Ip and Autoconnect
 	    mEtIp = (EditText) findViewById(R.id.etIp);
+	    mEtIp.setRawInputType(InputType.TYPE_CLASS_NUMBER);
 	    mCbAutoConnect = (CheckBox) findViewById(R.id.cbAutoconnect);
 	    
 	    // Set the handler

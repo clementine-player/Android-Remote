@@ -17,41 +17,43 @@
 
 package de.qspool.clementineremote.ui;
 
-import de.qspool.clementineremote.App;
-import de.qspool.clementineremote.ClementineRemoteControlActivity;
-import de.qspool.clementineremote.R;
-import de.qspool.clementineremote.backend.Clementine;
-import de.qspool.clementineremote.backend.player.Song;
-import de.qspool.clementineremote.backend.requests.RequestControl;
-import de.qspool.clementineremote.backend.requests.RequestDisconnect;
-import de.qspool.clementineremote.backend.requests.RequestVolume;
-import de.qspool.clementineremote.backend.requests.RequestControl.Request;
-import de.qspool.clementineremote.utils.Utilities;
-import android.app.Activity;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
+import java.util.LinkedList;
+
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Player extends Activity {
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+
+import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.ClementineRemoteControlActivity;
+import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.backend.Clementine;
+import de.qspool.clementineremote.backend.player.MyPlaylist;
+import de.qspool.clementineremote.backend.player.MySong;
+import de.qspool.clementineremote.backend.requests.RequestControl;
+import de.qspool.clementineremote.backend.requests.RequestControl.Request;
+import de.qspool.clementineremote.backend.requests.RequestDisconnect;
+import de.qspool.clementineremote.backend.requests.RequestPlaylistSong;
+import de.qspool.clementineremote.backend.requests.RequestVolume;
+import de.qspool.clementineremote.utils.Utilities;
+
+
+public class Player extends SherlockActivity {
 	private TextView mTvArtist;
 	private TextView mTvTitle;
 	private TextView mTvAlbum;
@@ -69,17 +71,16 @@ public class Player extends Activity {
 	private SharedPreferences mSharedPref;
 	private PlayerHandler mHandler;
 	
-	private NotificationCompat.Builder mNotifyBuilder;
-	private NotificationManager mNotificationManager;
-	private int mNotifyId = 1;
+	private ActionBar mActionBar;
+	
+	private int mDownloadPlaylists;
+	private LinkedList<String> mDownloadPlaylistNames;
+	private ProgressDialog mProgressDialog;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    
-	    // Remove title bar and set the view
-	    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-	    	this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 	    setContentView(R.layout.player);
 	    
 	    // Get the Views
@@ -102,15 +103,12 @@ public class Player extends Activity {
 	    mBtnPrev.setOnClickListener(oclControl);
 	    mBtnPlayPause.setOnClickListener(oclControl);
 	    
-	    // Set the handler
-	    mHandler = new PlayerHandler(this);
-	    App.mClementineConnection.setUiHandler(mHandler);
-	    
 	    // Get the shared preferences
 	    mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 	    
-	    // Get the notification manager
-	    setupNotification();
+	    // Get the actionbar
+	    mActionBar = getSupportActionBar();
+	    mActionBar.setTitle(R.string.player_playlist);
 	    
 	    // Reload the player ui
 	    reloadInfo();
@@ -119,6 +117,11 @@ public class Player extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
+		
+	    // Set the handler
+	    mHandler = new PlayerHandler(this);
+	    App.mClementineConnection.setUiHandler(mHandler);
+		
 		// after resume, the connection shall not be dropped immediatly
 		App.mClementineConnection.setLastKeepAlive(System.currentTimeMillis());
 		
@@ -127,30 +130,97 @@ public class Player extends Activity {
 	}
 	
 	@Override
+	public void onPause() {
+		super.onPause();
+		
+		mHandler = null;
+	    App.mClementineConnection.setUiHandler(mHandler);
+	}
+	
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inf = getMenuInflater();
+		MenuInflater inf = getSupportMenuInflater();
 		inf.inflate(R.menu.player_menu, menu);
 		return true;
 	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		Message msg = Message.obtain();
 		switch (item.getItemId())
 		{
 		case R.id.disconnect: 	requestDisconnect();
 								break;
-		case R.id.shuffle:		Message msg = Message.obtain();
-								msg.obj = new RequestControl(Request.SHUFFLE);
+		case R.id.random:		App.mClementine.nextRandomMode(true, this);
+								msg.obj = new RequestControl(Request.RANDOM);
+								App.mClementineConnection.mHandler.sendMessage(msg);
+								break;
+		case R.id.repeat:		App.mClementine.nextRepeatMode(true, this);
+								msg.obj = new RequestControl(Request.REPEAT);
 								App.mClementineConnection.mHandler.sendMessage(msg);
 								break;
 		case R.id.settings:		Intent settingsIntent = new Intent(this, ClementineRemoteSettings.class);
 								startActivity(settingsIntent);
+								break;
+		case R.id.playlist:		openPlaylistView();
 								break;
 		default: break;
 		}
 		return true;
 	}
 	
+	/**
+	 * Check if we have all Playlists, otherwise get them
+	 */
+	private void openPlaylistView() {
+		mDownloadPlaylists = 0;
+		mDownloadPlaylistNames = new LinkedList<String>();
+		for (int i=0;i<App.mClementine.getPlaylists().size();i++) {
+			// Get the Playlsit
+			int key = App.mClementine.getPlaylists().keyAt(i);
+			MyPlaylist playlist = App.mClementine.getPlaylists().get(key);
+			if (playlist.getPlaylistSongs().size() == 0) {
+				Message msg = Message.obtain();
+				msg.obj = new RequestPlaylistSong(playlist.getId());
+				App.mClementineConnection.mHandler.sendMessage(msg);
+				mDownloadPlaylists++;
+				mDownloadPlaylistNames.add(playlist.getName());
+			}
+		}
+		
+		// Open it directly only when we got all playlists
+		if (mDownloadPlaylists == 0) {
+			Intent playlistIntent = new Intent(this, Playlists.class);
+			startActivity(playlistIntent);
+		} else {
+			// Start a Progressbar
+			mProgressDialog = new ProgressDialog(this);
+			mProgressDialog.setMax(mDownloadPlaylists);
+			mProgressDialog.setCancelable(true);
+			mProgressDialog.setTitle(R.string.player_download_playlists);
+			mProgressDialog.setMessage(mDownloadPlaylistNames.pollFirst());
+			mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+			mProgressDialog.show();
+		}
+	}
+	
+	/**
+	 * Update the Progressbar and open the intent if necessary
+	 */
+	void checkGotAllPlaylists() {
+		if (mProgressDialog != null) {
+			mProgressDialog.setProgress(mProgressDialog.getProgress()+1);
+			mProgressDialog.setMessage(mDownloadPlaylistNames.pollFirst());
+			mDownloadPlaylists--;
+			
+			if (mDownloadPlaylists == 0 && mProgressDialog.isShowing()) {
+				mProgressDialog.dismiss();
+				Intent playlistIntent = new Intent(this, Playlists.class);
+				startActivity(playlistIntent);
+			}
+		}
+	}
+
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -178,28 +248,10 @@ public class Player extends Activity {
 		return super.onKeyDown(keyCode, event);
 	}
 	
-	private void setupNotification() {
-		mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-	    mNotifyBuilder = new NotificationCompat.Builder(this);
-	    mNotifyBuilder.setSmallIcon(R.drawable.ic_launcher);
-	    mNotifyBuilder.setOngoing(true);
-	    
-	    // Set the result intent
-	    Intent resultIntent = new Intent(this, Player.class);
-	    resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-	    // Create a TaskStack, so the app navigates correctly backwards
-	    TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-	    stackBuilder.addParentStack(Player.class);
-	    stackBuilder.addNextIntent(resultIntent);
-	    PendingIntent resultPendingintent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-	    mNotifyBuilder.setContentIntent(resultPendingintent);
-	}
-	
 	/**
 	 * Disconnect was finished, now finish this activity
 	 */
 	void disconnect() {
-		mNotificationManager.cancel(mNotifyId);
 		Toast.makeText(this, R.string.player_disconnected, Toast.LENGTH_SHORT).show();
 		setResult(ClementineRemoteControlActivity.RESULT_DISCONNECT);
 		finish();
@@ -223,7 +275,7 @@ public class Player extends Activity {
 	/**
 	 * Reload the player ui
 	 */
-    void reloadInfo() {
+	void reloadInfo() {
     	// display play / pause image
     	if (App.mClementine.getState() == Clementine.State.PLAY) {
     		mBtnPlayPause.setImageDrawable(getResources().getDrawable(R.drawable.ic_media_pause));
@@ -232,7 +284,7 @@ public class Player extends Activity {
     	}
     	
     	// Get the currently played song
-    	Song currentSong = App.mClementine.getCurrentSong();
+    	MySong currentSong = App.mClementine.getCurrentSong();
     	if (currentSong == null) {
     		// If none is played right now, show a text and the clementine icon
     		mTvArtist.setText(getString(R.string.player_nosong));
@@ -261,14 +313,10 @@ public class Player extends Activity {
 	    	}
     	}
     	
-    	// Now update the notification
-    	mNotifyBuilder.setLargeIcon(mImgArt.getDrawingCache());
-    	mNotifyBuilder.setContentTitle(mTvArtist.getText().toString());
-    	mNotifyBuilder.setContentText(mTvTitle.getText().toString() + 
-    								  " / " + 
-    								  mTvAlbum.getText().toString());
-    	mNotificationManager.notify(mNotifyId, mNotifyBuilder.build());
-    	
+    	// ActionBar shows the current playlist
+    	if (App.mClementine.getActivePlaylist() != null) {
+    		mActionBar.setSubtitle(App.mClementine.getActivePlaylist().getName());
+    	}
     }
     
     private String buildTrackPosition() {

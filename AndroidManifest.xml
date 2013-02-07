@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
+        android:name="de.qspool.clementineremote.App"
         android:icon="@drawable/ic_launcher"
         android:allowBackup="true"
         android:label="@string/app_name" >
@@ -25,14 +26,18 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.ConnectDialog"
-                  android:windowSoftInputMode="adjustPan"
+                  android:windowSoftInputMode="stateHidden|adjustResize"
                   android:screenOrientation="portrait"></activity>
         <activity android:name=".ui.Player"
+                  android:theme="@style/PlayerTheme"
                   android:launchMode="singleTop"
                   android:screenOrientation="portrait"></activity>
         <activity android:name=".ui.ClementineRemoteSettings"
                   android:screenOrientation="portrait"
                   android:theme="@style/PreferencesTheme"></activity>
+        <activity android:name=".ui.Playlists"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/PlayerTheme"></activity>
         <service android:name=".backend.ClementineService"></service>
     </application>
 

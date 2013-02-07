@@ -15,21 +15,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package de.qspool.clementineremote;
+package de.qspool.clementineremote.backend.requests;
 
-import android.app.Application;
-import de.qspool.clementineremote.backend.Clementine;
-import de.qspool.clementineremote.backend.ClementineConnection;
+import de.qspool.clementineremote.backend.player.MySong;
 
-public class App extends Application {
-	public static ClementineConnection mClementineConnection = null;
-	public static Clementine mClementine = null;
-	public static Application mApp;
+public class RequestChangeCurrentSong extends RequestToThread {
+	private MySong mSong;
+	private int mPlaylistId;
 	
-	// Keys for SharedPrefences
-	public final static String SP_KEY_IP = "save_clementine_ip";
-	public final static String SP_KEY_AC = "pref_autoconnect";
-	public final static String SP_KEY_USE_VOLUMEKEYS = "pref_volumekey";
-	public final static String SP_KEY_PORT = "pref_port";
-	public final static String SP_LAST_AUTH_CODE = "last_auth_code";
+	public RequestChangeCurrentSong(MySong song, int playlistId) {
+		mSong = song;
+		mPlaylistId = playlistId;
+	}
+	
+	public MySong getSong() {
+		return mSong;
+	}
+	
+	public int getPlaylistId() {
+		return mPlaylistId;
+	}
 }

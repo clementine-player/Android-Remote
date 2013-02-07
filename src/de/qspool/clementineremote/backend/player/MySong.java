@@ -25,7 +25,7 @@ import android.graphics.BitmapFactory;
 /**
  * Representation of a song
  */
-public class Song {
+public class MySong {
 	private int id;
 	private int index;
 	private String title;
@@ -40,6 +40,15 @@ public class Song {
 	private int disc;
 	private int playcount;
 	private Bitmap art;
+	
+	public boolean equals(MySong song) {
+		if (song.id == this.id
+		 && song.index == this.index) {
+			return true;
+	} else {
+			return false;
+		}
+	}
 	
 	public int getId() {
 		return id;

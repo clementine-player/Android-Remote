@@ -8,21 +8,7 @@ import android.os.IBinder;
 import android.os.Message;
 
 public class ClementineService extends Service {
-	ClementineConnection mClementineConnection = null;
-	Clementine mClementine = null;
-	
-	@Override
-	public void onCreate() {
-		// We don't need this Object in here directly, but this will
-		// prevent it from being garbage collected. Because after some time
-		// Android destroyes inactive activities, the reference to this
-		// Object gets lost. So we save it here.
-		mClementine = App.mClementine;
-		mClementineConnection = new ClementineConnection();
-		App.mClementineConnection = mClementineConnection;
-		
-	}
-	
+
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
@@ -30,7 +16,7 @@ public class ClementineService extends Service {
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		if (!mClementineConnection.isAlive())
+		if (!App.mClementineConnection.isAlive())
 			App.mClementineConnection.start();
 		return START_STICKY;
 	}
@@ -49,10 +35,9 @@ public class ClementineService extends Service {
 			App.mClementineConnection.mHandler.sendMessage(msg);
 		}
 		try {
-			mClementineConnection.join(1000);
+			App.mClementineConnection.join(1000);
 		} catch (InterruptedException e) {}
 		
-		mClementineConnection = null;
 		App.mClementineConnection = null;
 	}
 }

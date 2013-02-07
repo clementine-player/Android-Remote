@@ -20,6 +20,7 @@ package de.qspool.clementineremote.ui;
 import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
@@ -29,10 +30,13 @@ import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View.OnClickListener;
 
@@ -42,6 +46,7 @@ import android.view.View.OnClickListener;
 public class ClementineRemoteSettings extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 	private Preference mLicenseDialogPreference;
 	private Preference mAboutDialogPreference;
+	private Preference mVersion;
 	private Dialog mCustomDialog;
 	private EditTextPreference mPortPreference;
 	
@@ -54,6 +59,16 @@ public class ClementineRemoteSettings extends PreferenceActivity implements OnSh
         // Get the dialog preferences
         mLicenseDialogPreference = (Preference) getPreferenceScreen().findPreference("pref_key_license");
         mAboutDialogPreference = (Preference) getPreferenceScreen().findPreference("pref_key_about");
+        mVersion = (Preference) getPreferenceScreen().findPreference("pref_version");
+        
+        // Get the Version
+        try {
+			mVersion.setTitle(getString(R.string.pref_version_title) + 
+							  " " + 
+							  getPackageManager().getPackageInfo(getPackageName(), 0 ).versionName);
+		} catch (NameNotFoundException e) {
+			
+		}
         
         // Read the port and fill in the summary
         mPortPreference = (EditTextPreference) getPreferenceScreen().findPreference("pref_port");
@@ -129,6 +144,24 @@ public class ClementineRemoteSettings extends PreferenceActivity implements OnSh
 			mCustomDialog.setCancelable(true);
 			mCustomDialog.getWindow().getAttributes().width = LayoutParams.MATCH_PARENT;
 			
+			// Fill the people working on this project
+			TextView tvAuthors    = (TextView) mCustomDialog.findViewById(R.id.tvAuthors);
+			TextView tvSupporters = (TextView) mCustomDialog.findViewById(R.id.tvSupporters);
+			TextView tvOthers     = (TextView) mCustomDialog.findViewById(R.id.tvOthers);
+			
+			// Authors
+			tvAuthors.setText("Andreas Muttscheller\n");
+			
+			// Supporters
+			tvSupporters.setText("David Sansome (Clementine-Dev)\n" + 
+								 "John Maguire (Clementine-Dev)\n");
+			
+			// Others
+			tvOthers.setText(Html.fromHtml("Icons: <a href=\"http://chrfb.deviantart.com\">Christian Burprich</a><br>" +
+										   "<a href=\"http://actionbarsherlock.com/\">ActionBarSherlock</a> (<a href=\"http://www.apache.org/licenses/LICENSE-2.0.html\">License</a>)"));
+			tvOthers.setMovementMethod(LinkMovementMethod.getInstance());
+			
+			// Create the buttons and the listener
 			Button button = (Button) mCustomDialog.findViewById(R.id.btnCloseAbout);
 			button.setOnClickListener(new OnClickListener() {
 				@Override

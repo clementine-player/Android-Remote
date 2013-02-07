@@ -22,7 +22,7 @@
     <PreferenceCategory 
         android:title="@string/pref_cat_info">
         <Preference 
-            android:title="@string/app_versionName"
+            android:key="pref_version"
             android:summary="@string/pref_version_summary">
             <intent android:action="android.intent.action.VIEW"
                 android:data="https://code.google.com/p/clementine-remote-android"/>

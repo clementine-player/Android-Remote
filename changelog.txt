@@ -1,3 +1,15 @@
+Version 0.3
+  Features:
+    - Playlist Support
+    - Set Repeat and Random Modes
+    - Action Bar for all Android Versions
+  Improvements:
+    - Scale Cover to full size (Thanks Evan)
+    - Show keyboard in number mode on connect dialog (Thanks Evan)
+    - Show the current playlist in the ActionBar
+  Bugfixes:
+    - Fix the Notification Force Closes
+
 Version 0.2:
   Features:
     - Added authentication code support

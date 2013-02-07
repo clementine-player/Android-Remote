@@ -4,8 +4,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     android:orientation="vertical"
-    android:paddingBottom="30dp"
-    android:paddingTop="30dp" >
+    android:paddingBottom="30dp" >
 
     <ImageView
         android:id="@+id/imgClementineIcon"
@@ -13,7 +12,7 @@
         android:layout_height="0dip"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_weight="0.58"
+        android:layout_weight="0.90"
         android:contentDescription="@string/connect_desc_icon"
         android:src="@drawable/icon_large" />
 
@@ -42,7 +41,7 @@
 
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dip"
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_weight="1" >
 
@@ -67,7 +66,8 @@
                 android:layout_gravity="center_vertical"
                 android:background="@android:color/transparent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_menu_preferences" />
+                android:contentDescription="@string/connect_settings_icon"
+                android:src="@drawable/ab_settings" />
 
         </RelativeLayout>
 

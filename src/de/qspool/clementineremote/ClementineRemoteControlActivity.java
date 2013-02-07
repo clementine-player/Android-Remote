@@ -18,6 +18,7 @@
 package de.qspool.clementineremote;
 
 import de.qspool.clementineremote.backend.Clementine;
+import de.qspool.clementineremote.backend.ClementineConnection;
 import de.qspool.clementineremote.backend.ClementineService;
 import de.qspool.clementineremote.ui.ConnectDialog;
 import de.qspool.clementineremote.ui.Player;
@@ -87,6 +88,9 @@ public class ClementineRemoteControlActivity extends Activity {
     private void checkBackend() {
     	if (App.mClementine == null) {
     		App.mClementine = new Clementine();
+    	}
+    	if (App.mClementineConnection == null) {
+    		App.mClementineConnection = new ClementineConnection();
 	    	mServiceIntent = new Intent(this, ClementineService.class);
 	        startService(mServiceIntent);
         }
