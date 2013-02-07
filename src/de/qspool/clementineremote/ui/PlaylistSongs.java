@@ -97,7 +97,8 @@ public class PlaylistSongs extends SherlockListFragment {
 								.inflate(R.layout.song_row, parent, false);
 			}
 			
-			if (App.mClementine.getCurrentSong().equals(mData.get(position))) {
+			if (App.mClementine.getCurrentSong() != null 
+			 && App.mClementine.getCurrentSong().equals(mData.get(position))) {
 				convertView.setBackgroundResource(R.drawable.orange_background_border);
 			} else {
 				convertView.setBackgroundResource(R.drawable.white_background_border);

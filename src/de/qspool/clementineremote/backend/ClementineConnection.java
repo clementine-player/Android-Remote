@@ -179,7 +179,8 @@ public class ClementineConnection extends Thread {
 			sendUiMessage(new Disconnected(DisconnectReason.WRONG_PROTO));
 		} else if (clementineElement instanceof Reload) {
 	    	// Now update the notification
-			if (App.mClementine.getCurrentSong() != mLastSong) {
+			if (App.mClementine.getCurrentSong() != mLastSong
+			 && App.mClementine.getCurrentSong().getArt() != null) {
 				mLastSong = App.mClementine.getCurrentSong();
 				Bitmap scaledArt = Bitmap.createScaledBitmap(App.mClementine.getCurrentSong().getArt(), 
 														mNotificationWidth, 
