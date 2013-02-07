@@ -86,6 +86,10 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 			playlistTab.setText(playlist.getName());
 			playlistTab.setTag(playlist);
 			actionBar.addTab(playlistTab);
+			
+			if (playlist.isActive()) {
+				mViewPager.setCurrentItem(playlistTab.getPosition());
+			}
 		}
 		
 	}
