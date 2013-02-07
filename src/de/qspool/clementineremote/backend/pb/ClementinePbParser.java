@@ -164,7 +164,9 @@ public class ClementinePbParser {
 		song.setTrack (songMetadata.getTrack());
 		song.setDisc  (songMetadata.getDisc());
 		song.setPlaycount(songMetadata.getPlaycount());
-		song.setArt   (songMetadata.getArt());
+		if (songMetadata.hasArt()) {
+			song.setArt   (songMetadata.getArt());
+		}
 
 		return song;
 	}
