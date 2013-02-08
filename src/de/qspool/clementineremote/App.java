@@ -22,8 +22,8 @@ import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementineConnection;
 
 public class App extends Application {
-	public static ClementineConnection mClementineConnection = null;
-	public static Clementine mClementine = null;
+	public static ClementineConnection mClementineConnection;
+	public static Clementine mClementine;
 	public static Application mApp;
 	
 	// Keys for SharedPrefences

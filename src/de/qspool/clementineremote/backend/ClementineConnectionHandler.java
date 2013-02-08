@@ -47,7 +47,7 @@ public class ClementineConnectionHandler extends Handler {
     	} else if (r instanceof RequestConnect) {
     		myClementineConnection.createConnection((RequestConnect) r);
     	} else if (r instanceof RequestDisconnect) {
-    		myClementineConnection.disconnect(r);
+    		myClementineConnection.disconnect((RequestDisconnect)r);
     	} else {
     		myClementineConnection.sendRequest(r);
     	}

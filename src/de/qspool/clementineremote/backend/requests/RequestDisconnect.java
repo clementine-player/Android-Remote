@@ -18,7 +18,17 @@
 package de.qspool.clementineremote.backend.requests;
 
 public class RequestDisconnect extends RequestToThread {
+	private boolean mKillThread = false;
+	
 	public RequestDisconnect() {
 		super();
+	}
+	
+	public RequestDisconnect(boolean killThread) {
+		mKillThread = killThread;
+	}
+	
+	public boolean getKillThread() {
+		return mKillThread;
 	}
 }

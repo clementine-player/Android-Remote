@@ -1,6 +1,6 @@
 package de.qspool.clementineremote.backend;
 
-import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.App; 
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
 import android.app.Service;
 import android.content.Intent;
@@ -18,14 +18,14 @@ public class ClementineService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		if (!App.mClementineConnection.isAlive())
 			App.mClementineConnection.start();
-		return START_STICKY;
+		return  START_NOT_STICKY;
 	}
 	
 	@Override
 	public void onDestroy() {
 		if (App.mClementine.isConnected()) {
 			// Create a new request
-			RequestDisconnect r = new RequestDisconnect();
+			RequestDisconnect r = new RequestDisconnect(true);
 			
 			// Move the request to the message
 			Message msg = Message.obtain();
@@ -35,9 +35,10 @@ public class ClementineService extends Service {
 			App.mClementineConnection.mHandler.sendMessage(msg);
 		}
 		try {
-			App.mClementineConnection.join(1000);
+			App.mClementineConnection.join();
 		} catch (InterruptedException e) {}
 		
-		App.mClementineConnection = null;
+		// Create a new instance
+		App.mClementineConnection = new ClementineConnection();
 	}
 }

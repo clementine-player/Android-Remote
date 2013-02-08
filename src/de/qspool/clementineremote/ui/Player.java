@@ -109,14 +109,18 @@ public class Player extends SherlockActivity {
 	    // Get the actionbar
 	    mActionBar = getSupportActionBar();
 	    mActionBar.setTitle(R.string.player_playlist);
-	    
-	    // Reload the player ui
-	    reloadInfo();
 	}
 	
 	@Override
 	public void onResume() {
 		super.onResume();
+		
+		// Check if we are still connected
+		if (App.mClementineConnection == null 
+		 || !App.mClementineConnection.isAlive()) {
+			setResult(ClementineRemoteControlActivity.RESULT_DISCONNECT);
+			finish();
+		}
 		
 	    // Set the handler
 	    mHandler = new PlayerHandler(this);

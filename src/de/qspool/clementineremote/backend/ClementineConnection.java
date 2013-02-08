@@ -40,6 +40,7 @@ import de.qspool.clementineremote.backend.pb.ClementinePbParser;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.backend.requests.CheckForData;
 import de.qspool.clementineremote.backend.requests.RequestConnect;
+import de.qspool.clementineremote.backend.requests.RequestDisconnect;
 import de.qspool.clementineremote.backend.requests.RequestToThread;
 
 import android.app.NotificationManager;
@@ -229,7 +230,7 @@ public class ClementineConnection extends Thread {
 	 * Disconnect from Clementine
 	 * @param r The RequestDisconnect Object
 	 */
-	void disconnect(RequestToThread r) {
+	void disconnect(RequestDisconnect r) {
 		Log.d(TAG, "Disconnect Request");
 		if (App.mClementine.isConnected()) {
 			// Set the Connected flag to false, so the loop in
@@ -253,6 +254,11 @@ public class ClementineConnection extends Thread {
 			
 		// Send the result to the ui thread
 		sendUiMessage(new Disconnected(DisconnectReason.CLIENT_CLOSE));
+		
+		// Check if the thread shall be closed
+		if (r.getKillThread()) {
+			Looper.myLooper().quit();
+		}
 	}
 	
 	/**
