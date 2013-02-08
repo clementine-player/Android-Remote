@@ -155,8 +155,8 @@ public class Player extends SherlockActivity {
 		{
 		case R.id.disconnect: 	requestDisconnect();
 								break;
-		case R.id.random:		App.mClementine.nextRandomMode(true, this);
-								msg.obj = new RequestControl(Request.RANDOM);
+		case R.id.shuffle:		App.mClementine.nextShuffleMode(true, this);
+								msg.obj = new RequestControl(Request.SHUFFLE);
 								App.mClementineConnection.mHandler.sendMessage(msg);
 								break;
 		case R.id.repeat:		App.mClementine.nextRepeatMode(true, this);
@@ -202,7 +202,7 @@ public class Player extends SherlockActivity {
 			mProgressDialog.setMax(mDownloadPlaylists);
 			mProgressDialog.setCancelable(true);
 			mProgressDialog.setTitle(R.string.player_download_playlists);
-			mProgressDialog.setMessage(mDownloadPlaylistNames.pollFirst());
+			mProgressDialog.setMessage(mDownloadPlaylistNames.poll());
 			mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 			mProgressDialog.show();
 		}
@@ -214,7 +214,7 @@ public class Player extends SherlockActivity {
 	void checkGotAllPlaylists() {
 		if (mProgressDialog != null) {
 			mProgressDialog.setProgress(mProgressDialog.getProgress()+1);
-			mProgressDialog.setMessage(mDownloadPlaylistNames.pollFirst());
+			mProgressDialog.setMessage(mDownloadPlaylistNames.poll());
 			mDownloadPlaylists--;
 			
 			if (mDownloadPlaylists == 0 && mProgressDialog.isShowing()) {

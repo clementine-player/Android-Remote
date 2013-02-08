@@ -79,7 +79,7 @@ public class ClementinePbCreator {
 			case REPEAT:	msg.setType(MsgType.REPEAT);
 							msg.setRepeat(buildRepeat(msg));
 							break;
-			case RANDOM:	msg.setType(MsgType.SHUFFLE);
+			case SHUFFLE:	msg.setType(MsgType.SHUFFLE);
 							msg.setShuffle(buildRandom(msg));
 							break;
 			default: 		break;
@@ -133,7 +133,7 @@ public class ClementinePbCreator {
 	private Shuffle.Builder buildRandom(Builder msg) {
 		Shuffle.Builder shuffle = msg.getShuffleBuilder();
 		
-		switch (App.mClementine.getRandomMode()) {
+		switch (App.mClementine.getShuffleMode()) {
 		case OFF: 		shuffle.setShuffleMode(ShuffleMode.Shuffle_Off);
 						break;
 		case ALL:		shuffle.setShuffleMode(ShuffleMode.Shuffle_All);

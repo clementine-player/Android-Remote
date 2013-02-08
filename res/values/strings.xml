@@ -15,7 +15,7 @@
     <string name="player_download_playlists">Downloading Playlists</string>
     <string name="menu_shuffle">Shuffle</string>
     <string name="menu_repeat">Repeat</string>
-    <string name="menu_random">Random</string>
+    <string name="menu_shuffle">Shuffle</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_playlist">Playlists</string>
     <string name="pref_volume_title">Use Volume Keys</string>
@@ -44,12 +44,12 @@
     <string name="old_proto">Please update Clementine!</string>
     <string name="input_auth_code">Authentication Code</string>
     <string name="invalid_code">Invalid Code</string>
-    <string name="repeat_off">Repeat Off</string>
-    <string name="repeat_track">Repeat Track</string>
-    <string name="repeat_album">Repeat Album</string>
-    <string name="repeat_playlist">Repeat Playlist</string>
-    <string name="random_off">Random Off</string>
-    <string name="random_all">Random All</string>
-    <string name="random_inside_album">Random Inside Album</string>
-    <string name="random_albums">Random Albums</string>
+    <string name="repeat_off">Don\'t repeat</string>
+    <string name="repeat_track">Repeat track</string>
+    <string name="repeat_album">Repeat album</string>
+    <string name="repeat_playlist">Repeat playlist</string>
+    <string name="shuffle_off">Don\'t shuffle</string>
+    <string name="shuffle_all">Shuffle all</string>
+    <string name="shuffle_inside_album">Shuffle tracks in this album</string>
+    <string name="shuffle_albums">Shuffle albums</string>
 </resources>

@@ -32,7 +32,7 @@ import android.widget.Toast;
 public class Clementine {
 	public static enum State {PLAY, PAUSE, STOP};
 	public static enum RepeatMode {OFF, TRACK, ALBUM, PLAYLIST};
-	public static enum RandomMode {OFF, ALL, INSIDE_ALBUM, ALBUMS};
+	public static enum ShuffleMode {OFF, ALL, INSIDE_ALBUM, ALBUMS};
 	public static int DefaultPort = 5500; // Change also strings.xml! 
 	
 	private String mVersion;
@@ -41,7 +41,7 @@ public class Clementine {
 	private int mVolume;
 	private State mState;
 	private RepeatMode mRepeatMode;
-	private RandomMode mRandomMode;
+	private ShuffleMode mShuffleMode;
 	private int mSongPosition;
 	private SparseArray<MyPlaylist> mPlaylists = new SparseArray<MyPlaylist>();
 	private int mActivePlaylist;
@@ -137,34 +137,34 @@ public class Clementine {
 		}
 	}
 
-	public RandomMode getRandomMode() {
-		return mRandomMode;
+	public ShuffleMode getShuffleMode() {
+		return mShuffleMode;
 	}
 
-	public void setRandomMode(RandomMode mRandomMode) {
-		this.mRandomMode = mRandomMode;
+	public void setShuffleMode(ShuffleMode mShuffleMode) {
+		this.mShuffleMode = mShuffleMode;
 	}
 	
-	public void nextRandomMode(boolean showToast, Context context) {
-		switch (mRandomMode) {
-		case OFF: 		mRandomMode = RandomMode.ALL;
+	public void nextShuffleMode(boolean showToast, Context context) {
+		switch (mShuffleMode) {
+		case OFF: 		mShuffleMode = ShuffleMode.ALL;
 						if (showToast) {
-							Toast.makeText(context, R.string.random_all, Toast.LENGTH_SHORT).show();
+							Toast.makeText(context, R.string.shuffle_all, Toast.LENGTH_SHORT).show();
 						}
 						break;
-		case ALL:		mRandomMode = RandomMode.INSIDE_ALBUM;
+		case ALL:		mShuffleMode = ShuffleMode.INSIDE_ALBUM;
 						if (showToast) {
-							Toast.makeText(context, R.string.random_inside_album, Toast.LENGTH_SHORT).show();
+							Toast.makeText(context, R.string.shuffle_inside_album, Toast.LENGTH_SHORT).show();
 						}
 						break;
-		case INSIDE_ALBUM:	mRandomMode = RandomMode.ALBUMS;
+		case INSIDE_ALBUM:	mShuffleMode = ShuffleMode.ALBUMS;
 							if (showToast) {
-								Toast.makeText(context, R.string.random_albums, Toast.LENGTH_SHORT).show();
+								Toast.makeText(context, R.string.shuffle_albums, Toast.LENGTH_SHORT).show();
 							}
 							break;
-		case ALBUMS:	mRandomMode = RandomMode.OFF;
+		case ALBUMS:	mShuffleMode = ShuffleMode.OFF;
 						if (showToast) {
-							Toast.makeText(context, R.string.random_off, Toast.LENGTH_SHORT).show();
+							Toast.makeText(context, R.string.shuffle_off, Toast.LENGTH_SHORT).show();
 						}
 						break;
 		}

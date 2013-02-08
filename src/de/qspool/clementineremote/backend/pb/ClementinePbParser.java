@@ -23,7 +23,7 @@ import java.util.List;
 import com.google.protobuf.InvalidProtocolBufferException;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.Clementine;
-import de.qspool.clementineremote.backend.Clementine.RandomMode;
+import de.qspool.clementineremote.backend.Clementine.ShuffleMode;
 import de.qspool.clementineremote.backend.Clementine.RepeatMode;
 import de.qspool.clementineremote.backend.elements.ClementineElement;
 import de.qspool.clementineremote.backend.elements.Connected;
@@ -287,13 +287,13 @@ public class ClementinePbParser {
 	 */
 	private ClementineElement parseRandom(Shuffle random) {
 		switch (random.getShuffleMode()) {
-		case Shuffle_Off:		App.mClementine.setRandomMode(RandomMode.OFF);
+		case Shuffle_Off:		App.mClementine.setShuffleMode(ShuffleMode.OFF);
 								break;
-		case Shuffle_All:		App.mClementine.setRandomMode(RandomMode.ALL);
+		case Shuffle_All:		App.mClementine.setShuffleMode(ShuffleMode.ALL);
 								break;
-		case Shuffle_InsideAlbum:	App.mClementine.setRandomMode(RandomMode.INSIDE_ALBUM);
+		case Shuffle_InsideAlbum:	App.mClementine.setShuffleMode(ShuffleMode.INSIDE_ALBUM);
 									break;
-		case Shuffle_Albums:	App.mClementine.setRandomMode(RandomMode.ALBUMS);
+		case Shuffle_Albums:	App.mClementine.setShuffleMode(ShuffleMode.ALBUMS);
 								break;
 		default: break;
 		}

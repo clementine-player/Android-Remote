@@ -4,8 +4,8 @@
           android:title="@string/menu_playlist"
           android:showAsAction="always"
           android:icon="@drawable/ab_playlist"></item>
-    <item android:id="@+id/random" 
-          android:title="@string/menu_random"
+    <item android:id="@+id/shuffle" 
+          android:title="@string/menu_shuffle"
           android:showAsAction="always"
           android:icon="@drawable/ab_random"></item>
     <item android:id="@+id/repeat" 

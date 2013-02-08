@@ -13,9 +13,9 @@
   <string name="player_disconnected">Verbindung beendet</string>
   <string name="player_playlist">Wiedergabeliste:</string>
   <string name="player_download_playlists">Lade Wiedergabelisten</string>
-  <string name="menu_shuffle">Mischen</string>
-  <string name="menu_repeat">Wiederhole</string>
-  <string name="menu_random">Zufällig</string>
+  <string name="menu_shuffle">Zufallsmodus</string>
+  <string name="menu_repeat">Wiederholung</string>
+  <string name="menu_shuffle">Zufallsmodus</string>
   <string name="menu_settings">Einstellungen</string>
   <string name="menu_playlist">Wiedergabelisten</string>
   <string name="pref_volume_title">Nutze Lautstärketasten</string>
@@ -45,11 +45,11 @@
   <string name="input_auth_code">Authentifizierungs-Code</string>
   <string name="invalid_code">Ungültiger Code</string>
   <string name="repeat_off">Wiederholung aus</string>
-  <string name="repeat_track">Wiederhole Titel</string>
-  <string name="repeat_album">Wiederhole Album</string>
-  <string name="repeat_playlist">Wiederhole Wiedergabeliste</string>
-  <string name="random_off">Zufällig Aus</string>
-  <string name="random_all">Zufällig Alle</string>
-  <string name="random_inside_album">Zufällig In Album</string>
-  <string name="random_albums">Zufällig Alben</string>
+  <string name="repeat_track">Stück wiederholen</string>
+  <string name="repeat_album">Album wiederholen</string>
+  <string name="repeat_playlist">Wiedergabeliste wiederholen</string>
+  <string name="shuffle_off">Zufallsmodus aus</string>
+  <string name="shuffle_all">Zufällige Titelreihenfolge</string>
+  <string name="shuffle_inside_album">Zufällige Titelreihenfolge innerhalb eines Albums</string>
+  <string name="shuffle_albums">Zufällige Albenreihenfolge</string>
 </resources>
