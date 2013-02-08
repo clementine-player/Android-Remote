@@ -24,14 +24,16 @@
     <style name="PlayerTheme" parent="Theme.Sherlock">
 	    <item name="actionBarStyle">@style/ActionBarStyle</item>
 	    <item name="android:actionBarStyle">@style/ActionBarStyle</item>
+	    <item name="actionButtonStyle">@style/ActionButtonStyle</item>
+      <item name="@android:actionButtonStyle">@style/ActionButtonStyle</item>
 		</style>
-	    <style name="ActionBarStyle" parent="Widget.Sherlock.ActionBar">
-	      <item name="background">@drawable/actionbar_bg</item>
-	      <item name="android:background">@drawable/actionbar_bg</item>
-	      <item name="titleTextStyle">@style/ActionBarTextAppearance</item>
-	      <item name="@android:titleTextStyle">@style/ActionBarTextAppearance</item>
-	      <item name="subtitleTextStyle">@style/ActionBarSubtitleTextAppearance</item>
-	      <item name="@android:subtitleTextStyle">@style/ActionBarSubtitleTextAppearance</item>
+    <style name="ActionBarStyle" parent="Widget.Sherlock.ActionBar">
+      <item name="background">@drawable/actionbar_bg</item>
+      <item name="android:background">@drawable/actionbar_bg</item>
+      <item name="titleTextStyle">@style/ActionBarTextAppearance</item>
+      <item name="@android:titleTextStyle">@style/ActionBarTextAppearance</item>
+      <item name="subtitleTextStyle">@style/ActionBarSubtitleTextAppearance</item>
+      <item name="@android:subtitleTextStyle">@style/ActionBarSubtitleTextAppearance</item>
 	  </style>
 	  <style name="ActionBarTextAppearance" parent="@android:style/TextAppearance">
       <item name="android:textColor">@android:color/white</item>
@@ -39,4 +41,9 @@
     <style name="ActionBarSubtitleTextAppearance" parent="TextAppearance.Sherlock.Widget.ActionBar.Subtitle">
       <item name="android:textColor">@color/actionbar_subtitle</item>
     </style>
+    <style name="ActionButtonStyle" parent="Widget.Sherlock.ActionButton">
+	    <item name="android:minWidth">0dip</item>
+	    <item name="android:paddingLeft">10dip</item>
+	    <item name="android:paddingRight">10dip</item>
+	</style>
 </resources>

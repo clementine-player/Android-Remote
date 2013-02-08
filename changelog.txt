@@ -9,6 +9,8 @@ Version 0.3
     - Show the current playlist in the ActionBar
   Bugfixes:
     - Fix the Notification Force Closes
+  Translations:
+    - Added german translation
 
 Version 0.2:
   Features:
