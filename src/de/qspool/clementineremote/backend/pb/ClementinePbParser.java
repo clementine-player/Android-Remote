@@ -49,7 +49,6 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuf
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata;
 import de.qspool.clementineremote.backend.player.MyPlaylist;
 import de.qspool.clementineremote.backend.player.MySong;
-import de.qspool.clementineremote.backend.requests.RequestPlaylistSong;
 
 public class ClementinePbParser {
 	
@@ -69,7 +68,8 @@ public class ClementinePbParser {
 			msg = Message.parseFrom(bs);
 			
 			// First check the proto version
-			if (msg.getVersion() < Message.getDefaultInstance().getVersion()) {
+			if (!msg.hasVersion()
+			 || msg.getVersion() < Message.getDefaultInstance().getVersion()) {
 				parsedElement = new OldProtoVersion();
 			} else {
 				parsedElement = parseMsg(msg);
