@@ -1,5 +1,6 @@
 Version 0.3
   Features:
+    - Android 2.2 support
     - Playlist Support
     - Set Repeat and Random Modes
     - Action Bar for all Android Versions
