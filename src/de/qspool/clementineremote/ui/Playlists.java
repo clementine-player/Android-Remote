@@ -35,6 +35,7 @@ import com.actionbarsherlock.view.MenuItem;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.player.MyPlaylist;
+import de.qspool.clementineremote.ui.fragments.PlaylistSongs;
 
 public class Playlists extends SherlockFragmentActivity implements ActionBar.TabListener {
 
@@ -77,8 +78,9 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 			MyPlaylist playlist = App.mClementine.getPlaylists().get(key);
 			
 			// Create the fragment
-			Fragment frag = new PlaylistSongs(playlist.getId());
-			mPagerAdapter.addFragment(frag);
+			PlaylistSongs playlistSongs = new PlaylistSongs();
+			playlistSongs.setId(playlist.getId());
+			mPagerAdapter.addFragment(playlistSongs);
 			
 			// Create the tab
 			ActionBar.Tab playlistTab  = actionBar.newTab();
