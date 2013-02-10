@@ -70,9 +70,6 @@ public class ConnectDialog extends Activity {
     	
 	    setContentView(R.layout.connectdialog);
 	    
-	    // Get the parameters
-	    Bundle extras = getIntent().getExtras();
-	    
 	    // Get the Layoutelements
 	    mBtnConnect = (Button) findViewById(R.id.btnConnect);
 	    mBtnConnect.setOnClickListener(oclConnect);
@@ -103,11 +100,20 @@ public class ConnectDialog extends Activity {
 	    
 	    // Get the last auth code
 	    mAuthCode = mSharedPref.getInt(App.SP_LAST_AUTH_CODE, 0);
+	}
+	
+	@Override 
+	public void onResume() {
+		super.onResume();
+		
+	    // Get the parameters
+	    Bundle extras = getIntent().getExtras();
 	    
 	    // Check if Autoconnect is enabled
 	    if (mCbAutoConnect.isChecked() && extras.getBoolean(App.SP_KEY_AC)) {
 	    	connect();
 	    }
+	    extras.putBoolean(App.SP_KEY_AC, true);
 	}
 
 	private OnClickListener oclConnect = new OnClickListener() {

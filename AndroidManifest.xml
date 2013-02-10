@@ -37,6 +37,11 @@
         <activity android:name=".ui.Playlists"
                   android:theme="@style/PlayerTheme"></activity>
         <service android:name=".backend.ClementineService"></service>
+        <receiver android:name=".backend.ClementineMediaButtonEventReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

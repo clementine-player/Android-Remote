@@ -1,15 +1,19 @@
 Version 0.3
   Features:
     - Android 2.2 support
-    - Playlist Support
-    - Set Repeat and Random Modes
-    - Action Bar for all Android Versions
+    - Playlist support
+    - Set repeat and shuffle Modes
+    - ActionBar for all Android versions
+    - Media Widgets or bluetooth devices can control Clementine like 
+      every other media player
+    - Added Lockscreen-Controls for Android 4.0+
   Improvements:
-    - Scale Cover to full size (Thanks Evan)
+    - Scale cover to full size (Thanks Evan)
     - Show keyboard in number mode on connect dialog (Thanks Evan)
     - Show the current playlist in the ActionBar
+    - Show cover art in notification (Android 4.0+)
   Bugfixes:
-    - Fix the Notification Force Closes
+    - Fix the notification force closes
   Translations:
     - Added german translation
 

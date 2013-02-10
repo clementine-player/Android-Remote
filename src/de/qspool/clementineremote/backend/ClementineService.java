@@ -39,6 +39,6 @@ public class ClementineService extends Service {
 		} catch (InterruptedException e) {}
 		
 		// Create a new instance
-		App.mClementineConnection = new ClementineConnection();
+		App.mClementineConnection = new ClementineConnection(this);
 	}
 }

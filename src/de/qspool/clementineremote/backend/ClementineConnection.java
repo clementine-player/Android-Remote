@@ -43,12 +43,20 @@ import de.qspool.clementineremote.backend.requests.RequestConnect;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
 import de.qspool.clementineremote.backend.requests.RequestToThread;
 
+import android.annotation.TargetApi;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.media.AudioManager;
+import android.media.MediaMetadataRetriever;
+import android.media.RemoteControlClient;
+import android.media.AudioManager.OnAudioFocusChangeListener;
+import android.media.RemoteControlClient.MetadataEditor;
+import android.os.Build;
 import android.os.Looper;
 import android.os.Handler;
 import android.os.Message;
@@ -65,6 +73,8 @@ public class ClementineConnection extends Thread {
 	private final int DELAY_MILLIS = 250;
 	private final String TAG = "ClementineConnection";
 	private final long KEEP_ALIVE_TIMEOUT = 60000; // 60 Second timeout
+	
+	private Context mContext;
 	private Socket mClient;
 	private DataInputStream mIn;
 	private DataOutputStream mOut;
@@ -79,6 +89,14 @@ public class ClementineConnection extends Thread {
 	private int mNotificationWidth;
 	private int mNotificationHeight;
 	private MySong mLastSong = null;
+	
+	private AudioManager mAudioManager;
+	private ComponentName mClementineMediaButtonEventReceiver;
+	private RemoteControlClient mRcClient;
+	
+	public ClementineConnection(Context context) {
+		mContext = context;
+	}
 
 	@Override
 	public void run() {
@@ -92,6 +110,10 @@ public class ClementineConnection extends Thread {
 		mNotificationHeight = (int) res.getDimension(android.R.dimen.notification_large_icon_height);
 		mNotificationWidth  = (int) res.getDimension(android.R.dimen.notification_large_icon_width);
 		
+		mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+		mClementineMediaButtonEventReceiver = new ComponentName(mContext.getPackageName(),
+																ClementineMediaButtonEventReceiver.class.getName());
+		
 		Looper.loop();
 	}
 	
@@ -103,6 +125,7 @@ public class ClementineConnection extends Thread {
 		// Reset the connected flag
 		App.mClementine.setConnected(false);
 		mLastKeepAlive = 0;
+		
 		try {
 			// Now try to connect and set the input and output streams
 			SocketAddress socketAddress = new InetSocketAddress(r.getIp(), r.getPort());
@@ -125,7 +148,12 @@ public class ClementineConnection extends Thread {
 				
 				// Now we are connected
 				App.mClementine.setConnected(true);
+				
+				// Setup the notification
 				setupNotification();
+				
+				// Setup the MediaButtonReceiver and the RemoteControlClient
+				registerRemoteControlClient();
 			}
 		} catch(UnknownHostException e) {
 			// If we can't connect, then tell that the ui-thread 
@@ -179,21 +207,10 @@ public class ClementineConnection extends Thread {
 			App.mClementine.setConnected(false);
 			sendUiMessage(new Disconnected(DisconnectReason.WRONG_PROTO));
 		} else if (clementineElement instanceof Reload) {
-	    	// Now update the notification
-			if (App.mClementine.getCurrentSong() != mLastSong
-			 && App.mClementine.getCurrentSong().getArt() != null) {
-				mLastSong = App.mClementine.getCurrentSong();
-				Bitmap scaledArt = Bitmap.createScaledBitmap(App.mClementine.getCurrentSong().getArt(), 
-														mNotificationWidth, 
-														mNotificationHeight, 
-														false);
-		    	mNotifyBuilder.setLargeIcon(scaledArt);
-		    	mNotifyBuilder.setContentTitle(App.mClementine.getCurrentSong().getArtist());
-		    	mNotifyBuilder.setContentText(App.mClementine.getCurrentSong().getTitle() + 
-		    								  " / " + 
-		    								  App.mClementine.getCurrentSong().getAlbum());
-		    	mNotificationManager.notify(mNotifyId, mNotifyBuilder.build());
-			}
+	    	// Now update the notification and the remote control client
+			mLastSong = App.mClementine.getCurrentSong();
+			updateNotification();
+			updateRemoteControlClient();
 		}
 	}
 	
@@ -231,7 +248,6 @@ public class ClementineConnection extends Thread {
 	 * @param r The RequestDisconnect Object
 	 */
 	void disconnect(RequestDisconnect r) {
-		Log.d(TAG, "Disconnect Request");
 		if (App.mClementine.isConnected()) {
 			// Set the Connected flag to false, so the loop in
 			// checkForData() is interrupted
@@ -265,7 +281,12 @@ public class ClementineConnection extends Thread {
 	 * Close the socket and the streams
 	 */
 	private void closeConnection() {
+		// Cancel Notification
 		mNotificationManager.cancel(mNotifyId);
+
+		unregisterRemoteControlClient();
+		
+		// Disconnect socket
 		try {
 			mClient.close();
 			mIn.close();
@@ -289,7 +310,6 @@ public class ClementineConnection extends Thread {
 	 */
 	private void checkKeepAlive() {
 		if (mLastKeepAlive > 0 && (System.currentTimeMillis() - mLastKeepAlive) > KEEP_ALIVE_TIMEOUT ) {
-			Log.d(TAG, "KeepAlive disconnect");
 			closeConnection();
 			
 			// Tell the ui, that we lost the connection
@@ -325,4 +345,113 @@ public class ClementineConnection extends Thread {
 	    PendingIntent resultPendingintent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 	    mNotifyBuilder.setContentIntent(resultPendingintent);
 	}
+	
+	/**
+	 * Update the notification with the new track info
+	 */
+	private void updateNotification() {
+		if (App.mClementine.getCurrentSong() != mLastSong
+				 && App.mClementine.getCurrentSong().getArt() != null) {
+			Bitmap scaledArt = Bitmap.createScaledBitmap(App.mClementine.getCurrentSong().getArt(), 
+													mNotificationWidth, 
+													mNotificationHeight, 
+													false);
+	    	mNotifyBuilder.setLargeIcon(scaledArt);
+	    	mNotifyBuilder.setContentTitle(App.mClementine.getCurrentSong().getArtist());
+	    	mNotifyBuilder.setContentText(App.mClementine.getCurrentSong().getTitle() + 
+	    								  " / " + 
+	    								  App.mClementine.getCurrentSong().getAlbum());
+	    	mNotificationManager.notify(mNotifyId, mNotifyBuilder.build());
+		}
+	}
+	
+	/**
+	 * Register the RemoteControlClient
+	 */
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+	private void registerRemoteControlClient() {
+		// Request AudioFocus, so the widget is shown on the lock-screen
+		mAudioManager.requestAudioFocus(mOnAudioFocusChangeListener, 
+										AudioManager.STREAM_MUSIC, 
+										AudioManager.AUDIOFOCUS_GAIN);
+		
+		mAudioManager.registerMediaButtonEventReceiver(mClementineMediaButtonEventReceiver);
+		
+		// The rest is only available in API Level 14
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+			return;
+		
+		// Create the intent
+		Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+		mediaButtonIntent.setComponent(mClementineMediaButtonEventReceiver);
+		PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(App.mApp.getApplicationContext(), 
+																	  0, 
+																	  mediaButtonIntent, 
+																	  0);
+		// Create the client
+		mRcClient = new RemoteControlClient(mediaPendingIntent);
+		if (App.mClementine.getState() == Clementine.State.PLAY) {
+			mRcClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
+    	} else {
+    		mRcClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
+    	}
+		mRcClient.setTransportControlFlags(	RemoteControlClient.FLAG_KEY_MEDIA_NEXT |
+											RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS |
+											RemoteControlClient.FLAG_KEY_MEDIA_PLAY |
+											RemoteControlClient.FLAG_KEY_MEDIA_PAUSE);
+		mAudioManager.registerRemoteControlClient(mRcClient);
+	}
+	
+	/**
+	 * Unregister the RemoteControlClient
+	 */
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+	private void unregisterRemoteControlClient() {
+		// Disconnect EventReceiver and RemoteControlClient
+		mAudioManager.unregisterMediaButtonEventReceiver(mClementineMediaButtonEventReceiver);
+		
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+			return;
+		
+		if (mRcClient != null) {
+			mAudioManager.unregisterRemoteControlClient(mRcClient);
+			mAudioManager.abandonAudioFocus(mOnAudioFocusChangeListener);
+		}
+	}
+	
+	/**
+	 * Update the RemoteControlClient
+	 */
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+	private void updateRemoteControlClient() {
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+			return;
+		
+		// Update playstate
+		if (App.mClementine.getState() == Clementine.State.PLAY) {
+			mRcClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
+    	} else {
+    		mRcClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
+    	}
+		
+		if (App.mClementine.getCurrentSong() != mLastSong
+				 && App.mClementine.getCurrentSong().getArt() != null) {
+			// Get the metadata editor
+			RemoteControlClient.MetadataEditor editor = mRcClient.editMetadata(false);
+			editor.putBitmap(MetadataEditor.BITMAP_KEY_ARTWORK, mLastSong.getArt());
+			editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUM, mLastSong.getAlbum());
+			editor.putString(MediaMetadataRetriever.METADATA_KEY_ARTIST, mLastSong.getArtist());
+			editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, mLastSong.getTitle());
+			editor.putString(MediaMetadataRetriever.METADATA_KEY_GENRE, mLastSong.getGenre());
+			editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, mLastSong.getAlbumartist());
+			editor.apply();
+		}
+	}
+	
+	private OnAudioFocusChangeListener mOnAudioFocusChangeListener = new OnAudioFocusChangeListener() {
+		@Override
+		public void onAudioFocusChange(int focusChange) {
+
+		}
+	};
 }

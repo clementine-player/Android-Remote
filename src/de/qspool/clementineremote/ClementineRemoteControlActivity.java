@@ -90,9 +90,7 @@ public class ClementineRemoteControlActivity extends Activity {
     		App.mClementine = new Clementine();
     	}
     	if (App.mClementineConnection == null) {
-    		App.mClementineConnection = new ClementineConnection();
-    	}
-    	if (!App.mClementineConnection.isAlive()) {
+    		App.mClementineConnection = new ClementineConnection(this);
 	    	mServiceIntent = new Intent(this, ClementineService.class);
 	    	startService(mServiceIntent);
     	}
