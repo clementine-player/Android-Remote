@@ -89,6 +89,7 @@ public class ClementineConnection extends Thread {
 	private int mNotificationWidth;
 	private int mNotificationHeight;
 	private MySong mLastSong = null;
+	private Clementine.State mLastState;
 	
 	private AudioManager mAudioManager;
 	private ComponentName mClementineMediaButtonEventReceiver;
@@ -207,10 +208,16 @@ public class ClementineConnection extends Thread {
 			App.mClementine.setConnected(false);
 			sendUiMessage(new Disconnected(DisconnectReason.WRONG_PROTO));
 		} else if (clementineElement instanceof Reload) {
-	    	// Now update the notification and the remote control client
-			mLastSong = App.mClementine.getCurrentSong();
-			updateNotification();
-			updateRemoteControlClient();
+	    	// Now update the notification and the remote control client			
+			if (App.mClementine.getCurrentSong() != mLastSong) {
+				mLastSong = App.mClementine.getCurrentSong();
+				updateNotification();
+				updateRemoteControlClient();
+			}
+			if (App.mClementine.getState() != mLastState) {
+				mLastState = App.mClementine.getState();
+				updateRemoteControlClient();
+			}
 		}
 	}
 	
@@ -350,19 +357,16 @@ public class ClementineConnection extends Thread {
 	 * Update the notification with the new track info
 	 */
 	private void updateNotification() {
-		if (App.mClementine.getCurrentSong() != mLastSong
-				 && App.mClementine.getCurrentSong().getArt() != null) {
-			Bitmap scaledArt = Bitmap.createScaledBitmap(App.mClementine.getCurrentSong().getArt(), 
-													mNotificationWidth, 
-													mNotificationHeight, 
-													false);
-	    	mNotifyBuilder.setLargeIcon(scaledArt);
-	    	mNotifyBuilder.setContentTitle(App.mClementine.getCurrentSong().getArtist());
-	    	mNotifyBuilder.setContentText(App.mClementine.getCurrentSong().getTitle() + 
-	    								  " / " + 
-	    								  App.mClementine.getCurrentSong().getAlbum());
-	    	mNotificationManager.notify(mNotifyId, mNotifyBuilder.build());
-		}
+		Bitmap scaledArt = Bitmap.createScaledBitmap(App.mClementine.getCurrentSong().getArt(), 
+												mNotificationWidth, 
+												mNotificationHeight, 
+												false);
+    	mNotifyBuilder.setLargeIcon(scaledArt);
+    	mNotifyBuilder.setContentTitle(App.mClementine.getCurrentSong().getArtist());
+    	mNotifyBuilder.setContentText(App.mClementine.getCurrentSong().getTitle() + 
+    								  " / " + 
+    								  App.mClementine.getCurrentSong().getAlbum());
+    	mNotificationManager.notify(mNotifyId, mNotifyBuilder.build());
 	}
 	
 	/**
@@ -434,18 +438,15 @@ public class ClementineConnection extends Thread {
     		mRcClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
     	}
 		
-		if (App.mClementine.getCurrentSong() != mLastSong
-				 && App.mClementine.getCurrentSong().getArt() != null) {
-			// Get the metadata editor
-			RemoteControlClient.MetadataEditor editor = mRcClient.editMetadata(false);
-			editor.putBitmap(MetadataEditor.BITMAP_KEY_ARTWORK, mLastSong.getArt());
-			editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUM, mLastSong.getAlbum());
-			editor.putString(MediaMetadataRetriever.METADATA_KEY_ARTIST, mLastSong.getArtist());
-			editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, mLastSong.getTitle());
-			editor.putString(MediaMetadataRetriever.METADATA_KEY_GENRE, mLastSong.getGenre());
-			editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, mLastSong.getAlbumartist());
-			editor.apply();
-		}
+		// Get the metadata editor
+		RemoteControlClient.MetadataEditor editor = mRcClient.editMetadata(false);
+		editor.putBitmap(MetadataEditor.BITMAP_KEY_ARTWORK, mLastSong.getArt());
+		editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUM, mLastSong.getAlbum());
+		editor.putString(MediaMetadataRetriever.METADATA_KEY_ARTIST, mLastSong.getArtist());
+		editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, mLastSong.getTitle());
+		editor.putString(MediaMetadataRetriever.METADATA_KEY_GENRE, mLastSong.getGenre());
+		editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, mLastSong.getAlbumartist());
+		editor.apply();
 	}
 	
 	private OnAudioFocusChangeListener mOnAudioFocusChangeListener = new OnAudioFocusChangeListener() {
