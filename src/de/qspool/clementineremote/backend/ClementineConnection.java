@@ -149,6 +149,8 @@ public class ClementineConnection extends Thread {
 				
 				// Now we are connected
 				App.mClementine.setConnected(true);
+				mLastSong = null;
+				mLastState = App.mClementine.getState();
 				
 				// Setup the notification
 				setupNotification();
@@ -439,14 +441,16 @@ public class ClementineConnection extends Thread {
     	}
 		
 		// Get the metadata editor
-		RemoteControlClient.MetadataEditor editor = mRcClient.editMetadata(false);
-		editor.putBitmap(MetadataEditor.BITMAP_KEY_ARTWORK, mLastSong.getArt());
-		editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUM, mLastSong.getAlbum());
-		editor.putString(MediaMetadataRetriever.METADATA_KEY_ARTIST, mLastSong.getArtist());
-		editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, mLastSong.getTitle());
-		editor.putString(MediaMetadataRetriever.METADATA_KEY_GENRE, mLastSong.getGenre());
-		editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, mLastSong.getAlbumartist());
-		editor.apply();
+		if (mLastSong.getArt() != null) {
+			RemoteControlClient.MetadataEditor editor = mRcClient.editMetadata(false);
+			editor.putBitmap(MetadataEditor.BITMAP_KEY_ARTWORK, mLastSong.getArt());
+			editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUM, mLastSong.getAlbum());
+			editor.putString(MediaMetadataRetriever.METADATA_KEY_ARTIST, mLastSong.getArtist());
+			editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, mLastSong.getTitle());
+			editor.putString(MediaMetadataRetriever.METADATA_KEY_GENRE, mLastSong.getGenre());
+			editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, mLastSong.getAlbumartist());
+			editor.apply();
+		}
 	}
 	
 	private OnAudioFocusChangeListener mOnAudioFocusChangeListener = new OnAudioFocusChangeListener() {
