@@ -32,6 +32,7 @@ public class ClementineRemoteControlActivity extends Activity {
 	
 	public final static int RESULT_CONNECT = 1;
 	public final static int RESULT_DISCONNECT = 2;
+	public final static int RESULT_RESTART = 3;
 	
 	Intent mServiceIntent;
 	
@@ -65,12 +66,17 @@ public class ClementineRemoteControlActivity extends Activity {
     	// Check what acivity has finished. Depending on that, another activity 
     	// is called or the app closes
      	if (requestCode == ID_CONNECT_DIALOG) {
-    		if (resultCode == Activity.RESULT_CANCELED) {
-        		finish();
-        	}
-        	if (resultCode == RESULT_CONNECT) {
-        		startPlayerDialog();
-        	}
+     		switch (resultCode) {
+     		case Activity.RESULT_CANCELED:
+     			finish();
+     			break;
+     		case RESULT_CONNECT:
+     			startPlayerDialog();
+     			break;
+     		case RESULT_RESTART:
+     			startConnectDialog(false);
+     			break;
+     		}
         	return;
     	}
     	

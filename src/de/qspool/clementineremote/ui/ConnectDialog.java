@@ -83,9 +83,6 @@ public class ConnectDialog extends Activity {
 	    mEtIp.setRawInputType(InputType.TYPE_CLASS_NUMBER);
 	    mCbAutoConnect = (CheckBox) findViewById(R.id.cbAutoconnect);
 	    
-	    // Set the handler
-	    App.mClementineConnection.setUiHandler(mHandler);
-	    
 	    // Create a progress dialog
 	    mPdConnect = new ProgressDialog(this);
 	    mPdConnect.setCancelable(true);
@@ -106,14 +103,24 @@ public class ConnectDialog extends Activity {
 	public void onResume() {
 		super.onResume();
 		
-	    // Get the parameters
-	    Bundle extras = getIntent().getExtras();
-	    
-	    // Check if Autoconnect is enabled
-	    if (mCbAutoConnect.isChecked() && extras.getBoolean(App.SP_KEY_AC)) {
-	    	connect();
-	    }
-	    extras.putBoolean(App.SP_KEY_AC, true);
+		// Check if we are still connected
+		if (App.mClementineConnection == null 
+		 || !App.mClementineConnection.isAlive()) {
+			setResult(ClementineRemoteControlActivity.RESULT_RESTART);
+			finish();
+		} else {
+		    // Set the handler
+		    App.mClementineConnection.setUiHandler(mHandler);
+		    
+		    // Get the parameters
+		    Bundle extras = getIntent().getExtras();
+		    
+		    // Check if Autoconnect is enabled
+		    if (mCbAutoConnect.isChecked() && extras.getBoolean(App.SP_KEY_AC)) {
+		    	connect();
+		    }
+		    extras.putBoolean(App.SP_KEY_AC, true);
+		}
 	}
 
 	private OnClickListener oclConnect = new OnClickListener() {

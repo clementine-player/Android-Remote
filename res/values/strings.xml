@@ -7,7 +7,7 @@
     <string name="connectdialog_connecting">Connecting to Clementine</string>
     <string name="connectdialog_connected">Connected</string>
     <string name="connectdialog_error">Could not reach host</string>
-    <string name="connectdialog_ip_hint">Enter Ip address</string>
+    <string name="connectdialog_ip_hint">Enter IP address</string>
     <string name="menu_disconnect">Disconnect</string>
     <string name="player_nosong">No Song playing right now</string>
     <string name="player_disconnected">Disconnected</string>
