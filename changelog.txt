@@ -1,3 +1,11 @@
+Version 0.3.1
+  Improvements:
+    - Enable fastscroll in playlist view
+    - Show the current track on playlist view
+  Bugfixes:
+    - Fix FC when starting Clementine Remote
+    - Display Artist on Lockscreen (Android 4.0+)
+
 Version 0.3
   Features:
     - Android 2.2 support

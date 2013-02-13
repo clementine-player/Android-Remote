@@ -444,11 +444,15 @@ public class ClementineConnection extends Thread {
 		if (mLastSong.getArt() != null) {
 			RemoteControlClient.MetadataEditor editor = mRcClient.editMetadata(false);
 			editor.putBitmap(MetadataEditor.BITMAP_KEY_ARTWORK, mLastSong.getArt());
+			
+			// The RemoteControlClients displays the following info:
+			// METADATA_KEY_TITLE (white) - METADATA_KEY_ALBUMARTIST (grey) - METADATA_KEY_TITLE (grey)
+			// 
+			// So i put the metadata not in the "correct" fields to display artist, track and album
+			// TODO: Fix it when changed in newer android versions
 			editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUM, mLastSong.getAlbum());
-			editor.putString(MediaMetadataRetriever.METADATA_KEY_ARTIST, mLastSong.getArtist());
-			editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, mLastSong.getTitle());
-			editor.putString(MediaMetadataRetriever.METADATA_KEY_GENRE, mLastSong.getGenre());
-			editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, mLastSong.getAlbumartist());
+			editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, mLastSong.getArtist());
+			editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, mLastSong.getTitle());
 			editor.apply();
 		}
 	}

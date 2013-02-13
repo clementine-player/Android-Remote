@@ -78,6 +78,16 @@ public class PlaylistSongs extends SherlockListFragment {
 		mActivity = activity;
 	}
 	
+	@Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getListView().setFastScrollEnabled(true);
+        
+        // Get the position of the current track
+        int pos = App.mClementine.getCurrentSong().getIndex();
+        getListView().setSelection(pos - 3);
+	}
+	
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
