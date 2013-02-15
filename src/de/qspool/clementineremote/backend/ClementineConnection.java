@@ -359,16 +359,18 @@ public class ClementineConnection extends Thread {
 	 * Update the notification with the new track info
 	 */
 	private void updateNotification() {
-		Bitmap scaledArt = Bitmap.createScaledBitmap(App.mClementine.getCurrentSong().getArt(), 
-												mNotificationWidth, 
-												mNotificationHeight, 
-												false);
-    	mNotifyBuilder.setLargeIcon(scaledArt);
-    	mNotifyBuilder.setContentTitle(App.mClementine.getCurrentSong().getArtist());
-    	mNotifyBuilder.setContentText(App.mClementine.getCurrentSong().getTitle() + 
-    								  " / " + 
-    								  App.mClementine.getCurrentSong().getAlbum());
-    	mNotificationManager.notify(mNotifyId, mNotifyBuilder.build());
+		if (mLastSong != null)  {
+			Bitmap scaledArt = Bitmap.createScaledBitmap(mLastSong.getArt(), 
+													mNotificationWidth, 
+													mNotificationHeight, 
+													false);
+			mNotifyBuilder.setLargeIcon(scaledArt);
+			mNotifyBuilder.setContentTitle(mLastSong.getArtist());
+			mNotifyBuilder.setContentText(mLastSong.getTitle() + 
+										  " / " + 
+										  mLastSong.getAlbum());
+			mNotificationManager.notify(mNotifyId, mNotifyBuilder.build());
+		}
 	}
 	
 	/**
@@ -441,7 +443,8 @@ public class ClementineConnection extends Thread {
     	}
 		
 		// Get the metadata editor
-		if (mLastSong.getArt() != null) {
+		if (mLastSong != null
+		 && mLastSong.getArt() != null) {
 			RemoteControlClient.MetadataEditor editor = mRcClient.editMetadata(false);
 			editor.putBitmap(MetadataEditor.BITMAP_KEY_ARTWORK, mLastSong.getArt());
 			
