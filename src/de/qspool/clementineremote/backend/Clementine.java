@@ -17,13 +17,9 @@
 
 package de.qspool.clementineremote.backend;
 
-import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.player.MyPlaylist;
 import de.qspool.clementineremote.backend.player.MySong;
-import android.content.Context;
 import android.util.SparseArray;
-import android.widget.Toast;
-
 
 /**
  * This Class stores the attributes of Clementine, like the version,
@@ -112,27 +108,15 @@ public class Clementine {
 		this.mRepeatMode = mRepeatMode;
 	}
 	
-	public void nextRepeatMode(boolean showToast, Context context) {
+	public void nextRepeatMode() {
 		switch (mRepeatMode) {
 		case OFF: 		mRepeatMode = RepeatMode.TRACK;
-						if (showToast) {
-							Toast.makeText(context, R.string.repeat_track, Toast.LENGTH_SHORT).show();
-						}
 						break;
 		case TRACK:		mRepeatMode = RepeatMode.ALBUM;
-						if (showToast) {
-							Toast.makeText(context, R.string.repeat_album, Toast.LENGTH_SHORT).show();
-						}
 						break;
 		case ALBUM:		mRepeatMode = RepeatMode.PLAYLIST;
-						if (showToast) {
-							Toast.makeText(context, R.string.repeat_playlist, Toast.LENGTH_SHORT).show();
-						}
 						break;
 		case PLAYLIST:	mRepeatMode = RepeatMode.OFF;
-						if (showToast) {
-							Toast.makeText(context, R.string.repeat_off, Toast.LENGTH_SHORT).show();
-						}
 						break;
 		}
 	}
@@ -145,27 +129,15 @@ public class Clementine {
 		this.mShuffleMode = mShuffleMode;
 	}
 	
-	public void nextShuffleMode(boolean showToast, Context context) {
+	public void nextShuffleMode() {
 		switch (mShuffleMode) {
 		case OFF: 		mShuffleMode = ShuffleMode.ALL;
-						if (showToast) {
-							Toast.makeText(context, R.string.shuffle_all, Toast.LENGTH_SHORT).show();
-						}
 						break;
 		case ALL:		mShuffleMode = ShuffleMode.INSIDE_ALBUM;
-						if (showToast) {
-							Toast.makeText(context, R.string.shuffle_inside_album, Toast.LENGTH_SHORT).show();
-						}
 						break;
 		case INSIDE_ALBUM:	mShuffleMode = ShuffleMode.ALBUMS;
-							if (showToast) {
-								Toast.makeText(context, R.string.shuffle_albums, Toast.LENGTH_SHORT).show();
-							}
 							break;
 		case ALBUMS:	mShuffleMode = ShuffleMode.OFF;
-						if (showToast) {
-							Toast.makeText(context, R.string.shuffle_off, Toast.LENGTH_SHORT).show();
-						}
 						break;
 		}
 	}

@@ -77,6 +77,8 @@ public class Player extends SherlockActivity {
 	private LinkedList<String> mDownloadPlaylistNames;
 	private ProgressDialog mProgressDialog;
 	
+	private Toast mToast;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
@@ -155,13 +157,15 @@ public class Player extends SherlockActivity {
 		{
 		case R.id.disconnect: 	requestDisconnect();
 								break;
-		case R.id.shuffle:		App.mClementine.nextShuffleMode(true, this);
+		case R.id.shuffle:		App.mClementine.nextShuffleMode();
 								msg.obj = new RequestControl(Request.SHUFFLE);
 								App.mClementineConnection.mHandler.sendMessage(msg);
+								showShuffleToast();
 								break;
-		case R.id.repeat:		App.mClementine.nextRepeatMode(true, this);
+		case R.id.repeat:		App.mClementine.nextRepeatMode();
 								msg.obj = new RequestControl(Request.REPEAT);
 								App.mClementineConnection.mHandler.sendMessage(msg);
+								showRepeatToast();
 								break;
 		case R.id.settings:		Intent settingsIntent = new Intent(this, ClementineRemoteSettings.class);
 								startActivity(settingsIntent);
@@ -171,6 +175,38 @@ public class Player extends SherlockActivity {
 		default: break;
 		}
 		return true;
+	}
+	
+	/**
+	 * Show the toast for the shuffle mode
+	 */
+	private void showShuffleToast() {
+		switch (App.mClementine.getShuffleMode()) {
+		case OFF: 		makeToast(R.string.shuffle_off, Toast.LENGTH_SHORT);
+						break;
+		case ALL:		makeToast(R.string.shuffle_all, Toast.LENGTH_SHORT);
+						break;
+		case INSIDE_ALBUM:	makeToast(R.string.shuffle_inside_album, Toast.LENGTH_SHORT);
+							break;
+		case ALBUMS:	makeToast(R.string.shuffle_albums, Toast.LENGTH_SHORT);
+						break;
+		}
+	}
+	
+	/**
+	 * Show the toast for the repeat mode
+	 */
+	public void showRepeatToast() {
+		switch (App.mClementine.getRepeatMode()) {
+		case OFF: 		makeToast(R.string.repeat_off, Toast.LENGTH_SHORT);
+						break;
+		case TRACK:		makeToast(R.string.repeat_track, Toast.LENGTH_SHORT);
+						break;
+		case ALBUM:		makeToast(R.string.repeat_album, Toast.LENGTH_SHORT);
+						break;
+		case PLAYLIST:	makeToast(R.string.repeat_playlist, Toast.LENGTH_SHORT);
+						break;
+		}
 	}
 	
 	/**
@@ -235,6 +271,7 @@ public class Player extends SherlockActivity {
 					Message msgDown = Message.obtain();
 					msgDown.obj = new RequestVolume(App.mClementine.getVolume() - 10);
 					App.mClementineConnection.mHandler.sendMessage(msgDown);
+					makeToast(getString(R.string.playler_volume) + " " + App.mClementine.getVolume(), Toast.LENGTH_SHORT);
 					return true;
 				}
 				break;
@@ -243,6 +280,7 @@ public class Player extends SherlockActivity {
 					Message msgUp = Message.obtain();
 					msgUp.obj = new RequestVolume(App.mClementine.getVolume() + 10);
 					App.mClementineConnection.mHandler.sendMessage(msgUp);
+					makeToast(getString(R.string.playler_volume) + " " + App.mClementine.getVolume(), Toast.LENGTH_SHORT);
 					return true;
 				}
 				break;
@@ -256,7 +294,7 @@ public class Player extends SherlockActivity {
 	 * Disconnect was finished, now finish this activity
 	 */
 	void disconnect() {
-		Toast.makeText(this, R.string.player_disconnected, Toast.LENGTH_SHORT).show();
+		makeToast(R.string.player_disconnected, Toast.LENGTH_SHORT);
 		setResult(ClementineRemoteControlActivity.RESULT_DISCONNECT);
 		finish();
 	}
@@ -330,6 +368,28 @@ public class Player extends SherlockActivity {
     	sb.append(Utilities.PrettyTime(App.mClementine.getCurrentSong().getLength()));
     	
     	return sb.toString();
+    }
+    
+    /**
+     * Show text in a toast. Cancels previous toast
+     * @param resId The resource id
+     * @param length length
+     */
+    private void makeToast(int resId, int length) {
+    	makeToast(getString(resId), length);
+    }
+    
+    /**
+     * Show text in a toast. Cancels previous toast
+     * @param tetx The text to show
+     * @param length length
+     */
+    private void makeToast(String text, int length) {
+    	if (mToast != null) {
+    		mToast.cancel();
+    	}
+    	mToast = Toast.makeText(this, text, length);
+    	mToast.show();
     }
 	
 	private OnClickListener oclControl = new OnClickListener() {

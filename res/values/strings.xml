@@ -8,11 +8,14 @@
     <string name="connectdialog_connected">Connected</string>
     <string name="connectdialog_error">Could not reach host</string>
     <string name="connectdialog_ip_hint">Enter IP address</string>
+    <string name="connectdialog_mdns_found">Found Clementines. Hit the icon to choose</string>
+    <string name="connectdialog_services">Clementines</string>
     <string name="menu_disconnect">Disconnect</string>
     <string name="player_nosong">No Song playing right now</string>
     <string name="player_disconnected">Disconnected</string>
     <string name="player_playlist">Playlist:</string>
     <string name="player_download_playlists">Downloading Playlists</string>
+    <string name="playler_volume">Volume</string>
     <string name="menu_shuffle">Shuffle</string>
     <string name="menu_repeat">Repeat</string>
     <string name="menu_shuffle">Shuffle</string>

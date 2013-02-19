@@ -25,6 +25,7 @@ import de.qspool.clementineremote.backend.elements.Connected;
 import de.qspool.clementineremote.backend.elements.Disconnected;
 import de.qspool.clementineremote.backend.elements.NoConnection;
 import de.qspool.clementineremote.backend.elements.OldProtoVersion;
+import de.qspool.clementineremote.backend.elements.ServiceFound;
 
 /**
  * This class is used to handle the messages sent from the
@@ -49,6 +50,8 @@ public class ConnectDialogHandler extends Handler {
 			cd.oldProtoVersion();
 		} else if (msg.obj instanceof Disconnected) {
 			cd.disconnected((Disconnected) msg.obj);
+		} else if (msg.obj instanceof ServiceFound) {
+			cd.serviceFound();
 		}
 	}
 }

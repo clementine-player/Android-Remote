@@ -23,16 +23,21 @@ import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.elements.Disconnected;
 import de.qspool.clementineremote.backend.elements.Disconnected.DisconnectReason;
+import de.qspool.clementineremote.backend.mdns.ClementineMDnsDiscovery;
 import de.qspool.clementineremote.backend.requests.RequestConnect;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.nsd.NsdServiceInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
@@ -41,6 +46,10 @@ import android.view.View.OnClickListener;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -52,14 +61,24 @@ import android.widget.Toast;
  * The connect dialog
  */
 public class ConnectDialog extends Activity {
+	private final static int ANIMATION_DURATION = 2000;
 	private Button mBtnConnect;
 	private ImageButton mBtnSettings;
+	private ImageButton mBtnClementine;
 	private EditText mEtIp;
 	private CheckBox mCbAutoConnect;
+	
 	ProgressDialog mPdConnect;
+	
 	private SharedPreferences mSharedPref;
     private ConnectDialogHandler mHandler = new ConnectDialogHandler(this);
     private int mAuthCode = 0;
+    
+    private ClementineMDnsDiscovery mClementineMDns;
+    private AlphaAnimation mAlphaDown; 
+    private AlphaAnimation mAlphaUp;
+    private boolean mAnimationCancel;
+    private boolean mFirstCall;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -77,6 +96,20 @@ public class ConnectDialog extends Activity {
 	    
 	    mBtnSettings = (ImageButton) findViewById(R.id.btnSettings);
 	    mBtnSettings.setOnClickListener(oclSettings);
+	    
+	    mBtnClementine = (ImageButton) findViewById(R.id.btnClementineIcon);
+	    mBtnClementine.setOnClickListener(oclClementine);
+	    
+	    // Setup the animation for the Clementine icon
+	    mAlphaDown = new AlphaAnimation(1.0f, 0.3f);
+	    mAlphaUp = new AlphaAnimation(0.3f, 1.0f);
+	    mAlphaDown.setDuration(ANIMATION_DURATION);
+	    mAlphaUp.setDuration(ANIMATION_DURATION);
+	    mAlphaDown.setFillAfter(true);
+	    mAlphaUp.setFillAfter(true);
+	    mAlphaUp.setAnimationListener(mAnimationListener);
+	    mAlphaDown.setAnimationListener(mAnimationListener);
+	    mAnimationCancel = false;
 	    
 	    // Ip and Autoconnect
 	    mEtIp = (EditText) findViewById(R.id.etIp);
@@ -114,13 +147,29 @@ public class ConnectDialog extends Activity {
 		    
 		    // Get the parameters
 		    Bundle extras = getIntent().getExtras();
+		    mFirstCall = extras.getBoolean(App.SP_KEY_AC);
 		    
 		    // Check if Autoconnect is enabled
 		    if (mCbAutoConnect.isChecked() && extras.getBoolean(App.SP_KEY_AC)) {
 		    	connect();
 		    }
+		    
+		    // Only for Jelly Bean: mDNS Discovery
+		    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+		    	mClementineMDns = new ClementineMDnsDiscovery(mHandler);
+		    	mClementineMDns.discoverServices();
+		    }
+		    
 		    extras.putBoolean(App.SP_KEY_AC, true);
 		}
+	}
+	
+	@Override
+	public void onStop() {
+		super.onStop();
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+	    	mClementineMDns.stopServiceDiscovery();
+	    }
 	}
 
 	private OnClickListener oclConnect = new OnClickListener() {
@@ -138,6 +187,43 @@ public class ConnectDialog extends Activity {
 		public void onClick(View v) {
 			Intent settingsIntent = new Intent(ConnectDialog.this, ClementineRemoteSettings.class);
 			startActivity(settingsIntent);
+		}
+	};
+	
+	private OnClickListener oclClementine = new OnClickListener() {
+
+		@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+		@Override
+		public void onClick(View v) {
+			// Only when we have Jelly Bean or higher
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
+			 && !mClementineMDns.getServices().isEmpty()) {
+				mAnimationCancel = true;
+				AlertDialog.Builder builder = new AlertDialog.Builder(ConnectDialog.this);
+				builder.setTitle(R.string.connectdialog_services);
+				
+				ArrayAdapter<String> adapter = new ArrayAdapter<String>(ConnectDialog.this,
+						android.R.layout.simple_list_item_1, mClementineMDns.getHosts());
+				builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+					
+					@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						NsdServiceInfo service = mClementineMDns.getServices().get(which);
+						// Insert the host
+						mEtIp.setText(service.getHost().getHostAddress());
+						
+						// Update the port
+						SharedPreferences.Editor editor = mSharedPref.edit();
+						editor.putString(App.SP_KEY_PORT, 
+								String.valueOf(service.getPort()));
+						editor.commit();
+						connect();
+					}
+				});
+				
+				builder.show();
+			}
 		}
 	};
 	
@@ -261,4 +347,43 @@ public class ConnectDialog extends Activity {
 			showAuthCodePromt();
 		}
 	}
+	
+	/**
+	 * A service was found. Now show a toast and animate the icon
+	 */
+	void serviceFound() {
+		// Start the animation
+		mBtnClementine.startAnimation(mAlphaDown);
+		
+		// On the first call show a toast that we found a host
+        if (mFirstCall) {
+        	mFirstCall = false;
+        	Toast.makeText(this, R.string.connectdialog_mdns_found, Toast.LENGTH_LONG).show();
+        }
+	}
+	
+	private AnimationListener mAnimationListener = new AnimationListener() {
+		@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+		@Override
+		public void onAnimationEnd(Animation animation) {
+			if (!mAnimationCancel) {
+				if (animation.equals(mAlphaDown)) {
+					mBtnClementine.startAnimation(mAlphaUp);
+				} else {
+					mBtnClementine.startAnimation(mAlphaDown);
+				}
+			} else {
+				mBtnClementine.clearAnimation();
+			}
+		}
+
+		@Override
+		public void onAnimationRepeat(Animation animation) {
+		}
+
+		@Override
+		public void onAnimationStart(Animation animation) {
+		}
+
+	};
 }
