@@ -8,7 +8,7 @@
     <string name="connectdialog_connected">Connected</string>
     <string name="connectdialog_error">Could not reach host</string>
     <string name="connectdialog_ip_hint">Enter IP address</string>
-    <string name="connectdialog_mdns_found">Found Clementines. Hit the icon to choose</string>
+    <string name="connectdialog_mdns_found">Found Clementines. Touch the icon to choose one.</string>
     <string name="connectdialog_services">Clementines</string>
     <string name="menu_disconnect">Disconnect</string>
     <string name="player_nosong">No Song playing right now</string>
@@ -22,7 +22,7 @@
     <string name="menu_settings">Settings</string>
     <string name="menu_playlist">Playlists</string>
     <string name="pref_volume_title">Use Volume Keys</string>
-    <string name="pref_volume_summary">Use volume keys to control the volume of clementine.</string>
+    <string name="pref_volume_summary">Use volume keys to control the volume of Clementine.</string>
     <string name="pref_cat_behavior">Behavior</string>
     <string name="pref_cat_info">Information</string>
     <string name="pref_version_summary">Click to visit project website</string>
@@ -46,7 +46,8 @@
     <string name="error_versions">Incompatible version</string>
     <string name="old_proto">Please update Clementine!</string>
     <string name="no_private_ip">Your Android device has a non local ip address. Try disabling \"Use only local ip addresses\" in the Clementine settings.</string>
-    <string name="check_ip">1) Did you enable the network remote in the Clementine settings?\n2) Check if you entered the correct ip address.</string>
+    <string name="check_ip">1) Is Clementine running?\n2) Did you enable the network remote in the Clementine settings?\n3) Check if you entered the correct ip address.</string>
+    <string name="wifi_disabled">Wifi is disabled. If you want to connect to Clementine via internet make sure you forwarded the ports correctly.</string>
     <string name="input_auth_code">Authentication Code</string>
     <string name="invalid_code">Invalid Code</string>
     <string name="repeat_off">Don\'t repeat</string>

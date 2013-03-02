@@ -38,24 +38,32 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.View.OnClickListener;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -156,15 +164,8 @@ public class ConnectDialog extends Activity {
 		    } else {
 			    // mDNS Discovery
 		    	mClementineMDns = new ClementineMDnsDiscovery(mHandler);
-		    	Thread t = new Thread(new Runnable() {
-					@Override
-					public void run() {
-						mClementineMDns.discoverServices();
-					}
-		    		
-		    	});
-		    	t.start();
-		    }
+		    	mClementineMDns.discoverServices();
+			}
 		    
 		    extras.putBoolean(App.SP_KEY_AC, true);
 		}
@@ -195,16 +196,33 @@ public class ConnectDialog extends Activity {
 			// Only when we have Jelly Bean or higher
 			if (!mClementineMDns.getServices().isEmpty()) {
 				mAnimationCancel = true;
-				AlertDialog.Builder builder = new AlertDialog.Builder(ConnectDialog.this);
-				builder.setTitle(R.string.connectdialog_services);
+				final Dialog listDialog = new Dialog(ConnectDialog.this, R.style.Dialog_Transparent);
+				listDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+				listDialog.setContentView(R.layout.dialog_list);
 				
-				ArrayAdapter<String> adapter = new ArrayAdapter<String>(ConnectDialog.this,
-						android.R.layout.simple_list_item_1, mClementineMDns.getHosts());
-				builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
-					
+				// Set the title
+				TextView tvTitle = (TextView) listDialog.findViewById(R.id.tvListTitle);
+				tvTitle.setText(R.string.connectdialog_services);
+				
+				// Set the close button
+				Button closeButton = (Button) listDialog.findViewById(R.id.btnListClose);
+				closeButton.setOnClickListener(new OnClickListener() {
 					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						ServiceInfo service = mClementineMDns.getServices().get(which);
+					public void onClick(View v) {
+						listDialog.cancel();
+					}
+			    });
+				
+				// Set the list adapter
+				ListView listView = (ListView) listDialog.findViewById(R.id.lvClementines);
+				ArrayAdapter<String> adapter = new ArrayAdapter<String>(ConnectDialog.this,
+						R.layout.dialog_list_item, mClementineMDns.getHosts());
+				listView.setAdapter(adapter);
+				listView.setOnItemClickListener(new OnItemClickListener() {
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view,
+							int position, long id) {
+						ServiceInfo service = mClementineMDns.getServices().get(position);
 						// Insert the host
 						String ip = service.getInet4Addresses()[0].toString().split("/")[1];
 						mEtIp.setText(ip);
@@ -218,7 +236,7 @@ public class ConnectDialog extends Activity {
 					}
 				});
 				
-				builder.show();
+				listDialog.show();
 			}
 		}
 	};
@@ -297,6 +315,7 @@ public class ConnectDialog extends Activity {
 	 * We connected to clementine successfully. Now open other view
 	 */
 	void connected() {
+		mClementineMDns.stopServiceDiscovery();
 		setResult(ClementineRemoteControlActivity.RESULT_CONNECT);
 		finish();
 	}
@@ -309,12 +328,18 @@ public class ConnectDialog extends Activity {
 		WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
 		WifiInfo wifiInfo = wifiManager.getConnectionInfo();
 		int ip = wifiInfo.getIpAddress();
-		if (!Utilities.ToInetAddress(ip).isSiteLocalAddress()) {
+		
+		// Get the current wifi state
+		ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+		NetworkInfo networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		
+		if (!networkInfo.isConnected()) {
+			Utilities.ShowMessageDialog(this, R.string.connectdialog_error, R.string.wifi_disabled);
+		} else if (!Utilities.ToInetAddress(ip).isSiteLocalAddress()) {
 			Utilities.ShowMessageDialog(this, R.string.connectdialog_error, R.string.no_private_ip);
 		} else {
 			Utilities.ShowMessageDialog(this, R.string.connectdialog_error, R.string.check_ip);
 		}
-		
 	}
 	
 	/**
@@ -338,8 +363,12 @@ public class ConnectDialog extends Activity {
 	 * A service was found. Now show a toast and animate the icon
 	 */
 	void serviceFound() {
-		// Start the animation
-		mBtnClementine.startAnimation(mAlphaDown);
+		if (mClementineMDns.getServices().isEmpty()) {
+			mBtnClementine.clearAnimation();
+		} else {
+			// Start the animation
+			mBtnClementine.startAnimation(mAlphaDown);
+		}
 		
 		// On the first call show a toast that we found a host
         if (mFirstCall) {

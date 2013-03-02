@@ -45,5 +45,5 @@
 	    <item name="android:minWidth">0dip</item>
 	    <item name="android:paddingLeft">10dip</item>
 	    <item name="android:paddingRight">10dip</item>
-	</style>
+	 </style>
 </resources>

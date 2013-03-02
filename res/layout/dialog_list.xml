@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/WhiteBackgroundBorder"
-        android:id="@+id/dialog_message_root"
+        android:id="@+id/dialog_list_root"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|center_vertical"
@@ -10,7 +10,7 @@
         android:paddingRight="15dp" >
 
     <TextView
-        android:id="@+id/tvTitle"
+        android:id="@+id/tvListTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -25,16 +25,17 @@
         android:layout_marginBottom="6dp"
         android:background="#000000" />
 
-    <TextView
-        android:id="@+id/tvMessage"
+    <ListView
+        android:id="@+id/lvClementines"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:gravity="center_vertical|center_horizontal"
-        android:textColor="@android:color/black" />
+        android:layout_weight="1"
+        android:headerDividersEnabled="true" >
+
+    </ListView>
 
     <Button
-        android:id="@+id/btnClose"
+        android:id="@+id/btnListClose"
         style="@style/OrangeButton.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

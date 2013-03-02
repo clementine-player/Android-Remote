@@ -53,29 +53,57 @@ public class ClementineMDnsDiscovery {
 		mServices = new LinkedList<ServiceInfo>();
 	}
 	
+	/**
+	 * Discover services on the network
+	 */
 	public void discoverServices() {
-		WifiManager wifi = (WifiManager)
-		              App.mApp.getSystemService(android.content.Context.WIFI_SERVICE);
-		mMulticastLock = wifi.createMulticastLock("Clementine Lock");
-		mMulticastLock.setReferenceCounted(true);
-		mMulticastLock.acquire();
-		jmDnsListener();
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				WifiManager wifi = (WifiManager)
+			              App.mApp.getSystemService(android.content.Context.WIFI_SERVICE);
+				mMulticastLock = wifi.createMulticastLock("Clementine Lock");
+				mMulticastLock.setReferenceCounted(true);
+				mMulticastLock.acquire();
+				jmDnsListener();
+			}
+    		
+    	});
+    	t.start();
 	}
 	
+	/**
+	 * Stop network discovery
+	 */
 	public void stopServiceDiscovery() {
-		try {
-			mJmDNS.removeServiceListener(mDnsType, mListener);
-			mJmDNS.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		if (mMulticastLock != null) mMulticastLock.release();
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					mJmDNS.removeServiceListener(mDnsType, mListener);
+					mJmDNS.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				if (mMulticastLock != null) mMulticastLock.release();
+			}
+    		
+    	});
+    	t.start();
 	}
 	
+	/**
+	 * Get the services on the network
+	 * @return A LinkedList of ServiceInfo with the services.
+	 */
 	public LinkedList<ServiceInfo> getServices() {
 		return mServices;
 	}
 	
+	/**
+	 * Get the Hosts on the network
+	 * @return A LinkedList of Hosts found
+	 */
 	public LinkedList<String> getHosts() {
 		LinkedList<String> hosts = new LinkedList<String>();
 		for (ServiceInfo info : mServices) {
@@ -84,18 +112,26 @@ public class ClementineMDnsDiscovery {
 		return hosts;
 	}
 	
-	public void jmDnsListener() {
+	private void jmDnsListener() {
 		try {
 			mJmDNS = JmDNS.create();
 			mJmDNS.addServiceListener(mDnsType, mListener = new ServiceListener() {
 
 				@Override
-				public void serviceAdded(ServiceEvent event) {
-					mJmDNS.requestServiceInfo(event.getType(), event.getName(), 1);
+				public void serviceAdded(ServiceEvent serviceEvent) {
+					mJmDNS.requestServiceInfo(serviceEvent.getType(), serviceEvent.getName(), 1);
 				}
 
 				@Override
-				public void serviceRemoved(ServiceEvent arg0) {
+				public void serviceRemoved(ServiceEvent serviceEvent) {
+					ServiceInfo info = serviceEvent.getInfo();
+					mServices.remove(info);
+					// Send a message to the connect activity
+	                if (mConnectActivityHandler != null) {
+		                Message msg = Message.obtain();
+		                msg.obj = new ServiceFound();
+		                mConnectActivityHandler.sendMessage(msg);
+	                }
 				}
 
 				@Override
@@ -116,7 +152,6 @@ public class ClementineMDnsDiscovery {
 				
 			});
 		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 }
