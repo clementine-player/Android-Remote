@@ -158,7 +158,8 @@ public class ClementineRemoteSettings extends PreferenceActivity implements OnSh
 			
 			// Others
 			tvOthers.setText(Html.fromHtml("Icons: <a href=\"http://chrfb.deviantart.com\">Christian Burprich</a><br>" +
-										   "<a href=\"http://actionbarsherlock.com/\">ActionBarSherlock</a> (<a href=\"http://www.apache.org/licenses/LICENSE-2.0.html\">License</a>)"));
+										   "<a href=\"http://actionbarsherlock.com/\">ActionBarSherlock</a> (<a href=\"http://www.apache.org/licenses/LICENSE-2.0.html\">License</a>)<br>" +
+										   "<a href=\"http://jmdns.sourceforge.net/\">JmDNS</a> (<a href=\"http://jmdns.sourceforge.net/license.html\">License</a>)"));
 			tvOthers.setMovementMethod(LinkMovementMethod.getInstance());
 			
 			// Create the buttons and the listener

@@ -17,6 +17,8 @@
 
 package de.qspool.clementineremote.ui;
 
+import javax.jmdns.ServiceInfo;
+
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.ClementineRemoteControlActivity;
 import de.qspool.clementineremote.R;
@@ -27,7 +29,6 @@ import de.qspool.clementineremote.backend.mdns.ClementineMDnsDiscovery;
 import de.qspool.clementineremote.backend.requests.RequestConnect;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -36,8 +37,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.nsd.NsdServiceInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
@@ -154,11 +153,16 @@ public class ConnectDialog extends Activity {
 		    	connect();
 		    }
 		    
-		    // Only for Jelly Bean: mDNS Discovery
-		    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-		    	mClementineMDns = new ClementineMDnsDiscovery(mHandler);
-		    	mClementineMDns.discoverServices();
-		    }
+		    // mDNS Discovery
+	    	mClementineMDns = new ClementineMDnsDiscovery(mHandler);
+	    	Thread t = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					mClementineMDns.discoverServices();
+				}
+	    		
+	    	});
+	    	t.start();
 		    
 		    extras.putBoolean(App.SP_KEY_AC, true);
 		}
@@ -167,7 +171,7 @@ public class ConnectDialog extends Activity {
 	@Override
 	public void onStop() {
 		super.onStop();
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+		if (mClementineMDns != null) {
 	    	mClementineMDns.stopServiceDiscovery();
 	    }
 	}
@@ -192,12 +196,10 @@ public class ConnectDialog extends Activity {
 	
 	private OnClickListener oclClementine = new OnClickListener() {
 
-		@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 		@Override
 		public void onClick(View v) {
 			// Only when we have Jelly Bean or higher
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
-			 && !mClementineMDns.getServices().isEmpty()) {
+			if (!mClementineMDns.getServices().isEmpty()) {
 				mAnimationCancel = true;
 				AlertDialog.Builder builder = new AlertDialog.Builder(ConnectDialog.this);
 				builder.setTitle(R.string.connectdialog_services);
@@ -206,12 +208,12 @@ public class ConnectDialog extends Activity {
 						android.R.layout.simple_list_item_1, mClementineMDns.getHosts());
 				builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
 					
-					@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						NsdServiceInfo service = mClementineMDns.getServices().get(which);
+						ServiceInfo service = mClementineMDns.getServices().get(which);
 						// Insert the host
-						mEtIp.setText(service.getHost().getHostAddress());
+						String ip = service.getInet4Addresses()[0].toString().split("/")[1];
+						mEtIp.setText(ip);
 						
 						// Update the port
 						SharedPreferences.Editor editor = mSharedPref.edit();
@@ -363,7 +365,6 @@ public class ConnectDialog extends Activity {
 	}
 	
 	private AnimationListener mAnimationListener = new AnimationListener() {
-		@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 		@Override
 		public void onAnimationEnd(Animation animation) {
 			if (!mAnimationCancel) {
