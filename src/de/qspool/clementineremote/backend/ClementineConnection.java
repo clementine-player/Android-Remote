@@ -280,9 +280,7 @@ public class ClementineConnection extends Thread {
 		sendUiMessage(new Disconnected(DisconnectReason.CLIENT_CLOSE));
 		
 		// Check if the thread shall be closed
-		if (r.getKillThread()) {
-			Looper.myLooper().quit();
-		}
+		Looper.myLooper().quit();
 	}
 	
 	/**

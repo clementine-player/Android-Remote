@@ -23,13 +23,29 @@ public class ClementineService extends Service {
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		if (!App.mClementineConnection.isAlive()) {
+		int action = intent.getIntExtra(App.SERVICE_ID, 0);
+		switch (action) {
+		case App.SERVICE_START:
+			// Create a new instance
+			App.mClementineConnection = new ClementineConnection(this);
 			setupNotification();
-			startForeground(App.NOTIFY_ID, mNotifyBuilder.build());
 			App.mClementineConnection.setNotificationBuilder(mNotifyBuilder);
 			App.mClementineConnection.start();
+			break;
+		case App.SERVICE_CONNECTED:
+			startForeground(App.NOTIFY_ID, mNotifyBuilder.build());
+			break;
+		case App.SERVICE_DISCONNECTED:
+			stopForeground(true);
+			try {
+				App.mClementineConnection.join();
+			} catch (InterruptedException e) {}
+			App.mClementineConnection = null;
+			break;
+		
+		default: break;
 		}
-		return  START_NOT_STICKY;
+		return START_STICKY;
 	}
 	
 	@Override
@@ -37,7 +53,7 @@ public class ClementineService extends Service {
 		stopForeground(true);
 		if (App.mClementine.isConnected()) {
 			// Create a new request
-			RequestDisconnect r = new RequestDisconnect(true);
+			RequestDisconnect r = new RequestDisconnect();
 			
 			// Move the request to the message
 			Message msg = Message.obtain();
@@ -49,9 +65,7 @@ public class ClementineService extends Service {
 		try {
 			App.mClementineConnection.join();
 		} catch (InterruptedException e) {}
-		
-		// Create a new instance
-		App.mClementineConnection = new ClementineConnection(this);
+		App.mClementineConnection = null;
 	}
 	
 	/**

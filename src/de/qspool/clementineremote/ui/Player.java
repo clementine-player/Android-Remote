@@ -126,10 +126,7 @@ public class Player extends SherlockActivity {
 		    // Set the handler
 		    mHandler = new PlayerHandler(this);
 		    App.mClementineConnection.setUiHandler(mHandler);
-			
-			// after resume, the connection shall not be dropped immediatly
-			App.mClementineConnection.setLastKeepAlive(System.currentTimeMillis());
-			
+		    
 			// Reload infos
 			reloadInfo();
 		}

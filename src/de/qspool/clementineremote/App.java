@@ -27,6 +27,10 @@ public class App extends Application {
 	public static Application mApp;
 	
 	public final static int NOTIFY_ID = 78923748;
+	public final static String SERVICE_ID = "ServiceIntentIntData";
+	public final static int SERVICE_START = 1;
+	public final static int SERVICE_CONNECTED = 2;
+	public final static int SERVICE_DISCONNECTED = 3;
 	
 	// Keys for SharedPrefences
 	public final static String SP_KEY_IP = "save_clementine_ip";

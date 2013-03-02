@@ -169,14 +169,6 @@ public class ConnectDialog extends Activity {
 		    extras.putBoolean(App.SP_KEY_AC, true);
 		}
 	}
-	
-	@Override
-	public void onStop() {
-		super.onStop();
-		if (mClementineMDns != null) {
-	    	mClementineMDns.stopServiceDiscovery();
-	    }
-	}
 
 	private OnClickListener oclConnect = new OnClickListener() {
 		
@@ -305,7 +297,6 @@ public class ConnectDialog extends Activity {
 	 * We connected to clementine successfully. Now open other view
 	 */
 	void connected() {
-		Toast.makeText(this, R.string.connectdialog_connected, Toast.LENGTH_SHORT).show();
 		setResult(ClementineRemoteControlActivity.RESULT_CONNECT);
 		finish();
 	}
