@@ -30,7 +30,10 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.widget.SearchView;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
@@ -40,6 +43,7 @@ import de.qspool.clementineremote.ui.fragments.PlaylistSongs;
 public class Playlists extends SherlockFragmentActivity implements ActionBar.TabListener {
 
 	private ViewPager mViewPager;
+	private PagerAdapter mPagerAdapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -52,7 +56,7 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		
 		mViewPager = (ViewPager) findViewById(R.id.pager);
-		PagerAdapter mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
+		mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
 		mViewPager.setAdapter(mPagerAdapter);
 		mViewPager.setOnPageChangeListener(
 				new OnPageChangeListener() {
@@ -105,6 +109,42 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inf = getSupportMenuInflater();
+		inf.inflate(R.menu.playlist_menu, menu);
+		
+		// Create a listener for search change
+		SearchView searchView = (SearchView) menu.findItem(R.id.playlist_menu_search).getActionView();
+		final SearchView.OnQueryTextListener queryTextListener = new    SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+            	for (int i=0;i< mPagerAdapter.getCount();i++) {
+	            	PlaylistSongs ps = (PlaylistSongs) mPagerAdapter.getItem(i);
+	            	if (ps.getAdapter() != null) {
+	            		ps.getAdapter().getFilter().filter(newText);
+	            	}
+            	}
+                return true;
+            }
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Do something
+            	for (int i=0;i< mPagerAdapter.getCount();i++) {
+	            	PlaylistSongs ps = (PlaylistSongs) mPagerAdapter.getItem(i);
+	            	if (ps.getAdapter() != null) {
+	            		ps.getAdapter().getFilter().filter(query);
+	            	}
+            	}
+                return true;
+            }
+        };
+        searchView.setOnQueryTextListener(queryTextListener);
+        
+		
+		return true;
 	}
 
 	@Override

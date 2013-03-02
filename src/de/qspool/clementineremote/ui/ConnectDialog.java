@@ -19,19 +19,7 @@ package de.qspool.clementineremote.ui;
 
 import javax.jmdns.ServiceInfo;
 
-import de.qspool.clementineremote.App;
-import de.qspool.clementineremote.ClementineRemoteControlActivity;
-import de.qspool.clementineremote.R;
-import de.qspool.clementineremote.backend.Clementine;
-import de.qspool.clementineremote.backend.elements.Disconnected;
-import de.qspool.clementineremote.backend.elements.Disconnected.DisconnectReason;
-import de.qspool.clementineremote.backend.mdns.ClementineMDnsDiscovery;
-import de.qspool.clementineremote.backend.requests.RequestConnect;
-import de.qspool.clementineremote.backend.requests.RequestDisconnect;
-import de.qspool.clementineremote.utils.Utilities;
-
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -46,10 +34,8 @@ import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.InputType;
-import android.view.LayoutInflater;
-import android.view.View.OnClickListener;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.AlphaAnimation;
@@ -65,6 +51,16 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.ClementineRemoteControlActivity;
+import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.backend.Clementine;
+import de.qspool.clementineremote.backend.elements.Disconnected;
+import de.qspool.clementineremote.backend.elements.Disconnected.DisconnectReason;
+import de.qspool.clementineremote.backend.mdns.ClementineMDnsDiscovery;
+import de.qspool.clementineremote.backend.requests.RequestConnect;
+import de.qspool.clementineremote.backend.requests.RequestDisconnect;
+import de.qspool.clementineremote.utils.Utilities;
 
 /**
  * The connect dialog

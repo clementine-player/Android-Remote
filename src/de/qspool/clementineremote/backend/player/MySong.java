@@ -19,6 +19,7 @@ package de.qspool.clementineremote.backend.player;
 
 import com.google.protobuf.ByteString;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -48,6 +49,25 @@ public class MySong {
 	} else {
 			return false;
 		}
+	}
+	
+	@SuppressLint("DefaultLocale")
+	public boolean contains(String constraint) {
+		String cs = constraint.toLowerCase();
+		return (title.toLowerCase().contains(cs) ||
+				 artist.toLowerCase().contains(cs) ||
+				 album.toLowerCase().contains(cs) ||
+				 albumartist.toLowerCase().contains(cs) ||
+				 genre.toLowerCase().contains(cs) ||
+				 year.toLowerCase().contains(cs));
+	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(artist);
+		sb.append(" - ");
+		sb.append(title);
+		return sb.toString();
 	}
 	
 	public int getId() {

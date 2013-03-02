@@ -21,6 +21,7 @@
     <string name="menu_shuffle">Shuffle</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_playlist">Playlists</string>
+    <string name="menu_search">Search</string>
     <string name="pref_volume_title">Use Volume Keys</string>
     <string name="pref_volume_summary">Use volume keys to control the volume of Clementine.</string>
     <string name="pref_cat_behavior">Behavior</string>

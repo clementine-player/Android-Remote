@@ -21,7 +21,7 @@
     <style name="PreferencesTheme" parent="@android:style/Theme.Light.NoTitleBar">
         <!-- <item name="android:windowBackground">@drawable/background</item> -->
     </style>
-    <style name="PlayerTheme" parent="Theme.Sherlock">
+    <style name="PlayerTheme" parent="@style/Theme.Sherlock">
 	    <item name="actionBarStyle">@style/ActionBarStyle</item>
 	    <item name="android:actionBarStyle">@style/ActionBarStyle</item>
 	    <item name="actionButtonStyle">@style/ActionButtonStyle</item>

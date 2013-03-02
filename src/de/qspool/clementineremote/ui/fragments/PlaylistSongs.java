@@ -18,17 +18,12 @@
 package de.qspool.clementineremote.ui.fragments;
 
 import java.util.LinkedList;
-import java.util.List;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 
@@ -36,12 +31,14 @@ import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.backend.requests.RequestChangeCurrentSong;
+import de.qspool.clementineremote.ui.adapter.CustomSongAdapter;
 
 public class PlaylistSongs extends SherlockListFragment {
 	public final static String PLAYLIST_ID = "playlist_id";
 	private LinkedList<MySong> mData;
 	private int mId;
 	private Activity mActivity;
+	CustomSongAdapter mAdapter;
 	
 	public PlaylistSongs() {
 	}
@@ -57,13 +54,17 @@ public class PlaylistSongs extends SherlockListFragment {
 		}
 		
 		// Create the adapter
-		CustomSongAdapter adapter = new CustomSongAdapter(mActivity, R.layout.song_row, mData);
-		setListAdapter(adapter);
+		mAdapter = new CustomSongAdapter(mActivity, R.layout.song_row, mData);
+		setListAdapter(mAdapter);
 	}
 	
 	public void setId(int id) {
 		mId = id;
-		mData = App.mClementine.getPlaylists().get(mId).getPlaylistSongs();
+		mData = new LinkedList<MySong>(App.mClementine.getPlaylists().get(mId).getPlaylistSongs());
+	}
+	
+	public CustomSongAdapter getAdapter() {
+		return mAdapter;
 	}
 	
 	@Override
@@ -82,6 +83,7 @@ public class PlaylistSongs extends SherlockListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getListView().setFastScrollEnabled(true);
+        getListView().setTextFilterEnabled(true);
         
         // Get the position of the current track if we have one
         if (App.mClementine.getCurrentSong() != null) {
@@ -101,45 +103,4 @@ public class PlaylistSongs extends SherlockListFragment {
 
         getActivity().finish();
     }
-	
-	/**
-	 * Class is used for displaying the song data
-	 */
-	public class CustomSongAdapter extends ArrayAdapter<MySong> {
-		Context mContext;
-
-		public CustomSongAdapter(Context context, int resource,
-				List<MySong> objects) {
-			super(context, resource, objects);
-			mContext = context;
-		}
-		
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			
-			if (convertView == null) {
-				convertView = ((Activity)mContext).getLayoutInflater()
-								.inflate(R.layout.song_row, parent, false);
-			}
-			
-			if (App.mClementine.getCurrentSong() != null 
-			 && App.mClementine.getCurrentSong().equals(mData.get(position))) {
-				convertView.setBackgroundResource(R.drawable.orange_background_border);
-			} else {
-				convertView.setBackgroundResource(R.drawable.white_background_border);
-			}
-			
-			TextView tvArtist = (TextView) convertView.findViewById(R.id.tvRowArtist);
-			TextView tvTitle  = (TextView) convertView.findViewById(R.id.tvRowTitle);
-			TextView tvLength = (TextView) convertView.findViewById(R.id.tvRowLength);
-			
-			tvArtist.setText(mData.get(position).getArtist());
-			tvTitle .setText(mData.get(position).getTitle() + 
-							 " / " + 
-							 mData.get(position).getAlbum());
-			tvLength.setText(mData.get(position).getPrettyLength());
-			
-			return convertView;
-		}
-	}
 }
