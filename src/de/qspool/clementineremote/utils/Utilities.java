@@ -38,13 +38,14 @@ public class Utilities {
 	 * @param context In which context will the dialog be displayed?
 	 * @param title The resource id of the message dialog title.
 	 * @param message The resource id of the message
+	 * @return The Dialog object
 	 */
-	public static void ShowMessageDialog(Context context, int title, int message) {
+	public static Dialog ShowMessageDialog(Context context, int title, int message) {
 		final Dialog errorDialog = new Dialog(context, R.style.Dialog_Transparent);
 		errorDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		errorDialog.setContentView(R.layout.dialog_message);
 		
-		// Set the ViewsButton connectButton = (Button) authCodeDialog.findViewById(R.id.btnConnectAuth);
+		// Set the Views
 		final TextView tvTitle = (TextView) errorDialog.findViewById(R.id.tvTitle);
 		final TextView tvMessage = (TextView) errorDialog.findViewById(R.id.tvMessage);
 		tvTitle.setText(title);
@@ -57,8 +58,10 @@ public class Utilities {
 				errorDialog.cancel();
 			}
 	    });
-		
+				
 		errorDialog.show();
+		
+		return errorDialog;
 	}
 	
 	public static byte[] ToIPByteArray(int addr){

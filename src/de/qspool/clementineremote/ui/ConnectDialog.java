@@ -17,8 +17,6 @@
 
 package de.qspool.clementineremote.ui;
 
-import java.net.InetAddress;
-
 import javax.jmdns.ServiceInfo;
 
 import de.qspool.clementineremote.App;
@@ -58,7 +56,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 /**

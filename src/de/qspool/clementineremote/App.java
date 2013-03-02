@@ -26,6 +26,8 @@ public class App extends Application {
 	public static Clementine mClementine;
 	public static Application mApp;
 	
+	public final static int NOTIFY_ID = 78923748;
+	
 	// Keys for SharedPrefences
 	public final static String SP_KEY_IP = "save_clementine_ip";
 	public final static String SP_KEY_AC = "pref_autoconnect";

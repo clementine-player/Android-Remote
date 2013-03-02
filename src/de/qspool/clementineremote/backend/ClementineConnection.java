@@ -26,8 +26,6 @@ import java.net.SocketAddress;
 import java.net.UnknownHostException;
 
 import de.qspool.clementineremote.App;
-import de.qspool.clementineremote.ClementineRemoteControlActivity;
-import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.elements.ClementineElement;
 import de.qspool.clementineremote.backend.elements.Disconnected;
 import de.qspool.clementineremote.backend.elements.Disconnected.DisconnectReason;
@@ -61,7 +59,6 @@ import android.os.Looper;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 /**
@@ -85,7 +82,6 @@ public class ClementineConnection extends Thread {
 	
 	private NotificationCompat.Builder mNotifyBuilder;
 	private NotificationManager mNotificationManager;
-	private int mNotifyId = 1;
 	private int mNotificationWidth;
 	private int mNotificationHeight;
 	private MySong mLastSong = null;
@@ -104,6 +100,8 @@ public class ClementineConnection extends Thread {
 		// Start the thread
 		mClementinePbCreator = new ClementinePbCreator();
 		mClementinePbParser  = new ClementinePbParser();
+		mNotificationManager = (NotificationManager) App.mApp.getSystemService(Context.NOTIFICATION_SERVICE);
+		
 		Looper.prepare();
 		mHandler = new ClementineConnectionHandler(this);
 		
@@ -116,6 +114,10 @@ public class ClementineConnection extends Thread {
 																ClementineMediaButtonEventReceiver.class.getName());
 		
 		Looper.loop();
+	}
+	
+	public void setNotificationBuilder(NotificationCompat.Builder builder) {
+		mNotifyBuilder = builder;
 	}
 	
 	/**
@@ -151,9 +153,6 @@ public class ClementineConnection extends Thread {
 				App.mClementine.setConnected(true);
 				mLastSong = null;
 				mLastState = App.mClementine.getState();
-				
-				// Setup the notification
-				setupNotification();
 				
 				// Setup the MediaButtonReceiver and the RemoteControlClient
 				registerRemoteControlClient();
@@ -291,7 +290,7 @@ public class ClementineConnection extends Thread {
 	 */
 	private void closeConnection() {
 		// Cancel Notification
-		mNotificationManager.cancel(mNotifyId);
+		mNotificationManager.cancel(App.NOTIFY_ID);
 
 		unregisterRemoteControlClient();
 		
@@ -336,26 +335,6 @@ public class ClementineConnection extends Thread {
 	}
 	
 	/**
-	 * Setup the Notification
-	 */
-	private void setupNotification() {
-		mNotificationManager = (NotificationManager) App.mApp.getSystemService(Context.NOTIFICATION_SERVICE);
-	    mNotifyBuilder = new NotificationCompat.Builder(App.mApp);
-	    mNotifyBuilder.setSmallIcon(R.drawable.ic_launcher);
-	    mNotifyBuilder.setOngoing(true);
-	    
-	    // Set the result intent
-	    Intent resultIntent = new Intent(App.mApp, ClementineRemoteControlActivity.class);
-	    resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-	    // Create a TaskStack, so the app navigates correctly backwards
-	    TaskStackBuilder stackBuilder = TaskStackBuilder.create(App.mApp);
-	    stackBuilder.addParentStack(ClementineRemoteControlActivity.class);
-	    stackBuilder.addNextIntent(resultIntent);
-	    PendingIntent resultPendingintent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-	    mNotifyBuilder.setContentIntent(resultPendingintent);
-	}
-	
-	/**
 	 * Update the notification with the new track info
 	 */
 	private void updateNotification() {
@@ -369,7 +348,7 @@ public class ClementineConnection extends Thread {
 			mNotifyBuilder.setContentText(mLastSong.getTitle() + 
 										  " / " + 
 										  mLastSong.getAlbum());
-			mNotificationManager.notify(mNotifyId, mNotifyBuilder.build());
+			mNotificationManager.notify(App.NOTIFY_ID, mNotifyBuilder.build());
 		}
 	}
 	
