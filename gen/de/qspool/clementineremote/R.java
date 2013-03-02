@@ -1127,6 +1127,7 @@ containing a value of this type.
          */
         public static final int abs__shareactionprovider_share_with_application=0x7f0a0009;
         public static final int app_name=0x7f0a0014;
+        public static final int check_ip=0x7f0a0041;
         public static final int close=0x7f0a0036;
         public static final int connect_desc_icon=0x7f0a0011;
         public static final int connect_settings_icon=0x7f0a0012;
@@ -1146,13 +1147,14 @@ containing a value of this type.
         public static final int dialog_license_top=0x7f0a0037;
         public static final int error_versions=0x7f0a003e;
         public static final int gpl=0x7f0a0013;
-        public static final int input_auth_code=0x7f0a0040;
-        public static final int invalid_code=0x7f0a0041;
+        public static final int input_auth_code=0x7f0a0042;
+        public static final int invalid_code=0x7f0a0043;
         public static final int menu_disconnect=0x7f0a001e;
         public static final int menu_playlist=0x7f0a0027;
         public static final int menu_repeat=0x7f0a0025;
         public static final int menu_settings=0x7f0a0026;
         public static final int menu_shuffle=0x7f0a0024;
+        public static final int no_private_ip=0x7f0a0040;
         public static final int old_proto=0x7f0a003f;
         public static final int player_desc_buttons=0x7f0a0010;
         public static final int player_desc_img=0x7f0a000f;
@@ -1177,14 +1179,14 @@ containing a value of this type.
         public static final int pref_version_title=0x7f0a002d;
         public static final int pref_volume_summary=0x7f0a0029;
         public static final int pref_volume_title=0x7f0a0028;
-        public static final int repeat_album=0x7f0a0044;
-        public static final int repeat_off=0x7f0a0042;
-        public static final int repeat_playlist=0x7f0a0045;
-        public static final int repeat_track=0x7f0a0043;
-        public static final int shuffle_albums=0x7f0a0049;
-        public static final int shuffle_all=0x7f0a0047;
-        public static final int shuffle_inside_album=0x7f0a0048;
-        public static final int shuffle_off=0x7f0a0046;
+        public static final int repeat_album=0x7f0a0046;
+        public static final int repeat_off=0x7f0a0044;
+        public static final int repeat_playlist=0x7f0a0047;
+        public static final int repeat_track=0x7f0a0045;
+        public static final int shuffle_albums=0x7f0a004b;
+        public static final int shuffle_all=0x7f0a0049;
+        public static final int shuffle_inside_album=0x7f0a004a;
+        public static final int shuffle_off=0x7f0a0048;
     }
     public static final class style {
         public static final int ActionBarStyle=0x7f0b0060;

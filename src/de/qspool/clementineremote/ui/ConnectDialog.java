@@ -17,6 +17,8 @@
 
 package de.qspool.clementineremote.ui;
 
+import java.net.InetAddress;
+
 import javax.jmdns.ServiceInfo;
 
 import de.qspool.clementineremote.App;
@@ -28,6 +30,7 @@ import de.qspool.clementineremote.backend.elements.Disconnected.DisconnectReason
 import de.qspool.clementineremote.backend.mdns.ClementineMDnsDiscovery;
 import de.qspool.clementineremote.backend.requests.RequestConnect;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
+import de.qspool.clementineremote.utils.Utilities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -37,6 +40,8 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
@@ -151,18 +156,18 @@ public class ConnectDialog extends Activity {
 		    // Check if Autoconnect is enabled
 		    if (mCbAutoConnect.isChecked() && extras.getBoolean(App.SP_KEY_AC)) {
 		    	connect();
+		    } else {
+			    // mDNS Discovery
+		    	mClementineMDns = new ClementineMDnsDiscovery(mHandler);
+		    	Thread t = new Thread(new Runnable() {
+					@Override
+					public void run() {
+						mClementineMDns.discoverServices();
+					}
+		    		
+		    	});
+		    	t.start();
 		    }
-		    
-		    // mDNS Discovery
-	    	mClementineMDns = new ClementineMDnsDiscovery(mHandler);
-	    	Thread t = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					mClementineMDns.discoverServices();
-				}
-	    		
-	    	});
-	    	t.start();
 		    
 		    extras.putBoolean(App.SP_KEY_AC, true);
 		}
@@ -312,32 +317,23 @@ public class ConnectDialog extends Activity {
 	 * We couldn't connect to clementine. Inform the user
 	 */
 	void noConnection() {
-		Toast.makeText(this, R.string.connectdialog_error, Toast.LENGTH_SHORT).show();
+		// Check if we have not a local ip
+		WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
+		WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+		int ip = wifiInfo.getIpAddress();
+		if (!Utilities.ToInetAddress(ip).isSiteLocalAddress()) {
+			Utilities.ShowMessageDialog(this, R.string.connectdialog_error, R.string.no_private_ip);
+		} else {
+			Utilities.ShowMessageDialog(this, R.string.connectdialog_error, R.string.check_ip);
+		}
+		
 	}
 	
 	/**
 	 * We have an old Proto version. User has to update Clementine
 	 */
 	void oldProtoVersion() {
-		final Dialog errorDialog = new Dialog(this, R.style.Dialog_Transparent);
-		errorDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		errorDialog.setContentView(R.layout.dialog_message);
-		
-		// Set the ViewsButton connectButton = (Button) authCodeDialog.findViewById(R.id.btnConnectAuth);
-		final TextView title = (TextView) errorDialog.findViewById(R.id.tvTitle);
-		final TextView message = (TextView) errorDialog.findViewById(R.id.tvMessage);
-		title.setText(R.string.error_versions);
-		message.setText(R.string.old_proto);
-		
-		Button connectButton = (Button) errorDialog.findViewById(R.id.btnClose);
-				connectButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				errorDialog.cancel();
-			}
-	    });
-		
-		errorDialog.show();
+		Utilities.ShowMessageDialog(this, R.string.error_versions, R.string.old_proto);
 	}
 	
 	/**

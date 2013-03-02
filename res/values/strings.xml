@@ -45,6 +45,8 @@
     <string name="pref_port_error">Illegal Port!</string>
     <string name="error_versions">Incompatible version</string>
     <string name="old_proto">Please update Clementine!</string>
+    <string name="no_private_ip">Your Android device has a non local ip address. Try disabling \"Use only local ip addresses\" in the Clementine settings.</string>
+    <string name="check_ip">1) Did you enable the network remote in the Clementine settings?\n2) Check if you entered the correct ip address.</string>
     <string name="input_auth_code">Authentication Code</string>
     <string name="invalid_code">Invalid Code</string>
     <string name="repeat_off">Don\'t repeat</string>
