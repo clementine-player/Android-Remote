@@ -20,9 +20,6 @@ package de.qspool.clementineremote.ui.fragments;
 import java.util.LinkedList;
 
 import android.app.Activity;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.PaintDrawable;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.View;

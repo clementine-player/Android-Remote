@@ -16,6 +16,7 @@
     <string name="player_playlist">Playlist:</string>
     <string name="player_download_playlists">Downloading Playlists</string>
     <string name="playler_volume">Volume</string>
+    <string name="playlist_search_hint">Search track</string>
     <string name="menu_shuffle">Shuffle</string>
     <string name="menu_repeat">Repeat</string>
     <string name="menu_shuffle">Shuffle</string>

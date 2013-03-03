@@ -40,13 +40,19 @@
                   android:theme="@style/PreferencesTheme"></activity>
         <activity android:name=".ui.Playlists"
                   android:screenOrientation="portrait"
-                  android:theme="@style/PlayerTheme"></activity>
+                  android:theme="@style/PlayerTheme">
+        </activity>
         <service android:name=".backend.ClementineService"></service>
         <receiver android:name=".backend.ClementineMediaButtonEventReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
+        <provider android:name=".ui.adapter.SongSuggestionAdapter"
+                  android:authorities="de.qspool.clementineremote.ui.adapter.SongSuggestionAdapter"
+                  android:enabled="true" 
+                  android:exported="false" />
+        
     </application>
 
 </manifest>
