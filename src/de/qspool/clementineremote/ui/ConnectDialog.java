@@ -43,7 +43,6 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -60,6 +59,7 @@ import de.qspool.clementineremote.backend.elements.Disconnected.DisconnectReason
 import de.qspool.clementineremote.backend.mdns.ClementineMDnsDiscovery;
 import de.qspool.clementineremote.backend.requests.RequestConnect;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
+import de.qspool.clementineremote.ui.adapter.CustomClementinesAdapter;
 import de.qspool.clementineremote.utils.Utilities;
 
 /**
@@ -211,8 +211,8 @@ public class ConnectDialog extends Activity {
 				
 				// Set the list adapter
 				ListView listView = (ListView) listDialog.findViewById(R.id.lvClementines);
-				ArrayAdapter<String> adapter = new ArrayAdapter<String>(ConnectDialog.this,
-						R.layout.dialog_list_item, mClementineMDns.getHosts());
+				CustomClementinesAdapter adapter = new CustomClementinesAdapter(ConnectDialog.this,
+						R.layout.dialog_list_item, mClementineMDns.getServices());
 				listView.setAdapter(adapter);
 				listView.setOnItemClickListener(new OnItemClickListener() {
 					@Override

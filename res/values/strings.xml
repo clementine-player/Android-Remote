@@ -48,7 +48,7 @@
     <string name="old_proto">Please update Clementine!</string>
     <string name="no_private_ip">Your Android device has a non local ip address. Try disabling \"Use only local ip addresses\" in the Clementine settings.</string>
     <string name="check_ip">1) Is Clementine running?\n2) Did you enable the network remote in the Clementine settings?\n3) Check if you entered the correct ip address.</string>
-    <string name="wifi_disabled">Wifi is disabled. If you want to connect to Clementine via internet make sure you forwarded the ports correctly.</string>
+    <string name="wifi_disabled">Wifi is disabled. If you want to connect to Clementine via internet make sure you forwarded the ports correctly and you have disabled \"Use only local ip addresses\"".</string>
     <string name="input_auth_code">Authentication Code</string>
     <string name="invalid_code">Invalid Code</string>
     <string name="repeat_off">Don\'t repeat</string>

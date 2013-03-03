@@ -39,7 +39,8 @@ import android.os.Message;
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class ClementineMDnsDiscovery {
 	private JmDNS mJmDNS;
-	MulticastLock mMulticastLock;
+	private MulticastLock mMulticastLock;
+	private Thread mThread;
 	
 	private final String mDnsType = "_clementine._tcp.local.";
 	private ServiceListener mListener;
@@ -57,7 +58,7 @@ public class ClementineMDnsDiscovery {
 	 * Discover services on the network
 	 */
 	public void discoverServices() {
-		Thread t = new Thread(new Runnable() {
+		mThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				WifiManager wifi = (WifiManager)
@@ -69,14 +70,14 @@ public class ClementineMDnsDiscovery {
 			}
     		
     	});
-    	t.start();
+		mThread.start();
 	}
 	
 	/**
 	 * Stop network discovery
 	 */
 	public void stopServiceDiscovery() {
-		Thread t = new Thread(new Runnable() {
+		mThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
@@ -89,7 +90,7 @@ public class ClementineMDnsDiscovery {
 			}
     		
     	});
-    	t.start();
+		mThread.start();
 	}
 	
 	/**

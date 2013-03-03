@@ -23,11 +23,16 @@ public class ClementineService extends Service {
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		int action = intent.getIntExtra(App.SERVICE_ID, 0);
+		int action = 0;
+		if (intent != null) {
+			action = intent.getIntExtra(App.SERVICE_ID, 0);
+		}
 		switch (action) {
 		case App.SERVICE_START:
 			// Create a new instance
-			App.mClementineConnection = new ClementineConnection(this);
+			if (App.mClementineConnection == null) {
+				App.mClementineConnection = new ClementineConnection(this);
+			}
 			setupNotification();
 			App.mClementineConnection.setNotificationBuilder(mNotifyBuilder);
 			App.mClementineConnection.start();
@@ -41,6 +46,9 @@ public class ClementineService extends Service {
 				App.mClementineConnection.join();
 			} catch (InterruptedException e) {}
 			App.mClementineConnection = null;
+			break;
+		case App.SERVICE_STOP:
+			stopSelf();
 			break;
 		
 		default: break;

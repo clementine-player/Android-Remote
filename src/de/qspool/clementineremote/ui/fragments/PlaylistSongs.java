@@ -20,6 +20,9 @@ package de.qspool.clementineremote.ui.fragments;
 import java.util.LinkedList;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.PaintDrawable;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.View;
@@ -80,11 +83,12 @@ public class PlaylistSongs extends SherlockListFragment {
 	}
 	
 	@Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onViewCreated(final View view, final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getListView().setFastScrollEnabled(true);
         getListView().setTextFilterEnabled(true);
-        
+        getListView().setSelector(android.R.color.transparent);
+         
         // Get the position of the current track if we have one
         if (App.mClementine.getCurrentSong() != null) {
         	int pos = App.mClementine.getCurrentSong().getIndex();

@@ -18,6 +18,7 @@
 package de.qspool.clementineremote;
 
 import de.qspool.clementineremote.backend.Clementine;
+import de.qspool.clementineremote.backend.ClementineConnection;
 import de.qspool.clementineremote.backend.ClementineService;
 import de.qspool.clementineremote.ui.ConnectDialog;
 import de.qspool.clementineremote.ui.Player;
@@ -68,6 +69,9 @@ public class ClementineRemoteControlActivity extends Activity {
      		switch (resultCode) {
      		case Activity.RESULT_CANCELED:
      			finish();
+     			mServiceIntent = new Intent(this, ClementineService.class);
+    	    	mServiceIntent.putExtra(App.SERVICE_ID, App.SERVICE_STOP);
+    	    	startService(mServiceIntent);
      			break;
      		case RESULT_CONNECT:
      			startPlayerDialog();
@@ -101,6 +105,7 @@ public class ClementineRemoteControlActivity extends Activity {
     		App.mClementine = new Clementine();
     	}
     	if (App.mClementineConnection == null) {
+    		App.mClementineConnection = new ClementineConnection(this);
 	    	mServiceIntent = new Intent(this, ClementineService.class);
 	    	mServiceIntent.putExtra(App.SERVICE_ID, App.SERVICE_START);
 	    	startService(mServiceIntent);
