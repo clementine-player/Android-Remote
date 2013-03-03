@@ -46,11 +46,7 @@ public class ClementineService extends Service {
 				App.mClementineConnection.join();
 			} catch (InterruptedException e) {}
 			App.mClementineConnection = null;
-			break;
-		case App.SERVICE_STOP:
-			stopSelf();
-			break;
-		
+			break;		
 		default: break;
 		}
 		return START_STICKY;

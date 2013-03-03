@@ -31,7 +31,6 @@ public class App extends Application {
 	public final static int SERVICE_START = 1;
 	public final static int SERVICE_CONNECTED = 2;
 	public final static int SERVICE_DISCONNECTED = 3;
-	public final static int SERVICE_STOP = 9;
 	
 	// Keys for SharedPrefences
 	public final static String SP_KEY_IP = "save_clementine_ip";

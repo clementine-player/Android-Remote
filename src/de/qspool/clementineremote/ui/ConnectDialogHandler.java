@@ -41,17 +41,22 @@ public class ConnectDialogHandler extends Handler {
 	@Override
 	public void handleMessage(Message msg) {
 		ConnectDialog cd = mDialog.get();
-		cd.mPdConnect.dismiss();
-		if (msg.obj instanceof Connected) {
-			cd.connected();
-		} else if (msg.obj instanceof NoConnection) {
-			cd.noConnection();
-		} else if (msg.obj instanceof OldProtoVersion) {
-			cd.oldProtoVersion();
-		} else if (msg.obj instanceof Disconnected) {
-			cd.disconnected((Disconnected) msg.obj);
-		} else if (msg.obj instanceof ServiceFound) {
-			cd.serviceFound();
+		if (cd != null) {
+			if (msg.obj instanceof Connected) {
+				cd.mPdConnect.dismiss();
+				cd.connected();
+			} else if (msg.obj instanceof NoConnection) {
+				cd.mPdConnect.dismiss();
+				cd.noConnection();
+			} else if (msg.obj instanceof OldProtoVersion) {
+				cd.mPdConnect.dismiss();
+				cd.oldProtoVersion();
+			} else if (msg.obj instanceof Disconnected) {
+				cd.mPdConnect.dismiss();
+				cd.disconnected((Disconnected) msg.obj);
+			} else if (msg.obj instanceof ServiceFound) {
+				cd.serviceFound();
+			}
 		}
 	}
 }

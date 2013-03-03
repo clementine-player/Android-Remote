@@ -69,9 +69,6 @@ public class ClementineRemoteControlActivity extends Activity {
      		switch (resultCode) {
      		case Activity.RESULT_CANCELED:
      			finish();
-     			mServiceIntent = new Intent(this, ClementineService.class);
-    	    	mServiceIntent.putExtra(App.SERVICE_ID, App.SERVICE_STOP);
-    	    	startService(mServiceIntent);
      			break;
      		case RESULT_CONNECT:
      			startPlayerDialog();
