@@ -17,6 +17,8 @@
 
 package de.qspool.clementineremote.backend.event;
 
+import de.qspool.clementineremote.backend.elements.Disconnected;
+
 public interface OnConnectionClosedListener {
-	void onConnectionClosed();
+	void onConnectionClosed(Disconnected disconnected);
 }

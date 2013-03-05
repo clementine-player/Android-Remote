@@ -20,10 +20,14 @@ package de.qspool.clementineremote.backend;
 import de.qspool.clementineremote.App; 
 import de.qspool.clementineremote.ClementineRemoteControlActivity;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.backend.elements.Disconnected;
+import de.qspool.clementineremote.backend.elements.Disconnected.DisconnectReason;
 import de.qspool.clementineremote.backend.event.OnConnectionClosedListener;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.Message;
@@ -33,6 +37,7 @@ import android.support.v4.app.TaskStackBuilder;
 public class ClementineService extends Service {
 
 	private NotificationCompat.Builder mNotifyBuilder;
+	private NotificationManager mNotificationManager;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -42,7 +47,7 @@ public class ClementineService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		if (intent != null) {
-			handleServiceAction(intent.getIntExtra(App.SERVICE_ID, 0));
+			handleServiceAction(intent);
 		}
 
 		return START_STICKY;
@@ -52,7 +57,8 @@ public class ClementineService extends Service {
 	 * Handle the requests to the service
 	 * @param action The action to perform
 	 */
-	private void handleServiceAction(int action) {
+	private void handleServiceAction(Intent intent) {
+		int action = intent.getIntExtra(App.SERVICE_ID, 0);
 		switch (action) {
 		case App.SERVICE_START:
 			// Create a new instance
@@ -73,9 +79,24 @@ public class ClementineService extends Service {
 				App.mClementineConnection.join();
 			} catch (InterruptedException e) {}
 			App.mClementineConnection = null;
+			
+			// Check if we lost connection due a keep alive
+			if (intent.hasExtra(App.SERVICE_DISCONNECT_DATA)) {
+				int reason = intent.getIntExtra(App.SERVICE_DISCONNECT_DATA, 0);
+				if (reason == DisconnectReason.KEEP_ALIVE.ordinal()) {
+					setupNotification(false);
+					showKeepAliveDisconnectNotification();
+				}
+			}
 			break;		
 		default: break;
 		}
+	}
+	
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		mNotificationManager = (NotificationManager) App.mApp.getSystemService(Context.NOTIFICATION_SERVICE);
 	}
 	
 	@Override
@@ -117,12 +138,22 @@ public class ClementineService extends Service {
 	    mNotifyBuilder.setContentIntent(resultPendingintent);
 	}
 	
+	/**
+	 * Create a notification that shows, that we got a keep alive timeout
+	 */
+	private void showKeepAliveDisconnectNotification() {
+		mNotifyBuilder.setContentTitle(App.mApp.getString(R.string.app_name));
+		mNotifyBuilder.setContentText(App.mApp.getString(R.string.notification_disconnect_keep_alive));
+		mNotificationManager.notify(App.NOTIFY_ID, mNotifyBuilder.build());
+	}
+	
 	private OnConnectionClosedListener occl = new OnConnectionClosedListener() {
 		
 		@Override
-		public void onConnectionClosed() {
+		public void onConnectionClosed(Disconnected disconnected) {
 			Intent mServiceIntent = new Intent(ClementineService.this, ClementineService.class);
 	    	mServiceIntent.putExtra(App.SERVICE_ID, App.SERVICE_DISCONNECTED);
+	    	mServiceIntent.putExtra(App.SERVICE_DISCONNECT_DATA, disconnected.getReason().ordinal());
 	    	startService(mServiceIntent);
 		}
 	};

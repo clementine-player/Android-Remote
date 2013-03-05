@@ -1167,6 +1167,7 @@ containing a value of this type.
         public static final int menu_settings=0x7f0a0027;
         public static final int menu_shuffle=0x7f0a0025;
         public static final int no_private_ip=0x7f0a0042;
+        public static final int notification_disconnect_keep_alive=0x7f0a0047;
         public static final int old_proto=0x7f0a0041;
         public static final int player_desc_buttons=0x7f0a0010;
         public static final int player_desc_img=0x7f0a000f;
@@ -1192,14 +1193,14 @@ containing a value of this type.
         public static final int pref_version_title=0x7f0a002f;
         public static final int pref_volume_summary=0x7f0a002b;
         public static final int pref_volume_title=0x7f0a002a;
-        public static final int repeat_album=0x7f0a0049;
-        public static final int repeat_off=0x7f0a0047;
-        public static final int repeat_playlist=0x7f0a004a;
-        public static final int repeat_track=0x7f0a0048;
-        public static final int shuffle_albums=0x7f0a004e;
-        public static final int shuffle_all=0x7f0a004c;
-        public static final int shuffle_inside_album=0x7f0a004d;
-        public static final int shuffle_off=0x7f0a004b;
+        public static final int repeat_album=0x7f0a004a;
+        public static final int repeat_off=0x7f0a0048;
+        public static final int repeat_playlist=0x7f0a004b;
+        public static final int repeat_track=0x7f0a0049;
+        public static final int shuffle_albums=0x7f0a004f;
+        public static final int shuffle_all=0x7f0a004d;
+        public static final int shuffle_inside_album=0x7f0a004e;
+        public static final int shuffle_off=0x7f0a004c;
         public static final int wifi_disabled=0x7f0a0044;
     }
     public static final class style {

@@ -52,6 +52,7 @@
     <string name="wifi_disabled">Wifi is disabled. If you want to connect to Clementine via internet make sure you forwarded the ports correctly and you have disabled \"Use only local ip addresses\"".</string>
     <string name="input_auth_code">Authentication Code</string>
     <string name="invalid_code">Invalid Code</string>
+    <string name="notification_disconnect_keep_alive">Lost connection. Touch to reconnect.</string>
     <string name="repeat_off">Don\'t repeat</string>
     <string name="repeat_track">Repeat track</string>
     <string name="repeat_album">Repeat album</string>

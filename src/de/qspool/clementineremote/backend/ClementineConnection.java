@@ -323,16 +323,16 @@ public class ClementineConnection extends Thread {
 		Looper.myLooper().quit();
 		
 		// Fire the listener
-		fireOnConnectionClosed();
+		fireOnConnectionClosed(disconnected);
 	}
 	
 	/**
 	 * Fire the event to all listeners
 	 * @param r The Disconnect event.
 	 */
-	private void fireOnConnectionClosed() {
+	private void fireOnConnectionClosed(Disconnected d) {
 		for (OnConnectionClosedListener listener : mListeners ) {
-			listener.onConnectionClosed();
+			listener.onConnectionClosed(d);
 		}
 	}
 

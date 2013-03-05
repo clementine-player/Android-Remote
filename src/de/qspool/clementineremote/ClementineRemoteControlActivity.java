@@ -110,7 +110,7 @@ public class ClementineRemoteControlActivity extends Activity {
      * Open the connect dialog
      * @param useAutoConnect true if the application should connect directly to clementine, false if not
      */
-    private void startConnectDialog(boolean useAutoConnect) {        
+    private void startConnectDialog(boolean useAutoConnect) {
     	Intent connectDialog = new Intent(this, ConnectDialog.class);
     	connectDialog.putExtra(App.SP_KEY_AC, useAutoConnect);
         startActivityForResult(connectDialog, ID_CONNECT_DIALOG);
