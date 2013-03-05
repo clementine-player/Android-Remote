@@ -81,8 +81,10 @@ public class ClementineMDnsDiscovery {
 			@Override
 			public void run() {
 				try {
-					mJmDNS.removeServiceListener(mDnsType, mListener);
-					mJmDNS.close();
+					if (mListener != null) {
+						mJmDNS.removeServiceListener(mDnsType, mListener);
+						mJmDNS.close();
+					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
