@@ -15,19 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package de.qspool.clementineremote.backend.elements;
+package de.qspool.clementineremote.backend.event;
 
-public class Disconnected extends ClementineElement {
-	public static enum DisconnectReason {CLIENT_CLOSE, SERVER_CLOSE, WRONG_PROTO, WRONG_AUTH_CODE, KEEP_ALIVE}; 
-
-	private DisconnectReason mReason;
-	
-	public Disconnected(DisconnectReason reason) {
-		super();
-		mReason = reason;
-	}
-
-	public DisconnectReason getReason() {
-		return mReason;
-	}
+public interface OnConnectionClosedListener {
+	void onConnectionClosed();
 }

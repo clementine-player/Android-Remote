@@ -137,7 +137,9 @@ public class Player extends SherlockActivity {
 		super.onPause();
 		
 		mHandler = null;
-	    App.mClementineConnection.setUiHandler(mHandler);
+		if (App.mClementineConnection != null) {
+			App.mClementineConnection.setUiHandler(mHandler);
+		}
 	}
 	
 	@Override

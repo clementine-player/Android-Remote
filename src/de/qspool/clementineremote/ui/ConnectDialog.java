@@ -154,12 +154,13 @@ public class ConnectDialog extends Activity {
 		    Bundle extras = getIntent().getExtras();
 		    mFirstCall = extras.getBoolean(App.SP_KEY_AC);
 		    
+		    // mDNS Discovery
+	    	mClementineMDns = new ClementineMDnsDiscovery(mHandler);
+		    
 		    // Check if Autoconnect is enabled
 		    if (mCbAutoConnect.isChecked() && extras.getBoolean(App.SP_KEY_AC)) {
 		    	connect();
 		    } else {
-			    // mDNS Discovery
-		    	mClementineMDns = new ClementineMDnsDiscovery(mHandler);
 		    	mClementineMDns.discoverServices();
 			}
 		    
@@ -311,7 +312,9 @@ public class ConnectDialog extends Activity {
 	 * We connected to clementine successfully. Now open other view
 	 */
 	void connected() {
-		mClementineMDns.stopServiceDiscovery();
+		if (mClementineMDns != null) {
+			mClementineMDns.stopServiceDiscovery();
+		}
 		setResult(ClementineRemoteControlActivity.RESULT_CONNECT);
 		finish();
 	}

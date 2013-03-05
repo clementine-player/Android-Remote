@@ -88,9 +88,6 @@ public class ClementineRemoteControlActivity extends Activity {
     			finish();
     		}
     		if (resultCode == RESULT_DISCONNECT) {
-    	    	mServiceIntent = new Intent(this, ClementineService.class);
-    	    	mServiceIntent.putExtra(App.SERVICE_ID, App.SERVICE_DISCONNECTED);
-    	    	startService(mServiceIntent);
         		startConnectDialog(false);
         	}
         	return;

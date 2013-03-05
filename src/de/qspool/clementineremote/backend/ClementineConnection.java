@@ -24,8 +24,10 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.elements.ClementineElement;
 import de.qspool.clementineremote.backend.elements.Disconnected;
 import de.qspool.clementineremote.backend.elements.Disconnected.DisconnectReason;
@@ -33,6 +35,7 @@ import de.qspool.clementineremote.backend.elements.InvalidData;
 import de.qspool.clementineremote.backend.elements.NoConnection;
 import de.qspool.clementineremote.backend.elements.OldProtoVersion;
 import de.qspool.clementineremote.backend.elements.Reload;
+import de.qspool.clementineremote.backend.event.OnConnectionClosedListener;
 import de.qspool.clementineremote.backend.pb.ClementinePbCreator;
 import de.qspool.clementineremote.backend.pb.ClementinePbParser;
 import de.qspool.clementineremote.backend.player.MySong;
@@ -91,8 +94,19 @@ public class ClementineConnection extends Thread {
 	private ComponentName mClementineMediaButtonEventReceiver;
 	private RemoteControlClient mRcClient;
 	
+	private ArrayList<OnConnectionClosedListener> mListeners = new ArrayList<OnConnectionClosedListener>();
+	private RequestConnect mRequestConnect;
+	
 	public ClementineConnection(Context context) {
 		mContext = context;
+	}
+	
+	/**
+	 * Add a new listener for closed connections
+	 * @param listener The listener object
+	 */
+	public void setOnConnectionClosedListener(OnConnectionClosedListener listener) {
+		mListeners.add(listener);
 	}
 
 	@Override
@@ -156,6 +170,11 @@ public class ClementineConnection extends Thread {
 				
 				// Setup the MediaButtonReceiver and the RemoteControlClient
 				registerRemoteControlClient();
+				
+				updateNotification();
+				
+				// save the request for potential reconnect
+				mRequestConnect = r;
 			}
 		} catch(UnknownHostException e) {
 			// If we can't connect, then tell that the ui-thread 
@@ -205,9 +224,7 @@ public class ClementineConnection extends Thread {
 		
 		// Close the connection if we have an old proto verion
 		if (clementineElement instanceof OldProtoVersion) {
-			closeConnection();
-			App.mClementine.setConnected(false);
-			sendUiMessage(new Disconnected(DisconnectReason.WRONG_PROTO));
+			closeConnection(new Disconnected(DisconnectReason.WRONG_PROTO));
 		} else if (clementineElement instanceof Reload) {
 	    	// Now update the notification and the remote control client			
 			if (App.mClementine.getCurrentSong() != mLastSong) {
@@ -247,7 +264,8 @@ public class ClementineConnection extends Thread {
 			mOut.write(data);
 			mOut.flush();
 		} catch (IOException e) {
-			Log.e(TAG, "Error writing to socket: " + e.getMessage());
+			// Try to reconnect
+			createConnection(mRequestConnect);
 		}
 	}
 	
@@ -271,26 +289,25 @@ public class ClementineConnection extends Thread {
 				mOut.flush();
 				
 				// and close the connection
-				closeConnection();
+				closeConnection(new Disconnected(DisconnectReason.CLIENT_CLOSE));
 			} catch (IOException e) {	
 			}
 		}
 			
 		// Send the result to the ui thread
 		sendUiMessage(new Disconnected(DisconnectReason.CLIENT_CLOSE));
-		
-		// Check if the thread shall be closed
-		Looper.myLooper().quit();
 	}
 	
 	/**
 	 * Close the socket and the streams
 	 */
-	private void closeConnection() {
+	private void closeConnection(Disconnected disconnected) {
 		// Cancel Notification
 		mNotificationManager.cancel(App.NOTIFY_ID);
 
 		unregisterRemoteControlClient();
+		
+		App.mClementine.setConnected(false);
 		
 		// Disconnect socket
 		try {
@@ -300,6 +317,23 @@ public class ClementineConnection extends Thread {
 		} catch (IOException e) {
 		}
 		
+		sendUiMessage(disconnected);
+		
+		// Close thread
+		Looper.myLooper().quit();
+		
+		// Fire the listener
+		fireOnConnectionClosed();
+	}
+	
+	/**
+	 * Fire the event to all listeners
+	 * @param r The Disconnect event.
+	 */
+	private void fireOnConnectionClosed() {
+		for (OnConnectionClosedListener listener : mListeners ) {
+			listener.onConnectionClosed();
+		}
 	}
 
 	/**
@@ -316,11 +350,7 @@ public class ClementineConnection extends Thread {
 	 */
 	private void checkKeepAlive() {
 		if (mLastKeepAlive > 0 && (System.currentTimeMillis() - mLastKeepAlive) > KEEP_ALIVE_TIMEOUT ) {
-			closeConnection();
-			
-			// Tell the ui, that we lost the connection
-			App.mClementine.setConnected(false);
-			sendUiMessage(new NoConnection());
+			closeConnection(new Disconnected(DisconnectReason.KEEP_ALIVE));
 		}
 	}
 	
@@ -346,8 +376,11 @@ public class ClementineConnection extends Thread {
 			mNotifyBuilder.setContentText(mLastSong.getTitle() + 
 										  " / " + 
 										  mLastSong.getAlbum());
-			mNotificationManager.notify(App.NOTIFY_ID, mNotifyBuilder.build());
+		} else {
+			mNotifyBuilder.setContentTitle(App.mApp.getString(R.string.app_name));
+			mNotifyBuilder.setContentText(App.mApp.getString(R.string.player_nosong));
 		}
+		mNotificationManager.notify(App.NOTIFY_ID, mNotifyBuilder.build());
 	}
 	
 	/**

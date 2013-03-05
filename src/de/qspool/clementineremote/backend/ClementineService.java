@@ -1,8 +1,26 @@
+/* This file is part of the Android Clementine Remote.
+ * Copyright (C) 2013, Andreas Muttscheller <asfa194@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 package de.qspool.clementineremote.backend;
 
 import de.qspool.clementineremote.App; 
 import de.qspool.clementineremote.ClementineRemoteControlActivity;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.backend.event.OnConnectionClosedListener;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -23,18 +41,27 @@ public class ClementineService extends Service {
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		int action = 0;
 		if (intent != null) {
-			action = intent.getIntExtra(App.SERVICE_ID, 0);
+			handleServiceAction(intent.getIntExtra(App.SERVICE_ID, 0));
 		}
+
+		return START_STICKY;
+	}
+	
+	/**
+	 * Handle the requests to the service
+	 * @param action The action to perform
+	 */
+	private void handleServiceAction(int action) {
 		switch (action) {
 		case App.SERVICE_START:
 			// Create a new instance
 			if (App.mClementineConnection == null) {
 				App.mClementineConnection = new ClementineConnection(this);
 			}
-			setupNotification();
+			setupNotification(true);
 			App.mClementineConnection.setNotificationBuilder(mNotifyBuilder);
+			App.mClementineConnection.setOnConnectionClosedListener(occl);
 			App.mClementineConnection.start();
 			break;
 		case App.SERVICE_CONNECTED:
@@ -49,7 +76,6 @@ public class ClementineService extends Service {
 			break;		
 		default: break;
 		}
-		return START_STICKY;
 	}
 	
 	@Override
@@ -75,10 +101,10 @@ public class ClementineService extends Service {
 	/**
 	 * Setup the Notification
 	 */
-	private void setupNotification() {
+	private void setupNotification(boolean ongoing) {
 	    mNotifyBuilder = new NotificationCompat.Builder(App.mApp);
 	    mNotifyBuilder.setSmallIcon(R.drawable.ic_launcher);
-	    mNotifyBuilder.setOngoing(true);
+	    mNotifyBuilder.setOngoing(ongoing);
 	    
 	    // Set the result intent
 	    Intent resultIntent = new Intent(App.mApp, ClementineRemoteControlActivity.class);
@@ -90,4 +116,14 @@ public class ClementineService extends Service {
 	    PendingIntent resultPendingintent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 	    mNotifyBuilder.setContentIntent(resultPendingintent);
 	}
+	
+	private OnConnectionClosedListener occl = new OnConnectionClosedListener() {
+		
+		@Override
+		public void onConnectionClosed() {
+			Intent mServiceIntent = new Intent(ClementineService.this, ClementineService.class);
+	    	mServiceIntent.putExtra(App.SERVICE_ID, App.SERVICE_DISCONNECTED);
+	    	startService(mServiceIntent);
+		}
+	};
 }
