@@ -58,6 +58,8 @@ public class ClementineService extends Service {
 	 * @param action The action to perform
 	 */
 	private void handleServiceAction(Intent intent) {
+		mNotificationManager = (NotificationManager) App.mApp.getSystemService(Context.NOTIFICATION_SERVICE);
+		
 		int action = intent.getIntExtra(App.SERVICE_ID, 0);
 		switch (action) {
 		case App.SERVICE_START:
@@ -91,12 +93,6 @@ public class ClementineService extends Service {
 			break;		
 		default: break;
 		}
-	}
-	
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		mNotificationManager = (NotificationManager) App.mApp.getSystemService(Context.NOTIFICATION_SERVICE);
 	}
 	
 	@Override

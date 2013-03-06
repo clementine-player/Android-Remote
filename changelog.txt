@@ -1,10 +1,16 @@
-Version 0.3.1
+Version 0.4
+  Features:
+    - mDNS discovery
+    - Search Playlists
   Improvements:
     - Enable fastscroll in playlist view
     - Show the current track on playlist view
+    - Improved background service
   Bugfixes:
     - Fix FC when starting Clementine Remote
     - Display Artist on Lockscreen (Android 4.0+)
+  Translations:
+    - Added Portuguese and Burmese language 
 
 Version 0.3
   Features:
