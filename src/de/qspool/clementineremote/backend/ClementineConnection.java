@@ -61,6 +61,7 @@ import android.os.Build;
 import android.os.Looper;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -72,7 +73,10 @@ public class ClementineConnection extends Thread {
 	
 	private final int DELAY_MILLIS = 250;
 	private final String TAG = "ClementineConnection";
-	private final long KEEP_ALIVE_TIMEOUT = 60000; // 60 Second timeout
+	private final long KEEP_ALIVE_TIMEOUT = 20000; // 20 Second timeout
+	private final int MAX_RECONNECTS = 3;
+	
+	private int mLeftReconnects;
 	
 	private Context mContext;
 	private Socket mClient;
@@ -97,6 +101,8 @@ public class ClementineConnection extends Thread {
 	private ArrayList<OnConnectionClosedListener> mListeners = new ArrayList<OnConnectionClosedListener>();
 	private RequestConnect mRequestConnect;
 	
+	private PowerManager.WakeLock mWakeLock;
+	
 	public ClementineConnection(Context context) {
 		mContext = context;
 	}
@@ -118,6 +124,10 @@ public class ClementineConnection extends Thread {
 		
 		Looper.prepare();
 		mHandler = new ClementineConnectionHandler(this);
+		
+		// Get a Wakelock Object
+		PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+		mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Clementine");
 		
 		Resources res = App.mApp.getResources();
 		mNotificationHeight = (int) res.getDimension(android.R.dimen.notification_large_icon_height);
@@ -175,6 +185,13 @@ public class ClementineConnection extends Thread {
 				
 				// save the request for potential reconnect
 				mRequestConnect = r;
+				
+				// The device shall be awake
+				mWakeLock.acquire();
+				
+				// We can now reconnect MAX_RECONNECTS times when
+				// we get a keep alive timeout
+				mLeftReconnects = MAX_RECONNECTS;
 			}
 		} catch(UnknownHostException e) {
 			// If we can't connect, then tell that the ui-thread 
@@ -265,6 +282,7 @@ public class ClementineConnection extends Thread {
 			mOut.flush();
 		} catch (IOException e) {
 			// Try to reconnect
+			closeSocket();
 			createConnection(mRequestConnect);
 		}
 	}
@@ -309,13 +327,10 @@ public class ClementineConnection extends Thread {
 		
 		App.mClementine.setConnected(false);
 		
+		mWakeLock.release();
+		
 		// Disconnect socket
-		try {
-			mClient.close();
-			mIn.close();
-			mOut.close();
-		} catch (IOException e) {
-		}
+		closeSocket();
 		
 		sendUiMessage(disconnected);
 		
@@ -324,6 +339,19 @@ public class ClementineConnection extends Thread {
 		
 		// Fire the listener
 		fireOnConnectionClosed(disconnected);
+	}
+	
+	/**
+	 * Close the socket and the in and out streams
+	 */
+	private void closeSocket() {
+		try {
+			mClient.close();
+			mIn.close();
+			mOut.close();
+		} catch (IOException e) {
+		}
+		
 	}
 	
 	/**
@@ -350,7 +378,14 @@ public class ClementineConnection extends Thread {
 	 */
 	private void checkKeepAlive() {
 		if (mLastKeepAlive > 0 && (System.currentTimeMillis() - mLastKeepAlive) > KEEP_ALIVE_TIMEOUT ) {
-			closeConnection(new Disconnected(DisconnectReason.KEEP_ALIVE));
+			// Check if we shall reconnect
+			if (mLeftReconnects > 0) {
+				mLeftReconnects--;
+				closeSocket();
+				createConnection(mRequestConnect);
+			} else {
+				closeConnection(new Disconnected(DisconnectReason.KEEP_ALIVE));
+			}
 		}
 	}
 	
