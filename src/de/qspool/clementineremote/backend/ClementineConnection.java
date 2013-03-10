@@ -155,12 +155,7 @@ public class ClementineConnection extends Thread {
 		
 		try {
 			// Now try to connect and set the input and output streams
-			SocketAddress socketAddress = new InetSocketAddress(r.getIp(), r.getPort());
-			mClient = new Socket();
-			mClient.connect(socketAddress, 3000);
-			
-			mIn  = new DataInputStream(mClient.getInputStream());
-			mOut = new DataOutputStream(mClient.getOutputStream());
+			createSocket(r);
 			
 			// Check if Clementine dropped the connection.
 			// Is possible when we connect from a public ip and clementine rejects it
@@ -201,6 +196,20 @@ public class ClementineConnection extends Thread {
 			sendUiMessage(new NoConnection());
 			Log.d(TAG, "No I/O");
 		}
+	}
+	
+	/**
+	 * Create a new Socket and the i/o streams
+	 * @param r The Request with the ip and port
+	 * @throws IOException If we cannot connect or open the streams
+	 */
+	private void createSocket(RequestConnect r) throws IOException {
+		SocketAddress socketAddress = new InetSocketAddress(r.getIp(), r.getPort());
+		mClient = new Socket();
+		mClient.connect(socketAddress, 3000);
+		
+		mIn  = new DataInputStream(mClient.getInputStream());
+		mOut = new DataOutputStream(mClient.getOutputStream());
 	}
 	
 	/**
@@ -283,7 +292,11 @@ public class ClementineConnection extends Thread {
 		} catch (IOException e) {
 			// Try to reconnect
 			closeSocket();
-			createConnection(mRequestConnect);
+			try {
+				createSocket(mRequestConnect);
+			} catch (IOException e1) {
+				closeConnection(new Disconnected(DisconnectReason.SERVER_CLOSE));
+			}
 		}
 	}
 	
@@ -379,11 +392,19 @@ public class ClementineConnection extends Thread {
 	private void checkKeepAlive() {
 		if (mLastKeepAlive > 0 && (System.currentTimeMillis() - mLastKeepAlive) > KEEP_ALIVE_TIMEOUT ) {
 			// Check if we shall reconnect
-			if (mLeftReconnects > 0) {
-				mLeftReconnects--;
-				closeSocket();
-				createConnection(mRequestConnect);
-			} else {
+			while (mLeftReconnects > 0) {
+				try {
+					closeSocket();
+					createSocket(mRequestConnect);
+					mLeftReconnects = MAX_RECONNECTS;
+					break;
+				} catch (IOException e) {
+					mLeftReconnects--;
+				}
+			} 
+			
+			// We tried, but the server isn't there anymore
+			if (mLeftReconnects == 0) {
 				closeConnection(new Disconnected(DisconnectReason.KEEP_ALIVE));
 			}
 		}

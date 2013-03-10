@@ -26,6 +26,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
@@ -118,7 +119,7 @@ public class ConnectDialog extends Activity {
 	    
 	    // Ip and Autoconnect
 	    mEtIp = (EditText) findViewById(R.id.etIp);
-	    mEtIp.setRawInputType(InputType.TYPE_CLASS_NUMBER);
+	    mEtIp.setRawInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 	    mCbAutoConnect = (CheckBox) findViewById(R.id.cbAutoconnect);
 	    
 	    // Create a progress dialog
@@ -206,7 +207,7 @@ public class ConnectDialog extends Activity {
 				closeButton.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						listDialog.cancel();
+						listDialog.dismiss();
 					}
 			    });
 				
@@ -219,6 +220,7 @@ public class ConnectDialog extends Activity {
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
+						listDialog.dismiss();
 						ServiceInfo service = mClementineMDns.getServices().get(position);
 						// Insert the host
 						String ip = service.getInet4Addresses()[0].toString().split("/")[1];
