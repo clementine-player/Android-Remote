@@ -73,7 +73,7 @@ public class ClementineConnection extends Thread {
 	
 	private final int DELAY_MILLIS = 250;
 	private final String TAG = "ClementineConnection";
-	private final long KEEP_ALIVE_TIMEOUT = 20000; // 20 Second timeout
+	private final long KEEP_ALIVE_TIMEOUT = 25000; // 25 Second timeout
 	private final int MAX_RECONNECTS = 3;
 	
 	private int mLeftReconnects;
