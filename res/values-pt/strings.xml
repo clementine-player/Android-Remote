@@ -52,6 +52,7 @@
   <string name="wifi_disabled">A rede sem fios está inativa. Se quiser ligar ao Clementine através da Internet, certifique-se se reencaminha as portas corretamente e que desativa a opção \"Utilizar IP de endereços local\"</string>
   <string name="input_auth_code">Código de autenticação</string>
   <string name="invalid_code">Código inválido</string>
+  <string name="notification_disconnect_keep_alive">Ligação abortada. Clique para ligar novamente.</string>
   <string name="repeat_off">Não repetir</string>
   <string name="repeat_track">Repetir faixa</string>
   <string name="repeat_album">Repetir álbum</string>
