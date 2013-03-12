@@ -78,7 +78,6 @@ public class ClementineConnection extends Thread {
 	
 	private int mLeftReconnects;
 	
-	private Context mContext;
 	private Socket mClient;
 	private DataInputStream mIn;
 	private DataOutputStream mOut;
@@ -103,10 +102,6 @@ public class ClementineConnection extends Thread {
 	
 	private PowerManager.WakeLock mWakeLock;
 	
-	public ClementineConnection(Context context) {
-		mContext = context;
-	}
-	
 	/**
 	 * Add a new listener for closed connections
 	 * @param listener The listener object
@@ -126,15 +121,15 @@ public class ClementineConnection extends Thread {
 		mHandler = new ClementineConnectionHandler(this);
 		
 		// Get a Wakelock Object
-		PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+		PowerManager pm = (PowerManager) App.mApp.getSystemService(Context.POWER_SERVICE);
 		mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Clementine");
 		
 		Resources res = App.mApp.getResources();
 		mNotificationHeight = (int) res.getDimension(android.R.dimen.notification_large_icon_height);
 		mNotificationWidth  = (int) res.getDimension(android.R.dimen.notification_large_icon_width);
 		
-		mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
-		mClementineMediaButtonEventReceiver = new ComponentName(mContext.getPackageName(),
+		mAudioManager = (AudioManager) App.mApp.getSystemService(Context.AUDIO_SERVICE);
+		mClementineMediaButtonEventReceiver = new ComponentName(App.mApp.getPackageName(),
 																ClementineMediaButtonEventReceiver.class.getName());
 		
 		Looper.loop();
@@ -187,6 +182,9 @@ public class ClementineConnection extends Thread {
 				// We can now reconnect MAX_RECONNECTS times when
 				// we get a keep alive timeout
 				mLeftReconnects = MAX_RECONNECTS;
+				
+				// Set the current time to last keep alive
+				setLastKeepAlive(System.currentTimeMillis());
 			}
 		} catch(UnknownHostException e) {
 			// If we can't connect, then tell that the ui-thread 

@@ -18,20 +18,16 @@
         android:icon="@drawable/ic_launcher"
         android:allowBackup="true"
         android:label="@string/app_name" >
-        <activity
-            android:name=".ClementineRemoteControlActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:launchMode="singleTop"
-            android:label="@string/app_name" >
+
+        <activity android:name=".ui.ConnectDialog"
+                  android:windowSoftInputMode="stateHidden|adjustResize"
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.ConnectDialog"
-                  android:windowSoftInputMode="stateHidden|adjustResize"
-                  android:screenOrientation="portrait"></activity>
         <activity android:name=".ui.Player"
                   android:theme="@style/PlayerTheme"
                   android:launchMode="singleTop"

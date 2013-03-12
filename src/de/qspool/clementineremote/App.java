@@ -22,8 +22,8 @@ import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementineConnection;
 
 public class App extends Application {
-	public static ClementineConnection mClementineConnection;
-	public static Clementine mClementine;
+	public static ClementineConnection mClementineConnection = null;
+	public static Clementine mClementine = new Clementine();
 	public static Application mApp;
 	
 	public final static int NOTIFY_ID = 78923748;

@@ -26,7 +26,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
@@ -52,9 +51,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import de.qspool.clementineremote.App;
-import de.qspool.clementineremote.ClementineRemoteControlActivity;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.Clementine;
+import de.qspool.clementineremote.backend.ClementineService;
 import de.qspool.clementineremote.backend.elements.Disconnected;
 import de.qspool.clementineremote.backend.elements.Disconnected.DisconnectReason;
 import de.qspool.clementineremote.backend.mdns.ClementineMDnsDiscovery;
@@ -68,6 +67,12 @@ import de.qspool.clementineremote.utils.Utilities;
  */
 public class ConnectDialog extends Activity {
 	private final static int ANIMATION_DURATION = 2000;
+	
+	private final int ID_PLAYER_DIALOG = 1;
+	public final static int RESULT_CONNECT = 1;
+	public final static int RESULT_DISCONNECT = 2;
+	public final static int RESULT_RESTART = 3;
+	
 	private Button mBtnConnect;
 	private ImageButton mBtnSettings;
 	private ImageButton mBtnClementine;
@@ -85,6 +90,9 @@ public class ConnectDialog extends Activity {
     private AlphaAnimation mAlphaUp;
     private boolean mAnimationCancel;
     private boolean mFirstCall;
+    
+    private Intent mServiceIntent;
+    private boolean doAutoConnect = true;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -92,6 +100,8 @@ public class ConnectDialog extends Activity {
 	    
 	    // Remove title bar
 	    this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+	    
+	    App.mApp = getApplication();
     	
 	    setContentView(R.layout.connectdialog);
 	    
@@ -142,31 +152,36 @@ public class ConnectDialog extends Activity {
 	public void onResume() {
 		super.onResume();
 		
-		// Check if we are still connected
-		if (App.mClementineConnection == null 
-		 || !App.mClementineConnection.isAlive()) {
-			setResult(ClementineRemoteControlActivity.RESULT_RESTART);
-			finish();
-		} else {
-		    // Set the handler
-		    App.mClementineConnection.setUiHandler(mHandler);
-		    
-		    // Get the parameters
-		    Bundle extras = getIntent().getExtras();
-		    mFirstCall = extras.getBoolean(App.SP_KEY_AC);
-		    
-		    // mDNS Discovery
-	    	mClementineMDns = new ClementineMDnsDiscovery(mHandler);
-		    
-		    // Check if Autoconnect is enabled
-		    if (mCbAutoConnect.isChecked() && extras.getBoolean(App.SP_KEY_AC)) {
-		    	connect();
-		    } else {
-		    	mClementineMDns.discoverServices();
-			}
-		    
-		    extras.putBoolean(App.SP_KEY_AC, true);
+		// Check if we are currently connected, then open the player dialog
+		if (App.mClementine.isConnected()) {
+			showPlayerDialog();
+			return;
 		}
+		
+		// Start the background service
+		mServiceIntent = new Intent(this, ClementineService.class);
+    	mServiceIntent.putExtra(App.SERVICE_ID, App.SERVICE_START);
+    	startService(mServiceIntent);
+		
+	    mFirstCall = doAutoConnect;
+	    
+	    // mDNS Discovery
+    	mClementineMDns = new ClementineMDnsDiscovery(mHandler);
+	    
+	    // Check if Autoconnect is enabled
+	    if (mCbAutoConnect.isChecked() && doAutoConnect) {
+	    	// Post delayed, so the service has time to start
+	    	mHandler.postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					connect();
+				}
+	    	}, 100);
+	    	
+	    } else {
+	    	mClementineMDns.discoverServices();
+		}
+	    doAutoConnect = true;
 	}
 
 	private OnClickListener oclConnect = new OnClickListener() {
@@ -267,6 +282,9 @@ public class ConnectDialog extends Activity {
 		editor.putInt(App.SP_LAST_AUTH_CODE, mAuthCode);
 		editor.commit();
 		
+    	// Set the handler
+	    App.mClementineConnection.setUiHandler(mHandler);
+		
 		mPdConnect.show();
 		// Get the port to connect to			
 		int port = Integer.valueOf(mSharedPref.getString(App.SP_KEY_PORT, String.valueOf(Clementine.DefaultPort)));
@@ -313,12 +331,15 @@ public class ConnectDialog extends Activity {
 	/**
 	 * We connected to clementine successfully. Now open other view
 	 */
-	void connected() {
+	void showPlayerDialog() {
 		if (mClementineMDns != null) {
 			mClementineMDns.stopServiceDiscovery();
 		}
-		setResult(ClementineRemoteControlActivity.RESULT_CONNECT);
-		finish();
+		
+		// Start the player dialog
+		Intent playerDialog = new Intent(this, Player.class);
+    	playerDialog.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+    	startActivityForResult(playerDialog, ID_PLAYER_DIALOG);
 	}
 	
 	/**
@@ -359,6 +380,17 @@ public class ConnectDialog extends Activity {
 			showAuthCodePromt();
 		}
 	}
+	
+	 @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	if (requestCode == ID_PLAYER_DIALOG) {
+    		if (resultCode == Activity.RESULT_CANCELED) {
+    			finish();
+    		} else {
+    			doAutoConnect = false;
+    		}
+    	}
+    }
 	
 	/**
 	 * A service was found. Now show a toast and animate the icon

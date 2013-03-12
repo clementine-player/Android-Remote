@@ -40,7 +40,6 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 import de.qspool.clementineremote.App;
-import de.qspool.clementineremote.ClementineRemoteControlActivity;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.player.MyPlaylist;
@@ -120,7 +119,7 @@ public class Player extends SherlockActivity {
 		// Check if we are still connected
 		if (App.mClementineConnection == null 
 		 || !App.mClementineConnection.isAlive()) {
-			setResult(ClementineRemoteControlActivity.RESULT_DISCONNECT);
+			setResult(ConnectDialog.RESULT_DISCONNECT);
 			finish();
 		} else {
 		    // Set the handler
@@ -294,7 +293,7 @@ public class Player extends SherlockActivity {
 	 */
 	void disconnect() {
 		makeToast(R.string.player_disconnected, Toast.LENGTH_SHORT);
-		setResult(ClementineRemoteControlActivity.RESULT_DISCONNECT);
+		setResult(ConnectDialog.RESULT_DISCONNECT);
 		finish();
 	}
 	

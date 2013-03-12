@@ -44,7 +44,7 @@ public class ConnectDialogHandler extends Handler {
 		if (cd != null) {
 			if (msg.obj instanceof Connected) {
 				cd.mPdConnect.dismiss();
-				cd.connected();
+				cd.showPlayerDialog();
 			} else if (msg.obj instanceof NoConnection) {
 				cd.mPdConnect.dismiss();
 				cd.noConnection();

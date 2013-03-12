@@ -18,12 +18,12 @@
 package de.qspool.clementineremote.backend;
 
 import de.qspool.clementineremote.App; 
-import de.qspool.clementineremote.ClementineRemoteControlActivity;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.elements.Disconnected;
 import de.qspool.clementineremote.backend.elements.Disconnected.DisconnectReason;
 import de.qspool.clementineremote.backend.event.OnConnectionClosedListener;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
+import de.qspool.clementineremote.ui.ConnectDialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -65,12 +65,13 @@ public class ClementineService extends Service {
 		case App.SERVICE_START:
 			// Create a new instance
 			if (App.mClementineConnection == null) {
-				App.mClementineConnection = new ClementineConnection(this);
+				App.mClementineConnection = new ClementineConnection();
+	
+				setupNotification(true);
+				App.mClementineConnection.setNotificationBuilder(mNotifyBuilder);
+				App.mClementineConnection.setOnConnectionClosedListener(occl);
+				App.mClementineConnection.start();
 			}
-			setupNotification(true);
-			App.mClementineConnection.setNotificationBuilder(mNotifyBuilder);
-			App.mClementineConnection.setOnConnectionClosedListener(occl);
-			App.mClementineConnection.start();
 			break;
 		case App.SERVICE_CONNECTED:
 			startForeground(App.NOTIFY_ID, mNotifyBuilder.build());
@@ -123,12 +124,16 @@ public class ClementineService extends Service {
 	    mNotifyBuilder.setSmallIcon(R.drawable.ic_launcher);
 	    mNotifyBuilder.setOngoing(ongoing);
 	    
+	    if (!ongoing) {
+	    	mNotifyBuilder.setAutoCancel(true);
+	    }
+	    
 	    // Set the result intent
-	    Intent resultIntent = new Intent(App.mApp, ClementineRemoteControlActivity.class);
+	    Intent resultIntent = new Intent(App.mApp, ConnectDialog.class);
 	    resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 	    // Create a TaskStack, so the app navigates correctly backwards
 	    TaskStackBuilder stackBuilder = TaskStackBuilder.create(App.mApp);
-	    stackBuilder.addParentStack(ClementineRemoteControlActivity.class);
+	    stackBuilder.addParentStack(ConnectDialog.class);
 	    stackBuilder.addNextIntent(resultIntent);
 	    PendingIntent resultPendingintent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 	    mNotifyBuilder.setContentIntent(resultPendingintent);
