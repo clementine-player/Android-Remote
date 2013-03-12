@@ -124,6 +124,7 @@ public class ClementineService extends Service {
 	    mNotifyBuilder.setSmallIcon(R.drawable.ic_launcher);
 	    mNotifyBuilder.setOngoing(ongoing);
 	    
+	    // If we don't have an ongoing notification, it shall be closed after clicked.
 	    if (!ongoing) {
 	    	mNotifyBuilder.setAutoCancel(true);
 	    }
