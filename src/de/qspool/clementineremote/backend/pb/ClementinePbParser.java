@@ -96,6 +96,7 @@ public class ClementinePbParser {
 		} else if (msg.getType().equals(MsgType.CURRENT_METAINFO)) {
 			MySong s = parseSong(msg.getResponseCurrentMetadata());
 			App.mClementine.setCurrentSong(s);
+			App.mClementine.setSongPosition(0);
 			parsedElement = new Reload(); 
 		} else if (msg.getType().equals(MsgType.UPDATE_TRACK_POSITION)) {
 			parseUpdateTrackPosition(msg.getResponseUpdateTrackPosition());
