@@ -69,6 +69,7 @@ public class ConnectDialog extends Activity {
 	private final static int ANIMATION_DURATION = 2000;
 	
 	private final int ID_PLAYER_DIALOG = 1;
+	private final int ID_SETTINGS = 2;
 	public final static int RESULT_CONNECT = 1;
 	public final static int RESULT_DISCONNECT = 2;
 	public final static int RESULT_RESTART = 3;
@@ -198,7 +199,7 @@ public class ConnectDialog extends Activity {
 		@Override
 		public void onClick(View v) {
 			Intent settingsIntent = new Intent(ConnectDialog.this, ClementineRemoteSettings.class);
-			startActivity(settingsIntent);
+			startActivityForResult(settingsIntent, ID_SETTINGS);
 		}
 	};
 	
@@ -389,6 +390,8 @@ public class ConnectDialog extends Activity {
     		} else {
     			doAutoConnect = false;
     		}
+    	} else if (requestCode == ID_SETTINGS) {
+    		doAutoConnect = false;
     	}
     }
 	
