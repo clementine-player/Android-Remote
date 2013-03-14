@@ -10,7 +10,7 @@ Version 0.4
     - Fix FC when starting Clementine Remote
     - Display Artist on Lockscreen (Android 4.0+)
   Translations:
-    - Added Spanish, Portuguese and Burmese language 
+    - Added Spanish, French, Portuguese and Burmese language 
 
 Version 0.3
   Features:
