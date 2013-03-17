@@ -117,8 +117,10 @@ public class Player extends SherlockActivity {
 		super.onResume();
 		
 		// Check if we are still connected
-		if (App.mClementineConnection == null 
-		 || !App.mClementineConnection.isAlive()) {
+		if (App.mClementineConnection == null
+		 || App.mClementine           == null
+		 || !App.mClementineConnection.isAlive()
+		 || !App.mClementine.isConnected()) {
 			setResult(ConnectDialog.RESULT_DISCONNECT);
 			finish();
 		} else {
