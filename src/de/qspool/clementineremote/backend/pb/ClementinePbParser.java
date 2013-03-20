@@ -28,11 +28,15 @@ import de.qspool.clementineremote.backend.Clementine.RepeatMode;
 import de.qspool.clementineremote.backend.elements.ClementineElement;
 import de.qspool.clementineremote.backend.elements.Connected;
 import de.qspool.clementineremote.backend.elements.Disconnected;
-import de.qspool.clementineremote.backend.elements.GotPlaylistSongs;
+import de.qspool.clementineremote.backend.elements.ReloadPlaylistSongs;
+import de.qspool.clementineremote.backend.elements.ReloadControl;
+import de.qspool.clementineremote.backend.elements.ReloadPlaylists;
+import de.qspool.clementineremote.backend.elements.ReloadTrackPosition;
 import de.qspool.clementineremote.backend.elements.Disconnected.DisconnectReason;
 import de.qspool.clementineremote.backend.elements.InvalidData;
 import de.qspool.clementineremote.backend.elements.OldProtoVersion;
 import de.qspool.clementineremote.backend.elements.Reload;
+import de.qspool.clementineremote.backend.elements.ReloadMetadataChanged;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.EngineState;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
@@ -97,23 +101,23 @@ public class ClementinePbParser {
 			MySong s = parseSong(msg.getResponseCurrentMetadata());
 			App.mClementine.setCurrentSong(s);
 			App.mClementine.setSongPosition(0);
-			parsedElement = new Reload(); 
+			parsedElement = new ReloadMetadataChanged(); 
 		} else if (msg.getType().equals(MsgType.UPDATE_TRACK_POSITION)) {
 			parseUpdateTrackPosition(msg.getResponseUpdateTrackPosition());
-			parsedElement = new Reload(); 
+			parsedElement = new ReloadTrackPosition(); 
 		} else if (msg.getType().equals(MsgType.KEEP_ALIVE)) {
 			App.mClementineConnection.setLastKeepAlive(System.currentTimeMillis());
 		} else if (msg.getType().equals(MsgType.SET_VOLUME)) {
 			App.mClementine.setVolume(msg.getRequestSetVolume().getVolume());
 		} else if (msg.getType().equals(MsgType.PLAY)) {
 			App.mClementine.setState(Clementine.State.PLAY);
-			parsedElement = new Reload(); 
+			parsedElement = new ReloadControl(); 
 		} else if (msg.getType().equals(MsgType.PAUSE)) {
 			App.mClementine.setState(Clementine.State.PAUSE);
-			parsedElement = new Reload(); 
+			parsedElement = new ReloadControl(); 
 		} else if (msg.getType().equals(MsgType.STOP)) {
 			App.mClementine.setState(Clementine.State.STOP);
-			parsedElement = new Reload(); 
+			parsedElement = new ReloadControl(); 
 		} else if (msg.getType().equals(MsgType.DISCONNECT)) {
 			parsedElement = parseDisconnect(msg.getResponseDisconnect());
 		} else if (msg.getType().equals(MsgType.PLAYLISTS)) {
@@ -244,7 +248,7 @@ public class ClementinePbParser {
 			App.mClementine.addPlaylist(myPlaylist);
 		}
 		
-		return new Reload();
+		return new ReloadPlaylists();
 	}
 	
 	private ClementineElement parsePlaylistSongs(ResponsePlaylistSongs response) {
@@ -258,7 +262,7 @@ public class ClementinePbParser {
 			playlistSongs.add(copySongMetadata(s));
 		}
 		
-		return new GotPlaylistSongs();
+		return new ReloadPlaylistSongs();
 	}
 	
 	/**
@@ -278,7 +282,7 @@ public class ClementinePbParser {
 								break;
 		default: break;
 		}
-		return new Reload();
+		return new ReloadControl();
 	}
 	
 	/**
@@ -298,6 +302,6 @@ public class ClementinePbParser {
 								break;
 		default: break;
 		}
-		return new Reload();
+		return new ReloadControl();
 	}
 }

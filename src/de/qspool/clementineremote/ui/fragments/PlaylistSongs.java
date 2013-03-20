@@ -40,6 +40,7 @@ public class PlaylistSongs extends SherlockListFragment {
 	private Activity mActivity;
 	CustomSongAdapter mAdapter;
 	private String mFilterText;
+	private boolean updateTrackPositionOnNewTrack = false;
 	
 	public PlaylistSongs() {
 		mFilterText = "";
@@ -70,6 +71,20 @@ public class PlaylistSongs extends SherlockListFragment {
 	public void setId(int id) {
 		mId = id;
 		mData = new LinkedList<MySong>(App.mClementine.getPlaylists().get(mId).getPlaylistSongs());
+	}
+	
+	/**
+	 * Update the underlying data. It reloads the current playlist songs from the Clementine object.
+	 */
+	public void updateSongList() {
+		mData.clear();
+		mData.addAll(App.mClementine.getPlaylists().get(mId).getPlaylistSongs());
+		mAdapter.updateSongs(mData);
+		
+		// Check if we should update the current view position
+		if (updateTrackPositionOnNewTrack) {
+			updateViewPosition();
+		}
 	}
 	
 	/**
@@ -109,8 +124,7 @@ public class PlaylistSongs extends SherlockListFragment {
          
         // Get the position of the current track if we have one
         if (App.mClementine.getCurrentSong() != null) {
-        	int pos = App.mClementine.getCurrentSong().getIndex();
-        	getListView().setSelection(pos - 3);
+        	updateViewPosition();
         }
 	}
 	
@@ -125,4 +139,21 @@ public class PlaylistSongs extends SherlockListFragment {
 
         getActivity().finish();
     }
+    
+    /**
+     * Set the selection to the currently played item
+     */
+    private void updateViewPosition() {
+    	int pos = App.mClementine.getCurrentSong().getIndex();
+    	getListView().setSelection(pos - 3);
+    }
+
+	public boolean isUpdateTrackPositionOnNewTrack() {
+		return updateTrackPositionOnNewTrack;
+	}
+
+	public void setUpdateTrackPositionOnNewTrack(
+			boolean updateTrackPositionOnNewTrack) {
+		this.updateTrackPositionOnNewTrack = updateTrackPositionOnNewTrack;
+	}
 }

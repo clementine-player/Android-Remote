@@ -49,6 +49,11 @@ public class CustomSongAdapter extends ArrayAdapter<MySong> implements Filterabl
 		mOrigData = new LinkedList<MySong>(data);
 	}
 	
+	public void updateSongs(List<MySong> data) {
+		mOrigData = new LinkedList<MySong>(data);
+		notifyDataSetChanged();
+	}
+	
 	@Override
 	public Filter getFilter() {
 		if (mFilter == null) {

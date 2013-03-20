@@ -44,6 +44,7 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 
 	private ViewPager mViewPager;
 	private PagerAdapter mPagerAdapter;
+	private PlaylistsHandler mHandler = new PlaylistsHandler(this);
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -75,9 +76,23 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 					}
 		});
 		
+		createPlaylistTabs();
+		
+		App.mClementineConnection.setUiHandler(mHandler);
+	}
+	
+	/**
+	 * Read all playlists from mClementine and create an actionbar tab for
+	 * each one.
+	 */
+	protected void createPlaylistTabs() {
+		final ActionBar actionBar = getSupportActionBar();
+		actionBar.removeAllTabs();
+		mPagerAdapter.removeAllFragments();
+		
 		// Now get all Playlists
 		for (int i=0;i<App.mClementine.getPlaylists().size();i++) {
-			// Get the Playlsit
+			// Get the Playlist
 			int key = App.mClementine.getPlaylists().keyAt(i);
 			MyPlaylist playlist = App.mClementine.getPlaylists().get(key);
 			
@@ -97,7 +112,19 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 				mViewPager.setCurrentItem(playlistTab.getPosition());
 			}
 		}
-		
+	}
+	
+	/**
+	 * We got an reload request.
+	 */
+	protected void reloadInfo() {
+		for (int i=0;i< mPagerAdapter.getCount();i++) {
+			PlaylistSongs ps = (PlaylistSongs) mPagerAdapter.getItem(i);
+			
+			if (ps.getAdapter() != null) {
+				ps.updateSongList();
+			}
+		}
 	}
 	
 	@Override
@@ -181,6 +208,10 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
         public void addFragment(Fragment fragment) {
             mFragments.add(fragment);
             notifyDataSetChanged();
+        }
+        
+        public void removeAllFragments() {
+        	mFragments.clear();
         }
 
         @Override
