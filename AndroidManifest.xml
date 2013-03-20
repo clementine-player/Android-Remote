@@ -45,10 +45,6 @@
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
-        <provider android:name=".ui.adapter.SongSuggestionAdapter"
-                  android:authorities="de.qspool.clementineremote.ui.adapter.SongSuggestionAdapter"
-                  android:enabled="true" 
-                  android:exported="false" />
         
     </application>
 

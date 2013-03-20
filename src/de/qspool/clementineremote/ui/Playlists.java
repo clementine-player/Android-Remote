@@ -20,7 +20,6 @@ package de.qspool.clementineremote.ui;
 import java.util.ArrayList;
 
 import android.os.Bundle;
-import android.provider.SearchRecentSuggestions;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -39,7 +38,6 @@ import com.actionbarsherlock.widget.SearchView;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.player.MyPlaylist;
-import de.qspool.clementineremote.ui.adapter.SongSuggestionAdapter;
 import de.qspool.clementineremote.ui.fragments.PlaylistSongs;
 
 public class Playlists extends SherlockFragmentActivity implements ActionBar.TabListener {
@@ -141,10 +139,6 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 	            		ps.getAdapter().getFilter().filter(query);
 	            	}
             	}
-            	SearchRecentSuggestions suggestions = new SearchRecentSuggestions(Playlists.this, 
-            																	SongSuggestionAdapter.AUTHORITY,
-            																	SongSuggestionAdapter.MODE);
-            	suggestions.saveRecentQuery(query, null);
                 return true;
             }
         };
