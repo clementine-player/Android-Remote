@@ -124,6 +124,13 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
             public boolean onQueryTextChange(String newText) {
             	for (int i=0;i< mPagerAdapter.getCount();i++) {
 	            	PlaylistSongs ps = (PlaylistSongs) mPagerAdapter.getItem(i);
+	            	
+	            	// Set the filter text as the fragments might not yet
+	            	// created. Only the left and right fragment from the
+	            	// currently active is created (onCreate() called).
+	            	// Therefore the other adapters are not yet created,
+	            	// onCreate filters for this string given in setFilterText()
+	            	ps.setFilterText(newText);
 	            	if (ps.getAdapter() != null) {
 	            		ps.getAdapter().getFilter().filter(newText);
 	            	}
@@ -135,6 +142,7 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
                 // Do something
             	for (int i=0;i< mPagerAdapter.getCount();i++) {
 	            	PlaylistSongs ps = (PlaylistSongs) mPagerAdapter.getItem(i);
+	            	ps.setFilterText(query);
 	            	if (ps.getAdapter() != null) {
 	            		ps.getAdapter().getFilter().filter(query);
 	            	}

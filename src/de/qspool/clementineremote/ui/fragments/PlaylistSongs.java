@@ -39,8 +39,10 @@ public class PlaylistSongs extends SherlockListFragment {
 	private int mId;
 	private Activity mActivity;
 	CustomSongAdapter mAdapter;
+	private String mFilterText;
 	
 	public PlaylistSongs() {
+		mFilterText = "";
 	}
 
 	@Override
@@ -56,13 +58,32 @@ public class PlaylistSongs extends SherlockListFragment {
 		// Create the adapter
 		mAdapter = new CustomSongAdapter(mActivity, R.layout.song_row, mData);
 		setListAdapter(mAdapter);
+		
+		// Filter the results
+		mAdapter.getFilter().filter(mFilterText);
 	}
 	
+	/**
+	 * Set the playlist id
+	 * @param id The playlist id, from which the songs are displayed
+	 */
 	public void setId(int id) {
 		mId = id;
 		mData = new LinkedList<MySong>(App.mClementine.getPlaylists().get(mId).getPlaylistSongs());
 	}
 	
+	/**
+	 * Set the text to filter
+	 * @param filterText String, which results are filtered by
+	 */
+	public void setFilterText(String filterText) {
+		mFilterText = filterText;
+	}
+	
+	/**
+	 * Get the song adapter
+	 * @return The CustomSongAdapter
+	 */
 	public CustomSongAdapter getAdapter() {
 		return mAdapter;
 	}
