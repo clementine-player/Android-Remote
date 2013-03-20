@@ -22,7 +22,6 @@ import java.lang.ref.WeakReference;
 import android.os.Message;
 import android.os.Handler;
 import de.qspool.clementineremote.backend.elements.Disconnected;
-import de.qspool.clementineremote.backend.elements.ReloadPlaylistSongs;
 import de.qspool.clementineremote.backend.elements.NoConnection;
 import de.qspool.clementineremote.backend.elements.Reload;
 
@@ -45,8 +44,6 @@ public class PlayerHandler extends Handler {
 			pd.disconnect();
 		} else if (msg.obj instanceof Disconnected) {
 			pd.disconnect();
-		} else if (msg.obj instanceof ReloadPlaylistSongs) {
-			pd.checkGotAllPlaylists();
 		} else if (msg.obj instanceof Reload) {
 			pd.reloadInfo();
 		}

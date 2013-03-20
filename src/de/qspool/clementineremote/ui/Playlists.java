@@ -18,8 +18,12 @@
 package de.qspool.clementineremote.ui;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -38,6 +42,7 @@ import com.actionbarsherlock.widget.SearchView;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.player.MyPlaylist;
+import de.qspool.clementineremote.backend.requests.RequestPlaylistSong;
 import de.qspool.clementineremote.ui.fragments.PlaylistSongs;
 
 public class Playlists extends SherlockFragmentActivity implements ActionBar.TabListener {
@@ -45,6 +50,10 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 	private ViewPager mViewPager;
 	private PagerAdapter mPagerAdapter;
 	private PlaylistsHandler mHandler = new PlaylistsHandler(this);
+	
+	private int mDownloadPlaylists;
+	private LinkedList<String> mDownloadPlaylistNames;
+	private ProgressDialog mProgressDialog;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -76,16 +85,12 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 					}
 		});
 		
-		createPlaylistTabs();
+		getPlaylists();
 		
 		App.mClementineConnection.setUiHandler(mHandler);
 	}
 	
-	/**
-	 * Read all playlists from mClementine and create an actionbar tab for
-	 * each one.
-	 */
-	protected void createPlaylistTabs() {
+	private void createPlaylistTabs() {
 		final ActionBar actionBar = getSupportActionBar();
 		actionBar.removeAllTabs();
 		mPagerAdapter.removeAllFragments();
@@ -110,6 +115,56 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 			
 			if (playlist.isActive()) {
 				mViewPager.setCurrentItem(playlistTab.getPosition());
+			}
+		}
+	}
+	
+	/**
+	 * Check if we have all Playlists, otherwise get them
+	 */
+	protected void getPlaylists() {
+		mDownloadPlaylists = 0;
+		mDownloadPlaylistNames = new LinkedList<String>();
+		for (int i=0;i<App.mClementine.getPlaylists().size();i++) {
+			// Get the Playlsit
+			int key = App.mClementine.getPlaylists().keyAt(i);
+			MyPlaylist playlist = App.mClementine.getPlaylists().get(key);
+			if (playlist.getPlaylistSongs().size() == 0) {
+				Message msg = Message.obtain();
+				msg.obj = new RequestPlaylistSong(playlist.getId());
+				App.mClementineConnection.mHandler.sendMessage(msg);
+				mDownloadPlaylists++;
+				mDownloadPlaylistNames.add(playlist.getName());
+			}
+		}
+		
+		// Open it directly only when we got all playlists
+		if (mDownloadPlaylists == 0) {
+			createPlaylistTabs();
+		} else {
+			// Start a Progressbar
+			mProgressDialog = new ProgressDialog(this);
+			mProgressDialog.setMax(mDownloadPlaylists);
+			mProgressDialog.setCancelable(true);
+			mProgressDialog.setTitle(R.string.player_download_playlists);
+			mProgressDialog.setMessage(mDownloadPlaylistNames.poll());
+			mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+			mProgressDialog.show();
+		}
+	}
+	
+	/**
+	 * Update the Progressbar and open the intent if necessary
+	 */
+	void checkGotAllPlaylists() {
+		if (mProgressDialog != null) {
+			mProgressDialog.setProgress(mProgressDialog.getProgress()+1);
+			mProgressDialog.setMessage(mDownloadPlaylistNames.poll());
+			mDownloadPlaylists--;
+			
+			if (mDownloadPlaylists == 0 && mProgressDialog.isShowing()) {
+				mProgressDialog.dismiss();
+				createPlaylistTabs();
 			}
 		}
 	}

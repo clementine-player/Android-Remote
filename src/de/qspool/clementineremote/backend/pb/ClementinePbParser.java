@@ -43,6 +43,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgT
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Playlist;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ReasonDisconnect;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Repeat;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseActiveChanged;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseClementineInfo;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseCurrentMetadata;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseDisconnect;
@@ -124,6 +125,8 @@ public class ClementinePbParser {
 			parsedElement = parsePlaylists(msg.getResponsePlaylists());
 		} else if (msg.getType().equals(MsgType.PLAYLIST_SONGS)) {
 			parsedElement = parsePlaylistSongs(msg.getResponsePlaylistSongs());
+		} else if (msg.getType().equals(MsgType.ACTIVE_PLAYLIST_CHANGED)) {
+			parsedElement = parseActivePlaylistChanged(msg.getResponseActiveChanged());
 		} else if (msg.getType().equals(MsgType.REPEAT)) {
 			parsedElement = parseRepeat(msg.getRepeat());
 		} else if (msg.getType().equals(MsgType.SHUFFLE)) {
@@ -131,6 +134,18 @@ public class ClementinePbParser {
 		}
 		
 		return parsedElement;
+	}
+
+	/**
+	 * Update the currently active playlist id
+	 * @param responseActiveChanged The response element
+	 * @return A new Reload element
+	 */
+	private ClementineElement parseActivePlaylistChanged(
+			ResponseActiveChanged responseActiveChanged) {
+		int id = responseActiveChanged.getId();
+		App.mClementine.setActivePlaylistId(id);
+		return new Reload();
 	}
 
 	/**

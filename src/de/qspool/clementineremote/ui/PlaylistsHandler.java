@@ -39,11 +39,13 @@ public class PlaylistsHandler extends Handler {
 	@Override
 	public void handleMessage(Message msg) {
 		Playlists pd = mDialog.get();
-		if (msg.obj instanceof ReloadMetadataChanged
-		 || msg.obj instanceof ReloadPlaylistSongs) {
+		if (msg.obj instanceof ReloadMetadataChanged) {
+			pd.reloadInfo();
+		} else if (msg.obj instanceof ReloadPlaylistSongs) {
+			pd.checkGotAllPlaylists();
 			pd.reloadInfo();
 		} else if (msg.obj instanceof ReloadPlaylists) {
-			pd.createPlaylistTabs();
+			pd.getPlaylists();
 		}
 	}
 }

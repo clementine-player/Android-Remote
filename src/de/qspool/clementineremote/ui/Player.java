@@ -17,9 +17,6 @@
 
 package de.qspool.clementineremote.ui;
 
-import java.util.LinkedList;
-
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -42,12 +39,10 @@ import com.actionbarsherlock.view.MenuItem;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.Clementine;
-import de.qspool.clementineremote.backend.player.MyPlaylist;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.backend.requests.RequestControl;
 import de.qspool.clementineremote.backend.requests.RequestControl.Request;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
-import de.qspool.clementineremote.backend.requests.RequestPlaylistSong;
 import de.qspool.clementineremote.backend.requests.RequestVolume;
 import de.qspool.clementineremote.utils.Utilities;
 
@@ -71,10 +66,6 @@ public class Player extends SherlockActivity {
 	private PlayerHandler mHandler;
 	
 	private ActionBar mActionBar;
-	
-	private int mDownloadPlaylists;
-	private LinkedList<String> mDownloadPlaylistNames;
-	private ProgressDialog mProgressDialog;
 	
 	private Toast mToast;
 	
@@ -170,7 +161,8 @@ public class Player extends SherlockActivity {
 		case R.id.settings:		Intent settingsIntent = new Intent(this, ClementineRemoteSettings.class);
 								startActivity(settingsIntent);
 								break;
-		case R.id.playlist:		openPlaylistView();
+		case R.id.playlist:		Intent playlistIntent = new Intent(this, Playlists.class);
+								startActivity(playlistIntent);
 								break;
 		default: break;
 		}
@@ -209,57 +201,7 @@ public class Player extends SherlockActivity {
 		}
 	}
 	
-	/**
-	 * Check if we have all Playlists, otherwise get them
-	 */
-	private void openPlaylistView() {
-		mDownloadPlaylists = 0;
-		mDownloadPlaylistNames = new LinkedList<String>();
-		for (int i=0;i<App.mClementine.getPlaylists().size();i++) {
-			// Get the Playlsit
-			int key = App.mClementine.getPlaylists().keyAt(i);
-			MyPlaylist playlist = App.mClementine.getPlaylists().get(key);
-			if (playlist.getPlaylistSongs().size() == 0) {
-				Message msg = Message.obtain();
-				msg.obj = new RequestPlaylistSong(playlist.getId());
-				App.mClementineConnection.mHandler.sendMessage(msg);
-				mDownloadPlaylists++;
-				mDownloadPlaylistNames.add(playlist.getName());
-			}
-		}
-		
-		// Open it directly only when we got all playlists
-		if (mDownloadPlaylists == 0) {
-			Intent playlistIntent = new Intent(this, Playlists.class);
-			startActivity(playlistIntent);
-		} else {
-			// Start a Progressbar
-			mProgressDialog = new ProgressDialog(this);
-			mProgressDialog.setMax(mDownloadPlaylists);
-			mProgressDialog.setCancelable(true);
-			mProgressDialog.setTitle(R.string.player_download_playlists);
-			mProgressDialog.setMessage(mDownloadPlaylistNames.poll());
-			mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			mProgressDialog.show();
-		}
-	}
-	
-	/**
-	 * Update the Progressbar and open the intent if necessary
-	 */
-	void checkGotAllPlaylists() {
-		if (mProgressDialog != null) {
-			mProgressDialog.setProgress(mProgressDialog.getProgress()+1);
-			mProgressDialog.setMessage(mDownloadPlaylistNames.poll());
-			mDownloadPlaylists--;
-			
-			if (mDownloadPlaylists == 0 && mProgressDialog.isShowing()) {
-				mProgressDialog.dismiss();
-				Intent playlistIntent = new Intent(this, Playlists.class);
-				startActivity(playlistIntent);
-			}
-		}
-	}
+
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {

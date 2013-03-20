@@ -157,4 +157,8 @@ public class Clementine {
 	public MyPlaylist getActivePlaylist() {
 		return mPlaylists.get(mActivePlaylist);
 	}
+	
+	public void setActivePlaylistId(int id) {
+		mActivePlaylist = id;
+	}
 }
