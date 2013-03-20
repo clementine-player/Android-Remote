@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:paddingBottom="30dp" >
 
     <ImageButton
         android:id="@+id/btnClementineIcon"
         android:layout_width="wrap_content"
-        android:layout_height="0dip"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_weight="0.90"
+        android:layout_toLeftOf="@id/llConnect"
+        android:layout_weight="1"
         android:background="@android:color/transparent"
         android:contentDescription="@string/connect_desc_icon"
         android:scaleType="fitCenter"
@@ -23,7 +27,10 @@
         style="@style/WhiteBackground"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_marginRight="20dp"
         android:orientation="vertical"
         android:paddingLeft="15dp"
         android:paddingRight="15dp" >
@@ -89,4 +96,4 @@
 
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>
