@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -85,9 +84,13 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 					}
 		});
 		
-		getPlaylists();
-		
 		App.mClementineConnection.setUiHandler(mHandler);
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		getPlaylists();
 	}
 	
 	private void createPlaylistTabs() {
