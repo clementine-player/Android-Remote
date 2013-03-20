@@ -260,6 +260,8 @@ public class ClementineConnection extends Thread {
 				mLastState = App.mClementine.getState();
 				updateRemoteControlClient();
 			}
+		} else if (clementineElement instanceof Disconnected) {
+			closeConnection((Disconnected) clementineElement);
 		}
 	}
 	
