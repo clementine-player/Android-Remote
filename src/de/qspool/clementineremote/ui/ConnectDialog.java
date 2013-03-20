@@ -317,7 +317,7 @@ public class ConnectDialog extends Activity {
 			public void onClick(View v) {
 				try {
 					mAuthCode = Integer.parseInt(etAuthCode.getText().toString());
-					authCodeDialog.cancel();
+					authCodeDialog.dismiss();
 	        	    connect();
 				} catch (NumberFormatException e) {
 					Toast.makeText(ConnectDialog.this, R.string.invalid_code, Toast.LENGTH_SHORT).show();

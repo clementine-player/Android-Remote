@@ -244,12 +244,13 @@ public class ClementineConnection extends Thread {
 	private void processProtocolBuffer(byte[] bs) {
 		// Send the parsed Message to the ui thread
 		ClementineElement clementineElement = mClementinePbParser.parse(bs);
-		sendUiMessage(clementineElement);
 		
 		// Close the connection if we have an old proto verion
 		if (clementineElement instanceof OldProtoVersion) {
 			closeConnection(new Disconnected(DisconnectReason.WRONG_PROTO));
 		} else if (clementineElement instanceof Reload) {
+			sendUiMessage(clementineElement);
+			
 	    	// Now update the notification and the remote control client			
 			if (App.mClementine.getCurrentSong() != mLastSong) {
 				mLastSong = App.mClementine.getCurrentSong();
@@ -262,6 +263,8 @@ public class ClementineConnection extends Thread {
 			}
 		} else if (clementineElement instanceof Disconnected) {
 			closeConnection((Disconnected) clementineElement);
+		} else {
+			sendUiMessage(clementineElement);
 		}
 	}
 	
