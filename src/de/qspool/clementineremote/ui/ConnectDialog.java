@@ -377,6 +377,11 @@ public class ConnectDialog extends Activity {
 	 * @param disconnected The object to work with
 	 */
 	void disconnected(Disconnected disconnected) {
+		// Restart the background service
+		mServiceIntent = new Intent(this, ClementineService.class);
+    	mServiceIntent.putExtra(App.SERVICE_ID, App.SERVICE_START);
+    	startService(mServiceIntent);
+    	
 		if (disconnected.getReason() == DisconnectReason.WRONG_AUTH_CODE) {
 			showAuthCodePromt();
 		}
