@@ -1,3 +1,6 @@
+Version 0.4.1
+  Bugfix: Fix errormessage "old version" was not shown.
+
 Version 0.4
   Features:
     - mDNS discovery

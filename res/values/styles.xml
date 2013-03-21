@@ -18,6 +18,9 @@
     <style name="ImgCoverWhiteBorder" >
         <item name="android:background">@drawable/img_cover_bg</item>
     </style>
+    <style name="ImgCoverGreyBorder" >
+        <item name="android:background">@drawable/img_cover_grey_bg</item>
+    </style>
     <style name="PreferencesTheme" parent="@android:style/Theme.Light.NoTitleBar">
         <!-- <item name="android:windowBackground">@drawable/background</item> -->
     </style>

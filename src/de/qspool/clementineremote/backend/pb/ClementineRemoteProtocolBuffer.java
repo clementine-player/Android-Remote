@@ -375,10 +375,12 @@ public final class ClementineRemoteProtocolBuffer {
       implements com.google.protobuf.ProtocolMessageEnum {
     Server_Shutdown(0, 1),
     Wrong_Auth_Code(1, 2),
+    Not_Authenticated(2, 3),
     ;
     
     public static final int Server_Shutdown_VALUE = 1;
     public static final int Wrong_Auth_Code_VALUE = 2;
+    public static final int Not_Authenticated_VALUE = 3;
     
     
     public final int getNumber() { return value; }
@@ -387,6 +389,7 @@ public final class ClementineRemoteProtocolBuffer {
       switch (value) {
         case 1: return Server_Shutdown;
         case 2: return Wrong_Auth_Code;
+        case 3: return Not_Authenticated;
         default: return null;
       }
     }
@@ -417,7 +420,7 @@ public final class ClementineRemoteProtocolBuffer {
     }
     
     private static final ReasonDisconnect[] VALUES = {
-      Server_Shutdown, Wrong_Auth_Code, 
+      Server_Shutdown, Wrong_Auth_Code, Not_Authenticated, 
     };
     
     public static ReasonDisconnect valueOf(
@@ -10972,10 +10975,11 @@ public final class ClementineRemoteProtocolBuffer {
       "Track\020\001\022\020\n\014Repeat_Album\020\002\022\023\n\017Repeat_Play" +
       "list\020\003*\\\n\013ShuffleMode\022\017\n\013Shuffle_Off\020\000\022\017" +
       "\n\013Shuffle_All\020\001\022\027\n\023Shuffle_InsideAlbum\020\002" +
-      "\022\022\n\016Shuffle_Albums\020\003*<\n\020ReasonDisconnect" +
+      "\022\022\n\016Shuffle_Albums\020\003*S\n\020ReasonDisconnect" +
       "\022\023\n\017Server_Shutdown\020\001\022\023\n\017Wrong_Auth_Code" +
-      "\020\002BG\n%de.qspool.clementineremote.backend" +
-      ".pbB\036ClementineRemoteProtocolBuffer"
+      "\020\002\022\025\n\021Not_Authenticated\020\003BG\n%de.qspool.c" +
+      "lementineremote.backend.pbB\036ClementineRe" +
+      "moteProtocolBuffer"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

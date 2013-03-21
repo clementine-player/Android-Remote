@@ -31,10 +31,8 @@
                   android:theme="@style/PlayerTheme"
                   android:launchMode="singleTop" ></activity>
         <activity android:name=".ui.ClementineRemoteSettings"
-                  android:screenOrientation="portrait"
                   android:theme="@style/PreferencesTheme"></activity>
         <activity android:name=".ui.Playlists"
-                  android:screenOrientation="portrait"
                   android:theme="@style/PlayerTheme">
         </activity>
         <service android:name=".backend.ClementineService"></service>

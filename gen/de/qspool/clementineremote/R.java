@@ -939,11 +939,12 @@ containing a value of this type.
         public static final int ic_menu_preferences=0x7f020080;
         public static final int icon_large=0x7f020081;
         public static final int img_cover_bg=0x7f020082;
-        public static final int orange_background_border=0x7f020083;
-        public static final int orange_button=0x7f020084;
-        public static final int shuffle=0x7f020085;
-        public static final int white_background=0x7f020086;
-        public static final int white_background_border=0x7f020087;
+        public static final int img_cover_grey_bg=0x7f020083;
+        public static final int orange_background_border=0x7f020084;
+        public static final int orange_button=0x7f020085;
+        public static final int shuffle=0x7f020086;
+        public static final int white_background=0x7f020087;
+        public static final int white_background_border=0x7f020088;
     }
     public static final class id {
         public static final int ScrollView01=0x7f05003b;
@@ -1205,19 +1206,20 @@ containing a value of this type.
         public static final int wifi_disabled=0x7f0a0044;
     }
     public static final class style {
-        public static final int ActionBarStyle=0x7f0b0060;
-        public static final int ActionBarSubtitleTextAppearance=0x7f0b0062;
-        public static final int ActionBarTextAppearance=0x7f0b0061;
-        public static final int ActionButtonStyle=0x7f0b0063;
+        public static final int ActionBarStyle=0x7f0b0061;
+        public static final int ActionBarSubtitleTextAppearance=0x7f0b0063;
+        public static final int ActionBarTextAppearance=0x7f0b0062;
+        public static final int ActionButtonStyle=0x7f0b0064;
         public static final int DialogWindowTitle_Sherlock=0x7f0b0036;
         public static final int DialogWindowTitle_Sherlock_Light=0x7f0b0037;
         public static final int Dialog_Transparent=0x7f0b005c;
+        public static final int ImgCoverGreyBorder=0x7f0b005e;
         public static final int ImgCoverWhiteBorder=0x7f0b005d;
         public static final int OrangeButton_Button=0x7f0b0059;
-        public static final int PlayerTheme=0x7f0b005f;
+        public static final int PlayerTheme=0x7f0b0060;
         /**  <item name="android:windowBackground">@drawable/background</item> 
          */
-        public static final int PreferencesTheme=0x7f0b005e;
+        public static final int PreferencesTheme=0x7f0b005f;
         public static final int Sherlock___TextAppearance_Small=0x7f0b004a;
         public static final int Sherlock___Theme=0x7f0b004e;
         public static final int Sherlock___Theme_DarkActionBar=0x7f0b0050;
