@@ -26,6 +26,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
@@ -106,47 +107,12 @@ public class ConnectDialog extends Activity {
     	
 	    setContentView(R.layout.connectdialog);
 	    
-	    // Get the Layoutelements
-	    mBtnConnect = (Button) findViewById(R.id.btnConnect);
-	    mBtnConnect.setOnClickListener(oclConnect);
-	    mBtnConnect.requestFocus();
-	    
-	    mBtnSettings = (ImageButton) findViewById(R.id.btnSettings);
-	    mBtnSettings.setOnClickListener(oclSettings);
-	    
-	    mBtnClementine = (ImageButton) findViewById(R.id.btnClementineIcon);
-	    mBtnClementine.setOnClickListener(oclClementine);
-	    
-	    // Setup the animation for the Clementine icon
-	    mAlphaDown = new AlphaAnimation(1.0f, 0.3f);
-	    mAlphaUp = new AlphaAnimation(0.3f, 1.0f);
-	    mAlphaDown.setDuration(ANIMATION_DURATION);
-	    mAlphaUp.setDuration(ANIMATION_DURATION);
-	    mAlphaDown.setFillAfter(true);
-	    mAlphaUp.setFillAfter(true);
-	    mAlphaUp.setAnimationListener(mAnimationListener);
-	    mAlphaDown.setAnimationListener(mAnimationListener);
-	    mAnimationCancel = false;
-	    
-	    // Ip and Autoconnect
-	    mEtIp = (EditText) findViewById(R.id.etIp);
-	    mEtIp.setRawInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-	    mCbAutoConnect = (CheckBox) findViewById(R.id.cbAutoconnect);
-	    
 	    // Create a progress dialog
 	    mPdConnect = new ProgressDialog(this);
 	    mPdConnect.setCancelable(true);
 	    mPdConnect.setOnCancelListener(oclProgressDialog);
-	    mPdConnect.setMessage(getString(R.string.connectdialog_connecting));
 	    
-	    // Get old ip and auto-connect from shared prefences
-	    mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-	    mEtIp.setText(mSharedPref.getString(App.SP_KEY_IP, ""));
-	    mEtIp.setSelection(mEtIp.length());
-	    mCbAutoConnect.setChecked(mSharedPref.getBoolean(App.SP_KEY_AC, false));
-	    
-	    // Get the last auth code
-	    mAuthCode = mSharedPref.getInt(App.SP_LAST_AUTH_CODE, 0);
+	    initializeUi();
 	}
 	
 	@Override 
@@ -154,7 +120,7 @@ public class ConnectDialog extends Activity {
 		super.onResume();
 		
 		// Check if we are currently connected, then open the player dialog
-		if (App.mClementine.isConnected()) {
+		if (!mPdConnect.isShowing() && App.mClementine.isConnected()) {
 			showPlayerDialog();
 			return;
 		}
@@ -183,6 +149,53 @@ public class ConnectDialog extends Activity {
 	    	mClementineMDns.discoverServices();
 		}
 	    doAutoConnect = true;
+	}
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig)
+	{
+	    super.onConfigurationChanged(newConfig);
+	    setContentView(R.layout.connectdialog);
+	    
+	    initializeUi();
+	}
+	
+	private void initializeUi() {
+	    // Get the Layoutelements
+	    mBtnConnect = (Button) findViewById(R.id.btnConnect);
+	    mBtnConnect.setOnClickListener(oclConnect);
+	    mBtnConnect.requestFocus();
+	    
+	    mBtnSettings = (ImageButton) findViewById(R.id.btnSettings);
+	    mBtnSettings.setOnClickListener(oclSettings);
+	    
+	    mBtnClementine = (ImageButton) findViewById(R.id.btnClementineIcon);
+	    mBtnClementine.setOnClickListener(oclClementine);
+	    
+	    // Setup the animation for the Clementine icon
+	    mAlphaDown = new AlphaAnimation(1.0f, 0.3f);
+	    mAlphaUp = new AlphaAnimation(0.3f, 1.0f);
+	    mAlphaDown.setDuration(ANIMATION_DURATION);
+	    mAlphaUp.setDuration(ANIMATION_DURATION);
+	    mAlphaDown.setFillAfter(true);
+	    mAlphaUp.setFillAfter(true);
+	    mAlphaUp.setAnimationListener(mAnimationListener);
+	    mAlphaDown.setAnimationListener(mAnimationListener);
+	    mAnimationCancel = false;
+	    
+	    // Ip and Autoconnect
+	    mEtIp = (EditText) findViewById(R.id.etIp);
+	    mEtIp.setRawInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+	    mCbAutoConnect = (CheckBox) findViewById(R.id.cbAutoconnect);
+	    
+	    // Get old ip and auto-connect from shared prefences
+	    mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+	    mEtIp.setText(mSharedPref.getString(App.SP_KEY_IP, ""));
+	    mEtIp.setSelection(mEtIp.length());
+	    mCbAutoConnect.setChecked(mSharedPref.getBoolean(App.SP_KEY_AC, false));
+	    
+	    // Get the last auth code
+	    mAuthCode = mSharedPref.getInt(App.SP_LAST_AUTH_CODE, 0);
 	}
 
 	private OnClickListener oclConnect = new OnClickListener() {
@@ -285,8 +298,10 @@ public class ConnectDialog extends Activity {
 		
     	// Set the handler
 	    App.mClementineConnection.setUiHandler(mHandler);
-		
+	    
+	    mPdConnect.setMessage(getString(R.string.connectdialog_connecting));
 		mPdConnect.show();
+		
 		// Get the port to connect to			
 		int port = Integer.valueOf(mSharedPref.getString(App.SP_KEY_PORT, String.valueOf(Clementine.DefaultPort)));
 					

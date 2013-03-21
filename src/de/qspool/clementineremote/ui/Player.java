@@ -22,46 +22,29 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
-import de.qspool.clementineremote.backend.Clementine;
-import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.backend.requests.RequestControl;
 import de.qspool.clementineremote.backend.requests.RequestControl.Request;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
 import de.qspool.clementineremote.backend.requests.RequestVolume;
-import de.qspool.clementineremote.utils.Utilities;
+import de.qspool.clementineremote.ui.fragments.PlayerFragment;
+import de.qspool.clementineremote.ui.fragments.PlaylistSongs;
 
+public class Player extends SherlockFragmentActivity {
 
-public class Player extends SherlockActivity {
-	private TextView mTvArtist;
-	private TextView mTvTitle;
-	private TextView mTvAlbum;
-	
-	private TextView mTvGenre;
-	private TextView mTvYear;
-	private TextView mTvLength;
-	
-	private ImageButton mBtnNext;
-	private ImageButton mBtnPrev;
-	private ImageButton mBtnPlayPause;
-	
-	private ImageView mImgArt;
-	
 	private SharedPreferences mSharedPref;
 	private PlayerHandler mHandler;
 	
@@ -69,32 +52,23 @@ public class Player extends SherlockActivity {
 	
 	private Toast mToast;
 	
+	PlayerFragment mPlayerFragment;
+	PlaylistSongs mPlaylistSongs;
+	View mPlaylistFragmentView;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    
 	    setContentView(R.layout.player);
 	    
-	    // Get the Views
-	    mTvArtist = (TextView) findViewById(R.id.tvArtist);
-	    mTvTitle  = (TextView) findViewById(R.id.tvTitle);
-	    mTvAlbum  = (TextView) findViewById(R.id.tvAlbum);
-	    
-	    mTvGenre  = (TextView) findViewById(R.id.tvGenre);
-	    mTvYear   = (TextView) findViewById(R.id.tvYear);
-	    mTvLength = (TextView) findViewById(R.id.tvLength);
-	    
-	    mBtnNext  = (ImageButton) findViewById(R.id.btnNext);
-	    mBtnPrev  = (ImageButton) findViewById(R.id.btnPrev);
-	    mBtnPlayPause  = (ImageButton) findViewById(R.id.btnPlaypause);
-	    
-	    mImgArt = (ImageView) findViewById(R.id.imgArt);
-
-	    // Set the onclicklistener for the buttons
-	    mBtnNext.setOnClickListener(oclControl);
-	    mBtnPrev.setOnClickListener(oclControl);
-	    mBtnPlayPause.setOnClickListener(oclControl);
-	    
+		mPlayerFragment = (PlayerFragment) getSupportFragmentManager().findFragmentById(R.id.playerFragment);
+		mPlaylistFragmentView = (View) findViewById(R.id.playlistSongsFragment);
+		
+		if (mPlaylistFragmentView != null) {
+			createPlaylistFragment();
+		}
+		
 	    // Get the shared preferences
 	    mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 	    
@@ -121,6 +95,7 @@ public class Player extends SherlockActivity {
 		    
 			// Reload infos
 			reloadInfo();
+			reloadPlaylist();
 		}
 	}
 	
@@ -170,6 +145,20 @@ public class Player extends SherlockActivity {
 	}
 	
 	/**
+	 * Creates the playlistsongs fragment and adds it to the activity
+	 */
+	private void createPlaylistFragment() {
+		mPlaylistSongs = new PlaylistSongs();
+		mPlaylistSongs.setUpdateTrackPositionOnNewTrack(true, 1);
+		mPlaylistSongs.setId(App.mClementine.getActivePlaylist().getId());
+		
+		FragmentManager fragmentManager = getSupportFragmentManager();
+		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+		fragmentTransaction.replace(R.id.playlistSongsFragment, mPlaylistSongs);
+		fragmentTransaction.commit();
+	}
+	
+	/**
 	 * Show the toast for the shuffle mode
 	 */
 	private void showShuffleToast() {
@@ -201,8 +190,6 @@ public class Player extends SherlockActivity {
 		}
 	}
 	
-
-
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -260,57 +247,30 @@ public class Player extends SherlockActivity {
 	 * Reload the player ui
 	 */
 	void reloadInfo() {
-    	// display play / pause image
-    	if (App.mClementine.getState() == Clementine.State.PLAY) {
-    		mBtnPlayPause.setImageDrawable(getResources().getDrawable(R.drawable.ic_media_pause));
-    	} else {
-    		mBtnPlayPause.setImageDrawable(getResources().getDrawable(R.drawable.ic_media_play));
-    	}
-    	
-    	// Get the currently played song
-    	MySong currentSong = App.mClementine.getCurrentSong();
-    	if (currentSong == null) {
-    		// If none is played right now, show a text and the clementine icon
-    		mTvArtist.setText(getString(R.string.player_nosong));
-	    	mTvTitle. setText("");
-	    	mTvAlbum. setText("");
-	    	
-	    	mTvGenre. setText("");
-	    	mTvYear.  setText("");
-	    	mTvLength.setText("");
-	    	
-    		mImgArt.setImageResource(R.drawable.icon_large);
-    	} else {
-	    	mTvArtist.setText(currentSong.getArtist());
-	    	mTvTitle. setText(currentSong.getTitle());
-	    	mTvAlbum. setText(currentSong.getAlbum());
-	    	
-	    	mTvGenre. setText(currentSong.getGenre());
-	    	mTvYear.  setText(currentSong.getYear());
-	    	mTvLength.setText(buildTrackPosition());
-	    	
-	    	// Check if a coverart is valid
-	    	if (currentSong.getArt() == null) {
-	    		mImgArt.setImageResource(R.drawable.icon_large);
-	    	} else {
-	    		mImgArt.setImageBitmap(currentSong.getArt());
-	    	}
-    	}
-    	
+		// Update the Player Fragment
+		if (mPlayerFragment != null && mPlayerFragment.isInLayout()) {
+			mPlayerFragment.reloadInfo();
+		}
+		
     	// ActionBar shows the current playlist
     	if (App.mClementine.getActivePlaylist() != null) {
     		mActionBar.setSubtitle(App.mClementine.getActivePlaylist().getName());
     	}
     }
-    
-    private String buildTrackPosition() {
-    	StringBuilder sb = new StringBuilder();
-    	sb.append(Utilities.PrettyTime(App.mClementine.getSongPosition()));
-    	sb.append("/");
-    	sb.append(Utilities.PrettyTime(App.mClementine.getCurrentSong().getLength()));
-    	
-    	return sb.toString();
-    }
+	
+	/**
+	 * Reload the playlist songs fragment
+	 */
+	void reloadPlaylist() {
+		// Update the playlist songs fragment
+		if (mPlaylistSongs != null) {
+			if (App.mClementine.getActivePlaylist().getId() != mPlaylistSongs.getPlaylistId()) {
+				createPlaylistFragment();
+			} else {
+				mPlaylistSongs.updateSongList();
+			}
+		}
+	}
     
     /**
      * Show text in a toast. Cancels previous toast
@@ -333,24 +293,4 @@ public class Player extends SherlockActivity {
     	mToast = Toast.makeText(this, text, length);
     	mToast.show();
     }
-	
-	private OnClickListener oclControl = new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			Message msg = Message.obtain();
-			
-			switch(v.getId()) {
-			case R.id.btnNext: msg.obj = new RequestControl(Request.NEXT);
-							   break;
-			case R.id.btnPrev: msg.obj = new RequestControl(Request.PREV);
-							   break;
-			case R.id.btnPlaypause: msg.obj = new RequestControl(Request.PLAYPAUSE);
-								break;
-		    default: break;
-			}
-			// Send the request to the thread
-			App.mClementineConnection.mHandler.sendMessage(msg);
-		}
-	};
 }

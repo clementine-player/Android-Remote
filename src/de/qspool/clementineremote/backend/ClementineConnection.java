@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.elements.ClementineElement;
+import de.qspool.clementineremote.backend.elements.Connected;
 import de.qspool.clementineremote.backend.elements.Disconnected;
 import de.qspool.clementineremote.backend.elements.Disconnected.DisconnectReason;
 import de.qspool.clementineremote.backend.elements.InvalidData;
@@ -42,6 +43,7 @@ import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.backend.requests.CheckForData;
 import de.qspool.clementineremote.backend.requests.RequestConnect;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
+import de.qspool.clementineremote.backend.requests.RequestPlaylistSong;
 import de.qspool.clementineremote.backend.requests.RequestToThread;
 
 import android.annotation.TargetApi;

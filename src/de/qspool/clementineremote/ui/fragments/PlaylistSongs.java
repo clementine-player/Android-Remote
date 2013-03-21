@@ -40,10 +40,12 @@ public class PlaylistSongs extends SherlockListFragment {
 	private Activity mActivity;
 	CustomSongAdapter mAdapter;
 	private String mFilterText;
-	private boolean updateTrackPositionOnNewTrack = false;
+	private boolean mUpdateTrackPositionOnNewTrack = false;
+	private int mSelectionOffset;
 	
 	public PlaylistSongs() {
 		mFilterText = "";
+		mSelectionOffset = 3;
 	}
 
 	@Override
@@ -73,6 +75,10 @@ public class PlaylistSongs extends SherlockListFragment {
 		mData = new LinkedList<MySong>(App.mClementine.getPlaylists().get(mId).getPlaylistSongs());
 	}
 	
+	public int getPlaylistId() {
+		return mId;
+	}
+	
 	/**
 	 * Update the underlying data. It reloads the current playlist songs from the Clementine object.
 	 */
@@ -82,7 +88,7 @@ public class PlaylistSongs extends SherlockListFragment {
 		mAdapter.updateSongs(mData);
 		
 		// Check if we should update the current view position
-		if (updateTrackPositionOnNewTrack) {
+		if (mUpdateTrackPositionOnNewTrack) {
 			updateViewPosition();
 		}
 	}
@@ -136,8 +142,6 @@ public class PlaylistSongs extends SherlockListFragment {
         Message msg = Message.obtain();
         msg.obj = new RequestChangeCurrentSong(song, mId);
         App.mClementineConnection.mHandler.sendMessage(msg);
-
-        getActivity().finish();
     }
     
     /**
@@ -145,15 +149,16 @@ public class PlaylistSongs extends SherlockListFragment {
      */
     private void updateViewPosition() {
     	int pos = App.mClementine.getCurrentSong().getIndex();
-    	getListView().setSelection(pos - 3);
+    	getListView().setSelection(pos - mSelectionOffset);
     }
 
 	public boolean isUpdateTrackPositionOnNewTrack() {
-		return updateTrackPositionOnNewTrack;
+		return mUpdateTrackPositionOnNewTrack;
 	}
 
 	public void setUpdateTrackPositionOnNewTrack(
-			boolean updateTrackPositionOnNewTrack) {
-		this.updateTrackPositionOnNewTrack = updateTrackPositionOnNewTrack;
+			boolean updateTrackPositionOnNewTrack, int offset) {
+		this.mUpdateTrackPositionOnNewTrack = updateTrackPositionOnNewTrack;
+		mSelectionOffset = offset;
 	}
 }

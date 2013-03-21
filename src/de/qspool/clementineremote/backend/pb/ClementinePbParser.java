@@ -28,6 +28,7 @@ import de.qspool.clementineremote.backend.Clementine.RepeatMode;
 import de.qspool.clementineremote.backend.elements.ClementineElement;
 import de.qspool.clementineremote.backend.elements.Connected;
 import de.qspool.clementineremote.backend.elements.Disconnected;
+import de.qspool.clementineremote.backend.elements.FirstDataReceived;
 import de.qspool.clementineremote.backend.elements.ReloadPlaylistSongs;
 import de.qspool.clementineremote.backend.elements.ReloadControl;
 import de.qspool.clementineremote.backend.elements.ReloadPlaylists;
@@ -98,6 +99,8 @@ public class ClementinePbParser {
 		if (msg.getType().equals(MsgType.INFO)) {
 			parseInfos(msg.getResponseClementineInfo());
 			parsedElement = new Connected();
+		} else if (msg.getType().equals(MsgType.FIRST_DATA_SENT_COMPLETE)) {
+			parsedElement = new FirstDataReceived();
 		} else if (msg.getType().equals(MsgType.CURRENT_METAINFO)) {
 			MySong s = parseSong(msg.getResponseCurrentMetadata());
 			App.mClementine.setCurrentSong(s);

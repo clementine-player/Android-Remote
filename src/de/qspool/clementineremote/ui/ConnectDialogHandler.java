@@ -21,8 +21,10 @@ import java.lang.ref.WeakReference;
 
 import android.os.Message;
 import android.os.Handler;
+import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.elements.Connected;
 import de.qspool.clementineremote.backend.elements.Disconnected;
+import de.qspool.clementineremote.backend.elements.FirstDataReceived;
 import de.qspool.clementineremote.backend.elements.NoConnection;
 import de.qspool.clementineremote.backend.elements.OldProtoVersion;
 import de.qspool.clementineremote.backend.elements.ServiceFound;
@@ -43,6 +45,8 @@ public class ConnectDialogHandler extends Handler {
 		ConnectDialog cd = mDialog.get();
 		if (cd != null) {
 			if (msg.obj instanceof Connected) {
+				cd.mPdConnect.setMessage(cd.getString(R.string.connectdialog_download_data));
+			} else if (msg.obj instanceof FirstDataReceived) {
 				cd.mPdConnect.dismiss();
 				cd.showPlayerDialog();
 			} else if (msg.obj instanceof NoConnection) {

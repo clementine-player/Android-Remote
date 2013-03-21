@@ -24,6 +24,9 @@ import android.os.Handler;
 import de.qspool.clementineremote.backend.elements.Disconnected;
 import de.qspool.clementineremote.backend.elements.NoConnection;
 import de.qspool.clementineremote.backend.elements.Reload;
+import de.qspool.clementineremote.backend.elements.ReloadMetadataChanged;
+import de.qspool.clementineremote.backend.elements.ReloadPlaylistSongs;
+import de.qspool.clementineremote.backend.elements.ReloadPlaylists;
 
 /**
  * This class is used to handle the messages sent from the
@@ -44,6 +47,11 @@ public class PlayerHandler extends Handler {
 			pd.disconnect();
 		} else if (msg.obj instanceof Disconnected) {
 			pd.disconnect();
+		} else if (msg.obj instanceof ReloadMetadataChanged
+				 || msg.obj instanceof ReloadPlaylistSongs
+				 || msg.obj instanceof ReloadPlaylists) {
+			pd.reloadInfo();
+			pd.reloadPlaylist();
 		} else if (msg.obj instanceof Reload) {
 			pd.reloadInfo();
 		}
