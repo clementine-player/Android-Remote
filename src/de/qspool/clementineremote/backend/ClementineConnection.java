@@ -160,9 +160,6 @@ public class ClementineConnection extends Thread {
 			// Check if Clementine dropped the connection.
 			// Is possible when we connect from a public ip and clementine rejects it
 			if (!mClient.isClosed()) {
-				// Send the connect request to clementine
-				sendRequest(r);
-		
 				// Enter the main loop in the thread
 				Message msg = Message.obtain();
 				msg.obj = new CheckForData();
@@ -213,6 +210,9 @@ public class ClementineConnection extends Thread {
 		
 		mIn  = new DataInputStream(mClient.getInputStream());
 		mOut = new DataOutputStream(mClient.getOutputStream());
+		
+		// Send the connect request to clementine
+		sendRequest(r);
 	}
 	
 	/**
