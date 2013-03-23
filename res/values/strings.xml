@@ -26,6 +26,8 @@
     <string name="menu_search">Search</string>
     <string name="pref_volume_title">Use Volume Keys</string>
     <string name="pref_volume_summary">Use volume keys to control the volume of Clementine.</string>
+    <string name="pref_pebble_title">Use Pebble</string>
+    <string name="pref_pebble_summary">Send the current track metadata to the Pebble music app.</string>
     <string name="pref_cat_behavior">Behavior</string>
     <string name="pref_cat_info">Information</string>
     <string name="pref_version_summary">Click to visit project website</string>

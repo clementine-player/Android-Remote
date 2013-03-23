@@ -113,6 +113,12 @@
 		                      android:textAppearance="?android:attr/textAppearanceSmall"
 		                      android:textColor="@color/player_smalltext" />
 		              </LinearLayout>
+
+		              <SeekBar
+		                  android:id="@+id/sbPosition"
+		                  android:layout_width="match_parent"
+		                  android:layout_height="wrap_content" />
+
               </LinearLayout>
               
               <LinearLayout

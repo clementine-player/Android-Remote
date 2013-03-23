@@ -23,6 +23,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Mess
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Repeat;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestPlaylistSongs;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestSetTrackPosition;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestSetVolume;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuffle;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ShuffleMode;
@@ -81,6 +82,10 @@ public class ClementinePbCreator {
 							break;
 			case SHUFFLE:	msg.setType(MsgType.SHUFFLE);
 							msg.setShuffle(buildRandom(msg));
+							break;
+			case TRACKPOSITION:
+							msg.setType(MsgType.SET_TRACK_POSITION);
+							msg.setRequestSetTrackPosition(buildTrackPosition(msg, rc));
 							break;
 			default: 		break;
 			}
@@ -194,6 +199,18 @@ public class ClementinePbCreator {
 		
 		request.setSongIndex(r.getSong().getIndex());
 		request.setPlaylistId(r.getPlaylistId());
+		
+		return request;
+	}
+	
+	/**
+	 * Request to set the track position
+	 * @param msg The root message
+	 * @return 
+	 */
+	private RequestSetTrackPosition.Builder buildTrackPosition(Builder msg, RequestControl control) {
+		RequestSetTrackPosition.Builder request = msg.getRequestSetTrackPositionBuilder();
+		request.setPosition(control.getValue());
 		
 		return request;
 	}

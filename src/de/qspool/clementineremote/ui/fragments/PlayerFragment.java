@@ -25,7 +25,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
@@ -46,6 +48,8 @@ public class PlayerFragment extends SherlockFragment {
 	private TextView mTvGenre;
 	private TextView mTvYear;
 	private TextView mTvLength;
+	
+	private SeekBar mSbPosition;
 	
 	private ImageButton mBtnNext;
 	private ImageButton mBtnPrev;
@@ -68,6 +72,8 @@ public class PlayerFragment extends SherlockFragment {
 	    mTvYear   = (TextView) view.findViewById(R.id.tvYear);
 	    mTvLength = (TextView) view.findViewById(R.id.tvLength);
 	    
+	    mSbPosition = (SeekBar) view.findViewById(R.id.sbPosition);
+	    
 	    mBtnNext  = (ImageButton) view.findViewById(R.id.btnNext);
 	    mBtnPrev  = (ImageButton) view.findViewById(R.id.btnPrev);
 	    mBtnPlayPause  = (ImageButton) view.findViewById(R.id.btnPlaypause);
@@ -78,6 +84,8 @@ public class PlayerFragment extends SherlockFragment {
 	    mBtnNext.setOnClickListener(oclControl);
 	    mBtnPrev.setOnClickListener(oclControl);
 	    mBtnPlayPause.setOnClickListener(oclControl);
+	    
+	    mSbPosition.setOnSeekBarChangeListener(onSeekBarChanged);
 	    
 	    reloadInfo();
 	    
@@ -107,6 +115,8 @@ public class PlayerFragment extends SherlockFragment {
 	    	mTvYear.  setText("");
 	    	mTvLength.setText("");
 	    	
+	    	mSbPosition.setEnabled(false);
+	    	
     		mImgArt.setImageResource(R.drawable.icon_large);
     	} else {
 	    	mTvArtist.setText(currentSong.getArtist());
@@ -116,6 +126,10 @@ public class PlayerFragment extends SherlockFragment {
 	    	mTvGenre. setText(currentSong.getGenre());
 	    	mTvYear.  setText(currentSong.getYear());
 	    	mTvLength.setText(buildTrackPosition());
+	    	
+	    	mSbPosition.setEnabled(true);
+	    	mSbPosition.setMax(currentSong.getLength());
+	    	mSbPosition.setProgress(App.mClementine.getSongPosition());
 	    	
 	    	// Check if a coverart is valid
 	    	if (currentSong.getArt() == null) {
@@ -152,6 +166,30 @@ public class PlayerFragment extends SherlockFragment {
 			}
 			// Send the request to the thread
 			App.mClementineConnection.mHandler.sendMessage(msg);
+		}
+	};
+	
+	private OnSeekBarChangeListener onSeekBarChanged = new OnSeekBarChangeListener() {
+		
+		@Override
+		public void onStopTrackingTouch(SeekBar seekBar) {
+		}
+		
+		@Override
+		public void onStartTrackingTouch(SeekBar seekBar) {
+		}
+		
+		@Override
+		public void onProgressChanged(SeekBar seekBar, int progress,
+				boolean fromUser) {
+			// If the user changed the position, send a request to Clementine
+			if (fromUser) {
+				Message msg = Message.obtain();
+				RequestControl control = new RequestControl(Request.TRACKPOSITION);
+				control.setValue(progress);
+				msg.obj = control;
+				App.mClementineConnection.mHandler.sendMessage(msg);
+			}
 		}
 	};
 }

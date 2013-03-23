@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.elements.ClementineElement;
-import de.qspool.clementineremote.backend.elements.Connected;
 import de.qspool.clementineremote.backend.elements.Disconnected;
 import de.qspool.clementineremote.backend.elements.Disconnected.DisconnectReason;
 import de.qspool.clementineremote.backend.elements.InvalidData;
@@ -39,11 +38,11 @@ import de.qspool.clementineremote.backend.elements.Reload;
 import de.qspool.clementineremote.backend.event.OnConnectionClosedListener;
 import de.qspool.clementineremote.backend.pb.ClementinePbCreator;
 import de.qspool.clementineremote.backend.pb.ClementinePbParser;
+import de.qspool.clementineremote.backend.pebble.Pebble;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.backend.requests.CheckForData;
 import de.qspool.clementineremote.backend.requests.RequestConnect;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
-import de.qspool.clementineremote.backend.requests.RequestPlaylistSong;
 import de.qspool.clementineremote.backend.requests.RequestToThread;
 
 import android.annotation.TargetApi;
@@ -104,6 +103,8 @@ public class ClementineConnection extends Thread {
 	
 	private PowerManager.WakeLock mWakeLock;
 	
+	private Pebble mPebble;
+	
 	/**
 	 * Add a new listener for closed connections
 	 * @param listener The listener object
@@ -121,6 +122,8 @@ public class ClementineConnection extends Thread {
 		
 		Looper.prepare();
 		mHandler = new ClementineConnectionHandler(this);
+		
+		mPebble = new Pebble();
 		
 		// Get a Wakelock Object
 		PowerManager pm = (PowerManager) App.mApp.getSystemService(Context.POWER_SERVICE);
@@ -259,6 +262,7 @@ public class ClementineConnection extends Thread {
 				mLastSong = App.mClementine.getCurrentSong();
 				updateNotification();
 				updateRemoteControlClient();
+				mPebble.sendMusicUpdateToPebble();
 			}
 			if (App.mClementine.getState() != mLastState) {
 				mLastState = App.mClementine.getState();

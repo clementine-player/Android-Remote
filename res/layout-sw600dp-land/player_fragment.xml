@@ -104,6 +104,13 @@
 
         </LinearLayout>
 
+        <SeekBar
+            android:id="@+id/sbPosition"
+            android:thumb="@drawable/ic_launcher"
+            android:progressDrawable="@drawable/progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

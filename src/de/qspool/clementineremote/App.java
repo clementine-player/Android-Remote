@@ -39,4 +39,5 @@ public class App extends Application {
 	public final static String SP_KEY_USE_VOLUMEKEYS = "pref_volumekey";
 	public final static String SP_KEY_PORT = "pref_port";
 	public final static String SP_LAST_AUTH_CODE = "last_auth_code";
+	public final static String SP_USE_PEBBLE = "pref_use_pebble";
 }

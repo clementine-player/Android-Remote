@@ -2,11 +2,16 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory 
         android:title="@string/pref_cat_behavior">
-	    <CheckBoxPreference 
-	        android:key="pref_volumekey"
-	        android:title="@string/pref_volume_title"
-	        android:summary="@string/pref_volume_summary"
-	        android:defaultValue="true"/>
+      <CheckBoxPreference 
+          android:key="pref_volumekey"
+          android:title="@string/pref_volume_title"
+          android:summary="@string/pref_volume_summary"
+          android:defaultValue="true"/>
+      <CheckBoxPreference 
+          android:key="pref_use_pebble"
+          android:title="@string/pref_pebble_title"
+          android:summary="@string/pref_pebble_summary"
+          android:defaultValue="true"/>
 	    <CheckBoxPreference
 	        android:key="pref_autoconnect"
 	        android:title="@string/connectdialog_autoconnect"

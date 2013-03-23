@@ -19,8 +19,9 @@ package de.qspool.clementineremote.backend.requests;
 
 public class RequestControl extends RequestToThread {
 
-	public static enum Request {PLAY, PLAYPAUSE, PAUSE, STOP, NEXT, PREV, CHANGESONG, REPEAT, SHUFFLE};
+	public static enum Request {PLAY, PLAYPAUSE, PAUSE, STOP, NEXT, PREV, CHANGESONG, REPEAT, SHUFFLE, TRACKPOSITION};
 	private Request mRequest;
+	private int mValue;
 	
 	public RequestControl(Request request) {
 		super();
@@ -29,6 +30,14 @@ public class RequestControl extends RequestToThread {
 
 	public Request getRequest() {
 		return mRequest;
+	}
+
+	public int getValue() {
+		return mValue;
+	}
+
+	public void setValue(int mValue) {
+		this.mValue = mValue;
 	}
 
 }
