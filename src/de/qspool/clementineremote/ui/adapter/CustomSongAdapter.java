@@ -77,10 +77,12 @@ public class CustomSongAdapter extends ArrayAdapter<MySong> implements Filterabl
 			convertView.setBackgroundResource(R.drawable.white_background_border);
 		}
 		
+		TextView tvTrackNo = (TextView) convertView.findViewById(R.id.tvTrackNo);
 		TextView tvArtist = (TextView) convertView.findViewById(R.id.tvRowArtist);
 		TextView tvTitle  = (TextView) convertView.findViewById(R.id.tvRowTitle);
 		TextView tvLength = (TextView) convertView.findViewById(R.id.tvRowLength);
 		
+		tvTrackNo.setText(String.valueOf(mData.get(position).getTrack()) + ".");
 		tvArtist.setText(mData.get(position).getArtist());
 		tvTitle .setText(mData.get(position).getTitle() + 
 						 " / " + 
