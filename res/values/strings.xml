@@ -5,7 +5,7 @@
     <string name="connectdialog_autoconnect">Auto-Connect</string>
     <string name="connectdialog_clementine_found">Found Clementine!</string>
     <string name="connectdialog_connecting">Connecting to Clementine</string>
-    <string name="connectdialog_download_data">Downloading track data</string>
+    <string name="connectdialog_download_data">Downloading data</string>
     <string name="connectdialog_connected">Connected</string>
     <string name="connectdialog_error">Could not reach host</string>
     <string name="connectdialog_ip_hint">Enter IP address</string>

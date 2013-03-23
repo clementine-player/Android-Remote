@@ -1,46 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/background" 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="right"
-    android:orientation="vertical"
     android:paddingBottom="5dp"
     android:paddingLeft="5dp"
     android:paddingRight="5dp"
-    android:paddingTop="5dp" >
+    android:paddingTop="5dp">
+    
+    <LinearLayout
+      android:orientation="vertical"
+	    style="@style/WhiteBackground"
+	    android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginBottom="7dp"
+      android:layout_marginLeft="7dp"
+      android:layout_marginRight="7dp"
+      android:layout_marginTop="7dp">
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_gravity="center_vertical|center_horizontal"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:layout_weight="1" >
 
-        <ImageView android:id="@+id/imgArt" 
-            style="@style/ImgCoverWhiteBorder" 
-            android:layout_width="match_parent" 
-            android:layout_height="match_parent" 
-            android:contentDescription="@string/player_desc_img" 
-            android:paddingBottom="5dp" 
-            android:paddingLeft="5dp" 
-            android:paddingRight="5dp" 
-            android:paddingTop="5dp" 
+        <ImageView
+            android:id="@+id/imgArt"
+            style="@style/ImgCoverGreyBorder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/player_desc_img"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp"
             android:scaleType="fitCenter"
             android:src="@drawable/icon_large" />
 
-    </FrameLayout>
+    </LinearLayout>
     
     <LinearLayout
-        style="@style/WhiteBackground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="7dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="5dp"
         android:orientation="vertical" >
 
         <TextView
@@ -107,14 +112,18 @@
         <SeekBar
             android:id="@+id/sbPosition"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:maxHeight="5dp"
+            android:progressDrawable="@drawable/progress"
+            android:thumb="@drawable/scrubber_control" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center_vertical"
-            android:gravity="center_horizontal"
-            android:paddingTop="10dp" >
+            android:gravity="center_horizontal" >
 
             <ImageButton
                 android:id="@+id/btnPrev"
@@ -151,6 +160,6 @@
         </LinearLayout>
     </LinearLayout>
 
-    
+    </LinearLayout>
 
 </LinearLayout>

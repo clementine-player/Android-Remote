@@ -117,7 +117,10 @@
 		              <SeekBar
 		                  android:id="@+id/sbPosition"
 		                  android:layout_width="match_parent"
-		                  android:layout_height="wrap_content" />
+		                  android:layout_height="wrap_content" 
+		                  android:maxHeight="5dp"
+		                  android:progressDrawable="@drawable/progress"
+                      android:thumb="@drawable/scrubber_control" />
 
               </LinearLayout>
               

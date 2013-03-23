@@ -943,9 +943,9 @@ containing a value of this type.
         public static final int orange_background_border=0x7f020084;
         public static final int orange_button=0x7f020085;
         public static final int progress=0x7f020086;
-        public static final int sb_background=0x7f020087;
-        public static final int sb_background2=0x7f020088;
-        public static final int sb_progress=0x7f020089;
+        public static final int scrubber=0x7f020087;
+        public static final int scrubber_control=0x7f020088;
+        public static final int scrubber_pressed=0x7f020089;
         public static final int shuffle=0x7f02008a;
         public static final int white_background=0x7f02008b;
         public static final int white_background_border=0x7f02008c;
