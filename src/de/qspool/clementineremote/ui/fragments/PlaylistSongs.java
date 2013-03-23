@@ -127,6 +127,8 @@ public class PlaylistSongs extends SherlockListFragment {
         getListView().setFastScrollEnabled(true);
         getListView().setTextFilterEnabled(true);
         getListView().setSelector(android.R.color.transparent);
+        getListView().setDivider(null);
+        getListView().setDividerHeight(0);
          
         // Get the position of the current track if we have one
         if (App.mClementine.getCurrentSong() != null) {
