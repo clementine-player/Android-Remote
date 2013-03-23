@@ -189,6 +189,8 @@ public class PlayerFragment extends SherlockFragment {
 				control.setValue(progress);
 				msg.obj = control;
 				App.mClementineConnection.mHandler.sendMessage(msg);
+				
+				App.mClementine.setSongPosition(progress);
 			}
 		}
 	};
