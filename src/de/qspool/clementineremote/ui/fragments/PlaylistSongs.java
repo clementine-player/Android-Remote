@@ -150,8 +150,10 @@ public class PlaylistSongs extends SherlockListFragment {
      * Set the selection to the currently played item
      */
     private void updateViewPosition() {
-    	int pos = App.mClementine.getCurrentSong().getIndex();
-    	getListView().setSelection(pos - mSelectionOffset);
+    	if (App.mClementine.getCurrentSong() != null) {
+    		int pos = App.mClementine.getCurrentSong().getIndex();
+    		getListView().setSelection(pos - mSelectionOffset);
+    	}
     }
 
 	public boolean isUpdateTrackPositionOnNewTrack() {

@@ -187,6 +187,10 @@ public class ClementineConnection extends Thread {
 				
 				// Set the current time to last keep alive
 				setLastKeepAlive(System.currentTimeMillis());
+				
+				// Until we get a new connection request from ui,
+				// don't request the first data a second time
+				r.setRequestPlaylistSongs(false);
 			}
 		} catch(UnknownHostException e) {
 			// If we can't connect, then tell that the ui-thread 

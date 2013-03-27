@@ -54,6 +54,8 @@ public class ClementinePbCreator {
 		// Get a new builder and set the version
 		Message.Builder msg = Message.newBuilder();
 		
+		msg.setVersion(msg.getDefaultInstanceForType().getVersion());
+		
 		// Set the messagetype and the content depending
 		// on the request
 		if (r instanceof RequestConnect) {
@@ -126,7 +128,10 @@ public class ClementinePbCreator {
 			buildConnectMessage(Message.Builder msg, RequestConnect r) {
 		ClementineRemoteProtocolBuffer.RequestConnect.Builder 
 			requestConnect = msg.getRequestConnectBuilder();
+		
 		requestConnect.setAuthCode(r.getAuthCode());
+		requestConnect.setSendPlaylistSongs(r.getRequestPlaylistSongs());
+		
 		return requestConnect;
 	}
 	

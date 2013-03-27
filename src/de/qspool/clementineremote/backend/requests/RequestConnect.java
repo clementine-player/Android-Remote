@@ -22,12 +22,14 @@ public class RequestConnect extends RequestToThread {
 	private String mIp;
 	private int mPort;
 	private int mAuthCode;
+	private boolean mRequestPlaylistSongs;
 	
-	public RequestConnect(String ip, int port, int authCode) {
+	public RequestConnect(String ip, int port, int authCode, boolean requestPlaylistSongs) {
 		super();
 		mIp = ip;
 		mPort = port;
 		mAuthCode = authCode;
+		mRequestPlaylistSongs = requestPlaylistSongs;
 	}
 
 	public String getIp() {
@@ -40,5 +42,13 @@ public class RequestConnect extends RequestToThread {
 
 	public int getAuthCode() {
 		return mAuthCode;
+	}
+	
+	public boolean getRequestPlaylistSongs() {
+		return mRequestPlaylistSongs;
+	}
+	
+	public void setRequestPlaylistSongs(boolean requestFirstData) {
+		mRequestPlaylistSongs = requestFirstData;
 	}
 }

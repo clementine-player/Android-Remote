@@ -6902,6 +6902,10 @@ public final class ClementineRemoteProtocolBuffer {
     // optional int32 auth_code = 1;
     boolean hasAuthCode();
     int getAuthCode();
+    
+    // optional bool send_playlist_songs = 2;
+    boolean hasSendPlaylistSongs();
+    boolean getSendPlaylistSongs();
   }
   public static final class RequestConnect extends
       com.google.protobuf.GeneratedMessage
@@ -6942,8 +6946,19 @@ public final class ClementineRemoteProtocolBuffer {
       return authCode_;
     }
     
+    // optional bool send_playlist_songs = 2;
+    public static final int SEND_PLAYLIST_SONGS_FIELD_NUMBER = 2;
+    private boolean sendPlaylistSongs_;
+    public boolean hasSendPlaylistSongs() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public boolean getSendPlaylistSongs() {
+      return sendPlaylistSongs_;
+    }
+    
     private void initFields() {
       authCode_ = 0;
+      sendPlaylistSongs_ = false;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -6960,6 +6975,9 @@ public final class ClementineRemoteProtocolBuffer {
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         output.writeInt32(1, authCode_);
       }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBool(2, sendPlaylistSongs_);
+      }
       getUnknownFields().writeTo(output);
     }
     
@@ -6972,6 +6990,10 @@ public final class ClementineRemoteProtocolBuffer {
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(1, authCode_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(2, sendPlaylistSongs_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -7099,6 +7121,8 @@ public final class ClementineRemoteProtocolBuffer {
         super.clear();
         authCode_ = 0;
         bitField0_ = (bitField0_ & ~0x00000001);
+        sendPlaylistSongs_ = false;
+        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
       
@@ -7141,6 +7165,10 @@ public final class ClementineRemoteProtocolBuffer {
           to_bitField0_ |= 0x00000001;
         }
         result.authCode_ = authCode_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.sendPlaylistSongs_ = sendPlaylistSongs_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -7159,6 +7187,9 @@ public final class ClementineRemoteProtocolBuffer {
         if (other == de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestConnect.getDefaultInstance()) return this;
         if (other.hasAuthCode()) {
           setAuthCode(other.getAuthCode());
+        }
+        if (other.hasSendPlaylistSongs()) {
+          setSendPlaylistSongs(other.getSendPlaylistSongs());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -7196,6 +7227,11 @@ public final class ClementineRemoteProtocolBuffer {
               authCode_ = input.readInt32();
               break;
             }
+            case 16: {
+              bitField0_ |= 0x00000002;
+              sendPlaylistSongs_ = input.readBool();
+              break;
+            }
           }
         }
       }
@@ -7219,6 +7255,27 @@ public final class ClementineRemoteProtocolBuffer {
       public Builder clearAuthCode() {
         bitField0_ = (bitField0_ & ~0x00000001);
         authCode_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // optional bool send_playlist_songs = 2;
+      private boolean sendPlaylistSongs_ ;
+      public boolean hasSendPlaylistSongs() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      public boolean getSendPlaylistSongs() {
+        return sendPlaylistSongs_;
+      }
+      public Builder setSendPlaylistSongs(boolean value) {
+        bitField0_ |= 0x00000002;
+        sendPlaylistSongs_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearSendPlaylistSongs() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        sendPlaylistSongs_ = false;
         onChanged();
         return this;
       }
@@ -8260,7 +8317,7 @@ public final class ClementineRemoteProtocolBuffer {
   public interface MessageOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
     
-    // optional int32 version = 1 [default = 4];
+    // optional int32 version = 1 [default = 5];
     boolean hasVersion();
     int getVersion();
     
@@ -8372,7 +8429,7 @@ public final class ClementineRemoteProtocolBuffer {
     }
     
     private int bitField0_;
-    // optional int32 version = 1 [default = 4];
+    // optional int32 version = 1 [default = 5];
     public static final int VERSION_FIELD_NUMBER = 1;
     private int version_;
     public boolean hasVersion() {
@@ -8588,7 +8645,7 @@ public final class ClementineRemoteProtocolBuffer {
     }
     
     private void initFields() {
-      version_ = 4;
+      version_ = 5;
       type_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType.UNKNOWN;
       requestConnect_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestConnect.getDefaultInstance();
       requestPlaylistSongs_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestPlaylistSongs.getDefaultInstance();
@@ -8885,7 +8942,7 @@ public final class ClementineRemoteProtocolBuffer {
       
       public Builder clear() {
         super.clear();
-        version_ = 4;
+        version_ = 5;
         bitField0_ = (bitField0_ & ~0x00000001);
         type_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -9400,8 +9457,8 @@ public final class ClementineRemoteProtocolBuffer {
       
       private int bitField0_;
       
-      // optional int32 version = 1 [default = 4];
-      private int version_ = 4;
+      // optional int32 version = 1 [default = 5];
+      private int version_ = 5;
       public boolean hasVersion() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
@@ -9416,7 +9473,7 @@ public final class ClementineRemoteProtocolBuffer {
       }
       public Builder clearVersion() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        version_ = 4;
+        version_ = 5;
         onChanged();
         return this;
       }
@@ -10931,59 +10988,59 @@ public final class ClementineRemoteProtocolBuffer {
       "mote.SongMetadata\"C\n\032ResponseEngineState" +
       "Changed\022%\n\005state\030\001 \001(\0162\026.pb.remote.Engin" +
       "eState\"/\n\033ResponseUpdateTrackPosition\022\020\n" +
-      "\010position\030\001 \001(\005\"#\n\016RequestConnect\022\021\n\taut" +
-      "h_code\030\001 \001(\005\"L\n\022ResponseDisconnect\0226\n\021re" +
-      "ason_disconnect\030\001 \001(\0162\033.pb.remote.Reason" +
-      "Disconnect\"#\n\025ResponseActiveChanged\022\n\n\002i",
-      "d\030\001 \001(\005\"+\n\027RequestSetTrackPosition\022\020\n\010po" +
-      "sition\030\001 \001(\005\"\347\007\n\007Message\022\022\n\007version\030\001 \001(" +
-      "\005:\0014\022)\n\004type\030\002 \001(\0162\022.pb.remote.MsgType:\007" +
-      "UNKNOWN\0222\n\017request_connect\030\025 \001(\0132\031.pb.re" +
-      "mote.RequestConnect\022?\n\026request_playlist_" +
-      "songs\030\n \001(\0132\037.pb.remote.RequestPlaylistS" +
-      "ongs\0229\n\023request_change_song\030\013 \001(\0132\034.pb.r" +
-      "emote.RequestChangeSong\0227\n\022request_set_v" +
-      "olume\030\014 \001(\0132\033.pb.remote.RequestSetVolume" +
-      "\022F\n\032request_set_track_position\030\027 \001(\0132\".p",
-      "b.remote.RequestSetTrackPosition\022!\n\006repe" +
-      "at\030\r \001(\0132\021.pb.remote.Repeat\022#\n\007shuffle\030\016" +
-      " \001(\0132\022.pb.remote.Shuffle\022C\n\030response_cle" +
-      "mentine_info\030\017 \001(\0132!.pb.remote.ResponseC" +
-      "lementineInfo\022E\n\031response_current_metada" +
-      "ta\030\020 \001(\0132\".pb.remote.ResponseCurrentMeta" +
-      "data\0228\n\022response_playlists\030\021 \001(\0132\034.pb.re" +
-      "mote.ResponsePlaylists\022A\n\027response_playl" +
-      "ist_songs\030\022 \001(\0132 .pb.remote.ResponsePlay" +
-      "listSongs\022L\n\035response_engine_state_chang",
-      "ed\030\023 \001(\0132%.pb.remote.ResponseEngineState" +
-      "Changed\022N\n\036response_update_track_positio" +
-      "n\030\024 \001(\0132&.pb.remote.ResponseUpdateTrackP" +
-      "osition\022:\n\023response_disconnect\030\026 \001(\0132\035.p" +
-      "b.remote.ResponseDisconnect\022A\n\027response_" +
-      "active_changed\030\030 \001(\0132 .pb.remote.Respons" +
-      "eActiveChanged*\327\003\n\007MsgType\022\013\n\007UNKNOWN\020\000\022" +
-      "\013\n\007CONNECT\020\001\022\025\n\021REQUEST_PLAYLISTS\020\003\022\032\n\026R" +
-      "EQUEST_PLAYLIST_SONGS\020\004\022\017\n\013CHANGE_SONG\020\005" +
-      "\022\016\n\nSET_VOLUME\020\006\022\026\n\022SET_TRACK_POSITION\020\007",
-      "\022\016\n\nDISCONNECT\020\002\022\010\n\004PLAY\020\024\022\r\n\tPLAYPAUSE\020" +
-      "\025\022\t\n\005PAUSE\020\026\022\010\n\004STOP\020\027\022\010\n\004NEXT\020\030\022\014\n\010PREV" +
-      "IOUS\020\031\022\024\n\020SHUFFLE_PLAYLIST\020\032\022\n\n\006REPEAT\020\033" +
-      "\022\013\n\007SHUFFLE\020\034\022\010\n\004INFO\020(\022\024\n\020CURRENT_METAI" +
-      "NFO\020)\022\r\n\tPLAYLISTS\020*\022\022\n\016PLAYLIST_SONGS\020+" +
-      "\022\030\n\024ENGINE_STATE_CHANGED\020,\022\016\n\nKEEP_ALIVE" +
-      "\020-\022\031\n\025UPDATE_TRACK_POSITION\020.\022\033\n\027ACTIVE_" +
-      "PLAYLIST_CHANGED\020/\022\034\n\030FIRST_DATA_SENT_CO" +
-      "MPLETE\0200*;\n\013EngineState\022\t\n\005Empty\020\000\022\010\n\004Id" +
-      "le\020\001\022\013\n\007Playing\020\002\022\n\n\006Paused\020\003*U\n\nRepeatM",
-      "ode\022\016\n\nRepeat_Off\020\000\022\020\n\014Repeat_Track\020\001\022\020\n" +
-      "\014Repeat_Album\020\002\022\023\n\017Repeat_Playlist\020\003*\\\n\013" +
-      "ShuffleMode\022\017\n\013Shuffle_Off\020\000\022\017\n\013Shuffle_" +
-      "All\020\001\022\027\n\023Shuffle_InsideAlbum\020\002\022\022\n\016Shuffl" +
-      "e_Albums\020\003*S\n\020ReasonDisconnect\022\023\n\017Server" +
-      "_Shutdown\020\001\022\023\n\017Wrong_Auth_Code\020\002\022\025\n\021Not_" +
-      "Authenticated\020\003BG\n%de.qspool.clementiner" +
-      "emote.backend.pbB\036ClementineRemoteProtoc" +
-      "olBuffer"
+      "\010position\030\001 \001(\005\"@\n\016RequestConnect\022\021\n\taut" +
+      "h_code\030\001 \001(\005\022\033\n\023send_playlist_songs\030\002 \001(" +
+      "\010\"L\n\022ResponseDisconnect\0226\n\021reason_discon" +
+      "nect\030\001 \001(\0162\033.pb.remote.ReasonDisconnect\"",
+      "#\n\025ResponseActiveChanged\022\n\n\002id\030\001 \001(\005\"+\n\027" +
+      "RequestSetTrackPosition\022\020\n\010position\030\001 \001(" +
+      "\005\"\347\007\n\007Message\022\022\n\007version\030\001 \001(\005:\0015\022)\n\004typ" +
+      "e\030\002 \001(\0162\022.pb.remote.MsgType:\007UNKNOWN\0222\n\017" +
+      "request_connect\030\025 \001(\0132\031.pb.remote.Reques" +
+      "tConnect\022?\n\026request_playlist_songs\030\n \001(\013" +
+      "2\037.pb.remote.RequestPlaylistSongs\0229\n\023req" +
+      "uest_change_song\030\013 \001(\0132\034.pb.remote.Reque" +
+      "stChangeSong\0227\n\022request_set_volume\030\014 \001(\013" +
+      "2\033.pb.remote.RequestSetVolume\022F\n\032request",
+      "_set_track_position\030\027 \001(\0132\".pb.remote.Re" +
+      "questSetTrackPosition\022!\n\006repeat\030\r \001(\0132\021." +
+      "pb.remote.Repeat\022#\n\007shuffle\030\016 \001(\0132\022.pb.r" +
+      "emote.Shuffle\022C\n\030response_clementine_inf" +
+      "o\030\017 \001(\0132!.pb.remote.ResponseClementineIn" +
+      "fo\022E\n\031response_current_metadata\030\020 \001(\0132\"." +
+      "pb.remote.ResponseCurrentMetadata\0228\n\022res" +
+      "ponse_playlists\030\021 \001(\0132\034.pb.remote.Respon" +
+      "sePlaylists\022A\n\027response_playlist_songs\030\022" +
+      " \001(\0132 .pb.remote.ResponsePlaylistSongs\022L",
+      "\n\035response_engine_state_changed\030\023 \001(\0132%." +
+      "pb.remote.ResponseEngineStateChanged\022N\n\036" +
+      "response_update_track_position\030\024 \001(\0132&.p" +
+      "b.remote.ResponseUpdateTrackPosition\022:\n\023" +
+      "response_disconnect\030\026 \001(\0132\035.pb.remote.Re" +
+      "sponseDisconnect\022A\n\027response_active_chan" +
+      "ged\030\030 \001(\0132 .pb.remote.ResponseActiveChan" +
+      "ged*\327\003\n\007MsgType\022\013\n\007UNKNOWN\020\000\022\013\n\007CONNECT\020" +
+      "\001\022\025\n\021REQUEST_PLAYLISTS\020\003\022\032\n\026REQUEST_PLAY" +
+      "LIST_SONGS\020\004\022\017\n\013CHANGE_SONG\020\005\022\016\n\nSET_VOL",
+      "UME\020\006\022\026\n\022SET_TRACK_POSITION\020\007\022\016\n\nDISCONN" +
+      "ECT\020\002\022\010\n\004PLAY\020\024\022\r\n\tPLAYPAUSE\020\025\022\t\n\005PAUSE\020" +
+      "\026\022\010\n\004STOP\020\027\022\010\n\004NEXT\020\030\022\014\n\010PREVIOUS\020\031\022\024\n\020S" +
+      "HUFFLE_PLAYLIST\020\032\022\n\n\006REPEAT\020\033\022\013\n\007SHUFFLE" +
+      "\020\034\022\010\n\004INFO\020(\022\024\n\020CURRENT_METAINFO\020)\022\r\n\tPL" +
+      "AYLISTS\020*\022\022\n\016PLAYLIST_SONGS\020+\022\030\n\024ENGINE_" +
+      "STATE_CHANGED\020,\022\016\n\nKEEP_ALIVE\020-\022\031\n\025UPDAT" +
+      "E_TRACK_POSITION\020.\022\033\n\027ACTIVE_PLAYLIST_CH" +
+      "ANGED\020/\022\034\n\030FIRST_DATA_SENT_COMPLETE\0200*;\n" +
+      "\013EngineState\022\t\n\005Empty\020\000\022\010\n\004Idle\020\001\022\013\n\007Pla",
+      "ying\020\002\022\n\n\006Paused\020\003*U\n\nRepeatMode\022\016\n\nRepe" +
+      "at_Off\020\000\022\020\n\014Repeat_Track\020\001\022\020\n\014Repeat_Alb" +
+      "um\020\002\022\023\n\017Repeat_Playlist\020\003*\\\n\013ShuffleMode" +
+      "\022\017\n\013Shuffle_Off\020\000\022\017\n\013Shuffle_All\020\001\022\027\n\023Sh" +
+      "uffle_InsideAlbum\020\002\022\022\n\016Shuffle_Albums\020\003*" +
+      "S\n\020ReasonDisconnect\022\023\n\017Server_Shutdown\020\001" +
+      "\022\023\n\017Wrong_Auth_Code\020\002\022\025\n\021Not_Authenticat" +
+      "ed\020\003BG\n%de.qspool.clementineremote.backe" +
+      "nd.pbB\036ClementineRemoteProtocolBuffer"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -11099,7 +11156,7 @@ public final class ClementineRemoteProtocolBuffer {
           internal_static_pb_remote_RequestConnect_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pb_remote_RequestConnect_descriptor,
-              new java.lang.String[] { "AuthCode", },
+              new java.lang.String[] { "AuthCode", "SendPlaylistSongs", },
               de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestConnect.class,
               de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestConnect.Builder.class);
           internal_static_pb_remote_ResponseDisconnect_descriptor =

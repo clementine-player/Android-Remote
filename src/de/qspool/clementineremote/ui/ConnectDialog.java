@@ -306,7 +306,7 @@ public class ConnectDialog extends Activity {
 		int port = Integer.valueOf(mSharedPref.getString(App.SP_KEY_PORT, String.valueOf(Clementine.DefaultPort)));
 					
 		// Create a new connect request
-		RequestConnect r = new RequestConnect(mEtIp.getText().toString(), port, mAuthCode);
+		RequestConnect r = new RequestConnect(mEtIp.getText().toString(), port, mAuthCode, true);
 		
 		// Move the request to the message
 		Message msg = Message.obtain();
