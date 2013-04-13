@@ -5,6 +5,7 @@
   <string name="connectdialog_autoconnect">Direkt Verbinden</string>
   <string name="connectdialog_clementine_found">Clementine gefunden!</string>
   <string name="connectdialog_connecting">Verbinde mit Clementine</string>
+  <string name="connectdialog_download_data">Lade Daten herunter</string>
   <string name="connectdialog_connected">Verbunden</string>
   <string name="connectdialog_error">Host nicht gefunden</string>
   <string name="connectdialog_ip_hint">IP-Adresse eingeben</string>
@@ -25,6 +26,8 @@
   <string name="menu_search">Suche</string>
   <string name="pref_volume_title">Nutze Lautstärketasten</string>
   <string name="pref_volume_summary">Nutzte die Lautstärketasten, um die Lautstärke von Clementine zu ändern.</string>
+  <string name="pref_pebble_title">Nutze Pebble</string>
+  <string name="pref_pebble_summary">Sendet die Metadaten des aktuellen Titels an die Pebble Musikanwendung.</string>
   <string name="pref_cat_behavior">Verhalten</string>
   <string name="pref_cat_info">Informationen</string>
   <string name="pref_version_summary">Klicke für Projekt-Webseite</string>

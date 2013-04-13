@@ -21,9 +21,11 @@ import javax.jmdns.ServiceInfo;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -149,6 +151,10 @@ public class ConnectDialog extends Activity {
 	    	mClementineMDns.discoverServices();
 		}
 	    doAutoConnect = true;
+	    
+	    // Remove still active notifications
+	    NotificationManager mNotificationManager = (NotificationManager) App.mApp.getSystemService(Context.NOTIFICATION_SERVICE);
+	    mNotificationManager.cancel(App.NOTIFY_ID);
 	}
 	
 	@Override
