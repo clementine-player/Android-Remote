@@ -5,6 +5,7 @@ Version 0.5
     - Show and set the track position
   Improvements:
     - show the track-nr. in playlist
+    - Landscape layout
   
 
 Version 0.4.1
