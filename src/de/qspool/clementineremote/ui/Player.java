@@ -200,7 +200,7 @@ public class Player extends SherlockFragmentActivity {
 					Message msgDown = Message.obtain();
 					msgDown.obj = new RequestVolume(App.mClementine.getVolume() - 10);
 					App.mClementineConnection.mHandler.sendMessage(msgDown);
-					makeToast(getString(R.string.playler_volume) + " " + App.mClementine.getVolume(), Toast.LENGTH_SHORT);
+					makeToast(getString(R.string.playler_volume) + " " + (App.mClementine.getVolume() - 10), Toast.LENGTH_SHORT);
 					return true;
 				}
 				break;
@@ -209,7 +209,7 @@ public class Player extends SherlockFragmentActivity {
 					Message msgUp = Message.obtain();
 					msgUp.obj = new RequestVolume(App.mClementine.getVolume() + 10);
 					App.mClementineConnection.mHandler.sendMessage(msgUp);
-					makeToast(getString(R.string.playler_volume) + " " + App.mClementine.getVolume(), Toast.LENGTH_SHORT);
+					makeToast(getString(R.string.playler_volume) + " " + (App.mClementine.getVolume() + 10), Toast.LENGTH_SHORT);
 					return true;
 				}
 				break;
@@ -217,6 +217,16 @@ public class Player extends SherlockFragmentActivity {
 			}
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+	
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent keyEvent) {
+		if (mSharedPref.getBoolean(App.SP_KEY_USE_VOLUMEKEYS, true)) {
+			if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+				return true;
+			}
+		}
+		return super.onKeyUp(keyCode, keyEvent);
 	}
 	
 	/**
