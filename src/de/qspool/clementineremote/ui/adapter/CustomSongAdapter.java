@@ -22,8 +22,11 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -40,6 +43,7 @@ public class CustomSongAdapter extends ArrayAdapter<MySong> implements Filterabl
 	private List<MySong> mData;
 	private List<MySong> mOrigData;
 	private Filter mFilter;
+	private boolean mShowTrackNo = true;
 
 	public CustomSongAdapter(Context context, int resource,
 			List<MySong> data) {
@@ -47,6 +51,9 @@ public class CustomSongAdapter extends ArrayAdapter<MySong> implements Filterabl
 		mContext = context;
 		mData = data;
 		mOrigData = new LinkedList<MySong>(data);
+		
+		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+		mShowTrackNo = sharedPref.getBoolean(App.SP_SHOW_TRACKNO, true);
 	}
 	
 	public void updateSongs(List<MySong> data) {
@@ -78,6 +85,14 @@ public class CustomSongAdapter extends ArrayAdapter<MySong> implements Filterabl
 		}
 		
 		TextView tvTrackNo = (TextView) convertView.findViewById(R.id.tvTrackNo);
+		
+		// Hide the tracknumber  
+		if (!mShowTrackNo) {
+			LayoutParams params = tvTrackNo.getLayoutParams();
+			params.width = 0;
+			params.height = 0;
+			tvTrackNo.setLayoutParams(params);
+		}
 		TextView tvArtist = (TextView) convertView.findViewById(R.id.tvRowArtist);
 		TextView tvTitle  = (TextView) convertView.findViewById(R.id.tvRowTitle);
 		TextView tvLength = (TextView) convertView.findViewById(R.id.tvRowLength);

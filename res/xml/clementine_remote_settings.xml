@@ -12,6 +12,11 @@
           android:title="@string/pref_pebble_title"
           android:summary="@string/pref_pebble_summary"
           android:defaultValue="true"/>
+      <CheckBoxPreference 
+          android:key="pref_show_trackno"
+          android:title="@string/pref_trackno_title"
+          android:summary="@string/pref_trackno_summary"
+          android:defaultValue="true"/>
 	    <CheckBoxPreference
 	        android:key="pref_autoconnect"
 	        android:title="@string/connectdialog_autoconnect"
