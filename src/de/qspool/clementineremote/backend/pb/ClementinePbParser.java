@@ -261,6 +261,7 @@ public class ClementinePbParser {
 			myPlaylist.setName(playlist.getName());
 			myPlaylist.setActive(playlist.getActive());
 			myPlaylist.setItemCount(playlist.getItemCount());
+			myPlaylist.setClosed(playlist.getClosed());
 			
 			// Add the playlist to the playlist list
 			App.mClementine.addPlaylist(myPlaylist);

@@ -1,3 +1,11 @@
+Version 0.6
+  Improvements:
+    - Removed beep sound when changing volume
+    - Tracknumber in playlist can be hidden in settings
+  Bugfixes:
+    - Fixed a FC when using Pebble
+    - Fixed a FC when connecting to Clementine
+
 Version 0.5
   Features:
     - New layout for tables

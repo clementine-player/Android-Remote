@@ -28,6 +28,7 @@ public class MyPlaylist {
 	private int mItemCount;
 	private boolean mActive;
 	private LinkedList<MySong> mPlaylistSongs;
+	private boolean mClosed;
 	
 	public MyPlaylist() {
 		mPlaylistSongs = new LinkedList<MySong>();
@@ -64,5 +65,13 @@ public class MyPlaylist {
 	
 	public void addSong(MySong song) {
 		mPlaylistSongs.push(song);
+	}
+
+	public boolean isClosed() {
+		return mClosed;
+	}
+
+	public void setClosed(boolean mClosed) {
+		this.mClosed = mClosed;
 	}
 }

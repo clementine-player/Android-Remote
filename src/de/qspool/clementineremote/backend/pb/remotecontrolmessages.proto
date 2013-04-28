@@ -13,6 +13,10 @@ enum MsgType {
   CHANGE_SONG = 5;
   SET_VOLUME = 6;
   SET_TRACK_POSITION = 7;
+  INSERT_URLS = 8;
+  REMOVE_SONGS = 9;
+  OPEN_PLAYLIST = 10;
+  CLOSE_PLAYLIST = 11;
 
   // Messages send by both
   DISCONNECT = 2;
@@ -72,6 +76,7 @@ message Playlist {
   optional string name = 2;
   optional int32 item_count = 3;
   optional bool active = 4;
+  optional bool closed = 5;
 }
 
 // Valid Repeatmodes
@@ -88,6 +93,10 @@ enum ShuffleMode {
   Shuffle_All = 1;
   Shuffle_InsideAlbum = 2;
   Shuffle_Albums = 3;
+}
+
+message RequestPlaylists {
+  optional bool include_closed = 1;
 }
 
 // A Client requests songs from a specific playlist
@@ -178,16 +187,46 @@ message RequestSetTrackPosition {
   optional int32 position = 1;
 }
 
+message RequestInsertUrls {
+  // In which playlist should the urls be inserted?
+  optional int32 playlist_id = 1;
+  repeated string urls = 2;
+  optional int32 position = 3 [default=-1];
+  optional bool play_now = 4 [default=false];
+  optional bool enqueue = 5 [default=false];
+}
+
+// Client want to change track
+message RequestRemoveSongs {
+  // In which playlist is the songs?
+  optional int32 playlist_id = 1;
+  // And on which position?
+  repeated int32 songs = 2;
+}
+
+// Messages for opening / closing playlists
+message RequestOpenPlaylist {
+  optional int32 playlist_id = 1;
+}
+message RequestClosePlaylist {
+  optional int32 playlist_id = 1;
+}
+
 // The message itself
 message Message {
-  optional int32 version = 1 [default=5];
+  optional int32 version = 1 [default=6];
   optional MsgType type = 2 [default=UNKNOWN]; // What data is in the message?
 
   optional RequestConnect request_connect = 21;
+  optional RequestPlaylists request_playlists = 27;
   optional RequestPlaylistSongs request_playlist_songs = 10;
   optional RequestChangeSong request_change_song = 11;
   optional RequestSetVolume request_set_volume = 12;
   optional RequestSetTrackPosition request_set_track_position = 23;
+  optional RequestInsertUrls request_insert_urls = 25;
+  optional RequestRemoveSongs request_remove_songs = 26;
+  optional RequestOpenPlaylist request_open_playlist = 28;
+  optional RequestClosePlaylist request_close_playlist = 29;
 
   optional Repeat repeat = 13;
   optional Shuffle shuffle = 14;

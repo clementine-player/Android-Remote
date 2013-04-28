@@ -41,4 +41,5 @@ public class App extends Application {
 	public final static String SP_LAST_AUTH_CODE = "last_auth_code";
 	public final static String SP_USE_PEBBLE = "pref_use_pebble";
 	public final static String SP_SHOW_TRACKNO = "pref_show_trackno";
+	public final static String SP_FIRST_TIME = "pref_first_time";
 }

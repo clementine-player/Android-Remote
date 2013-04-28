@@ -28,6 +28,7 @@ import android.content.DialogInterface.OnCancelListener;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -202,6 +203,17 @@ public class ConnectDialog extends Activity {
 	    
 	    // Get the last auth code
 	    mAuthCode = mSharedPref.getInt(App.SP_LAST_AUTH_CODE, 0);
+	    
+	    // First time called? Show an info screen
+	    if (!mSharedPref.getBoolean(App.SP_FIRST_TIME, false)) {
+	    	// Save for next calls
+	    	Editor edit = mSharedPref.edit();
+	    	edit.putBoolean(App.SP_FIRST_TIME, true);
+	    	edit.commit();
+	    	
+	    	// Show the info screen
+	    	showFirstTimeScreen();
+	    }
 	}
 
 	private OnClickListener oclConnect = new OnClickListener() {
@@ -308,8 +320,14 @@ public class ConnectDialog extends Activity {
 	    mPdConnect.setMessage(getString(R.string.connectdialog_connecting));
 		mPdConnect.show();
 		
-		// Get the port to connect to			
-		int port = Integer.valueOf(mSharedPref.getString(App.SP_KEY_PORT, String.valueOf(Clementine.DefaultPort)));
+		// Get the port to connect to
+		int port;
+		try {
+			port = Integer.valueOf(mSharedPref.getString(App.SP_KEY_PORT, String.valueOf(Clementine.DefaultPort)));			
+		} catch (NumberFormatException e) {
+			port = Clementine.DefaultPort;
+		}
+		
 					
 		// Create a new connect request
 		RequestConnect r = new RequestConnect(mEtIp.getText().toString(), port, mAuthCode, true);
@@ -348,6 +366,13 @@ public class ConnectDialog extends Activity {
 		// Show the keyboard directly
 		authCodeDialog.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 		authCodeDialog.show();
+	}
+	
+	/**
+	 * Show the user the first time called dialog
+	 */
+	private void showFirstTimeScreen() {
+		Utilities.ShowMessageDialog(this, R.string.first_time_title, R.string.first_time_text);
 	}
 	
 	/**

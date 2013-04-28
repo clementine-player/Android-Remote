@@ -1169,6 +1169,8 @@ containing a value of this type.
         public static final int dialog_about_supporters=0x7f0a003b;
         public static final int dialog_license_top=0x7f0a003e;
         public static final int error_versions=0x7f0a0045;
+        public static final int first_time_text=0x7f0a0056;
+        public static final int first_time_title=0x7f0a0055;
         public static final int gpl=0x7f0a0013;
         public static final int input_auth_code=0x7f0a004a;
         public static final int invalid_code=0x7f0a004b;

@@ -55,7 +55,7 @@ public class Pebble {
 	 * to the pebble
 	 */
 	public void sendMusicUpdateToPebble() {
-		if (mUsePebble) {
+		if (mUsePebble && App.mClementine.getCurrentSong() != null) {
 			final Intent i = new Intent("com.getpebble.action.NOW_PLAYING");
 			i.putExtra("artist", App.mClementine.getCurrentSong().getArtist());
 			i.putExtra("album", App.mClementine.getCurrentSong().getAlbum());
