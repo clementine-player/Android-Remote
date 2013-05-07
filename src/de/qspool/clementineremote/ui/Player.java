@@ -117,7 +117,7 @@ public class Player extends SherlockFragmentActivity {
 		inf.inflate(R.menu.player_menu, menu);
 		
 		// Shall we show the lastfm buttons?
-		boolean showLastFm = mSharedPref.getBoolean("pref_show_lastfm", true);
+		boolean showLastFm = mSharedPref.getBoolean(App.SP_LASTFM, true);
 		menu.findItem(R.id.love).setVisible(showLastFm);
 		menu.findItem(R.id.ban).setVisible(showLastFm);
 		
