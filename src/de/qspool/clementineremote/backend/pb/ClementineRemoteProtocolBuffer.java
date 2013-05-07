@@ -21,25 +21,27 @@ public final class ClementineRemoteProtocolBuffer {
     REMOVE_SONGS(8, 9),
     OPEN_PLAYLIST(9, 10),
     CLOSE_PLAYLIST(10, 11),
-    DISCONNECT(11, 2),
-    PLAY(12, 20),
-    PLAYPAUSE(13, 21),
-    PAUSE(14, 22),
-    STOP(15, 23),
-    NEXT(16, 24),
-    PREVIOUS(17, 25),
-    SHUFFLE_PLAYLIST(18, 26),
-    REPEAT(19, 27),
-    SHUFFLE(20, 28),
-    INFO(21, 40),
-    CURRENT_METAINFO(22, 41),
-    PLAYLISTS(23, 42),
-    PLAYLIST_SONGS(24, 43),
-    ENGINE_STATE_CHANGED(25, 44),
-    KEEP_ALIVE(26, 45),
-    UPDATE_TRACK_POSITION(27, 46),
-    ACTIVE_PLAYLIST_CHANGED(28, 47),
-    FIRST_DATA_SENT_COMPLETE(29, 48),
+    LOVE(11, 12),
+    BAN(12, 13),
+    DISCONNECT(13, 2),
+    PLAY(14, 20),
+    PLAYPAUSE(15, 21),
+    PAUSE(16, 22),
+    STOP(17, 23),
+    NEXT(18, 24),
+    PREVIOUS(19, 25),
+    SHUFFLE_PLAYLIST(20, 26),
+    REPEAT(21, 27),
+    SHUFFLE(22, 28),
+    INFO(23, 40),
+    CURRENT_METAINFO(24, 41),
+    PLAYLISTS(25, 42),
+    PLAYLIST_SONGS(26, 43),
+    ENGINE_STATE_CHANGED(27, 44),
+    KEEP_ALIVE(28, 45),
+    UPDATE_TRACK_POSITION(29, 46),
+    ACTIVE_PLAYLIST_CHANGED(30, 47),
+    FIRST_DATA_SENT_COMPLETE(31, 48),
     ;
     
     public static final int UNKNOWN_VALUE = 0;
@@ -53,6 +55,8 @@ public final class ClementineRemoteProtocolBuffer {
     public static final int REMOVE_SONGS_VALUE = 9;
     public static final int OPEN_PLAYLIST_VALUE = 10;
     public static final int CLOSE_PLAYLIST_VALUE = 11;
+    public static final int LOVE_VALUE = 12;
+    public static final int BAN_VALUE = 13;
     public static final int DISCONNECT_VALUE = 2;
     public static final int PLAY_VALUE = 20;
     public static final int PLAYPAUSE_VALUE = 21;
@@ -89,6 +93,8 @@ public final class ClementineRemoteProtocolBuffer {
         case 9: return REMOVE_SONGS;
         case 10: return OPEN_PLAYLIST;
         case 11: return CLOSE_PLAYLIST;
+        case 12: return LOVE;
+        case 13: return BAN;
         case 2: return DISCONNECT;
         case 20: return PLAY;
         case 21: return PLAYPAUSE;
@@ -138,7 +144,7 @@ public final class ClementineRemoteProtocolBuffer {
     }
     
     private static final MsgType[] VALUES = {
-      UNKNOWN, CONNECT, REQUEST_PLAYLISTS, REQUEST_PLAYLIST_SONGS, CHANGE_SONG, SET_VOLUME, SET_TRACK_POSITION, INSERT_URLS, REMOVE_SONGS, OPEN_PLAYLIST, CLOSE_PLAYLIST, DISCONNECT, PLAY, PLAYPAUSE, PAUSE, STOP, NEXT, PREVIOUS, SHUFFLE_PLAYLIST, REPEAT, SHUFFLE, INFO, CURRENT_METAINFO, PLAYLISTS, PLAYLIST_SONGS, ENGINE_STATE_CHANGED, KEEP_ALIVE, UPDATE_TRACK_POSITION, ACTIVE_PLAYLIST_CHANGED, FIRST_DATA_SENT_COMPLETE, 
+      UNKNOWN, CONNECT, REQUEST_PLAYLISTS, REQUEST_PLAYLIST_SONGS, CHANGE_SONG, SET_VOLUME, SET_TRACK_POSITION, INSERT_URLS, REMOVE_SONGS, OPEN_PLAYLIST, CLOSE_PLAYLIST, LOVE, BAN, DISCONNECT, PLAY, PLAYPAUSE, PAUSE, STOP, NEXT, PREVIOUS, SHUFFLE_PLAYLIST, REPEAT, SHUFFLE, INFO, CURRENT_METAINFO, PLAYLISTS, PLAYLIST_SONGS, ENGINE_STATE_CHANGED, KEEP_ALIVE, UPDATE_TRACK_POSITION, ACTIVE_PLAYLIST_CHANGED, FIRST_DATA_SENT_COMPLETE, 
     };
     
     public static MsgType valueOf(
@@ -13924,30 +13930,31 @@ public final class ClementineRemoteProtocolBuffer {
       "sponse_disconnect\030\026 \001(\0132\035.pb.remote.Resp" +
       "onseDisconnect\022A\n\027response_active_change" +
       "d\030\030 \001(\0132 .pb.remote.ResponseActiveChange" +
-      "d*\241\004\n\007MsgType\022\013\n\007UNKNOWN\020\000\022\013\n\007CONNECT\020\001\022" +
+      "d*\264\004\n\007MsgType\022\013\n\007UNKNOWN\020\000\022\013\n\007CONNECT\020\001\022" +
       "\025\n\021REQUEST_PLAYLISTS\020\003\022\032\n\026REQUEST_PLAYLI" +
       "ST_SONGS\020\004\022\017\n\013CHANGE_SONG\020\005\022\016\n\nSET_VOLUM" +
       "E\020\006\022\026\n\022SET_TRACK_POSITION\020\007\022\017\n\013INSERT_UR" +
       "LS\020\010\022\020\n\014REMOVE_SONGS\020\t\022\021\n\rOPEN_PLAYLIST\020" +
-      "\n\022\022\n\016CLOSE_PLAYLIST\020\013\022\016\n\nDISCONNECT\020\002\022\010\n" +
-      "\004PLAY\020\024\022\r\n\tPLAYPAUSE\020\025\022\t\n\005PAUSE\020\026\022\010\n\004STO",
-      "P\020\027\022\010\n\004NEXT\020\030\022\014\n\010PREVIOUS\020\031\022\024\n\020SHUFFLE_P" +
-      "LAYLIST\020\032\022\n\n\006REPEAT\020\033\022\013\n\007SHUFFLE\020\034\022\010\n\004IN" +
-      "FO\020(\022\024\n\020CURRENT_METAINFO\020)\022\r\n\tPLAYLISTS\020" +
-      "*\022\022\n\016PLAYLIST_SONGS\020+\022\030\n\024ENGINE_STATE_CH" +
-      "ANGED\020,\022\016\n\nKEEP_ALIVE\020-\022\031\n\025UPDATE_TRACK_" +
-      "POSITION\020.\022\033\n\027ACTIVE_PLAYLIST_CHANGED\020/\022" +
-      "\034\n\030FIRST_DATA_SENT_COMPLETE\0200*;\n\013EngineS" +
-      "tate\022\t\n\005Empty\020\000\022\010\n\004Idle\020\001\022\013\n\007Playing\020\002\022\n" +
-      "\n\006Paused\020\003*U\n\nRepeatMode\022\016\n\nRepeat_Off\020\000" +
-      "\022\020\n\014Repeat_Track\020\001\022\020\n\014Repeat_Album\020\002\022\023\n\017",
-      "Repeat_Playlist\020\003*\\\n\013ShuffleMode\022\017\n\013Shuf" +
-      "fle_Off\020\000\022\017\n\013Shuffle_All\020\001\022\027\n\023Shuffle_In" +
-      "sideAlbum\020\002\022\022\n\016Shuffle_Albums\020\003*S\n\020Reaso" +
-      "nDisconnect\022\023\n\017Server_Shutdown\020\001\022\023\n\017Wron" +
-      "g_Auth_Code\020\002\022\025\n\021Not_Authenticated\020\003BG\n%" +
-      "de.qspool.clementineremote.backend.pbB\036C" +
-      "lementineRemoteProtocolBuffer"
+      "\n\022\022\n\016CLOSE_PLAYLIST\020\013\022\010\n\004LOVE\020\014\022\007\n\003BAN\020\r" +
+      "\022\016\n\nDISCONNECT\020\002\022\010\n\004PLAY\020\024\022\r\n\tPLAYPAUSE\020",
+      "\025\022\t\n\005PAUSE\020\026\022\010\n\004STOP\020\027\022\010\n\004NEXT\020\030\022\014\n\010PREV" +
+      "IOUS\020\031\022\024\n\020SHUFFLE_PLAYLIST\020\032\022\n\n\006REPEAT\020\033" +
+      "\022\013\n\007SHUFFLE\020\034\022\010\n\004INFO\020(\022\024\n\020CURRENT_METAI" +
+      "NFO\020)\022\r\n\tPLAYLISTS\020*\022\022\n\016PLAYLIST_SONGS\020+" +
+      "\022\030\n\024ENGINE_STATE_CHANGED\020,\022\016\n\nKEEP_ALIVE" +
+      "\020-\022\031\n\025UPDATE_TRACK_POSITION\020.\022\033\n\027ACTIVE_" +
+      "PLAYLIST_CHANGED\020/\022\034\n\030FIRST_DATA_SENT_CO" +
+      "MPLETE\0200*;\n\013EngineState\022\t\n\005Empty\020\000\022\010\n\004Id" +
+      "le\020\001\022\013\n\007Playing\020\002\022\n\n\006Paused\020\003*U\n\nRepeatM" +
+      "ode\022\016\n\nRepeat_Off\020\000\022\020\n\014Repeat_Track\020\001\022\020\n",
+      "\014Repeat_Album\020\002\022\023\n\017Repeat_Playlist\020\003*\\\n\013" +
+      "ShuffleMode\022\017\n\013Shuffle_Off\020\000\022\017\n\013Shuffle_" +
+      "All\020\001\022\027\n\023Shuffle_InsideAlbum\020\002\022\022\n\016Shuffl" +
+      "e_Albums\020\003*S\n\020ReasonDisconnect\022\023\n\017Server" +
+      "_Shutdown\020\001\022\023\n\017Wrong_Auth_Code\020\002\022\025\n\021Not_" +
+      "Authenticated\020\003BG\n%de.qspool.clementiner" +
+      "emote.backend.pbB\036ClementineRemoteProtoc" +
+      "olBuffer"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

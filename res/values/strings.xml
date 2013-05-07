@@ -68,4 +68,10 @@
     <string name="shuffle_albums">Shuffle albums</string>
     <string name="first_time_title">Welcome</string>
     <string name="first_time_text">Thank you for using Clementine Remote!\nI hope this app well be useful for you.\n\nIn order to use this remote app you have to download and install the newest Clementine build from here: http://builds.clementine-player.org/ . The stable version (like 1.0 / 1.1 / 1.1.1) doesn\'t support it yet!</string>
+    <string name="menu_love">Love</string>
+    <string name="menu_ban">Ban</string>
+    <string name="track_loved">Track loved &lt;3</string>
+    <string name="track_banned">Track banned :-(</string>
+    <string name="pref_lastfm_title">Last.fm</string>
+    <string name="pref_lastfm_summary">Activate to love / ban tracks. (requires restart)</string>
 </resources>

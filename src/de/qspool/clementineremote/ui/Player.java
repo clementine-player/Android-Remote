@@ -39,6 +39,8 @@ import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.requests.RequestControl;
 import de.qspool.clementineremote.backend.requests.RequestControl.Request;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
+import de.qspool.clementineremote.backend.requests.RequestLoveBan;
+import de.qspool.clementineremote.backend.requests.RequestLoveBan.LastFmType;
 import de.qspool.clementineremote.backend.requests.RequestVolume;
 import de.qspool.clementineremote.ui.fragments.PlayerFragment;
 import de.qspool.clementineremote.ui.fragments.PlaylistSongs;
@@ -113,6 +115,12 @@ public class Player extends SherlockFragmentActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inf = getSupportMenuInflater();
 		inf.inflate(R.menu.player_menu, menu);
+		
+		// Shall we show the lastfm buttons?
+		boolean showLastFm = mSharedPref.getBoolean("pref_show_lastfm", true);
+		menu.findItem(R.id.love).setVisible(showLastFm);
+		menu.findItem(R.id.ban).setVisible(showLastFm);
+		
 		return true;
 	}
 	
@@ -138,6 +146,18 @@ public class Player extends SherlockFragmentActivity {
 								break;
 		case R.id.playlist:		Intent playlistIntent = new Intent(this, Playlists.class);
 								startActivity(playlistIntent);
+								break;
+		case R.id.love:			if (!App.mClementine.getCurrentSong().isLoved()) {
+									// You can love only one
+									msg.obj = new RequestLoveBan(LastFmType.LOVE);
+									App.mClementineConnection.mHandler.sendMessage(msg);	
+									App.mClementine.getCurrentSong().setLoved(true);
+								}
+								makeToast(R.string.track_loved, Toast.LENGTH_SHORT);
+								break;
+		case R.id.ban:			msg.obj = new RequestLoveBan(LastFmType.BAN);
+								App.mClementineConnection.mHandler.sendMessage(msg);
+								makeToast(R.string.track_banned, Toast.LENGTH_SHORT);
 								break;
 		default: break;
 		}

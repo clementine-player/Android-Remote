@@ -33,6 +33,8 @@ import de.qspool.clementineremote.backend.requests.RequestConnect;
 import de.qspool.clementineremote.backend.requests.RequestControl;
 import de.qspool.clementineremote.backend.requests.RequestControl.Request;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
+import de.qspool.clementineremote.backend.requests.RequestLoveBan;
+import de.qspool.clementineremote.backend.requests.RequestLoveBan.LastFmType;
 import de.qspool.clementineremote.backend.requests.RequestPlaylistSong;
 import de.qspool.clementineremote.backend.requests.RequestVolume;
 import de.qspool.clementineremote.backend.requests.RequestToThread;
@@ -100,6 +102,13 @@ public class ClementinePbCreator {
 		} else if (r instanceof RequestChangeCurrentSong) {
 			msg.setType(MsgType.CHANGE_SONG);
 			msg.setRequestChangeSong(buildRequestChangeSong(msg, (RequestChangeCurrentSong)r));
+		} else if (r instanceof RequestLoveBan) {
+			if (((RequestLoveBan) r).getType() == LastFmType.LOVE) {
+				msg.setType(MsgType.LOVE);
+			} else {
+				msg.setType(MsgType.BAN);
+			}
+			
 		}
 		Message m = msg.build();
 		

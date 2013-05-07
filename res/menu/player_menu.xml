@@ -12,6 +12,12 @@
           android:title="@string/menu_repeat"
           android:showAsAction="always"
           android:icon="@drawable/ab_replay"></item>
+    <item android:id="@+id/love" 
+          android:title="@string/menu_love"
+          android:showAsAction="ifRoom"></item>
+    <item android:id="@+id/ban" 
+          android:title="@string/menu_ban"
+          android:showAsAction="ifRoom"></item>
     <item android:id="@+id/settings"
           android:title="@string/menu_settings"
           android:showAsAction="ifRoom|withText"

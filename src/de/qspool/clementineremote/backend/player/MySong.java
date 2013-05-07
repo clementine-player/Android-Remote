@@ -41,6 +41,7 @@ public class MySong {
 	private int disc;
 	private int playcount;
 	private Bitmap art;
+	private boolean loved;
 	
 	public boolean equals(MySong song) {
 		if (song.id == this.id
@@ -154,5 +155,13 @@ public class MySong {
 	public void setArt(ByteString byteString) {
 		Bitmap bmp = BitmapFactory.decodeByteArray(byteString.toByteArray(), 0, byteString.size());
 		this.art = bmp;
+	}
+
+	public boolean isLoved() {
+		return loved;
+	}
+
+	public void setLoved(boolean loved) {
+		this.loved = loved;
 	}
 }

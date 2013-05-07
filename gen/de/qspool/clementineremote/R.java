@@ -994,6 +994,7 @@ containing a value of this type.
         public static final int abs__title=0x7f05001b;
         public static final int abs__titleDivider=0x7f05001c;
         public static final int abs__up=0x7f05000b;
+        public static final int ban=0x7f050067;
         public static final int btnClementineIcon=0x7f050033;
         public static final int btnClose=0x7f050051;
         public static final int btnCloseAbout=0x7f050042;
@@ -1009,7 +1010,7 @@ containing a value of this type.
         public static final int dialog_list_root=0x7f050048;
         public static final int dialog_message_root=0x7f05004e;
         public static final int disableHome=0x7f050009;
-        public static final int disconnect=0x7f050067;
+        public static final int disconnect=0x7f050069;
         public static final int edit_query=0x7f050027;
         public static final int etAuthCode=0x7f050044;
         public static final int etIp=0x7f050035;
@@ -1017,17 +1018,18 @@ containing a value of this type.
         public static final int imgArt=0x7f050054;
         public static final int listMode=0x7f050002;
         public static final int llConnect=0x7f050034;
+        public static final int love=0x7f050066;
         public static final int lvClementines=0x7f05004a;
         public static final int normal=0x7f050001;
         public static final int pager=0x7f05005e;
         public static final int playerFragment=0x7f050052;
         public static final int playlist=0x7f050063;
         public static final int playlistSongsFragment=0x7f050053;
-        public static final int playlist_menu_search=0x7f050068;
+        public static final int playlist_menu_search=0x7f05006a;
         public static final int repeat=0x7f050065;
         public static final int sbPosition=0x7f05005a;
         public static final int scrollView1=0x7f050046;
-        public static final int settings=0x7f050066;
+        public static final int settings=0x7f050068;
         public static final int showCustom=0x7f050008;
         public static final int showHome=0x7f050005;
         public static final int showTitle=0x7f050007;
@@ -1174,7 +1176,9 @@ containing a value of this type.
         public static final int gpl=0x7f0a0013;
         public static final int input_auth_code=0x7f0a004a;
         public static final int invalid_code=0x7f0a004b;
+        public static final int menu_ban=0x7f0a0058;
         public static final int menu_disconnect=0x7f0a001f;
+        public static final int menu_love=0x7f0a0057;
         public static final int menu_playlist=0x7f0a0029;
         public static final int menu_repeat=0x7f0a0027;
         public static final int menu_search=0x7f0a002a;
@@ -1197,6 +1201,8 @@ containing a value of this type.
         public static final int pref_cat_info=0x7f0a0032;
         public static final int pref_clementine_summary=0x7f0a0040;
         public static final int pref_clementine_title=0x7f0a003f;
+        public static final int pref_lastfm_summary=0x7f0a005c;
+        public static final int pref_lastfm_title=0x7f0a005b;
         public static final int pref_license_summary=0x7f0a0036;
         public static final int pref_license_title=0x7f0a0035;
         public static final int pref_pebble_summary=0x7f0a002e;
@@ -1219,6 +1225,8 @@ containing a value of this type.
         public static final int shuffle_all=0x7f0a0052;
         public static final int shuffle_inside_album=0x7f0a0053;
         public static final int shuffle_off=0x7f0a0051;
+        public static final int track_banned=0x7f0a005a;
+        public static final int track_loved=0x7f0a0059;
         public static final int wifi_disabled=0x7f0a0049;
     }
     public static final class style {
