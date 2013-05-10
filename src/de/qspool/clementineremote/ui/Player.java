@@ -147,7 +147,8 @@ public class Player extends SherlockFragmentActivity {
 		case R.id.playlist:		Intent playlistIntent = new Intent(this, Playlists.class);
 								startActivity(playlistIntent);
 								break;
-		case R.id.love:			if (!App.mClementine.getCurrentSong().isLoved()) {
+		case R.id.love:			if (App.mClementine.getCurrentSong() != null
+								 && !App.mClementine.getCurrentSong().isLoved()) {
 									// You can love only one
 									msg.obj = new RequestLoveBan(LastFmType.LOVE);
 									App.mClementineConnection.mHandler.sendMessage(msg);	
