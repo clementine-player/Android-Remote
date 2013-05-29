@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <application
         android:name="de.qspool.clementineremote.App"
@@ -38,12 +39,16 @@
                   android:theme="@style/PlayerTheme">
         </activity>
         <service android:name=".backend.ClementineService"></service>
-        <receiver android:name=".backend.ClementineMediaButtonEventReceiver">
+        <receiver android:name=".backend.receivers.ClementineMediaButtonEventReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
-        
+        <receiver android:name=".backend.receivers.ClementinePhoneStateCheck">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

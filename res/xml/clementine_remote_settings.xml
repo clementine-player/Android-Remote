@@ -22,6 +22,13 @@
           android:title="@string/pref_lastfm_title"
           android:summary="@string/pref_lastfm_summary"
           android:defaultValue="true"/>
+      <CheckBoxPreference 
+          android:key="pref_lower_volume"
+          android:title="@string/pref_lower_volume_title"
+          android:summary="@string/pref_lower_volume_summary"
+          android:defaultValue="true"/>
+    </PreferenceCategory> 
+    <PreferenceCategory android:title="@string/pref_cat_connection">
 	    <CheckBoxPreference
 	        android:key="pref_autoconnect"
 	        android:title="@string/connectdialog_autoconnect"

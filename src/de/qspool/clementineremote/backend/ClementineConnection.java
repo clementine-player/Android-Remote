@@ -40,6 +40,7 @@ import de.qspool.clementineremote.backend.pb.ClementinePbCreator;
 import de.qspool.clementineremote.backend.pb.ClementinePbParser;
 import de.qspool.clementineremote.backend.pebble.Pebble;
 import de.qspool.clementineremote.backend.player.MySong;
+import de.qspool.clementineremote.backend.receivers.ClementineMediaButtonEventReceiver;
 import de.qspool.clementineremote.backend.requests.CheckForData;
 import de.qspool.clementineremote.backend.requests.RequestConnect;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;

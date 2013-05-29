@@ -214,6 +214,7 @@ public class Player extends SherlockFragmentActivity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (event.getAction() == KeyEvent.ACTION_DOWN) {
+			int currentVolume = App.mClementine.getVolume();
 			// Control the volume of clementine if enabled in the options
 			switch (keyCode) {
 			case KeyEvent.KEYCODE_VOLUME_DOWN:
@@ -221,7 +222,11 @@ public class Player extends SherlockFragmentActivity {
 					Message msgDown = Message.obtain();
 					msgDown.obj = new RequestVolume(App.mClementine.getVolume() - 10);
 					App.mClementineConnection.mHandler.sendMessage(msgDown);
-					makeToast(getString(R.string.playler_volume) + " " + (App.mClementine.getVolume() - 10), Toast.LENGTH_SHORT);
+					if (currentVolume >= 10)
+						currentVolume -= 10;
+					else
+						currentVolume = 0;
+					makeToast(getString(R.string.playler_volume) + " " + currentVolume + "%", Toast.LENGTH_SHORT);
 					return true;
 				}
 				break;
@@ -230,7 +235,11 @@ public class Player extends SherlockFragmentActivity {
 					Message msgUp = Message.obtain();
 					msgUp.obj = new RequestVolume(App.mClementine.getVolume() + 10);
 					App.mClementineConnection.mHandler.sendMessage(msgUp);
-					makeToast(getString(R.string.playler_volume) + " " + (App.mClementine.getVolume() + 10), Toast.LENGTH_SHORT);
+					if (currentVolume > 90)
+						currentVolume = 100;
+					else
+						currentVolume += 10;
+					makeToast(getString(R.string.playler_volume) + " " + currentVolume + "%", Toast.LENGTH_SHORT);
 					return true;
 				}
 				break;

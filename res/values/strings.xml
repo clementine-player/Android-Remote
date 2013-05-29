@@ -31,6 +31,7 @@
     <string name="pref_trackno_title">Show tracknumber</string>
     <string name="pref_trackno_summary">Show or hide the tracknumber in the playlists.</string>
     <string name="pref_cat_behavior">Behavior</string>
+    <string name="pref_cat_connection">Connection</string>
     <string name="pref_cat_info">Information</string>
     <string name="pref_version_summary">Click to visit project website</string>
     <string name="pref_version_title">Version</string>
@@ -74,4 +75,6 @@
     <string name="track_banned">Track banned :-(</string>
     <string name="pref_lastfm_title">Last.fm</string>
     <string name="pref_lastfm_summary">Activate to love / ban tracks. (requires restart)</string>
+    <string name="pref_lower_volume_title">Lower volume</string>
+    <string name="pref_lower_volume_summary">Lower volume to 25% on incoming / outgoing call.</string>
 </resources>
