@@ -32,6 +32,9 @@ public class ClementinePhoneStateCheck extends BroadcastReceiver {
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		if (App.mClementine == null)
+			return;
+		
 		// Check if we need to change the volume
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(App.mApp);
 		

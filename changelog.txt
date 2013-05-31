@@ -1,6 +1,7 @@
 Version 0.6
   Features:
     - Last.fm: Love and ban tracks
+    - Lower volume on calls
   Improvements:
     - Removed beep sound when changing volume
     - Tracknumber in playlist can be hidden in settings
