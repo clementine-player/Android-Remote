@@ -19,6 +19,7 @@
       android:layout_marginTop="7dp">
 
     <LinearLayout
+        style="@style/ImgCoverGreyBorder"
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_gravity="center_vertical|center_horizontal"
@@ -30,7 +31,6 @@
 
         <ImageView
             android:id="@+id/imgArt"
-            style="@style/ImgCoverGreyBorder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/player_desc_img"

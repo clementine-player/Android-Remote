@@ -17,6 +17,7 @@
 	    android:orientation="horizontal" >
     
           <FrameLayout
+              style="@style/ImgCoverGreyBorder"
               android:layout_width="0dip"
               android:layout_height="fill_parent"
               android:layout_gravity="center_vertical"
@@ -28,7 +29,6 @@
 
               <ImageView
                   android:id="@+id/imgArt"
-                  style="@style/ImgCoverGreyBorder"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
                   android:contentDescription="@string/player_desc_img"

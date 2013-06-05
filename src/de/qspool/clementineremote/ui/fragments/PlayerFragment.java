@@ -22,6 +22,10 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -41,6 +45,7 @@ import de.qspool.clementineremote.utils.Utilities;
 
 
 public class PlayerFragment extends SherlockFragment {
+	private final static int ANIMATION_DURATION = 750;
 	private TextView mTvArtist;
 	private TextView mTvTitle;
 	private TextView mTvAlbum;
@@ -56,6 +61,12 @@ public class PlayerFragment extends SherlockFragment {
 	private ImageButton mBtnPlayPause;
 	
 	private ImageView mImgArt;
+	
+    private AlphaAnimation mAlphaDown; 
+    private AlphaAnimation mAlphaUp;
+    private boolean mCoverUpdated = false;
+    
+    private MySong mCurrentSong = new MySong();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -86,6 +97,18 @@ public class PlayerFragment extends SherlockFragment {
 	    mBtnPlayPause.setOnClickListener(oclControl);
 	    
 	    mSbPosition.setOnSeekBarChangeListener(onSeekBarChanged);
+	    
+	    // Animation for track change
+	    mAlphaDown = new AlphaAnimation(1.0f, 0.0f);
+	    mAlphaUp = new AlphaAnimation(0.0f, 1.0f);
+	    mAlphaDown.setDuration(ANIMATION_DURATION);
+	    mAlphaUp.setDuration(ANIMATION_DURATION);
+	    mAlphaDown.setFillAfter(true);
+	    mAlphaUp.setFillAfter(true);
+	    mAlphaUp.setAnimationListener(mAnimationListener);
+	    mAlphaDown.setAnimationListener(mAnimationListener);
+	    mAlphaDown.setInterpolator(new AccelerateInterpolator());
+	    mAlphaUp.setInterpolator(new AccelerateInterpolator());
 	    
 	    reloadInfo();
 	    
@@ -118,25 +141,29 @@ public class PlayerFragment extends SherlockFragment {
 	    	mSbPosition.setEnabled(false);
 	    	
     		mImgArt.setImageResource(R.drawable.icon_large);
-    	} else {
+    	} else if (!currentSong.equals(mCurrentSong)) {
 	    	mTvArtist.setText(currentSong.getArtist());
 	    	mTvTitle. setText(currentSong.getTitle());
 	    	mTvAlbum. setText(currentSong.getAlbum());
 	    	
 	    	mTvGenre. setText(currentSong.getGenre());
 	    	mTvYear.  setText(currentSong.getYear());
-	    	mTvLength.setText(buildTrackPosition());
-	    	
-	    	mSbPosition.setEnabled(true);
-	    	mSbPosition.setMax(currentSong.getLength());
-	    	mSbPosition.setProgress(App.mClementine.getSongPosition());
 	    	
 	    	// Check if a coverart is valid
 	    	if (currentSong.getArt() == null) {
 	    		mImgArt.setImageResource(R.drawable.icon_large);
-	    	} else {
-	    		mImgArt.setImageBitmap(currentSong.getArt());
+	    	} else if (mCurrentSong.getArt() == null
+	    			 || !mCurrentSong.getArt().sameAs(currentSong.getArt())) {
+	    		// Transit only if the cover changed
+	    		mImgArt.startAnimation(mAlphaDown);
 	    	}
+	    	mCurrentSong = currentSong;
+    	} else {
+    		mTvLength.setText(buildTrackPosition());
+    		
+    		mSbPosition.setEnabled(true);
+	    	mSbPosition.setMax(currentSong.getLength());
+	    	mSbPosition.setProgress(App.mClementine.getSongPosition());
     	}
     }
     
@@ -193,5 +220,25 @@ public class PlayerFragment extends SherlockFragment {
 				App.mClementine.setSongPosition(progress);
 			}
 		}
+	};
+	
+	private AnimationListener mAnimationListener = new AnimationListener() {
+		@Override
+		public void onAnimationEnd(Animation animation) {
+			if (!mCoverUpdated) {
+				mImgArt.setImageBitmap(App.mClementine.getCurrentSong().getArt());
+				mImgArt.startAnimation(mAlphaUp);
+			}
+			mCoverUpdated = !mCoverUpdated;
+		}
+
+		@Override
+		public void onAnimationRepeat(Animation animation) {
+		}
+
+		@Override
+		public void onAnimationStart(Animation animation) {
+		}
+
 	};
 }
