@@ -23,9 +23,9 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -48,12 +48,17 @@ import android.view.animation.Animation.AnimationListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.Clementine;
@@ -69,7 +74,7 @@ import de.qspool.clementineremote.utils.Utilities;
 /**
  * The connect dialog
  */
-public class ConnectDialog extends Activity {
+public class ConnectDialog extends SherlockActivity {
 	private final static int ANIMATION_DURATION = 2000;
 	
 	private final int ID_PLAYER_DIALOG = 1;
@@ -79,10 +84,8 @@ public class ConnectDialog extends Activity {
 	public final static int RESULT_RESTART = 3;
 	
 	private Button mBtnConnect;
-	private ImageButton mBtnSettings;
 	private ImageButton mBtnClementine;
 	private EditText mEtIp;
-	private CheckBox mCbAutoConnect;
 	
 	ProgressDialog mPdConnect;
 	
@@ -102,9 +105,6 @@ public class ConnectDialog extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-	    
-	    // Remove title bar
-	    this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 	    
 	    App.mApp = getApplication();
     	
@@ -139,7 +139,7 @@ public class ConnectDialog extends Activity {
     	mClementineMDns = new ClementineMDnsDiscovery(mHandler);
 	    
 	    // Check if Autoconnect is enabled
-	    if (mCbAutoConnect.isChecked() && doAutoConnect) {
+	    if (mSharedPref.getBoolean(App.SP_KEY_AC, false) && doAutoConnect) {
 	    	// Post delayed, so the service has time to start
 	    	mHandler.postDelayed(new Runnable() {
 				@Override
@@ -167,14 +167,31 @@ public class ConnectDialog extends Activity {
 	    initializeUi();
 	}
 	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    		case R.id.settings:		Intent settingsIntent = new Intent(this, ClementineSettings.class);
+				startActivity(settingsIntent);
+				doAutoConnect = false;
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inf = getSupportMenuInflater();
+		inf.inflate(R.menu.connectdialog_menu, menu);
+		
+		return true;
+	}
+	
 	private void initializeUi() {
 	    // Get the Layoutelements
 	    mBtnConnect = (Button) findViewById(R.id.btnConnect);
 	    mBtnConnect.setOnClickListener(oclConnect);
 	    mBtnConnect.requestFocus();
-	    
-	    mBtnSettings = (ImageButton) findViewById(R.id.btnSettings);
-	    mBtnSettings.setOnClickListener(oclSettings);
 	    
 	    mBtnClementine = (ImageButton) findViewById(R.id.btnClementineIcon);
 	    mBtnClementine.setOnClickListener(oclClementine);
@@ -193,13 +210,11 @@ public class ConnectDialog extends Activity {
 	    // Ip and Autoconnect
 	    mEtIp = (EditText) findViewById(R.id.etIp);
 	    mEtIp.setRawInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-	    mCbAutoConnect = (CheckBox) findViewById(R.id.cbAutoconnect);
 	    
 	    // Get old ip and auto-connect from shared prefences
 	    mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 	    mEtIp.setText(mSharedPref.getString(App.SP_KEY_IP, ""));
 	    mEtIp.setSelection(mEtIp.length());
-	    mCbAutoConnect.setChecked(mSharedPref.getBoolean(App.SP_KEY_AC, false));
 	    
 	    // Get the last auth code
 	    mAuthCode = mSharedPref.getInt(App.SP_LAST_AUTH_CODE, 0);
@@ -222,15 +237,6 @@ public class ConnectDialog extends Activity {
 		public void onClick(View v) {
 			// And connect
 			connect();
-		}
-	};
-	
-	private OnClickListener oclSettings = new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			Intent settingsIntent = new Intent(ConnectDialog.this, ClementineRemoteSettings.class);
-			startActivityForResult(settingsIntent, ID_SETTINGS);
 		}
 	};
 	
@@ -309,7 +315,6 @@ public class ConnectDialog extends Activity {
 	private void connect() {
 		// Save the data
 		SharedPreferences.Editor editor = mSharedPref.edit();
-		editor.putBoolean(App.SP_KEY_AC, mCbAutoConnect.isChecked());
 		editor.putString(App.SP_KEY_IP, mEtIp.getText().toString());
 		editor.putInt(App.SP_LAST_AUTH_CODE, mAuthCode);
 		editor.commit();

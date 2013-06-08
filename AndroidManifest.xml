@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.qspool.clementineremote"
-    android:versionCode="8"
-    android:versionName="0.6" >
+    android:versionCode="9"
+    android:versionName="6" >
 
     <uses-sdk android:minSdkVersion="8"
               android:targetSdkVersion="17" />
@@ -23,6 +23,7 @@
         <activity android:name=".ui.ConnectDialog"
                   android:configChanges="orientation|keyboardHidden|screenSize"
                   android:launchMode="singleTop"
+                  android:theme="@style/PlayerTheme"
                   android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,7 +34,7 @@
         <activity android:name=".ui.Player"
                   android:theme="@style/PlayerTheme"
                   android:launchMode="singleTop" ></activity>
-        <activity android:name=".ui.ClementineRemoteSettings"
+        <activity android:name="de.qspool.clementineremote.ui.ClementineSettings"
                   android:theme="@style/PreferencesTheme"></activity>
         <activity android:name=".ui.Playlists"
                   android:theme="@style/PlayerTheme">

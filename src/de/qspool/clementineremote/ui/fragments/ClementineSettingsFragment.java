@@ -1,49 +1,31 @@
-/* This file is part of the Android Clementine Remote.
- * Copyright (C) 2013, Andreas Muttscheller <asfa194@gmail.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+package de.qspool.clementineremote.ui.fragments;
 
-package de.qspool.clementineremote.ui;
-
+import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.backend.Clementine;
 import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
-import de.qspool.clementineremote.App;
-import de.qspool.clementineremote.R;
-import de.qspool.clementineremote.backend.Clementine;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
+import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceClickListener;
-import android.preference.PreferenceActivity;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.view.View.OnClickListener;
 
-/**
- * The settings screen of Clementine Remote
- */
-public class ClementineRemoteSettings extends PreferenceActivity implements OnSharedPreferenceChangeListener {
+public class ClementineSettingsFragment extends PreferenceFragment 
+										 implements OnSharedPreferenceChangeListener {
+
 	private Preference mLicenseDialogPreference;
 	private Preference mAboutDialogPreference;
 	private Preference mVersion;
@@ -63,25 +45,28 @@ public class ClementineRemoteSettings extends PreferenceActivity implements OnSh
         
         // Get the Version
         try {
-			mVersion.setTitle(getString(R.string.pref_version_title) + 
+        	mVersion.setTitle(getString(R.string.pref_version_title) + 
 							  " " + 
-							  getPackageManager().getPackageInfo(getPackageName(), 0 ).versionName);
+							  getActivity().getPackageManager()
+							  			   .getPackageInfo(getActivity().getPackageName(), 0 ).versionName);
 		} catch (NameNotFoundException e) {
 			
 		}
         
         // Read the port and fill in the summary
-        mPortPreference = (EditTextPreference) getPreferenceScreen().findPreference("pref_port");
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mPortPreference = (EditTextPreference) getPreferenceScreen().findPreference(App.SP_KEY_PORT);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         
         String port = sharedPreferences.getString(App.SP_KEY_PORT, String.valueOf(Clementine.DefaultPort));
 		mPortPreference.setSummary(getString(R.string.pref_port_summary) + " " + port);
+		
+		mPortPreference.setOnPreferenceClickListener(etListener);
         
 		// Set the onclicklistener for the dialogs
         mLicenseDialogPreference.setOnPreferenceClickListener(opclLicense);
         mAboutDialogPreference.setOnPreferenceClickListener(opclAbout);
         
-        /// Register Listener
+        // Register Listener
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 	
@@ -98,7 +83,7 @@ public class ClementineRemoteSettings extends PreferenceActivity implements OnSh
 				editor.commit();
 				
 				// Tell the user that he specified an illegal port
-				Toast.makeText(this, getString(R.string.pref_port_error), Toast.LENGTH_LONG).show();
+				Toast.makeText(getActivity(), getString(R.string.pref_port_error), Toast.LENGTH_LONG).show();
 			}
 			// Set the summary
 			mPortPreference.setSummary(getString(R.string.pref_port_summary) + " " + port);
@@ -113,7 +98,7 @@ public class ClementineRemoteSettings extends PreferenceActivity implements OnSh
 		
 		@Override
 		public boolean onPreferenceClick(Preference preference) {
-			mCustomDialog = new Dialog(ClementineRemoteSettings.this);
+			mCustomDialog = new Dialog(getActivity());
 			mCustomDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 			mCustomDialog.setContentView(R.layout.dialog_license);
 			mCustomDialog.setCancelable(true);
@@ -123,7 +108,7 @@ public class ClementineRemoteSettings extends PreferenceActivity implements OnSh
 			button.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					ClementineRemoteSettings.this.mCustomDialog.dismiss();
+					mCustomDialog.dismiss();
 				}
 			});
 			mCustomDialog.show();
@@ -138,7 +123,7 @@ public class ClementineRemoteSettings extends PreferenceActivity implements OnSh
 		
 		@Override
 		public boolean onPreferenceClick(Preference preference) {
-			mCustomDialog = new Dialog(ClementineRemoteSettings.this);
+			mCustomDialog = new Dialog(getActivity());
 			mCustomDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 			mCustomDialog.setContentView(R.layout.dialog_about);
 			mCustomDialog.setCancelable(true);
@@ -157,8 +142,7 @@ public class ClementineRemoteSettings extends PreferenceActivity implements OnSh
 								 "John Maguire (Clementine-Dev)\n");
 			
 			// Others
-			tvOthers.setText(Html.fromHtml("Icons: <a href=\"http://chrfb.deviantart.com\">Christian Burprich</a><br>" +
-										   "<a href=\"http://actionbarsherlock.com/\">ActionBarSherlock</a> (<a href=\"http://www.apache.org/licenses/LICENSE-2.0.html\">License</a>)<br>" +
+			tvOthers.setText(Html.fromHtml("<a href=\"http://actionbarsherlock.com/\">ActionBarSherlock</a> (<a href=\"http://www.apache.org/licenses/LICENSE-2.0.html\">License</a>)<br>" +
 										   "<a href=\"http://jmdns.sourceforge.net/\">JmDNS</a> (<a href=\"http://jmdns.sourceforge.net/license.html\">License</a>)<br>" +
 										   "and all the <a href=\"https://www.transifex.com/projects/p/clementine-remote/\">translators</a>!"));
 			tvOthers.setMovementMethod(LinkMovementMethod.getInstance());
@@ -168,10 +152,20 @@ public class ClementineRemoteSettings extends PreferenceActivity implements OnSh
 			button.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					ClementineRemoteSettings.this.mCustomDialog.dismiss();
+					mCustomDialog.dismiss();
 				}
 			});
 			mCustomDialog.show();
+			return true;
+		}
+	};
+	
+	private OnPreferenceClickListener etListener = new OnPreferenceClickListener() {
+		
+		@Override
+		public boolean onPreferenceClick(Preference preference) {
+			EditTextPreference editTextPref = (EditTextPreference) preference;
+			editTextPref.getEditText().setSelection(editTextPref.getText().length());
 			return true;
 		}
 	};

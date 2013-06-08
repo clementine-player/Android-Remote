@@ -58,11 +58,16 @@ public class Player extends SherlockFragmentActivity {
 	PlaylistSongs mPlaylistSongs;
 	View mPlaylistFragmentView;
 	
+	MenuItem mMenuRepeat;
+	MenuItem mMenuShuffle;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    
 	    setContentView(R.layout.player);
+	    
+	    getSupportActionBar().setHomeButtonEnabled(true);
 	    
 		mPlayerFragment = (PlayerFragment) getSupportFragmentManager().findFragmentById(R.id.playerFragment);
 		mPlaylistFragmentView = (View) findViewById(R.id.playlistSongsFragment);
@@ -121,42 +126,43 @@ public class Player extends SherlockFragmentActivity {
 		menu.findItem(R.id.love).setVisible(showLastFm);
 		menu.findItem(R.id.ban).setVisible(showLastFm);
 		
+		mMenuRepeat =  menu.findItem(R.id.repeat);
+		mMenuShuffle = menu.findItem(R.id.shuffle);
+		
+		updateShuffleIcon();
+		updateRepeatIcon();
+		
 		return true;
 	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		Message msg = Message.obtain();
 		switch (item.getItemId())
 		{
 		case R.id.disconnect: 	requestDisconnect();
 								break;
-		case R.id.shuffle:		App.mClementine.nextShuffleMode();
-								msg.obj = new RequestControl(Request.SHUFFLE);
-								App.mClementineConnection.mHandler.sendMessage(msg);
-								showShuffleToast();
+		case R.id.shuffle:		doShuffle();
 								break;
-		case R.id.repeat:		App.mClementine.nextRepeatMode();
-								msg.obj = new RequestControl(Request.REPEAT);
-								App.mClementineConnection.mHandler.sendMessage(msg);
-								showRepeatToast();
+		case R.id.repeat:		doRepeat();
 								break;
-		case R.id.settings:		Intent settingsIntent = new Intent(this, ClementineRemoteSettings.class);
+		case R.id.settings:		Intent settingsIntent = new Intent(this, ClementineSettings.class);
 								startActivity(settingsIntent);
 								break;
-		case R.id.playlist:		Intent playlistIntent = new Intent(this, Playlists.class);
+		case android.R.id.home:		Intent playlistIntent = new Intent(this, Playlists.class);
 								startActivity(playlistIntent);
 								break;
 		case R.id.love:			if (App.mClementine.getCurrentSong() != null
 								 && !App.mClementine.getCurrentSong().isLoved()) {
 									// You can love only one
+									Message msg = Message.obtain();
 									msg.obj = new RequestLoveBan(LastFmType.LOVE);
 									App.mClementineConnection.mHandler.sendMessage(msg);	
 									App.mClementine.getCurrentSong().setLoved(true);
 								}
 								makeToast(R.string.track_loved, Toast.LENGTH_SHORT);
 								break;
-		case R.id.ban:			msg.obj = new RequestLoveBan(LastFmType.BAN);
+		case R.id.ban:			Message msg = Message.obtain();
+								msg.obj = new RequestLoveBan(LastFmType.BAN);
 								App.mClementineConnection.mHandler.sendMessage(msg);
 								makeToast(R.string.track_banned, Toast.LENGTH_SHORT);
 								break;
@@ -180,9 +186,14 @@ public class Player extends SherlockFragmentActivity {
 	}
 	
 	/**
-	 * Show the toast for the shuffle mode
+	 * Change shuffle mode and update view
 	 */
-	private void showShuffleToast() {
+	private void doShuffle() {
+		Message msg = Message.obtain();
+		App.mClementine.nextShuffleMode();
+		msg.obj = new RequestControl(Request.SHUFFLE);
+		App.mClementineConnection.mHandler.sendMessage(msg);
+		
 		switch (App.mClementine.getShuffleMode()) {
 		case OFF: 		makeToast(R.string.shuffle_off, Toast.LENGTH_SHORT);
 						break;
@@ -193,12 +204,36 @@ public class Player extends SherlockFragmentActivity {
 		case ALBUMS:	makeToast(R.string.shuffle_albums, Toast.LENGTH_SHORT);
 						break;
 		}
+		
+		updateShuffleIcon();
 	}
 	
 	/**
-	 * Show the toast for the repeat mode
+	 * Update the shuffle icon in the actionbar
 	 */
-	public void showRepeatToast() {
+	private void updateShuffleIcon() {
+		switch (App.mClementine.getShuffleMode()) {
+		case OFF: 		mMenuShuffle.setIcon(R.drawable.ab_shuffle_off);
+						break;
+		case ALL:		mMenuShuffle.setIcon(R.drawable.ab_shuffle);
+						break;
+		case INSIDE_ALBUM:	mMenuShuffle.setIcon(R.drawable.ab_shuffle_albumtracks);
+							break;
+		case ALBUMS:	mMenuShuffle.setIcon(R.drawable.ab_shuffle_albums);
+						break;
+		}
+	}
+	
+	/**
+	 * Change repeat mode and update view
+	 */
+	public void doRepeat() {
+		Message msg = Message.obtain();
+		
+		App.mClementine.nextRepeatMode();
+		msg.obj = new RequestControl(Request.REPEAT);
+		App.mClementineConnection.mHandler.sendMessage(msg);
+		
 		switch (App.mClementine.getRepeatMode()) {
 		case OFF: 		makeToast(R.string.repeat_off, Toast.LENGTH_SHORT);
 						break;
@@ -207,6 +242,24 @@ public class Player extends SherlockFragmentActivity {
 		case ALBUM:		makeToast(R.string.repeat_album, Toast.LENGTH_SHORT);
 						break;
 		case PLAYLIST:	makeToast(R.string.repeat_playlist, Toast.LENGTH_SHORT);
+						break;
+		}
+		
+		updateRepeatIcon();
+	}
+	
+	/**
+	 * Update the repeat icon in the actionbar
+	 */
+	private void updateRepeatIcon() {
+		switch (App.mClementine.getRepeatMode()) {
+		case OFF: 		mMenuRepeat.setIcon(R.drawable.ab_repeat_off);
+						break;
+		case TRACK:		mMenuRepeat.setIcon(R.drawable.ab_repeat_single_track);
+						break;
+		case ALBUM:		mMenuRepeat.setIcon(R.drawable.ab_repeat_album);
+						break;
+		case PLAYLIST:	mMenuRepeat.setIcon(R.drawable.ab_repeat_playlist);
 						break;
 		}
 	}

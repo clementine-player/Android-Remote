@@ -21,8 +21,12 @@
     <style name="ImgCoverGreyBorder" >
         <item name="android:background">@drawable/img_cover_grey_bg</item>
     </style>
-    <style name="PreferencesTheme" parent="@android:style/Theme.Light.NoTitleBar">
-        <!-- <item name="android:windowBackground">@drawable/background</item> -->
+    <style name="PreferencesTheme" parent="@style/Theme.Sherlock.Light">
+      <item name="actionBarStyle">@style/ActionBarStyle</item>
+      <item name="android:actionBarStyle">@style/ActionBarStyle</item>
+      <item name="actionButtonStyle">@style/ActionButtonStyle</item>
+      <item name="@android:actionButtonStyle">@style/ActionButtonStyle</item>
+      <item name="android:homeAsUpIndicator">@drawable/abs__ic_ab_back_holo_dark</item>
     </style>
     <style name="PlayerTheme" parent="@style/Theme.Sherlock">
 	    <item name="actionBarStyle">@style/ActionBarStyle</item>

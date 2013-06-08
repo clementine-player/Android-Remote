@@ -66,33 +66,7 @@
                 android:minHeight="0dp"
                 android:text="@string/connectdialog_connect" />
 
-            <ImageButton
-                android:id="@+id/btnSettings"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center_vertical"
-                android:background="@android:color/transparent"
-                android:scaleType="centerCrop"
-                android:contentDescription="@string/connect_settings_icon"
-                android:src="@drawable/ab_settings" />
-
         </RelativeLayout>
-
-        <CheckBox
-            android:id="@+id/cbAutoconnect"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:layout_marginTop="3dp"
-            android:button="@drawable/checkbox"
-            android:checked="false"
-            android:text="@string/connectdialog_autoconnect"
-            android:textColor="@android:color/black"
-            android:textSize="14sp"
-            android:textStyle="italic" />
 
     </LinearLayout>
 

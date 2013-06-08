@@ -32,7 +32,6 @@ public class App extends Application {
 	public final static int SERVICE_START = 1;
 	public final static int SERVICE_CONNECTED = 2;
 	public final static int SERVICE_DISCONNECTED = 3;
-	public final static int LOWERED_VOLUME = 25;
 		
 	// Keys for SharedPrefences
 	public final static String SP_KEY_IP = "save_clementine_ip";
@@ -45,4 +44,5 @@ public class App extends Application {
 	public final static String SP_FIRST_TIME = "pref_first_time";
 	public final static String SP_LASTFM = "pref_show_lastfm";
 	public final static String SP_LOWER_VOLUME = "pref_lower_volume";
+	public final static String SP_CALL_VOLUME="pref_call_volume";
 }
