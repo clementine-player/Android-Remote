@@ -36,6 +36,8 @@ import com.actionbarsherlock.view.MenuItem;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.backend.elements.Reload;
+import de.qspool.clementineremote.backend.elements.ReloadControl;
 import de.qspool.clementineremote.backend.requests.RequestControl;
 import de.qspool.clementineremote.backend.requests.RequestControl.Request;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
@@ -101,7 +103,7 @@ public class Player extends SherlockFragmentActivity {
 		    App.mClementineConnection.setUiHandler(mHandler);
 		    
 			// Reload infos
-			reloadInfo();
+			reloadInfo(new Reload());
 			reloadPlaylist();
 		}
 	}
@@ -339,7 +341,7 @@ public class Player extends SherlockFragmentActivity {
 	/**
 	 * Reload the player ui
 	 */
-	void reloadInfo() {
+	void reloadInfo(Reload r) {
 		// Update the Player Fragment
 		if (mPlayerFragment != null && mPlayerFragment.isInLayout()) {
 			mPlayerFragment.reloadInfo();
@@ -348,6 +350,11 @@ public class Player extends SherlockFragmentActivity {
     	// ActionBar shows the current playlist
     	if (App.mClementine.getActivePlaylist() != null) {
     		mActionBar.setSubtitle(App.mClementine.getActivePlaylist().getName());
+    	}
+    	
+    	if (r instanceof ReloadControl) {
+    		updateRepeatIcon();
+    		updateShuffleIcon();
     	}
     }
 	

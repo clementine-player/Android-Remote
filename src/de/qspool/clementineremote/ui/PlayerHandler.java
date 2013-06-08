@@ -50,10 +50,12 @@ public class PlayerHandler extends Handler {
 		} else if (msg.obj instanceof ReloadMetadataChanged
 				 || msg.obj instanceof ReloadPlaylistSongs
 				 || msg.obj instanceof ReloadPlaylists) {
-			pd.reloadInfo();
+			Reload r = (Reload) msg.obj;
+			pd.reloadInfo(r);
 			pd.reloadPlaylist();
 		} else if (msg.obj instanceof Reload) {
-			pd.reloadInfo();
+			Reload r = (Reload) msg.obj;
+			pd.reloadInfo(r);
 		}
 	}
 }

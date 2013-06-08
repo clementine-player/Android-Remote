@@ -305,12 +305,12 @@ public class ClementinePbParser {
 	}
 	
 	/**
-	 * Get the Random Mode
-	 * @param random The Element
+	 * Get the shuffle Mode
+	 * @param shuffle The Element
 	 * @return Reload
 	 */
-	private ClementineElement parseRandom(Shuffle random) {
-		switch (random.getShuffleMode()) {
+	private ClementineElement parseRandom(Shuffle shuffle) {
+		switch (shuffle.getShuffleMode()) {
 		case Shuffle_Off:		App.mClementine.setShuffleMode(ShuffleMode.OFF);
 								break;
 		case Shuffle_All:		App.mClementine.setShuffleMode(ShuffleMode.ALL);

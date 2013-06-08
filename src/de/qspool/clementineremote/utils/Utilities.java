@@ -9,7 +9,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
