@@ -1,12 +1,16 @@
-Version 0.6
+Version 6
   Features:
     - Last.fm: Love and ban tracks
     - Lower volume on calls
   Improvements:
+    - New Icons
+    - Playlist is now accessible with pressing the playlist name
     - Removed beep sound when changing volume
     - Tracknumber in playlist can be hidden in settings
     - Show a welcome dialog on first run
     - Improved "no connection" errormessage
+    - New settings layout
+    - Actionbar now in Connectdialog
   Bugfixes:
     - Fixed a FC when using Pebble
     - Fixed a FC when connecting to Clementine

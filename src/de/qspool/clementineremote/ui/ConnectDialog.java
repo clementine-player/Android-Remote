@@ -377,7 +377,7 @@ public class ConnectDialog extends SherlockActivity {
 	 * Show the user the first time called dialog
 	 */
 	private void showFirstTimeScreen() {
-		Utilities.ShowMessageDialog(this, R.string.first_time_title, R.string.first_time_text);
+		Utilities.ShowHtmlMessageDialog(this, R.string.first_time_title, R.string.first_time_text);
 	}
 	
 	/**

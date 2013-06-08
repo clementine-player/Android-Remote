@@ -7,6 +7,9 @@ import de.qspool.clementineremote.R;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -41,6 +44,28 @@ public class Utilities {
 	 * @return The Dialog object
 	 */
 	public static Dialog ShowMessageDialog(Context context, int title, int message) {
+		return ShowMessageDialog(context, context.getString(title), context.getString(message), false);
+	}
+	
+	/**
+	 * Show a simple designed message dialog
+	 * @param context In which context will the dialog be displayed?
+	 * @param title The resource id of the message dialog title.
+	 * @param message The resource id of the message
+	 * @return The Dialog object
+	 */
+	public static Dialog ShowHtmlMessageDialog(Context context, int title, int message) {
+		return ShowMessageDialog(context, context.getString(title), context.getString(message), true);
+	}
+	
+	/**
+	 * Show a simple designed message dialog
+	 * @param context In which context will the dialog be displayed?
+	 * @param title The message string dialog title.
+	 * @param message The string of the message
+	 * @return The Dialog object
+	 */
+	public static Dialog ShowMessageDialog(Context context, String title, String message, boolean hasHtml) {
 		final Dialog errorDialog = new Dialog(context, R.style.Dialog_Transparent);
 		errorDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		errorDialog.setContentView(R.layout.dialog_message);
@@ -49,7 +74,12 @@ public class Utilities {
 		final TextView tvTitle = (TextView) errorDialog.findViewById(R.id.tvTitle);
 		final TextView tvMessage = (TextView) errorDialog.findViewById(R.id.tvMessage);
 		tvTitle.setText(title);
-		tvMessage.setText(message);
+		if (hasHtml) {
+			tvMessage.setText(Html.fromHtml(message));
+		} else {
+			tvMessage.setText(message);
+		}
+		tvMessage.setMovementMethod(LinkMovementMethod.getInstance());
 		
 		Button connectButton = (Button) errorDialog.findViewById(R.id.btnClose);
 				connectButton.setOnClickListener(new OnClickListener() {
