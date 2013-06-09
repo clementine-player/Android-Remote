@@ -66,6 +66,8 @@ public class PlayerFragment extends SherlockFragment {
     private AlphaAnimation mAlphaUp;
     private boolean mCoverUpdated = false;
     
+    private boolean mFirstCall = true;
+    
     private MySong mCurrentSong = new MySong();
 
 	@Override
@@ -155,7 +157,11 @@ public class PlayerFragment extends SherlockFragment {
 	    	} else if (mCurrentSong.getArt() == null
 	    			 || !mCurrentSong.getArt().sameAs(currentSong.getArt())) {
 	    		// Transit only if the cover changed
-	    		mImgArt.startAnimation(mAlphaDown);
+	    		if (mFirstCall) {
+	    			mImgArt.setImageBitmap(App.mClementine.getCurrentSong().getArt());
+	    		} else {
+	    			mImgArt.startAnimation(mAlphaDown);
+	    		}
 	    	}
 	    	mCurrentSong = currentSong;
     	} else {
@@ -165,6 +171,7 @@ public class PlayerFragment extends SherlockFragment {
 	    	mSbPosition.setMax(currentSong.getLength());
 	    	mSbPosition.setProgress(App.mClementine.getSongPosition());
     	}
+    	mFirstCall = false;
     }
     
     private String buildTrackPosition() {
