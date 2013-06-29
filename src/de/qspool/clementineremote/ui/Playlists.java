@@ -127,8 +127,13 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 	 * Check if we have all Playlists, otherwise get them
 	 */
 	protected void getPlaylists() {
+		// If a progress is showing, do not show again!
+		if (mProgressDialog != null && mProgressDialog.isShowing())
+			return;
+		
 		mDownloadPlaylists = 0;
 		mDownloadPlaylistNames = new LinkedList<String>();
+		
 		for (int i=0;i<App.mClementine.getPlaylists().size();i++) {
 			// Get the Playlsit
 			int key = App.mClementine.getPlaylists().keyAt(i);
@@ -180,9 +185,16 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 		for (int i=0;i< mPagerAdapter.getCount();i++) {
 			PlaylistSongs ps = (PlaylistSongs) mPagerAdapter.getItem(i);
 			
-			if (ps.getAdapter() != null) {
-				ps.updateSongList();
+			if (ps.getAdapter() == null) {
+				continue;
 			}
+			
+			// Check if the playlist still exists
+			if (App.mClementine.getPlaylists().valueAt(i) == null) {
+				continue;
+			}
+			
+			ps.updateSongList();
 		}
 	}
 	
@@ -267,6 +279,11 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
         public void addFragment(Fragment fragment) {
             mFragments.add(fragment);
             notifyDataSetChanged();
+        }
+        
+        public void removeFragment(Fragment fragment) {
+        	mFragments.remove(fragment);
+        	notifyDataSetChanged();
         }
         
         public void removeAllFragments() {
