@@ -5,6 +5,7 @@
   <string name="connectdialog_autoconnect">Connexion automatique</string>
   <string name="connectdialog_clementine_found">Clementine trouvé !</string>
   <string name="connectdialog_connecting">Connexion à Clementine</string>
+  <string name="connectdialog_download_data">Téléchargement des données</string>
   <string name="connectdialog_connected">Connecté</string>
   <string name="connectdialog_error">Impossible de se connecter</string>
   <string name="connectdialog_ip_hint">Saisissez votre adresse IP</string>
@@ -25,7 +26,12 @@
   <string name="menu_search">Recherche</string>
   <string name="pref_volume_title">Utiliser les touches de volume</string>
   <string name="pref_volume_summary">Utiliser les touches de volume pour contrôler le volume de Clementine.</string>
+  <string name="pref_pebble_title">Utiliser Pebble</string>
+  <string name="pref_pebble_summary">Envoyer les métadonnées du morceau courant à l\'application musicale de Pebble.</string>
+  <string name="pref_trackno_title">Afficher le numéro de la piste</string>
+  <string name="pref_trackno_summary">Afficher/cacher le numéro de piste dans les listes de lecture.</string>
   <string name="pref_cat_behavior">Comportement</string>
+  <string name="pref_cat_connection">Connexion</string>
   <string name="pref_cat_info">Information</string>
   <string name="pref_version_summary">Cliquez pour visiter le site web du projet</string>
   <string name="pref_version_title">Version</string>
@@ -48,7 +54,7 @@
   <string name="error_versions">Version incompatible</string>
   <string name="old_proto">Merci de mettre à jour Clementine</string>
   <string name="no_private_ip">Votre téléphone Android a une adresse IP non-locale. Essayez de désactiver « Utiliser seulement les adresses IP locales » dans les préférences de Clementine.</string>
-  <string name="check_ip">1) Est-ce que Clementine est en cours d\'exécution ?\n2) Est-ce le contrôle à distance est activé dans les préférences de Clementine?\n3) Vérifiez que vous avez saisi la bonne adresse IP.</string>
+  <string name="check_ip">1) Est-ce que Clementine est en cours d\'exécution ?\n2) Est-ce le contrôle à distance est activé dans les préférences de Clementine?\n3) Vérifiez que vous avez saisi la bonne adresse IP.\n4) Avez-vous une version de Clementine compatible ? Actuellement, seules les version de développement sont compatibles. Elle peuvent être téléchargées ici : http://builds.clementine-player.org/</string>
   <string name="wifi_disabled">Le Wifi est désactivé. Si vous voulez vous connecter à Clementine via Internet, vérifiez que vous avez redirigé les ports et désactivé « Utiliser seulement les adresses IP locales ».</string>
   <string name="input_auth_code">Code d\'authentication</string>
   <string name="invalid_code">Code invalide</string>
@@ -61,4 +67,16 @@
   <string name="shuffle_all">Aléatoire : tout</string>
   <string name="shuffle_inside_album">Aléatoire : pistes de cet album</string>
   <string name="shuffle_albums">Aléatoire : albums</string>
+  <string name="first_time_title">Bienvenue</string>
+  <string name="first_time_text">Merci d\'utiliser Clementine à distance !\nJ\'espère que cette application vous sera utile.&lt;br&gt;&lt;br&gt;Pour pouvoir l\'utiliser, vous devez avoir une version de Clementine compatible. Actuellement, seules les version de développement sont compatibles. Elle peuvent être téléchargées ici : &lt;a href=\"http://builds.clementine-player.org/\"&gt;ici&lt;/a&gt;. Les versions stables (1.0/1.1) ne sont pas compatibles.</string>
+  <string name="menu_love">J\'aime</string>
+  <string name="menu_ban">Je déteste</string>
+  <string name="track_loved">Piste aimée &lt;3</string>
+  <string name="track_banned">Piste détestée :-(</string>
+  <string name="pref_lastfm_title">Last.fm</string>
+  <string name="pref_lastfm_summary">Activer la possibilité d\'aimer/détester des pistes (nécessite un redémarrage).</string>
+  <string name="pref_lower_volume_title">Baisser le volume</string>
+  <string name="pref_lower_volume_summary">Baisser le volume lors des appels.</string>
+  <string name="pref_call_volume_title">Volume d\'appel</string>
+  <string name="pref_call_volume_summary">Volume d\'appel actuel : %s</string>
 </resources>

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="app_name">Clementine Remote</string>
-  <string name="connectdialog_connect">Verbinde</string>
+  <string name="connectdialog_connect">Verbinden</string>
   <string name="connectdialog_autoconnect">Direkt Verbinden</string>
   <string name="connectdialog_clementine_found">Clementine gefunden!</string>
   <string name="connectdialog_connecting">Verbinde mit Clementine</string>
@@ -28,7 +28,10 @@
   <string name="pref_volume_summary">Nutzte die Lautstärketasten, um die Lautstärke von Clementine zu ändern.</string>
   <string name="pref_pebble_title">Nutze Pebble</string>
   <string name="pref_pebble_summary">Sendet die Metadaten des aktuellen Titels an die Pebble Musikanwendung.</string>
+  <string name="pref_trackno_title">Zeige Titelnummer</string>
+  <string name="pref_trackno_summary">Zeige oder verstecke Titelnummer in der Wiedergabeliste.</string>
   <string name="pref_cat_behavior">Verhalten</string>
+  <string name="pref_cat_connection">Verbindung</string>
   <string name="pref_cat_info">Informationen</string>
   <string name="pref_version_summary">Klicke für Projekt-Webseite</string>
   <string name="pref_version_title">Version</string>
@@ -51,7 +54,7 @@
   <string name="error_versions">Inkompatible Version</string>
   <string name="old_proto">Bitte Clementine updaten!</string>
   <string name="no_private_ip">Dein Android Gerät hat eine nicht lokale IP Addresse. Deaktiviere \"Akzeptiere nur lokale Clients\" in den Clementine Einstellungen.</string>
-  <string name="check_ip">1) Läuft Clementine?\n2) Hast du die Netzwerkfernsteuerung in den Clementine-Einstellungen aktiviert?\n3) Prüfe, ob du die korrekte IP Addresse eingegeben hast.</string>
+  <string name="check_ip">1) Läuft Clementine?\n2) Hast du die Netzwerkfernsteuerung in den Clementine Einstellungen aktiviert?\n3) Hast du die korrekte IP Adresse eingegeben?\n4) Hast du die neuste Clementine Version hier heruntergeladen: http://builds.clementine-player.org/ </string>
   <string name="wifi_disabled">Wifi ist deaktiviert. Wenn du über das Internet Clementine fernsteuern möchtest, stelle sicher, dass du die Ports korrekt weitergeleitet hast und \"Akzeptiere nur lokale Clients\" deaktiviert ist.</string>
   <string name="input_auth_code">Authentifizierungs-Code</string>
   <string name="invalid_code">Ungültiger Code</string>
@@ -64,4 +67,16 @@
   <string name="shuffle_all">Zufällige Titelreihenfolge</string>
   <string name="shuffle_inside_album">Zufällige Titelreihenfolge innerhalb eines Albums</string>
   <string name="shuffle_albums">Zufällige Albenreihenfolge</string>
+  <string name="first_time_title">Willkommen</string>
+  <string name="first_time_text">Vielen Dank für die Nutzung von Clementine Remote!\nIch hoffe, dass die Anwendung nützlich für dich ist. &lt;br&gt;&lt;br&gt;Um die Fernsteuerung zu nutzen musst die neuste Clementine Version von &lt;a href=\"http://builds.clementine-player.org/\"&gt;hier&lt;/a&gt; installieren. Die stabilen Versionen (wie 1.0 / 1.1 / 1.1.1) werden nicht unterstützt!</string>
+  <string name="menu_love">Lieben</string>
+  <string name="menu_ban">Bannen</string>
+  <string name="track_loved">Titel geliebt &lt;3</string>
+  <string name="track_banned">Titel gebannt :-(</string>
+  <string name="pref_lastfm_title">Last.fm</string>
+  <string name="pref_lastfm_summary">Aktivieren, um Titel zu lieben / bannen. (benötigt Neustart der App)</string>
+  <string name="pref_lower_volume_title">Lautstärke verringern</string>
+  <string name="pref_lower_volume_summary">Lautstärke bei eingehenden / ausgehenden Aufruf verringern.</string>
+  <string name="pref_call_volume_title">Läutstärke bei Anruf</string>
+  <string name="pref_call_volume_summary">Aktuelles Lautstärkelevel: %s</string>
 </resources>
