@@ -190,7 +190,7 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 			}
 			
 			// Check if the playlist still exists
-			if (App.mClementine.getPlaylists().valueAt(i) == null) {
+			if (App.mClementine.getPlaylists().get(ps.getPlaylistId()) == null) {
 				continue;
 			}
 			
