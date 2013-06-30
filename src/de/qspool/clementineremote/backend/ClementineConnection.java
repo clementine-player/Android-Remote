@@ -304,7 +304,7 @@ public class ClementineConnection extends Thread {
 			mOut.writeInt(data.length);
 			mOut.write(data);
 			mOut.flush();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// Try to reconnect
 			closeSocket();
 			try {
