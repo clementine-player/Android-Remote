@@ -1,3 +1,7 @@
+Version 6.1
+  Bugfixes:
+    - Fix crash on devices < 3.0 when opening settings
+
 Version 6
   Features:
     - Last.fm: Love and ban tracks
