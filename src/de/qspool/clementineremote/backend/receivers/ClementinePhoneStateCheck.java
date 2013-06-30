@@ -33,7 +33,11 @@ public class ClementinePhoneStateCheck extends BroadcastReceiver {
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		if (App.mApp  == null || App.mClementine == null)
+		if (App.mApp == null
+		 || App.mClementineConnection == null
+		 || App.mClementine           == null
+		 || !App.mClementineConnection.isAlive()
+		 || !App.mClementine.isConnected())
 			return;
 		
 		// Check if we need to change the volume
