@@ -90,7 +90,16 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 	@Override
 	public void onResume() {
 		super.onResume();
-		getPlaylists();
+		// Check if we are still connected
+		if (App.mClementineConnection == null
+		 || App.mClementine           == null
+		 || !App.mClementineConnection.isAlive()
+		 || !App.mClementine.isConnected()) {
+			setResult(ConnectDialog.RESULT_DISCONNECT);
+			finish();
+		} else {
+			getPlaylists();
+		}
 	}
 	
 	private void createPlaylistTabs() {
