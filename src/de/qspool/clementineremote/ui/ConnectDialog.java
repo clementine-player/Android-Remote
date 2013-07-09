@@ -129,9 +129,7 @@ public class ConnectDialog extends SherlockActivity {
 		}
 		
 		// Start the background service
-		mServiceIntent = new Intent(this, ClementineService.class);
-    	mServiceIntent.putExtra(App.SERVICE_ID, App.SERVICE_START);
-    	startService(mServiceIntent);
+		startBackgroundService();
 		
 	    mFirstCall = doAutoConnect;
 	    
@@ -146,7 +144,7 @@ public class ConnectDialog extends SherlockActivity {
 				public void run() {
 					connect();
 				}
-	    	}, 100);
+	    	}, 250);
 	    	
 	    } else {
 	    	mClementineMDns.discoverServices();
@@ -170,12 +168,13 @@ public class ConnectDialog extends SherlockActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
-	    		case R.id.settings:		Intent settingsIntent = new Intent(this, ClementineSettings.class);
-				startActivity(settingsIntent);
-				doAutoConnect = false;
-	            return true;
-	        default:
-	            return super.onOptionsItemSelected(item);
+	    case R.id.settings:		
+	    	Intent settingsIntent = new Intent(this, ClementineSettings.class);
+			startActivity(settingsIntent);
+			doAutoConnect = false;
+	        return true;
+	    default:
+	        return super.onOptionsItemSelected(item);
 	    }
 	}
 	
@@ -185,6 +184,16 @@ public class ConnectDialog extends SherlockActivity {
 		inf.inflate(R.menu.connectdialog_menu, menu);
 		
 		return true;
+	}
+	
+	/**
+	 * Start the background service
+	 */
+	private void startBackgroundService() {
+		// Start the background service
+		mServiceIntent = new Intent(this, ClementineService.class);
+    	mServiceIntent.putExtra(App.SERVICE_ID, App.SERVICE_START);
+    	startService(mServiceIntent);
 	}
 	
 	private void initializeUi() {
