@@ -1,3 +1,10 @@
+Version 6.2
+  Bugfixes:
+    - Fix a nullpointer when receiving a call
+    - Fix a nullpointer when connecting to Clementine
+  Translations:
+    - Added dutch translation
+
 Version 6.1
   Bugfixes:
     - Fix crash on devices < 3.0 when opening settings
