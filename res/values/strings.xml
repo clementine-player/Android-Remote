@@ -79,4 +79,6 @@
     <string name="pref_lower_volume_summary">Lower volume on incoming / outgoing call.</string>
     <string name="pref_call_volume_title">Call volume level</string>
     <string name="pref_call_volume_summary">Current call volume level: %s</string>
+    <string name="player_download_lyrics">Downloading lyrics</string>
+    <string name="player_no_lyrics">No lyrics found.</string>
 </resources>

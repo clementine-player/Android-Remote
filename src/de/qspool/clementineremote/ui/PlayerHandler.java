@@ -24,6 +24,7 @@ import android.os.Handler;
 import de.qspool.clementineremote.backend.elements.Disconnected;
 import de.qspool.clementineremote.backend.elements.NoConnection;
 import de.qspool.clementineremote.backend.elements.Reload;
+import de.qspool.clementineremote.backend.elements.ReloadLyrics;
 import de.qspool.clementineremote.backend.elements.ReloadMetadataChanged;
 import de.qspool.clementineremote.backend.elements.ReloadPlaylistSongs;
 import de.qspool.clementineremote.backend.elements.ReloadPlaylists;
@@ -53,6 +54,8 @@ public class PlayerHandler extends Handler {
 			Reload r = (Reload) msg.obj;
 			pd.reloadInfo(r);
 			pd.reloadPlaylist();
+		} else if (msg.obj instanceof ReloadLyrics) {
+			pd.showLyricsDialog();
 		} else if (msg.obj instanceof Reload) {
 			Reload r = (Reload) msg.obj;
 			pd.reloadInfo(r);

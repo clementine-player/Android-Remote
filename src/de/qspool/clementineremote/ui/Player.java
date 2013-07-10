@@ -266,6 +266,16 @@ public class Player extends SherlockFragmentActivity {
 		}
 	}
 	
+	/**
+	 * Opens a dialog to show the lyrics
+	 */
+	void showLyricsDialog() {
+		// Update the Player Fragment
+		if (mPlayerFragment != null && mPlayerFragment.isInLayout()) {
+			mPlayerFragment.showLyricsDialog();
+		}
+	}
+	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (event.getAction() == KeyEvent.ACTION_DOWN) {

@@ -17,6 +17,9 @@
 
 package de.qspool.clementineremote.backend.player;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import com.google.protobuf.ByteString;
 
 import android.annotation.SuppressLint;
@@ -42,6 +45,7 @@ public class MySong {
 	private int playcount;
 	private Bitmap art;
 	private boolean loved;
+	private List<LyricsProvider> mLyricsProvider = new LinkedList<LyricsProvider>();
 	
 	public boolean equals(MySong song) {
 		if (song.id == this.id
@@ -163,5 +167,9 @@ public class MySong {
 
 	public void setLoved(boolean loved) {
 		this.loved = loved;
+	}
+
+	public List<LyricsProvider> getLyricsProvider() {
+		return mLyricsProvider;
 	}
 }

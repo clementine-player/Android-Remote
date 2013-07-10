@@ -29,6 +29,7 @@ import de.qspool.clementineremote.backend.elements.ClementineElement;
 import de.qspool.clementineremote.backend.elements.Connected;
 import de.qspool.clementineremote.backend.elements.Disconnected;
 import de.qspool.clementineremote.backend.elements.FirstDataReceived;
+import de.qspool.clementineremote.backend.elements.ReloadLyrics;
 import de.qspool.clementineremote.backend.elements.ReloadPlaylistSongs;
 import de.qspool.clementineremote.backend.elements.ReloadControl;
 import de.qspool.clementineremote.backend.elements.ReloadPlaylists;
@@ -39,6 +40,7 @@ import de.qspool.clementineremote.backend.elements.OldProtoVersion;
 import de.qspool.clementineremote.backend.elements.Reload;
 import de.qspool.clementineremote.backend.elements.ReloadMetadataChanged;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.EngineState;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Lyric;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Playlist;
@@ -48,11 +50,13 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Resp
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseClementineInfo;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseCurrentMetadata;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseDisconnect;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseLyrics;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylistSongs;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylists;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseUpdateTrackPosition;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuffle;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata;
+import de.qspool.clementineremote.backend.player.LyricsProvider;
 import de.qspool.clementineremote.backend.player.MyPlaylist;
 import de.qspool.clementineremote.backend.player.MySong;
 
@@ -134,9 +138,31 @@ public class ClementinePbParser {
 			parsedElement = parseRepeat(msg.getRepeat());
 		} else if (msg.getType().equals(MsgType.SHUFFLE)) {
 			parsedElement = parseRandom(msg.getShuffle());
+		} else if (msg.getType().equals(MsgType.LYRICS)) {
+			parsedElement = parseLyrics(msg.getResponseLyrics());
 		}
 		
 		return parsedElement;
+	}
+
+	/**
+	 * Parse the lyrics and save them into the song object
+	 * @param responseLyrics The protocolbuffer message with the lyrics
+	 * @return A new ReloadLyrics object
+	 */
+	private ClementineElement parseLyrics(ResponseLyrics responseLyrics) {
+		// Read all lyric providers
+		for (Lyric lyric : responseLyrics.getLyricsList()) {
+			// Save them into the structure
+			LyricsProvider provider = new LyricsProvider();
+			provider.setId(lyric.getId());
+			provider.setTitle(lyric.getTitle());
+			provider.setContent(lyric.getContent());
+			
+			// And save them into the song
+			App.mClementine.getCurrentSong().getLyricsProvider().add(provider);
+		}
+		return new ReloadLyrics();
 	}
 
 	/**

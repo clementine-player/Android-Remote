@@ -17,6 +17,9 @@
 
 package de.qspool.clementineremote.ui.fragments;
 
+import java.util.List;
+
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.LayoutInflater;
@@ -31,6 +34,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -38,8 +42,10 @@ import com.actionbarsherlock.app.SherlockFragment;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.Clementine;
+import de.qspool.clementineremote.backend.player.LyricsProvider;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.backend.requests.RequestControl;
+import de.qspool.clementineremote.backend.requests.RequestLyrics;
 import de.qspool.clementineremote.backend.requests.RequestControl.Request;
 import de.qspool.clementineremote.utils.Utilities;
 
@@ -67,6 +73,8 @@ public class PlayerFragment extends SherlockFragment {
     private boolean mCoverUpdated = false;
     
     private boolean mFirstCall = true;
+    
+    ProgressDialog mPdDownloadLyrics;
     
     private MySong mCurrentSong = new MySong();
 
@@ -97,6 +105,7 @@ public class PlayerFragment extends SherlockFragment {
 	    mBtnNext.setOnClickListener(oclControl);
 	    mBtnPrev.setOnClickListener(oclControl);
 	    mBtnPlayPause.setOnClickListener(oclControl);
+	    mImgArt.setOnClickListener(oclControl);
 	    
 	    mSbPosition.setOnSeekBarChangeListener(onSeekBarChanged);
 	    
@@ -111,6 +120,10 @@ public class PlayerFragment extends SherlockFragment {
 	    mAlphaDown.setAnimationListener(mAnimationListener);
 	    mAlphaDown.setInterpolator(new AccelerateInterpolator());
 	    mAlphaUp.setInterpolator(new AccelerateInterpolator());
+	    
+	    mPdDownloadLyrics = new ProgressDialog(getActivity());
+	    mPdDownloadLyrics.setMessage(getString(R.string.player_download_lyrics));
+	    mPdDownloadLyrics.setCancelable(true);
 	    
 	    reloadInfo();
 	    
@@ -174,6 +187,10 @@ public class PlayerFragment extends SherlockFragment {
     	mFirstCall = false;
     }
     
+	/**
+	 * Build the current track position. Format: "01:30/3:33"
+	 * @return The current and total track position as a string
+	 */
     private String buildTrackPosition() {
     	StringBuilder sb = new StringBuilder();
     	sb.append(Utilities.PrettyTime(App.mClementine.getSongPosition()));
@@ -182,6 +199,45 @@ public class PlayerFragment extends SherlockFragment {
     	
     	return sb.toString();
     }
+    
+	/**
+	 * Opens a dialog to show the lyrics
+	 */
+	public void showLyricsDialog() {
+		// Only show lyrics dialog, if the user is still waiting for it
+		if (!mPdDownloadLyrics.isShowing())
+			return;
+		
+		// Dismiss the dialog
+		mPdDownloadLyrics.dismiss();
+					
+		// Check for a valid lyric
+		if (mCurrentSong.getLyricsProvider().isEmpty()) {
+			Toast.makeText(getActivity(), R.string.player_no_lyrics, Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
+		// Receive the provider and show the dialog
+		LyricsProvider provider = getBestLyricsProvider(mCurrentSong.getLyricsProvider());
+		
+		// Show the dialog
+		Utilities.ShowMessageDialog(getActivity(), provider.getTitle(), provider.getContent(), false);
+	}
+	
+	/**
+	 * Get the best lyrics provider for this song (currently the one with the most characters
+	 * @param providers A list of lyrics providers
+	 * @return The best possible provider
+	 */
+	private LyricsProvider getBestLyricsProvider(List<LyricsProvider> providers) {		
+		LyricsProvider bestProvider = providers.get(0);
+		for (LyricsProvider lyric : providers) {
+			// For now the provider with the longest lyrics wins
+			if (lyric.getContent().length() > bestProvider.getContent().length())
+				bestProvider = lyric;
+		}
+		return bestProvider;
+	}
 	
 	private OnClickListener oclControl = new OnClickListener() {
 		
@@ -190,12 +246,24 @@ public class PlayerFragment extends SherlockFragment {
 			Message msg = Message.obtain();
 			
 			switch(v.getId()) {
-			case R.id.btnNext: msg.obj = new RequestControl(Request.NEXT);
-							   break;
-			case R.id.btnPrev: msg.obj = new RequestControl(Request.PREV);
-							   break;
-			case R.id.btnPlaypause: msg.obj = new RequestControl(Request.PLAYPAUSE);
-								break;
+			case R.id.btnNext: 
+				msg.obj = new RequestControl(Request.NEXT);
+				break;
+			case R.id.btnPrev: 
+				msg.obj = new RequestControl(Request.PREV);
+				break;
+			case R.id.btnPlaypause: 
+				msg.obj = new RequestControl(Request.PLAYPAUSE);
+				break;
+			case R.id.imgArt:
+				// Shall we download the lyrics or do we have them already downloaded?
+				mPdDownloadLyrics.show();
+				if (mCurrentSong.getLyricsProvider().isEmpty()) {
+					msg.obj = new RequestLyrics();
+				} else {
+					showLyricsDialog();
+				}
+				break;
 		    default: break;
 			}
 			// Send the request to the thread

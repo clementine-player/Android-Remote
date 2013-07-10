@@ -1196,7 +1196,9 @@ containing a value of this type.
         public static final int player_desc_buttons=0x7f0a0010;
         public static final int player_desc_img=0x7f0a000f;
         public static final int player_disconnected=0x7f0a0021;
+        public static final int player_download_lyrics=0x7f0a0062;
         public static final int player_download_playlists=0x7f0a0023;
+        public static final int player_no_lyrics=0x7f0a0063;
         public static final int player_nosong=0x7f0a0020;
         public static final int player_playlist=0x7f0a0022;
         public static final int playler_volume=0x7f0a0024;
