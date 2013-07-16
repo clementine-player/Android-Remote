@@ -36,11 +36,14 @@ import com.actionbarsherlock.view.MenuItem;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.backend.ClementineSongDownloader;
 import de.qspool.clementineremote.backend.elements.Reload;
 import de.qspool.clementineremote.backend.elements.ReloadControl;
 import de.qspool.clementineremote.backend.requests.RequestControl;
 import de.qspool.clementineremote.backend.requests.RequestControl.Request;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
+import de.qspool.clementineremote.backend.requests.RequestDownload;
+import de.qspool.clementineremote.backend.requests.RequestDownload.DownloadType;
 import de.qspool.clementineremote.backend.requests.RequestLoveBan;
 import de.qspool.clementineremote.backend.requests.RequestLoveBan.LastFmType;
 import de.qspool.clementineremote.backend.requests.RequestVolume;
@@ -167,6 +170,16 @@ public class Player extends SherlockFragmentActivity {
 								msg.obj = new RequestLoveBan(LastFmType.BAN);
 								App.mClementineConnection.mHandler.sendMessage(msg);
 								makeToast(R.string.track_banned, Toast.LENGTH_SHORT);
+								break;
+		case R.id.download_song: 
+								ClementineSongDownloader downloaderSong = new ClementineSongDownloader(this, App.downloaders.size());
+								App.downloaders.add(downloaderSong);
+								downloaderSong.execute(new RequestDownload(DownloadType.CURRENT_SONG));
+								break;
+		case R.id.download_album: 
+								ClementineSongDownloader downloaderAlbum = new ClementineSongDownloader(this, App.downloaders.size());
+								App.downloaders.add(downloaderAlbum);
+								downloaderAlbum.execute(new RequestDownload(DownloadType.ALBUM));
 								break;
 		default: break;
 		}

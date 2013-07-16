@@ -7,6 +7,8 @@ import de.qspool.clementineremote.R;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Environment;
+import android.os.StatFs;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
@@ -103,5 +105,14 @@ public class Utilities {
 		} catch (UnknownHostException e) {
 			return null;
 		}
+	}
+	
+	/**
+	 * Get the free space on the device
+	 * @return The free space in byte
+	 */
+	public static double getFreeSpace() { 
+		StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+		return (double) stat.getAvailableBlocks() * (double)stat.getBlockSize();
 	}
 }

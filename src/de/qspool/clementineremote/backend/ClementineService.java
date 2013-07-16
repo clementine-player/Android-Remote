@@ -24,6 +24,7 @@ import de.qspool.clementineremote.backend.elements.Disconnected.DisconnectReason
 import de.qspool.clementineremote.backend.event.OnConnectionClosedListener;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
 import de.qspool.clementineremote.ui.ConnectDialog;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;

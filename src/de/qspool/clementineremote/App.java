@@ -17,14 +17,18 @@
 
 package de.qspool.clementineremote;
 
+import java.util.LinkedList;
+
 import android.app.Application;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementineConnection;
+import de.qspool.clementineremote.backend.ClementineSongDownloader;
 
 public class App extends Application {
 	public static ClementineConnection mClementineConnection = null;
 	public static Clementine mClementine = new Clementine();
 	public static Application mApp;
+	public static LinkedList<ClementineSongDownloader> downloaders = new LinkedList<ClementineSongDownloader>();
 	
 	public final static int NOTIFY_ID = 78923748;
 	public final static String SERVICE_ID = "ServiceIntentId";
@@ -32,6 +36,8 @@ public class App extends Application {
 	public final static int SERVICE_START = 1;
 	public final static int SERVICE_CONNECTED = 2;
 	public final static int SERVICE_DISCONNECTED = 3;
+	
+	public final static String NOTIFICATION_ID = "NotificationID";
 		
 	// Keys for SharedPrefences
 	public final static String SP_KEY_IP = "save_clementine_ip";

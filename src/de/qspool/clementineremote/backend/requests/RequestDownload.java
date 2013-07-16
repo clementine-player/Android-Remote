@@ -17,44 +17,26 @@
 
 package de.qspool.clementineremote.backend.requests;
 
-public class RequestConnect extends RequestToThread {
+public class RequestDownload extends RequestToThread {
 
-	private String mIp;
-	private int mPort;
-	private int mAuthCode;
-	private boolean mRequestPlaylistSongs;
-	private boolean mDownloader;
+	public enum DownloadType {CURRENT_SONG, ALBUM, PLAYLIST};
+	private DownloadType mType;
+	private int mPlaylistId;
 	
-	public RequestConnect(String ip, int port, int authCode, boolean requestPlaylistSongs, boolean downloader) {
+	public RequestDownload(DownloadType type) {
 		super();
-		mIp = ip;
-		mPort = port;
-		mAuthCode = authCode;
-		mRequestPlaylistSongs = requestPlaylistSongs;
-		mDownloader = downloader;
+		mType = type;
 	}
 
-	public String getIp() {
-		return mIp;
+	public DownloadType getType() {
+		return mType;
 	}
 
-	public int getPort() {
-		return mPort;
+	public int getPlaylistId() {
+		return mPlaylistId;
 	}
 
-	public int getAuthCode() {
-		return mAuthCode;
-	}
-	
-	public boolean getRequestPlaylistSongs() {
-		return mRequestPlaylistSongs;
-	}
-	
-	public boolean getDownloader() {
-		return mDownloader;
-	}
-	
-	public void setRequestPlaylistSongs(boolean requestFirstData) {
-		mRequestPlaylistSongs = requestFirstData;
+	public void setPlaylistId(int mPlaylistId) {
+		this.mPlaylistId = mPlaylistId;
 	}
 }

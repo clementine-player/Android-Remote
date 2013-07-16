@@ -46,6 +46,8 @@ public class MySong {
 	private Bitmap art;
 	private boolean loved;
 	private List<LyricsProvider> mLyricsProvider = new LinkedList<LyricsProvider>();
+	private String filename;
+	private int size;
 	
 	public boolean equals(MySong song) {
 		if (song.id == this.id
@@ -171,5 +173,21 @@ public class MySong {
 
 	public List<LyricsProvider> getLyricsProvider() {
 		return mLyricsProvider;
+	}
+
+	public String getFilename() {
+		return filename;
+	}
+
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
 	}
 }

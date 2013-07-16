@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -213,6 +214,10 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 	        case android.R.id.home:
 	            finish();
 	            return true;
+	        case R.id.settings:		
+	        	Intent settingsIntent = new Intent(this, ClementineSettings.class);
+				startActivity(settingsIntent);
+				return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }

@@ -20,6 +20,8 @@ package de.qspool.clementineremote.backend.pb;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.util.Log;
+
 import com.google.protobuf.InvalidProtocolBufferException;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.Clementine;
@@ -34,6 +36,7 @@ import de.qspool.clementineremote.backend.elements.ReloadPlaylistSongs;
 import de.qspool.clementineremote.backend.elements.ReloadControl;
 import de.qspool.clementineremote.backend.elements.ReloadPlaylists;
 import de.qspool.clementineremote.backend.elements.ReloadTrackPosition;
+import de.qspool.clementineremote.backend.elements.SongFileChunk;
 import de.qspool.clementineremote.backend.elements.Disconnected.DisconnectReason;
 import de.qspool.clementineremote.backend.elements.InvalidData;
 import de.qspool.clementineremote.backend.elements.OldProtoVersion;
@@ -53,6 +56,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Resp
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseLyrics;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylistSongs;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylists;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongFileChunk;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseUpdateTrackPosition;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuffle;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata;
@@ -86,6 +90,7 @@ public class ClementinePbParser {
 			}
 		} catch (InvalidProtocolBufferException e) {
 			msg = null;
+			Log.d("Parser", "InvalidProtocolBufferException");
 			parsedElement = new InvalidData();
 		}
 		
@@ -140,9 +145,33 @@ public class ClementinePbParser {
 			parsedElement = parseRandom(msg.getShuffle());
 		} else if (msg.getType().equals(MsgType.LYRICS)) {
 			parsedElement = parseLyrics(msg.getResponseLyrics());
+		} else if (msg.getType().equals(MsgType.SONG_FILE_CHUNK)) {
+			parsedElement = parseFileChunk(msg.getResponseSongFileChunk());
 		}
 		
 		return parsedElement;
+	}
+
+	/**
+	 * Parse a song file chunk
+	 * @param responseSongFileChunk The chunk
+	 * @return The Clementine Element
+	 */
+	private ClementineElement parseFileChunk(
+			ResponseSongFileChunk responseSongFileChunk) {
+		MySong song = null;
+		if (responseSongFileChunk.hasSongMetadata())
+			song = copySongMetadata(responseSongFileChunk.getSongMetadata());
+		
+		SongFileChunk chunk = new SongFileChunk(
+				responseSongFileChunk.getChunkNumber(),
+				responseSongFileChunk.getChunkCount(),
+				responseSongFileChunk.getFileNumber(),
+				responseSongFileChunk.getFileCount(),
+				song,
+				responseSongFileChunk.getData().toByteArray(),
+				responseSongFileChunk.getSize());
+		return chunk;
 	}
 
 	/**
@@ -213,6 +242,8 @@ public class ClementinePbParser {
 		song.setTrack (songMetadata.getTrack());
 		song.setDisc  (songMetadata.getDisc());
 		song.setPlaycount(songMetadata.getPlaycount());
+		song.setFilename(songMetadata.getFilename());
+		song.setSize(songMetadata.getFileSize());
 		if (songMetadata.hasArt()) {
 			song.setArt   (songMetadata.getArt());
 		}
@@ -263,6 +294,9 @@ public class ClementinePbParser {
 		case ReasonDisconnect.Wrong_Auth_Code_VALUE:
 			 disconnected = new Disconnected(DisconnectReason.WRONG_AUTH_CODE);
 		     break;
+		case ReasonDisconnect.Download_Forbidden_VALUE:
+			 disconnected = new Disconnected(DisconnectReason.DOWNLOAD_FORBIDDEN);
+			 break;
 		default: disconnected = new Disconnected(DisconnectReason.SERVER_CLOSE);
 				 break;
 		}

@@ -4,7 +4,9 @@
 	        android:actionViewClass="com.actionbarsherlock.widget.SearchView"
 	        android:icon="@android:drawable/ic_menu_search"
 	        android:showAsAction="ifRoom|collapseActionView"
-	        android:title="@string/menu_search">
-	  </item>
-
+	        android:title="@string/menu_search"></item>
+    <item android:id="@+id/settings"
+          android:title="@string/menu_settings"
+          android:showAsAction="ifRoom|withText"
+          android:icon="@drawable/ab_settings"></item>
 </menu>

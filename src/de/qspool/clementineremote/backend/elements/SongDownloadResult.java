@@ -17,17 +17,17 @@
 
 package de.qspool.clementineremote.backend.elements;
 
-public class Disconnected extends ClementineElement {
-	public static enum DisconnectReason {CLIENT_CLOSE, SERVER_CLOSE, WRONG_PROTO, WRONG_AUTH_CODE, KEEP_ALIVE, DOWNLOAD_FORBIDDEN}; 
-
-	private DisconnectReason mReason;
+public class SongDownloadResult extends ClementineElement {
+	public enum DownloadResult {SUCCESSFUL, INSUFFIANT_SPACE, NOT_MOUNTED, CONNECTION_ERROR, FOBIDDEN};
 	
-	public Disconnected(DisconnectReason reason) {
-		super();
-		mReason = reason;
+	private DownloadResult mResult;
+	
+	public SongDownloadResult(DownloadResult result) {
+		mResult = result;
 	}
-
-	public DisconnectReason getReason() {
-		return mReason;
+	  
+	public DownloadResult getResult() {
+		return mResult;
 	}
+	
 }

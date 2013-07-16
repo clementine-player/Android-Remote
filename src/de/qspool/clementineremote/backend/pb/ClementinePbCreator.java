@@ -18,10 +18,12 @@
 package de.qspool.clementineremote.backend.pb;
 
 import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message.Builder;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Repeat;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestDownloadSongs;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestPlaylistSongs;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestSetTrackPosition;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestSetVolume;
@@ -33,6 +35,7 @@ import de.qspool.clementineremote.backend.requests.RequestConnect;
 import de.qspool.clementineremote.backend.requests.RequestControl;
 import de.qspool.clementineremote.backend.requests.RequestControl.Request;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
+import de.qspool.clementineremote.backend.requests.RequestDownload;
 import de.qspool.clementineremote.backend.requests.RequestLoveBan;
 import de.qspool.clementineremote.backend.requests.RequestLoveBan.LastFmType;
 import de.qspool.clementineremote.backend.requests.RequestLyrics;
@@ -112,10 +115,38 @@ public class ClementinePbCreator {
 			
 		} else if (r instanceof RequestLyrics) {
 			msg.setType(MsgType.GET_LYRICS);
+		} else if (r instanceof RequestDownload) {
+			msg.setType(MsgType.DOWNLOAD_SONGS);
+			msg.setRequestDownloadSongs(buildDownloadSongsMessage(msg, (RequestDownload) r));
 		}
 		Message m = msg.build();
 		
 		return m.toByteArray();
+	}
+	
+	/**
+	 * Create a download song message
+	 * @param msg The message itself
+	 * @param r The download request
+	 * @return The built request
+	 */
+	private RequestDownloadSongs.Builder buildDownloadSongsMessage(Message.Builder msg, RequestDownload r) {
+		RequestDownloadSongs.Builder request = msg.getRequestDownloadSongsBuilder();
+		request.setPlaylistId(r.getPlaylistId());
+		
+		switch (r.getType()) {
+		case ALBUM:
+			request.setDownloadItem(DownloadItem.ItemAlbum);
+			break;
+		case CURRENT_SONG:
+			request.setDownloadItem(DownloadItem.CurrentItem);
+			break;
+		case PLAYLIST:
+			request.setDownloadItem(DownloadItem.APlaylist);
+			break;
+		}
+		
+		return request;
 	}
 
 	/**
@@ -143,6 +174,7 @@ public class ClementinePbCreator {
 		
 		requestConnect.setAuthCode(r.getAuthCode());
 		requestConnect.setSendPlaylistSongs(r.getRequestPlaylistSongs());
+		requestConnect.setDownloader(r.getDownloader());
 		
 		return requestConnect;
 	}
