@@ -93,6 +93,7 @@
     <string name="download_noti_insufficient_space">Insufficient space, aborting download.</string>
     <string name="download_noti_forbidden">Download forbidden. Activate in Clementine settings.</string>
     <string name="download_noti_not_mounted">No storage device found, aborting download.</string>
+    <string name="download_noti_only_wifi">Download only on wifi allowed.</string>
     <string name="pref_dl_wifi_only_title">WiFi only</string>
     <string name="pref_dl_wifi_only_summary">Download songs only when connected to a wifi network.</string>
 </resources>

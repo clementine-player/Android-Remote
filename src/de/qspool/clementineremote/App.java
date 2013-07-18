@@ -51,4 +51,5 @@ public class App extends Application {
 	public final static String SP_LASTFM = "pref_show_lastfm";
 	public final static String SP_LOWER_VOLUME = "pref_lower_volume";
 	public final static String SP_CALL_VOLUME="pref_call_volume";
+	public final static String SP_WIFI_ONLY="pref_dl_wifi_only";
 }

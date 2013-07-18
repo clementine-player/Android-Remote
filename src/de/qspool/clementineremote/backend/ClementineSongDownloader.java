@@ -91,6 +91,9 @@ public class ClementineSongDownloader extends
 		if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
 			return new SongDownloadResult(SongDownloadResult.DownloadResult.NOT_MOUNTED);
 		
+		if (mSharedPref.getBoolean(App.SP_WIFI_ONLY, false) && !Utilities.onWifi(mContext))
+			return new SongDownloadResult(SongDownloadResult.DownloadResult.ONLY_WIFI);
+		
 		// First create a connection
 		if (!connect())
 			return new SongDownloadResult(SongDownloadResult.DownloadResult.CONNECTION_ERROR);
@@ -150,6 +153,9 @@ public class ClementineSongDownloader extends
 				break;
 			case NOT_MOUNTED:
 				mBuilder.setContentText(mContext.getText(R.string.download_noti_not_mounted));
+				break;
+			case ONLY_WIFI:
+				mBuilder.setContentText(mContext.getText(R.string.download_noti_only_wifi));
 				break;
 			case SUCCESSFUL:
 				mBuilder.setContentTitle(mContext.getText(R.string.download_noti_complete));

@@ -7,6 +7,8 @@ import de.qspool.clementineremote.R;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Environment;
 import android.os.StatFs;
 import android.text.Html;
@@ -114,5 +116,16 @@ public class Utilities {
 	public static double getFreeSpace() { 
 		StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
 		return (double) stat.getAvailableBlocks() * (double)stat.getBlockSize();
+	}
+	
+	/**
+	 * Is the device connceted to a wifi network?
+	 * @return true if connected to a wifi network
+	 */
+	public static boolean onWifi(Context context) {
+		ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+		return mWifi.isConnected();
 	}
 }

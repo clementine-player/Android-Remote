@@ -18,7 +18,7 @@
 package de.qspool.clementineremote.backend.elements;
 
 public class SongDownloadResult extends ClementineElement {
-	public enum DownloadResult {SUCCESSFUL, INSUFFIANT_SPACE, NOT_MOUNTED, CONNECTION_ERROR, FOBIDDEN};
+	public enum DownloadResult {SUCCESSFUL, INSUFFIANT_SPACE, NOT_MOUNTED, CONNECTION_ERROR, FOBIDDEN, ONLY_WIFI};
 	
 	private DownloadResult mResult;
 	
