@@ -52,4 +52,5 @@ public class App extends Application {
 	public final static String SP_LOWER_VOLUME = "pref_lower_volume";
 	public final static String SP_CALL_VOLUME="pref_call_volume";
 	public final static String SP_WIFI_ONLY="pref_dl_wifi_only";
+	public final static String SP_DOWNLOAD_DIR="pref_dl_dir";
 }

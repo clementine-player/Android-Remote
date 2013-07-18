@@ -1186,6 +1186,7 @@ containing a value of this type.
         public static final int download_noti_only_wifi=0x7f0a0070;
         public static final int download_noti_title=0x7f0a006a;
         public static final int error_versions=0x7f0a0048;
+        public static final int file_dialog_set_dir=0x7f0a0074;
         public static final int first_time_text=0x7f0a0059;
         public static final int first_time_title=0x7f0a0058;
         public static final int gpl=0x7f0a0013;
@@ -1227,6 +1228,7 @@ containing a value of this type.
         public static final int pref_cat_player=0x7f0a0032;
         public static final int pref_clementine_summary=0x7f0a0043;
         public static final int pref_clementine_title=0x7f0a0042;
+        public static final int pref_dl_dir=0x7f0a0073;
         public static final int pref_dl_wifi_only_summary=0x7f0a0072;
         public static final int pref_dl_wifi_only_title=0x7f0a0071;
         public static final int pref_lastfm_summary=0x7f0a005f;

@@ -17,11 +17,14 @@
 
 package de.qspool.clementineremote.ui;
 
+import java.io.File;
+
 import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -56,6 +59,8 @@ public class ClementineSettings extends SherlockPreferenceActivity
 	private Dialog mCustomDialog;
 	private EditTextPreference mPortPreference;
 	private ListPreference mCallVolume;
+	private FileDialog mFileDialog;
+	private Preference mDownloadDir;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,6 +74,7 @@ public class ClementineSettings extends SherlockPreferenceActivity
         mLicenseDialogPreference = (Preference) getPreferenceScreen().findPreference("pref_key_license");
         mAboutDialogPreference = (Preference) getPreferenceScreen().findPreference("pref_key_about");
         mVersion = (Preference) getPreferenceScreen().findPreference("pref_version");
+        mDownloadDir = (Preference) getPreferenceScreen().findPreference(App.SP_DOWNLOAD_DIR);
         
         // Get the Version
         try {
@@ -96,9 +102,26 @@ public class ClementineSettings extends SherlockPreferenceActivity
 		// Set the onclicklistener for the dialogs
         mLicenseDialogPreference.setOnPreferenceClickListener(opclLicense);
         mAboutDialogPreference.setOnPreferenceClickListener(opclAbout);
+        mDownloadDir.setOnPreferenceClickListener(opclDownloadDir );
         
         // Register Listener
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        
+        // Create dialog
+        String defaultPath = Environment.getExternalStorageDirectory() + "//ClementineMusic";
+        String path = sharedPreferences.getString(App.SP_DOWNLOAD_DIR, defaultPath);
+        File mPath = new File(path);
+        mFileDialog = new FileDialog(this, mPath);
+        mFileDialog.addDirectoryListener(new FileDialog.DirectorySelectedListener() {
+          public void directorySelected(File directory) {
+        	  SharedPreferences.Editor editor = getPreferenceScreen().getSharedPreferences().edit();
+				editor.putString(App.SP_DOWNLOAD_DIR, directory.getAbsolutePath());
+				editor.commit();
+				mDownloadDir.setSummary(directory.getAbsolutePath());
+          }
+        });
+        mFileDialog.setSelectDirectoryOption(true);
+        mDownloadDir.setSummary(path);
     }
 	
 	@Override
@@ -190,6 +213,15 @@ public class ClementineSettings extends SherlockPreferenceActivity
 				}
 			});
 			mCustomDialog.show();
+			return true;
+		}
+	};
+	
+	private OnPreferenceClickListener opclDownloadDir = new OnPreferenceClickListener() {
+		
+		@Override
+		public boolean onPreferenceClick(Preference preference) {
+			mFileDialog.showDialog();
 			return true;
 		}
 	};

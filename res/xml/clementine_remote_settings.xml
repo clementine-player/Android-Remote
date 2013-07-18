@@ -43,6 +43,9 @@
 	            android:title="@string/pref_dl_wifi_only_title"
 	            android:summary="@string/pref_dl_wifi_only_summary"
 	            android:defaultValue="false"/>
+	        <Preference 
+	            android:key="pref_dl_dir"
+	            android:title="@string/pref_dl_dir" />
 	    </PreferenceScreen>
 	  </PreferenceCategory>
     <PreferenceCategory android:title="@string/pref_cat_connection">

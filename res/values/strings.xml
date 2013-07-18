@@ -96,4 +96,6 @@
     <string name="download_noti_only_wifi">Download only on wifi allowed.</string>
     <string name="pref_dl_wifi_only_title">WiFi only</string>
     <string name="pref_dl_wifi_only_summary">Download songs only when connected to a wifi network.</string>
+    <string name="pref_dl_dir">Set download folder</string>
+    <string name="file_dialog_set_dir">Select directory</string>
 </resources>
