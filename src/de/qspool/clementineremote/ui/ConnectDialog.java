@@ -111,6 +111,8 @@ public class ConnectDialog extends SherlockActivity {
     	
 	    setContentView(R.layout.connectdialog);
 	    
+	    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+	    
 	    // Create a progress dialog
 	    mPdConnect = new ProgressDialog(this);
 	    mPdConnect.setCancelable(true);

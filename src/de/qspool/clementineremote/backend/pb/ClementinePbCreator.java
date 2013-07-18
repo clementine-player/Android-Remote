@@ -39,6 +39,7 @@ import de.qspool.clementineremote.backend.requests.RequestDownload;
 import de.qspool.clementineremote.backend.requests.RequestLoveBan;
 import de.qspool.clementineremote.backend.requests.RequestLoveBan.LastFmType;
 import de.qspool.clementineremote.backend.requests.RequestLyrics;
+import de.qspool.clementineremote.backend.requests.RequestNextSong;
 import de.qspool.clementineremote.backend.requests.RequestPlaylistSong;
 import de.qspool.clementineremote.backend.requests.RequestVolume;
 import de.qspool.clementineremote.backend.requests.RequestToThread;
@@ -118,6 +119,8 @@ public class ClementinePbCreator {
 		} else if (r instanceof RequestDownload) {
 			msg.setType(MsgType.DOWNLOAD_SONGS);
 			msg.setRequestDownloadSongs(buildDownloadSongsMessage(msg, (RequestDownload) r));
+		} else if (r instanceof RequestNextSong) {
+			msg.setType(MsgType.SEND_NEXT_SONG);
 		}
 		Message m = msg.build();
 		

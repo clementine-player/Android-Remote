@@ -46,6 +46,7 @@ import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.backend.requests.RequestConnect;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
 import de.qspool.clementineremote.backend.requests.RequestDownload;
+import de.qspool.clementineremote.backend.requests.RequestNextSong;
 import de.qspool.clementineremote.ui.ConnectDialog;
 import de.qspool.clementineremote.utils.Utilities;
 
@@ -265,6 +266,10 @@ public class ClementineSongDownloader extends
 						
 						f = null;
 						ignoreSong = true;
+						
+						// Request new track
+						mClient.sendRequest(new RequestNextSong());
+						
 						continue;
 					}
 					
@@ -290,6 +295,9 @@ public class ClementineSongDownloader extends
 					fo.flush();
 					fo.close();
 					f = null;
+					
+					// Request new track
+					mClient.sendRequest(new RequestNextSong());
 					
 					// Check if we have downloaded all files
 					if (chunk.getFileCount() == chunk.getFileNumber())
