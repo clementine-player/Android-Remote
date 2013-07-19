@@ -5,6 +5,9 @@
 	        android:icon="@android:drawable/ic_menu_search"
 	        android:showAsAction="ifRoom|collapseActionView"
 	        android:title="@string/menu_search"></item>
+        <item android:id="@+id/download_playlist"
+          android:title="@string/playlist_download_playlist"
+          android:showAsAction="ifRoom"></item>
     <item android:id="@+id/settings"
           android:title="@string/menu_settings"
           android:showAsAction="ifRoom|withText"

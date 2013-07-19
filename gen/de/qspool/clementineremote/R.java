@@ -1018,6 +1018,7 @@ containing a value of this type.
         public static final int disableHome=0x7f050009;
         public static final int disconnect=0x7f050068;
         public static final int download_album=0x7f050067;
+        public static final int download_playlist=0x7f05006a;
         public static final int download_song=0x7f050066;
         public static final int edit_query=0x7f050027;
         public static final int etAuthCode=0x7f050042;

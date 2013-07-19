@@ -127,7 +127,8 @@ public class ConnectDialog extends SherlockActivity {
 			int i = getIntent().getIntExtra(App.NOTIFICATION_ID, -1);
 			// Check if the asynctask is running
 			if (i != -1
-			 && App.downloaders.size() >= i
+			 && App.downloaders != null
+			 && App.downloaders.get(i) != null
 			 && App.downloaders.get(i).getStatus() == AsyncTask.Status.RUNNING) {
 				App.downloaders.get(i).cancel(true);
 			}

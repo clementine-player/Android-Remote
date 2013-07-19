@@ -41,8 +41,11 @@ import com.actionbarsherlock.widget.SearchView;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.backend.ClementineSongDownloader;
 import de.qspool.clementineremote.backend.player.MyPlaylist;
+import de.qspool.clementineremote.backend.requests.RequestDownload;
 import de.qspool.clementineremote.backend.requests.RequestPlaylistSong;
+import de.qspool.clementineremote.backend.requests.RequestDownload.DownloadType;
 import de.qspool.clementineremote.ui.fragments.PlaylistSongs;
 
 public class Playlists extends SherlockFragmentActivity implements ActionBar.TabListener {
@@ -214,6 +217,16 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 	        case android.R.id.home:
 	            finish();
 	            return true;
+	        case R.id.download_playlist: 
+				ClementineSongDownloader downloaderAlbum = new ClementineSongDownloader(this, App.downloaders.size());
+				App.downloaders.add(downloaderAlbum);
+				// Get the playlist id and download the playlist
+				RequestDownload request = new RequestDownload(DownloadType.PLAYLIST);
+				int tabpos = getSupportActionBar().getSelectedTab().getPosition();
+				PlaylistSongs ps = (PlaylistSongs) mPagerAdapter.getItem(tabpos);
+				request.setPlaylistId(ps.getPlaylistId());
+				downloaderAlbum.execute(request);
+				return true;
 	        case R.id.settings:		
 	        	Intent settingsIntent = new Intent(this, ClementineSettings.class);
 				startActivity(settingsIntent);
