@@ -36,7 +36,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.app.NotificationCompat.Builder;
-import android.util.Log;
 import android.widget.Toast;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
@@ -104,7 +103,6 @@ public class ClementineSongDownloader extends
 	    
 	    // Add this downloader to list
 	    App.downloaders.put(mId, this);
-	    Log.d("Downloader ID", String.valueOf(mId));
 	}
 	
 	public void startDownload(RequestDownload r) {
@@ -150,7 +148,6 @@ public class ClementineSongDownloader extends
 		}
         // Displays the progress bar for the first time.
         mNotifyManager.notify(mId, mBuilder.build());
-        Log.d("Downloader ID update", String.valueOf(mId));
     }
 	
 	@Override

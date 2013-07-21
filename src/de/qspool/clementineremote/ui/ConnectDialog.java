@@ -39,7 +39,6 @@ import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -126,7 +125,6 @@ public class ConnectDialog extends SherlockActivity {
 	    // would not shown when disconnecting
 		if (getIntent().hasExtra(App.NOTIFICATION_ID)) {
 			int i = getIntent().getIntExtra(App.NOTIFICATION_ID, -1);
-			Log.d("Downloader ID remove", String.valueOf(i));
 			// Check if the asynctask is running
 			if (i != -1
 			 && App.downloaders != null
