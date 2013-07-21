@@ -66,7 +66,7 @@ public class ClementineService extends Service {
 		case App.SERVICE_START:
 			// Create a new instance
 			if (App.mClementineConnection == null) {
-				App.mClementineConnection = new ClementineConnection();
+				App.mClementineConnection = new ClementinePlayerConnection();
 	
 				setupNotification(true);
 				App.mClementineConnection.setNotificationBuilder(mNotifyBuilder);

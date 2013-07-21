@@ -17,34 +17,8 @@
 
 package de.qspool.clementineremote.backend;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.SocketAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
-
-import de.qspool.clementineremote.App;
-import de.qspool.clementineremote.R;
-import de.qspool.clementineremote.backend.elements.ClementineElement;
-import de.qspool.clementineremote.backend.elements.Disconnected;
-import de.qspool.clementineremote.backend.elements.Disconnected.DisconnectReason;
-import de.qspool.clementineremote.backend.elements.InvalidData;
-import de.qspool.clementineremote.backend.elements.NoConnection;
-import de.qspool.clementineremote.backend.elements.OldProtoVersion;
-import de.qspool.clementineremote.backend.elements.Reload;
-import de.qspool.clementineremote.backend.event.OnConnectionClosedListener;
-import de.qspool.clementineremote.backend.pb.ClementinePbCreator;
-import de.qspool.clementineremote.backend.pb.ClementinePbParser;
-import de.qspool.clementineremote.backend.pebble.Pebble;
-import de.qspool.clementineremote.backend.player.MySong;
-import de.qspool.clementineremote.backend.receivers.ClementineMediaButtonEventReceiver;
-import de.qspool.clementineremote.backend.requests.CheckForData;
-import de.qspool.clementineremote.backend.requests.RequestConnect;
-import de.qspool.clementineremote.backend.requests.RequestDisconnect;
-import de.qspool.clementineremote.backend.requests.RequestToThread;
 
 import android.annotation.TargetApi;
 import android.app.NotificationManager;
@@ -55,38 +29,50 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
+import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaMetadataRetriever;
 import android.media.RemoteControlClient;
-import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.RemoteControlClient.MetadataEditor;
 import android.os.Build;
-import android.os.Looper;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
+import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.backend.elements.ClementineElement;
+import de.qspool.clementineremote.backend.elements.Disconnected;
+import de.qspool.clementineremote.backend.elements.Disconnected.DisconnectReason;
+import de.qspool.clementineremote.backend.elements.InvalidData;
+import de.qspool.clementineremote.backend.elements.NoConnection;
+import de.qspool.clementineremote.backend.elements.OldProtoVersion;
+import de.qspool.clementineremote.backend.elements.Reload;
+import de.qspool.clementineremote.backend.event.OnConnectionClosedListener;
+import de.qspool.clementineremote.backend.pebble.Pebble;
+import de.qspool.clementineremote.backend.player.MySong;
+import de.qspool.clementineremote.backend.receivers.ClementineMediaButtonEventReceiver;
+import de.qspool.clementineremote.backend.requests.CheckForData;
+import de.qspool.clementineremote.backend.requests.RequestConnect;
+import de.qspool.clementineremote.backend.requests.RequestDisconnect;
+import de.qspool.clementineremote.backend.requests.RequestToThread;
 
 /**
  * This Thread-Class is used to communicate with Clementine
  */
-public class ClementineConnection extends Thread {
+public class ClementinePlayerConnection extends ClementineSimpleConnection
+										  implements Runnable {
 	public ClementineConnectionHandler mHandler;
 	
 	private final int DELAY_MILLIS = 250;
-	private final String TAG = "ClementineConnection";
 	private final long KEEP_ALIVE_TIMEOUT = 25000; // 25 Second timeout
 	private final int MAX_RECONNECTS = 5;
 	
-	private int mLeftReconnects;
-	
-	private Socket mClient;
-	private DataInputStream mIn;
-	private DataOutputStream mOut;
+	private Thread mThread;
 	private Handler mUiHandler;
+	
+	private int mLeftReconnects;
 	private long mLastKeepAlive;
-	private ClementinePbCreator mClementinePbCreator;
-	private ClementinePbParser mClementinePbParser;
 	
 	private NotificationCompat.Builder mNotifyBuilder;
 	private NotificationManager mNotificationManager;
@@ -106,6 +92,17 @@ public class ClementineConnection extends Thread {
 	
 	private Pebble mPebble;
 	
+	public ClementinePlayerConnection() {
+		mThread = new Thread(this);
+	}
+	
+	/**
+	 * Start the thread
+	 */
+	public void start() {
+		mThread.start();
+	}
+	
 	/**
 	 * Add a new listener for closed connections
 	 * @param listener The listener object
@@ -114,11 +111,8 @@ public class ClementineConnection extends Thread {
 		mListeners.add(listener);
 	}
 
-	@Override
 	public void run() {
 		// Start the thread
-		mClementinePbCreator = new ClementinePbCreator();
-		mClementinePbParser  = new ClementinePbParser();
 		mNotificationManager = (NotificationManager) App.mApp.getSystemService(Context.NOTIFICATION_SERVICE);
 		
 		Looper.prepare();
@@ -149,75 +143,55 @@ public class ClementineConnection extends Thread {
 	 * Try to connect to Clementine
 	 * @param r The Request Object. Stores the ip to connect to.
 	 */
-	void createConnection(RequestConnect r) {
+	@Override
+	public boolean createConnection(RequestConnect r) {
+		boolean connected = false;
 		// Reset the connected flag
 		App.mClementine.setConnected(false);
 		mLastKeepAlive = 0;
 		
-		try {
-			// Now try to connect and set the input and output streams
-			createSocket(r);
+		// Now try to connect and set the input and output streams
+		connected = super.createConnection(r);
+		
+		// Check if Clementine dropped the connection.
+		// Is possible when we connect from a public ip and clementine rejects it
+		if (connected && !mSocket.isClosed()) {
+			// Enter the main loop in the thread
+			Message msg = Message.obtain();
+			msg.obj = new CheckForData();
+			mHandler.sendMessage(msg);
 			
-			// Check if Clementine dropped the connection.
-			// Is possible when we connect from a public ip and clementine rejects it
-			if (!mClient.isClosed()) {
-				// Enter the main loop in the thread
-				Message msg = Message.obtain();
-				msg.obj = new CheckForData();
-				mHandler.sendMessage(msg);
-				
-				// Now we are connected
-				App.mClementine.setConnected(true);
-				mLastSong = null;
-				mLastState = App.mClementine.getState();
-				
-				// Setup the MediaButtonReceiver and the RemoteControlClient
-				registerRemoteControlClient();
-				
-				updateNotification();
-				
-				// save the request for potential reconnect
-				mRequestConnect = r;
-				
-				// The device shall be awake
-				mWakeLock.acquire();
-				
-				// We can now reconnect MAX_RECONNECTS times when
-				// we get a keep alive timeout
-				mLeftReconnects = MAX_RECONNECTS;
-				
-				// Set the current time to last keep alive
-				setLastKeepAlive(System.currentTimeMillis());
-				
-				// Until we get a new connection request from ui,
-				// don't request the first data a second time
-				r.setRequestPlaylistSongs(false);
-			}
-		} catch(UnknownHostException e) {
-			// If we can't connect, then tell that the ui-thread 
+			// Now we are connected
+			App.mClementine.setConnected(true);
+			mLastSong = null;
+			mLastState = App.mClementine.getState();
+			
+			// Setup the MediaButtonReceiver and the RemoteControlClient
+			registerRemoteControlClient();
+			
+			updateNotification();
+			
+			// save the request for potential reconnect
+			mRequestConnect = r;
+			
+			// The device shall be awake
+			mWakeLock.acquire();
+			
+			// We can now reconnect MAX_RECONNECTS times when
+			// we get a keep alive timeout
+			mLeftReconnects = MAX_RECONNECTS;
+			
+			// Set the current time to last keep alive
+			setLastKeepAlive(System.currentTimeMillis());
+			
+			// Until we get a new connection request from ui,
+			// don't request the first data a second time
+			r.setRequestPlaylistSongs(false);
+		} else {
 			sendUiMessage(new NoConnection());
-			Log.d(TAG, "Unknown host: " + r.getIp());
-		} catch(IOException e) {
-			sendUiMessage(new NoConnection());
-			Log.d(TAG, "No I/O");
 		}
-	}
-	
-	/**
-	 * Create a new Socket and the i/o streams
-	 * @param r The Request with the ip and port
-	 * @throws IOException If we cannot connect or open the streams
-	 */
-	private void createSocket(RequestConnect r) throws IOException {
-		SocketAddress socketAddress = new InetSocketAddress(r.getIp(), r.getPort());
-		mClient = new Socket();
-		mClient.connect(socketAddress, 3000);
 		
-		mIn  = new DataInputStream(mClient.getInputStream());
-		mOut = new DataOutputStream(mClient.getOutputStream());
-		
-		// Send the connect request to clementine
-		sendRequest(r);
+		return connected;
 	}
 	
 	/**
@@ -230,10 +204,7 @@ public class ClementineConnection extends Thread {
 				checkKeepAlive();
 			} else {
 				// Otherwise read the data and parse it
-				int len = mIn.readInt();
-				byte[] data = new byte[len];
-				mIn.readFully(data, 0, len);
-				processProtocolBuffer(data);
+				processProtocolBuffer(getProtoc());
 			}
 		} catch (IOException e) {
 			sendUiMessage(new InvalidData());
@@ -251,10 +222,7 @@ public class ClementineConnection extends Thread {
 	 * Process the received protocol buffer
 	 * @param bs The binary representation of the protocol buffer
 	 */
-	private void processProtocolBuffer(byte[] bs) {
-		// Send the parsed Message to the ui thread
-		ClementineElement clementineElement = mClementinePbParser.parse(bs);
-		
+	private void processProtocolBuffer(ClementineElement clementineElement) {		
 		// Close the connection if we have an old proto verion
 		if (clementineElement instanceof OldProtoVersion) {
 			closeConnection(new Disconnected(DisconnectReason.WRONG_PROTO));
@@ -296,48 +264,40 @@ public class ClementineConnection extends Thread {
 	/**
 	 * Send a request to clementine
 	 * @param r The request as a RequestToThread object
+	 * @return true if data was sent, false if not
 	 */
-	void sendRequest(RequestToThread r) {
-		// Create the protocolbuffer
-		byte[] data = mClementinePbCreator.createRequest(r);
-		try {
-			mOut.writeInt(data.length);
-			mOut.write(data);
-			mOut.flush();
-		} catch (Exception e) {
-			// Try to reconnect
-			closeSocket();
-			try {
-				createSocket(mRequestConnect);
-			} catch (IOException e1) {
+	@Override
+	public boolean sendRequest(RequestToThread r) {
+		// Send the request to Clementine
+		boolean ret = super.sendRequest(r);
+		
+		// If we lost connection, try to reconnect
+		if (!ret) {
+			ret = super.createConnection(mRequestConnect);
+			if (!ret) {
+				// Failed. Close connection
 				closeConnection(new Disconnected(DisconnectReason.SERVER_CLOSE));
 			}
 		}
+		
+		return ret;
 	}
 	
 	/**
 	 * Disconnect from Clementine
 	 * @param r The RequestDisconnect Object
 	 */
-	void disconnect(RequestDisconnect r) {
+	@Override
+	public void disconnect(RequestDisconnect r) {
 		if (App.mClementine.isConnected()) {
 			// Set the Connected flag to false, so the loop in
 			// checkForData() is interrupted
 			App.mClementine.setConnected(false);
 			
-			// Send the disconnect message to clementine
-			byte[] data = mClementinePbCreator.createRequest(r);
+			super.disconnect(r);
 			
-			try {
-				// Now send the data
-				mOut.writeInt(data.length);
-				mOut.write(data);
-				mOut.flush();
-				
-				// and close the connection
-				closeConnection(new Disconnected(DisconnectReason.CLIENT_CLOSE));
-			} catch (IOException e) {	
-			}
+			// and close the connection
+			closeConnection(new Disconnected(DisconnectReason.CLIENT_CLOSE));
 		}
 			
 		// Send the result to the ui thread
@@ -348,6 +308,9 @@ public class ClementineConnection extends Thread {
 	 * Close the socket and the streams
 	 */
 	private void closeConnection(Disconnected disconnected) {
+		// Disconnect socket
+		closeSocket();
+		
 		// Cancel Notification
 		mNotificationManager.cancel(App.NOTIFY_ID);
 
@@ -357,9 +320,6 @@ public class ClementineConnection extends Thread {
 		
 		mWakeLock.release();
 		
-		// Disconnect socket
-		closeSocket();
-		
 		sendUiMessage(disconnected);
 		
 		// Close thread
@@ -367,19 +327,6 @@ public class ClementineConnection extends Thread {
 		
 		// Fire the listener
 		fireOnConnectionClosed(disconnected);
-	}
-	
-	/**
-	 * Close the socket and the in and out streams
-	 */
-	private void closeSocket() {
-		try {
-			mClient.close();
-			mIn.close();
-			mOut.close();
-		} catch (IOException e) {
-		}
-		
 	}
 	
 	/**
@@ -403,20 +350,20 @@ public class ClementineConnection extends Thread {
 	/**
 	 * Check the keep alive timeout.
 	 * If we reached the timeout, we can assume, that we lost the connection
+	 * @returns Is the connection still active?
 	 */
 	private void checkKeepAlive() {
 		if (mLastKeepAlive > 0 && (System.currentTimeMillis() - mLastKeepAlive) > KEEP_ALIVE_TIMEOUT ) {
 			// Check if we shall reconnect
 			while (mLeftReconnects > 0) {
-				try {
-					closeSocket();
-					createSocket(mRequestConnect);
+				closeSocket();
+				if (super.createConnection(mRequestConnect)) {
 					mLeftReconnects = MAX_RECONNECTS;
 					break;
-				} catch (IOException e) {
-					mLeftReconnects--;
 				}
-			} 
+				
+				mLeftReconnects--;
+			}
 			
 			// We tried, but the server isn't there anymore
 			if (mLeftReconnects == 0) {
@@ -539,6 +486,18 @@ public class ClementineConnection extends Thread {
 			editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, mLastSong.getTitle());
 			editor.apply();
 		}
+	}
+	
+	/**
+	 * Is the thread still alive?
+	 * @return A boolean indicating the status
+	 */
+	public boolean isAlive() {
+		return mThread.isAlive();
+	}
+	
+	public void join() throws InterruptedException {
+		mThread.join();
 	}
 	
 	private OnAudioFocusChangeListener mOnAudioFocusChangeListener = new OnAudioFocusChangeListener() {

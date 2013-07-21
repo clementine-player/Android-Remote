@@ -30,15 +30,15 @@ import de.qspool.clementineremote.backend.requests.RequestToThread;
  * This class receives the handler messages from the ui thread
  */
 public class ClementineConnectionHandler extends Handler {
-	WeakReference<ClementineConnection> mClementineConnection;
+	WeakReference<ClementinePlayerConnection> mClementineConnection;
 	
-	public ClementineConnectionHandler(ClementineConnection c) {
-		mClementineConnection = new WeakReference<ClementineConnection>(c);
+	public ClementineConnectionHandler(ClementinePlayerConnection c) {
+		mClementineConnection = new WeakReference<ClementinePlayerConnection>(c);
 	}
 
 	@Override
 	public void handleMessage(Message msg) {
-		ClementineConnection myClementineConnection = mClementineConnection.get();
+		ClementinePlayerConnection myClementineConnection = mClementineConnection.get();
 		
         // Act on the message
     	RequestToThread r = (RequestToThread) msg.obj;

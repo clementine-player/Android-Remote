@@ -35,9 +35,13 @@ import de.qspool.clementineremote.backend.requests.RequestConnect;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
 import de.qspool.clementineremote.backend.requests.RequestToThread;
 
-public class ClementineSimpleConnection extends Socket {
-	private DataInputStream mIn;
-	private DataOutputStream mOut;
+public class ClementineSimpleConnection {
+	// Socket, input and output streams
+	protected Socket mSocket;
+	protected DataInputStream mIn;
+	protected DataOutputStream mOut;
+	
+	// Protocol buffer data
 	private ClementinePbCreator mClementinePbCreator = new ClementinePbCreator();
 	private ClementinePbParser mClementinePbParser = new ClementinePbParser();
 	
@@ -48,10 +52,11 @@ public class ClementineSimpleConnection extends Socket {
 	 */
 	public boolean createConnection(RequestConnect r) {
 		SocketAddress socketAddress = new InetSocketAddress(r.getIp(), r.getPort());
+		mSocket = new Socket();
 		try {
-			connect(socketAddress, 3000);
-			mIn  = new DataInputStream(getInputStream());
-			mOut = new DataOutputStream(getOutputStream());
+			mSocket.connect(socketAddress, 3000);
+			mIn  = new DataInputStream(mSocket.getInputStream());
+			mOut = new DataOutputStream(mSocket.getOutputStream());
 			
 			// Send the connect request to clementine
 			sendRequest(r);
@@ -65,6 +70,7 @@ public class ClementineSimpleConnection extends Socket {
 	/**
 	 * Send a request to clementine
 	 * @param r The request as a RequestToThread object
+	 * @return true if data was sent, false if not
 	 */
 	public boolean sendRequest(RequestToThread r) {
 		// Create the protocolbuffer
@@ -82,35 +88,18 @@ public class ClementineSimpleConnection extends Socket {
 	}
 	
 	/**
-	 * Get the raw protocol buffer message
+	 * Get the raw protocol buffer message. This function blocks until data is 
+	 * available!
+	 * @returns The parsed protocol buffer
 	 */
 	public ClementineElement getProtoc() {
 		ClementineElement element = new InvalidData();
-		int secondsToWait = 30;
-		
 		try {
-			// If there is no data, then check the keep alive timeout
-			while (mIn.available() == 0) {
-				secondsToWait--;
-				if (secondsToWait == 0) {
-					Log.d("getProtoc", "Timeout");
-					break;
-				}
-				
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-				}
-			}
-			
-			if (secondsToWait > 0) {
-				// Read the data and return it
-				int len = mIn.readInt();
-				byte[] data = new byte[len];
-				mIn.readFully(data, 0, len);
-				element = mClementinePbParser.parse(data);
-			}
-			
+			// Read the data and return it
+			int len = mIn.readInt();
+			byte[] data = new byte[len];
+			mIn.readFully(data, 0, len);
+			element = mClementinePbParser.parse(data);
 		} catch (IOException e) {
 			Log.d("getProtoc", "IOException");
 		}
@@ -133,10 +122,8 @@ public class ClementineSimpleConnection extends Socket {
 				mOut.write(data);
 				mOut.flush();
 				
-				// Do not close the connection, Clementine will do this!
-				//closeSocket();
+				closeSocket();
 			} catch (IOException e) {
-				Log.d("disconnect", "IOException");
 			}
 		}
 	}
@@ -144,7 +131,7 @@ public class ClementineSimpleConnection extends Socket {
 	/**
 	 * Close the socket and the in and out streams
 	 */
-	private void closeSocket() {
+	protected void closeSocket() {
 		try {
 			mOut.close();
 		} catch (IOException e) {
