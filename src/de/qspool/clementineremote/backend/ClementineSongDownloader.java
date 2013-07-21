@@ -46,6 +46,7 @@ import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.backend.requests.RequestConnect;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
 import de.qspool.clementineremote.backend.requests.RequestDownload;
+import de.qspool.clementineremote.backend.requests.RequestDownload.DownloadType;
 import de.qspool.clementineremote.backend.requests.RequestNextSong;
 import de.qspool.clementineremote.ui.ConnectDialog;
 import de.qspool.clementineremote.utils.Utilities;
@@ -63,9 +64,19 @@ public class ClementineSongDownloader extends
 	private int mFileCount;
 	private int mCurrentFile;
 	
+	private int mPlaylistId;
+	
+	private boolean isPlaylist = false;
+	private boolean createPlaylistDir = false;
+	private boolean createPlaylistArtistDir = false;
+	
 	public ClementineSongDownloader(Context context, int id) {
 		mContext = context;
 		mSharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
+		
+		// Get preferences
+		createPlaylistDir = mSharedPref.getBoolean(App.SP_DOWNLOAD_SAVE_OWN_DIR, false);
+		createPlaylistArtistDir = mSharedPref.getBoolean(App.SP_DOWNLOAD_PLAYLIST_CRT_ARTIST_DIR, false);
 		
 		mId = id;
 		
@@ -212,6 +223,12 @@ public class ClementineSongDownloader extends
     	File f = null;
     	FileOutputStream fo = null;
     	
+    	// Do we have a playlist?
+    	isPlaylist = (r.getType() == DownloadType.PLAYLIST);
+    	if (isPlaylist) {
+    		mPlaylistId = r.getPlaylistId();
+    	}
+    	
     	publishProgress(0);
     	
 		// Now request the songs
@@ -352,12 +369,25 @@ public class ClementineSongDownloader extends
     	StringBuilder sb = new StringBuilder();
     	sb.append(path);
     	sb.append(File.separator);
-    	if (chunk.getSongMetadata().getAlbumartist().isEmpty())
-    		sb.append(chunk.getSongMetadata().getArtist());
-    	else
-    		sb.append(chunk.getSongMetadata().getAlbumartist());
-    	sb.append(File.separator);
-    	sb.append(chunk.getSongMetadata().getAlbum());
+    	if (isPlaylist && createPlaylistDir) {
+    		sb.append(App.mClementine.getPlaylists().get(mPlaylistId).getName());
+    		sb.append(File.separator);
+    	}
+    	
+    	// Create artist/album subfolder only when we have no playlist
+    	// or user set the settings
+    	if (!isPlaylist ||
+    		isPlaylist && createPlaylistDir && createPlaylistArtistDir) {
+    		// Append artist name
+	    	if (chunk.getSongMetadata().getAlbumartist().isEmpty())
+	    		sb.append(chunk.getSongMetadata().getArtist());
+	    	else
+	    		sb.append(chunk.getSongMetadata().getAlbumartist());
+	    	
+	    	// append album
+	    	sb.append(File.separator);
+    		sb.append(chunk.getSongMetadata().getAlbum());
+    	}
     	
     	return sb.toString();
     }
