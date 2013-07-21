@@ -20,6 +20,7 @@ package de.qspool.clementineremote.backend;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Random;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -27,12 +28,15 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.app.NotificationCompat.Builder;
+import android.util.Log;
 import android.widget.Toast;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
@@ -70,7 +74,7 @@ public class ClementineSongDownloader extends
 	private boolean createPlaylistDir = false;
 	private boolean createPlaylistArtistDir = false;
 	
-	public ClementineSongDownloader(Context context, int id) {
+	public ClementineSongDownloader(Context context) {
 		mContext = context;
 		mSharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
 		
@@ -78,7 +82,10 @@ public class ClementineSongDownloader extends
 		createPlaylistDir = mSharedPref.getBoolean(App.SP_DOWNLOAD_SAVE_OWN_DIR, false);
 		createPlaylistArtistDir = mSharedPref.getBoolean(App.SP_DOWNLOAD_PLAYLIST_CRT_ARTIST_DIR, false);
 		
-		mId = id;
+		// Get a new id
+		do {
+			mId = new Random().nextInt();
+		} while (mId <= 0 || App.downloaders.get(mId) != null);
 		
 		// Show a toast that the download is starting
 		Toast.makeText(mContext, R.string.player_howto_cancel, Toast.LENGTH_SHORT).show();
@@ -94,6 +101,17 @@ public class ClementineSongDownloader extends
 	    mBuilder.setContentIntent(buildNotificationIntent());
 	    
 	    mBuilder.setPriority(Notification.PRIORITY_LOW);
+	    
+	    // Add this downloader to list
+	    App.downloaders.put(mId, this);
+	    Log.d("Downloader ID", String.valueOf(mId));
+	}
+	
+	public void startDownload(RequestDownload r) {
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+	        this.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, r);
+	    else
+	        this.execute(r);
 	}
 
 	@Override
@@ -132,6 +150,7 @@ public class ClementineSongDownloader extends
 		}
         // Displays the progress bar for the first time.
         mNotifyManager.notify(mId, mBuilder.build());
+        Log.d("Downloader ID update", String.valueOf(mId));
     }
 	
 	@Override
@@ -186,6 +205,7 @@ public class ClementineSongDownloader extends
 		Intent resultIntent = new Intent(App.mApp, ConnectDialog.class);
 	    resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 	    resultIntent.putExtra(App.NOTIFICATION_ID, mId);
+	    resultIntent.setData(Uri.parse("ClemetineDownload" + mId));
 	    
 	    // Create a TaskStack, so the app navigates correctly backwards
 	    TaskStackBuilder stackBuilder = TaskStackBuilder.create(App.mApp);
@@ -235,6 +255,20 @@ public class ClementineSongDownloader extends
 		mClient.sendRequest(r);
 		
 		while (!downloadFinished) {
+			// Check if the user canceled the process
+			if (isCancelled()) {
+				// Close the stream and delete the incomplete file
+				try {
+					if (fo != null) {
+						fo.flush();
+						fo.close();
+					}
+					if (f != null) f.delete();
+				} catch (IOException e) {}
+				
+				break;
+			}
+			
 			// Get the raw protocol buffer
 			ClementineElement element = mClient.getProtoc();
 			
@@ -303,15 +337,6 @@ public class ClementineSongDownloader extends
 				
 				// Write chunk to sdcard
 				fo.write(chunk.getData());
-				
-				// Check if the user canceled the process
-				if (isCancelled()) {
-					// Close the stream and delete the incomplete file
-					fo.flush();
-					fo.close();
-					f.delete();
-					break;
-				}
 				
 				// Have we downloaded all chunks?
 				if (chunk.getChunkCount() == chunk.getChunkNumber()) {

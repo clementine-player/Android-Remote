@@ -218,14 +218,13 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 	            finish();
 	            return true;
 	        case R.id.download_playlist: 
-				ClementineSongDownloader downloaderAlbum = new ClementineSongDownloader(this, App.downloaders.size());
-				App.downloaders.add(downloaderAlbum);
+				ClementineSongDownloader downloaderAlbum = new ClementineSongDownloader(this);
 				// Get the playlist id and download the playlist
 				RequestDownload request = new RequestDownload(DownloadType.PLAYLIST);
 				int tabpos = getSupportActionBar().getSelectedTab().getPosition();
 				PlaylistSongs ps = (PlaylistSongs) mPagerAdapter.getItem(tabpos);
 				request.setPlaylistId(ps.getPlaylistId());
-				downloaderAlbum.execute(request);
+				downloaderAlbum.startDownload(request);
 				return true;
 	        case R.id.settings:		
 	        	Intent settingsIntent = new Intent(this, ClementineSettings.class);

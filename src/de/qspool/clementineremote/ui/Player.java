@@ -172,14 +172,12 @@ public class Player extends SherlockFragmentActivity {
 								makeToast(R.string.track_banned, Toast.LENGTH_SHORT);
 								break;
 		case R.id.download_song: 
-								ClementineSongDownloader downloaderSong = new ClementineSongDownloader(this, App.downloaders.size());
-								App.downloaders.add(downloaderSong);
-								downloaderSong.execute(new RequestDownload(DownloadType.CURRENT_SONG));
+								ClementineSongDownloader downloaderSong = new ClementineSongDownloader(this);
+								downloaderSong.startDownload(new RequestDownload(DownloadType.CURRENT_SONG));
 								break;
 		case R.id.download_album: 
-								ClementineSongDownloader downloaderAlbum = new ClementineSongDownloader(this, App.downloaders.size());
-								App.downloaders.add(downloaderAlbum);
-								downloaderAlbum.execute(new RequestDownload(DownloadType.ALBUM));
+								ClementineSongDownloader downloaderAlbum = new ClementineSongDownloader(this);
+								downloaderAlbum.startDownload(new RequestDownload(DownloadType.ALBUM));
 								break;
 		default: break;
 		}
