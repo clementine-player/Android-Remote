@@ -82,6 +82,8 @@ public class ClementinePbCreator {
 							break;
 			case STOP: 		msg.setType(MsgType.STOP);
 							break;
+			case STOP_AFTER: msg.setType(MsgType.STOP_AFTER);
+							break;
 			case NEXT: 		msg.setType(MsgType.NEXT);
 							break;
 			case PREV: 		msg.setType(MsgType.PREVIOUS);

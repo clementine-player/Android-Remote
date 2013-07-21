@@ -25,6 +25,7 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -106,6 +107,7 @@ public class PlayerFragment extends SherlockFragment {
 	    mBtnPrev.setOnClickListener(oclControl);
 	    mBtnPlayPause.setOnClickListener(oclControl);
 	    mImgArt.setOnClickListener(oclControl);
+	    mBtnPlayPause.setOnLongClickListener(olclControl);
 	    
 	    mSbPosition.setOnSeekBarChangeListener(onSeekBarChanged);
 	    
@@ -268,6 +270,28 @@ public class PlayerFragment extends SherlockFragment {
 			}
 			// Send the request to the thread
 			App.mClementineConnection.mHandler.sendMessage(msg);
+		}
+	};
+	
+	private OnLongClickListener olclControl = new OnLongClickListener() {
+		
+		@Override
+		public boolean onLongClick(View v) {
+			boolean ret = false;
+			Message msg = Message.obtain();
+			
+			switch(v.getId()) {
+			case R.id.btnPlaypause:
+				Toast.makeText(getActivity(), R.string.player_stop_after_current, Toast.LENGTH_SHORT).show();
+				msg.obj = new RequestControl(Request.STOP_AFTER);
+				ret = true;
+				break;
+			default:
+				break;
+			}
+			
+			App.mClementineConnection.mHandler.sendMessage(msg);
+			return ret;
 		}
 	};
 	

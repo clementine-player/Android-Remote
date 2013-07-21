@@ -26,27 +26,28 @@ public final class ClementineRemoteProtocolBuffer {
     SEND_NEXT_SONG(13, 16),
     LOVE(14, 12),
     BAN(15, 13),
-    DISCONNECT(16, 2),
-    PLAY(17, 20),
-    PLAYPAUSE(18, 21),
-    PAUSE(19, 22),
-    STOP(20, 23),
-    NEXT(21, 24),
-    PREVIOUS(22, 25),
-    SHUFFLE_PLAYLIST(23, 26),
-    REPEAT(24, 27),
-    SHUFFLE(25, 28),
-    INFO(26, 40),
-    CURRENT_METAINFO(27, 41),
-    PLAYLISTS(28, 42),
-    PLAYLIST_SONGS(29, 43),
-    ENGINE_STATE_CHANGED(30, 44),
-    KEEP_ALIVE(31, 45),
-    UPDATE_TRACK_POSITION(32, 46),
-    ACTIVE_PLAYLIST_CHANGED(33, 47),
-    FIRST_DATA_SENT_COMPLETE(34, 48),
-    LYRICS(35, 49),
-    SONG_FILE_CHUNK(36, 50),
+    STOP_AFTER(16, 17),
+    DISCONNECT(17, 2),
+    PLAY(18, 20),
+    PLAYPAUSE(19, 21),
+    PAUSE(20, 22),
+    STOP(21, 23),
+    NEXT(22, 24),
+    PREVIOUS(23, 25),
+    SHUFFLE_PLAYLIST(24, 26),
+    REPEAT(25, 27),
+    SHUFFLE(26, 28),
+    INFO(27, 40),
+    CURRENT_METAINFO(28, 41),
+    PLAYLISTS(29, 42),
+    PLAYLIST_SONGS(30, 43),
+    ENGINE_STATE_CHANGED(31, 44),
+    KEEP_ALIVE(32, 45),
+    UPDATE_TRACK_POSITION(33, 46),
+    ACTIVE_PLAYLIST_CHANGED(34, 47),
+    FIRST_DATA_SENT_COMPLETE(35, 48),
+    LYRICS(36, 49),
+    SONG_FILE_CHUNK(37, 50),
     ;
     
     public static final int UNKNOWN_VALUE = 0;
@@ -65,6 +66,7 @@ public final class ClementineRemoteProtocolBuffer {
     public static final int SEND_NEXT_SONG_VALUE = 16;
     public static final int LOVE_VALUE = 12;
     public static final int BAN_VALUE = 13;
+    public static final int STOP_AFTER_VALUE = 17;
     public static final int DISCONNECT_VALUE = 2;
     public static final int PLAY_VALUE = 20;
     public static final int PLAYPAUSE_VALUE = 21;
@@ -108,6 +110,7 @@ public final class ClementineRemoteProtocolBuffer {
         case 16: return SEND_NEXT_SONG;
         case 12: return LOVE;
         case 13: return BAN;
+        case 17: return STOP_AFTER;
         case 2: return DISCONNECT;
         case 20: return PLAY;
         case 21: return PLAYPAUSE;
@@ -159,7 +162,7 @@ public final class ClementineRemoteProtocolBuffer {
     }
     
     private static final MsgType[] VALUES = {
-      UNKNOWN, CONNECT, REQUEST_PLAYLISTS, REQUEST_PLAYLIST_SONGS, CHANGE_SONG, SET_VOLUME, SET_TRACK_POSITION, INSERT_URLS, REMOVE_SONGS, OPEN_PLAYLIST, CLOSE_PLAYLIST, GET_LYRICS, DOWNLOAD_SONGS, SEND_NEXT_SONG, LOVE, BAN, DISCONNECT, PLAY, PLAYPAUSE, PAUSE, STOP, NEXT, PREVIOUS, SHUFFLE_PLAYLIST, REPEAT, SHUFFLE, INFO, CURRENT_METAINFO, PLAYLISTS, PLAYLIST_SONGS, ENGINE_STATE_CHANGED, KEEP_ALIVE, UPDATE_TRACK_POSITION, ACTIVE_PLAYLIST_CHANGED, FIRST_DATA_SENT_COMPLETE, LYRICS, SONG_FILE_CHUNK, 
+      UNKNOWN, CONNECT, REQUEST_PLAYLISTS, REQUEST_PLAYLIST_SONGS, CHANGE_SONG, SET_VOLUME, SET_TRACK_POSITION, INSERT_URLS, REMOVE_SONGS, OPEN_PLAYLIST, CLOSE_PLAYLIST, GET_LYRICS, DOWNLOAD_SONGS, SEND_NEXT_SONG, LOVE, BAN, STOP_AFTER, DISCONNECT, PLAY, PLAYPAUSE, PAUSE, STOP, NEXT, PREVIOUS, SHUFFLE_PLAYLIST, REPEAT, SHUFFLE, INFO, CURRENT_METAINFO, PLAYLISTS, PLAYLIST_SONGS, ENGINE_STATE_CHANGED, KEEP_ALIVE, UPDATE_TRACK_POSITION, ACTIVE_PLAYLIST_CHANGED, FIRST_DATA_SENT_COMPLETE, LYRICS, SONG_FILE_CHUNK, 
     };
     
     public static MsgType valueOf(
@@ -17037,35 +17040,36 @@ public final class ClementineRemoteProtocolBuffer {
       "anged\0222\n\017response_lyrics\030\036 \001(\0132\031.pb.remo" +
       "te.ResponseLyrics\022B\n\030response_song_file_" +
       "chunk\030  \001(\0132 .pb.remote.ResponseSongFile" +
-      "Chunk*\215\005\n\007MsgType\022\013\n\007UNKNOWN\020\000\022\013\n\007CONNEC",
+      "Chunk*\235\005\n\007MsgType\022\013\n\007UNKNOWN\020\000\022\013\n\007CONNEC",
       "T\020\001\022\025\n\021REQUEST_PLAYLISTS\020\003\022\032\n\026REQUEST_PL" +
       "AYLIST_SONGS\020\004\022\017\n\013CHANGE_SONG\020\005\022\016\n\nSET_V" +
       "OLUME\020\006\022\026\n\022SET_TRACK_POSITION\020\007\022\017\n\013INSER" +
       "T_URLS\020\010\022\020\n\014REMOVE_SONGS\020\t\022\021\n\rOPEN_PLAYL" +
       "IST\020\n\022\022\n\016CLOSE_PLAYLIST\020\013\022\016\n\nGET_LYRICS\020" +
       "\016\022\022\n\016DOWNLOAD_SONGS\020\017\022\022\n\016SEND_NEXT_SONG\020" +
-      "\020\022\010\n\004LOVE\020\014\022\007\n\003BAN\020\r\022\016\n\nDISCONNECT\020\002\022\010\n\004" +
-      "PLAY\020\024\022\r\n\tPLAYPAUSE\020\025\022\t\n\005PAUSE\020\026\022\010\n\004STOP" +
-      "\020\027\022\010\n\004NEXT\020\030\022\014\n\010PREVIOUS\020\031\022\024\n\020SHUFFLE_PL" +
-      "AYLIST\020\032\022\n\n\006REPEAT\020\033\022\013\n\007SHUFFLE\020\034\022\010\n\004INF",
-      "O\020(\022\024\n\020CURRENT_METAINFO\020)\022\r\n\tPLAYLISTS\020*" +
-      "\022\022\n\016PLAYLIST_SONGS\020+\022\030\n\024ENGINE_STATE_CHA" +
-      "NGED\020,\022\016\n\nKEEP_ALIVE\020-\022\031\n\025UPDATE_TRACK_P" +
-      "OSITION\020.\022\033\n\027ACTIVE_PLAYLIST_CHANGED\020/\022\034" +
-      "\n\030FIRST_DATA_SENT_COMPLETE\0200\022\n\n\006LYRICS\0201" +
-      "\022\023\n\017SONG_FILE_CHUNK\0202*;\n\013EngineState\022\t\n\005" +
-      "Empty\020\000\022\010\n\004Idle\020\001\022\013\n\007Playing\020\002\022\n\n\006Paused" +
-      "\020\003*U\n\nRepeatMode\022\016\n\nRepeat_Off\020\000\022\020\n\014Repe" +
-      "at_Track\020\001\022\020\n\014Repeat_Album\020\002\022\023\n\017Repeat_P" +
-      "laylist\020\003*\\\n\013ShuffleMode\022\017\n\013Shuffle_Off\020",
-      "\000\022\017\n\013Shuffle_All\020\001\022\027\n\023Shuffle_InsideAlbu" +
-      "m\020\002\022\022\n\016Shuffle_Albums\020\003*k\n\020ReasonDisconn" +
-      "ect\022\023\n\017Server_Shutdown\020\001\022\023\n\017Wrong_Auth_C" +
-      "ode\020\002\022\025\n\021Not_Authenticated\020\003\022\026\n\022Download" +
-      "_Forbidden\020\004*=\n\014DownloadItem\022\017\n\013CurrentI" +
-      "tem\020\001\022\r\n\tItemAlbum\020\002\022\r\n\tAPlaylist\020\003BG\n%d" +
-      "e.qspool.clementineremote.backend.pbB\036Cl" +
-      "ementineRemoteProtocolBuffer"
+      "\020\022\010\n\004LOVE\020\014\022\007\n\003BAN\020\r\022\016\n\nSTOP_AFTER\020\021\022\016\n\n" +
+      "DISCONNECT\020\002\022\010\n\004PLAY\020\024\022\r\n\tPLAYPAUSE\020\025\022\t\n" +
+      "\005PAUSE\020\026\022\010\n\004STOP\020\027\022\010\n\004NEXT\020\030\022\014\n\010PREVIOUS" +
+      "\020\031\022\024\n\020SHUFFLE_PLAYLIST\020\032\022\n\n\006REPEAT\020\033\022\013\n\007",
+      "SHUFFLE\020\034\022\010\n\004INFO\020(\022\024\n\020CURRENT_METAINFO\020" +
+      ")\022\r\n\tPLAYLISTS\020*\022\022\n\016PLAYLIST_SONGS\020+\022\030\n\024" +
+      "ENGINE_STATE_CHANGED\020,\022\016\n\nKEEP_ALIVE\020-\022\031" +
+      "\n\025UPDATE_TRACK_POSITION\020.\022\033\n\027ACTIVE_PLAY" +
+      "LIST_CHANGED\020/\022\034\n\030FIRST_DATA_SENT_COMPLE" +
+      "TE\0200\022\n\n\006LYRICS\0201\022\023\n\017SONG_FILE_CHUNK\0202*;\n" +
+      "\013EngineState\022\t\n\005Empty\020\000\022\010\n\004Idle\020\001\022\013\n\007Pla" +
+      "ying\020\002\022\n\n\006Paused\020\003*U\n\nRepeatMode\022\016\n\nRepe" +
+      "at_Off\020\000\022\020\n\014Repeat_Track\020\001\022\020\n\014Repeat_Alb" +
+      "um\020\002\022\023\n\017Repeat_Playlist\020\003*\\\n\013ShuffleMode",
+      "\022\017\n\013Shuffle_Off\020\000\022\017\n\013Shuffle_All\020\001\022\027\n\023Sh" +
+      "uffle_InsideAlbum\020\002\022\022\n\016Shuffle_Albums\020\003*" +
+      "k\n\020ReasonDisconnect\022\023\n\017Server_Shutdown\020\001" +
+      "\022\023\n\017Wrong_Auth_Code\020\002\022\025\n\021Not_Authenticat" +
+      "ed\020\003\022\026\n\022Download_Forbidden\020\004*=\n\014Download" +
+      "Item\022\017\n\013CurrentItem\020\001\022\r\n\tItemAlbum\020\002\022\r\n\t" +
+      "APlaylist\020\003BG\n%de.qspool.clementineremot" +
+      "e.backend.pbB\036ClementineRemoteProtocolBu" +
+      "ffer"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

@@ -1215,6 +1215,7 @@ containing a value of this type.
         public static final int player_no_lyrics=0x7f0a0065;
         public static final int player_nosong=0x7f0a0020;
         public static final int player_playlist=0x7f0a0022;
+        public static final int player_stop_after_current=0x7f0a0075;
         public static final int playler_volume=0x7f0a0024;
         public static final int playlist_download_playlist=0x7f0a0068;
         public static final int playlist_search_hint=0x7f0a0025;
