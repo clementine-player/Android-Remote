@@ -56,7 +56,7 @@
     <string name="error_versions">Incompatible version</string>
     <string name="old_proto">Please update Clementine!</string>
     <string name="no_private_ip">Your Android device has a non local ip address. Try disabling \"Use only local ip addresses\" in the Clementine settings.</string>
-    <string name="check_ip">1) Is Clementine running?\n2) Did you enable the network remote in the Clementine settings?\n3) Check if you entered the correct ip address.\n4) Have you downloaded the newest Clementine build from here: http://builds.clementine-player.org/ </string>
+    <string name="check_ip">1) Is Clementine running?\n2) Are you using Clementine 1.2 or higher?\n3) Did you enable the network remote in the Clementine settings?\n4) Check if you entered the correct ip address.\n</string>
     <string name="wifi_disabled">Wifi is disabled. If you want to connect to Clementine via internet make sure you forwarded the ports correctly and you have disabled \"Use only local ip addresses\"".</string>
     <string name="input_auth_code">Authentication Code</string>
     <string name="invalid_code">Invalid Code</string>
@@ -70,7 +70,7 @@
     <string name="shuffle_inside_album">Shuffle tracks in this album</string>
     <string name="shuffle_albums">Shuffle albums</string>
     <string name="first_time_title">Welcome</string>
-    <string name="first_time_text">Thank you for using Clementine Remote!\nI hope this app will be useful for you.&lt;br>&lt;br>In order to use this remote app you have to download and install the newest Clementine build from &lt;a href=\"http://builds.clementine-player.org/\">here&lt;/a>. The stable version (like 1.0 / 1.1 / 1.1.1) doesn\'t support it yet!</string>
+    <string name="first_time_text">Thank you for using Clementine Remote!\nI hope this app will be useful for you.&lt;br>&lt;br>In order to use this remote app you have to download and install Clementine 1.2 or higher from &lt;a href=\"http://www.clementine-player.org/downloads\">here&lt;/a>.</string>
     <string name="menu_love">Love</string>
     <string name="menu_ban">Ban</string>
     <string name="track_loved">Track loved &lt;3</string>
