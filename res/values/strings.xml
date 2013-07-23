@@ -97,6 +97,7 @@
     <string name="pref_dl_wifi_only_title">WiFi only</string>
     <string name="pref_dl_wifi_only_summary">Download songs only when connected to a wifi network.</string>
     <string name="pref_dl_dir">Set download folder</string>
+    <string name="pref_dl_override">Override existing files</string>
     <string name="pref_dl_cat_playlist">Playlist download</string>
     <string name="pref_dl_pl_save_own_dir_title">Save tracks in playlist folder</string>
     <string name="pref_dl_pl_save_own_dir_summary">Creates a playlist-named folder and saves tracks in there.</string>

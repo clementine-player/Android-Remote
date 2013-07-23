@@ -50,7 +50,7 @@ import de.qspool.clementineremote.backend.requests.RequestConnect;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
 import de.qspool.clementineremote.backend.requests.RequestDownload;
 import de.qspool.clementineremote.backend.requests.RequestDownload.DownloadType;
-import de.qspool.clementineremote.backend.requests.RequestNextSong;
+import de.qspool.clementineremote.backend.requests.SongOfferResponse;
 import de.qspool.clementineremote.ui.ConnectDialog;
 import de.qspool.clementineremote.utils.Utilities;
 
@@ -69,17 +69,19 @@ public class ClementineSongDownloader extends
 	
 	private int mPlaylistId;
 	
-	private boolean isPlaylist = false;
-	private boolean createPlaylistDir = false;
-	private boolean createPlaylistArtistDir = false;
+	private boolean mIsPlaylist = false;
+	private boolean mCreatePlaylistDir = false;
+	private boolean mCreatePlaylistArtistDir = false;
+	private boolean mOverrideExistingFiles = false; 
 	
 	public ClementineSongDownloader(Context context) {
 		mContext = context;
 		mSharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
 		
 		// Get preferences
-		createPlaylistDir = mSharedPref.getBoolean(App.SP_DOWNLOAD_SAVE_OWN_DIR, false);
-		createPlaylistArtistDir = mSharedPref.getBoolean(App.SP_DOWNLOAD_PLAYLIST_CRT_ARTIST_DIR, false);
+		mCreatePlaylistDir = mSharedPref.getBoolean(App.SP_DOWNLOAD_SAVE_OWN_DIR, false);
+		mCreatePlaylistArtistDir = mSharedPref.getBoolean(App.SP_DOWNLOAD_PLAYLIST_CRT_ARTIST_DIR, false);
+		mOverrideExistingFiles = mSharedPref.getBoolean(App.SP_DOWNLOAD_OVERRIDE, false);
 		
 		// Get a new id
 		do {
@@ -236,13 +238,12 @@ public class ClementineSongDownloader extends
     private SongDownloadResult startDownloading(RequestDownload r) {
     	boolean downloadFinished = false;
     	SongDownloadResult result = new SongDownloadResult(DownloadResult.SUCCESSFUL);
-    	boolean ignoreSong = false;
     	File f = null;
     	FileOutputStream fo = null;
     	
     	// Do we have a playlist?
-    	isPlaylist = (r.getType() == DownloadType.PLAYLIST);
-    	if (isPlaylist) {
+    	mIsPlaylist = (r.getType() == DownloadType.PLAYLIST);
+    	if (mIsPlaylist) {
     		mPlaylistId = r.getPlaylistId();
     	}
     	
@@ -286,15 +287,17 @@ public class ClementineSongDownloader extends
 			
 			SongFileChunk chunk = (SongFileChunk) element;
 			
-			// Shall the current song be ignored? (It is already on the device)
-			if (ignoreSong && chunk.getSongMetadata() == null) {
-				// Update the chunk, nevertheless it's ignored, so the user
-				// doesn't think its hanging
-				updateProgress(chunk);
+			// If we received chunk no 0, then we have to decide wether to
+			// accept the song offered or not
+			if (chunk.getChunkNumber() == 0) {
+				boolean accepted = processSongOffer(chunk);
+				
+				// If we didn't accept the file and we reached the end, then 
+				if (!accepted && chunk.getFileCount() == chunk.getFileNumber())
+					downloadFinished = true;
+				
 				continue;
 			}
-			
-			ignoreSong = false;
 			
 			try {				
 				// Check if we need to create a new file
@@ -312,19 +315,10 @@ public class ClementineSongDownloader extends
 					mCurrentSong = chunk.getSongMetadata();
 					updateProgress(chunk);
 					
-					// do not override existing files!
+					// User wants to override files, so delete it here!
+					// The check was already done in processSongOffer()
 					if (f.exists()) {
-						// Check if we have downloaded all files
-						if (chunk.getFileCount() == chunk.getFileNumber())
-							downloadFinished = true;
-						
-						f = null;
-						ignoreSong = true;
-						
-						// Request new track
-						mClient.sendRequest(new RequestNextSong());
-						
-						continue;
+						f.delete();
 					}
 					
 					dir.mkdirs();
@@ -340,10 +334,7 @@ public class ClementineSongDownloader extends
 					fo.flush();
 					fo.close();
 					f = null;
-					
-					// Request new track
-					mClient.sendRequest(new RequestNextSong());
-					
+	
 					// Check if we have downloaded all files
 					if (chunk.getFileCount() == chunk.getFileNumber())
 						downloadFinished = true;
@@ -366,6 +357,28 @@ public class ClementineSongDownloader extends
     }
     
     /**
+     * This method checks if the offered file exists and sends a response to Clementine.
+     * If the file does not exist -> Download file
+     * otherwise
+     * 	 The user wants to override existing files -> Download file
+     *   otherwise
+     *     refuse file
+     * @param chunk The chunk with the metadata
+     * @return a boolean indicating if the song will be sent or not
+     */
+    private boolean processSongOffer(SongFileChunk chunk) {
+    	File f = new File(BuildFilePath(chunk));
+    	boolean accept = true;
+    	
+    	if (f.exists() && !mOverrideExistingFiles) 
+    		accept = false;	
+
+    	mClient.sendRequest(new SongOfferResponse(accept));
+    	
+    	return accept;
+	}
+
+	/**
      * Updates the current notification
      * @param chunk The current downloaded chunk
      */
@@ -391,15 +404,15 @@ public class ClementineSongDownloader extends
     	StringBuilder sb = new StringBuilder();
     	sb.append(path);
     	sb.append(File.separator);
-    	if (isPlaylist && createPlaylistDir) {
+    	if (mIsPlaylist && mCreatePlaylistDir) {
     		sb.append(App.mClementine.getPlaylists().get(mPlaylistId).getName());
     		sb.append(File.separator);
     	}
     	
     	// Create artist/album subfolder only when we have no playlist
     	// or user set the settings
-    	if (!isPlaylist ||
-    		isPlaylist && createPlaylistDir && createPlaylistArtistDir) {
+    	if (!mIsPlaylist ||
+    		mIsPlaylist && mCreatePlaylistDir && mCreatePlaylistArtistDir) {
     		// Append artist name
 	    	if (chunk.getSongMetadata().getAlbumartist().isEmpty())
 	    		sb.append(chunk.getSongMetadata().getArtist());

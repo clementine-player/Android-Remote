@@ -27,6 +27,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Requ
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestPlaylistSongs;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestSetTrackPosition;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestSetVolume;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongOffer;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuffle;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ShuffleMode;
 import de.qspool.clementineremote.backend.requests.RequestChangeCurrentSong;
@@ -39,7 +40,7 @@ import de.qspool.clementineremote.backend.requests.RequestDownload;
 import de.qspool.clementineremote.backend.requests.RequestLoveBan;
 import de.qspool.clementineremote.backend.requests.RequestLoveBan.LastFmType;
 import de.qspool.clementineremote.backend.requests.RequestLyrics;
-import de.qspool.clementineremote.backend.requests.RequestNextSong;
+import de.qspool.clementineremote.backend.requests.SongOfferResponse;
 import de.qspool.clementineremote.backend.requests.RequestPlaylistSong;
 import de.qspool.clementineremote.backend.requests.RequestVolume;
 import de.qspool.clementineremote.backend.requests.RequestToThread;
@@ -121,14 +122,28 @@ public class ClementinePbCreator {
 		} else if (r instanceof RequestDownload) {
 			msg.setType(MsgType.DOWNLOAD_SONGS);
 			msg.setRequestDownloadSongs(buildDownloadSongsMessage(msg, (RequestDownload) r));
-		} else if (r instanceof RequestNextSong) {
-			msg.setType(MsgType.SEND_NEXT_SONG);
+		} else if (r instanceof SongOfferResponse) {
+			msg.setType(MsgType.SONG_OFFER_RESPONSE);
+			msg.setResponseSongOffer(buildSongOfferResponse(msg, (SongOfferResponse) r));
 		}
 		Message m = msg.build();
 		
 		return m.toByteArray();
 	}
 	
+	/**
+	 * Create a song offer response
+	 * @param msg The message itself
+	 * @param r A SongOfferResponse
+	 * @return ResponseSongOffer Builder for protocol buffer message
+	 */
+	private ResponseSongOffer.Builder buildSongOfferResponse(
+			Message.Builder msg, SongOfferResponse r) {
+		ResponseSongOffer.Builder offer = msg.getResponseSongOfferBuilder();
+		offer.setAccepted(r.getAccepted());
+		return offer;
+	}
+
 	/**
 	 * Create a download song message
 	 * @param msg The message itself

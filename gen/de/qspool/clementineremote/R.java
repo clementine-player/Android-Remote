@@ -1187,7 +1187,7 @@ containing a value of this type.
         public static final int download_noti_only_wifi=0x7f0a0070;
         public static final int download_noti_title=0x7f0a006a;
         public static final int error_versions=0x7f0a0048;
-        public static final int file_dialog_set_dir=0x7f0a0079;
+        public static final int file_dialog_set_dir=0x7f0a007a;
         public static final int first_time_text=0x7f0a0059;
         public static final int first_time_title=0x7f0a0058;
         public static final int gpl=0x7f0a0013;
@@ -1215,7 +1215,7 @@ containing a value of this type.
         public static final int player_no_lyrics=0x7f0a0065;
         public static final int player_nosong=0x7f0a0020;
         public static final int player_playlist=0x7f0a0022;
-        public static final int player_stop_after_current=0x7f0a007a;
+        public static final int player_stop_after_current=0x7f0a007b;
         public static final int playler_volume=0x7f0a0024;
         public static final int playlist_download_playlist=0x7f0a0068;
         public static final int playlist_search_hint=0x7f0a0025;
@@ -1230,12 +1230,13 @@ containing a value of this type.
         public static final int pref_cat_player=0x7f0a0032;
         public static final int pref_clementine_summary=0x7f0a0043;
         public static final int pref_clementine_title=0x7f0a0042;
-        public static final int pref_dl_cat_playlist=0x7f0a0074;
+        public static final int pref_dl_cat_playlist=0x7f0a0075;
         public static final int pref_dl_dir=0x7f0a0073;
-        public static final int pref_dl_pl_artist_dir_summary=0x7f0a0078;
-        public static final int pref_dl_pl_artist_dir_title=0x7f0a0077;
-        public static final int pref_dl_pl_save_own_dir_summary=0x7f0a0076;
-        public static final int pref_dl_pl_save_own_dir_title=0x7f0a0075;
+        public static final int pref_dl_override=0x7f0a0074;
+        public static final int pref_dl_pl_artist_dir_summary=0x7f0a0079;
+        public static final int pref_dl_pl_artist_dir_title=0x7f0a0078;
+        public static final int pref_dl_pl_save_own_dir_summary=0x7f0a0077;
+        public static final int pref_dl_pl_save_own_dir_title=0x7f0a0076;
         public static final int pref_dl_wifi_only_summary=0x7f0a0072;
         public static final int pref_dl_wifi_only_title=0x7f0a0071;
         public static final int pref_lastfm_summary=0x7f0a005f;

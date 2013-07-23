@@ -46,6 +46,10 @@
 	        <Preference 
 	            android:key="pref_dl_dir"
 	            android:title="@string/pref_dl_dir" />
+	        <CheckBoxPreference 
+	            android:key="pref_dl_override"
+	            android:title="@string/pref_dl_override"
+	            android:defaultValue="false"/>
 	        <PreferenceCategory android:title="@string/pref_dl_cat_playlist">
 		        <CheckBoxPreference 
 		             android:key="pref_dl_pl_save_own_dir"
