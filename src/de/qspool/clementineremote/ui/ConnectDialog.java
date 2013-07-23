@@ -339,6 +339,10 @@ public class ConnectDialog extends SherlockActivity {
 	 * Connect to clementine
 	 */
 	private void connect() {
+		// Do not connect if the activity has finished!
+		if (this.isFinishing())
+			return;
+		
 		// Save the data
 		SharedPreferences.Editor editor = mSharedPref.edit();
 		editor.putString(App.SP_KEY_IP, mEtIp.getText().toString());
@@ -424,6 +428,10 @@ public class ConnectDialog extends SherlockActivity {
 	 * We couldn't connect to clementine. Inform the user
 	 */
 	void noConnection() {
+		// Do not display dialog if the activity has finished!
+		if (this.isFinishing())
+			return;
+		
 		// Check if we have not a local ip
 		WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
 		WifiInfo wifiInfo = wifiManager.getConnectionInfo();
