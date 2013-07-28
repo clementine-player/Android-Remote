@@ -41,6 +41,7 @@ import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.elements.ClementineElement;
 import de.qspool.clementineremote.backend.elements.Disconnected;
+import de.qspool.clementineremote.backend.elements.DownloadQueueEmpty;
 import de.qspool.clementineremote.backend.elements.InvalidData;
 import de.qspool.clementineremote.backend.elements.SongDownloadResult;
 import de.qspool.clementineremote.backend.elements.SongFileChunk;
@@ -281,6 +282,11 @@ public class ClementineSongDownloader extends
 				break;
 			}
 			
+			// Download finished?
+			if (element instanceof DownloadQueueEmpty) {
+				break;
+			}
+			
 			// Ignore other elements!
 			if (!(element instanceof SongFileChunk))
 				continue;
@@ -290,12 +296,7 @@ public class ClementineSongDownloader extends
 			// If we received chunk no 0, then we have to decide wether to
 			// accept the song offered or not
 			if (chunk.getChunkNumber() == 0) {
-				boolean accepted = processSongOffer(chunk);
-				
-				// If we didn't accept the file and we reached the end, then 
-				if (!accepted && chunk.getFileCount() == chunk.getFileNumber())
-					downloadFinished = true;
-				
+				processSongOffer(chunk);
 				continue;
 			}
 			
@@ -333,12 +334,7 @@ public class ClementineSongDownloader extends
 				if (chunk.getChunkCount() == chunk.getChunkNumber()) {
 					fo.flush();
 					fo.close();
-					f = null;
-	
-					// Check if we have downloaded all files
-					if (chunk.getFileCount() == chunk.getFileNumber())
-						downloadFinished = true;
-					
+					f = null;					
 				}
 				
 				// Update notification

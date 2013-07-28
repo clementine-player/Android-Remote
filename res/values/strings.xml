@@ -86,6 +86,7 @@
     <string name="player_download_album">Download album</string>
     <string name="playlist_download_playlist">Download playlist</string>
     <string name="player_howto_cancel">Download queued, please wait. Click notification to cancel active download.</string>
+    <string name="player_song_is_stream">Cannot download streams!</string>
     <string name="download_noti_title">Downloading songs</string>
     <string name="download_noti_complete">Download complete</string>
     <string name="download_noti_canceled">Download canceled</string>

@@ -48,6 +48,7 @@ public final class ClementineRemoteProtocolBuffer {
     FIRST_DATA_SENT_COMPLETE(35, 48),
     LYRICS(36, 49),
     SONG_FILE_CHUNK(37, 50),
+    DOWNLOAD_QUEUE_EMPTY(38, 51),
     ;
     
     public static final int UNKNOWN_VALUE = 0;
@@ -88,6 +89,7 @@ public final class ClementineRemoteProtocolBuffer {
     public static final int FIRST_DATA_SENT_COMPLETE_VALUE = 48;
     public static final int LYRICS_VALUE = 49;
     public static final int SONG_FILE_CHUNK_VALUE = 50;
+    public static final int DOWNLOAD_QUEUE_EMPTY_VALUE = 51;
     
     
     public final int getNumber() { return value; }
@@ -132,6 +134,7 @@ public final class ClementineRemoteProtocolBuffer {
         case 48: return FIRST_DATA_SENT_COMPLETE;
         case 49: return LYRICS;
         case 50: return SONG_FILE_CHUNK;
+        case 51: return DOWNLOAD_QUEUE_EMPTY;
         default: return null;
       }
     }
@@ -162,7 +165,7 @@ public final class ClementineRemoteProtocolBuffer {
     }
     
     private static final MsgType[] VALUES = {
-      UNKNOWN, CONNECT, REQUEST_PLAYLISTS, REQUEST_PLAYLIST_SONGS, CHANGE_SONG, SET_VOLUME, SET_TRACK_POSITION, INSERT_URLS, REMOVE_SONGS, OPEN_PLAYLIST, CLOSE_PLAYLIST, GET_LYRICS, DOWNLOAD_SONGS, SONG_OFFER_RESPONSE, LOVE, BAN, STOP_AFTER, DISCONNECT, PLAY, PLAYPAUSE, PAUSE, STOP, NEXT, PREVIOUS, SHUFFLE_PLAYLIST, REPEAT, SHUFFLE, INFO, CURRENT_METAINFO, PLAYLISTS, PLAYLIST_SONGS, ENGINE_STATE_CHANGED, KEEP_ALIVE, UPDATE_TRACK_POSITION, ACTIVE_PLAYLIST_CHANGED, FIRST_DATA_SENT_COMPLETE, LYRICS, SONG_FILE_CHUNK, 
+      UNKNOWN, CONNECT, REQUEST_PLAYLISTS, REQUEST_PLAYLIST_SONGS, CHANGE_SONG, SET_VOLUME, SET_TRACK_POSITION, INSERT_URLS, REMOVE_SONGS, OPEN_PLAYLIST, CLOSE_PLAYLIST, GET_LYRICS, DOWNLOAD_SONGS, SONG_OFFER_RESPONSE, LOVE, BAN, STOP_AFTER, DISCONNECT, PLAY, PLAYPAUSE, PAUSE, STOP, NEXT, PREVIOUS, SHUFFLE_PLAYLIST, REPEAT, SHUFFLE, INFO, CURRENT_METAINFO, PLAYLISTS, PLAYLIST_SONGS, ENGINE_STATE_CHANGED, KEEP_ALIVE, UPDATE_TRACK_POSITION, ACTIVE_PLAYLIST_CHANGED, FIRST_DATA_SENT_COMPLETE, LYRICS, SONG_FILE_CHUNK, DOWNLOAD_QUEUE_EMPTY, 
     };
     
     public static MsgType valueOf(
@@ -17528,7 +17531,7 @@ public final class ClementineRemoteProtocolBuffer {
       "e.ResponseLyrics\022B\n\030response_song_file_c" +
       "hunk\030  \001(\0132 .pb.remote.ResponseSongFileC",
       "hunk\0229\n\023response_song_offer\030! \001(\0132\034.pb.r" +
-      "emote.ResponseSongOffer*\242\005\n\007MsgType\022\013\n\007U" +
+      "emote.ResponseSongOffer*\274\005\n\007MsgType\022\013\n\007U" +
       "NKNOWN\020\000\022\013\n\007CONNECT\020\001\022\025\n\021REQUEST_PLAYLIS" +
       "TS\020\003\022\032\n\026REQUEST_PLAYLIST_SONGS\020\004\022\017\n\013CHAN" +
       "GE_SONG\020\005\022\016\n\nSET_VOLUME\020\006\022\026\n\022SET_TRACK_P" +
@@ -17545,19 +17548,20 @@ public final class ClementineRemoteProtocolBuffer {
       "GED\020,\022\016\n\nKEEP_ALIVE\020-\022\031\n\025UPDATE_TRACK_PO" +
       "SITION\020.\022\033\n\027ACTIVE_PLAYLIST_CHANGED\020/\022\034\n" +
       "\030FIRST_DATA_SENT_COMPLETE\0200\022\n\n\006LYRICS\0201\022" +
-      "\023\n\017SONG_FILE_CHUNK\0202*;\n\013EngineState\022\t\n\005E" +
-      "mpty\020\000\022\010\n\004Idle\020\001\022\013\n\007Playing\020\002\022\n\n\006Paused\020",
-      "\003*U\n\nRepeatMode\022\016\n\nRepeat_Off\020\000\022\020\n\014Repea" +
-      "t_Track\020\001\022\020\n\014Repeat_Album\020\002\022\023\n\017Repeat_Pl" +
-      "aylist\020\003*\\\n\013ShuffleMode\022\017\n\013Shuffle_Off\020\000" +
-      "\022\017\n\013Shuffle_All\020\001\022\027\n\023Shuffle_InsideAlbum" +
-      "\020\002\022\022\n\016Shuffle_Albums\020\003*k\n\020ReasonDisconne" +
-      "ct\022\023\n\017Server_Shutdown\020\001\022\023\n\017Wrong_Auth_Co" +
-      "de\020\002\022\025\n\021Not_Authenticated\020\003\022\026\n\022Download_" +
-      "Forbidden\020\004*=\n\014DownloadItem\022\017\n\013CurrentIt" +
-      "em\020\001\022\r\n\tItemAlbum\020\002\022\r\n\tAPlaylist\020\003BG\n%de" +
-      ".qspool.clementineremote.backend.pbB\036Cle",
-      "mentineRemoteProtocolBuffer"
+      "\023\n\017SONG_FILE_CHUNK\0202\022\030\n\024DOWNLOAD_QUEUE_E" +
+      "MPTY\0203*;\n\013EngineState\022\t\n\005Empty\020\000\022\010\n\004Idle",
+      "\020\001\022\013\n\007Playing\020\002\022\n\n\006Paused\020\003*U\n\nRepeatMod" +
+      "e\022\016\n\nRepeat_Off\020\000\022\020\n\014Repeat_Track\020\001\022\020\n\014R" +
+      "epeat_Album\020\002\022\023\n\017Repeat_Playlist\020\003*\\\n\013Sh" +
+      "uffleMode\022\017\n\013Shuffle_Off\020\000\022\017\n\013Shuffle_Al" +
+      "l\020\001\022\027\n\023Shuffle_InsideAlbum\020\002\022\022\n\016Shuffle_" +
+      "Albums\020\003*k\n\020ReasonDisconnect\022\023\n\017Server_S" +
+      "hutdown\020\001\022\023\n\017Wrong_Auth_Code\020\002\022\025\n\021Not_Au" +
+      "thenticated\020\003\022\026\n\022Download_Forbidden\020\004*=\n" +
+      "\014DownloadItem\022\017\n\013CurrentItem\020\001\022\r\n\tItemAl" +
+      "bum\020\002\022\r\n\tAPlaylist\020\003BG\n%de.qspool.clemen",
+      "tineremote.backend.pbB\036ClementineRemoteP" +
+      "rotocolBuffer"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

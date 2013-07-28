@@ -172,12 +172,20 @@ public class Player extends SherlockFragmentActivity {
 								makeToast(R.string.track_banned, Toast.LENGTH_SHORT);
 								break;
 		case R.id.download_song: 
-								ClementineSongDownloader downloaderSong = new ClementineSongDownloader(this);
-								downloaderSong.startDownload(new RequestDownload(DownloadType.CURRENT_SONG));
+								if (App.mClementine.getCurrentSong().isLocal()) {
+									ClementineSongDownloader downloaderSong = new ClementineSongDownloader(this);
+									downloaderSong.startDownload(new RequestDownload(DownloadType.CURRENT_SONG));
+								} else {
+									Toast.makeText(this, R.string.player_song_is_stream, Toast.LENGTH_LONG).show();
+								}
 								break;
 		case R.id.download_album: 
-								ClementineSongDownloader downloaderAlbum = new ClementineSongDownloader(this);
-								downloaderAlbum.startDownload(new RequestDownload(DownloadType.ALBUM));
+								if (App.mClementine.getCurrentSong().isLocal()) {
+									ClementineSongDownloader downloaderSong = new ClementineSongDownloader(this);
+									downloaderSong.startDownload(new RequestDownload(DownloadType.ALBUM));
+								} else {
+									Toast.makeText(this, R.string.player_song_is_stream, Toast.LENGTH_LONG).show();
+								}
 								break;
 		default: break;
 		}

@@ -48,6 +48,7 @@ public class MySong {
 	private List<LyricsProvider> mLyricsProvider = new LinkedList<LyricsProvider>();
 	private String filename;
 	private int size;
+	private boolean local;
 	
 	public boolean equals(MySong song) {
 		if (song.id == this.id
@@ -189,5 +190,13 @@ public class MySong {
 
 	public void setSize(int size) {
 		this.size = size;
+	}
+
+	public boolean isLocal() {
+		return local;
+	}
+
+	public void setLocal(boolean local) {
+		this.local = local;
 	}
 }

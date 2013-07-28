@@ -1,3 +1,13 @@
+Version 7
+  Features:
+    - Display lyrics when clicking albumcover
+    - Download current song, album or playlist to your device
+  Improvements:
+    - Improved settings dialog
+    - Toggle stop after current track (hold pause)
+  Bugfixes:
+    - Fixed two crashes when displaying a dialog
+
 Version 6.2
   Bugfixes:
     - Fix a nullpointer when receiving a call

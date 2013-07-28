@@ -30,6 +30,7 @@ import de.qspool.clementineremote.backend.Clementine.RepeatMode;
 import de.qspool.clementineremote.backend.elements.ClementineElement;
 import de.qspool.clementineremote.backend.elements.Connected;
 import de.qspool.clementineremote.backend.elements.Disconnected;
+import de.qspool.clementineremote.backend.elements.DownloadQueueEmpty;
 import de.qspool.clementineremote.backend.elements.FirstDataReceived;
 import de.qspool.clementineremote.backend.elements.ReloadLyrics;
 import de.qspool.clementineremote.backend.elements.ReloadPlaylistSongs;
@@ -147,6 +148,8 @@ public class ClementinePbParser {
 			parsedElement = parseLyrics(msg.getResponseLyrics());
 		} else if (msg.getType().equals(MsgType.SONG_FILE_CHUNK)) {
 			parsedElement = parseFileChunk(msg.getResponseSongFileChunk());
+		} else if (msg.getType().equals(MsgType.DOWNLOAD_QUEUE_EMPTY)) {
+			parsedElement = new DownloadQueueEmpty();
 		}
 		
 		return parsedElement;
@@ -244,6 +247,7 @@ public class ClementinePbParser {
 		song.setPlaycount(songMetadata.getPlaycount());
 		song.setFilename(songMetadata.getFilename());
 		song.setSize(songMetadata.getFileSize());
+		song.setLocal(songMetadata.getIsLocal());
 		if (songMetadata.hasArt()) {
 			song.setArt   (songMetadata.getArt());
 		}
