@@ -37,8 +37,8 @@ public class Clementine {
 	private boolean mIsConnected;
 	private int mVolume;
 	private State mState;
-	private RepeatMode mRepeatMode;
-	private ShuffleMode mShuffleMode;
+	private RepeatMode mRepeatMode = RepeatMode.OFF;
+	private ShuffleMode mShuffleMode = ShuffleMode.OFF;
 	private int mSongPosition;
 	private SparseArray<MyPlaylist> mPlaylists = new SparseArray<MyPlaylist>();
 	private int mActivePlaylist;
