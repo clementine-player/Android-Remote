@@ -20,9 +20,11 @@ package de.qspool.clementineremote.ui;
 import java.io.File;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.EditTextPreference;
@@ -61,6 +63,7 @@ public class ClementineSettings extends SherlockPreferenceActivity
 	private ListPreference mCallVolume;
 	private FileDialog mFileDialog;
 	private Preference mDownloadDir;
+	private Preference mClementine;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,7 @@ public class ClementineSettings extends SherlockPreferenceActivity
         mAboutDialogPreference = (Preference) getPreferenceScreen().findPreference("pref_key_about");
         mVersion = (Preference) getPreferenceScreen().findPreference("pref_version");
         mDownloadDir = (Preference) getPreferenceScreen().findPreference(App.SP_DOWNLOAD_DIR);
+        mClementine = (Preference) getPreferenceScreen().findPreference("pref_clementine_website");
         
         // Get the Version
         try {
@@ -85,6 +89,9 @@ public class ClementineSettings extends SherlockPreferenceActivity
 		} catch (NameNotFoundException e) {
 			
 		}
+        
+        mVersion.setOnPreferenceClickListener(etBrowserLinks);
+        mClementine.setOnPreferenceClickListener(etBrowserLinks);
         
         // Read the port and fill in the summary
         mPortPreference = (EditTextPreference) getPreferenceScreen().findPreference(App.SP_KEY_PORT);
@@ -246,4 +253,23 @@ public class ClementineSettings extends SherlockPreferenceActivity
 			return super.onOptionsItemSelected(menuItem);
 		}
 	}
+	
+	private OnPreferenceClickListener etBrowserLinks = new OnPreferenceClickListener() {
+		
+		@Override
+		public boolean onPreferenceClick(Preference preference) {
+			Intent intent = new Intent(Intent.ACTION_VIEW);
+			if (preference.getKey().equals("pref_version")) {
+				intent.setData(Uri.parse("https://code.google.com/p/clementine-remote-android"));
+			} else if (preference.getKey().equals("pref_clementine_website")) {
+				intent.setData(Uri.parse("http://www.clementine-player.org/"));
+			}
+			if (intent.resolveActivity(getPackageManager()) != null) {
+			    startActivity(intent);
+			} else {
+			    Toast.makeText(ClementineSettings.this, R.string.app_not_available, Toast.LENGTH_LONG).show();
+			}
+			return true;
+		}
+	};
 }

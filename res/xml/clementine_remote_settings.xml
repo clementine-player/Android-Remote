@@ -83,14 +83,11 @@
         <Preference 
             android:key="pref_version"
             android:summary="@string/pref_version_summary">
-            <intent android:action="android.intent.action.VIEW"
-                android:data="https://code.google.com/p/clementine-remote-android"/>
         </Preference>
-        <Preference 
+        <Preference
+            android:key="pref_clementine_website"
             android:title="@string/pref_clementine_title"
             android:summary="@string/pref_clementine_summary">
-            <intent android:action="android.intent.action.VIEW"
-                android:data="http://www.clementine-player.org/"/>
         </Preference>
         <Preference
             android:key="pref_key_license"

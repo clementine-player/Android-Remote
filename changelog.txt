@@ -5,8 +5,11 @@ Version 7
   Improvements:
     - Improved settings dialog
     - Toggle stop after current track (hold pause)
+    - Build against api level 18 (android 4.3)
   Bugfixes:
     - Fixed two crashes when displaying a dialog
+    - Fix a nullpointer issue when connecting to Clementine
+    - Fix FC when opening urls in restricted profiles
 
 Version 6.2
   Bugfixes:
