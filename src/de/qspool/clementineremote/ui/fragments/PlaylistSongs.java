@@ -144,6 +144,13 @@ public class PlaylistSongs extends SherlockListFragment {
         Message msg = Message.obtain();
         msg.obj = new RequestChangeCurrentSong(song, mId);
         App.mClementineConnection.mHandler.sendMessage(msg);
+        
+        // save which playlist is the active one
+        for (int i = 0; i<App.mClementine.getPlaylists().size(); i++) {
+        	App.mClementine.getPlaylists().valueAt(i).setActive(false);
+        }
+        
+        App.mClementine.getPlaylists().get(mId).setActive(true);
     }
     
     /**

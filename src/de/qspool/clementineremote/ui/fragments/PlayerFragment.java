@@ -20,6 +20,7 @@ package de.qspool.clementineremote.ui.fragments;
 import java.util.List;
 
 import android.app.ProgressDialog;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.LayoutInflater;
@@ -167,13 +168,15 @@ public class PlayerFragment extends SherlockFragment {
 	    	mTvYear.  setText(currentSong.getYear());
 	    	
 	    	// Check if a coverart is valid
-	    	if (currentSong.getArt() == null) {
+	    	Bitmap newArt = currentSong.getArt();
+	    	Bitmap oldArt = mCurrentSong.getArt();
+	    	if (newArt == null) {
 	    		mImgArt.setImageResource(R.drawable.icon_large);
-	    	} else if (mCurrentSong.getArt() == null
-	    			 || !mCurrentSong.getArt().sameAs(currentSong.getArt())) {
+	    	} else if (oldArt == null
+	    			 || !oldArt.sameAs(newArt)) {
 	    		// Transit only if the cover changed
 	    		if (mFirstCall) {
-	    			mImgArt.setImageBitmap(App.mClementine.getCurrentSong().getArt());
+	    			mImgArt.setImageBitmap(newArt);
 	    		} else {
 	    			mImgArt.startAnimation(mAlphaDown);
 	    		}

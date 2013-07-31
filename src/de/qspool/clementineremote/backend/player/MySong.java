@@ -43,7 +43,7 @@ public class MySong {
 	private int track;
 	private int disc;
 	private int playcount;
-	private Bitmap art;
+	private byte[] art;
 	private boolean loved;
 	private List<LyricsProvider> mLyricsProvider = new LinkedList<LyricsProvider>();
 	private String filename;
@@ -157,11 +157,13 @@ public class MySong {
 		this.playcount = playcount;
 	}
 	public Bitmap getArt() {
-		return art;
+		if (art == null)
+			return null;
+		else 
+			return BitmapFactory.decodeByteArray(art, 0, art.length);
 	}
 	public void setArt(ByteString byteString) {
-		Bitmap bmp = BitmapFactory.decodeByteArray(byteString.toByteArray(), 0, byteString.size());
-		this.art = bmp;
+		this.art = byteString.toByteArray();
 	}
 
 	public boolean isLoved() {

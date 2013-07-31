@@ -11,6 +11,7 @@ Version 7
     - Fixed two crashes when displaying a dialog
     - Fix a nullpointer issue when connecting to Clementine
     - Fix FC when opening urls in restricted profiles
+    - Fix a FC when exiting playlist view
 
 Version 6.2
   Bugfixes:

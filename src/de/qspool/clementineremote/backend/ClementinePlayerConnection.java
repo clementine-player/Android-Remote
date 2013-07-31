@@ -477,7 +477,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 			editor.putBitmap(MetadataEditor.BITMAP_KEY_ARTWORK, mLastSong.getArt());
 			
 			// The RemoteControlClients displays the following info:
-			// METADATA_KEY_TITLE (white) - METADATA_KEY_ALBUMARTIST (grey) - METADATA_KEY_TITLE (grey)
+			// METADATA_KEY_TITLE (white) - METADATA_KEY_ALBUMARTIST (grey) - METADATA_KEY_ALBUM (grey)
 			// 
 			// So i put the metadata not in the "correct" fields to display artist, track and album
 			// TODO: Fix it when changed in newer android versions
