@@ -410,7 +410,7 @@ public class ClementineSongDownloader extends
     	if (!mIsPlaylist ||
     		mIsPlaylist && mCreatePlaylistDir && mCreatePlaylistArtistDir) {
     		// Append artist name
-	    	if (chunk.getSongMetadata().getAlbumartist().isEmpty())
+	    	if (chunk.getSongMetadata().getAlbumartist().length() == 0)
 	    		sb.append(chunk.getSongMetadata().getArtist());
 	    	else
 	    		sb.append(chunk.getSongMetadata().getAlbumartist());
