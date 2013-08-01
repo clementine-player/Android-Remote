@@ -191,7 +191,7 @@ public class ConnectDialog extends SherlockActivity {
 	    switch (item.getItemId()) {
 	    case R.id.settings:		
 	    	Intent settingsIntent = new Intent(this, ClementineSettings.class);
-			startActivity(new Intent("asd"));//settingsIntent);
+			startActivity(settingsIntent);
 			doAutoConnect = false;
 	        return true;
 	    default:
