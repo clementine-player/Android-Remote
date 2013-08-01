@@ -7,6 +7,7 @@ Version 7
     - Toggle stop after current track (hold pause)
     - Build against api level 18 (android 4.3)
     - Show cursor in ip text field
+    - Added crash reporting function
   Bugfixes:
     - Fixed two crashes when displaying a dialog
     - Fix a nullpointer issue when connecting to Clementine

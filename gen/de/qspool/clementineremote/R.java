@@ -1175,6 +1175,9 @@ containing a value of this type.
         public static final int connectdialog_ip_hint=0x7f0a001c;
         public static final int connectdialog_mdns_found=0x7f0a001d;
         public static final int connectdialog_services=0x7f0a001e;
+        public static final int crash_report_message=0x7f0a007f;
+        public static final int crash_report_send=0x7f0a0080;
+        public static final int crash_report_title=0x7f0a007e;
         public static final int dialog_about_authors=0x7f0a003d;
         public static final int dialog_about_header=0x7f0a003c;
         public static final int dialog_about_others=0x7f0a003f;

@@ -133,6 +133,10 @@ public class ConnectDialog extends SherlockActivity {
 				App.downloaders.get(i).cancel(true);
 			}
 		}
+		
+		// Check if we got a stack trace
+		CrashReportDialog crashReportDialog = new CrashReportDialog(this);
+		crashReportDialog.showDialogIfTraceExists();
 	}
 	
 	@Override 
@@ -187,7 +191,7 @@ public class ConnectDialog extends SherlockActivity {
 	    switch (item.getItemId()) {
 	    case R.id.settings:		
 	    	Intent settingsIntent = new Intent(this, ClementineSettings.class);
-			startActivity(settingsIntent);
+			startActivity(new Intent("asd"));//settingsIntent);
 			doAutoConnect = false;
 	        return true;
 	    default:

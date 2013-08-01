@@ -106,4 +106,7 @@
     <string name="file_dialog_set_dir">Select directory</string>
     <string name="player_stop_after_current">Toggle stopping after track finishes.</string>
     <string name="app_not_available">App not available!</string>
+    <string name="crash_report_title">Oops, something went wrong!</string>
+    <string name="crash_report_message">Last time Clementine Remote crashed! This should not have happened! Please help me to improve the app and send me the logfile. Thanks!</string>
+    <string name="crash_report_send">Send!</string>
 </resources>

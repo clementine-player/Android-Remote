@@ -28,6 +28,7 @@ public class App extends Application {
 	public static Clementine mClementine = new Clementine();
 	public static Application mApp;
 	public static SparseArray<ClementineSongDownloader> downloaders = new SparseArray<ClementineSongDownloader>();
+	public static ClementineExceptionHandler mClementineExceptionHandler;
 	
 	public final static int NOTIFY_ID = 78923748;
 	public final static String SERVICE_ID = "ServiceIntentId";
@@ -55,4 +56,14 @@ public class App extends Application {
 	public final static String SP_DOWNLOAD_OVERRIDE="pref_dl_override";
 	public final static String SP_DOWNLOAD_SAVE_OWN_DIR="pref_dl_pl_save_own_dir";
 	public final static String SP_DOWNLOAD_PLAYLIST_CRT_ARTIST_DIR="pref_dl_pl_artist_dir";
+	public final static String SP_LAST_STACKTRACE = "last_stacktrace";
+	public final static String SP_LAST_SEND_STACKTRACE = "last_send_stacktrace";
+	
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		// Register new default uncaught exception handler
+		mClementineExceptionHandler = new ClementineExceptionHandler(this);
+		Thread.setDefaultUncaughtExceptionHandler(mClementineExceptionHandler);
+	}
 }
