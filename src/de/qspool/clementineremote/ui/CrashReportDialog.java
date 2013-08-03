@@ -17,6 +17,12 @@
 
 package de.qspool.clementineremote.ui;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import android.app.AlertDialog;
@@ -51,12 +57,7 @@ public class CrashReportDialog {
 		    public void onClick(DialogInterface dialog, int which) {
 		        switch (which){
 		        case DialogInterface.BUTTON_POSITIVE:
-		            Intent mailIntent = new Intent(Intent.ACTION_SEND);
-		            mailIntent.setType("message/rfc822");
-		            mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"asfa194@gmail.com"});
-		            mailIntent.putExtra(Intent.EXTRA_SUBJECT, "New Crashreport from Clementine Remote");
-		            mailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + mLastTraceFileName));
-		            mContext.startActivity(Intent.createChooser(mailIntent, "Send email..."));
+		            SendMail();
 		            break;
 
 		        case DialogInterface.BUTTON_NEGATIVE:
@@ -76,5 +77,25 @@ public class CrashReportDialog {
 		SharedPreferences.Editor edit = mSharedPref.edit();
 		edit.putString(App.SP_LAST_SEND_STACKTRACE, mLastTraceFileName);
 		edit.commit();
+	}
+	
+	private void SendMail() {
+		String body = "";
+		File f = new File(mLastTraceFileName);
+		try {
+			FileReader reader = new FileReader(f);
+			char[] chars = new char[(int) f.length()];
+			reader.read(chars);
+			body = new String(chars);
+		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
+		} 
+		
+		Intent mailIntent = new Intent(Intent.ACTION_SEND);
+        mailIntent.setType("message/rfc822");
+        mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"asfa194@gmail.com"});
+        mailIntent.putExtra(Intent.EXTRA_SUBJECT, "New Crashreport from Clementine Remote");
+        mailIntent.putExtra(Intent.EXTRA_TEXT, body);
+        mContext.startActivity(Intent.createChooser(mailIntent, "Send email..."));
 	}
 }

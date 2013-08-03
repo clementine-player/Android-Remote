@@ -26,6 +26,9 @@ import java.util.Date;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Debug;
 import android.preference.PreferenceManager;
 
 public class ClementineExceptionHandler implements UncaughtExceptionHandler {
@@ -36,7 +39,7 @@ public class ClementineExceptionHandler implements UncaughtExceptionHandler {
 	public ClementineExceptionHandler(Context context) {
 		mContext = context;
 		mDefaultUEH = Thread.getDefaultUncaughtExceptionHandler();
-		mSharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+		mSharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
 	}
 
 	@Override
@@ -51,10 +54,27 @@ public class ClementineExceptionHandler implements UncaughtExceptionHandler {
 		try {
 			// Write the stacktrace to the file
 			PrintWriter printer = new PrintWriter(f);
+			// Print Debug info
+			printer.write("== Device Info ==\n");
+			printer.write("\nOS Version: " + android.os.Build.VERSION.RELEASE + " (" + System.getProperty("os.version") + ")");
+			printer.write("\nOS API Level: " + android.os.Build.VERSION.SDK_INT);
+			printer.write("\nDevice: " + android.os.Build.DEVICE);
+			printer.write("\nModel (and Product): " + android.os.Build.MODEL + " (" + android.os.Build.PRODUCT + ")");
+			PackageInfo pInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
+			printer.write("\nApp Version: " + pInfo.versionName + " (" + pInfo.versionCode + ")");
+			
+			printer.write("\n\nMax memory: " + Runtime.getRuntime().maxMemory()); //the maximum memory the app can use
+			printer.write("\nCurrent heap: " + Runtime.getRuntime().totalMemory()); //current heap size
+			printer.write("\nHeap available: " + Runtime.getRuntime().freeMemory()); //amount available in heap
+			printer.write("\nNative Heap: " + Debug.getNativeHeapAllocatedSize()); //is this right? I only want to account for native memory that my app is being "charged" for.  Is this the proper way to account for that?
+			
+			// Print stacktrace
+			printer.write("\n\n== Stacktrace ==\n\n");
 			ex.printStackTrace(printer);
 			printer.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+		} catch (NameNotFoundException e) {
 		}
 		
 		// Save the new filename
@@ -75,7 +95,7 @@ public class ClementineExceptionHandler implements UncaughtExceptionHandler {
 		SimpleDateFormat ft = 
 			      new SimpleDateFormat ("yyyy.MM.dd-hh:mm:ss");
 		StringBuilder sb = new StringBuilder();
-		sb.append(mContext.getExternalCacheDir());
+		sb.append(App.mApp.getApplicationInfo().dataDir);
 		sb.append("/stacktrace-");
 		sb.append(ft.format(new Date()));
 		sb.append(".txt");
