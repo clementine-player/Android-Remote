@@ -23,41 +23,24 @@ import java.util.List;
 import android.util.Log;
 
 import com.google.protobuf.InvalidProtocolBufferException;
+
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.Clementine;
-import de.qspool.clementineremote.backend.Clementine.ShuffleMode;
 import de.qspool.clementineremote.backend.Clementine.RepeatMode;
-import de.qspool.clementineremote.backend.elements.ClementineElement;
-import de.qspool.clementineremote.backend.elements.Connected;
-import de.qspool.clementineremote.backend.elements.Disconnected;
-import de.qspool.clementineremote.backend.elements.DownloadQueueEmpty;
-import de.qspool.clementineremote.backend.elements.FirstDataReceived;
-import de.qspool.clementineremote.backend.elements.ReloadLyrics;
-import de.qspool.clementineremote.backend.elements.ReloadPlaylistSongs;
-import de.qspool.clementineremote.backend.elements.ReloadControl;
-import de.qspool.clementineremote.backend.elements.ReloadPlaylists;
-import de.qspool.clementineremote.backend.elements.ReloadTrackPosition;
-import de.qspool.clementineremote.backend.elements.SongFileChunk;
-import de.qspool.clementineremote.backend.elements.Disconnected.DisconnectReason;
-import de.qspool.clementineremote.backend.elements.InvalidData;
-import de.qspool.clementineremote.backend.elements.OldProtoVersion;
-import de.qspool.clementineremote.backend.elements.Reload;
-import de.qspool.clementineremote.backend.elements.ReloadMetadataChanged;
+import de.qspool.clementineremote.backend.Clementine.ShuffleMode;
+import de.qspool.clementineremote.backend.pb.ClementineMessage.ErrorMessage;
+import de.qspool.clementineremote.backend.pb.ClementineMessage.MessageGroup;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.EngineState;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Lyric;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Playlist;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ReasonDisconnect;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Repeat;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseActiveChanged;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseClementineInfo;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseCurrentMetadata;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseDisconnect;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseLyrics;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylistSongs;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylists;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongFileChunk;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseUpdateTrackPosition;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuffle;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata;
@@ -75,9 +58,9 @@ public class ClementinePbParser {
 	 * @param bs The binary representation of the protocol buffer
 	 * @return The parsed Element
 	 */
-	public ClementineElement parse(byte[] bs) {
+	public ClementineMessage parse(byte[] bs) {
 		Message msg = null;
-		ClementineElement parsedElement = new InvalidData();
+		ClementineMessage parsedElement = null;
 		
 		try {
 			msg = Message.parseFrom(bs);
@@ -85,14 +68,14 @@ public class ClementinePbParser {
 			// First check the proto version
 			if (!msg.hasVersion()
 			 || msg.getVersion() < Message.getDefaultInstance().getVersion()) {
-				parsedElement = new OldProtoVersion();
+				parsedElement = new ClementineMessage(ErrorMessage.OLD_PROTO);
 			} else {
 				parsedElement = parseMsg(msg);
 			}
 		} catch (InvalidProtocolBufferException e) {
 			msg = null;
 			Log.d("Parser", "InvalidProtocolBufferException");
-			parsedElement = new InvalidData();
+			parsedElement = new ClementineMessage(ErrorMessage.INVALID_DATA);
 		}
 		
 		return parsedElement;
@@ -103,86 +86,79 @@ public class ClementinePbParser {
 	 * @param msg The created message
 	 * @return The parsed data
 	 */
-	private ClementineElement parseMsg(Message msg) {
-		ClementineElement parsedElement = null;
+	private ClementineMessage parseMsg(Message msg) {
+		ClementineMessage clementineMessage = new ClementineMessage(msg);
 		
-		if (msg.getType().equals(MsgType.INFO)) {
+		switch (msg.getType()) {		
+		case INFO: 
 			parseInfos(msg.getResponseClementineInfo());
-			parsedElement = new Connected();
-		} else if (msg.getType().equals(MsgType.FIRST_DATA_SENT_COMPLETE)) {
-			parsedElement = new FirstDataReceived();
-		} else if (msg.getType().equals(MsgType.CURRENT_METAINFO)) {
+			break;
+		case CURRENT_METAINFO:
 			MySong s = parseSong(msg.getResponseCurrentMetadata());
 			App.mClementine.setCurrentSong(s);
 			App.mClementine.setSongPosition(0);
-			parsedElement = new ReloadMetadataChanged(); 
-		} else if (msg.getType().equals(MsgType.UPDATE_TRACK_POSITION)) {
+			clementineMessage.setTypeGroup(MessageGroup.GUI_RELOAD);
+			break;
+		case UPDATE_TRACK_POSITION:
 			parseUpdateTrackPosition(msg.getResponseUpdateTrackPosition());
-			parsedElement = new ReloadTrackPosition(); 
-		} else if (msg.getType().equals(MsgType.KEEP_ALIVE)) {
+			clementineMessage.setTypeGroup(MessageGroup.GUI_RELOAD);
+			break; 
+		case KEEP_ALIVE:
 			App.mClementineConnection.setLastKeepAlive(System.currentTimeMillis());
-		} else if (msg.getType().equals(MsgType.SET_VOLUME)) {
+			break;
+		case SET_VOLUME:
 			App.mClementine.setVolume(msg.getRequestSetVolume().getVolume());
-		} else if (msg.getType().equals(MsgType.PLAY)) {
+			break;
+		case PLAY:
 			App.mClementine.setState(Clementine.State.PLAY);
-			parsedElement = new ReloadControl(); 
-		} else if (msg.getType().equals(MsgType.PAUSE)) {
+			clementineMessage.setTypeGroup(MessageGroup.GUI_RELOAD);
+			break;
+		case PAUSE:
 			App.mClementine.setState(Clementine.State.PAUSE);
-			parsedElement = new ReloadControl(); 
-		} else if (msg.getType().equals(MsgType.STOP)) {
+			clementineMessage.setTypeGroup(MessageGroup.GUI_RELOAD);
+			break; 
+		case STOP:
 			App.mClementine.setState(Clementine.State.STOP);
-			parsedElement = new ReloadControl(); 
-		} else if (msg.getType().equals(MsgType.DISCONNECT)) {
-			parsedElement = parseDisconnect(msg.getResponseDisconnect());
-		} else if (msg.getType().equals(MsgType.PLAYLISTS)) {
-			parsedElement = parsePlaylists(msg.getResponsePlaylists());
-		} else if (msg.getType().equals(MsgType.PLAYLIST_SONGS)) {
-			parsedElement = parsePlaylistSongs(msg.getResponsePlaylistSongs());
-		} else if (msg.getType().equals(MsgType.ACTIVE_PLAYLIST_CHANGED)) {
-			parsedElement = parseActivePlaylistChanged(msg.getResponseActiveChanged());
-		} else if (msg.getType().equals(MsgType.REPEAT)) {
-			parsedElement = parseRepeat(msg.getRepeat());
-		} else if (msg.getType().equals(MsgType.SHUFFLE)) {
-			parsedElement = parseRandom(msg.getShuffle());
-		} else if (msg.getType().equals(MsgType.LYRICS)) {
-			parsedElement = parseLyrics(msg.getResponseLyrics());
-		} else if (msg.getType().equals(MsgType.SONG_FILE_CHUNK)) {
-			parsedElement = parseFileChunk(msg.getResponseSongFileChunk());
-		} else if (msg.getType().equals(MsgType.DOWNLOAD_QUEUE_EMPTY)) {
-			parsedElement = new DownloadQueueEmpty();
+			clementineMessage.setTypeGroup(MessageGroup.GUI_RELOAD);
+			break; 
+		case DISCONNECT:
+			break;
+		case PLAYLISTS:
+			parsePlaylists(msg.getResponsePlaylists());
+			clementineMessage.setTypeGroup(MessageGroup.GUI_RELOAD);
+			break;
+		case PLAYLIST_SONGS:
+			parsePlaylistSongs(msg.getResponsePlaylistSongs());
+			clementineMessage.setTypeGroup(MessageGroup.GUI_RELOAD);
+			break;
+		case ACTIVE_PLAYLIST_CHANGED:
+			parseActivePlaylistChanged(msg.getResponseActiveChanged());
+			clementineMessage.setTypeGroup(MessageGroup.GUI_RELOAD);
+			break;
+		case REPEAT:
+			parseRepeat(msg.getRepeat());
+			break;
+		case SHUFFLE:
+			parseShuffle(msg.getShuffle());
+			break;
+		case LYRICS:
+			parseLyrics(msg.getResponseLyrics());
+			clementineMessage.setTypeGroup(MessageGroup.GUI_RELOAD);
+			break;
+		case SONG_FILE_CHUNK:
+			break;
+		case DOWNLOAD_QUEUE_EMPTY:
+			break;
 		}
 		
-		return parsedElement;
-	}
-
-	/**
-	 * Parse a song file chunk
-	 * @param responseSongFileChunk The chunk
-	 * @return The Clementine Element
-	 */
-	private ClementineElement parseFileChunk(
-			ResponseSongFileChunk responseSongFileChunk) {
-		MySong song = null;
-		if (responseSongFileChunk.hasSongMetadata())
-			song = copySongMetadata(responseSongFileChunk.getSongMetadata());
-		
-		SongFileChunk chunk = new SongFileChunk(
-				responseSongFileChunk.getChunkNumber(),
-				responseSongFileChunk.getChunkCount(),
-				responseSongFileChunk.getFileNumber(),
-				responseSongFileChunk.getFileCount(),
-				song,
-				responseSongFileChunk.getData().toByteArray(),
-				responseSongFileChunk.getSize());
-		return chunk;
+		return clementineMessage;
 	}
 
 	/**
 	 * Parse the lyrics and save them into the song object
 	 * @param responseLyrics The protocolbuffer message with the lyrics
-	 * @return A new ReloadLyrics object
 	 */
-	private ClementineElement parseLyrics(ResponseLyrics responseLyrics) {
+	private void parseLyrics(ResponseLyrics responseLyrics) {
 		// Read all lyric providers
 		for (Lyric lyric : responseLyrics.getLyricsList()) {
 			// Save them into the structure
@@ -194,7 +170,6 @@ public class ClementinePbParser {
 			// And save them into the song
 			App.mClementine.getCurrentSong().getLyricsProvider().add(provider);
 		}
-		return new ReloadLyrics();
 	}
 
 	/**
@@ -202,11 +177,10 @@ public class ClementinePbParser {
 	 * @param responseActiveChanged The response element
 	 * @return A new Reload element
 	 */
-	private ClementineElement parseActivePlaylistChanged(
+	private void parseActivePlaylistChanged(
 			ResponseActiveChanged responseActiveChanged) {
 		int id = responseActiveChanged.getId();
 		App.mClementine.setActivePlaylistId(id);
-		return new Reload();
 	}
 
 	/**
@@ -225,34 +199,7 @@ public class ClementinePbParser {
 			return null;
 		}
 
-		return copySongMetadata(songMetadata);
-	}
-	
-	private MySong copySongMetadata(SongMetadata songMetadata) {
-		MySong song = new MySong();
-		
-		// Apply the metadata
-		song.setId	  (songMetadata.getId());
-		song.setIndex (songMetadata.getIndex());
-		song.setArtist(songMetadata.getArtist());
-		song.setTitle (songMetadata.getTitle());
-		song.setAlbum (songMetadata.getAlbum());
-		song.setAlbumartist(songMetadata.getAlbumartist());
-		song.setPrettyLength(songMetadata.getPrettyLength());
-		song.setLength(songMetadata.getLength());
-		song.setGenre (songMetadata.getGenre());
-		song.setYear  (songMetadata.getPrettyYear());
-		song.setTrack (songMetadata.getTrack());
-		song.setDisc  (songMetadata.getDisc());
-		song.setPlaycount(songMetadata.getPlaycount());
-		song.setFilename(songMetadata.getFilename());
-		song.setSize(songMetadata.getFileSize());
-		song.setLocal(songMetadata.getIsLocal());
-		if (songMetadata.hasArt()) {
-			song.setArt   (songMetadata.getArt());
-		}
-
-		return song;
+		return MySong.fromProtocolBuffer(songMetadata);
 	}
 
 	/**
@@ -283,36 +230,10 @@ public class ClementinePbParser {
 	}
 	
 	/**
-	 * Parse the Disconnect message
-	 * @param responseDisconnect The response from Clementine
-	 * @return The parsed Element
-	 */
-	private ClementineElement parseDisconnect(
-			ResponseDisconnect responseDisconnect) {
-		Disconnected disconnected = null;
-		
-		switch (responseDisconnect.getReasonDisconnect().getNumber()) {
-		case ReasonDisconnect.Server_Shutdown_VALUE:
-				 disconnected = new Disconnected(DisconnectReason.SERVER_CLOSE);
-			     break;
-		case ReasonDisconnect.Wrong_Auth_Code_VALUE:
-			 disconnected = new Disconnected(DisconnectReason.WRONG_AUTH_CODE);
-		     break;
-		case ReasonDisconnect.Download_Forbidden_VALUE:
-			 disconnected = new Disconnected(DisconnectReason.DOWNLOAD_FORBIDDEN);
-			 break;
-		default: disconnected = new Disconnected(DisconnectReason.SERVER_CLOSE);
-				 break;
-		}
-		return disconnected;
-	}
-	
-	/**
 	 * Parse the playlists
 	 * @param responsePlaylists The Playlist Elements
-	 * @return Reload Element
 	 */
-	private ClementineElement parsePlaylists(ResponsePlaylists responsePlaylists) {
+	private void  parsePlaylists(ResponsePlaylists responsePlaylists) {
 		// First clear the current playlists
 		App.mClementine.getPlaylists().clear();
 		
@@ -330,11 +251,13 @@ public class ClementinePbParser {
 			// Add the playlist to the playlist list
 			App.mClementine.addPlaylist(myPlaylist);
 		}
-		
-		return new ReloadPlaylists();
 	}
 	
-	private ClementineElement parsePlaylistSongs(ResponsePlaylistSongs response) {
+	/**
+	 * Parse the songs in a playlist and add them to our structure
+	 * @param response The message with the songs
+	 */
+	private void parsePlaylistSongs(ResponsePlaylistSongs response) {
 		Playlist playlist = response.getRequestedPlaylist();
 		LinkedList<MySong> playlistSongs = App.mClementine.getPlaylists().get(playlist.getId()).getPlaylistSongs();
 		playlistSongs.clear();
@@ -342,18 +265,15 @@ public class ClementinePbParser {
 		List<SongMetadata> songs = response.getSongsList();
 		
 		for (SongMetadata s : songs) {
-			playlistSongs.add(copySongMetadata(s));
+			playlistSongs.add(MySong.fromProtocolBuffer(s));
 		}
-		
-		return new ReloadPlaylistSongs();
 	}
 	
 	/**
 	 * Get the Repeat Mode
 	 * @param repeat The Element
-	 * @return Reload
 	 */
-	private ClementineElement parseRepeat(Repeat repeat) {
+	private void parseRepeat(Repeat repeat) {
 		switch (repeat.getRepeatMode()) {
 		case Repeat_Off:		App.mClementine.setRepeatMode(RepeatMode.OFF);
 								break;
@@ -365,15 +285,13 @@ public class ClementinePbParser {
 								break;
 		default: break;
 		}
-		return new ReloadControl();
 	}
 	
 	/**
 	 * Get the shuffle Mode
 	 * @param shuffle The Element
-	 * @return Reload
 	 */
-	private ClementineElement parseRandom(Shuffle shuffle) {
+	private void parseShuffle(Shuffle shuffle) {
 		switch (shuffle.getShuffleMode()) {
 		case Shuffle_Off:		App.mClementine.setShuffleMode(ShuffleMode.OFF);
 								break;
@@ -385,6 +303,5 @@ public class ClementinePbParser {
 								break;
 		default: break;
 		}
-		return new ReloadControl();
 	}
 }

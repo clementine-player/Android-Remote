@@ -19,9 +19,9 @@ package de.qspool.clementineremote.backend;
 
 import de.qspool.clementineremote.App; 
 import de.qspool.clementineremote.R;
-import de.qspool.clementineremote.backend.elements.Disconnected;
-import de.qspool.clementineremote.backend.elements.Disconnected.DisconnectReason;
 import de.qspool.clementineremote.backend.event.OnConnectionClosedListener;
+import de.qspool.clementineremote.backend.pb.ClementineMessage;
+import de.qspool.clementineremote.backend.pb.ClementineMessage.ErrorMessage;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
 import de.qspool.clementineremote.ui.ConnectDialog;
 import android.app.NotificationManager;
@@ -86,7 +86,7 @@ public class ClementineService extends Service {
 			// Check if we lost connection due a keep alive
 			if (intent.hasExtra(App.SERVICE_DISCONNECT_DATA)) {
 				int reason = intent.getIntExtra(App.SERVICE_DISCONNECT_DATA, 0);
-				if (reason == DisconnectReason.KEEP_ALIVE.ordinal()) {
+				if (reason == ErrorMessage.KEEP_ALIVE_TIMEOUT.ordinal()) {
 					setupNotification(false);
 					showKeepAliveDisconnectNotification();
 				}
@@ -152,10 +152,10 @@ public class ClementineService extends Service {
 	private OnConnectionClosedListener occl = new OnConnectionClosedListener() {
 		
 		@Override
-		public void onConnectionClosed(Disconnected disconnected) {
+		public void onConnectionClosed(ClementineMessage clementineMessage) {
 			Intent mServiceIntent = new Intent(ClementineService.this, ClementineService.class);
 	    	mServiceIntent.putExtra(App.SERVICE_ID, App.SERVICE_DISCONNECTED);
-	    	mServiceIntent.putExtra(App.SERVICE_DISCONNECT_DATA, disconnected.getReason().ordinal());
+	    	mServiceIntent.putExtra(App.SERVICE_DISCONNECT_DATA, clementineMessage.getErrorMessage().ordinal());
 	    	startService(mServiceIntent);
 		}
 	};

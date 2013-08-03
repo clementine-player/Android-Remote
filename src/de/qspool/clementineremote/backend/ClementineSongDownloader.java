@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Random;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -34,18 +35,16 @@ import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.app.NotificationCompat.Builder;
+import android.support.v4.app.TaskStackBuilder;
 import android.widget.Toast;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
-import de.qspool.clementineremote.backend.elements.ClementineElement;
-import de.qspool.clementineremote.backend.elements.Disconnected;
-import de.qspool.clementineremote.backend.elements.DownloadQueueEmpty;
-import de.qspool.clementineremote.backend.elements.InvalidData;
 import de.qspool.clementineremote.backend.elements.SongDownloadResult;
-import de.qspool.clementineremote.backend.elements.SongFileChunk;
 import de.qspool.clementineremote.backend.elements.SongDownloadResult.DownloadResult;
+import de.qspool.clementineremote.backend.pb.ClementineMessage;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongFileChunk;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.backend.requests.RequestConnect;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
@@ -108,6 +107,7 @@ public class ClementineSongDownloader extends
 	    App.downloaders.put(mId, this);
 	}
 	
+	@SuppressLint("InlinedApi")
 	public void startDownload(RequestDownload r) {
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 	        this.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, r);
@@ -269,29 +269,29 @@ public class ClementineSongDownloader extends
 			}
 			
 			// Get the raw protocol buffer
-			ClementineElement element = mClient.getProtoc();
+			ClementineMessage message = mClient.getProtoc();
 			
-			if (element instanceof InvalidData) {
+			if (message.isErrorMessage()) {
 				result = new SongDownloadResult(DownloadResult.CONNECTION_ERROR);
 				break;
 			}
 			
 			// Is the download forbidden?
-			if (element instanceof Disconnected) {
+			if (message.getMessageType() == MsgType.DISCONNECT) {
 				result = new SongDownloadResult(DownloadResult.FOBIDDEN);
 				break;
 			}
 			
 			// Download finished?
-			if (element instanceof DownloadQueueEmpty) {
+			if (message.getMessageType() == MsgType.DOWNLOAD_QUEUE_EMPTY) {
 				break;
 			}
 			
 			// Ignore other elements!
-			if (!(element instanceof SongFileChunk))
+			if (message.getMessageType() != MsgType.SONG_FILE_CHUNK)
 				continue;
 			
-			SongFileChunk chunk = (SongFileChunk) element;
+			ResponseSongFileChunk chunk = message.getMessage().getResponseSongFileChunk();
 			
 			// If we received chunk no 0, then we have to decide wether to
 			// accept the song offered or not
@@ -313,7 +313,7 @@ public class ClementineSongDownloader extends
 					f = new File(BuildFilePath(chunk));
 					
 					// Save the songs Metadata on first chunk
-					mCurrentSong = chunk.getSongMetadata();
+					mCurrentSong = MySong.fromProtocolBuffer(chunk.getSongMetadata());
 					updateProgress(chunk);
 					
 					// User wants to override files, so delete it here!
@@ -328,7 +328,7 @@ public class ClementineSongDownloader extends
 				}
 				
 				// Write chunk to sdcard
-				fo.write(chunk.getData());
+				fo.write(chunk.getData().toByteArray());
 				
 				// Have we downloaded all chunks?
 				if (chunk.getChunkCount() == chunk.getChunkNumber()) {
@@ -362,7 +362,7 @@ public class ClementineSongDownloader extends
      * @param chunk The chunk with the metadata
      * @return a boolean indicating if the song will be sent or not
      */
-    private boolean processSongOffer(SongFileChunk chunk) {
+    private boolean processSongOffer(ResponseSongFileChunk chunk) {
     	File f = new File(BuildFilePath(chunk));
     	boolean accept = true;
     	
@@ -378,7 +378,7 @@ public class ClementineSongDownloader extends
      * Updates the current notification
      * @param chunk The current downloaded chunk
      */
-    private void updateProgress(SongFileChunk chunk) {
+    private void updateProgress(ResponseSongFileChunk chunk) {
     	// Update notification
 		mFileCount = chunk.getFileCount();
 		mCurrentFile = chunk.getFileNumber();
@@ -393,7 +393,7 @@ public class ClementineSongDownloader extends
      * Return the folder where the file will be placed
      * @param chunk The chunk
      */
-    private String BuildDirPath(SongFileChunk chunk) {
+    private String BuildDirPath(ResponseSongFileChunk chunk) {
     	String defaultPath = Environment.getExternalStorageDirectory() + "//ClementineMusic";
         String path = mSharedPref.getString(App.SP_DOWNLOAD_DIR, defaultPath);
         
@@ -428,7 +428,7 @@ public class ClementineSongDownloader extends
      * @param e The SongFileChunk
      * @return /sdcard/Music/Artist/Album/file.mp3
      */
-    private String BuildFilePath(SongFileChunk chunk) {
+    private String BuildFilePath(ResponseSongFileChunk chunk) {
     	StringBuilder sb = new StringBuilder();
     	sb.append(BuildDirPath(chunk));
     	sb.append(File.separator);

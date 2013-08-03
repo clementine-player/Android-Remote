@@ -21,9 +21,7 @@ import java.lang.ref.WeakReference;
 
 import android.os.Message;
 import android.os.Handler;
-import de.qspool.clementineremote.backend.elements.ReloadMetadataChanged;
-import de.qspool.clementineremote.backend.elements.ReloadPlaylistSongs;
-import de.qspool.clementineremote.backend.elements.ReloadPlaylists;
+import de.qspool.clementineremote.backend.pb.ClementineMessage;
 
 /**
  * This class is used to handle the messages sent from the
@@ -39,13 +37,23 @@ public class PlaylistsHandler extends Handler {
 	@Override
 	public void handleMessage(Message msg) {
 		Playlists pd = mDialog.get();
-		if (msg.obj instanceof ReloadMetadataChanged) {
-			pd.reloadInfo();
-		} else if (msg.obj instanceof ReloadPlaylistSongs) {
-			pd.checkGotAllPlaylists();
-			pd.reloadInfo();
-		} else if (msg.obj instanceof ReloadPlaylists) {
-			pd.getPlaylists();
+		if (msg.obj instanceof ClementineMessage) {
+			ClementineMessage clementineMessage = (ClementineMessage) msg.obj;
+			
+			switch (clementineMessage.getMessageType()) {
+			case CURRENT_METAINFO:
+				pd.reloadInfo();
+				break;
+			case PLAYLIST_SONGS:
+				pd.checkGotAllPlaylists();
+				pd.reloadInfo();
+				break;
+			case PLAYLISTS:
+				pd.getPlaylists();
+				break;
+			default:
+				break;
+			}
 		}
 	}
 }

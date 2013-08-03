@@ -41,14 +41,14 @@ import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
-import de.qspool.clementineremote.backend.elements.ClementineElement;
-import de.qspool.clementineremote.backend.elements.Disconnected;
-import de.qspool.clementineremote.backend.elements.Disconnected.DisconnectReason;
-import de.qspool.clementineremote.backend.elements.InvalidData;
-import de.qspool.clementineremote.backend.elements.NoConnection;
-import de.qspool.clementineremote.backend.elements.OldProtoVersion;
-import de.qspool.clementineremote.backend.elements.Reload;
 import de.qspool.clementineremote.backend.event.OnConnectionClosedListener;
+import de.qspool.clementineremote.backend.pb.ClementineMessage;
+import de.qspool.clementineremote.backend.pb.ClementineMessage.ErrorMessage;
+import de.qspool.clementineremote.backend.pb.ClementineMessage.MessageGroup;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message.Builder;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ReasonDisconnect;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseDisconnect;
 import de.qspool.clementineremote.backend.pebble.Pebble;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.backend.receivers.ClementineMediaButtonEventReceiver;
@@ -188,7 +188,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 			// don't request the first data a second time
 			r.setRequestPlaylistSongs(false);
 		} else {
-			sendUiMessage(new NoConnection());
+			sendUiMessage(new ClementineMessage(ErrorMessage.NO_CONNECTION));
 		}
 		
 		return connected;
@@ -207,7 +207,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 				processProtocolBuffer(getProtoc());
 			}
 		} catch (IOException e) {
-			sendUiMessage(new InvalidData());
+			sendUiMessage(new ClementineMessage(ErrorMessage.INVALID_DATA));
 		}
 		
 		// Let the looper send the message again
@@ -222,13 +222,15 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 	 * Process the received protocol buffer
 	 * @param bs The binary representation of the protocol buffer
 	 */
-	private void processProtocolBuffer(ClementineElement clementineElement) {		
+	private void processProtocolBuffer(ClementineMessage clementineMessage) {
 		// Close the connection if we have an old proto verion
-		if (clementineElement instanceof OldProtoVersion) {
-			closeConnection(new Disconnected(DisconnectReason.WRONG_PROTO));
-			sendUiMessage(clementineElement);
-		} else if (clementineElement instanceof Reload) {
-			sendUiMessage(clementineElement);
+		if (clementineMessage.isErrorMessage()) {
+			closeConnection(clementineMessage);
+			sendUiMessage(clementineMessage);
+		} 
+		
+		if (clementineMessage.getTypeGroup() == MessageGroup.GUI_RELOAD) {
+			sendUiMessage(clementineMessage);
 			
 	    	// Now update the notification and the remote control client			
 			if (App.mClementine.getCurrentSong() != mLastSong) {
@@ -241,11 +243,12 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 				mLastState = App.mClementine.getState();
 				updateRemoteControlClient();
 			}
-		} else if (clementineElement instanceof Disconnected) {
-			closeConnection((Disconnected) clementineElement);
-		} else {
-			sendUiMessage(clementineElement);
 		}
+		
+		if (clementineMessage.getMessageType() == MsgType.DISCONNECT) {
+			closeConnection(clementineMessage);
+		}
+		sendUiMessage(clementineMessage);
 	}
 	
 	/**
@@ -276,7 +279,11 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 			ret = super.createConnection(mRequestConnect);
 			if (!ret) {
 				// Failed. Close connection
-				closeConnection(new Disconnected(DisconnectReason.SERVER_CLOSE));
+				Builder builder = ClementineMessage.getMessageBuilder(MsgType.DISCONNECT);
+				ResponseDisconnect.Builder disc = builder.getResponseDisconnectBuilder();
+				disc.setReasonDisconnect(ReasonDisconnect.Server_Shutdown);
+				builder.setResponseDisconnect(disc);
+				closeConnection(new ClementineMessage(builder));
 			}
 		}
 		
@@ -297,17 +304,15 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 			super.disconnect(r);
 			
 			// and close the connection
-			closeConnection(new Disconnected(DisconnectReason.CLIENT_CLOSE));
+			Builder builder = ClementineMessage.getMessageBuilder(MsgType.DISCONNECT);
+			closeConnection(new ClementineMessage(builder));
 		}
-			
-		// Send the result to the ui thread
-		sendUiMessage(new Disconnected(DisconnectReason.CLIENT_CLOSE));
 	}
 	
 	/**
 	 * Close the socket and the streams
 	 */
-	private void closeConnection(Disconnected disconnected) {
+	private void closeConnection(ClementineMessage clementineMessage) {
 		// Disconnect socket
 		closeSocket();
 		
@@ -320,22 +325,22 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 		
 		mWakeLock.release();
 		
-		sendUiMessage(disconnected);
+		sendUiMessage(clementineMessage);
 		
 		// Close thread
 		Looper.myLooper().quit();
 		
 		// Fire the listener
-		fireOnConnectionClosed(disconnected);
+		fireOnConnectionClosed(clementineMessage);
 	}
 	
 	/**
 	 * Fire the event to all listeners
 	 * @param r The Disconnect event.
 	 */
-	private void fireOnConnectionClosed(Disconnected d) {
+	private void fireOnConnectionClosed(ClementineMessage clementineMessage) {
 		for (OnConnectionClosedListener listener : mListeners ) {
-			listener.onConnectionClosed(d);
+			listener.onConnectionClosed(clementineMessage);
 		}
 	}
 
@@ -367,7 +372,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 			
 			// We tried, but the server isn't there anymore
 			if (mLeftReconnects == 0) {
-				closeConnection(new Disconnected(DisconnectReason.KEEP_ALIVE));
+				closeConnection(new ClementineMessage(ErrorMessage.KEEP_ALIVE_TIMEOUT));
 			}
 		}
 	}

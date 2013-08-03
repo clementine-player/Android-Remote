@@ -25,10 +25,8 @@ import java.net.Socket;
 import java.net.SocketAddress;
 
 import android.util.Log;
-
 import de.qspool.clementineremote.App;
-import de.qspool.clementineremote.backend.elements.ClementineElement;
-import de.qspool.clementineremote.backend.elements.InvalidData;
+import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementinePbCreator;
 import de.qspool.clementineremote.backend.pb.ClementinePbParser;
 import de.qspool.clementineremote.backend.requests.RequestConnect;
@@ -92,19 +90,19 @@ public class ClementineSimpleConnection {
 	 * available!
 	 * @returns The parsed protocol buffer
 	 */
-	public ClementineElement getProtoc() {
-		ClementineElement element = new InvalidData();
+	public ClementineMessage getProtoc() {
+		ClementineMessage message = null;
 		try {
 			// Read the data and return it
 			int len = mIn.readInt();
 			byte[] data = new byte[len];
 			mIn.readFully(data, 0, len);
-			element = mClementinePbParser.parse(data);
+			message = mClementinePbParser.parse(data);
 		} catch (IOException e) {
 			Log.d("getProtoc", "IOException");
 		}
 		
-		return element;
+		return message;
 	}
 	
 	/**

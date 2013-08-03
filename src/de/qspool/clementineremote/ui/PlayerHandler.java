@@ -19,15 +19,10 @@ package de.qspool.clementineremote.ui;
 
 import java.lang.ref.WeakReference;
 
-import android.os.Message;
 import android.os.Handler;
-import de.qspool.clementineremote.backend.elements.Disconnected;
-import de.qspool.clementineremote.backend.elements.NoConnection;
-import de.qspool.clementineremote.backend.elements.Reload;
-import de.qspool.clementineremote.backend.elements.ReloadLyrics;
-import de.qspool.clementineremote.backend.elements.ReloadMetadataChanged;
-import de.qspool.clementineremote.backend.elements.ReloadPlaylistSongs;
-import de.qspool.clementineremote.backend.elements.ReloadPlaylists;
+import android.os.Message;
+import de.qspool.clementineremote.backend.pb.ClementineMessage;
+import de.qspool.clementineremote.backend.pb.ClementineMessage.MessageGroup;
 
 /**
  * This class is used to handle the messages sent from the
@@ -44,21 +39,43 @@ public class PlayerHandler extends Handler {
 	public void handleMessage(Message msg) {
 		Player pd = mDialog.get();
 		
-		if (msg.obj instanceof NoConnection) {
-			pd.disconnect();
-		} else if (msg.obj instanceof Disconnected) {
-			pd.disconnect();
-		} else if (msg.obj instanceof ReloadMetadataChanged
-				 || msg.obj instanceof ReloadPlaylistSongs
-				 || msg.obj instanceof ReloadPlaylists) {
-			Reload r = (Reload) msg.obj;
-			pd.reloadInfo(r);
-			pd.reloadPlaylist();
-		} else if (msg.obj instanceof ReloadLyrics) {
-			pd.showLyricsDialog();
-		} else if (msg.obj instanceof Reload) {
-			Reload r = (Reload) msg.obj;
-			pd.reloadInfo(r);
+		if (msg.obj instanceof ClementineMessage) {
+			ClementineMessage clementineMessage = (ClementineMessage) msg.obj;
+			
+			if (clementineMessage.isErrorMessage()) {
+				// We have got an error
+				switch (clementineMessage.getErrorMessage()) {
+				case NO_CONNECTION:
+					pd.disconnect();
+					break;
+				default:
+					pd.disconnect();
+					break;
+				}
+			} else {
+				// Okay, normal message
+				switch (clementineMessage.getMessageType()) {
+				case DISCONNECT:
+					pd.disconnect();
+					break;
+				case CURRENT_METAINFO:
+				case PLAYLIST_SONGS:
+				case PLAYLISTS:
+				case SHUFFLE:
+				case REPEAT:
+					pd.reloadInfo(clementineMessage);
+					pd.reloadPlaylist();
+					break;
+				case LYRICS:
+					pd.showLyricsDialog();
+					break;
+				default:
+					if (clementineMessage.getTypeGroup() == MessageGroup.GUI_RELOAD) {
+						pd.reloadInfo(clementineMessage);
+					}
+					break;
+				}
+			}
 		}
 	}
 }

@@ -64,9 +64,9 @@ import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementineService;
-import de.qspool.clementineremote.backend.elements.Disconnected;
-import de.qspool.clementineremote.backend.elements.Disconnected.DisconnectReason;
 import de.qspool.clementineremote.backend.mdns.ClementineMDnsDiscovery;
+import de.qspool.clementineremote.backend.pb.ClementineMessage;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ReasonDisconnect;
 import de.qspool.clementineremote.backend.requests.RequestConnect;
 import de.qspool.clementineremote.backend.requests.RequestDisconnect;
 import de.qspool.clementineremote.ui.adapter.CustomClementinesAdapter;
@@ -463,15 +463,16 @@ public class ConnectDialog extends SherlockActivity {
 	
 	/**
 	 * Clementine closed the connection
-	 * @param disconnected The object to work with
+	 * @param clementineMessage The object to work with
 	 */
-	void disconnected(Disconnected disconnected) {
+	void disconnected(ClementineMessage clementineMessage) {
 		// Restart the background service
 		mServiceIntent = new Intent(this, ClementineService.class);
     	mServiceIntent.putExtra(App.SERVICE_ID, App.SERVICE_START);
     	startService(mServiceIntent);
     	
-		if (disconnected.getReason() == DisconnectReason.WRONG_AUTH_CODE) {
+		if (clementineMessage.getMessage().getResponseDisconnect()
+										  .getReasonDisconnect() == ReasonDisconnect.Wrong_Auth_Code) {
 			showAuthCodePromt();
 		}
 	}

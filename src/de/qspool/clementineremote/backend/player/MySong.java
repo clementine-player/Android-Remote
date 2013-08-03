@@ -22,6 +22,8 @@ import java.util.List;
 
 import com.google.protobuf.ByteString;
 
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata;
+
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -76,6 +78,33 @@ public class MySong {
 		sb.append(" - ");
 		sb.append(title);
 		return sb.toString();
+	}
+	
+	public static MySong fromProtocolBuffer(SongMetadata songMetadata) {		
+			MySong song = new MySong();
+		
+		// Apply the metadata
+		song.setId	  (songMetadata.getId());
+		song.setIndex (songMetadata.getIndex());
+		song.setArtist(songMetadata.getArtist());
+		song.setTitle (songMetadata.getTitle());
+		song.setAlbum (songMetadata.getAlbum());
+		song.setAlbumartist(songMetadata.getAlbumartist());
+		song.setPrettyLength(songMetadata.getPrettyLength());
+		song.setLength(songMetadata.getLength());
+		song.setGenre (songMetadata.getGenre());
+		song.setYear  (songMetadata.getPrettyYear());
+		song.setTrack (songMetadata.getTrack());
+		song.setDisc  (songMetadata.getDisc());
+		song.setPlaycount(songMetadata.getPlaycount());
+		song.setFilename(songMetadata.getFilename());
+		song.setSize(songMetadata.getFileSize());
+		song.setLocal(songMetadata.getIsLocal());
+		if (songMetadata.hasArt()) {
+			song.setArt   (songMetadata.getArt());
+		}
+
+		return song;
 	}
 	
 	public int getId() {

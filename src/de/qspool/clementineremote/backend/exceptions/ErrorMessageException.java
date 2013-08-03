@@ -15,11 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package de.qspool.clementineremote.backend.elements;
+package de.qspool.clementineremote.backend.exceptions;
 
-public class OldProtoVersion extends ClementineElement {
-
-	public OldProtoVersion() {
-		super();
-	}
+public class ErrorMessageException extends Exception {
+	private static final long serialVersionUID = -71325530820975818L;
 }
