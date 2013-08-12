@@ -38,15 +38,9 @@ import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.ClementineSongDownloader;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
+import de.qspool.clementineremote.backend.pb.ClementinePbCreator;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
-import de.qspool.clementineremote.backend.requests.RequestControl;
-import de.qspool.clementineremote.backend.requests.RequestControl.Request;
-import de.qspool.clementineremote.backend.requests.RequestDisconnect;
-import de.qspool.clementineremote.backend.requests.RequestDownload;
-import de.qspool.clementineremote.backend.requests.RequestDownload.DownloadType;
-import de.qspool.clementineremote.backend.requests.RequestLoveBan;
-import de.qspool.clementineremote.backend.requests.RequestLoveBan.LastFmType;
-import de.qspool.clementineremote.backend.requests.RequestVolume;
 import de.qspool.clementineremote.ui.fragments.PlayerFragment;
 import de.qspool.clementineremote.ui.fragments.PlaylistSongs;
 
@@ -160,21 +154,21 @@ public class Player extends SherlockFragmentActivity {
 								 && !App.mClementine.getCurrentSong().isLoved()) {
 									// You can love only one
 									Message msg = Message.obtain();
-									msg.obj = new RequestLoveBan(LastFmType.LOVE);
+									msg.obj = ClementineMessage.getMessage(MsgType.LOVE);
 									App.mClementineConnection.mHandler.sendMessage(msg);	
 									App.mClementine.getCurrentSong().setLoved(true);
 								}
 								makeToast(R.string.track_loved, Toast.LENGTH_SHORT);
 								break;
 		case R.id.ban:			Message msg = Message.obtain();
-								msg.obj = new RequestLoveBan(LastFmType.BAN);
+								msg.obj = ClementineMessage.getMessage(MsgType.BAN);
 								App.mClementineConnection.mHandler.sendMessage(msg);
 								makeToast(R.string.track_banned, Toast.LENGTH_SHORT);
 								break;
 		case R.id.download_song: 
 								if (App.mClementine.getCurrentSong().isLocal()) {
 									ClementineSongDownloader downloaderSong = new ClementineSongDownloader(this);
-									downloaderSong.startDownload(new RequestDownload(DownloadType.CURRENT_SONG));
+									downloaderSong.startDownload(ClementinePbCreator.buildDownloadSongsMessage(-1, DownloadItem.CurrentItem));
 								} else {
 									Toast.makeText(this, R.string.player_song_is_stream, Toast.LENGTH_LONG).show();
 								}
@@ -182,7 +176,7 @@ public class Player extends SherlockFragmentActivity {
 		case R.id.download_album: 
 								if (App.mClementine.getCurrentSong().isLocal()) {
 									ClementineSongDownloader downloaderSong = new ClementineSongDownloader(this);
-									downloaderSong.startDownload(new RequestDownload(DownloadType.ALBUM));
+									downloaderSong.startDownload(ClementinePbCreator.buildDownloadSongsMessage(-1, DownloadItem.ItemAlbum));
 								} else {
 									Toast.makeText(this, R.string.player_song_is_stream, Toast.LENGTH_LONG).show();
 								}
@@ -212,7 +206,7 @@ public class Player extends SherlockFragmentActivity {
 	private void doShuffle() {
 		Message msg = Message.obtain();
 		App.mClementine.nextShuffleMode();
-		msg.obj = new RequestControl(Request.SHUFFLE);
+		msg.obj = ClementinePbCreator.buildShuffle();
 		App.mClementineConnection.mHandler.sendMessage(msg);
 		
 		switch (App.mClementine.getShuffleMode()) {
@@ -252,7 +246,7 @@ public class Player extends SherlockFragmentActivity {
 		Message msg = Message.obtain();
 		
 		App.mClementine.nextRepeatMode();
-		msg.obj = new RequestControl(Request.REPEAT);
+		msg.obj = ClementinePbCreator.buildRepeat();
 		App.mClementineConnection.mHandler.sendMessage(msg);
 		
 		switch (App.mClementine.getRepeatMode()) {
@@ -304,7 +298,7 @@ public class Player extends SherlockFragmentActivity {
 			case KeyEvent.KEYCODE_VOLUME_DOWN:
 				if (mSharedPref.getBoolean(App.SP_KEY_USE_VOLUMEKEYS, true)) {
 					Message msgDown = Message.obtain();
-					msgDown.obj = new RequestVolume(App.mClementine.getVolume() - 10);
+					msgDown.obj = ClementinePbCreator.buildVolumeMessage(App.mClementine.getVolume() - 10);
 					App.mClementineConnection.mHandler.sendMessage(msgDown);
 					if (currentVolume >= 10)
 						currentVolume -= 10;
@@ -317,7 +311,7 @@ public class Player extends SherlockFragmentActivity {
 			case KeyEvent.KEYCODE_VOLUME_UP:
 				if (mSharedPref.getBoolean(App.SP_KEY_USE_VOLUMEKEYS, true)) {
 					Message msgUp = Message.obtain();
-					msgUp.obj = new RequestVolume(App.mClementine.getVolume() + 10);
+					msgUp.obj = ClementinePbCreator.buildVolumeMessage(App.mClementine.getVolume() + 10);
 					App.mClementineConnection.mHandler.sendMessage(msgUp);
 					if (currentVolume > 90)
 						currentVolume = 100;
@@ -356,12 +350,9 @@ public class Player extends SherlockFragmentActivity {
 	 * Request a disconnect from clementine
 	 */
 	void requestDisconnect() {
-		// Create a new request
-		RequestDisconnect r = new RequestDisconnect();
-		
 		// Move the request to the message
 		Message msg = Message.obtain();
-		msg.obj = r;
+		msg.obj = ClementineMessage.getMessage(MsgType.DISCONNECT);
 		
 		// Send the request to the thread
 		App.mClementineConnection.mHandler.sendMessage(msg);

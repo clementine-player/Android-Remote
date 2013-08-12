@@ -21,10 +21,7 @@ import java.lang.ref.WeakReference;
 
 import android.os.Handler;
 import android.os.Message;
-import de.qspool.clementineremote.backend.requests.CheckForData;
-import de.qspool.clementineremote.backend.requests.RequestConnect;
-import de.qspool.clementineremote.backend.requests.RequestDisconnect;
-import de.qspool.clementineremote.backend.requests.RequestToThread;
+import de.qspool.clementineremote.backend.pb.ClementineMessage;
 
 /**
  * This class receives the handler messages from the ui thread
@@ -40,16 +37,22 @@ public class ClementineConnectionHandler extends Handler {
 	public void handleMessage(Message msg) {
 		ClementinePlayerConnection myClementineConnection = mClementineConnection.get();
 		
-        // Act on the message
-    	RequestToThread r = (RequestToThread) msg.obj;
-    	if (r instanceof CheckForData) {
-    		myClementineConnection.checkForData();
-    	} else if (r instanceof RequestConnect) {
-    		myClementineConnection.createConnection((RequestConnect) r);
-    	} else if (r instanceof RequestDisconnect) {
-    		myClementineConnection.disconnect((RequestDisconnect)r);
-    	} else {
-    		myClementineConnection.sendRequest(r);
-    	}
+		if (msg.arg1 == ClementinePlayerConnection.CHECK_FOR_DATA_ARG) {
+			myClementineConnection.checkForData();
+		} else {
+	        // Act on the message
+			ClementineMessage message = (ClementineMessage) msg.obj;
+			switch (message.getMessageType()) {
+			case CONNECT:
+				myClementineConnection.createConnection(message);
+				break;
+			case DISCONNECT:
+				myClementineConnection.disconnect(message);
+				break;
+			default:
+				myClementineConnection.sendRequest(message);
+				break;
+			}
+		}
     }
 }

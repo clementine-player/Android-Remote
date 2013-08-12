@@ -29,8 +29,8 @@ import com.actionbarsherlock.app.SherlockListFragment;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.backend.pb.ClementinePbCreator;
 import de.qspool.clementineremote.backend.player.MySong;
-import de.qspool.clementineremote.backend.requests.RequestChangeCurrentSong;
 import de.qspool.clementineremote.ui.adapter.CustomSongAdapter;
 
 public class PlaylistSongs extends SherlockListFragment {
@@ -142,7 +142,7 @@ public class PlaylistSongs extends SherlockListFragment {
         MySong song = (MySong) getListAdapter().getItem(position);
         
         Message msg = Message.obtain();
-        msg.obj = new RequestChangeCurrentSong(song, mId);
+        msg.obj = ClementinePbCreator.buildRequestChangeSong(song.getIndex(), mId);
         App.mClementineConnection.mHandler.sendMessage(msg);
         
         // save which playlist is the active one

@@ -22,7 +22,7 @@ import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.event.OnConnectionClosedListener;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessage.ErrorMessage;
-import de.qspool.clementineremote.backend.requests.RequestDisconnect;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.ui.ConnectDialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -101,11 +101,10 @@ public class ClementineService extends Service {
 		stopForeground(true);
 		if (App.mClementine.isConnected()) {
 			// Create a new request
-			RequestDisconnect r = new RequestDisconnect();
 			
 			// Move the request to the message
 			Message msg = Message.obtain();
-			msg.obj = r;
+			msg.obj = ClementineMessage.getMessage(MsgType.DISCONNECT);
 			
 			// Send the request to the thread
 			App.mClementineConnection.mHandler.sendMessage(msg);

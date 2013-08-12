@@ -43,19 +43,16 @@ import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.elements.SongDownloadResult;
 import de.qspool.clementineremote.backend.elements.SongDownloadResult.DownloadResult;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
+import de.qspool.clementineremote.backend.pb.ClementinePbCreator;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongFileChunk;
 import de.qspool.clementineremote.backend.player.MySong;
-import de.qspool.clementineremote.backend.requests.RequestConnect;
-import de.qspool.clementineremote.backend.requests.RequestDisconnect;
-import de.qspool.clementineremote.backend.requests.RequestDownload;
-import de.qspool.clementineremote.backend.requests.RequestDownload.DownloadType;
-import de.qspool.clementineremote.backend.requests.SongOfferResponse;
 import de.qspool.clementineremote.ui.ConnectDialog;
 import de.qspool.clementineremote.utils.Utilities;
 
 public class ClementineSongDownloader extends
-		AsyncTask<RequestDownload, Integer, SongDownloadResult> {
+		AsyncTask<ClementineMessage, Integer, SongDownloadResult> {
 	
 	private Context mContext;
 	private SharedPreferences mSharedPref;
@@ -108,15 +105,15 @@ public class ClementineSongDownloader extends
 	}
 	
 	@SuppressLint("InlinedApi")
-	public void startDownload(RequestDownload r) {
+	public void startDownload(ClementineMessage message) {
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-	        this.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, r);
+	        this.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
 	    else
-	        this.execute(r);
+	        this.execute(message);
 	}
 
 	@Override
-	protected SongDownloadResult doInBackground(RequestDownload... params) {
+	protected SongDownloadResult doInBackground(ClementineMessage... params) {
 		// Check if the sd card is writeable
 		if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
 			return new SongDownloadResult(SongDownloadResult.DownloadResult.NOT_MOUNTED);
@@ -228,30 +225,28 @@ public class ClementineSongDownloader extends
 		}
     	int authCode = mSharedPref.getInt(App.SP_LAST_AUTH_CODE, 0);
     	
-    	RequestConnect r = new RequestConnect(ip, port, authCode, false, true);
-    	
-    	return mClient.createConnection(r);
+    	return mClient.createConnection(ClementinePbCreator.buildConnectMessage(ip, port, authCode, false, true));
     }
 
     /**
      * Start the Downlaod
      */
-    private SongDownloadResult startDownloading(RequestDownload r) {
+    private SongDownloadResult startDownloading(ClementineMessage clementineMessage) {
     	boolean downloadFinished = false;
     	SongDownloadResult result = new SongDownloadResult(DownloadResult.SUCCESSFUL);
     	File f = null;
     	FileOutputStream fo = null;
     	
     	// Do we have a playlist?
-    	mIsPlaylist = (r.getType() == DownloadType.PLAYLIST);
+    	mIsPlaylist = (clementineMessage.getMessage().getRequestDownloadSongs().getDownloadItem() == DownloadItem.APlaylist);
     	if (mIsPlaylist) {
-    		mPlaylistId = r.getPlaylistId();
+    		mPlaylistId = clementineMessage.getMessage().getRequestDownloadSongs().getPlaylistId();
     	}
     	
     	publishProgress(0);
     	
 		// Now request the songs
-		mClient.sendRequest(r);
+		mClient.sendRequest(clementineMessage);
 		
 		while (!downloadFinished) {
 			// Check if the user canceled the process
@@ -347,7 +342,7 @@ public class ClementineSongDownloader extends
 		}
 		
 		// Disconnect at the end
-		mClient.disconnect(new RequestDisconnect());
+		mClient.disconnect(ClementineMessage.getMessage(MsgType.DISCONNECT));
 		
 		return result;
     }
@@ -369,7 +364,7 @@ public class ClementineSongDownloader extends
     	if (f.exists() && !mOverrideExistingFiles) 
     		accept = false;	
 
-    	mClient.sendRequest(new SongOfferResponse(accept));
+    	mClient.sendRequest(ClementinePbCreator.buildSongOfferResponse(accept));
     	
     	return accept;
 	}

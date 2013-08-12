@@ -66,9 +66,9 @@ import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementineService;
 import de.qspool.clementineremote.backend.mdns.ClementineMDnsDiscovery;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
+import de.qspool.clementineremote.backend.pb.ClementinePbCreator;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ReasonDisconnect;
-import de.qspool.clementineremote.backend.requests.RequestConnect;
-import de.qspool.clementineremote.backend.requests.RequestDisconnect;
 import de.qspool.clementineremote.ui.adapter.CustomClementinesAdapter;
 import de.qspool.clementineremote.utils.Utilities;
 
@@ -326,12 +326,9 @@ public class ConnectDialog extends SherlockActivity {
 	private OnCancelListener oclProgressDialog = new OnCancelListener() {
 		@Override
 		public void onCancel(DialogInterface dialog) {
-			// Create a new request
-			RequestDisconnect r = new RequestDisconnect();
-			
 			// Move the request to the message
 			Message msg = Message.obtain();
-			msg.obj = r;
+			msg.obj = ClementineMessage.getMessage(MsgType.DISCONNECT);
 			
 			// Send the request to the thread
 			App.mClementineConnection.mHandler.sendMessage(msg);
@@ -367,13 +364,9 @@ public class ConnectDialog extends SherlockActivity {
 			port = Clementine.DefaultPort;
 		}
 		
-					
-		// Create a new connect request
-		RequestConnect r = new RequestConnect(mEtIp.getText().toString(), port, mAuthCode, true, false);
-		
 		// Move the request to the message
 		Message msg = Message.obtain();
-		msg.obj = r;
+		msg.obj = ClementinePbCreator.buildConnectMessage(mEtIp.getText().toString(), port, mAuthCode, true, false);
 		
 		// Send the request to the thread
 		App.mClementineConnection.mHandler.sendMessage(msg);

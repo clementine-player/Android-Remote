@@ -42,10 +42,9 @@ import com.actionbarsherlock.widget.SearchView;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.ClementineSongDownloader;
+import de.qspool.clementineremote.backend.pb.ClementinePbCreator;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
 import de.qspool.clementineremote.backend.player.MyPlaylist;
-import de.qspool.clementineremote.backend.requests.RequestDownload;
-import de.qspool.clementineremote.backend.requests.RequestPlaylistSong;
-import de.qspool.clementineremote.backend.requests.RequestDownload.DownloadType;
 import de.qspool.clementineremote.ui.fragments.PlaylistSongs;
 
 public class Playlists extends SherlockFragmentActivity implements ActionBar.TabListener {
@@ -153,7 +152,7 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 			MyPlaylist playlist = App.mClementine.getPlaylists().get(key);
 			if (playlist.getPlaylistSongs().size() == 0) {
 				Message msg = Message.obtain();
-				msg.obj = new RequestPlaylistSong(playlist.getId());
+				msg.obj = ClementinePbCreator.buildRequestPlaylistSongs(playlist.getId());
 				App.mClementineConnection.mHandler.sendMessage(msg);
 				mDownloadPlaylists++;
 				mDownloadPlaylistNames.add(playlist.getName());
@@ -219,12 +218,12 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 	            return true;
 	        case R.id.download_playlist: 
 				ClementineSongDownloader downloaderAlbum = new ClementineSongDownloader(this);
+				
 				// Get the playlist id and download the playlist
-				RequestDownload request = new RequestDownload(DownloadType.PLAYLIST);
 				int tabpos = getSupportActionBar().getSelectedTab().getPosition();
 				PlaylistSongs ps = (PlaylistSongs) mPagerAdapter.getItem(tabpos);
-				request.setPlaylistId(ps.getPlaylistId());
-				downloaderAlbum.startDownload(request);
+
+				downloaderAlbum.startDownload(ClementinePbCreator.buildDownloadSongsMessage(ps.getPlaylistId(), DownloadItem.APlaylist));
 				return true;
 	        case R.id.settings:		
 	        	Intent settingsIntent = new Intent(this, ClementineSettings.class);

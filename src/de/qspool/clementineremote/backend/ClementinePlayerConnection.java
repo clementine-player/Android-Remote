@@ -45,6 +45,7 @@ import de.qspool.clementineremote.backend.event.OnConnectionClosedListener;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessage.ErrorMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessage.MessageGroup;
+import de.qspool.clementineremote.backend.pb.ClementinePbCreator;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message.Builder;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ReasonDisconnect;
@@ -52,10 +53,6 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Resp
 import de.qspool.clementineremote.backend.pebble.Pebble;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.backend.receivers.ClementineMediaButtonEventReceiver;
-import de.qspool.clementineremote.backend.requests.CheckForData;
-import de.qspool.clementineremote.backend.requests.RequestConnect;
-import de.qspool.clementineremote.backend.requests.RequestDisconnect;
-import de.qspool.clementineremote.backend.requests.RequestToThread;
 
 /**
  * This Thread-Class is used to communicate with Clementine
@@ -67,6 +64,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 	private final int DELAY_MILLIS = 250;
 	private final long KEEP_ALIVE_TIMEOUT = 25000; // 25 Second timeout
 	private final int MAX_RECONNECTS = 5;
+	public final static int CHECK_FOR_DATA_ARG = 12387194;
 	
 	private Thread mThread;
 	private Handler mUiHandler;
@@ -86,7 +84,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 	private RemoteControlClient mRcClient;
 	
 	private ArrayList<OnConnectionClosedListener> mListeners = new ArrayList<OnConnectionClosedListener>();
-	private RequestConnect mRequestConnect;
+	private ClementineMessage mRequestConnect;
 	
 	private PowerManager.WakeLock mWakeLock;
 	
@@ -144,21 +142,21 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 	 * @param r The Request Object. Stores the ip to connect to.
 	 */
 	@Override
-	public boolean createConnection(RequestConnect r) {
+	public boolean createConnection(ClementineMessage message) {
 		boolean connected = false;
 		// Reset the connected flag
 		App.mClementine.setConnected(false);
 		mLastKeepAlive = 0;
 		
 		// Now try to connect and set the input and output streams
-		connected = super.createConnection(r);
+		connected = super.createConnection(message);
 		
 		// Check if Clementine dropped the connection.
 		// Is possible when we connect from a public ip and clementine rejects it
 		if (connected && !mSocket.isClosed()) {
 			// Enter the main loop in the thread
 			Message msg = Message.obtain();
-			msg.obj = new CheckForData();
+			msg.arg1 = CHECK_FOR_DATA_ARG;
 			mHandler.sendMessage(msg);
 			
 			// Now we are connected
@@ -170,9 +168,6 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 			registerRemoteControlClient();
 			
 			updateNotification();
-			
-			// save the request for potential reconnect
-			mRequestConnect = r;
 			
 			// The device shall be awake
 			mWakeLock.acquire();
@@ -186,7 +181,10 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 			
 			// Until we get a new connection request from ui,
 			// don't request the first data a second time
-			r.setRequestPlaylistSongs(false);
+			mRequestConnect = ClementinePbCreator.buildConnectMessage(message.getIp(), message.getPort(), 
+																	  message.getMessage().getRequestConnect().getAuthCode(), 
+																	  false, 
+																	  message.getMessage().getRequestConnect().getDownloader());
 		} else {
 			sendUiMessage(new ClementineMessage(ErrorMessage.NO_CONNECTION));
 		}
@@ -213,7 +211,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 		// Let the looper send the message again
 		if (App.mClementine.isConnected()) {
 			Message msg = Message.obtain();
-			msg.obj = new CheckForData();
+			msg.arg1 = CHECK_FOR_DATA_ARG;
 			mHandler.sendMessageDelayed(msg, DELAY_MILLIS);
 		}
 	}
@@ -270,9 +268,9 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 	 * @return true if data was sent, false if not
 	 */
 	@Override
-	public boolean sendRequest(RequestToThread r) {
+	public boolean sendRequest(ClementineMessage message) {
 		// Send the request to Clementine
-		boolean ret = super.sendRequest(r);
+		boolean ret = super.sendRequest(message);
 		
 		// If we lost connection, try to reconnect
 		if (!ret) {
@@ -295,17 +293,16 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 	 * @param r The RequestDisconnect Object
 	 */
 	@Override
-	public void disconnect(RequestDisconnect r) {
+	public void disconnect(ClementineMessage message) {
 		if (App.mClementine.isConnected()) {
 			// Set the Connected flag to false, so the loop in
 			// checkForData() is interrupted
 			App.mClementine.setConnected(false);
 			
-			super.disconnect(r);
+			super.disconnect(message);
 			
 			// and close the connection
-			Builder builder = ClementineMessage.getMessageBuilder(MsgType.DISCONNECT);
-			closeConnection(new ClementineMessage(builder));
+			closeConnection(message);
 		}
 	}
 	

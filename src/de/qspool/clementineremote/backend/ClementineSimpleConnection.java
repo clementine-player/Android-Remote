@@ -27,11 +27,7 @@ import java.net.SocketAddress;
 import android.util.Log;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
-import de.qspool.clementineremote.backend.pb.ClementinePbCreator;
 import de.qspool.clementineremote.backend.pb.ClementinePbParser;
-import de.qspool.clementineremote.backend.requests.RequestConnect;
-import de.qspool.clementineremote.backend.requests.RequestDisconnect;
-import de.qspool.clementineremote.backend.requests.RequestToThread;
 
 public class ClementineSimpleConnection {
 	// Socket, input and output streams
@@ -40,7 +36,6 @@ public class ClementineSimpleConnection {
 	protected DataOutputStream mOut;
 	
 	// Protocol buffer data
-	private ClementinePbCreator mClementinePbCreator = new ClementinePbCreator();
 	private ClementinePbParser mClementinePbParser = new ClementinePbParser();
 	
 	/**
@@ -48,8 +43,8 @@ public class ClementineSimpleConnection {
 	 * @param r The Request Object. Stores the ip to connect to.
 	 * @throws IOException 
 	 */
-	public boolean createConnection(RequestConnect r) {
-		SocketAddress socketAddress = new InetSocketAddress(r.getIp(), r.getPort());
+	public boolean createConnection(ClementineMessage message) {
+		SocketAddress socketAddress = new InetSocketAddress(message.getIp(), message.getPort());
 		mSocket = new Socket();
 		try {
 			mSocket.connect(socketAddress, 3000);
@@ -57,7 +52,7 @@ public class ClementineSimpleConnection {
 			mOut = new DataOutputStream(mSocket.getOutputStream());
 			
 			// Send the connect request to clementine
-			sendRequest(r);
+			sendRequest(message);
 		} catch (IOException e) {
 			return false;
 		}
@@ -70,9 +65,9 @@ public class ClementineSimpleConnection {
 	 * @param r The request as a RequestToThread object
 	 * @return true if data was sent, false if not
 	 */
-	public boolean sendRequest(RequestToThread r) {
+	public boolean sendRequest(ClementineMessage message) {
 		// Create the protocolbuffer
-		byte[] data = mClementinePbCreator.createRequest(r);
+		byte[] data = message.getMessage().toByteArray();
 		try {
 			mOut.writeInt(data.length);
 			mOut.write(data);
@@ -109,10 +104,10 @@ public class ClementineSimpleConnection {
 	 * Disconnect from Clementine
 	 * @param r The RequestDisconnect Object
 	 */
-	public void disconnect(RequestDisconnect r) {
+	public void disconnect(ClementineMessage message) {
 		if (App.mClementine.isConnected()) {			
 			// Send the disconnect message to clementine
-			byte[] data = mClementinePbCreator.createRequest(r);
+			byte[] data = message.getMessage().toByteArray();
 			
 			try {
 				// Now send the data

@@ -44,13 +44,12 @@ import com.actionbarsherlock.app.SherlockFragment;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.Clementine;
+import de.qspool.clementineremote.backend.pb.ClementineMessage;
+import de.qspool.clementineremote.backend.pb.ClementinePbCreator;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.player.LyricsProvider;
 import de.qspool.clementineremote.backend.player.MySong;
-import de.qspool.clementineremote.backend.requests.RequestControl;
-import de.qspool.clementineremote.backend.requests.RequestLyrics;
-import de.qspool.clementineremote.backend.requests.RequestControl.Request;
 import de.qspool.clementineremote.utils.Utilities;
-
 
 public class PlayerFragment extends SherlockFragment {
 	private final static int ANIMATION_DURATION = 750;
@@ -252,19 +251,19 @@ public class PlayerFragment extends SherlockFragment {
 			
 			switch(v.getId()) {
 			case R.id.btnNext: 
-				msg.obj = new RequestControl(Request.NEXT);
+				msg.obj = ClementineMessage.getMessage(MsgType.NEXT);
 				break;
 			case R.id.btnPrev: 
-				msg.obj = new RequestControl(Request.PREV);
+				msg.obj = ClementineMessage.getMessage(MsgType.PREVIOUS);
 				break;
 			case R.id.btnPlaypause: 
-				msg.obj = new RequestControl(Request.PLAYPAUSE);
+				msg.obj = ClementineMessage.getMessage(MsgType.PLAYPAUSE);
 				break;
 			case R.id.imgArt:
 				// Shall we download the lyrics or do we have them already downloaded?
 				mPdDownloadLyrics.show();
 				if (mCurrentSong.getLyricsProvider().isEmpty()) {
-					msg.obj = new RequestLyrics();
+					msg.obj = ClementineMessage.getMessage(MsgType.GET_LYRICS);
 				} else {
 					showLyricsDialog();
 				}
@@ -286,7 +285,7 @@ public class PlayerFragment extends SherlockFragment {
 			switch(v.getId()) {
 			case R.id.btnPlaypause:
 				Toast.makeText(getActivity(), R.string.player_stop_after_current, Toast.LENGTH_SHORT).show();
-				msg.obj = new RequestControl(Request.STOP_AFTER);
+				msg.obj = ClementineMessage.getMessage(MsgType.STOP_AFTER);
 				ret = true;
 				break;
 			default:
@@ -314,9 +313,7 @@ public class PlayerFragment extends SherlockFragment {
 			// If the user changed the position, send a request to Clementine
 			if (fromUser) {
 				Message msg = Message.obtain();
-				RequestControl control = new RequestControl(Request.TRACKPOSITION);
-				control.setValue(progress);
-				msg.obj = control;
+				msg.obj = ClementinePbCreator.buildTrackPosition(progress);
 				App.mClementineConnection.mHandler.sendMessage(msg);
 				
 				App.mClementine.setSongPosition(progress);

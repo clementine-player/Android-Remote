@@ -20,9 +20,10 @@ package de.qspool.clementineremote.backend.pb;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message.Builder;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Repeat;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestChangeSong;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestConnect;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestDownloadSongs;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestPlaylistSongs;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestSetTrackPosition;
@@ -30,118 +31,22 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Requ
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongOffer;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuffle;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ShuffleMode;
-import de.qspool.clementineremote.backend.requests.RequestChangeCurrentSong;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestChangeSong;
-import de.qspool.clementineremote.backend.requests.RequestConnect;
-import de.qspool.clementineremote.backend.requests.RequestControl;
-import de.qspool.clementineremote.backend.requests.RequestControl.Request;
-import de.qspool.clementineremote.backend.requests.RequestDisconnect;
-import de.qspool.clementineremote.backend.requests.RequestDownload;
-import de.qspool.clementineremote.backend.requests.RequestLoveBan;
-import de.qspool.clementineremote.backend.requests.RequestLoveBan.LastFmType;
-import de.qspool.clementineremote.backend.requests.RequestLyrics;
-import de.qspool.clementineremote.backend.requests.SongOfferResponse;
-import de.qspool.clementineremote.backend.requests.RequestPlaylistSong;
-import de.qspool.clementineremote.backend.requests.RequestVolume;
-import de.qspool.clementineremote.backend.requests.RequestToThread;
 
 /**
  * Creates the protocol buffer messages
  */
 public class ClementinePbCreator {
-	
-	public ClementinePbCreator() {
-	}
-
-	/**
-	 * Create a prtocolbuffer messsage
-	 * @param r What kind of message is created depends on r
-	 * @return The binary representation of the message.
-	 */
-	public byte[] createRequest(RequestToThread r) {
-		// Get a new builder and set the version
-		Message.Builder msg = Message.newBuilder();
-		
-		msg.setVersion(msg.getDefaultInstanceForType().getVersion());
-		
-		// Set the messagetype and the content depending
-		// on the request
-		if (r instanceof RequestConnect) {
-			msg.setType(MsgType.CONNECT);
-			msg.setRequestConnect(buildConnectMessage(msg, (RequestConnect)r));
-		} else if (r instanceof RequestDisconnect) {
-			msg.setType(MsgType.DISCONNECT);
-		} else if (r instanceof RequestControl) {
-			RequestControl rc = (RequestControl) r;
-			Request action = rc.getRequest();
-			switch (action) {
-			case PLAY: 		msg.setType(MsgType.PLAY);
-							break;
-			case PLAYPAUSE: msg.setType(MsgType.PLAYPAUSE);
-							break;
-			case PAUSE:		msg.setType(MsgType.PAUSE);
-							break;
-			case STOP: 		msg.setType(MsgType.STOP);
-							break;
-			case STOP_AFTER: msg.setType(MsgType.STOP_AFTER);
-							break;
-			case NEXT: 		msg.setType(MsgType.NEXT);
-							break;
-			case PREV: 		msg.setType(MsgType.PREVIOUS);
-							break;
-			case REPEAT:	msg.setType(MsgType.REPEAT);
-							msg.setRepeat(buildRepeat(msg));
-							break;
-			case SHUFFLE:	msg.setType(MsgType.SHUFFLE);
-							msg.setShuffle(buildRandom(msg));
-							break;
-			case TRACKPOSITION:
-							msg.setType(MsgType.SET_TRACK_POSITION);
-							msg.setRequestSetTrackPosition(buildTrackPosition(msg, rc));
-							break;
-			default: 		break;
-			}
-		} else if (r instanceof RequestVolume) {
-			msg.setType(MsgType.SET_VOLUME);
-			msg.setRequestSetVolume(buildVolumeMessage(msg, (RequestVolume)r));
-		} else if (r instanceof RequestPlaylistSong) {
-			msg.setType(MsgType.REQUEST_PLAYLIST_SONGS);
-			msg.setRequestPlaylistSongs(buildRequestPlaylistSongs(msg, (RequestPlaylistSong)r));
-		} else if (r instanceof RequestChangeCurrentSong) {
-			msg.setType(MsgType.CHANGE_SONG);
-			msg.setRequestChangeSong(buildRequestChangeSong(msg, (RequestChangeCurrentSong)r));
-		} else if (r instanceof RequestLoveBan) {
-			if (((RequestLoveBan) r).getType() == LastFmType.LOVE) {
-				msg.setType(MsgType.LOVE);
-			} else {
-				msg.setType(MsgType.BAN);
-			}
-			
-		} else if (r instanceof RequestLyrics) {
-			msg.setType(MsgType.GET_LYRICS);
-		} else if (r instanceof RequestDownload) {
-			msg.setType(MsgType.DOWNLOAD_SONGS);
-			msg.setRequestDownloadSongs(buildDownloadSongsMessage(msg, (RequestDownload) r));
-		} else if (r instanceof SongOfferResponse) {
-			msg.setType(MsgType.SONG_OFFER_RESPONSE);
-			msg.setResponseSongOffer(buildSongOfferResponse(msg, (SongOfferResponse) r));
-		}
-		Message m = msg.build();
-		
-		return m.toByteArray();
-	}
-	
 	/**
 	 * Create a song offer response
 	 * @param msg The message itself
 	 * @param r A SongOfferResponse
 	 * @return ResponseSongOffer Builder for protocol buffer message
 	 */
-	private ResponseSongOffer.Builder buildSongOfferResponse(
-			Message.Builder msg, SongOfferResponse r) {
+	public static ClementineMessage buildSongOfferResponse(boolean accepted) {
+		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.SONG_OFFER_RESPONSE);
 		ResponseSongOffer.Builder offer = msg.getResponseSongOfferBuilder();
-		offer.setAccepted(r.getAccepted());
-		return offer;
+		offer.setAccepted(accepted);
+		return new ClementineMessage(msg);
 	}
 
 	/**
@@ -150,23 +55,14 @@ public class ClementinePbCreator {
 	 * @param r The download request
 	 * @return The built request
 	 */
-	private RequestDownloadSongs.Builder buildDownloadSongsMessage(Message.Builder msg, RequestDownload r) {
+	public static ClementineMessage buildDownloadSongsMessage(int playlistId, DownloadItem downloadItem) {
+		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.DOWNLOAD_SONGS);
 		RequestDownloadSongs.Builder request = msg.getRequestDownloadSongsBuilder();
-		request.setPlaylistId(r.getPlaylistId());
 		
-		switch (r.getType()) {
-		case ALBUM:
-			request.setDownloadItem(DownloadItem.ItemAlbum);
-			break;
-		case CURRENT_SONG:
-			request.setDownloadItem(DownloadItem.CurrentItem);
-			break;
-		case PLAYLIST:
-			request.setDownloadItem(DownloadItem.APlaylist);
-			break;
-		}
+		request.setPlaylistId(playlistId);
+		request.setDownloadItem(downloadItem);
 		
-		return request;
+		return new ClementineMessage(msg);
 	}
 
 	/**
@@ -175,10 +71,13 @@ public class ClementinePbCreator {
 	 * @param r The Request
 	 * @return the Volume message part
 	 */
-	private RequestSetVolume.Builder buildVolumeMessage(Message.Builder msg, RequestVolume r) {
+	public static ClementineMessage buildVolumeMessage(int volume) {
+		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.SET_VOLUME);
+		
 		RequestSetVolume.Builder requestSetVolume = msg.getRequestSetVolumeBuilder();
-		requestSetVolume.setVolume(r.getVolume());
-		return requestSetVolume;
+		requestSetVolume.setVolume(volume);
+		
+		return new ClementineMessage(msg);
 	}
 	
 	/**
@@ -187,24 +86,30 @@ public class ClementinePbCreator {
 	 * @param r The Request
 	 * @return the connect message part
 	 */
-	private ClementineRemoteProtocolBuffer.RequestConnect.Builder
-			buildConnectMessage(Message.Builder msg, RequestConnect r) {
-		ClementineRemoteProtocolBuffer.RequestConnect.Builder 
-			requestConnect = msg.getRequestConnectBuilder();
+	public static ClementineMessage buildConnectMessage(String ip, int port, int authCode, boolean getPlaylistSongs, boolean isDownloader) {
+		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.CONNECT);
 		
-		requestConnect.setAuthCode(r.getAuthCode());
-		requestConnect.setSendPlaylistSongs(r.getRequestPlaylistSongs());
-		requestConnect.setDownloader(r.getDownloader());
+		RequestConnect.Builder requestConnect = msg.getRequestConnectBuilder();
 		
-		return requestConnect;
+		requestConnect.setAuthCode(authCode);
+		requestConnect.setSendPlaylistSongs(getPlaylistSongs);
+		requestConnect.setDownloader(isDownloader);
+		
+		ClementineMessage clementineMessage = new ClementineMessage(msg);
+		clementineMessage.setIp(ip);
+		clementineMessage.setPort(port);
+		
+		return clementineMessage;
 	}
 	
 	/**
-	 * Build Random Message
+	 * Build shuffle Message
 	 * @param msg The root message
 	 * @return The created element
 	 */
-	private Shuffle.Builder buildRandom(Builder msg) {
+	public static ClementineMessage buildShuffle() {
+		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.SHUFFLE);
+		
 		Shuffle.Builder shuffle = msg.getShuffleBuilder();
 		
 		switch (App.mClementine.getShuffleMode()) {
@@ -217,7 +122,7 @@ public class ClementinePbCreator {
 		case ALBUMS:	shuffle.setShuffleMode(ShuffleMode.Shuffle_Albums);
 						break;
 		}
-		return shuffle;
+		return new ClementineMessage(msg);
 	}
 
 	/**
@@ -225,7 +130,9 @@ public class ClementinePbCreator {
 	 * @param msg The root message
 	 * @return The created element
 	 */
-	private Repeat.Builder buildRepeat(Builder msg) {
+	public static ClementineMessage buildRepeat() {
+		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.REPEAT);
+		
 		Repeat.Builder repeat = msg.getRepeatBuilder();
 		
 		switch (App.mClementine.getRepeatMode()) {
@@ -238,7 +145,7 @@ public class ClementinePbCreator {
 		case PLAYLIST:	repeat.setRepeatMode(ClementineRemoteProtocolBuffer.RepeatMode.Repeat_Playlist);
 						break;
 		}
-		return repeat;
+		return new ClementineMessage(msg);
 	}
 	
 	/**
@@ -247,13 +154,14 @@ public class ClementinePbCreator {
 	 * @param r The Request Object
 	 * @return The Builder for the Message
 	 */
-	private RequestPlaylistSongs.Builder buildRequestPlaylistSongs(Builder msg,
-			RequestPlaylistSong r) {
+	public static ClementineMessage buildRequestPlaylistSongs(int playlistId) {
+		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.REQUEST_PLAYLIST_SONGS);
+		
 		RequestPlaylistSongs.Builder requestPlaylistSongs = msg.getRequestPlaylistSongsBuilder();
 		
-		requestPlaylistSongs.setId(r.getPlaylistId());
+		requestPlaylistSongs.setId(playlistId);
 		
-		return requestPlaylistSongs;
+		return new ClementineMessage(msg);
 	}
 	
 	/**
@@ -262,14 +170,15 @@ public class ClementinePbCreator {
 	 * @param r The Request Object
 	 * @return The Builder for the Message
 	 */
-	private RequestChangeSong.Builder buildRequestChangeSong(
-			Builder msg, RequestChangeCurrentSong r) {
+	public static ClementineMessage buildRequestChangeSong(int songIndex, int playlistId) {
+		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.CHANGE_SONG);
+		
 		RequestChangeSong.Builder request = msg.getRequestChangeSongBuilder();
 		
-		request.setSongIndex(r.getSong().getIndex());
-		request.setPlaylistId(r.getPlaylistId());
+		request.setSongIndex(songIndex);
+		request.setPlaylistId(playlistId);
 		
-		return request;
+		return new ClementineMessage(msg);
 	}
 	
 	/**
@@ -277,10 +186,12 @@ public class ClementinePbCreator {
 	 * @param msg The root message
 	 * @return 
 	 */
-	private RequestSetTrackPosition.Builder buildTrackPosition(Builder msg, RequestControl control) {
-		RequestSetTrackPosition.Builder request = msg.getRequestSetTrackPositionBuilder();
-		request.setPosition(control.getValue());
+	public static ClementineMessage buildTrackPosition(int position) {
+		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.SET_TRACK_POSITION);
 		
-		return request;
+		RequestSetTrackPosition.Builder request = msg.getRequestSetTrackPositionBuilder();
+		request.setPosition(position);
+		
+		return new ClementineMessage(msg);
 	}
 }

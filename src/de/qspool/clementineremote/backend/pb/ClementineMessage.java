@@ -35,6 +35,10 @@ public class ClementineMessage {
 	private MessageGroup mTypeGroup;
 	private ErrorMessage mErrorMessage;
 	
+	// Additional data for the connect message
+	private String mIp;
+	private int mPort;
+	
 	/**
 	 * Create a ClementineMessage from a giver protocol buffer
 	 * @param msg The created message
@@ -64,6 +68,15 @@ public class ClementineMessage {
 	 */
 	public ClementineMessage(ErrorMessage error) {
 		mErrorMessage = error;
+	}
+	
+	/**
+	 * Get a ClementineMessage from a specific message type
+	 * @param msgType the type
+	 * @return The ClementineMessage ready to send
+	 */
+	public static ClementineMessage getMessage(MsgType msgType) {
+		return new ClementineMessage(ClementineMessage.getMessageBuilder(msgType));
 	}
 	
 	/**
@@ -111,5 +124,21 @@ public class ClementineMessage {
 	
 	public boolean isErrorMessage() {
 		return (mErrorMessage != ErrorMessage.NO);
+	}
+
+	public String getIp() {
+		return mIp;
+	}
+
+	public void setIp(String mIp) {
+		this.mIp = mIp;
+	}
+
+	public int getPort() {
+		return mPort;
+	}
+
+	public void setPort(int mPort) {
+		this.mPort = mPort;
 	}
 }
