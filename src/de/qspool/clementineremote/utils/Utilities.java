@@ -115,7 +115,7 @@ public class Utilities {
 	 */
 	public static double getFreeSpace() { 
 		StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
-		return (double) stat.getAvailableBlocks() * (double)stat.getBlockSize();
+		return (double) stat.getAvailableBlocksLong() * (double)stat.getBlockSizeLong();
 	}
 	
 	/**
