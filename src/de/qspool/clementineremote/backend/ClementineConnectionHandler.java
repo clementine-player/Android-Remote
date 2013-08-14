@@ -42,16 +42,20 @@ public class ClementineConnectionHandler extends Handler {
 		} else {
 	        // Act on the message
 			ClementineMessage message = (ClementineMessage) msg.obj;
-			switch (message.getMessageType()) {
-			case CONNECT:
-				myClementineConnection.createConnection(message);
-				break;
-			case DISCONNECT:
+			if (message.isErrorMessage()) {
 				myClementineConnection.disconnect(message);
-				break;
-			default:
-				myClementineConnection.sendRequest(message);
-				break;
+			} else {
+				switch (message.getMessageType()) {
+				case CONNECT:
+					myClementineConnection.createConnection(message);
+					break;
+				case DISCONNECT:
+					myClementineConnection.disconnect(message);
+					break;
+				default:
+					myClementineConnection.sendRequest(message);
+					break;
+				}
 			}
 		}
     }
