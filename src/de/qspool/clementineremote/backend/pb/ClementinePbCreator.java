@@ -26,6 +26,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Requ
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestConnect;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestDownloadSongs;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestPlaylistSongs;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestSetTrackPosition;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestSetVolume;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongOffer;
@@ -36,6 +37,9 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuf
  * Creates the protocol buffer messages
  */
 public class ClementinePbCreator {
+	
+	private ClementinePbCreator() {}
+	
 	/**
 	 * Create a song offer response
 	 * @param msg The message itself
@@ -184,13 +188,27 @@ public class ClementinePbCreator {
 	/**
 	 * Request to set the track position
 	 * @param msg The root message
-	 * @return 
+	 * @return The Clementine message
 	 */
 	public static ClementineMessage buildTrackPosition(int position) {
 		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.SET_TRACK_POSITION);
 		
 		RequestSetTrackPosition.Builder request = msg.getRequestSetTrackPositionBuilder();
 		request.setPosition(position);
+		
+		return new ClementineMessage(msg);
+	}
+	
+	/**
+	 * Rate the current track
+	 * @param rating the rating from 0 to 5
+	 * @return the Clementine Message
+	 */
+	public static ClementineMessage buildRateTrack(int rating) {
+		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.RATE_SONG);
+		
+		RequestRateSong.Builder request = msg.getRequestRateSongBuilder();
+		request.setRating(rating);
 		
 		return new ClementineMessage(msg);
 	}

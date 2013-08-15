@@ -27,28 +27,29 @@ public final class ClementineRemoteProtocolBuffer {
     LOVE(14, 12),
     BAN(15, 13),
     STOP_AFTER(16, 17),
-    DISCONNECT(17, 2),
-    PLAY(18, 20),
-    PLAYPAUSE(19, 21),
-    PAUSE(20, 22),
-    STOP(21, 23),
-    NEXT(22, 24),
-    PREVIOUS(23, 25),
-    SHUFFLE_PLAYLIST(24, 26),
-    REPEAT(25, 27),
-    SHUFFLE(26, 28),
-    INFO(27, 40),
-    CURRENT_METAINFO(28, 41),
-    PLAYLISTS(29, 42),
-    PLAYLIST_SONGS(30, 43),
-    ENGINE_STATE_CHANGED(31, 44),
-    KEEP_ALIVE(32, 45),
-    UPDATE_TRACK_POSITION(33, 46),
-    ACTIVE_PLAYLIST_CHANGED(34, 47),
-    FIRST_DATA_SENT_COMPLETE(35, 48),
-    LYRICS(36, 49),
-    SONG_FILE_CHUNK(37, 50),
-    DOWNLOAD_QUEUE_EMPTY(38, 51),
+    RATE_SONG(17, 19),
+    DISCONNECT(18, 2),
+    PLAY(19, 20),
+    PLAYPAUSE(20, 21),
+    PAUSE(21, 22),
+    STOP(22, 23),
+    NEXT(23, 24),
+    PREVIOUS(24, 25),
+    SHUFFLE_PLAYLIST(25, 26),
+    REPEAT(26, 27),
+    SHUFFLE(27, 28),
+    INFO(28, 40),
+    CURRENT_METAINFO(29, 41),
+    PLAYLISTS(30, 42),
+    PLAYLIST_SONGS(31, 43),
+    ENGINE_STATE_CHANGED(32, 44),
+    KEEP_ALIVE(33, 45),
+    UPDATE_TRACK_POSITION(34, 46),
+    ACTIVE_PLAYLIST_CHANGED(35, 47),
+    FIRST_DATA_SENT_COMPLETE(36, 48),
+    LYRICS(37, 49),
+    SONG_FILE_CHUNK(38, 50),
+    DOWNLOAD_QUEUE_EMPTY(39, 51),
     ;
     
     public static final int UNKNOWN_VALUE = 0;
@@ -68,6 +69,7 @@ public final class ClementineRemoteProtocolBuffer {
     public static final int LOVE_VALUE = 12;
     public static final int BAN_VALUE = 13;
     public static final int STOP_AFTER_VALUE = 17;
+    public static final int RATE_SONG_VALUE = 19;
     public static final int DISCONNECT_VALUE = 2;
     public static final int PLAY_VALUE = 20;
     public static final int PLAYPAUSE_VALUE = 21;
@@ -113,6 +115,7 @@ public final class ClementineRemoteProtocolBuffer {
         case 12: return LOVE;
         case 13: return BAN;
         case 17: return STOP_AFTER;
+        case 19: return RATE_SONG;
         case 2: return DISCONNECT;
         case 20: return PLAY;
         case 21: return PLAYPAUSE;
@@ -165,7 +168,7 @@ public final class ClementineRemoteProtocolBuffer {
     }
     
     private static final MsgType[] VALUES = {
-      UNKNOWN, CONNECT, REQUEST_PLAYLISTS, REQUEST_PLAYLIST_SONGS, CHANGE_SONG, SET_VOLUME, SET_TRACK_POSITION, INSERT_URLS, REMOVE_SONGS, OPEN_PLAYLIST, CLOSE_PLAYLIST, GET_LYRICS, DOWNLOAD_SONGS, SONG_OFFER_RESPONSE, LOVE, BAN, STOP_AFTER, DISCONNECT, PLAY, PLAYPAUSE, PAUSE, STOP, NEXT, PREVIOUS, SHUFFLE_PLAYLIST, REPEAT, SHUFFLE, INFO, CURRENT_METAINFO, PLAYLISTS, PLAYLIST_SONGS, ENGINE_STATE_CHANGED, KEEP_ALIVE, UPDATE_TRACK_POSITION, ACTIVE_PLAYLIST_CHANGED, FIRST_DATA_SENT_COMPLETE, LYRICS, SONG_FILE_CHUNK, DOWNLOAD_QUEUE_EMPTY, 
+      UNKNOWN, CONNECT, REQUEST_PLAYLISTS, REQUEST_PLAYLIST_SONGS, CHANGE_SONG, SET_VOLUME, SET_TRACK_POSITION, INSERT_URLS, REMOVE_SONGS, OPEN_PLAYLIST, CLOSE_PLAYLIST, GET_LYRICS, DOWNLOAD_SONGS, SONG_OFFER_RESPONSE, LOVE, BAN, STOP_AFTER, RATE_SONG, DISCONNECT, PLAY, PLAYPAUSE, PAUSE, STOP, NEXT, PREVIOUS, SHUFFLE_PLAYLIST, REPEAT, SHUFFLE, INFO, CURRENT_METAINFO, PLAYLISTS, PLAYLIST_SONGS, ENGINE_STATE_CHANGED, KEEP_ALIVE, UPDATE_TRACK_POSITION, ACTIVE_PLAYLIST_CHANGED, FIRST_DATA_SENT_COMPLETE, LYRICS, SONG_FILE_CHUNK, DOWNLOAD_QUEUE_EMPTY, 
     };
     
     public static MsgType valueOf(
@@ -13455,10 +13458,348 @@ public final class ClementineRemoteProtocolBuffer {
     // @@protoc_insertion_point(class_scope:pb.remote.ResponseSongOffer)
   }
   
+  public interface RequestRateSongOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // optional int32 rating = 1;
+    boolean hasRating();
+    int getRating();
+  }
+  public static final class RequestRateSong extends
+      com.google.protobuf.GeneratedMessage
+      implements RequestRateSongOrBuilder {
+    // Use RequestRateSong.newBuilder() to construct.
+    private RequestRateSong(Builder builder) {
+      super(builder);
+    }
+    private RequestRateSong(boolean noInit) {}
+    
+    private static final RequestRateSong defaultInstance;
+    public static RequestRateSong getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public RequestRateSong getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.internal_static_pb_remote_RequestRateSong_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.internal_static_pb_remote_RequestRateSong_fieldAccessorTable;
+    }
+    
+    private int bitField0_;
+    // optional int32 rating = 1;
+    public static final int RATING_FIELD_NUMBER = 1;
+    private int rating_;
+    public boolean hasRating() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public int getRating() {
+      return rating_;
+    }
+    
+    private void initFields() {
+      rating_ = 0;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      memoizedIsInitialized = 1;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, rating_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, rating_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+    
+    public static de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSongOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.internal_static_pb_remote_RequestRateSong_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.internal_static_pb_remote_RequestRateSong_fieldAccessorTable;
+      }
+      
+      // Construct using de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+      
+      public Builder clear() {
+        super.clear();
+        rating_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong.getDescriptor();
+      }
+      
+      public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong getDefaultInstanceForType() {
+        return de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong.getDefaultInstance();
+      }
+      
+      public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong build() {
+        de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+      
+      private de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return result;
+      }
+      
+      public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong buildPartial() {
+        de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong result = new de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.rating_ = rating_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong) {
+          return mergeFrom((de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong other) {
+        if (other == de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong.getDefaultInstance()) return this;
+        if (other.hasRating()) {
+          setRating(other.getRating());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public final boolean isInitialized() {
+        return true;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              onChanged();
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              rating_ = input.readInt32();
+              break;
+            }
+          }
+        }
+      }
+      
+      private int bitField0_;
+      
+      // optional int32 rating = 1;
+      private int rating_ ;
+      public boolean hasRating() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      public int getRating() {
+        return rating_;
+      }
+      public Builder setRating(int value) {
+        bitField0_ |= 0x00000001;
+        rating_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearRating() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        rating_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // @@protoc_insertion_point(builder_scope:pb.remote.RequestRateSong)
+    }
+    
+    static {
+      defaultInstance = new RequestRateSong(true);
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:pb.remote.RequestRateSong)
+  }
+  
   public interface MessageOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
     
-    // optional int32 version = 1 [default = 9];
+    // optional int32 version = 1 [default = 10];
     boolean hasVersion();
     int getVersion();
     
@@ -13520,6 +13861,11 @@ public final class ClementineRemoteProtocolBuffer {
     boolean hasRequestDownloadSongs();
     de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestDownloadSongs getRequestDownloadSongs();
     de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestDownloadSongsOrBuilder getRequestDownloadSongsOrBuilder();
+    
+    // optional .pb.remote.RequestRateSong request_rate_song = 35;
+    boolean hasRequestRateSong();
+    de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong getRequestRateSong();
+    de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSongOrBuilder getRequestRateSongOrBuilder();
     
     // optional .pb.remote.Repeat repeat = 13;
     boolean hasRepeat();
@@ -13615,7 +13961,7 @@ public final class ClementineRemoteProtocolBuffer {
     }
     
     private int bitField0_;
-    // optional int32 version = 1 [default = 9];
+    // optional int32 version = 1 [default = 10];
     public static final int VERSION_FIELD_NUMBER = 1;
     private int version_;
     public boolean hasVersion() {
@@ -13778,11 +14124,24 @@ public final class ClementineRemoteProtocolBuffer {
       return requestDownloadSongs_;
     }
     
+    // optional .pb.remote.RequestRateSong request_rate_song = 35;
+    public static final int REQUEST_RATE_SONG_FIELD_NUMBER = 35;
+    private de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong requestRateSong_;
+    public boolean hasRequestRateSong() {
+      return ((bitField0_ & 0x00002000) == 0x00002000);
+    }
+    public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong getRequestRateSong() {
+      return requestRateSong_;
+    }
+    public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSongOrBuilder getRequestRateSongOrBuilder() {
+      return requestRateSong_;
+    }
+    
     // optional .pb.remote.Repeat repeat = 13;
     public static final int REPEAT_FIELD_NUMBER = 13;
     private de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Repeat repeat_;
     public boolean hasRepeat() {
-      return ((bitField0_ & 0x00002000) == 0x00002000);
+      return ((bitField0_ & 0x00004000) == 0x00004000);
     }
     public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Repeat getRepeat() {
       return repeat_;
@@ -13795,7 +14154,7 @@ public final class ClementineRemoteProtocolBuffer {
     public static final int SHUFFLE_FIELD_NUMBER = 14;
     private de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuffle shuffle_;
     public boolean hasShuffle() {
-      return ((bitField0_ & 0x00004000) == 0x00004000);
+      return ((bitField0_ & 0x00008000) == 0x00008000);
     }
     public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuffle getShuffle() {
       return shuffle_;
@@ -13808,7 +14167,7 @@ public final class ClementineRemoteProtocolBuffer {
     public static final int RESPONSE_CLEMENTINE_INFO_FIELD_NUMBER = 15;
     private de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseClementineInfo responseClementineInfo_;
     public boolean hasResponseClementineInfo() {
-      return ((bitField0_ & 0x00008000) == 0x00008000);
+      return ((bitField0_ & 0x00010000) == 0x00010000);
     }
     public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseClementineInfo getResponseClementineInfo() {
       return responseClementineInfo_;
@@ -13821,7 +14180,7 @@ public final class ClementineRemoteProtocolBuffer {
     public static final int RESPONSE_CURRENT_METADATA_FIELD_NUMBER = 16;
     private de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseCurrentMetadata responseCurrentMetadata_;
     public boolean hasResponseCurrentMetadata() {
-      return ((bitField0_ & 0x00010000) == 0x00010000);
+      return ((bitField0_ & 0x00020000) == 0x00020000);
     }
     public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseCurrentMetadata getResponseCurrentMetadata() {
       return responseCurrentMetadata_;
@@ -13834,7 +14193,7 @@ public final class ClementineRemoteProtocolBuffer {
     public static final int RESPONSE_PLAYLISTS_FIELD_NUMBER = 17;
     private de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylists responsePlaylists_;
     public boolean hasResponsePlaylists() {
-      return ((bitField0_ & 0x00020000) == 0x00020000);
+      return ((bitField0_ & 0x00040000) == 0x00040000);
     }
     public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylists getResponsePlaylists() {
       return responsePlaylists_;
@@ -13847,7 +14206,7 @@ public final class ClementineRemoteProtocolBuffer {
     public static final int RESPONSE_PLAYLIST_SONGS_FIELD_NUMBER = 18;
     private de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylistSongs responsePlaylistSongs_;
     public boolean hasResponsePlaylistSongs() {
-      return ((bitField0_ & 0x00040000) == 0x00040000);
+      return ((bitField0_ & 0x00080000) == 0x00080000);
     }
     public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylistSongs getResponsePlaylistSongs() {
       return responsePlaylistSongs_;
@@ -13860,7 +14219,7 @@ public final class ClementineRemoteProtocolBuffer {
     public static final int RESPONSE_ENGINE_STATE_CHANGED_FIELD_NUMBER = 19;
     private de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseEngineStateChanged responseEngineStateChanged_;
     public boolean hasResponseEngineStateChanged() {
-      return ((bitField0_ & 0x00080000) == 0x00080000);
+      return ((bitField0_ & 0x00100000) == 0x00100000);
     }
     public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseEngineStateChanged getResponseEngineStateChanged() {
       return responseEngineStateChanged_;
@@ -13873,7 +14232,7 @@ public final class ClementineRemoteProtocolBuffer {
     public static final int RESPONSE_UPDATE_TRACK_POSITION_FIELD_NUMBER = 20;
     private de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseUpdateTrackPosition responseUpdateTrackPosition_;
     public boolean hasResponseUpdateTrackPosition() {
-      return ((bitField0_ & 0x00100000) == 0x00100000);
+      return ((bitField0_ & 0x00200000) == 0x00200000);
     }
     public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseUpdateTrackPosition getResponseUpdateTrackPosition() {
       return responseUpdateTrackPosition_;
@@ -13886,7 +14245,7 @@ public final class ClementineRemoteProtocolBuffer {
     public static final int RESPONSE_DISCONNECT_FIELD_NUMBER = 22;
     private de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseDisconnect responseDisconnect_;
     public boolean hasResponseDisconnect() {
-      return ((bitField0_ & 0x00200000) == 0x00200000);
+      return ((bitField0_ & 0x00400000) == 0x00400000);
     }
     public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseDisconnect getResponseDisconnect() {
       return responseDisconnect_;
@@ -13899,7 +14258,7 @@ public final class ClementineRemoteProtocolBuffer {
     public static final int RESPONSE_ACTIVE_CHANGED_FIELD_NUMBER = 24;
     private de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseActiveChanged responseActiveChanged_;
     public boolean hasResponseActiveChanged() {
-      return ((bitField0_ & 0x00400000) == 0x00400000);
+      return ((bitField0_ & 0x00800000) == 0x00800000);
     }
     public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseActiveChanged getResponseActiveChanged() {
       return responseActiveChanged_;
@@ -13912,7 +14271,7 @@ public final class ClementineRemoteProtocolBuffer {
     public static final int RESPONSE_LYRICS_FIELD_NUMBER = 30;
     private de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseLyrics responseLyrics_;
     public boolean hasResponseLyrics() {
-      return ((bitField0_ & 0x00800000) == 0x00800000);
+      return ((bitField0_ & 0x01000000) == 0x01000000);
     }
     public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseLyrics getResponseLyrics() {
       return responseLyrics_;
@@ -13925,7 +14284,7 @@ public final class ClementineRemoteProtocolBuffer {
     public static final int RESPONSE_SONG_FILE_CHUNK_FIELD_NUMBER = 32;
     private de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongFileChunk responseSongFileChunk_;
     public boolean hasResponseSongFileChunk() {
-      return ((bitField0_ & 0x01000000) == 0x01000000);
+      return ((bitField0_ & 0x02000000) == 0x02000000);
     }
     public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongFileChunk getResponseSongFileChunk() {
       return responseSongFileChunk_;
@@ -13938,7 +14297,7 @@ public final class ClementineRemoteProtocolBuffer {
     public static final int RESPONSE_SONG_OFFER_FIELD_NUMBER = 33;
     private de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongOffer responseSongOffer_;
     public boolean hasResponseSongOffer() {
-      return ((bitField0_ & 0x02000000) == 0x02000000);
+      return ((bitField0_ & 0x04000000) == 0x04000000);
     }
     public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongOffer getResponseSongOffer() {
       return responseSongOffer_;
@@ -13948,7 +14307,7 @@ public final class ClementineRemoteProtocolBuffer {
     }
     
     private void initFields() {
-      version_ = 9;
+      version_ = 10;
       type_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType.UNKNOWN;
       requestConnect_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestConnect.getDefaultInstance();
       requestPlaylists_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestPlaylists.getDefaultInstance();
@@ -13961,6 +14320,7 @@ public final class ClementineRemoteProtocolBuffer {
       requestOpenPlaylist_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestOpenPlaylist.getDefaultInstance();
       requestClosePlaylist_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestClosePlaylist.getDefaultInstance();
       requestDownloadSongs_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestDownloadSongs.getDefaultInstance();
+      requestRateSong_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong.getDefaultInstance();
       repeat_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Repeat.getDefaultInstance();
       shuffle_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuffle.getDefaultInstance();
       responseClementineInfo_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseClementineInfo.getDefaultInstance();
@@ -14002,40 +14362,40 @@ public final class ClementineRemoteProtocolBuffer {
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         output.writeMessage(12, requestSetVolume_);
       }
-      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
         output.writeMessage(13, repeat_);
       }
-      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+      if (((bitField0_ & 0x00008000) == 0x00008000)) {
         output.writeMessage(14, shuffle_);
       }
-      if (((bitField0_ & 0x00008000) == 0x00008000)) {
+      if (((bitField0_ & 0x00010000) == 0x00010000)) {
         output.writeMessage(15, responseClementineInfo_);
       }
-      if (((bitField0_ & 0x00010000) == 0x00010000)) {
+      if (((bitField0_ & 0x00020000) == 0x00020000)) {
         output.writeMessage(16, responseCurrentMetadata_);
       }
-      if (((bitField0_ & 0x00020000) == 0x00020000)) {
+      if (((bitField0_ & 0x00040000) == 0x00040000)) {
         output.writeMessage(17, responsePlaylists_);
       }
-      if (((bitField0_ & 0x00040000) == 0x00040000)) {
+      if (((bitField0_ & 0x00080000) == 0x00080000)) {
         output.writeMessage(18, responsePlaylistSongs_);
       }
-      if (((bitField0_ & 0x00080000) == 0x00080000)) {
+      if (((bitField0_ & 0x00100000) == 0x00100000)) {
         output.writeMessage(19, responseEngineStateChanged_);
       }
-      if (((bitField0_ & 0x00100000) == 0x00100000)) {
+      if (((bitField0_ & 0x00200000) == 0x00200000)) {
         output.writeMessage(20, responseUpdateTrackPosition_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeMessage(21, requestConnect_);
       }
-      if (((bitField0_ & 0x00200000) == 0x00200000)) {
+      if (((bitField0_ & 0x00400000) == 0x00400000)) {
         output.writeMessage(22, responseDisconnect_);
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         output.writeMessage(23, requestSetTrackPosition_);
       }
-      if (((bitField0_ & 0x00400000) == 0x00400000)) {
+      if (((bitField0_ & 0x00800000) == 0x00800000)) {
         output.writeMessage(24, responseActiveChanged_);
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
@@ -14053,17 +14413,20 @@ public final class ClementineRemoteProtocolBuffer {
       if (((bitField0_ & 0x00000800) == 0x00000800)) {
         output.writeMessage(29, requestClosePlaylist_);
       }
-      if (((bitField0_ & 0x00800000) == 0x00800000)) {
+      if (((bitField0_ & 0x01000000) == 0x01000000)) {
         output.writeMessage(30, responseLyrics_);
       }
       if (((bitField0_ & 0x00001000) == 0x00001000)) {
         output.writeMessage(31, requestDownloadSongs_);
       }
-      if (((bitField0_ & 0x01000000) == 0x01000000)) {
+      if (((bitField0_ & 0x02000000) == 0x02000000)) {
         output.writeMessage(32, responseSongFileChunk_);
       }
-      if (((bitField0_ & 0x02000000) == 0x02000000)) {
+      if (((bitField0_ & 0x04000000) == 0x04000000)) {
         output.writeMessage(33, responseSongOffer_);
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        output.writeMessage(35, requestRateSong_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -14094,35 +14457,35 @@ public final class ClementineRemoteProtocolBuffer {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(12, requestSetVolume_);
       }
-      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(13, repeat_);
       }
-      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+      if (((bitField0_ & 0x00008000) == 0x00008000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(14, shuffle_);
       }
-      if (((bitField0_ & 0x00008000) == 0x00008000)) {
+      if (((bitField0_ & 0x00010000) == 0x00010000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(15, responseClementineInfo_);
       }
-      if (((bitField0_ & 0x00010000) == 0x00010000)) {
+      if (((bitField0_ & 0x00020000) == 0x00020000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(16, responseCurrentMetadata_);
       }
-      if (((bitField0_ & 0x00020000) == 0x00020000)) {
+      if (((bitField0_ & 0x00040000) == 0x00040000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(17, responsePlaylists_);
       }
-      if (((bitField0_ & 0x00040000) == 0x00040000)) {
+      if (((bitField0_ & 0x00080000) == 0x00080000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(18, responsePlaylistSongs_);
       }
-      if (((bitField0_ & 0x00080000) == 0x00080000)) {
+      if (((bitField0_ & 0x00100000) == 0x00100000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(19, responseEngineStateChanged_);
       }
-      if (((bitField0_ & 0x00100000) == 0x00100000)) {
+      if (((bitField0_ & 0x00200000) == 0x00200000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(20, responseUpdateTrackPosition_);
       }
@@ -14130,7 +14493,7 @@ public final class ClementineRemoteProtocolBuffer {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(21, requestConnect_);
       }
-      if (((bitField0_ & 0x00200000) == 0x00200000)) {
+      if (((bitField0_ & 0x00400000) == 0x00400000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(22, responseDisconnect_);
       }
@@ -14138,7 +14501,7 @@ public final class ClementineRemoteProtocolBuffer {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(23, requestSetTrackPosition_);
       }
-      if (((bitField0_ & 0x00400000) == 0x00400000)) {
+      if (((bitField0_ & 0x00800000) == 0x00800000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(24, responseActiveChanged_);
       }
@@ -14162,7 +14525,7 @@ public final class ClementineRemoteProtocolBuffer {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(29, requestClosePlaylist_);
       }
-      if (((bitField0_ & 0x00800000) == 0x00800000)) {
+      if (((bitField0_ & 0x01000000) == 0x01000000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(30, responseLyrics_);
       }
@@ -14170,13 +14533,17 @@ public final class ClementineRemoteProtocolBuffer {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(31, requestDownloadSongs_);
       }
-      if (((bitField0_ & 0x01000000) == 0x01000000)) {
+      if (((bitField0_ & 0x02000000) == 0x02000000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(32, responseSongFileChunk_);
       }
-      if (((bitField0_ & 0x02000000) == 0x02000000)) {
+      if (((bitField0_ & 0x04000000) == 0x04000000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(33, responseSongOffer_);
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(35, requestRateSong_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -14305,6 +14672,7 @@ public final class ClementineRemoteProtocolBuffer {
           getRequestOpenPlaylistFieldBuilder();
           getRequestClosePlaylistFieldBuilder();
           getRequestDownloadSongsFieldBuilder();
+          getRequestRateSongFieldBuilder();
           getRepeatFieldBuilder();
           getShuffleFieldBuilder();
           getResponseClementineInfoFieldBuilder();
@@ -14326,7 +14694,7 @@ public final class ClementineRemoteProtocolBuffer {
       
       public Builder clear() {
         super.clear();
-        version_ = 9;
+        version_ = 10;
         bitField0_ = (bitField0_ & ~0x00000001);
         type_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -14396,84 +14764,90 @@ public final class ClementineRemoteProtocolBuffer {
           requestDownloadSongsBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00001000);
+        if (requestRateSongBuilder_ == null) {
+          requestRateSong_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong.getDefaultInstance();
+        } else {
+          requestRateSongBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00002000);
         if (repeatBuilder_ == null) {
           repeat_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Repeat.getDefaultInstance();
         } else {
           repeatBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00002000);
+        bitField0_ = (bitField0_ & ~0x00004000);
         if (shuffleBuilder_ == null) {
           shuffle_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuffle.getDefaultInstance();
         } else {
           shuffleBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00004000);
+        bitField0_ = (bitField0_ & ~0x00008000);
         if (responseClementineInfoBuilder_ == null) {
           responseClementineInfo_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseClementineInfo.getDefaultInstance();
         } else {
           responseClementineInfoBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00008000);
+        bitField0_ = (bitField0_ & ~0x00010000);
         if (responseCurrentMetadataBuilder_ == null) {
           responseCurrentMetadata_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseCurrentMetadata.getDefaultInstance();
         } else {
           responseCurrentMetadataBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00010000);
+        bitField0_ = (bitField0_ & ~0x00020000);
         if (responsePlaylistsBuilder_ == null) {
           responsePlaylists_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylists.getDefaultInstance();
         } else {
           responsePlaylistsBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00020000);
+        bitField0_ = (bitField0_ & ~0x00040000);
         if (responsePlaylistSongsBuilder_ == null) {
           responsePlaylistSongs_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylistSongs.getDefaultInstance();
         } else {
           responsePlaylistSongsBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00040000);
+        bitField0_ = (bitField0_ & ~0x00080000);
         if (responseEngineStateChangedBuilder_ == null) {
           responseEngineStateChanged_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseEngineStateChanged.getDefaultInstance();
         } else {
           responseEngineStateChangedBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00080000);
+        bitField0_ = (bitField0_ & ~0x00100000);
         if (responseUpdateTrackPositionBuilder_ == null) {
           responseUpdateTrackPosition_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseUpdateTrackPosition.getDefaultInstance();
         } else {
           responseUpdateTrackPositionBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00100000);
+        bitField0_ = (bitField0_ & ~0x00200000);
         if (responseDisconnectBuilder_ == null) {
           responseDisconnect_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseDisconnect.getDefaultInstance();
         } else {
           responseDisconnectBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00200000);
+        bitField0_ = (bitField0_ & ~0x00400000);
         if (responseActiveChangedBuilder_ == null) {
           responseActiveChanged_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseActiveChanged.getDefaultInstance();
         } else {
           responseActiveChangedBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00400000);
+        bitField0_ = (bitField0_ & ~0x00800000);
         if (responseLyricsBuilder_ == null) {
           responseLyrics_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseLyrics.getDefaultInstance();
         } else {
           responseLyricsBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00800000);
+        bitField0_ = (bitField0_ & ~0x01000000);
         if (responseSongFileChunkBuilder_ == null) {
           responseSongFileChunk_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongFileChunk.getDefaultInstance();
         } else {
           responseSongFileChunkBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x01000000);
+        bitField0_ = (bitField0_ & ~0x02000000);
         if (responseSongOfferBuilder_ == null) {
           responseSongOffer_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongOffer.getDefaultInstance();
         } else {
           responseSongOfferBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x02000000);
+        bitField0_ = (bitField0_ & ~0x04000000);
         return this;
       }
       
@@ -14611,101 +14985,109 @@ public final class ClementineRemoteProtocolBuffer {
         if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
           to_bitField0_ |= 0x00002000;
         }
+        if (requestRateSongBuilder_ == null) {
+          result.requestRateSong_ = requestRateSong_;
+        } else {
+          result.requestRateSong_ = requestRateSongBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
+          to_bitField0_ |= 0x00004000;
+        }
         if (repeatBuilder_ == null) {
           result.repeat_ = repeat_;
         } else {
           result.repeat_ = repeatBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
-          to_bitField0_ |= 0x00004000;
+        if (((from_bitField0_ & 0x00008000) == 0x00008000)) {
+          to_bitField0_ |= 0x00008000;
         }
         if (shuffleBuilder_ == null) {
           result.shuffle_ = shuffle_;
         } else {
           result.shuffle_ = shuffleBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00008000) == 0x00008000)) {
-          to_bitField0_ |= 0x00008000;
+        if (((from_bitField0_ & 0x00010000) == 0x00010000)) {
+          to_bitField0_ |= 0x00010000;
         }
         if (responseClementineInfoBuilder_ == null) {
           result.responseClementineInfo_ = responseClementineInfo_;
         } else {
           result.responseClementineInfo_ = responseClementineInfoBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00010000) == 0x00010000)) {
-          to_bitField0_ |= 0x00010000;
+        if (((from_bitField0_ & 0x00020000) == 0x00020000)) {
+          to_bitField0_ |= 0x00020000;
         }
         if (responseCurrentMetadataBuilder_ == null) {
           result.responseCurrentMetadata_ = responseCurrentMetadata_;
         } else {
           result.responseCurrentMetadata_ = responseCurrentMetadataBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00020000) == 0x00020000)) {
-          to_bitField0_ |= 0x00020000;
+        if (((from_bitField0_ & 0x00040000) == 0x00040000)) {
+          to_bitField0_ |= 0x00040000;
         }
         if (responsePlaylistsBuilder_ == null) {
           result.responsePlaylists_ = responsePlaylists_;
         } else {
           result.responsePlaylists_ = responsePlaylistsBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00040000) == 0x00040000)) {
-          to_bitField0_ |= 0x00040000;
+        if (((from_bitField0_ & 0x00080000) == 0x00080000)) {
+          to_bitField0_ |= 0x00080000;
         }
         if (responsePlaylistSongsBuilder_ == null) {
           result.responsePlaylistSongs_ = responsePlaylistSongs_;
         } else {
           result.responsePlaylistSongs_ = responsePlaylistSongsBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00080000) == 0x00080000)) {
-          to_bitField0_ |= 0x00080000;
+        if (((from_bitField0_ & 0x00100000) == 0x00100000)) {
+          to_bitField0_ |= 0x00100000;
         }
         if (responseEngineStateChangedBuilder_ == null) {
           result.responseEngineStateChanged_ = responseEngineStateChanged_;
         } else {
           result.responseEngineStateChanged_ = responseEngineStateChangedBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00100000) == 0x00100000)) {
-          to_bitField0_ |= 0x00100000;
+        if (((from_bitField0_ & 0x00200000) == 0x00200000)) {
+          to_bitField0_ |= 0x00200000;
         }
         if (responseUpdateTrackPositionBuilder_ == null) {
           result.responseUpdateTrackPosition_ = responseUpdateTrackPosition_;
         } else {
           result.responseUpdateTrackPosition_ = responseUpdateTrackPositionBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00200000) == 0x00200000)) {
-          to_bitField0_ |= 0x00200000;
+        if (((from_bitField0_ & 0x00400000) == 0x00400000)) {
+          to_bitField0_ |= 0x00400000;
         }
         if (responseDisconnectBuilder_ == null) {
           result.responseDisconnect_ = responseDisconnect_;
         } else {
           result.responseDisconnect_ = responseDisconnectBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00400000) == 0x00400000)) {
-          to_bitField0_ |= 0x00400000;
+        if (((from_bitField0_ & 0x00800000) == 0x00800000)) {
+          to_bitField0_ |= 0x00800000;
         }
         if (responseActiveChangedBuilder_ == null) {
           result.responseActiveChanged_ = responseActiveChanged_;
         } else {
           result.responseActiveChanged_ = responseActiveChangedBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00800000) == 0x00800000)) {
-          to_bitField0_ |= 0x00800000;
+        if (((from_bitField0_ & 0x01000000) == 0x01000000)) {
+          to_bitField0_ |= 0x01000000;
         }
         if (responseLyricsBuilder_ == null) {
           result.responseLyrics_ = responseLyrics_;
         } else {
           result.responseLyrics_ = responseLyricsBuilder_.build();
         }
-        if (((from_bitField0_ & 0x01000000) == 0x01000000)) {
-          to_bitField0_ |= 0x01000000;
+        if (((from_bitField0_ & 0x02000000) == 0x02000000)) {
+          to_bitField0_ |= 0x02000000;
         }
         if (responseSongFileChunkBuilder_ == null) {
           result.responseSongFileChunk_ = responseSongFileChunk_;
         } else {
           result.responseSongFileChunk_ = responseSongFileChunkBuilder_.build();
         }
-        if (((from_bitField0_ & 0x02000000) == 0x02000000)) {
-          to_bitField0_ |= 0x02000000;
+        if (((from_bitField0_ & 0x04000000) == 0x04000000)) {
+          to_bitField0_ |= 0x04000000;
         }
         if (responseSongOfferBuilder_ == null) {
           result.responseSongOffer_ = responseSongOffer_;
@@ -14766,6 +15148,9 @@ public final class ClementineRemoteProtocolBuffer {
         }
         if (other.hasRequestDownloadSongs()) {
           mergeRequestDownloadSongs(other.getRequestDownloadSongs());
+        }
+        if (other.hasRequestRateSong()) {
+          mergeRequestRateSong(other.getRequestRateSong());
         }
         if (other.hasRepeat()) {
           mergeRepeat(other.getRepeat());
@@ -15069,14 +15454,23 @@ public final class ClementineRemoteProtocolBuffer {
               setResponseSongOffer(subBuilder.buildPartial());
               break;
             }
+            case 282: {
+              de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong.Builder subBuilder = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong.newBuilder();
+              if (hasRequestRateSong()) {
+                subBuilder.mergeFrom(getRequestRateSong());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setRequestRateSong(subBuilder.buildPartial());
+              break;
+            }
           }
         }
       }
       
       private int bitField0_;
       
-      // optional int32 version = 1 [default = 9];
-      private int version_ = 9;
+      // optional int32 version = 1 [default = 10];
+      private int version_ = 10;
       public boolean hasVersion() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
@@ -15091,7 +15485,7 @@ public final class ClementineRemoteProtocolBuffer {
       }
       public Builder clearVersion() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        version_ = 9;
+        version_ = 10;
         onChanged();
         return this;
       }
@@ -16110,12 +16504,102 @@ public final class ClementineRemoteProtocolBuffer {
         return requestDownloadSongsBuilder_;
       }
       
+      // optional .pb.remote.RequestRateSong request_rate_song = 35;
+      private de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong requestRateSong_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong.Builder, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSongOrBuilder> requestRateSongBuilder_;
+      public boolean hasRequestRateSong() {
+        return ((bitField0_ & 0x00002000) == 0x00002000);
+      }
+      public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong getRequestRateSong() {
+        if (requestRateSongBuilder_ == null) {
+          return requestRateSong_;
+        } else {
+          return requestRateSongBuilder_.getMessage();
+        }
+      }
+      public Builder setRequestRateSong(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong value) {
+        if (requestRateSongBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          requestRateSong_ = value;
+          onChanged();
+        } else {
+          requestRateSongBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00002000;
+        return this;
+      }
+      public Builder setRequestRateSong(
+          de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong.Builder builderForValue) {
+        if (requestRateSongBuilder_ == null) {
+          requestRateSong_ = builderForValue.build();
+          onChanged();
+        } else {
+          requestRateSongBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00002000;
+        return this;
+      }
+      public Builder mergeRequestRateSong(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong value) {
+        if (requestRateSongBuilder_ == null) {
+          if (((bitField0_ & 0x00002000) == 0x00002000) &&
+              requestRateSong_ != de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong.getDefaultInstance()) {
+            requestRateSong_ =
+              de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong.newBuilder(requestRateSong_).mergeFrom(value).buildPartial();
+          } else {
+            requestRateSong_ = value;
+          }
+          onChanged();
+        } else {
+          requestRateSongBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00002000;
+        return this;
+      }
+      public Builder clearRequestRateSong() {
+        if (requestRateSongBuilder_ == null) {
+          requestRateSong_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong.getDefaultInstance();
+          onChanged();
+        } else {
+          requestRateSongBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00002000);
+        return this;
+      }
+      public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong.Builder getRequestRateSongBuilder() {
+        bitField0_ |= 0x00002000;
+        onChanged();
+        return getRequestRateSongFieldBuilder().getBuilder();
+      }
+      public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSongOrBuilder getRequestRateSongOrBuilder() {
+        if (requestRateSongBuilder_ != null) {
+          return requestRateSongBuilder_.getMessageOrBuilder();
+        } else {
+          return requestRateSong_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong.Builder, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSongOrBuilder> 
+          getRequestRateSongFieldBuilder() {
+        if (requestRateSongBuilder_ == null) {
+          requestRateSongBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong.Builder, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSongOrBuilder>(
+                  requestRateSong_,
+                  getParentForChildren(),
+                  isClean());
+          requestRateSong_ = null;
+        }
+        return requestRateSongBuilder_;
+      }
+      
       // optional .pb.remote.Repeat repeat = 13;
       private de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Repeat repeat_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Repeat.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Repeat, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Repeat.Builder, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RepeatOrBuilder> repeatBuilder_;
       public boolean hasRepeat() {
-        return ((bitField0_ & 0x00002000) == 0x00002000);
+        return ((bitField0_ & 0x00004000) == 0x00004000);
       }
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Repeat getRepeat() {
         if (repeatBuilder_ == null) {
@@ -16134,7 +16618,7 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           repeatBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00002000;
+        bitField0_ |= 0x00004000;
         return this;
       }
       public Builder setRepeat(
@@ -16145,12 +16629,12 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           repeatBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00002000;
+        bitField0_ |= 0x00004000;
         return this;
       }
       public Builder mergeRepeat(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Repeat value) {
         if (repeatBuilder_ == null) {
-          if (((bitField0_ & 0x00002000) == 0x00002000) &&
+          if (((bitField0_ & 0x00004000) == 0x00004000) &&
               repeat_ != de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Repeat.getDefaultInstance()) {
             repeat_ =
               de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Repeat.newBuilder(repeat_).mergeFrom(value).buildPartial();
@@ -16161,7 +16645,7 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           repeatBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00002000;
+        bitField0_ |= 0x00004000;
         return this;
       }
       public Builder clearRepeat() {
@@ -16171,11 +16655,11 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           repeatBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00002000);
+        bitField0_ = (bitField0_ & ~0x00004000);
         return this;
       }
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Repeat.Builder getRepeatBuilder() {
-        bitField0_ |= 0x00002000;
+        bitField0_ |= 0x00004000;
         onChanged();
         return getRepeatFieldBuilder().getBuilder();
       }
@@ -16205,7 +16689,7 @@ public final class ClementineRemoteProtocolBuffer {
       private com.google.protobuf.SingleFieldBuilder<
           de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuffle, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuffle.Builder, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ShuffleOrBuilder> shuffleBuilder_;
       public boolean hasShuffle() {
-        return ((bitField0_ & 0x00004000) == 0x00004000);
+        return ((bitField0_ & 0x00008000) == 0x00008000);
       }
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuffle getShuffle() {
         if (shuffleBuilder_ == null) {
@@ -16224,7 +16708,7 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           shuffleBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00004000;
+        bitField0_ |= 0x00008000;
         return this;
       }
       public Builder setShuffle(
@@ -16235,12 +16719,12 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           shuffleBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00004000;
+        bitField0_ |= 0x00008000;
         return this;
       }
       public Builder mergeShuffle(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuffle value) {
         if (shuffleBuilder_ == null) {
-          if (((bitField0_ & 0x00004000) == 0x00004000) &&
+          if (((bitField0_ & 0x00008000) == 0x00008000) &&
               shuffle_ != de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuffle.getDefaultInstance()) {
             shuffle_ =
               de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuffle.newBuilder(shuffle_).mergeFrom(value).buildPartial();
@@ -16251,7 +16735,7 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           shuffleBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00004000;
+        bitField0_ |= 0x00008000;
         return this;
       }
       public Builder clearShuffle() {
@@ -16261,11 +16745,11 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           shuffleBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00004000);
+        bitField0_ = (bitField0_ & ~0x00008000);
         return this;
       }
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuffle.Builder getShuffleBuilder() {
-        bitField0_ |= 0x00004000;
+        bitField0_ |= 0x00008000;
         onChanged();
         return getShuffleFieldBuilder().getBuilder();
       }
@@ -16295,7 +16779,7 @@ public final class ClementineRemoteProtocolBuffer {
       private com.google.protobuf.SingleFieldBuilder<
           de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseClementineInfo, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseClementineInfo.Builder, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseClementineInfoOrBuilder> responseClementineInfoBuilder_;
       public boolean hasResponseClementineInfo() {
-        return ((bitField0_ & 0x00008000) == 0x00008000);
+        return ((bitField0_ & 0x00010000) == 0x00010000);
       }
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseClementineInfo getResponseClementineInfo() {
         if (responseClementineInfoBuilder_ == null) {
@@ -16314,7 +16798,7 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseClementineInfoBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00008000;
+        bitField0_ |= 0x00010000;
         return this;
       }
       public Builder setResponseClementineInfo(
@@ -16325,12 +16809,12 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseClementineInfoBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00008000;
+        bitField0_ |= 0x00010000;
         return this;
       }
       public Builder mergeResponseClementineInfo(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseClementineInfo value) {
         if (responseClementineInfoBuilder_ == null) {
-          if (((bitField0_ & 0x00008000) == 0x00008000) &&
+          if (((bitField0_ & 0x00010000) == 0x00010000) &&
               responseClementineInfo_ != de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseClementineInfo.getDefaultInstance()) {
             responseClementineInfo_ =
               de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseClementineInfo.newBuilder(responseClementineInfo_).mergeFrom(value).buildPartial();
@@ -16341,7 +16825,7 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseClementineInfoBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00008000;
+        bitField0_ |= 0x00010000;
         return this;
       }
       public Builder clearResponseClementineInfo() {
@@ -16351,11 +16835,11 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseClementineInfoBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00008000);
+        bitField0_ = (bitField0_ & ~0x00010000);
         return this;
       }
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseClementineInfo.Builder getResponseClementineInfoBuilder() {
-        bitField0_ |= 0x00008000;
+        bitField0_ |= 0x00010000;
         onChanged();
         return getResponseClementineInfoFieldBuilder().getBuilder();
       }
@@ -16385,7 +16869,7 @@ public final class ClementineRemoteProtocolBuffer {
       private com.google.protobuf.SingleFieldBuilder<
           de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseCurrentMetadata, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseCurrentMetadata.Builder, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseCurrentMetadataOrBuilder> responseCurrentMetadataBuilder_;
       public boolean hasResponseCurrentMetadata() {
-        return ((bitField0_ & 0x00010000) == 0x00010000);
+        return ((bitField0_ & 0x00020000) == 0x00020000);
       }
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseCurrentMetadata getResponseCurrentMetadata() {
         if (responseCurrentMetadataBuilder_ == null) {
@@ -16404,7 +16888,7 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseCurrentMetadataBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00010000;
+        bitField0_ |= 0x00020000;
         return this;
       }
       public Builder setResponseCurrentMetadata(
@@ -16415,12 +16899,12 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseCurrentMetadataBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00010000;
+        bitField0_ |= 0x00020000;
         return this;
       }
       public Builder mergeResponseCurrentMetadata(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseCurrentMetadata value) {
         if (responseCurrentMetadataBuilder_ == null) {
-          if (((bitField0_ & 0x00010000) == 0x00010000) &&
+          if (((bitField0_ & 0x00020000) == 0x00020000) &&
               responseCurrentMetadata_ != de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseCurrentMetadata.getDefaultInstance()) {
             responseCurrentMetadata_ =
               de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseCurrentMetadata.newBuilder(responseCurrentMetadata_).mergeFrom(value).buildPartial();
@@ -16431,7 +16915,7 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseCurrentMetadataBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00010000;
+        bitField0_ |= 0x00020000;
         return this;
       }
       public Builder clearResponseCurrentMetadata() {
@@ -16441,11 +16925,11 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseCurrentMetadataBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00010000);
+        bitField0_ = (bitField0_ & ~0x00020000);
         return this;
       }
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseCurrentMetadata.Builder getResponseCurrentMetadataBuilder() {
-        bitField0_ |= 0x00010000;
+        bitField0_ |= 0x00020000;
         onChanged();
         return getResponseCurrentMetadataFieldBuilder().getBuilder();
       }
@@ -16475,7 +16959,7 @@ public final class ClementineRemoteProtocolBuffer {
       private com.google.protobuf.SingleFieldBuilder<
           de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylists, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylists.Builder, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylistsOrBuilder> responsePlaylistsBuilder_;
       public boolean hasResponsePlaylists() {
-        return ((bitField0_ & 0x00020000) == 0x00020000);
+        return ((bitField0_ & 0x00040000) == 0x00040000);
       }
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylists getResponsePlaylists() {
         if (responsePlaylistsBuilder_ == null) {
@@ -16494,7 +16978,7 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responsePlaylistsBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00020000;
+        bitField0_ |= 0x00040000;
         return this;
       }
       public Builder setResponsePlaylists(
@@ -16505,12 +16989,12 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responsePlaylistsBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00020000;
+        bitField0_ |= 0x00040000;
         return this;
       }
       public Builder mergeResponsePlaylists(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylists value) {
         if (responsePlaylistsBuilder_ == null) {
-          if (((bitField0_ & 0x00020000) == 0x00020000) &&
+          if (((bitField0_ & 0x00040000) == 0x00040000) &&
               responsePlaylists_ != de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylists.getDefaultInstance()) {
             responsePlaylists_ =
               de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylists.newBuilder(responsePlaylists_).mergeFrom(value).buildPartial();
@@ -16521,7 +17005,7 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responsePlaylistsBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00020000;
+        bitField0_ |= 0x00040000;
         return this;
       }
       public Builder clearResponsePlaylists() {
@@ -16531,11 +17015,11 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responsePlaylistsBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00020000);
+        bitField0_ = (bitField0_ & ~0x00040000);
         return this;
       }
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylists.Builder getResponsePlaylistsBuilder() {
-        bitField0_ |= 0x00020000;
+        bitField0_ |= 0x00040000;
         onChanged();
         return getResponsePlaylistsFieldBuilder().getBuilder();
       }
@@ -16565,7 +17049,7 @@ public final class ClementineRemoteProtocolBuffer {
       private com.google.protobuf.SingleFieldBuilder<
           de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylistSongs, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylistSongs.Builder, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylistSongsOrBuilder> responsePlaylistSongsBuilder_;
       public boolean hasResponsePlaylistSongs() {
-        return ((bitField0_ & 0x00040000) == 0x00040000);
+        return ((bitField0_ & 0x00080000) == 0x00080000);
       }
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylistSongs getResponsePlaylistSongs() {
         if (responsePlaylistSongsBuilder_ == null) {
@@ -16584,7 +17068,7 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responsePlaylistSongsBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00040000;
+        bitField0_ |= 0x00080000;
         return this;
       }
       public Builder setResponsePlaylistSongs(
@@ -16595,12 +17079,12 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responsePlaylistSongsBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00040000;
+        bitField0_ |= 0x00080000;
         return this;
       }
       public Builder mergeResponsePlaylistSongs(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylistSongs value) {
         if (responsePlaylistSongsBuilder_ == null) {
-          if (((bitField0_ & 0x00040000) == 0x00040000) &&
+          if (((bitField0_ & 0x00080000) == 0x00080000) &&
               responsePlaylistSongs_ != de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylistSongs.getDefaultInstance()) {
             responsePlaylistSongs_ =
               de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylistSongs.newBuilder(responsePlaylistSongs_).mergeFrom(value).buildPartial();
@@ -16611,7 +17095,7 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responsePlaylistSongsBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00040000;
+        bitField0_ |= 0x00080000;
         return this;
       }
       public Builder clearResponsePlaylistSongs() {
@@ -16621,11 +17105,11 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responsePlaylistSongsBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00040000);
+        bitField0_ = (bitField0_ & ~0x00080000);
         return this;
       }
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylistSongs.Builder getResponsePlaylistSongsBuilder() {
-        bitField0_ |= 0x00040000;
+        bitField0_ |= 0x00080000;
         onChanged();
         return getResponsePlaylistSongsFieldBuilder().getBuilder();
       }
@@ -16655,7 +17139,7 @@ public final class ClementineRemoteProtocolBuffer {
       private com.google.protobuf.SingleFieldBuilder<
           de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseEngineStateChanged, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseEngineStateChanged.Builder, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseEngineStateChangedOrBuilder> responseEngineStateChangedBuilder_;
       public boolean hasResponseEngineStateChanged() {
-        return ((bitField0_ & 0x00080000) == 0x00080000);
+        return ((bitField0_ & 0x00100000) == 0x00100000);
       }
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseEngineStateChanged getResponseEngineStateChanged() {
         if (responseEngineStateChangedBuilder_ == null) {
@@ -16674,7 +17158,7 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseEngineStateChangedBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00080000;
+        bitField0_ |= 0x00100000;
         return this;
       }
       public Builder setResponseEngineStateChanged(
@@ -16685,12 +17169,12 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseEngineStateChangedBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00080000;
+        bitField0_ |= 0x00100000;
         return this;
       }
       public Builder mergeResponseEngineStateChanged(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseEngineStateChanged value) {
         if (responseEngineStateChangedBuilder_ == null) {
-          if (((bitField0_ & 0x00080000) == 0x00080000) &&
+          if (((bitField0_ & 0x00100000) == 0x00100000) &&
               responseEngineStateChanged_ != de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseEngineStateChanged.getDefaultInstance()) {
             responseEngineStateChanged_ =
               de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseEngineStateChanged.newBuilder(responseEngineStateChanged_).mergeFrom(value).buildPartial();
@@ -16701,7 +17185,7 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseEngineStateChangedBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00080000;
+        bitField0_ |= 0x00100000;
         return this;
       }
       public Builder clearResponseEngineStateChanged() {
@@ -16711,11 +17195,11 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseEngineStateChangedBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00080000);
+        bitField0_ = (bitField0_ & ~0x00100000);
         return this;
       }
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseEngineStateChanged.Builder getResponseEngineStateChangedBuilder() {
-        bitField0_ |= 0x00080000;
+        bitField0_ |= 0x00100000;
         onChanged();
         return getResponseEngineStateChangedFieldBuilder().getBuilder();
       }
@@ -16745,7 +17229,7 @@ public final class ClementineRemoteProtocolBuffer {
       private com.google.protobuf.SingleFieldBuilder<
           de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseUpdateTrackPosition, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseUpdateTrackPosition.Builder, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseUpdateTrackPositionOrBuilder> responseUpdateTrackPositionBuilder_;
       public boolean hasResponseUpdateTrackPosition() {
-        return ((bitField0_ & 0x00100000) == 0x00100000);
+        return ((bitField0_ & 0x00200000) == 0x00200000);
       }
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseUpdateTrackPosition getResponseUpdateTrackPosition() {
         if (responseUpdateTrackPositionBuilder_ == null) {
@@ -16764,7 +17248,7 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseUpdateTrackPositionBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00100000;
+        bitField0_ |= 0x00200000;
         return this;
       }
       public Builder setResponseUpdateTrackPosition(
@@ -16775,12 +17259,12 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseUpdateTrackPositionBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00100000;
+        bitField0_ |= 0x00200000;
         return this;
       }
       public Builder mergeResponseUpdateTrackPosition(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseUpdateTrackPosition value) {
         if (responseUpdateTrackPositionBuilder_ == null) {
-          if (((bitField0_ & 0x00100000) == 0x00100000) &&
+          if (((bitField0_ & 0x00200000) == 0x00200000) &&
               responseUpdateTrackPosition_ != de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseUpdateTrackPosition.getDefaultInstance()) {
             responseUpdateTrackPosition_ =
               de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseUpdateTrackPosition.newBuilder(responseUpdateTrackPosition_).mergeFrom(value).buildPartial();
@@ -16791,7 +17275,7 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseUpdateTrackPositionBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00100000;
+        bitField0_ |= 0x00200000;
         return this;
       }
       public Builder clearResponseUpdateTrackPosition() {
@@ -16801,11 +17285,11 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseUpdateTrackPositionBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00100000);
+        bitField0_ = (bitField0_ & ~0x00200000);
         return this;
       }
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseUpdateTrackPosition.Builder getResponseUpdateTrackPositionBuilder() {
-        bitField0_ |= 0x00100000;
+        bitField0_ |= 0x00200000;
         onChanged();
         return getResponseUpdateTrackPositionFieldBuilder().getBuilder();
       }
@@ -16835,7 +17319,7 @@ public final class ClementineRemoteProtocolBuffer {
       private com.google.protobuf.SingleFieldBuilder<
           de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseDisconnect, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseDisconnect.Builder, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseDisconnectOrBuilder> responseDisconnectBuilder_;
       public boolean hasResponseDisconnect() {
-        return ((bitField0_ & 0x00200000) == 0x00200000);
+        return ((bitField0_ & 0x00400000) == 0x00400000);
       }
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseDisconnect getResponseDisconnect() {
         if (responseDisconnectBuilder_ == null) {
@@ -16854,7 +17338,7 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseDisconnectBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00200000;
+        bitField0_ |= 0x00400000;
         return this;
       }
       public Builder setResponseDisconnect(
@@ -16865,12 +17349,12 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseDisconnectBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00200000;
+        bitField0_ |= 0x00400000;
         return this;
       }
       public Builder mergeResponseDisconnect(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseDisconnect value) {
         if (responseDisconnectBuilder_ == null) {
-          if (((bitField0_ & 0x00200000) == 0x00200000) &&
+          if (((bitField0_ & 0x00400000) == 0x00400000) &&
               responseDisconnect_ != de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseDisconnect.getDefaultInstance()) {
             responseDisconnect_ =
               de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseDisconnect.newBuilder(responseDisconnect_).mergeFrom(value).buildPartial();
@@ -16881,7 +17365,7 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseDisconnectBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00200000;
+        bitField0_ |= 0x00400000;
         return this;
       }
       public Builder clearResponseDisconnect() {
@@ -16891,11 +17375,11 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseDisconnectBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00200000);
+        bitField0_ = (bitField0_ & ~0x00400000);
         return this;
       }
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseDisconnect.Builder getResponseDisconnectBuilder() {
-        bitField0_ |= 0x00200000;
+        bitField0_ |= 0x00400000;
         onChanged();
         return getResponseDisconnectFieldBuilder().getBuilder();
       }
@@ -16925,7 +17409,7 @@ public final class ClementineRemoteProtocolBuffer {
       private com.google.protobuf.SingleFieldBuilder<
           de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseActiveChanged, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseActiveChanged.Builder, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseActiveChangedOrBuilder> responseActiveChangedBuilder_;
       public boolean hasResponseActiveChanged() {
-        return ((bitField0_ & 0x00400000) == 0x00400000);
+        return ((bitField0_ & 0x00800000) == 0x00800000);
       }
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseActiveChanged getResponseActiveChanged() {
         if (responseActiveChangedBuilder_ == null) {
@@ -16944,7 +17428,7 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseActiveChangedBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00400000;
+        bitField0_ |= 0x00800000;
         return this;
       }
       public Builder setResponseActiveChanged(
@@ -16955,12 +17439,12 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseActiveChangedBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00400000;
+        bitField0_ |= 0x00800000;
         return this;
       }
       public Builder mergeResponseActiveChanged(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseActiveChanged value) {
         if (responseActiveChangedBuilder_ == null) {
-          if (((bitField0_ & 0x00400000) == 0x00400000) &&
+          if (((bitField0_ & 0x00800000) == 0x00800000) &&
               responseActiveChanged_ != de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseActiveChanged.getDefaultInstance()) {
             responseActiveChanged_ =
               de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseActiveChanged.newBuilder(responseActiveChanged_).mergeFrom(value).buildPartial();
@@ -16971,7 +17455,7 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseActiveChangedBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00400000;
+        bitField0_ |= 0x00800000;
         return this;
       }
       public Builder clearResponseActiveChanged() {
@@ -16981,11 +17465,11 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseActiveChangedBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00400000);
+        bitField0_ = (bitField0_ & ~0x00800000);
         return this;
       }
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseActiveChanged.Builder getResponseActiveChangedBuilder() {
-        bitField0_ |= 0x00400000;
+        bitField0_ |= 0x00800000;
         onChanged();
         return getResponseActiveChangedFieldBuilder().getBuilder();
       }
@@ -17015,7 +17499,7 @@ public final class ClementineRemoteProtocolBuffer {
       private com.google.protobuf.SingleFieldBuilder<
           de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseLyrics, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseLyrics.Builder, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseLyricsOrBuilder> responseLyricsBuilder_;
       public boolean hasResponseLyrics() {
-        return ((bitField0_ & 0x00800000) == 0x00800000);
+        return ((bitField0_ & 0x01000000) == 0x01000000);
       }
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseLyrics getResponseLyrics() {
         if (responseLyricsBuilder_ == null) {
@@ -17034,7 +17518,7 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseLyricsBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00800000;
+        bitField0_ |= 0x01000000;
         return this;
       }
       public Builder setResponseLyrics(
@@ -17045,12 +17529,12 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseLyricsBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00800000;
+        bitField0_ |= 0x01000000;
         return this;
       }
       public Builder mergeResponseLyrics(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseLyrics value) {
         if (responseLyricsBuilder_ == null) {
-          if (((bitField0_ & 0x00800000) == 0x00800000) &&
+          if (((bitField0_ & 0x01000000) == 0x01000000) &&
               responseLyrics_ != de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseLyrics.getDefaultInstance()) {
             responseLyrics_ =
               de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseLyrics.newBuilder(responseLyrics_).mergeFrom(value).buildPartial();
@@ -17061,7 +17545,7 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseLyricsBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00800000;
+        bitField0_ |= 0x01000000;
         return this;
       }
       public Builder clearResponseLyrics() {
@@ -17071,11 +17555,11 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseLyricsBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00800000);
+        bitField0_ = (bitField0_ & ~0x01000000);
         return this;
       }
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseLyrics.Builder getResponseLyricsBuilder() {
-        bitField0_ |= 0x00800000;
+        bitField0_ |= 0x01000000;
         onChanged();
         return getResponseLyricsFieldBuilder().getBuilder();
       }
@@ -17105,7 +17589,7 @@ public final class ClementineRemoteProtocolBuffer {
       private com.google.protobuf.SingleFieldBuilder<
           de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongFileChunk, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongFileChunk.Builder, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongFileChunkOrBuilder> responseSongFileChunkBuilder_;
       public boolean hasResponseSongFileChunk() {
-        return ((bitField0_ & 0x01000000) == 0x01000000);
+        return ((bitField0_ & 0x02000000) == 0x02000000);
       }
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongFileChunk getResponseSongFileChunk() {
         if (responseSongFileChunkBuilder_ == null) {
@@ -17124,7 +17608,7 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseSongFileChunkBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x01000000;
+        bitField0_ |= 0x02000000;
         return this;
       }
       public Builder setResponseSongFileChunk(
@@ -17135,12 +17619,12 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseSongFileChunkBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x01000000;
+        bitField0_ |= 0x02000000;
         return this;
       }
       public Builder mergeResponseSongFileChunk(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongFileChunk value) {
         if (responseSongFileChunkBuilder_ == null) {
-          if (((bitField0_ & 0x01000000) == 0x01000000) &&
+          if (((bitField0_ & 0x02000000) == 0x02000000) &&
               responseSongFileChunk_ != de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongFileChunk.getDefaultInstance()) {
             responseSongFileChunk_ =
               de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongFileChunk.newBuilder(responseSongFileChunk_).mergeFrom(value).buildPartial();
@@ -17151,7 +17635,7 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseSongFileChunkBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x01000000;
+        bitField0_ |= 0x02000000;
         return this;
       }
       public Builder clearResponseSongFileChunk() {
@@ -17161,11 +17645,11 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseSongFileChunkBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x01000000);
+        bitField0_ = (bitField0_ & ~0x02000000);
         return this;
       }
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongFileChunk.Builder getResponseSongFileChunkBuilder() {
-        bitField0_ |= 0x01000000;
+        bitField0_ |= 0x02000000;
         onChanged();
         return getResponseSongFileChunkFieldBuilder().getBuilder();
       }
@@ -17195,7 +17679,7 @@ public final class ClementineRemoteProtocolBuffer {
       private com.google.protobuf.SingleFieldBuilder<
           de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongOffer, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongOffer.Builder, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongOfferOrBuilder> responseSongOfferBuilder_;
       public boolean hasResponseSongOffer() {
-        return ((bitField0_ & 0x02000000) == 0x02000000);
+        return ((bitField0_ & 0x04000000) == 0x04000000);
       }
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongOffer getResponseSongOffer() {
         if (responseSongOfferBuilder_ == null) {
@@ -17214,7 +17698,7 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseSongOfferBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x02000000;
+        bitField0_ |= 0x04000000;
         return this;
       }
       public Builder setResponseSongOffer(
@@ -17225,12 +17709,12 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseSongOfferBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x02000000;
+        bitField0_ |= 0x04000000;
         return this;
       }
       public Builder mergeResponseSongOffer(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongOffer value) {
         if (responseSongOfferBuilder_ == null) {
-          if (((bitField0_ & 0x02000000) == 0x02000000) &&
+          if (((bitField0_ & 0x04000000) == 0x04000000) &&
               responseSongOffer_ != de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongOffer.getDefaultInstance()) {
             responseSongOffer_ =
               de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongOffer.newBuilder(responseSongOffer_).mergeFrom(value).buildPartial();
@@ -17241,7 +17725,7 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseSongOfferBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x02000000;
+        bitField0_ |= 0x04000000;
         return this;
       }
       public Builder clearResponseSongOffer() {
@@ -17251,11 +17735,11 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           responseSongOfferBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x02000000);
+        bitField0_ = (bitField0_ & ~0x04000000);
         return this;
       }
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongOffer.Builder getResponseSongOfferBuilder() {
-        bitField0_ |= 0x02000000;
+        bitField0_ |= 0x04000000;
         onChanged();
         return getResponseSongOfferFieldBuilder().getBuilder();
       }
@@ -17427,6 +17911,11 @@ public final class ClementineRemoteProtocolBuffer {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_pb_remote_ResponseSongOffer_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_pb_remote_RequestRateSong_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_pb_remote_RequestRateSong_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_pb_remote_Message_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -17492,76 +17981,78 @@ public final class ClementineRemoteProtocolBuffer {
       "\013file_number\030\003 \001(\005\022\022\n\nfile_count\030\004 \001(\005\022.",
       "\n\rsong_metadata\030\006 \001(\0132\027.pb.remote.SongMe" +
       "tadata\022\014\n\004data\030\007 \001(\014\022\014\n\004size\030\010 \001(\005\"%\n\021Re" +
-      "sponseSongOffer\022\020\n\010accepted\030\001 \001(\010\"\213\014\n\007Me" +
-      "ssage\022\022\n\007version\030\001 \001(\005:\0019\022)\n\004type\030\002 \001(\0162" +
-      "\022.pb.remote.MsgType:\007UNKNOWN\0222\n\017request_" +
-      "connect\030\025 \001(\0132\031.pb.remote.RequestConnect" +
-      "\0226\n\021request_playlists\030\033 \001(\0132\033.pb.remote." +
-      "RequestPlaylists\022?\n\026request_playlist_son" +
-      "gs\030\n \001(\0132\037.pb.remote.RequestPlaylistSong" +
-      "s\0229\n\023request_change_song\030\013 \001(\0132\034.pb.remo",
-      "te.RequestChangeSong\0227\n\022request_set_volu" +
-      "me\030\014 \001(\0132\033.pb.remote.RequestSetVolume\022F\n" +
-      "\032request_set_track_position\030\027 \001(\0132\".pb.r" +
-      "emote.RequestSetTrackPosition\0229\n\023request" +
-      "_insert_urls\030\031 \001(\0132\034.pb.remote.RequestIn" +
-      "sertUrls\022;\n\024request_remove_songs\030\032 \001(\0132\035" +
-      ".pb.remote.RequestRemoveSongs\022=\n\025request" +
-      "_open_playlist\030\034 \001(\0132\036.pb.remote.Request" +
-      "OpenPlaylist\022?\n\026request_close_playlist\030\035" +
-      " \001(\0132\037.pb.remote.RequestClosePlaylist\022?\n",
-      "\026request_download_songs\030\037 \001(\0132\037.pb.remot" +
-      "e.RequestDownloadSongs\022!\n\006repeat\030\r \001(\0132\021" +
-      ".pb.remote.Repeat\022#\n\007shuffle\030\016 \001(\0132\022.pb." +
-      "remote.Shuffle\022C\n\030response_clementine_in" +
-      "fo\030\017 \001(\0132!.pb.remote.ResponseClementineI" +
-      "nfo\022E\n\031response_current_metadata\030\020 \001(\0132\"" +
-      ".pb.remote.ResponseCurrentMetadata\0228\n\022re" +
-      "sponse_playlists\030\021 \001(\0132\034.pb.remote.Respo" +
-      "nsePlaylists\022A\n\027response_playlist_songs\030" +
-      "\022 \001(\0132 .pb.remote.ResponsePlaylistSongs\022",
-      "L\n\035response_engine_state_changed\030\023 \001(\0132%" +
-      ".pb.remote.ResponseEngineStateChanged\022N\n" +
-      "\036response_update_track_position\030\024 \001(\0132&." +
-      "pb.remote.ResponseUpdateTrackPosition\022:\n" +
-      "\023response_disconnect\030\026 \001(\0132\035.pb.remote.R" +
-      "esponseDisconnect\022A\n\027response_active_cha" +
-      "nged\030\030 \001(\0132 .pb.remote.ResponseActiveCha" +
-      "nged\0222\n\017response_lyrics\030\036 \001(\0132\031.pb.remot" +
-      "e.ResponseLyrics\022B\n\030response_song_file_c" +
-      "hunk\030  \001(\0132 .pb.remote.ResponseSongFileC",
-      "hunk\0229\n\023response_song_offer\030! \001(\0132\034.pb.r" +
-      "emote.ResponseSongOffer*\274\005\n\007MsgType\022\013\n\007U" +
-      "NKNOWN\020\000\022\013\n\007CONNECT\020\001\022\025\n\021REQUEST_PLAYLIS" +
-      "TS\020\003\022\032\n\026REQUEST_PLAYLIST_SONGS\020\004\022\017\n\013CHAN" +
-      "GE_SONG\020\005\022\016\n\nSET_VOLUME\020\006\022\026\n\022SET_TRACK_P" +
-      "OSITION\020\007\022\017\n\013INSERT_URLS\020\010\022\020\n\014REMOVE_SON" +
-      "GS\020\t\022\021\n\rOPEN_PLAYLIST\020\n\022\022\n\016CLOSE_PLAYLIS" +
-      "T\020\013\022\016\n\nGET_LYRICS\020\016\022\022\n\016DOWNLOAD_SONGS\020\017\022" +
-      "\027\n\023SONG_OFFER_RESPONSE\020\020\022\010\n\004LOVE\020\014\022\007\n\003BA" +
-      "N\020\r\022\016\n\nSTOP_AFTER\020\021\022\016\n\nDISCONNECT\020\002\022\010\n\004P",
-      "LAY\020\024\022\r\n\tPLAYPAUSE\020\025\022\t\n\005PAUSE\020\026\022\010\n\004STOP\020" +
-      "\027\022\010\n\004NEXT\020\030\022\014\n\010PREVIOUS\020\031\022\024\n\020SHUFFLE_PLA" +
-      "YLIST\020\032\022\n\n\006REPEAT\020\033\022\013\n\007SHUFFLE\020\034\022\010\n\004INFO" +
-      "\020(\022\024\n\020CURRENT_METAINFO\020)\022\r\n\tPLAYLISTS\020*\022" +
-      "\022\n\016PLAYLIST_SONGS\020+\022\030\n\024ENGINE_STATE_CHAN" +
-      "GED\020,\022\016\n\nKEEP_ALIVE\020-\022\031\n\025UPDATE_TRACK_PO" +
-      "SITION\020.\022\033\n\027ACTIVE_PLAYLIST_CHANGED\020/\022\034\n" +
-      "\030FIRST_DATA_SENT_COMPLETE\0200\022\n\n\006LYRICS\0201\022" +
-      "\023\n\017SONG_FILE_CHUNK\0202\022\030\n\024DOWNLOAD_QUEUE_E" +
-      "MPTY\0203*;\n\013EngineState\022\t\n\005Empty\020\000\022\010\n\004Idle",
-      "\020\001\022\013\n\007Playing\020\002\022\n\n\006Paused\020\003*U\n\nRepeatMod" +
-      "e\022\016\n\nRepeat_Off\020\000\022\020\n\014Repeat_Track\020\001\022\020\n\014R" +
-      "epeat_Album\020\002\022\023\n\017Repeat_Playlist\020\003*\\\n\013Sh" +
-      "uffleMode\022\017\n\013Shuffle_Off\020\000\022\017\n\013Shuffle_Al" +
-      "l\020\001\022\027\n\023Shuffle_InsideAlbum\020\002\022\022\n\016Shuffle_" +
-      "Albums\020\003*k\n\020ReasonDisconnect\022\023\n\017Server_S" +
-      "hutdown\020\001\022\023\n\017Wrong_Auth_Code\020\002\022\025\n\021Not_Au" +
-      "thenticated\020\003\022\026\n\022Download_Forbidden\020\004*=\n" +
-      "\014DownloadItem\022\017\n\013CurrentItem\020\001\022\r\n\tItemAl" +
-      "bum\020\002\022\r\n\tAPlaylist\020\003BG\n%de.qspool.clemen",
-      "tineremote.backend.pbB\036ClementineRemoteP" +
-      "rotocolBuffer"
+      "sponseSongOffer\022\020\n\010accepted\030\001 \001(\010\"!\n\017Req" +
+      "uestRateSong\022\016\n\006rating\030\001 \001(\005\"\303\014\n\007Message" +
+      "\022\023\n\007version\030\001 \001(\005:\00210\022)\n\004type\030\002 \001(\0162\022.pb" +
+      ".remote.MsgType:\007UNKNOWN\0222\n\017request_conn" +
+      "ect\030\025 \001(\0132\031.pb.remote.RequestConnect\0226\n\021" +
+      "request_playlists\030\033 \001(\0132\033.pb.remote.Requ" +
+      "estPlaylists\022?\n\026request_playlist_songs\030\n" +
+      " \001(\0132\037.pb.remote.RequestPlaylistSongs\0229\n",
+      "\023request_change_song\030\013 \001(\0132\034.pb.remote.R" +
+      "equestChangeSong\0227\n\022request_set_volume\030\014" +
+      " \001(\0132\033.pb.remote.RequestSetVolume\022F\n\032req" +
+      "uest_set_track_position\030\027 \001(\0132\".pb.remot" +
+      "e.RequestSetTrackPosition\0229\n\023request_ins" +
+      "ert_urls\030\031 \001(\0132\034.pb.remote.RequestInsert" +
+      "Urls\022;\n\024request_remove_songs\030\032 \001(\0132\035.pb." +
+      "remote.RequestRemoveSongs\022=\n\025request_ope" +
+      "n_playlist\030\034 \001(\0132\036.pb.remote.RequestOpen" +
+      "Playlist\022?\n\026request_close_playlist\030\035 \001(\013",
+      "2\037.pb.remote.RequestClosePlaylist\022?\n\026req" +
+      "uest_download_songs\030\037 \001(\0132\037.pb.remote.Re" +
+      "questDownloadSongs\0225\n\021request_rate_song\030" +
+      "# \001(\0132\032.pb.remote.RequestRateSong\022!\n\006rep" +
+      "eat\030\r \001(\0132\021.pb.remote.Repeat\022#\n\007shuffle\030" +
+      "\016 \001(\0132\022.pb.remote.Shuffle\022C\n\030response_cl" +
+      "ementine_info\030\017 \001(\0132!.pb.remote.Response" +
+      "ClementineInfo\022E\n\031response_current_metad" +
+      "ata\030\020 \001(\0132\".pb.remote.ResponseCurrentMet" +
+      "adata\0228\n\022response_playlists\030\021 \001(\0132\034.pb.r",
+      "emote.ResponsePlaylists\022A\n\027response_play" +
+      "list_songs\030\022 \001(\0132 .pb.remote.ResponsePla" +
+      "ylistSongs\022L\n\035response_engine_state_chan" +
+      "ged\030\023 \001(\0132%.pb.remote.ResponseEngineStat" +
+      "eChanged\022N\n\036response_update_track_positi" +
+      "on\030\024 \001(\0132&.pb.remote.ResponseUpdateTrack" +
+      "Position\022:\n\023response_disconnect\030\026 \001(\0132\035." +
+      "pb.remote.ResponseDisconnect\022A\n\027response" +
+      "_active_changed\030\030 \001(\0132 .pb.remote.Respon" +
+      "seActiveChanged\0222\n\017response_lyrics\030\036 \001(\013",
+      "2\031.pb.remote.ResponseLyrics\022B\n\030response_" +
+      "song_file_chunk\030  \001(\0132 .pb.remote.Respon" +
+      "seSongFileChunk\0229\n\023response_song_offer\030!" +
+      " \001(\0132\034.pb.remote.ResponseSongOffer*\313\005\n\007M" +
+      "sgType\022\013\n\007UNKNOWN\020\000\022\013\n\007CONNECT\020\001\022\025\n\021REQU" +
+      "EST_PLAYLISTS\020\003\022\032\n\026REQUEST_PLAYLIST_SONG" +
+      "S\020\004\022\017\n\013CHANGE_SONG\020\005\022\016\n\nSET_VOLUME\020\006\022\026\n\022" +
+      "SET_TRACK_POSITION\020\007\022\017\n\013INSERT_URLS\020\010\022\020\n" +
+      "\014REMOVE_SONGS\020\t\022\021\n\rOPEN_PLAYLIST\020\n\022\022\n\016CL" +
+      "OSE_PLAYLIST\020\013\022\016\n\nGET_LYRICS\020\016\022\022\n\016DOWNLO",
+      "AD_SONGS\020\017\022\027\n\023SONG_OFFER_RESPONSE\020\020\022\010\n\004L" +
+      "OVE\020\014\022\007\n\003BAN\020\r\022\016\n\nSTOP_AFTER\020\021\022\r\n\tRATE_S" +
+      "ONG\020\023\022\016\n\nDISCONNECT\020\002\022\010\n\004PLAY\020\024\022\r\n\tPLAYP" +
+      "AUSE\020\025\022\t\n\005PAUSE\020\026\022\010\n\004STOP\020\027\022\010\n\004NEXT\020\030\022\014\n" +
+      "\010PREVIOUS\020\031\022\024\n\020SHUFFLE_PLAYLIST\020\032\022\n\n\006REP" +
+      "EAT\020\033\022\013\n\007SHUFFLE\020\034\022\010\n\004INFO\020(\022\024\n\020CURRENT_" +
+      "METAINFO\020)\022\r\n\tPLAYLISTS\020*\022\022\n\016PLAYLIST_SO" +
+      "NGS\020+\022\030\n\024ENGINE_STATE_CHANGED\020,\022\016\n\nKEEP_" +
+      "ALIVE\020-\022\031\n\025UPDATE_TRACK_POSITION\020.\022\033\n\027AC" +
+      "TIVE_PLAYLIST_CHANGED\020/\022\034\n\030FIRST_DATA_SE",
+      "NT_COMPLETE\0200\022\n\n\006LYRICS\0201\022\023\n\017SONG_FILE_C" +
+      "HUNK\0202\022\030\n\024DOWNLOAD_QUEUE_EMPTY\0203*;\n\013Engi" +
+      "neState\022\t\n\005Empty\020\000\022\010\n\004Idle\020\001\022\013\n\007Playing\020" +
+      "\002\022\n\n\006Paused\020\003*U\n\nRepeatMode\022\016\n\nRepeat_Of" +
+      "f\020\000\022\020\n\014Repeat_Track\020\001\022\020\n\014Repeat_Album\020\002\022" +
+      "\023\n\017Repeat_Playlist\020\003*\\\n\013ShuffleMode\022\017\n\013S" +
+      "huffle_Off\020\000\022\017\n\013Shuffle_All\020\001\022\027\n\023Shuffle" +
+      "_InsideAlbum\020\002\022\022\n\016Shuffle_Albums\020\003*k\n\020Re" +
+      "asonDisconnect\022\023\n\017Server_Shutdown\020\001\022\023\n\017W" +
+      "rong_Auth_Code\020\002\022\025\n\021Not_Authenticated\020\003\022",
+      "\026\n\022Download_Forbidden\020\004*=\n\014DownloadItem\022" +
+      "\017\n\013CurrentItem\020\001\022\r\n\tItemAlbum\020\002\022\r\n\tAPlay" +
+      "list\020\003BG\n%de.qspool.clementineremote.bac" +
+      "kend.pbB\036ClementineRemoteProtocolBuffer"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -17784,12 +18275,20 @@ public final class ClementineRemoteProtocolBuffer {
               new java.lang.String[] { "Accepted", },
               de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongOffer.class,
               de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongOffer.Builder.class);
-          internal_static_pb_remote_Message_descriptor =
+          internal_static_pb_remote_RequestRateSong_descriptor =
             getDescriptor().getMessageTypes().get(27);
+          internal_static_pb_remote_RequestRateSong_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_pb_remote_RequestRateSong_descriptor,
+              new java.lang.String[] { "Rating", },
+              de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong.class,
+              de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong.Builder.class);
+          internal_static_pb_remote_Message_descriptor =
+            getDescriptor().getMessageTypes().get(28);
           internal_static_pb_remote_Message_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pb_remote_Message_descriptor,
-              new java.lang.String[] { "Version", "Type", "RequestConnect", "RequestPlaylists", "RequestPlaylistSongs", "RequestChangeSong", "RequestSetVolume", "RequestSetTrackPosition", "RequestInsertUrls", "RequestRemoveSongs", "RequestOpenPlaylist", "RequestClosePlaylist", "RequestDownloadSongs", "Repeat", "Shuffle", "ResponseClementineInfo", "ResponseCurrentMetadata", "ResponsePlaylists", "ResponsePlaylistSongs", "ResponseEngineStateChanged", "ResponseUpdateTrackPosition", "ResponseDisconnect", "ResponseActiveChanged", "ResponseLyrics", "ResponseSongFileChunk", "ResponseSongOffer", },
+              new java.lang.String[] { "Version", "Type", "RequestConnect", "RequestPlaylists", "RequestPlaylistSongs", "RequestChangeSong", "RequestSetVolume", "RequestSetTrackPosition", "RequestInsertUrls", "RequestRemoveSongs", "RequestOpenPlaylist", "RequestClosePlaylist", "RequestDownloadSongs", "RequestRateSong", "Repeat", "Shuffle", "ResponseClementineInfo", "ResponseCurrentMetadata", "ResponsePlaylists", "ResponsePlaylistSongs", "ResponseEngineStateChanged", "ResponseUpdateTrackPosition", "ResponseDisconnect", "ResponseActiveChanged", "ResponseLyrics", "ResponseSongFileChunk", "ResponseSongOffer", },
               de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message.class,
               de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message.Builder.class);
           return null;
