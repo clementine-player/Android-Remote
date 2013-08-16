@@ -36,9 +36,9 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuf
 /**
  * Creates the protocol buffer messages
  */
-public class ClementinePbCreator {
+public class ClementineMessageFactory {
 	
-	private ClementinePbCreator() {}
+	private ClementineMessageFactory() {}
 	
 	/**
 	 * Create a song offer response

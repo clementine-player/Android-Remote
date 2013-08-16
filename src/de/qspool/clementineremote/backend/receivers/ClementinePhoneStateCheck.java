@@ -26,7 +26,7 @@ import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.Clementine;
-import de.qspool.clementineremote.backend.pb.ClementinePbCreator;
+import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 
 public class ClementinePhoneStateCheck extends BroadcastReceiver {
 	static int mLastVolume = -1;
@@ -51,12 +51,12 @@ public class ClementinePhoneStateCheck extends BroadcastReceiver {
 			Message msg = Message.obtain();
 			
 			if (state.equals(TelephonyManager.EXTRA_STATE_IDLE) && mLastVolume != -1) {
-				msg.obj = ClementinePbCreator.buildVolumeMessage(mLastVolume);
+				msg.obj = ClementineMessageFactory.buildVolumeMessage(mLastVolume);
 				mLastVolume = -1;
 			} else if (!state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
 				mLastVolume = App.mClementine.getVolume();
 				String volumeString = prefs.getString(App.SP_CALL_VOLUME, Clementine.DefaultCallVolume);
-				msg.obj = ClementinePbCreator.buildVolumeMessage(Integer.parseInt(volumeString));
+				msg.obj = ClementineMessageFactory.buildVolumeMessage(Integer.parseInt(volumeString));
 			} else {
 				msg = null;
 			}

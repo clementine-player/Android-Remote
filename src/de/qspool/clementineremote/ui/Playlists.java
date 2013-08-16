@@ -42,7 +42,7 @@ import com.actionbarsherlock.widget.SearchView;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.ClementineSongDownloader;
-import de.qspool.clementineremote.backend.pb.ClementinePbCreator;
+import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
 import de.qspool.clementineremote.backend.player.MyPlaylist;
 import de.qspool.clementineremote.ui.fragments.PlaylistSongs;
@@ -152,7 +152,7 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 			MyPlaylist playlist = App.mClementine.getPlaylists().get(key);
 			if (playlist.getPlaylistSongs().size() == 0) {
 				Message msg = Message.obtain();
-				msg.obj = ClementinePbCreator.buildRequestPlaylistSongs(playlist.getId());
+				msg.obj = ClementineMessageFactory.buildRequestPlaylistSongs(playlist.getId());
 				App.mClementineConnection.mHandler.sendMessage(msg);
 				mDownloadPlaylists++;
 				mDownloadPlaylistNames.add(playlist.getName());
@@ -223,7 +223,7 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 				int tabpos = getSupportActionBar().getSelectedTab().getPosition();
 				PlaylistSongs ps = (PlaylistSongs) mPagerAdapter.getItem(tabpos);
 
-				downloaderAlbum.startDownload(ClementinePbCreator.buildDownloadSongsMessage(ps.getPlaylistId(), DownloadItem.APlaylist));
+				downloaderAlbum.startDownload(ClementineMessageFactory.buildDownloadSongsMessage(ps.getPlaylistId(), DownloadItem.APlaylist));
 				return true;
 	        case R.id.settings:		
 	        	Intent settingsIntent = new Intent(this, ClementineSettings.class);

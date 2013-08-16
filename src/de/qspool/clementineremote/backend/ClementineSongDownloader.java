@@ -43,7 +43,7 @@ import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.elements.SongDownloadResult;
 import de.qspool.clementineremote.backend.elements.SongDownloadResult.DownloadResult;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
-import de.qspool.clementineremote.backend.pb.ClementinePbCreator;
+import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongFileChunk;
@@ -225,7 +225,7 @@ public class ClementineSongDownloader extends
 		}
     	int authCode = mSharedPref.getInt(App.SP_LAST_AUTH_CODE, 0);
     	
-    	return mClient.createConnection(ClementinePbCreator.buildConnectMessage(ip, port, authCode, false, true));
+    	return mClient.createConnection(ClementineMessageFactory.buildConnectMessage(ip, port, authCode, false, true));
     }
 
     /**
@@ -364,7 +364,7 @@ public class ClementineSongDownloader extends
     	if (f.exists() && !mOverrideExistingFiles) 
     		accept = false;	
 
-    	mClient.sendRequest(ClementinePbCreator.buildSongOfferResponse(accept));
+    	mClient.sendRequest(ClementineMessageFactory.buildSongOfferResponse(accept));
     	
     	return accept;
 	}

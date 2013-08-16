@@ -66,7 +66,7 @@ import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementineService;
 import de.qspool.clementineremote.backend.mdns.ClementineMDnsDiscovery;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
-import de.qspool.clementineremote.backend.pb.ClementinePbCreator;
+import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ReasonDisconnect;
 import de.qspool.clementineremote.ui.adapter.CustomClementinesAdapter;
@@ -366,7 +366,7 @@ public class ConnectDialog extends SherlockActivity {
 		
 		// Move the request to the message
 		Message msg = Message.obtain();
-		msg.obj = ClementinePbCreator.buildConnectMessage(mEtIp.getText().toString(), port, mAuthCode, true, false);
+		msg.obj = ClementineMessageFactory.buildConnectMessage(mEtIp.getText().toString(), port, mAuthCode, true, false);
 		
 		// Send the request to the thread
 		App.mClementineConnection.mHandler.sendMessage(msg);

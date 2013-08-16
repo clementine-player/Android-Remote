@@ -45,7 +45,7 @@ import de.qspool.clementineremote.backend.event.OnConnectionClosedListener;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessage.ErrorMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessage.MessageGroup;
-import de.qspool.clementineremote.backend.pb.ClementinePbCreator;
+import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message.Builder;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ReasonDisconnect;
@@ -181,7 +181,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 			
 			// Until we get a new connection request from ui,
 			// don't request the first data a second time
-			mRequestConnect = ClementinePbCreator.buildConnectMessage(message.getIp(), message.getPort(), 
+			mRequestConnect = ClementineMessageFactory.buildConnectMessage(message.getIp(), message.getPort(), 
 																	  message.getMessage().getRequestConnect().getAuthCode(), 
 																	  false, 
 																	  message.getMessage().getRequestConnect().getDownloader());

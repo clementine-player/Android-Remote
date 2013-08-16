@@ -19,7 +19,7 @@ package de.qspool.clementineremote.backend.receivers;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
-import de.qspool.clementineremote.backend.pb.ClementinePbCreator;
+import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -58,10 +58,10 @@ public class ClementineMediaButtonEventReceiver extends BroadcastReceiver {
 				msg.obj = ClementineMessage.getMessage(MsgType.PREVIOUS);
 				break;
 			case KeyEvent.KEYCODE_VOLUME_DOWN:
-				msg.obj = ClementinePbCreator.buildVolumeMessage(App.mClementine.getVolume() - 10);
+				msg.obj = ClementineMessageFactory.buildVolumeMessage(App.mClementine.getVolume() - 10);
 				break;
 			case KeyEvent.KEYCODE_VOLUME_UP:
-				msg.obj = ClementinePbCreator.buildVolumeMessage(App.mClementine.getVolume() + 10);
+				msg.obj = ClementineMessageFactory.buildVolumeMessage(App.mClementine.getVolume() + 10);
 				break;
 			default:
 				msg = null;

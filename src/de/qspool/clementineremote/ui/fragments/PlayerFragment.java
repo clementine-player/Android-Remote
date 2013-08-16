@@ -45,7 +45,7 @@ import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
-import de.qspool.clementineremote.backend.pb.ClementinePbCreator;
+import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.player.LyricsProvider;
 import de.qspool.clementineremote.backend.player.MySong;
@@ -313,7 +313,7 @@ public class PlayerFragment extends SherlockFragment {
 			// If the user changed the position, send a request to Clementine
 			if (fromUser) {
 				Message msg = Message.obtain();
-				msg.obj = ClementinePbCreator.buildTrackPosition(progress);
+				msg.obj = ClementineMessageFactory.buildTrackPosition(progress);
 				App.mClementineConnection.mHandler.sendMessage(msg);
 				
 				App.mClementine.setSongPosition(progress);
