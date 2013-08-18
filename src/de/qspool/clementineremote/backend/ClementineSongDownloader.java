@@ -389,7 +389,7 @@ public class ClementineSongDownloader extends
      * @param chunk The chunk
      */
     private String BuildDirPath(ResponseSongFileChunk chunk) {
-    	String defaultPath = Environment.getExternalStorageDirectory() + "//ClementineMusic";
+    	String defaultPath = Environment.getExternalStorageDirectory() + "/ClementineMusic";
         String path = mSharedPref.getString(App.SP_DOWNLOAD_DIR, defaultPath);
         
     	StringBuilder sb = new StringBuilder();

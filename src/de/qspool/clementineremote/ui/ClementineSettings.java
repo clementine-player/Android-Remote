@@ -115,7 +115,7 @@ public class ClementineSettings extends SherlockPreferenceActivity
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         
         // Create dialog
-        String defaultPath = Environment.getExternalStorageDirectory() + "//ClementineMusic";
+        String defaultPath = Environment.getExternalStorageDirectory() + "/ClementineMusic";
         String path = sharedPreferences.getString(App.SP_DOWNLOAD_DIR, defaultPath);
         File mPath = new File(path);
         mFileDialog = new FileDialog(this, mPath);
