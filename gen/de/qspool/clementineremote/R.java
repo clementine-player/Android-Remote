@@ -944,19 +944,18 @@ containing a value of this type.
         public static final int ic_media_pause=0x7f020081;
         public static final int ic_media_play=0x7f020082;
         public static final int ic_media_previous=0x7f020083;
-        public static final int ic_menu_preferences=0x7f020084;
-        public static final int icon_large=0x7f020085;
-        public static final int img_cover_bg=0x7f020086;
-        public static final int img_cover_grey_bg=0x7f020087;
+        public static final int icon_large=0x7f020084;
+        public static final int img_cover_bg=0x7f020085;
+        public static final int img_cover_grey_bg=0x7f020086;
+        public static final int nocover=0x7f020087;
         public static final int orange_background_border=0x7f020088;
         public static final int orange_button=0x7f020089;
         public static final int progress=0x7f02008a;
         public static final int scrubber=0x7f02008b;
         public static final int scrubber_control=0x7f02008c;
         public static final int scrubber_pressed=0x7f02008d;
-        public static final int shuffle=0x7f02008e;
-        public static final int white_background=0x7f02008f;
-        public static final int white_background_border=0x7f020090;
+        public static final int white_background=0x7f02008e;
+        public static final int white_background_border=0x7f02008f;
     }
     public static final class id {
         public static final int ScrollView01=0x7f050039;
