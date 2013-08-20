@@ -271,7 +271,8 @@ public class PlayerFragment extends SherlockFragment {
 		    default: break;
 			}
 			// Send the request to the thread
-			App.mClementineConnection.mHandler.sendMessage(msg);
+			if (msg.obj != null)
+				App.mClementineConnection.mHandler.sendMessage(msg);
 		}
 	};
 	
