@@ -464,10 +464,12 @@ public class ConnectDialog extends SherlockActivity {
     	mServiceIntent.putExtra(App.SERVICE_ID, App.SERVICE_START);
     	startService(mServiceIntent);
     	
-		if (clementineMessage.getMessage().getResponseDisconnect()
-										  .getReasonDisconnect() == ReasonDisconnect.Wrong_Auth_Code) {
-			showAuthCodePromt();
-		}
+    	if (!clementineMessage.isErrorMessage()) {
+			if (clementineMessage.getMessage().getResponseDisconnect()
+											  .getReasonDisconnect() == ReasonDisconnect.Wrong_Auth_Code) {
+				showAuthCodePromt();
+			}
+    	}
 	}
 	
 	 @Override

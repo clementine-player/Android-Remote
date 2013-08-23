@@ -59,6 +59,7 @@ public class ConnectDialogHandler extends Handler {
 						cd.noConnection();
 						break;
 					}
+					cd.disconnected(clementineMessage);
 				} else {
 					// Okay, normal message
 					switch (clementineMessage.getMessageType()) {

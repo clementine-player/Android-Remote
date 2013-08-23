@@ -224,10 +224,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 		// Close the connection if we have an old proto verion
 		if (clementineMessage.isErrorMessage()) {
 			closeConnection(clementineMessage);
-			sendUiMessage(clementineMessage);
-		} 
-		
-		if (clementineMessage.getTypeGroup() == MessageGroup.GUI_RELOAD) {
+		} else 	if (clementineMessage.getTypeGroup() == MessageGroup.GUI_RELOAD) {
 			sendUiMessage(clementineMessage);
 			
 	    	// Now update the notification and the remote control client			
@@ -241,12 +238,9 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 				mLastState = App.mClementine.getState();
 				updateRemoteControlClient();
 			}
-		}
-		
-		if (clementineMessage.getMessageType() == MsgType.DISCONNECT) {
+		} else if (clementineMessage.getMessageType() == MsgType.DISCONNECT) {
 			closeConnection(clementineMessage);
 		}
-		sendUiMessage(clementineMessage);
 	}
 	
 	/**
