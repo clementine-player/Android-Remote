@@ -240,6 +240,8 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 			}
 		} else if (clementineMessage.getMessageType() == MsgType.DISCONNECT) {
 			closeConnection(clementineMessage);
+		} else {
+			sendUiMessage(clementineMessage);
 		}
 	}
 	
