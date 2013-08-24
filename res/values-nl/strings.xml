@@ -20,7 +20,6 @@
   <string name="playlist_search_hint">Nummer zoeken</string>
   <string name="menu_shuffle">Willekeurig</string>
   <string name="menu_repeat">Herhalen</string>
-  <string name="menu_shuffle">Willekeurig</string>
   <string name="menu_settings">Instellingen</string>
   <string name="menu_playlist">Afspeellijst</string>
   <string name="menu_search">Zoeken</string>
@@ -31,6 +30,7 @@
   <string name="pref_trackno_title">Toon volgnummer</string>
   <string name="pref_trackno_summary">Toon of verberg het volgnummer in de afspeellijst.</string>
   <string name="pref_cat_behavior">Gedrag</string>
+  <string name="pref_cat_downloads">Downloads</string>
   <string name="pref_cat_connection">Verbinding</string>
   <string name="pref_cat_info">Informatie</string>
   <string name="pref_version_summary">Klik om de website te bezoeken.</string>
@@ -54,7 +54,7 @@
   <string name="error_versions">Versie niet compatibel</string>
   <string name="old_proto">Voer een update van Clementine uit!</string>
   <string name="no_private_ip">Uw Android apparaat heeft een niet-lokaal IP adres. Schakel de optie \"Alleen niet-publieke apparaten gebruiken\" in de instellingen van Clementine uit.</string>
-  <string name="check_ip">1) Draait Clementine?\n2) Is Netwerk Remote ingeschakeld in de Clementine instellingen?\n3) Controleer of u het juiste IP adres opgegeven hebt.\n4) Heeft uw de nieuwste versie van Clementine gedownload van: http://builds.clementine-player.org ? </string>
+  <string name="check_ip">1) Draait Clementine?\n2) Gebruikt u een versie Clementine 1.2 of hoger?\n3) Heeft u Netwerk Remote geactiveerd in de instellingen van Clementine?\n4) Controleer of u het juiste IP adres gebruikt\n</string>
   <string name="wifi_disabled">Wifi is uitgeschakeld. Als u met Clementine wilt verbinden via internet zorg dan de poorten juist doorgestuurd worden en dat de optie \"Alleen niet-publieke apparaten accepteren\" uitgeschakeld is.</string>
   <string name="input_auth_code">Autorisatiecode</string>
   <string name="invalid_code">Code incorrect</string>
@@ -68,7 +68,6 @@
   <string name="shuffle_inside_album">Nummers van dit album willekeurig</string>
   <string name="shuffle_albums">Albums willekeurig afspelen</string>
   <string name="first_time_title">Welkom</string>
-  <string name="first_time_text">Bedankt voor het gebruik van Clementine Remote!\nIk hoop dat deze app nuttig voor u is. &lt;br&gt;&lt;br&gt;Om deze app te kunnen gebruiken moet u de nieuweste versie van Clementine downloaden op &lt;a href=\"http://builds.clementine-player.org/\"&gt;here&lt;/a&gt;. De stabiele versies (zoals 1.0 / 1.1 / 1.1.1) bieden geen ondersteuning voor Clementine Remote.</string>
   <string name="menu_love">Love</string>
   <string name="menu_ban">Ban</string>
   <string name="track_loved">Nummer ge-loved &lt;3</string>

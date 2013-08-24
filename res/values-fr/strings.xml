@@ -9,7 +9,7 @@
   <string name="connectdialog_connected">Connecté</string>
   <string name="connectdialog_error">Impossible de se connecter</string>
   <string name="connectdialog_ip_hint">Saisissez votre adresse IP</string>
-  <string name="connectdialog_mdns_found">Plusieurs Clementines trouvées. Touchez l\'écran pour un choisir une.</string>
+  <string name="connectdialog_mdns_found">Plusieurs Clementines trouvées. Touchez l\\'écran pour un choisir une.</string>
   <string name="connectdialog_services">Clementines</string>
   <string name="menu_disconnect">Déconnexion</string>
   <string name="player_nosong">Aucun morceau joué actuellement</string>
@@ -20,7 +20,6 @@
   <string name="playlist_search_hint">Rechercher un morceau</string>
   <string name="menu_shuffle">Aléatoire</string>
   <string name="menu_repeat">Répétition</string>
-  <string name="menu_shuffle">Aléatoire</string>
   <string name="menu_settings">Préférences</string>
   <string name="menu_playlist">Listes de lecture</string>
   <string name="menu_search">Recherche</string>
@@ -31,6 +30,8 @@
   <string name="pref_trackno_title">Afficher le numéro de la piste</string>
   <string name="pref_trackno_summary">Afficher/cacher le numéro de piste dans les listes de lecture.</string>
   <string name="pref_cat_behavior">Comportement</string>
+  <string name="pref_cat_player">Lecteur</string>
+  <string name="pref_cat_downloads">Téléchargements</string>
   <string name="pref_cat_connection">Connexion</string>
   <string name="pref_cat_info">Information</string>
   <string name="pref_version_summary">Cliquez pour visiter le site web du projet</string>
@@ -44,7 +45,7 @@
   <string name="dialog_about_supporters">Supporters</string>
   <string name="dialog_about_others">Autres</string>
   <string name="close">Fermer</string>
-  <string name="dialog_license_top"> Ce programme est distribué dans l\'espoir qu\'il sera utile, mais SANS AUCUNE GARANTIE</string>
+  <string name="dialog_license_top"> Ce programme est distribué dans l\\'espoir qu\\'il sera utile, mais SANS AUCUNE GARANTIE</string>
   <string name="pref_clementine_title">Clementine</string>
   <string name="pref_clementine_summary">Visiter le site Web de Clementine</string>
   <string name="pref_port_title">Port</string>
@@ -54,21 +55,21 @@
   <string name="error_versions">Version incompatible</string>
   <string name="old_proto">Merci de mettre à jour Clementine</string>
   <string name="no_private_ip">Votre téléphone Android a une adresse IP non-locale. Essayez de désactiver « Utiliser seulement les adresses IP locales » dans les préférences de Clementine.</string>
-  <string name="check_ip">1) Est-ce que Clementine est en cours d\'exécution ?\n2) Est-ce le contrôle à distance est activé dans les préférences de Clementine?\n3) Vérifiez que vous avez saisi la bonne adresse IP.\n4) Avez-vous une version de Clementine compatible ? Actuellement, seules les version de développement sont compatibles. Elle peuvent être téléchargées ici : http://builds.clementine-player.org/</string>
+  <string name="check_ip">1) Est-ce que Clementine est en cours d\'exécution ?\n2) Utilisez-vous Clementine 1.2, ou une version plus récente ?\n3) Est-ce le contrôle à distance est activé dans les préférences de Clementine ?\n4) Vérifiez que vous avez saisi la bonne adresse IP.\n</string>
   <string name="wifi_disabled">Le Wifi est désactivé. Si vous voulez vous connecter à Clementine via Internet, vérifiez que vous avez redirigé les ports et désactivé « Utiliser seulement les adresses IP locales ».</string>
-  <string name="input_auth_code">Code d\'authentication</string>
+  <string name="input_auth_code">Code d\\'authentication</string>
   <string name="invalid_code">Code invalide</string>
   <string name="notification_disconnect_keep_alive">Connexion perdue. Touchez pour vous reconnecter.</string>
   <string name="repeat_off">Ne pas répéter</string>
   <string name="repeat_track">Répéter la piste</string>
-  <string name="repeat_album">Répéter l\'album</string>
+  <string name="repeat_album">Répéter l\\'album</string>
   <string name="repeat_playlist">Répéter la liste de lecture</string>
   <string name="shuffle_off">Aléatoire : désactivé</string>
   <string name="shuffle_all">Aléatoire : tout</string>
   <string name="shuffle_inside_album">Aléatoire : pistes de cet album</string>
   <string name="shuffle_albums">Aléatoire : albums</string>
   <string name="first_time_title">Bienvenue</string>
-  <string name="first_time_text">Merci d\'utiliser Clementine à distance !\nJ\'espère que cette application vous sera utile.&lt;br&gt;&lt;br&gt;Pour pouvoir l\'utiliser, vous devez avoir une version de Clementine compatible. Actuellement, seules les version de développement sont compatibles. Elle peuvent être téléchargées ici : &lt;a href=\"http://builds.clementine-player.org/\"&gt;ici&lt;/a&gt;. Les versions stables (1.0/1.1) ne sont pas compatibles.</string>
+  <string name="first_time_text">Merci d\'utiliser Clementine à distance !\nJ\'espère que cette application vous sera utile.&lt;br&gt;&lt;br&gt;Pour pouvoir l\'utiliser, vous devez avoir une version de Clementine compatible (au moins 1.2), disponible &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;ici&lt;/a&gt;.</string>
   <string name="menu_love">J\'aime</string>
   <string name="menu_ban">Je déteste</string>
   <string name="track_loved">Piste aimée &lt;3</string>
@@ -79,4 +80,33 @@
   <string name="pref_lower_volume_summary">Baisser le volume lors des appels.</string>
   <string name="pref_call_volume_title">Volume d\'appel</string>
   <string name="pref_call_volume_summary">Volume d\'appel actuel : %s</string>
+  <string name="player_download_lyrics">Téléchargement des paroles</string>
+  <string name="player_no_lyrics">Aucune parole trouvée.</string>
+  <string name="player_download_song">Télécharger le morceau</string>
+  <string name="player_download_album">Télécharger l\'album</string>
+  <string name="playlist_download_playlist">Télécharger la liste de lecture</string>
+  <string name="player_howto_cancel">Téléchargement en attente. Vous pouvez cliquer sur la notification pour annuler le téléchargement courant.</string>
+  <string name="player_song_is_stream">Les flux ne peuvent pas être téléchargés.</string>
+  <string name="download_noti_title">Téléchargement des morceaux</string>
+  <string name="download_noti_complete">Téléchargement terminé</string>
+  <string name="download_noti_canceled">Téléchargement annulé</string>
+  <string name="download_noti_insufficient_space">Espace disque insuffisant : téléchargement annulé.</string>
+  <string name="download_noti_forbidden">Téléchargement interdit. Vous pouvez l\'activer dans les préférences de Clementine.</string>
+  <string name="download_noti_not_mounted">Aucun espace de stockage trouvé : annulation du téléchargement.</string>
+  <string name="download_noti_only_wifi">Téléchargement seulement en Wifi autorisé.</string>
+  <string name="pref_dl_wifi_only_title">Wifi uniquement</string>
+  <string name="pref_dl_wifi_only_summary">Télécharger les morceaux uniquement lorsque connecté à un réseau Wifi.</string>
+  <string name="pref_dl_dir">Dossier pour les téléchargements</string>
+  <string name="pref_dl_override">Remplacer les fichiers existants</string>
+  <string name="pref_dl_cat_playlist">Téléchargement des listes de lecture</string>
+  <string name="pref_dl_pl_save_own_dir_title">Enregistrer les morceaux dans le dossier de la liste de lecture</string>
+  <string name="pref_dl_pl_save_own_dir_summary">Crée un dossier nommé comme la liste de lecture, et enregistre les morceaux dedans.</string>
+  <string name="pref_dl_pl_artist_dir_title">Créer un sous-dossier pour les artistes/albums</string>
+  <string name="pref_dl_pl_artist_dir_summary">Créer un sous-dossier pour les artistes/albums, pour chacun des morceaux.</string>
+  <string name="file_dialog_set_dir">Sélectionner le dossier</string>
+  <string name="player_stop_after_current">Terminer la lecture à la fin du morceau.</string>
+  <string name="app_not_available">L\'application n\'est pas disponible.</string>
+  <string name="crash_report_title">Oups, une erreur s\'est produite !</string>
+  <string name="crash_report_message">« Clementine à distance » a planté lors de la dernière utilisation : ceci ne devrait pas arriver. Aidez moi à l\'améliorer en m\'envoyant le rapport d\'erreur. Merci !</string>
+  <string name="crash_report_send">Envoyé !</string>
 </resources>

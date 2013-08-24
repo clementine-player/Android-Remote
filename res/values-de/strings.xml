@@ -20,7 +20,6 @@
   <string name="playlist_search_hint">Suche Titel</string>
   <string name="menu_shuffle">Zufallsmodus</string>
   <string name="menu_repeat">Wiederholung</string>
-  <string name="menu_shuffle">Zufallsmodus</string>
   <string name="menu_settings">Einstellungen</string>
   <string name="menu_playlist">Wiedergabelisten</string>
   <string name="menu_search">Suche</string>
@@ -31,6 +30,8 @@
   <string name="pref_trackno_title">Zeige Titelnummer</string>
   <string name="pref_trackno_summary">Zeige oder verstecke Titelnummer in der Wiedergabeliste.</string>
   <string name="pref_cat_behavior">Verhalten</string>
+  <string name="pref_cat_player">Spieler</string>
+  <string name="pref_cat_downloads">Downloads</string>
   <string name="pref_cat_connection">Verbindung</string>
   <string name="pref_cat_info">Informationen</string>
   <string name="pref_version_summary">Klicke für Projekt-Webseite</string>
@@ -54,7 +55,7 @@
   <string name="error_versions">Inkompatible Version</string>
   <string name="old_proto">Bitte Clementine updaten!</string>
   <string name="no_private_ip">Dein Android Gerät hat eine nicht lokale IP Addresse. Deaktiviere \"Akzeptiere nur lokale Clients\" in den Clementine Einstellungen.</string>
-  <string name="check_ip">1) Läuft Clementine?\n2) Hast du die Netzwerkfernsteuerung in den Clementine Einstellungen aktiviert?\n3) Hast du die korrekte IP Adresse eingegeben?\n4) Hast du die neuste Clementine Version hier heruntergeladen: http://builds.clementine-player.org/ </string>
+  <string name="check_ip">1) Läuft Clementine?\n2) Nutzt du Clementine 1.2 oder höher?\n3) Hast du die Netzwerkfernsteuerung in den Clementine-Einstellungen aktiviert?\n4) Prüfe, ob die IP Adresse korrekt ist.</string>
   <string name="wifi_disabled">Wifi ist deaktiviert. Wenn du über das Internet Clementine fernsteuern möchtest, stelle sicher, dass du die Ports korrekt weitergeleitet hast und \"Akzeptiere nur lokale Clients\" deaktiviert ist.</string>
   <string name="input_auth_code">Authentifizierungs-Code</string>
   <string name="invalid_code">Ungültiger Code</string>
@@ -68,7 +69,7 @@
   <string name="shuffle_inside_album">Zufällige Titelreihenfolge innerhalb eines Albums</string>
   <string name="shuffle_albums">Zufällige Albenreihenfolge</string>
   <string name="first_time_title">Willkommen</string>
-  <string name="first_time_text">Vielen Dank für die Nutzung von Clementine Remote!\nIch hoffe, dass die Anwendung nützlich für dich ist. &lt;br&gt;&lt;br&gt;Um die Fernsteuerung zu nutzen musst die neuste Clementine Version von &lt;a href=\"http://builds.clementine-player.org/\"&gt;hier&lt;/a&gt; installieren. Die stabilen Versionen (wie 1.0 / 1.1 / 1.1.1) werden nicht unterstützt!</string>
+  <string name="first_time_text">Danke, dass du Clementine Remote nutzt!\nIch hoffe, dass dir die App gefällt. Um diese Fernsteuerung zu nutzen musst du mindestens Clementine 1.2 installiert haben. Download: &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;</string>
   <string name="menu_love">Lieben</string>
   <string name="menu_ban">Bannen</string>
   <string name="track_loved">Titel geliebt &lt;3</string>
@@ -79,4 +80,33 @@
   <string name="pref_lower_volume_summary">Lautstärke bei eingehenden / ausgehenden Aufruf verringern.</string>
   <string name="pref_call_volume_title">Läutstärke bei Anruf</string>
   <string name="pref_call_volume_summary">Aktuelles Lautstärkelevel: %s</string>
+  <string name="player_download_lyrics">Lade Liedtexte</string>
+  <string name="player_no_lyrics">Keine Liedtexte gefunden.</string>
+  <string name="player_download_song">Song herunterladen</string>
+  <string name="player_download_album">Album herunterladen</string>
+  <string name="playlist_download_playlist">Wiedergabeliste herunterladen</string>
+  <string name="player_howto_cancel">Download eingereiht, bitte warten. Notification drücken, um den Download abzubrechen.</string>
+  <string name="player_song_is_stream">Streams können nicht heruntergeladen werden!</string>
+  <string name="download_noti_title">Lade Songs herunter</string>
+  <string name="download_noti_complete">Download fertig</string>
+  <string name="download_noti_canceled">Download abgebrochen</string>
+  <string name="download_noti_insufficient_space">Zu wenig Speicher, Download abgebrochen</string>
+  <string name="download_noti_forbidden">Download verboten. In den Clementine Einstellungen aktivieren.</string>
+  <string name="download_noti_not_mounted">Keine SD Karte gefunden, Download abgebrochen.</string>
+  <string name="download_noti_only_wifi">Download nur über WiFi erlaubt.</string>
+  <string name="pref_dl_wifi_only_title">Nur WiFi</string>
+  <string name="pref_dl_wifi_only_summary">Lade Songs nur über ein WiFi Netzwerk herunter.</string>
+  <string name="pref_dl_dir">Setze Downloadordner</string>
+  <string name="pref_dl_override">Existierende Dateien überschreiben</string>
+  <string name="pref_dl_cat_playlist">Download von Wiedergabelisten</string>
+  <string name="pref_dl_pl_save_own_dir_title">In Wiedergabelistenordner speichern</string>
+  <string name="pref_dl_pl_save_own_dir_summary">Erstellt einen nach der Wiedergabeliste benannten Ordner und speichert die Songs dort.</string>
+  <string name="pref_dl_pl_artist_dir_title">Künster/Album Unterordner erstellen</string>
+  <string name="pref_dl_pl_artist_dir_summary">Erstelle einen Künster/Album Unterordner für jeden Titel.</string>
+  <string name="file_dialog_set_dir">Ordner auswählen</string>
+  <string name="player_stop_after_current">Nach Titel anhalten (de)aktiviert.</string>
+  <string name="app_not_available">Anwendung nicht verfügbar!</string>
+  <string name="crash_report_title">Huch, irgendwas ist schiefgelaufen!</string>
+  <string name="crash_report_message">Clementine Remote ist das letzte mal abgestürzt! Das hätte nicht passieren dürfen! Hilf mir die Anwendung zu verbessern und sende mir die Logdatei. Danke!</string>
+  <string name="crash_report_send">Senden!</string>
 </resources>

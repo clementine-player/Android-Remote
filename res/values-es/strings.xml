@@ -20,7 +20,6 @@
   <string name="playlist_search_hint">Buscar pista</string>
   <string name="menu_shuffle">Aleatorio</string>
   <string name="menu_repeat">Repetir</string>
-  <string name="menu_shuffle">Aleatorio</string>
   <string name="menu_settings">Configuración</string>
   <string name="menu_playlist">Listas de reproducción</string>
   <string name="menu_search">Buscar</string>
@@ -31,6 +30,8 @@
   <string name="pref_trackno_title">Mostrar n.º de pista</string>
   <string name="pref_trackno_summary">Mostrar u ocultar el número de pista en las listas de reprod.</string>
   <string name="pref_cat_behavior">Comportamiento</string>
+  <string name="pref_cat_player">Reproductor</string>
+  <string name="pref_cat_downloads">Descargas</string>
   <string name="pref_cat_connection">Conexión</string>
   <string name="pref_cat_info">Información</string>
   <string name="pref_version_summary">Pulse para visitar el sitio web del proyecto</string>
@@ -54,6 +55,7 @@
   <string name="error_versions">Versión incompatible</string>
   <string name="old_proto">Actualice Clementine.</string>
   <string name="no_private_ip">Su dispositivo Android tiene una dirección IP no local. Pruebe a desactivar «Solo usar direcciones IP locales» en la configuración de Clementine.</string>
+  <string name="check_ip">1) ¿Clementine está en ejecución?\n2) ¿La versión de Clementine es la 1.2 o superior?\n3) ¿Ha activado el control remoto en la configuración de Clementine?\n4) Compruebe si ha escrito la dirección IP correcta.\n</string>
   <string name="wifi_disabled">WiFi está desactivado. Si quiere conectarse a Clementine mediante Internet, asegúrese de que redireccionó los puertos adecuadamente y de que desactivó «Solo usar direcciones IP locales».</string>
   <string name="input_auth_code">Código de autenticación</string>
   <string name="invalid_code">Código no válido</string>
@@ -67,6 +69,7 @@
   <string name="shuffle_inside_album">Mezclar pistas en este álbum</string>
   <string name="shuffle_albums">Mezclar álbumes</string>
   <string name="first_time_title">Bienvenido/a</string>
+  <string name="first_time_text">¡Gracias por utilizar el control remoto de Clementine!\nEsperamos que la aplicación le resulte útil.&lt;br&gt;&lt;br&gt;Para usar esta aplicación debe descargar e instalar Clementine 1.2 o superior desde &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;aquí&lt;/a&gt;.</string>
   <string name="menu_love">Me encanta</string>
   <string name="menu_ban">Vetar</string>
   <string name="track_loved">Le encanta esta pista &lt;3</string>
@@ -74,4 +77,30 @@
   <string name="pref_lastfm_title">Last.fm</string>
   <string name="pref_lastfm_summary">Activar para marcar pistas como favoritas o vetarlas. (se necesita reiniciar)</string>
   <string name="pref_lower_volume_title">Disminuir el volumen</string>
+  <string name="pref_lower_volume_summary">Reducir el volumen al realizar/recibir una llamada.</string>
+  <string name="pref_call_volume_title">Nivel de volumen en llamadas</string>
+  <string name="pref_call_volume_summary">Nivel de volumen en llamadas actual: %s</string>
+  <string name="player_download_lyrics">Descargando la letra</string>
+  <string name="player_no_lyrics">No se encontraron letras.</string>
+  <string name="player_download_song">Descargar canción</string>
+  <string name="player_download_album">Descargar álbum</string>
+  <string name="playlist_download_playlist">Descargar lista de reprod.</string>
+  <string name="player_howto_cancel">La descarga está en espera, aguarde. Pulse en la notificación para cancelar la descarga actual.</string>
+  <string name="player_song_is_stream">No se pueden descargar los flujos</string>
+  <string name="download_noti_title">Descargando las canciones</string>
+  <string name="download_noti_complete">Descarga completa</string>
+  <string name="download_noti_canceled">Descarga cancelada</string>
+  <string name="download_noti_insufficient_space">No hay espacio suficiente; se interrumpió la descarga.</string>
+  <string name="download_noti_not_mounted">No se encontró un dispositivo de almacenamiento; se interrumpió la descarga.</string>
+  <string name="pref_dl_wifi_only_title">Solo wifi</string>
+  <string name="pref_dl_wifi_only_summary">Solo descargar canciones mientras está conectado a una red wifi.</string>
+  <string name="pref_dl_dir">Definir la carpeta de descargas</string>
+  <string name="pref_dl_cat_playlist">Descarga de listas de reproducción</string>
+  <string name="pref_dl_pl_save_own_dir_title">Guardar pistas en la carpeta de la lista de reproducción</string>
+  <string name="pref_dl_pl_artist_dir_title">Crear subcarpeta de artista/álbum</string>
+  <string name="file_dialog_set_dir">Seleccione la carpeta</string>
+  <string name="app_not_available">La aplicación no está disponible</string>
+  <string name="crash_report_title">Vaya, algo ha fallado.</string>
+  <string name="crash_report_message">La última vez Clementine Remote se cerró inesperadamente. Para ayudar a que este error no se produzca de nuevo, envíe el archivo de registro al desarrollador. ¡Gracias!</string>
+  <string name="crash_report_send">Enviar</string>
 </resources>
