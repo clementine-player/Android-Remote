@@ -48,7 +48,7 @@ public class FileDialog {
      * @return file dialog
      */
     public Dialog createFileDialog() {
-        Dialog dialog = null;
+        AlertDialog dialog = null;
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
         builder.setTitle(currentPath.getPath());
@@ -80,6 +80,13 @@ public class FileDialog {
         });
 
         dialog = builder.show();
+        
+        if (currentPath.canWrite()) {
+        	dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+        } else {
+        	dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+        }
+        
         return dialog;
     }
 
@@ -108,7 +115,7 @@ public class FileDialog {
      * Show file dialog
      */
     public void showDialog() {
-        createFileDialog().show();
+        createFileDialog();
     }
 
     private void fireFileSelectedEvent(final File file) {
@@ -132,7 +139,7 @@ public class FileDialog {
         List<String> r = new ArrayList<String>();
         if (path.exists()) {
             if (path.getParentFile() != null
-             && !path.equals(Environment.getExternalStorageDirectory())) r.add(PARENT_DIR);
+             && !path.equals(Environment.getExternalStorageDirectory().getParentFile())) r.add(PARENT_DIR);
             FilenameFilter filter = new FilenameFilter() {
                 public boolean accept(File dir, String filename) {
                     File sel = new File(dir, filename);
