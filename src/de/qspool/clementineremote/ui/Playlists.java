@@ -45,7 +45,7 @@ import de.qspool.clementineremote.backend.ClementineSongDownloader;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
 import de.qspool.clementineremote.backend.player.MyPlaylist;
-import de.qspool.clementineremote.ui.fragments.PlaylistSongs;
+import de.qspool.clementineremote.ui.fragments.PlaylistFragment;
 
 public class Playlists extends SherlockFragmentActivity implements ActionBar.TabListener {
 
@@ -60,14 +60,14 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.playlist);
+		setContentView(R.layout.playlist_fragment);
 		
 		final ActionBar actionBar = getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		
-		mViewPager = (ViewPager) findViewById(R.id.pager);
+		//mViewPager = (ViewPager) findViewById(R.id.pager);
 		mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
 		mViewPager.setAdapter(mPagerAdapter);
 		mViewPager.setOnPageChangeListener(
@@ -117,7 +117,7 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 			MyPlaylist playlist = App.mClementine.getPlaylists().get(key);
 			
 			// Create the fragment
-			PlaylistSongs playlistSongs = new PlaylistSongs();
+			PlaylistFragment playlistSongs = new PlaylistFragment();
 			playlistSongs.setId(playlist.getId());
 			mPagerAdapter.addFragment(playlistSongs);
 			
@@ -195,7 +195,7 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 	 */
 	protected void reloadInfo() {
 		for (int i=0;i< mPagerAdapter.getCount();i++) {
-			PlaylistSongs ps = (PlaylistSongs) mPagerAdapter.getItem(i);
+			PlaylistFragment ps = (PlaylistFragment) mPagerAdapter.getItem(i);
 			
 			if (ps.getAdapter() == null) {
 				continue;
@@ -221,7 +221,7 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
 				
 				// Get the playlist id and download the playlist
 				int tabpos = getSupportActionBar().getSelectedTab().getPosition();
-				PlaylistSongs ps = (PlaylistSongs) mPagerAdapter.getItem(tabpos);
+				PlaylistFragment ps = (PlaylistFragment) mPagerAdapter.getItem(tabpos);
 
 				downloaderAlbum.startDownload(ClementineMessageFactory.buildDownloadSongsMessage(ps.getPlaylistId(), DownloadItem.APlaylist));
 				return true;
@@ -246,7 +246,7 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
             @Override
             public boolean onQueryTextChange(String newText) {
             	for (int i=0;i< mPagerAdapter.getCount();i++) {
-	            	PlaylistSongs ps = (PlaylistSongs) mPagerAdapter.getItem(i);
+	            	PlaylistFragment ps = (PlaylistFragment) mPagerAdapter.getItem(i);
 	            	
 	            	// Set the filter text as the fragments might not yet
 	            	// created. Only the left and right fragment from the
@@ -264,7 +264,7 @@ public class Playlists extends SherlockFragmentActivity implements ActionBar.Tab
             public boolean onQueryTextSubmit(String query) {
                 // Do something
             	for (int i=0;i< mPagerAdapter.getCount();i++) {
-	            	PlaylistSongs ps = (PlaylistSongs) mPagerAdapter.getItem(i);
+	            	PlaylistFragment ps = (PlaylistFragment) mPagerAdapter.getItem(i);
 	            	ps.setFilterText(query);
 	            	if (ps.getAdapter() != null) {
 	            		ps.getAdapter().getFilter().filter(query);

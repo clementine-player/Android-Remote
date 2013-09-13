@@ -17,71 +17,106 @@
 
 package de.qspool.clementineremote.ui;
 
+import java.util.LinkedList;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
-import de.qspool.clementineremote.backend.ClementineSongDownloader;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
+import de.qspool.clementineremote.ui.fragments.AbstractDrawerFragment;
 import de.qspool.clementineremote.ui.fragments.PlayerFragment;
-import de.qspool.clementineremote.ui.fragments.PlaylistSongs;
+import de.qspool.clementineremote.ui.fragments.PlaylistFragment;
 
 public class Player extends SherlockFragmentActivity {
 
 	private SharedPreferences mSharedPref;
 	private PlayerHandler mHandler;
 	
-	private ActionBar mActionBar;
-	
 	private Toast mToast;
 	
-	PlayerFragment mPlayerFragment;
-	PlaylistSongs mPlaylistSongs;
-	View mPlaylistFragmentView;
+	private int mCurrentFragment;
+	private LinkedList<AbstractDrawerFragment> mFragments = new LinkedList<AbstractDrawerFragment>();
 	
-	MenuItem mMenuRepeat;
-	MenuItem mMenuShuffle;
-	
+	private String[] mNavigationTitles;
+    private ListView mDrawerList;
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
+    
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    
-	    setContentView(R.layout.player);
+	    setContentView(R.layout.main_activity);
 	    
-	    getSupportActionBar().setHomeButtonEnabled(true);
+	    /* 
+	     * Define here the available fragments in the mail layout
+	     */
+        mFragments.add(new PlayerFragment());
+        mFragments.add(new PlaylistFragment());
 	    
-		mPlayerFragment = (PlayerFragment) getSupportFragmentManager().findFragmentById(R.id.playerFragment);
-		mPlaylistFragmentView = (View) findViewById(R.id.playlistSongsFragment);
+	    mNavigationTitles = getResources().getStringArray(R.array.navigation_array);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+        // Set the adapter for the list view
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+                R.layout.drawer_list_item, mNavigationTitles));
+        // Set the list's click listener
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 		
-		if (mPlaylistFragmentView != null) {
-			createPlaylistFragment();
-		}
-		
-	    // Get the shared preferences
-	    mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-	    
-	    // Get the actionbar
-	    mActionBar = getSupportActionBar();
-	    mActionBar.setTitle(R.string.player_playlist);
+		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,                  /* host Activity */
+                mDrawerLayout,         /* DrawerLayout object */
+                R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
+                R.string.connectdialog_connect,  /* "open drawer" description */
+                R.string.close  /* "close drawer" description */
+                ) {
+        };
+
+        // Set the drawer toggle as the DrawerListener
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        
+        mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        selectItem(0);
 	}
+	
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
 	
 	@Override
 	public void onResume() {
@@ -98,10 +133,6 @@ public class Player extends SherlockFragmentActivity {
 		    // Set the handler
 		    mHandler = new PlayerHandler(this);
 		    App.mClementineConnection.setUiHandler(mHandler);
-		    
-			// Reload infos
-			reloadInfo();
-			reloadPlaylist();
 		}
 	}
 	
@@ -112,180 +143,6 @@ public class Player extends SherlockFragmentActivity {
 		mHandler = null;
 		if (App.mClementineConnection != null) {
 			App.mClementineConnection.setUiHandler(mHandler);
-		}
-	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inf = getSupportMenuInflater();
-		inf.inflate(R.menu.player_menu, menu);
-		
-		// Shall we show the lastfm buttons?
-		boolean showLastFm = mSharedPref.getBoolean(App.SP_LASTFM, true);
-		menu.findItem(R.id.love).setVisible(showLastFm);
-		menu.findItem(R.id.ban).setVisible(showLastFm);
-		
-		mMenuRepeat =  menu.findItem(R.id.repeat);
-		mMenuShuffle = menu.findItem(R.id.shuffle);
-		
-		updateShuffleIcon();
-		updateRepeatIcon();
-		
-		return true;
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId())
-		{
-		case R.id.disconnect: 	requestDisconnect();
-								break;
-		case R.id.shuffle:		doShuffle();
-								break;
-		case R.id.repeat:		doRepeat();
-								break;
-		case R.id.settings:		Intent settingsIntent = new Intent(this, ClementineSettings.class);
-								startActivity(settingsIntent);
-								break;
-		case android.R.id.home:		Intent playlistIntent = new Intent(this, Playlists.class);
-								startActivity(playlistIntent);
-								break;
-		case R.id.love:			if (App.mClementine.getCurrentSong() != null
-								 && !App.mClementine.getCurrentSong().isLoved()) {
-									// You can love only one
-									Message msg = Message.obtain();
-									msg.obj = ClementineMessage.getMessage(MsgType.LOVE);
-									App.mClementineConnection.mHandler.sendMessage(msg);	
-									App.mClementine.getCurrentSong().setLoved(true);
-								}
-								makeToast(R.string.track_loved, Toast.LENGTH_SHORT);
-								break;
-		case R.id.ban:			Message msg = Message.obtain();
-								msg.obj = ClementineMessage.getMessage(MsgType.BAN);
-								App.mClementineConnection.mHandler.sendMessage(msg);
-								makeToast(R.string.track_banned, Toast.LENGTH_SHORT);
-								break;
-		case R.id.download_song: 
-								if (App.mClementine.getCurrentSong().isLocal()) {
-									ClementineSongDownloader downloaderSong = new ClementineSongDownloader(this);
-									downloaderSong.startDownload(ClementineMessageFactory.buildDownloadSongsMessage(-1, DownloadItem.CurrentItem));
-								} else {
-									Toast.makeText(this, R.string.player_song_is_stream, Toast.LENGTH_LONG).show();
-								}
-								break;
-		case R.id.download_album: 
-								if (App.mClementine.getCurrentSong().isLocal()) {
-									ClementineSongDownloader downloaderSong = new ClementineSongDownloader(this);
-									downloaderSong.startDownload(ClementineMessageFactory.buildDownloadSongsMessage(-1, DownloadItem.ItemAlbum));
-								} else {
-									Toast.makeText(this, R.string.player_song_is_stream, Toast.LENGTH_LONG).show();
-								}
-								break;
-		default: break;
-		}
-		return true;
-	}
-	
-	/**
-	 * Creates the playlistsongs fragment and adds it to the activity
-	 */
-	private void createPlaylistFragment() {
-		mPlaylistSongs = new PlaylistSongs();
-		mPlaylistSongs.setUpdateTrackPositionOnNewTrack(true, 1);
-		mPlaylistSongs.setId(App.mClementine.getActivePlaylist().getId());
-		
-		FragmentManager fragmentManager = getSupportFragmentManager();
-		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-		fragmentTransaction.replace(R.id.playlistSongsFragment, mPlaylistSongs);
-		fragmentTransaction.commit();
-	}
-	
-	/**
-	 * Change shuffle mode and update view
-	 */
-	private void doShuffle() {
-		Message msg = Message.obtain();
-		App.mClementine.nextShuffleMode();
-		msg.obj = ClementineMessageFactory.buildShuffle();
-		App.mClementineConnection.mHandler.sendMessage(msg);
-		
-		switch (App.mClementine.getShuffleMode()) {
-		case OFF: 		makeToast(R.string.shuffle_off, Toast.LENGTH_SHORT);
-						break;
-		case ALL:		makeToast(R.string.shuffle_all, Toast.LENGTH_SHORT);
-						break;
-		case INSIDE_ALBUM:	makeToast(R.string.shuffle_inside_album, Toast.LENGTH_SHORT);
-							break;
-		case ALBUMS:	makeToast(R.string.shuffle_albums, Toast.LENGTH_SHORT);
-						break;
-		}
-		
-		updateShuffleIcon();
-	}
-	
-	/**
-	 * Update the shuffle icon in the actionbar
-	 */
-	private void updateShuffleIcon() {
-		switch (App.mClementine.getShuffleMode()) {
-		case OFF: 		mMenuShuffle.setIcon(R.drawable.ab_shuffle_off);
-						break;
-		case ALL:		mMenuShuffle.setIcon(R.drawable.ab_shuffle);
-						break;
-		case INSIDE_ALBUM:	mMenuShuffle.setIcon(R.drawable.ab_shuffle_albumtracks);
-							break;
-		case ALBUMS:	mMenuShuffle.setIcon(R.drawable.ab_shuffle_albums);
-						break;
-		}
-	}
-	
-	/**
-	 * Change repeat mode and update view
-	 */
-	public void doRepeat() {
-		Message msg = Message.obtain();
-		
-		App.mClementine.nextRepeatMode();
-		msg.obj = ClementineMessageFactory.buildRepeat();
-		App.mClementineConnection.mHandler.sendMessage(msg);
-		
-		switch (App.mClementine.getRepeatMode()) {
-		case OFF: 		makeToast(R.string.repeat_off, Toast.LENGTH_SHORT);
-						break;
-		case TRACK:		makeToast(R.string.repeat_track, Toast.LENGTH_SHORT);
-						break;
-		case ALBUM:		makeToast(R.string.repeat_album, Toast.LENGTH_SHORT);
-						break;
-		case PLAYLIST:	makeToast(R.string.repeat_playlist, Toast.LENGTH_SHORT);
-						break;
-		}
-		
-		updateRepeatIcon();
-	}
-	
-	/**
-	 * Update the repeat icon in the actionbar
-	 */
-	private void updateRepeatIcon() {
-		switch (App.mClementine.getRepeatMode()) {
-		case OFF: 		mMenuRepeat.setIcon(R.drawable.ab_repeat_off);
-						break;
-		case TRACK:		mMenuRepeat.setIcon(R.drawable.ab_repeat_single_track);
-						break;
-		case ALBUM:		mMenuRepeat.setIcon(R.drawable.ab_repeat_album);
-						break;
-		case PLAYLIST:	mMenuRepeat.setIcon(R.drawable.ab_repeat_playlist);
-						break;
-		}
-	}
-	
-	/**
-	 * Opens a dialog to show the lyrics
-	 */
-	void showLyricsDialog() {
-		// Update the Player Fragment
-		if (mPlayerFragment != null && mPlayerFragment.isInLayout()) {
-			mPlayerFragment.showLyricsDialog();
 		}
 	}
 	
@@ -337,6 +194,34 @@ public class Player extends SherlockFragmentActivity {
 		return super.onKeyUp(keyCode, keyEvent);
 	}
 	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) 
+	{
+		if (item.getItemId() == android.R.id.home) {
+			if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
+				mDrawerLayout.closeDrawer(mDrawerList);
+			} else {
+				mDrawerLayout.openDrawer(mDrawerList);
+			}
+		}
+
+        return super.onOptionsItemSelected(item);
+
+	}
+	
+	/**
+     * Request a disconnect from clementine
+     */
+    private void requestDisconnect() {
+            // Move the request to the message
+            Message msg = Message.obtain();
+            msg.obj = ClementineMessage.getMessage(MsgType.DISCONNECT);
+           
+            // Send the request to the thread
+            App.mClementineConnection.mHandler.sendMessage(msg);
+    }
+
+	
 	/**
 	 * Disconnect was finished, now finish this activity
 	 */
@@ -347,54 +232,16 @@ public class Player extends SherlockFragmentActivity {
 	}
 	
 	/**
-	 * Request a disconnect from clementine
+	 * We got a message from Clementine. Here we process it for the main activity
+	 * and pass the data to the currently active fragment.
+	 * Info: Errormessages were already parsed in PlayerHandler!
+	 * @param clementineMessage The message from Clementine
 	 */
-	void requestDisconnect() {
-		// Move the request to the message
-		Message msg = Message.obtain();
-		msg.obj = ClementineMessage.getMessage(MsgType.DISCONNECT);
-		
-		// Send the request to the thread
-		App.mClementineConnection.mHandler.sendMessage(msg);
-	}
-	
-	void reloadInfo() {
+	void MessageFromClementine(ClementineMessage clementineMessage) {
 		// Update the Player Fragment
-		if (mPlayerFragment != null && mPlayerFragment.isInLayout()) {
-			mPlayerFragment.reloadInfo();
-		}
-		
-    	// ActionBar shows the current playlist
-    	if (App.mClementine.getActivePlaylist() != null) {
-    		mActionBar.setSubtitle(App.mClementine.getActivePlaylist().getName());
-    	}
-	}
-    
-	/**
-	 * Reload the player ui
-	 * @param Reload info, depending on the message
-	 */
-	void reloadInfo(ClementineMessage clementineMessage) {
-		reloadInfo();
-    	
-    	if (clementineMessage.getMessageType() == MsgType.REPEAT) {
-    		updateRepeatIcon();
-    	} else if (clementineMessage.getMessageType() == MsgType.SHUFFLE) {
-    		updateShuffleIcon();
-    	}
-    }
-	
-	/**
-	 * Reload the playlist songs fragment
-	 */
-	void reloadPlaylist() {
-		// Update the playlist songs fragment
-		if (mPlaylistSongs != null) {
-			if (App.mClementine.getActivePlaylist().getId() != mPlaylistSongs.getPlaylistId()) {
-				createPlaylistFragment();
-			} else {
-				mPlaylistSongs.updateSongList();
-			}
+		if (mFragments.get(mCurrentFragment) != null && 
+			mFragments.get(mCurrentFragment).isVisible()) {
+			mFragments.get(mCurrentFragment).MessageFromClementine(clementineMessage);
 		}
 	}
     
@@ -419,4 +266,29 @@ public class Player extends SherlockFragmentActivity {
     	mToast = Toast.makeText(this, text, length);
     	mToast.show();
     }
+    
+    private class DrawerItemClickListener implements OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView parent, View view, int position, long id) {
+            selectItem(position);
+        }
+    }
+
+    /** Swaps fragments in the main content view */
+    private void selectItem(int position) {
+    	if (position < mFragments.size()) {
+    		// Create a new fragment and specify the planet to show based on position
+    		FragmentManager fragmentManager = getSupportFragmentManager();
+        	fragmentManager.beginTransaction().replace(R.id.content_frame, mFragments.get(position)).commit();
+        	mCurrentFragment = position;
+    	} else 	if (position == mFragments.size()) {
+    		Intent settingsIntent = new Intent(this, ClementineSettings.class);
+            startActivity(settingsIntent);
+    	} else {
+    		requestDisconnect();
+    	}
+        
+        mDrawerLayout.closeDrawer(mDrawerList);
+    }
+
 }

@@ -22,13 +22,4 @@
     <item android:id="@+id/download_album"
           android:title="@string/player_download_album"
           android:showAsAction="ifRoom"></item>
-    <item android:id="@+id/settings"
-          android:title="@string/menu_settings"
-          android:showAsAction="ifRoom|withText"
-          android:icon="@drawable/ab_settings"></item>
-    <item android:id="@+id/disconnect"
-          android:title="@string/menu_disconnect"
-          android:showAsAction="ifRoom|withText"
-          android:icon="@drawable/ab_disconnect">
-    </item>
 </menu>

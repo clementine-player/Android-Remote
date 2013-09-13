@@ -20,9 +20,11 @@ package de.qspool.clementineremote.ui.fragments;
 import java.util.List;
 
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,19 +41,26 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.Clementine;
+import de.qspool.clementineremote.backend.ClementineSongDownloader;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
+import de.qspool.clementineremote.backend.pb.ClementineMessage.MessageGroup;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.player.LyricsProvider;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.utils.Utilities;
 
-public class PlayerFragment extends SherlockFragment {
+public class PlayerFragment extends AbstractDrawerFragment {
 	private final static int ANIMATION_DURATION = 750;
 	private TextView mTvArtist;
 	private TextView mTvTitle;
@@ -72,7 +81,18 @@ public class PlayerFragment extends SherlockFragment {
     private AlphaAnimation mAlphaDown; 
     private AlphaAnimation mAlphaUp;
     private boolean mCoverUpdated = false;
-    
+    private ActionBar mActionBar;
+	
+	PlaylistFragment mPlaylistSongs;
+	View mPlaylistFragmentView;
+	
+	MenuItem mMenuRepeat;
+	MenuItem mMenuShuffle;
+	
+	private Toast mToast;
+	
+	private SharedPreferences mSharedPref;
+	
     private boolean mFirstCall = true;
     
     ProgressDialog mPdDownloadLyrics;
@@ -127,22 +147,133 @@ public class PlayerFragment extends SherlockFragment {
 	    mPdDownloadLyrics.setMessage(getString(R.string.player_download_lyrics));
 	    mPdDownloadLyrics.setCancelable(true);
 	    
-	    reloadInfo();
+	    // Get the actionbar
+	    mActionBar = getSherlockActivity().getSupportActionBar();
+	    mActionBar.setTitle(R.string.player_playlist);
+	    setHasOptionsMenu(true);
+		
+	    // Get the shared preferences
+	    mSharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+	    
+		// Initialize interface
+	    updateTrackMetadata();
+	    updateTrackPosition();
 	    
 	    return view;
 	}
-    
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.player_menu, menu);
+		
+		// Shall we show the lastfm buttons?
+		boolean showLastFm = mSharedPref.getBoolean(App.SP_LASTFM, true);
+		menu.findItem(R.id.love).setVisible(showLastFm);
+		menu.findItem(R.id.ban).setVisible(showLastFm);
+		
+		mMenuRepeat =  menu.findItem(R.id.repeat);
+		mMenuShuffle = menu.findItem(R.id.shuffle);
+		
+		updateShuffleIcon();
+		updateRepeatIcon();
+		
+		super.onCreateOptionsMenu(menu,inflater);
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		mCurrentSong = new MySong();
+		mFirstCall = true;
+		updateTrackMetadata();
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId())
+		{
+		case R.id.shuffle:		doShuffle();
+								break;
+		case R.id.repeat:		doRepeat();
+								break;
+		case R.id.love:			if (App.mClementine.getCurrentSong() != null
+								 && !App.mClementine.getCurrentSong().isLoved()) {
+									// You can love only one
+									Message msg = Message.obtain();
+									msg.obj = ClementineMessage.getMessage(MsgType.LOVE);
+									App.mClementineConnection.mHandler.sendMessage(msg);	
+									App.mClementine.getCurrentSong().setLoved(true);
+								}
+								makeToast(R.string.track_loved, Toast.LENGTH_SHORT);
+								break;
+		case R.id.ban:			Message msg = Message.obtain();
+								msg.obj = ClementineMessage.getMessage(MsgType.BAN);
+								App.mClementineConnection.mHandler.sendMessage(msg);
+								makeToast(R.string.track_banned, Toast.LENGTH_SHORT);
+								break;
+		case R.id.download_song: 
+								if (App.mClementine.getCurrentSong().isLocal()) {
+									ClementineSongDownloader downloaderSong = new ClementineSongDownloader(getActivity());
+									downloaderSong.startDownload(ClementineMessageFactory.buildDownloadSongsMessage(-1, DownloadItem.CurrentItem));
+								} else {
+									Toast.makeText(getActivity(), R.string.player_song_is_stream, Toast.LENGTH_LONG).show();
+								}
+								break;
+		case R.id.download_album: 
+								if (App.mClementine.getCurrentSong().isLocal()) {
+									ClementineSongDownloader downloaderSong = new ClementineSongDownloader(getActivity());
+									downloaderSong.startDownload(ClementineMessageFactory.buildDownloadSongsMessage(-1, DownloadItem.ItemAlbum));
+								} else {
+									Toast.makeText(getActivity(), R.string.player_song_is_stream, Toast.LENGTH_LONG).show();
+								}
+								break;
+		default: break;
+		}
+		return true;
+	}
+	
+	@Override
+	public void MessageFromClementine(ClementineMessage clementineMessage) {
+		switch (clementineMessage.getMessageType()) {
+		case UPDATE_TRACK_POSITION:
+			updateTrackPosition();
+	    	break;
+		case CURRENT_METAINFO:
+			updateTrackMetadata();
+			break;
+		case PLAY:
+		case PAUSE:
+		case STOP:
+			stateChanged();
+			break;
+		case SHUFFLE:
+			updateShuffleIcon();
+			break;
+		case REPEAT:
+			updateRepeatIcon();
+			break;
+		case LYRICS:
+			showLyricsDialog();
+			break;
+		default:
+			break;
+		}
+	}
+	
 	/**
-	 * Reload the player ui
+	 * Update the track position. This method updates the seekbar and the time printed on the right hand side.
 	 */
-	public void reloadInfo() {
-    	// display play / pause image
-    	if (App.mClementine.getState() == Clementine.State.PLAY) {
-    		mBtnPlayPause.setImageDrawable(getResources().getDrawable(R.drawable.ic_media_pause));
-    	} else {
-    		mBtnPlayPause.setImageDrawable(getResources().getDrawable(R.drawable.ic_media_play));
-    	}
-    	
+	private void updateTrackPosition() {
+		mTvLength.setText(buildTrackPosition());
+		mSbPosition.setEnabled(true);
+    	mSbPosition.setMax(mCurrentSong.getLength());
+    	mSbPosition.setProgress(App.mClementine.getSongPosition());
+	}
+	
+	/**
+	 * The track changed. Update the metadata shown on the user interface
+	 */
+	public void updateTrackMetadata() {
     	// Get the currently played song
     	MySong currentSong = App.mClementine.getCurrentSong();
     	if (currentSong == null) {
@@ -158,7 +289,7 @@ public class PlayerFragment extends SherlockFragment {
 	    	mSbPosition.setEnabled(false);
 	    	
     		mImgArt.setImageResource(R.drawable.icon_large);
-    	} else if (!currentSong.equals(mCurrentSong)) {
+    	} else {
 	    	mTvArtist.setText(currentSong.getArtist());
 	    	mTvTitle. setText(currentSong.getTitle());
 	    	mTvAlbum. setText(currentSong.getAlbum());
@@ -169,6 +300,7 @@ public class PlayerFragment extends SherlockFragment {
 	    	// Check if a coverart is valid
 	    	Bitmap newArt = currentSong.getArt();
 	    	Bitmap oldArt = mCurrentSong.getArt();
+	    	
 	    	if (newArt == null) {
 	    		mImgArt.setImageResource(R.drawable.icon_large);
 	    	} else if (oldArt == null
@@ -181,15 +313,115 @@ public class PlayerFragment extends SherlockFragment {
 	    		}
 	    	}
 	    	mCurrentSong = currentSong;
-    	} else {
-    		mTvLength.setText(buildTrackPosition());
-    		
-    		mSbPosition.setEnabled(true);
-	    	mSbPosition.setMax(currentSong.getLength());
-	    	mSbPosition.setProgress(App.mClementine.getSongPosition());
     	}
+    	
+    	// ActionBar shows the current playlist
+    	if (App.mClementine.getActivePlaylist() != null) {
+    		mActionBar.setSubtitle(App.mClementine.getActivePlaylist().getName());
+    	}
+    	
     	mFirstCall = false;
     }
+	
+	private void stateChanged() {
+    	// display play / pause image
+    	if (App.mClementine.getState() == Clementine.State.PLAY) {
+    		mBtnPlayPause.setImageDrawable(getResources().getDrawable(R.drawable.ic_media_pause));
+    	} else {
+    		mBtnPlayPause.setImageDrawable(getResources().getDrawable(R.drawable.ic_media_play));
+    	}
+	}
+	
+	/**
+	 * Change shuffle mode and update view
+	 */
+	private void doShuffle() {
+		Message msg = Message.obtain();
+		App.mClementine.nextShuffleMode();
+		msg.obj = ClementineMessageFactory.buildShuffle();
+		App.mClementineConnection.mHandler.sendMessage(msg);
+		
+		switch (App.mClementine.getShuffleMode()) {
+		case OFF: 		makeToast(R.string.shuffle_off, Toast.LENGTH_SHORT);
+						break;
+		case ALL:		makeToast(R.string.shuffle_all, Toast.LENGTH_SHORT);
+						break;
+		case INSIDE_ALBUM:	makeToast(R.string.shuffle_inside_album, Toast.LENGTH_SHORT);
+							break;
+		case ALBUMS:	makeToast(R.string.shuffle_albums, Toast.LENGTH_SHORT);
+						break;
+		}
+		
+		updateShuffleIcon();
+	}
+	
+	/**
+	 * Update the shuffle icon in the actionbar
+	 */
+	private void updateShuffleIcon() {
+		switch (App.mClementine.getShuffleMode()) {
+		case OFF: 		mMenuShuffle.setIcon(R.drawable.ab_shuffle_off);
+						break;
+		case ALL:		mMenuShuffle.setIcon(R.drawable.ab_shuffle);
+						break;
+		case INSIDE_ALBUM:	mMenuShuffle.setIcon(R.drawable.ab_shuffle_albumtracks);
+							break;
+		case ALBUMS:	mMenuShuffle.setIcon(R.drawable.ab_shuffle_albums);
+						break;
+		}
+	}
+	
+	/**
+	 * Change repeat mode and update view
+	 */
+	public void doRepeat() {
+		Message msg = Message.obtain();
+		
+		App.mClementine.nextRepeatMode();
+		msg.obj = ClementineMessageFactory.buildRepeat();
+		App.mClementineConnection.mHandler.sendMessage(msg);
+		
+		switch (App.mClementine.getRepeatMode()) {
+		case OFF: 		makeToast(R.string.repeat_off, Toast.LENGTH_SHORT);
+						break;
+		case TRACK:		makeToast(R.string.repeat_track, Toast.LENGTH_SHORT);
+						break;
+		case ALBUM:		makeToast(R.string.repeat_album, Toast.LENGTH_SHORT);
+						break;
+		case PLAYLIST:	makeToast(R.string.repeat_playlist, Toast.LENGTH_SHORT);
+						break;
+		}
+		
+		updateRepeatIcon();
+	}
+	
+	/**
+	 * Update the repeat icon in the actionbar
+	 */
+	private void updateRepeatIcon() {
+		switch (App.mClementine.getRepeatMode()) {
+		case OFF: 		mMenuRepeat.setIcon(R.drawable.ab_repeat_off);
+						break;
+		case TRACK:		mMenuRepeat.setIcon(R.drawable.ab_repeat_single_track);
+						break;
+		case ALBUM:		mMenuRepeat.setIcon(R.drawable.ab_repeat_album);
+						break;
+		case PLAYLIST:	mMenuRepeat.setIcon(R.drawable.ab_repeat_playlist);
+						break;
+		}
+	}
+	
+	/**
+	 * Request a disconnect from clementine
+	 */
+	void requestDisconnect() {
+		// Move the request to the message
+		Message msg = Message.obtain();
+		msg.obj = ClementineMessage.getMessage(MsgType.DISCONNECT);
+		
+		// Send the request to the thread
+		App.mClementineConnection.mHandler.sendMessage(msg);
+	}
     
 	/**
 	 * Build the current track position. Format: "01:30/3:33"
@@ -199,7 +431,7 @@ public class PlayerFragment extends SherlockFragment {
     	StringBuilder sb = new StringBuilder();
     	sb.append(Utilities.PrettyTime(App.mClementine.getSongPosition()));
     	sb.append("/");
-    	sb.append(Utilities.PrettyTime(App.mClementine.getCurrentSong().getLength()));
+    	sb.append(Utilities.PrettyTime(mCurrentSong.getLength()));
     	
     	return sb.toString();
     }
@@ -242,6 +474,28 @@ public class PlayerFragment extends SherlockFragment {
 		}
 		return bestProvider;
 	}
+	
+    /**
+     * Show text in a toast. Cancels previous toast
+     * @param resId The resource id
+     * @param length length
+     */
+    private void makeToast(int resId, int length) {
+    	makeToast(getString(resId), length);
+    }
+	
+    /**
+     * Show text in a toast. Cancels previous toast
+     * @param tetx The text to show
+     * @param length length
+     */
+    private void makeToast(String text, int length) {
+    	if (mToast != null) {
+    		mToast.cancel();
+    	}
+    	mToast = Toast.makeText(getActivity(), text, length);
+    	mToast.show();
+    }
 	
 	private OnClickListener oclControl = new OnClickListener() {
 		

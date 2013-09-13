@@ -22,7 +22,6 @@ import java.lang.ref.WeakReference;
 import android.os.Handler;
 import android.os.Message;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
-import de.qspool.clementineremote.backend.pb.ClementineMessage.MessageGroup;
 
 /**
  * This class is used to handle the messages sent from the
@@ -58,21 +57,8 @@ public class PlayerHandler extends Handler {
 				case DISCONNECT:
 					pd.disconnect();
 					break;
-				case CURRENT_METAINFO:
-				case PLAYLIST_SONGS:
-				case PLAYLISTS:
-				case SHUFFLE:
-				case REPEAT:
-					pd.reloadInfo(clementineMessage);
-					pd.reloadPlaylist();
-					break;
-				case LYRICS:
-					pd.showLyricsDialog();
-					break;
 				default:
-					if (clementineMessage.getTypeGroup() == MessageGroup.GUI_RELOAD) {
-						pd.reloadInfo(clementineMessage);
-					}
+					pd.MessageFromClementine(clementineMessage);
 					break;
 				}
 			}
