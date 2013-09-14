@@ -23,7 +23,6 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.LayoutInflater;
@@ -37,8 +36,6 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -49,13 +46,9 @@ import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.ClementineSongDownloader;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
-import de.qspool.clementineremote.backend.pb.ClementineMessage.MessageGroup;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.player.MyPlaylist;
 import de.qspool.clementineremote.backend.player.MySong;
-import de.qspool.clementineremote.ui.ClementineSettings;
-import de.qspool.clementineremote.ui.ConnectDialog;
 import de.qspool.clementineremote.ui.adapter.CustomSongAdapter;
 
 public class PlaylistFragment extends AbstractDrawerFragment {
@@ -73,7 +66,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 	
 	private ListView mList;
 	
-	private MenuItem mPlaylistSpinner = null;
+	private Spinner mPlaylistSpinner = null;
 	
 	public PlaylistFragment() {
 		mFilterText = "";
@@ -111,6 +104,35 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 		// Filter the results
 		mAdapter.getFilter().filter(mFilterText);
 		
+		mPlaylistSpinner = (Spinner) view.findViewById(R.id.playlist_spinner);
+        List<CharSequence> arrayList = new ArrayList<CharSequence>();
+        for (int i = 0; i < App.mClementine.getPlaylists().size(); i++) {
+            arrayList.add(App.mClementine.getPlaylists().valueAt(i).getName());
+        }
+        
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(getActivity(),
+                android.R.layout.simple_spinner_item, arrayList);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        mPlaylistSpinner.setAdapter(adapter);
+
+        mPlaylistSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                    int position, long id) {
+            	setId(App.mClementine.getPlaylists().valueAt(position).getId());
+            	updateSongList();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+		
 		mActionBar = getSherlockActivity().getSupportActionBar();
 	    mActionBar.setTitle("");
 	    mActionBar.setSubtitle("");
@@ -143,42 +165,6 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 	
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
-		mPlaylistSpinner = menu.findItem(R.id.playlist_menu_playlist_spinner);
-	    View spinnerView = mPlaylistSpinner.getActionView();
-	    if (spinnerView instanceof Spinner)
-	    {
-	        final Spinner spinner = (Spinner) spinnerView;
-	        
-	        List<CharSequence> arrayList = new ArrayList<CharSequence>();
-	        for (int i = 0; i < App.mClementine.getPlaylists().size(); i++) {
-	            arrayList.add(App.mClementine.getPlaylists().valueAt(i).getName());
-	        }
-	        
-	        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(getActivity(),
-	                android.R.layout.simple_spinner_item, arrayList);
-	        // Specify the layout to use when the list of choices appears
-	        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-	        spinner.setAdapter(adapter);
-
-	        spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-	            @Override
-	            public void onItemSelected(AdapterView<?> parent, View view,
-	                    int position, long id) {
-	            	setId(App.mClementine.getPlaylists().valueAt(position).getId());
-	            	updateSongList();
-	            }
-
-	            @Override
-	            public void onNothingSelected(AdapterView<?> arg0) {
-	                // TODO Auto-generated method stub
-
-	            }
-	        });
-
-	    }
-		
 		// Create a listener for search change
 		SearchView searchView = (SearchView) menu.findItem(R.id.playlist_menu_search).getActionView();
 		

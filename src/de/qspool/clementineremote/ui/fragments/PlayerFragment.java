@@ -29,20 +29,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -53,7 +52,6 @@ import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementineSongDownloader;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
-import de.qspool.clementineremote.backend.pb.ClementineMessage.MessageGroup;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.player.LyricsProvider;
@@ -158,6 +156,7 @@ public class PlayerFragment extends AbstractDrawerFragment {
 		// Initialize interface
 	    updateTrackMetadata();
 	    updateTrackPosition();
+	    stateChanged();
 	    
 	    return view;
 	}

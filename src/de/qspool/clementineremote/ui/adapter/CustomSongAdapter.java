@@ -79,9 +79,9 @@ public class CustomSongAdapter extends ArrayAdapter<MySong> implements Filterabl
 		
 		if (App.mClementine.getCurrentSong() != null 
 		 && App.mClementine.getCurrentSong().equals(mData.get(position))) {
-			convertView.setBackgroundResource(R.drawable.orange_background_border);
+			convertView.setBackgroundResource(R.drawable.orange_background);
 		} else {
-			convertView.setBackgroundResource(R.drawable.white_background_border);
+			convertView.setBackgroundResource(R.drawable.white_background);
 		}
 		
 		TextView tvTrackNo = (TextView) convertView.findViewById(R.id.tvTrackNo);
