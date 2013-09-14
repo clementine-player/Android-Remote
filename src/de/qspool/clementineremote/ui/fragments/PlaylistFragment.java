@@ -84,6 +84,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 		 || !App.mClementine.isConnected()) {
 		} else {
 			RequestPlaylistSongs();
+			setActionBarTitle();
 		}
 	}
 	
@@ -127,10 +128,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
-
-            }
+            public void onNothingSelected(AdapterView<?> arg0) { }
         });
 		
 		mActionBar = getSherlockActivity().getSupportActionBar();
@@ -210,6 +208,17 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 	
 	public int getPlaylistId() {
 		return mId;
+	}
+	
+	private void setActionBarTitle() {
+		MySong currentSong = App.mClementine.getCurrentSong();
+		if (currentSong == null) {
+			mActionBar.setTitle(getString(R.string.player_nosong));
+			mActionBar.setSubtitle("");
+		} else {
+			mActionBar.setTitle(currentSong.getArtist());
+			mActionBar.setSubtitle(currentSong.getTitle());
+		}
 	}
 	
 	/**
@@ -313,6 +322,8 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 		switch (clementineMessage.getMessageType()) {
 		case CURRENT_METAINFO:
 			updateSongList();
+			setActionBarTitle();
+			break;
 		case PLAYLIST_SONGS:
 			checkGotAllPlaylists();
 			break;
