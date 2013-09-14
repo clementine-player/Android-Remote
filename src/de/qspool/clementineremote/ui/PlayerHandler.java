@@ -28,15 +28,15 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage;
  * connection thread
  */
 public class PlayerHandler extends Handler {	
-	WeakReference<Player> mDialog;
+	WeakReference<MainActivity> mDialog;
 	
-	PlayerHandler(Player playerDialog) {
-		mDialog = new WeakReference<Player>(playerDialog);
+	PlayerHandler(MainActivity playerDialog) {
+		mDialog = new WeakReference<MainActivity>(playerDialog);
 	}
 	
 	@Override
 	public void handleMessage(Message msg) {
-		Player pd = mDialog.get();
+		MainActivity pd = mDialog.get();
 		
 		if (msg.obj instanceof ClementineMessage) {
 			ClementineMessage clementineMessage = (ClementineMessage) msg.obj;

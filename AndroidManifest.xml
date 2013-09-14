@@ -33,7 +33,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.Player"
+        <activity android:name=".ui.MainActivity"
                   android:theme="@style/PlayerTheme"
                   android:launchMode="singleTop" ></activity>
         <activity android:name="de.qspool.clementineremote.ui.ClementineSettings"

@@ -137,6 +137,9 @@ public class ConnectDialog extends SherlockActivity {
 		// Check if we got a stack trace
 		CrashReportDialog crashReportDialog = new CrashReportDialog(this);
 		crashReportDialog.showDialogIfTraceExists();
+		
+		if (doAutoConnect && crashReportDialog.hasTrace())
+			doAutoConnect = false;
 	}
 	
 	@Override 
@@ -416,7 +419,7 @@ public class ConnectDialog extends SherlockActivity {
 		}
 		
 		// Start the player dialog
-		Intent playerDialog = new Intent(this, Player.class);
+		Intent playerDialog = new Intent(this, MainActivity.class);
     	playerDialog.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
     	startActivityForResult(playerDialog, ID_PLAYER_DIALOG);
 	}

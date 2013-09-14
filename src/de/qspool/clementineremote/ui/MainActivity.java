@@ -46,10 +46,11 @@ import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.ui.adapter.SeparatedListAdapter;
 import de.qspool.clementineremote.ui.fragments.AbstractDrawerFragment;
+import de.qspool.clementineremote.ui.fragments.DownloadsFragment;
 import de.qspool.clementineremote.ui.fragments.PlayerFragment;
 import de.qspool.clementineremote.ui.fragments.PlaylistFragment;
 
-public class Player extends SherlockFragmentActivity {
+public class MainActivity extends SherlockFragmentActivity {
 
 	private SharedPreferences mSharedPref;
 	private PlayerHandler mHandler;
@@ -74,6 +75,7 @@ public class Player extends SherlockFragmentActivity {
 	     */
         mFragments.add(new PlayerFragment());
         mFragments.add(new PlaylistFragment());
+        mFragments.add(new DownloadsFragment());
 	    
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
@@ -301,15 +303,19 @@ public class Player extends SherlockFragmentActivity {
         	fragmentManager.beginTransaction().replace(R.id.content_frame, mFragments.get(1)).commit();
         	mCurrentFragment = 1;
         	break;
-    	case 3: // Header Settings
+    	case 3: // Downloads
+    		fragmentManager.beginTransaction().replace(R.id.content_frame, mFragments.get(2)).commit();
+    		mCurrentFragment = 2;
     		break;
-    	case 4: // Settings
+    	case 4: // Header Settings
+    		break;
+    	case 5: // Settings
     		Intent settingsIntent = new Intent(this, ClementineSettings.class);
             startActivity(settingsIntent);
             break;
-    	case 5: // Header Disconnect
+    	case 6: // Header Disconnect
     		break;
-    	case 6: // Disonnect
+    	case 7: // Disonnect
     		requestDisconnect();
     		break;
     	default:

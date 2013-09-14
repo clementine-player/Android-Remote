@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Message;
@@ -53,20 +52,23 @@ import de.qspool.clementineremote.ui.adapter.CustomSongAdapter;
 
 public class PlaylistFragment extends AbstractDrawerFragment {
 	public final static String PLAYLIST_ID = "playlist_id";
+	
+	private CustomSongAdapter mAdapter;
+	private ProgressDialog mProgressDialog;
+	private ActionBar mActionBar; 
+	private ListView mList;
+	private Spinner mPlaylistSpinner = null;
+	private View mEmptyPlaylist;
+	
 	private LinkedList<MySong> mData = new LinkedList<MySong>();
 	private int mId;
-	CustomSongAdapter mAdapter;
+	
 	private String mFilterText;
 	private boolean mUpdateTrackPositionOnNewTrack = false;
 	private int mSelectionOffset;
+	
 	private int mDownloadPlaylists;
 	private LinkedList<String> mDownloadPlaylistNames;
-	private ProgressDialog mProgressDialog;
-	private ActionBar mActionBar; 
-	
-	private ListView mList;
-	
-	private Spinner mPlaylistSpinner = null;
 	
 	public PlaylistFragment() {
 		mFilterText = "";
@@ -95,6 +97,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 				container, false);
 		
 		mList = (ListView) view.findViewById(R.id.songs);
+		mEmptyPlaylist = view.findViewById(R.id.playlist_empty);
 		
 		// Create the adapter
 		mAdapter = new CustomSongAdapter(getActivity(), R.layout.song_row, mData);
@@ -227,13 +230,16 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 	public void updateSongList() {
 		mData.clear();
 		mData.addAll(App.mClementine.getPlaylists().get(mId).getPlaylistSongs());
-		mAdapter.updateSongs(mData);
 		
 		// Check if we should update the current view position
 		mAdapter = new CustomSongAdapter(getActivity(), R.layout.song_row, mData);
 		mList.setAdapter(mAdapter);
 		
 		updateViewPosition();
+		
+		if (mData.isEmpty()) {
+			mList.setEmptyView(mEmptyPlaylist);
+		}
 	}
 	
 	/**
@@ -250,17 +256,6 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 	 */
 	public CustomSongAdapter getAdapter() {
 		return mAdapter;
-	}
-	
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putInt(PLAYLIST_ID, mId);
-	}
-	
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
 	}
 	
 	@Override

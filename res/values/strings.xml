@@ -18,6 +18,7 @@
     <string name="player_download_playlists">Downloading Playlists</string>
     <string name="playler_volume">Volume</string>
     <string name="playlist_search_hint">Search track</string>
+    <string name="playlist_empty">Playlist is empty!</string>
     <string name="menu_shuffle">Shuffle</string>
     <string name="menu_repeat">Repeat</string>
     <string name="menu_settings">Settings</string>
@@ -109,6 +110,7 @@
     <string name="crash_report_title">Oops, something went wrong!</string>
     <string name="crash_report_message">Last time Clementine Remote crashed! This should not have happened! Please help me to improve the app and send me the logfile. Thanks!</string>
     <string name="crash_report_send">Send!</string>
+    <string name="downloads_empty">No downloads!</string>
     <string-array name="navigation_headers">
         <item>Remote</item>
         <item>Settings</item>
@@ -116,7 +118,8 @@
     </string-array>
     <string-array name="navigation_array_remote">
         <item>Player</item>
-        <item>Playlist</item>
+        <item>Playlists</item>
+        <item>Downloads</item>
     </string-array>
     <string-array name="navigation_array_settings">
         <item>Settings</item>

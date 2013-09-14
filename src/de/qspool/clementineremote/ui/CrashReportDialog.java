@@ -43,9 +43,17 @@ public class CrashReportDialog {
 		mLastTraceFileName = App.mClementineExceptionHandler.getLastStracktraceFile();
 		mLastSentTraceFileName = mSharedPref.getString(App.SP_LAST_SEND_STACKTRACE, "");
 	}
+	
+	/**
+	 * Did the app crash last time?
+	 * @return true if it crashed and a dialog will show on showDialogIfTraceExists.
+	 */
+	public boolean hasTrace() {
+		return !(mLastTraceFileName.equals(mLastSentTraceFileName));
+	}
 
 	public void showDialogIfTraceExists() {
-		if (mLastTraceFileName.equals(mLastSentTraceFileName))
+		if (!hasTrace())
 			return;
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
