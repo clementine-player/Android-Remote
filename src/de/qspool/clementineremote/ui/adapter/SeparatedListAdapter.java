@@ -36,7 +36,7 @@ public class SeparatedListAdapter extends BaseAdapter
 
 		public SeparatedListAdapter(Context context)
 			{
-				headers = new ArrayAdapter<String>(context, R.layout.list_header);
+				headers = new ArrayAdapter<String>(context, R.layout.drawer_list_header);
 			}
 
 		public void addSection(String section, Adapter adapter)

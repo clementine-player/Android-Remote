@@ -9,7 +9,10 @@ package de.qspool.clementineremote;
 
 public final class R {
     public static final class array {
-        public static final int navigation_array=0x7f0c0002;
+        public static final int navigation_array_disconnect=0x7f0c0005;
+        public static final int navigation_array_remote=0x7f0c0003;
+        public static final int navigation_array_settings=0x7f0c0004;
+        public static final int navigation_headers=0x7f0c0002;
         public static final int pref_volume_display=0x7f0c0000;
         public static final int pref_volume_values=0x7f0c0001;
     }
@@ -1106,8 +1109,8 @@ containing a value of this type.
         public static final int dialog_list=0x7f03001b;
         public static final int dialog_list_item=0x7f03001c;
         public static final int dialog_message=0x7f03001d;
-        public static final int drawer_list_item=0x7f03001e;
-        public static final int list_header=0x7f03001f;
+        public static final int drawer_list_header=0x7f03001e;
+        public static final int drawer_list_item=0x7f03001f;
         public static final int main_activity=0x7f030020;
         public static final int player_fragment=0x7f030021;
         public static final int playlist_fragment=0x7f030022;

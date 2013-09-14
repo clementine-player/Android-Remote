@@ -44,6 +44,7 @@ import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
+import de.qspool.clementineremote.ui.adapter.SeparatedListAdapter;
 import de.qspool.clementineremote.ui.fragments.AbstractDrawerFragment;
 import de.qspool.clementineremote.ui.fragments.PlayerFragment;
 import de.qspool.clementineremote.ui.fragments.PlaylistFragment;
@@ -58,7 +59,6 @@ public class Player extends SherlockFragmentActivity {
 	private int mCurrentFragment;
 	private LinkedList<AbstractDrawerFragment> mFragments = new LinkedList<AbstractDrawerFragment>();
 	
-	private String[] mNavigationTitles;
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -75,13 +75,25 @@ public class Player extends SherlockFragmentActivity {
         mFragments.add(new PlayerFragment());
         mFragments.add(new PlaylistFragment());
 	    
-	    mNavigationTitles = getResources().getStringArray(R.array.navigation_array);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-        // Set the adapter for the list view
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, mNavigationTitles));
-        // Set the list's click listener
+        // Create the adapters for the sections
+        ArrayAdapter<String> remoteAdapter = new ArrayAdapter<String>(this,
+                R.layout.drawer_list_item, getResources().getStringArray(R.array.navigation_array_remote));
+        ArrayAdapter<String> settingsAdapter = new ArrayAdapter<String>(this,
+                R.layout.drawer_list_item, getResources().getStringArray(R.array.navigation_array_settings));
+        ArrayAdapter<String> disconnectAdapter = new ArrayAdapter<String>(this,
+                R.layout.drawer_list_item, getResources().getStringArray(R.array.navigation_array_disconnect));
+        
+        // Create the header adapter
+        SeparatedListAdapter separatedListAdapter = new SeparatedListAdapter(this);
+        String[] headers = getResources().getStringArray(R.array.navigation_headers);
+        
+        separatedListAdapter.addSection(headers[0], remoteAdapter);
+        separatedListAdapter.addSection(headers[1], settingsAdapter);
+        separatedListAdapter.addSection(headers[2], disconnectAdapter);
+        
+        mDrawerList.setAdapter(separatedListAdapter);
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 		
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -102,7 +114,7 @@ public class Player extends SherlockFragmentActivity {
         
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        selectItem(0);
+        selectItem(1);
 	}
 	
     @Override
@@ -276,16 +288,32 @@ public class Player extends SherlockFragmentActivity {
 
     /** Swaps fragments in the main content view */
     private void selectItem(int position) {
-    	if (position < mFragments.size()) {
-    		// Create a new fragment and specify the planet to show based on position
-    		FragmentManager fragmentManager = getSupportFragmentManager();
-        	fragmentManager.beginTransaction().replace(R.id.content_frame, mFragments.get(position)).commit();
-        	mCurrentFragment = position;
-    	} else 	if (position == mFragments.size()) {
+		FragmentManager fragmentManager = getSupportFragmentManager();
+		
+    	switch (position) {
+    	case 0: // Header Remote
+    		break;
+    	case 1: // Player
+        	fragmentManager.beginTransaction().replace(R.id.content_frame, mFragments.get(0)).commit();
+        	mCurrentFragment = 0;
+        	break;
+    	case 2: // Playlist
+        	fragmentManager.beginTransaction().replace(R.id.content_frame, mFragments.get(1)).commit();
+        	mCurrentFragment = 1;
+        	break;
+    	case 3: // Header Settings
+    		break;
+    	case 4: // Settings
     		Intent settingsIntent = new Intent(this, ClementineSettings.class);
             startActivity(settingsIntent);
-    	} else {
+            break;
+    	case 5: // Header Disconnect
+    		break;
+    	case 6: // Disonnect
     		requestDisconnect();
+    		break;
+    	default:
+    		break;
     	}
         
         mDrawerLayout.closeDrawer(mDrawerList);

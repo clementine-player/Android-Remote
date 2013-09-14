@@ -109,10 +109,19 @@
     <string name="crash_report_title">Oops, something went wrong!</string>
     <string name="crash_report_message">Last time Clementine Remote crashed! This should not have happened! Please help me to improve the app and send me the logfile. Thanks!</string>
     <string name="crash_report_send">Send!</string>
-    <string-array name="navigation_array">
+    <string-array name="navigation_headers">
+        <item>Remote</item>
+        <item>Settings</item>
+        <item>Disconnect</item>
+    </string-array>
+    <string-array name="navigation_array_remote">
         <item>Player</item>
         <item>Playlist</item>
+    </string-array>
+    <string-array name="navigation_array_settings">
         <item>Settings</item>
+    </string-array>
+    <string-array name="navigation_array_disconnect">
         <item>Disconnect</item>
     </string-array>
 </resources>
