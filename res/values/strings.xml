@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Clementine Remote</string>
+    <string name="app_not_available">App not available!</string>
+    
+    
     <string name="connectdialog_connect">Connect</string>
     <string name="connectdialog_autoconnect">Auto-Connect</string>
     <string name="connectdialog_clementine_found">Found Clementine!</string>
@@ -11,90 +14,72 @@
     <string name="connectdialog_ip_hint">Enter IP address</string>
     <string name="connectdialog_mdns_found">Found Clementines. Touch the icon to choose one.</string>
     <string name="connectdialog_services">Clementines</string>
-    <string name="menu_disconnect">Disconnect</string>
+    
+    
     <string name="player_nosong">No Song playing right now</string>
     <string name="player_disconnected">Disconnected</string>
     <string name="player_playlist">Playlist:</string>
     <string name="player_download_playlists">Downloading Playlists</string>
     <string name="playler_volume">Volume</string>
+    <string name="player_stop_after_current">Toggle stopping after track finishes.</string>
+    <string name="player_download_lyrics">Downloading lyrics</string>
+    <string name="player_no_lyrics">No lyrics found.</string>
+    <string name="player_howto_cancel">Download queued, please wait. Click notification to cancel active download.</string>
+    <string name="player_song_is_stream">Cannot download streams!</string>
+    
+    
     <string name="playlist_search_hint">Search track</string>
     <string name="playlist_empty">Playlist is empty!</string>
+    
+    
+    <string name="downloads_empty">No downloads!</string>
+    
+    
     <string name="menu_shuffle">Shuffle</string>
     <string name="menu_repeat">Repeat</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_playlist">Playlists</string>
     <string name="menu_search">Search</string>
+    <string name="menu_disconnect">Disconnect</string>
+    <string name="menu_love">Love</string>
+    <string name="menu_ban">Ban</string>
+    <string name="menu_download_song">Download song</string>
+    <string name="menu_download_album">Download album</string>
+    <string name="menu_download_playlist">Download playlist</string>
+    
+
+    <string name="pref_cat_behavior">Behavior</string>
+    <string name="pref_cat_player">Player</string>
+    <string name="pref_cat_downloads">Downloads</string>
+    <string name="pref_cat_connection">Connection</string>
+    <string name="pref_cat_info">Information</string>
+    
     <string name="pref_volume_title">Use Volume Keys</string>
     <string name="pref_volume_summary">Use volume keys to control the volume of Clementine.</string>
     <string name="pref_pebble_title">Use Pebble</string>
     <string name="pref_pebble_summary">Send the current track metadata to the Pebble music app.</string>
     <string name="pref_trackno_title">Show tracknumber</string>
     <string name="pref_trackno_summary">Show or hide the tracknumber in the playlists.</string>
-    <string name="pref_cat_behavior">Behavior</string>
-    <string name="pref_cat_player">Player</string>
-    <string name="pref_cat_downloads">Downloads</string>
-    <string name="pref_cat_connection">Connection</string>
-    <string name="pref_cat_info">Information</string>
-    <string name="pref_version_summary">Click to visit project website</string>
-    <string name="pref_version_title">Version</string>
-    <string name="pref_license_title">License</string>
-    <string name="pref_license_summary">GNU GPLv3</string>
-    <string name="pref_about_title">About</string>
-    <string name="pref_about_summary">People working on this project</string>
-    <string name="dialog_about_header">About</string>
-    <string name="dialog_about_authors">Authors</string>
-    <string name="dialog_about_supporters">Supporters</string>
-    <string name="dialog_about_others">Others</string>
-    <string name="close">Close</string>
-    <string name="dialog_license_top"> This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY</string>
-    <string name="pref_clementine_title">Clementine</string>
-    <string name="pref_clementine_summary">Visit Clementine website</string>
     <string name="pref_port_title">Port</string>
     <string name="pref_port_summary">Current Port:</string>
     <string name="pref_port_default">5500</string>
     <string name="pref_port_error">Illegal Port!</string>
-    <string name="error_versions">Incompatible version</string>
-    <string name="old_proto">Please update Clementine!</string>
-    <string name="no_private_ip">Your Android device has a non local ip address. Try disabling \"Use only local ip addresses\" in the Clementine settings.</string>
-    <string name="check_ip">1) Is Clementine running?\n2) Are you using Clementine 1.2 or higher?\n3) Did you enable the network remote in the Clementine settings?\n4) Check if you entered the correct ip address.\n</string>
-    <string name="wifi_disabled">Wifi is disabled. If you want to connect to Clementine via internet make sure you forwarded the ports correctly and you have disabled \"Use only local ip addresses\"".</string>
-    <string name="input_auth_code">Authentication Code</string>
-    <string name="invalid_code">Invalid Code</string>
-    <string name="notification_disconnect_keep_alive">Lost connection. Touch to reconnect.</string>
-    <string name="repeat_off">Don\'t repeat</string>
-    <string name="repeat_track">Repeat track</string>
-    <string name="repeat_album">Repeat album</string>
-    <string name="repeat_playlist">Repeat playlist</string>
-    <string name="shuffle_off">Don\'t shuffle</string>
-    <string name="shuffle_all">Shuffle all</string>
-    <string name="shuffle_inside_album">Shuffle tracks in this album</string>
-    <string name="shuffle_albums">Shuffle albums</string>
-    <string name="first_time_title">Welcome</string>
-    <string name="first_time_text">Thank you for using Clementine Remote!\nI hope this app will be useful for you.&lt;br>&lt;br>In order to use this remote app you have to download and install Clementine 1.2 or higher from &lt;a href=\"http://www.clementine-player.org/downloads\">here&lt;/a>.</string>
-    <string name="menu_love">Love</string>
-    <string name="menu_ban">Ban</string>
-    <string name="track_loved">Track loved &lt;3</string>
-    <string name="track_banned">Track banned :-(</string>
     <string name="pref_lastfm_title">Last.fm</string>
     <string name="pref_lastfm_summary">Activate to love / ban tracks. (requires restart)</string>
     <string name="pref_lower_volume_title">Lower volume</string>
     <string name="pref_lower_volume_summary">Lower volume on incoming / outgoing call.</string>
     <string name="pref_call_volume_title">Call volume level</string>
     <string name="pref_call_volume_summary">Current call volume level: %s</string>
-    <string name="player_download_lyrics">Downloading lyrics</string>
-    <string name="player_no_lyrics">No lyrics found.</string>
-    <string name="player_download_song">Download song</string>
-    <string name="player_download_album">Download album</string>
-    <string name="playlist_download_playlist">Download playlist</string>
-    <string name="player_howto_cancel">Download queued, please wait. Click notification to cancel active download.</string>
-    <string name="player_song_is_stream">Cannot download streams!</string>
-    <string name="download_noti_title">Downloading songs</string>
-    <string name="download_noti_complete">Download complete</string>
-    <string name="download_noti_canceled">Download canceled</string>
-    <string name="download_noti_insufficient_space">Insufficient space, aborting download.</string>
-    <string name="download_noti_forbidden">Download forbidden. Activate in Clementine settings.</string>
-    <string name="download_noti_not_mounted">No storage device found, aborting download.</string>
-    <string name="download_noti_only_wifi">Download only on wifi allowed.</string>
+
+    <string name="pref_version_summary">Click to visit project website</string>
+    <string name="pref_version_title">Version</string>
+    <string name="pref_license_title">License</string>
+    <string name="pref_license_summary">GNU GPLv3</string>
+    <string name="pref_about_title">About</string>
+    <string name="pref_about_summary">People working on this project</string>
+    <string name="pref_clementine_title">Clementine</string>
+    <string name="pref_clementine_summary">Visit Clementine website</string>
+    
     <string name="pref_dl_wifi_only_title">WiFi only</string>
     <string name="pref_dl_wifi_only_summary">Download songs only when connected to a wifi network.</string>
     <string name="pref_dl_dir">Set download folder</string>
@@ -104,13 +89,61 @@
     <string name="pref_dl_pl_save_own_dir_summary">Creates a playlist-named folder and saves tracks in there.</string>
     <string name="pref_dl_pl_artist_dir_title">Create artist/album subfolder</string>
     <string name="pref_dl_pl_artist_dir_summary">Create a artist/album subfolder for each indiviual track.</string>
+    
     <string name="file_dialog_set_dir">Select directory</string>
-    <string name="player_stop_after_current">Toggle stopping after track finishes.</string>
-    <string name="app_not_available">App not available!</string>
+    
+    
+    <string name="dialog_about_header">About</string>
+    <string name="dialog_about_authors">Authors</string>
+    <string name="dialog_about_supporters">Supporters</string>
+    <string name="dialog_about_others">Others</string>
+    <string name="dialog_license_top"> This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY</string>
+    
+    <string name="dialog_close">Close</string>
+    
+    <string name="error_versions">Incompatible version</string>
+    <string name="old_proto">Please update Clementine!</string>
+    
+    <string name="no_private_ip">Your Android device has a non local ip address. Try disabling \"Use only local ip addresses\" in the Clementine settings.</string>
+    <string name="check_ip">1) Is Clementine running?\n2) Are you using Clementine 1.2 or higher?\n3) Did you enable the network remote in the Clementine settings?\n4) Check if you entered the correct ip address.\n</string>
+    <string name="wifi_disabled">Wifi is disabled. If you want to connect to Clementine via internet make sure you forwarded the ports correctly and you have disabled \"Use only local ip addresses\"".</string>
+    
+    <string name="input_auth_code">Authentication Code</string>
+    <string name="invalid_code">Invalid Code</string>
+    
+    
+    <string name="repeat_off">Don\'t repeat</string>
+    <string name="repeat_track">Repeat track</string>
+    <string name="repeat_album">Repeat album</string>
+    <string name="repeat_playlist">Repeat playlist</string>
+    <string name="shuffle_off">Don\'t shuffle</string>
+    <string name="shuffle_all">Shuffle all</string>
+    <string name="shuffle_inside_album">Shuffle tracks in this album</string>
+    <string name="shuffle_albums">Shuffle albums</string>
+    
+    
+    <string name="first_time_title">Welcome</string>
+    <string name="first_time_text">Thank you for using Clementine Remote!\nI hope this app will be useful for you.&lt;br>&lt;br>In order to use this remote app you have to download and install Clementine 1.2 or higher from &lt;a href=\"http://www.clementine-player.org/downloads\">here&lt;/a>.</string>
+    <string name="track_loved">Track loved &lt;3</string>
+    <string name="track_banned">Track banned :-(</string>
+
+
+    <string name="notification_disconnect_keep_alive">Lost connection. Touch to reconnect.</string>
+        
+    <string name="download_noti_title">Downloading songs</string>
+    <string name="download_noti_complete">Download complete</string>
+    <string name="download_noti_canceled">Download canceled</string>
+    <string name="download_noti_insufficient_space">Insufficient space, aborting download.</string>
+    <string name="download_noti_forbidden">Download forbidden. Activate in Clementine settings.</string>
+    <string name="download_noti_not_mounted">No storage device found, aborting download.</string>
+    <string name="download_noti_only_wifi">Download only on wifi allowed.</string>
+
+
     <string name="crash_report_title">Oops, something went wrong!</string>
     <string name="crash_report_message">Last time Clementine Remote crashed! This should not have happened! Please help me to improve the app and send me the logfile. Thanks!</string>
     <string name="crash_report_send">Send!</string>
-    <string name="downloads_empty">No downloads!</string>
+    
+    
     <string-array name="navigation_headers">
         <item>Remote</item>
         <item>Settings</item>
