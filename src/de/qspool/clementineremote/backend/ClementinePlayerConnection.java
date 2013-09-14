@@ -23,9 +23,11 @@ import java.util.ArrayList;
 import android.annotation.TargetApi;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
@@ -82,6 +84,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 	private AudioManager mAudioManager;
 	private ComponentName mClementineMediaButtonEventReceiver;
 	private RemoteControlClient mRcClient;
+	private BroadcastReceiver mMediaButtonBroadcastReceiver;
 	
 	private ArrayList<OnConnectionClosedListener> mListeners = new ArrayList<OnConnectionClosedListener>();
 	private ClementineMessage mRequestConnect;
@@ -130,6 +133,8 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 		mClementineMediaButtonEventReceiver = new ComponentName(App.mApp.getPackageName(),
 																ClementineMediaButtonEventReceiver.class.getName());
 		
+		mMediaButtonBroadcastReceiver = new ClementineMediaButtonEventReceiver();
+		
 		Looper.loop();
 	}
 	
@@ -166,6 +171,10 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 			
 			// Setup the MediaButtonReceiver and the RemoteControlClient
 			registerRemoteControlClient();
+			
+			// Register MediaButtonReceiver
+			IntentFilter filter = new IntentFilter(Intent.ACTION_MEDIA_BUTTON);
+			App.mApp.registerReceiver(mMediaButtonBroadcastReceiver, filter);
 			
 			updateNotification();
 			
@@ -313,6 +322,8 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 		mNotificationManager.cancel(App.NOTIFY_ID);
 
 		unregisterRemoteControlClient();
+		
+		App.mApp.unregisterReceiver(mMediaButtonBroadcastReceiver);
 		
 		App.mClementine.setConnected(false);
 		

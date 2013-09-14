@@ -28,50 +28,45 @@ import android.os.Message;
 import android.view.KeyEvent;
 
 public class ClementineMediaButtonEventReceiver extends BroadcastReceiver {
-	static boolean ignoreNext;
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		// Check if we have an media button intent
 		if (Intent.ACTION_MEDIA_BUTTON.equals(intent.getAction())) {
-			// TODO:
-			// Intent gets send twice, don't know why.
-			if (ignoreNext) {
-				ignoreNext = false;
-				return;
-			}
-			ignoreNext = true;
 			
 			// Get the key event and obtain a new message
 			KeyEvent event = (KeyEvent) intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
 			Message msg = Message.obtain();
 			
-			// Check which key was pressed
-			switch (event.getKeyCode()) {
-			case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-				msg.obj = ClementineMessage.getMessage(MsgType.PLAYPAUSE);
-				break;
-			case KeyEvent.KEYCODE_MEDIA_NEXT:
-				msg.obj = ClementineMessage.getMessage(MsgType.NEXT);
-				break;
-			case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
-				msg.obj = ClementineMessage.getMessage(MsgType.PREVIOUS);
-				break;
-			case KeyEvent.KEYCODE_VOLUME_DOWN:
-				msg.obj = ClementineMessageFactory.buildVolumeMessage(App.mClementine.getVolume() - 10);
-				break;
-			case KeyEvent.KEYCODE_VOLUME_UP:
-				msg.obj = ClementineMessageFactory.buildVolumeMessage(App.mClementine.getVolume() + 10);
-				break;
-			default:
-				msg = null;
-				break;
-			}
-			
-			// Now send the message
-			if (msg != null
-			 && App.mClementineConnection != null) {
-				App.mClementineConnection.mHandler.sendMessage(msg);
+			// Only on KeyDown
+			if (event.getAction() == KeyEvent.ACTION_UP) {
+				// Check which key was pressed
+				switch (event.getKeyCode()) {
+				case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+					msg.obj = ClementineMessage.getMessage(MsgType.PLAYPAUSE);
+					break;
+				case KeyEvent.KEYCODE_MEDIA_NEXT:
+					msg.obj = ClementineMessage.getMessage(MsgType.NEXT);
+					break;
+				case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
+					msg.obj = ClementineMessage.getMessage(MsgType.PREVIOUS);
+					break;
+				case KeyEvent.KEYCODE_VOLUME_DOWN:
+					msg.obj = ClementineMessageFactory.buildVolumeMessage(App.mClementine.getVolume() - 10);
+					break;
+				case KeyEvent.KEYCODE_VOLUME_UP:
+					msg.obj = ClementineMessageFactory.buildVolumeMessage(App.mClementine.getVolume() + 10);
+					break;
+				default:
+					msg = null;
+					break;
+				}
+				
+				// Now send the message
+				if (msg != null
+				 && App.mClementineConnection != null) {
+					App.mClementineConnection.mHandler.sendMessage(msg);
+				}
 			}
 		}
 	}
