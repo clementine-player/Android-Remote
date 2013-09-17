@@ -17,8 +17,9 @@
 
 package de.qspool.clementineremote;
 
+import java.util.LinkedList;
+
 import android.app.Application;
-import android.util.SparseArray;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementinePlayerConnection;
 import de.qspool.clementineremote.backend.ClementineSongDownloader;
@@ -27,7 +28,7 @@ public class App extends Application {
 	public static ClementinePlayerConnection mClementineConnection = null;
 	public static Clementine mClementine = new Clementine();
 	public static Application mApp;
-	public static SparseArray<ClementineSongDownloader> downloaders = new SparseArray<ClementineSongDownloader>();
+	public static LinkedList<ClementineSongDownloader> downloaders = new LinkedList<ClementineSongDownloader>();
 	public static ClementineExceptionHandler mClementineExceptionHandler;
 	
 	public final static int NOTIFY_ID = 78923748;

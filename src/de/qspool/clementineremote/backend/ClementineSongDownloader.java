@@ -20,7 +20,6 @@ package de.qspool.clementineremote.backend;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Random;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -49,6 +48,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgT
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongFileChunk;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.ui.ConnectDialog;
+import de.qspool.clementineremote.ui.MainActivity;
 import de.qspool.clementineremote.utils.Utilities;
 
 public class ClementineSongDownloader extends
@@ -60,7 +60,7 @@ public class ClementineSongDownloader extends
 	private NotificationManager mNotifyManager;
 	private Builder mBuilder;
 	private int mId;
-	private MySong mCurrentSong;
+	private MySong mCurrentSong = new MySong();
 	private int mFileCount;
 	private int mCurrentFile;
 	
@@ -69,7 +69,12 @@ public class ClementineSongDownloader extends
 	private boolean mIsPlaylist = false;
 	private boolean mCreatePlaylistDir = false;
 	private boolean mCreatePlaylistArtistDir = false;
-	private boolean mOverrideExistingFiles = false; 
+	private boolean mOverrideExistingFiles = false;
+	
+	private DownloadItem mItem;
+	private int mCurrentProgress;
+	private String mTitle;
+	private String mSubtitle;
 	
 	public ClementineSongDownloader(Context context) {
 		mContext = context;
@@ -81,9 +86,7 @@ public class ClementineSongDownloader extends
 		mOverrideExistingFiles = mSharedPref.getBoolean(App.SP_DOWNLOAD_OVERRIDE, false);
 		
 		// Get a new id
-		do {
-			mId = new Random().nextInt();
-		} while (mId <= 0 || App.downloaders.get(mId) != null);
+		mId = App.downloaders.size() + 1;
 		
 		// Show a toast that the download is starting
 		Toast.makeText(mContext, R.string.player_howto_cancel, Toast.LENGTH_SHORT).show();
@@ -101,11 +104,15 @@ public class ClementineSongDownloader extends
 	    mBuilder.setPriority(Notification.PRIORITY_LOW);
 	    
 	    // Add this downloader to list
-	    App.downloaders.put(mId, this);
+	    App.downloaders.add(this);
+	    
+	    mTitle = mContext.getString(R.string.download_noti_title);
 	}
 	
 	@SuppressLint("InlinedApi")
 	public void startDownload(ClementineMessage message) {
+		mItem = message.getMessage().getRequestDownloadSongs().getDownloadItem();
+		
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 	        this.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
 	    else
@@ -132,10 +139,33 @@ public class ClementineSongDownloader extends
 	@Override
 	protected void onProgressUpdate(Integer... progress) {
 		mBuilder.setProgress(100, progress[0], false);
-		if (mCurrentSong == null) {
-			mBuilder.setContentText(mContext.getString(R.string.connectdialog_connecting));	
+		StringBuilder sb = new StringBuilder();
+		
+		switch (mItem) {
+		case APlaylist:
+			sb.append(mContext.getString(R.string.download_noti_title_playlist));
+			sb.append(" ");
+			sb.append(App.mClementine.getPlaylists().get(mPlaylistId).getName());
+			break;
+		case CurrentItem:
+			sb.append(mContext.getString(R.string.download_noti_title_song));
+			sb.append(" ");
+			sb.append(mCurrentSong.getTitle());
+			break;
+		case ItemAlbum:
+			sb.append(mContext.getString(R.string.download_noti_title_album));
+			sb.append(" ");
+			sb.append(mCurrentSong.getAlbum());
+			break;
+		}
+		
+		mTitle = sb.toString();
+		
+		sb = new StringBuilder();
+		
+		if (mCurrentSong.equals(new MySong())) {
+			sb.append(mContext.getString(R.string.connectdialog_connecting));	
 		} else {
-			StringBuilder sb = new StringBuilder();
 			sb.append("(");
 			sb.append(mCurrentFile);
 			sb.append("/");
@@ -144,10 +174,17 @@ public class ClementineSongDownloader extends
 			sb.append(mCurrentSong.getArtist());
 			sb.append(" - ");
 			sb.append(mCurrentSong.getTitle());
-			mBuilder.setContentText(sb.toString());
 		}
+		
+		mSubtitle = sb.toString();
+		
+		mBuilder.setContentTitle(mTitle);
+		mBuilder.setContentText(mSubtitle);
+		
         // Displays the progress bar for the first time.
         mNotifyManager.notify(mId, mBuilder.build());
+        
+        mCurrentProgress = progress[0];
     }
 	
 	@Override
@@ -166,29 +203,32 @@ public class ClementineSongDownloader extends
     protected void onPostExecute(SongDownloadResult result) {
     	// When the loop is finished, updates the notification
 		if (result == null)
-			mBuilder.setContentText(mContext.getText(R.string.download_noti_canceled));
+			mSubtitle = mContext.getString(R.string.download_noti_canceled);
 		else {
 			switch (result.getResult()) {
 			case CONNECTION_ERROR:
-				mBuilder.setContentText(mContext.getText(R.string.download_noti_canceled));
+				mSubtitle = mContext.getString(R.string.download_noti_canceled);
 				break;
 			case FOBIDDEN:
-				mBuilder.setContentText(mContext.getText(R.string.download_noti_forbidden));
+				mSubtitle = mContext.getString(R.string.download_noti_forbidden);
 				break;
 			case INSUFFIANT_SPACE:
-				mBuilder.setContentText(mContext.getText(R.string.download_noti_insufficient_space));
+				mSubtitle = mContext.getString(R.string.download_noti_insufficient_space);
 				break;
 			case NOT_MOUNTED:
-				mBuilder.setContentText(mContext.getText(R.string.download_noti_not_mounted));
+				mSubtitle = mContext.getString(R.string.download_noti_not_mounted);
 				break;
 			case ONLY_WIFI:
-				mBuilder.setContentText(mContext.getText(R.string.download_noti_only_wifi));
+				mSubtitle = mContext.getString(R.string.download_noti_only_wifi);
 				break;
 			case SUCCESSFUL:
-				mBuilder.setContentTitle(mContext.getText(R.string.download_noti_complete));
+				mSubtitle = mContext.getString(R.string.download_noti_complete);
 				break;
 			}
 		}
+		
+		mBuilder.setContentTitle(mTitle);
+		mBuilder.setContentText(mSubtitle);
 			
         mBuilder.setOngoing(false);
         mBuilder.setProgress(0,0,false);
@@ -199,16 +239,16 @@ public class ClementineSongDownloader extends
     }
 	
 	private PendingIntent buildNotificationIntent() {
-		Intent resultIntent = new Intent(App.mApp, ConnectDialog.class);
-	    resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-	    resultIntent.putExtra(App.NOTIFICATION_ID, mId);
-	    resultIntent.setData(Uri.parse("ClemetineDownload" + mId));
+		Intent backIntent = new Intent(App.mApp, ConnectDialog.class);
+	    backIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	    
+	    Intent intent = new Intent(App.mApp, MainActivity.class);
+	    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+	    intent.putExtra(App.NOTIFICATION_ID, mId);
 	    
 	    // Create a TaskStack, so the app navigates correctly backwards
-	    TaskStackBuilder stackBuilder = TaskStackBuilder.create(App.mApp);
-	    stackBuilder.addParentStack(ConnectDialog.class);
-	    stackBuilder.addNextIntent(resultIntent);
-	    return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+	    return PendingIntent.getActivities(App.mApp, 0,
+	            new Intent[] {backIntent, intent}, PendingIntent.FLAG_UPDATE_CURRENT);
 	}
 
     /**
@@ -431,4 +471,20 @@ public class ClementineSongDownloader extends
     	
     	return sb.toString();
     }
+
+	public DownloadItem getItem() {
+		return mItem;
+	}
+
+	public int getCurrentProgress() {
+		return mCurrentProgress;
+	}
+
+	public String getTitle() {
+		return mTitle;
+	}
+
+	public String getSubtitle() {
+		return mSubtitle;
+	}
 }

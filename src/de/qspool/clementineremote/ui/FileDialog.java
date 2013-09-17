@@ -59,7 +59,7 @@ public class FileDialog {
                     fireDirectorySelectedEvent(currentPath);
                 }
             });
-            builder.setNegativeButton(activity.getString(R.string.close), new OnClickListener() {
+            builder.setNegativeButton(activity.getString(R.string.dialog_close), new OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 				}

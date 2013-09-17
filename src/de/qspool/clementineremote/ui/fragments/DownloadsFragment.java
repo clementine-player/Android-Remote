@@ -20,6 +20,8 @@ package de.qspool.clementineremote.ui.fragments;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -50,10 +52,33 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Down
 import de.qspool.clementineremote.backend.player.MyPlaylist;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.ui.adapter.CustomSongAdapter;
+import de.qspool.clementineremote.ui.adapter.DownloadAdapter;
 
 public class DownloadsFragment extends AbstractDrawerFragment {
 	private ActionBar mActionBar; 
 	private ListView mList;
+	private DownloadAdapter mAdapter;
+	private Timer mUpdateTimer;	
+	
+	public TimerTask getTimerTask() {
+		return new TimerTask() {
+
+			@Override
+			public void run() {
+				if (mAdapter != null) {
+					getActivity().runOnUiThread(new Runnable() {
+
+						@Override
+						public void run() {
+							mAdapter.notifyDataSetChanged();
+						}
+						
+					});
+				}
+			}
+			
+		};
+	}
 
 	@Override
 	public void onResume() {
@@ -66,7 +91,16 @@ public class DownloadsFragment extends AbstractDrawerFragment {
 		} else {
 			//RequestPlaylistSongs();
 			setActionBarTitle();
+			mUpdateTimer = new Timer();
+			mUpdateTimer.scheduleAtFixedRate(getTimerTask(), 250, 250);
 		}
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		
+		mUpdateTimer.cancel();
 	}
 	
 	@Override
@@ -78,13 +112,10 @@ public class DownloadsFragment extends AbstractDrawerFragment {
 		mList = (ListView) view.findViewById(R.id.downloads);
 		
 		// Create the adapter
-		/*mAdapter = new CustomSongAdapter(getActivity(), R.layout.song_row, mData);
+		mAdapter = new DownloadAdapter(getActivity(), R.layout.download_row, App.downloaders);
 		
-		mList.setOnItemClickListener(oiclSong);
+		//mList.setOnItemClickListener(oiclSong);
 		mList.setAdapter(mAdapter);
-		
-		// Filter the results
-		mAdapter.getFilter().filter(mFilterText);*/
 		
 		mActionBar = getSherlockActivity().getSupportActionBar();
 	    mActionBar.setTitle("");

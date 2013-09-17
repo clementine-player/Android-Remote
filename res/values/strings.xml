@@ -34,6 +34,17 @@
     
     <string name="downloads_empty">No downloads!</string>
     
+    <string name="download_noti_title">Starting download</string>
+    <string name="download_noti_title_song">[Current Song]</string>
+    <string name="download_noti_title_album">[Album]</string>
+    <string name="download_noti_title_playlist">[Playlist]</string>
+    <string name="download_noti_complete">Download complete</string>
+    <string name="download_noti_canceled">Download canceled</string>
+    <string name="download_noti_insufficient_space">Insufficient space, aborting download.</string>
+    <string name="download_noti_forbidden">Download forbidden. Activate in Clementine settings.</string>
+    <string name="download_noti_not_mounted">No storage device found, aborting download.</string>
+    <string name="download_noti_only_wifi">Download only on wifi allowed.</string>
+    
     
     <string name="menu_shuffle">Shuffle</string>
     <string name="menu_repeat">Repeat</string>
@@ -130,14 +141,6 @@
 
     <string name="notification_disconnect_keep_alive">Lost connection. Touch to reconnect.</string>
         
-    <string name="download_noti_title">Downloading songs</string>
-    <string name="download_noti_complete">Download complete</string>
-    <string name="download_noti_canceled">Download canceled</string>
-    <string name="download_noti_insufficient_space">Insufficient space, aborting download.</string>
-    <string name="download_noti_forbidden">Download forbidden. Activate in Clementine settings.</string>
-    <string name="download_noti_not_mounted">No storage device found, aborting download.</string>
-    <string name="download_noti_only_wifi">Download only on wifi allowed.</string>
-
 
     <string name="crash_report_title">Oops, something went wrong!</string>
     <string name="crash_report_message">Last time Clementine Remote crashed! This should not have happened! Please help me to improve the app and send me the logfile. Thanks!</string>

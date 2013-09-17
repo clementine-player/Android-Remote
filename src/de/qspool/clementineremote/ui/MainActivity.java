@@ -63,6 +63,7 @@ public class MainActivity extends SherlockFragmentActivity {
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
+    private int mLastPosition = 1;
     
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -104,7 +105,7 @@ public class MainActivity extends SherlockFragmentActivity {
                 mDrawerLayout,         /* DrawerLayout object */
                 R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
                 R.string.connectdialog_connect,  /* "open drawer" description */
-                R.string.close  /* "close drawer" description */
+                R.string.dialog_close  /* "close drawer" description */
                 ) {
         };
 
@@ -115,8 +116,6 @@ public class MainActivity extends SherlockFragmentActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-
-        selectItem(1);
 	}
 	
     @Override
@@ -147,6 +146,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		    // Set the handler
 		    mHandler = new PlayerHandler(this);
 		    App.mClementineConnection.setUiHandler(mHandler);
+		    selectItem(mLastPosition);
 		}
 	}
 	

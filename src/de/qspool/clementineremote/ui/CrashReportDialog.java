@@ -75,7 +75,7 @@ public class CrashReportDialog {
 		builder.setTitle(R.string.crash_report_title);
 		builder.setMessage(R.string.crash_report_message);
 		builder.setPositiveButton(R.string.crash_report_send, dialogOnClickListener);
-		builder.setNegativeButton(R.string.close, dialogOnClickListener);
+		builder.setNegativeButton(R.string.dialog_close, dialogOnClickListener);
 		
 		builder.show();
 		
