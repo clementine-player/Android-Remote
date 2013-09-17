@@ -116,6 +116,11 @@ public class MainActivity extends SherlockFragmentActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        
+		// When we have a download notifitication and it was clicked, show the download.
+		if (getIntent().hasExtra(App.NOTIFICATION_ID)) {
+			mLastPosition = 3;
+		}
 	}
 	
     @Override
@@ -157,6 +162,21 @@ public class MainActivity extends SherlockFragmentActivity {
 		mHandler = null;
 		if (App.mClementineConnection != null) {
 			App.mClementineConnection.setUiHandler(mHandler);
+		}
+	}
+	
+	@Override 
+	public void onDestroy() {
+		super.onDestroy();
+		
+		// If we disconnected, open connectdialog
+		if (App.mClementineConnection == null
+		 || App.mClementine           == null
+		 || !App.mClementineConnection.isAlive()
+		 || !App.mClementine.isConnected()) {
+			Intent connectDialog = new Intent(this, ConnectDialog.class);
+			connectDialog.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			startActivity(connectDialog);
 		}
 	}
 	
@@ -227,12 +247,12 @@ public class MainActivity extends SherlockFragmentActivity {
      * Request a disconnect from clementine
      */
     private void requestDisconnect() {
-            // Move the request to the message
-            Message msg = Message.obtain();
-            msg.obj = ClementineMessage.getMessage(MsgType.DISCONNECT);
-           
-            // Send the request to the thread
-            App.mClementineConnection.mHandler.sendMessage(msg);
+        // Move the request to the message
+        Message msg = Message.obtain();
+        msg.obj = ClementineMessage.getMessage(MsgType.DISCONNECT);
+       
+        // Send the request to the thread
+        App.mClementineConnection.mHandler.sendMessage(msg);
     }
 
 	
@@ -298,14 +318,17 @@ public class MainActivity extends SherlockFragmentActivity {
     	case 1: // Player
         	fragmentManager.beginTransaction().replace(R.id.content_frame, mFragments.get(0)).commit();
         	mCurrentFragment = 0;
+        	mLastPosition = position;
         	break;
     	case 2: // Playlist
         	fragmentManager.beginTransaction().replace(R.id.content_frame, mFragments.get(1)).commit();
         	mCurrentFragment = 1;
+        	mLastPosition = position;
         	break;
     	case 3: // Downloads
     		fragmentManager.beginTransaction().replace(R.id.content_frame, mFragments.get(2)).commit();
     		mCurrentFragment = 2;
+            mLastPosition = position;
     		break;
     	case 4: // Header Settings
     		break;

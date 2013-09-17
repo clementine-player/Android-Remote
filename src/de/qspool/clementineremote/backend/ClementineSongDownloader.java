@@ -47,7 +47,6 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Down
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongFileChunk;
 import de.qspool.clementineremote.backend.player.MySong;
-import de.qspool.clementineremote.ui.ConnectDialog;
 import de.qspool.clementineremote.ui.MainActivity;
 import de.qspool.clementineremote.utils.Utilities;
 
@@ -239,16 +238,16 @@ public class ClementineSongDownloader extends
     }
 	
 	private PendingIntent buildNotificationIntent() {
-		Intent backIntent = new Intent(App.mApp, ConnectDialog.class);
-	    backIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-	    
 	    Intent intent = new Intent(App.mApp, MainActivity.class);
 	    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 	    intent.putExtra(App.NOTIFICATION_ID, mId);
+	    intent.setData(Uri.parse("ClemetineDownload" + mId));
 	    
 	    // Create a TaskStack, so the app navigates correctly backwards
-	    return PendingIntent.getActivities(App.mApp, 0,
-	            new Intent[] {backIntent, intent}, PendingIntent.FLAG_UPDATE_CURRENT);
+	    TaskStackBuilder stackBuilder = TaskStackBuilder.create(App.mApp);
+	    stackBuilder.addParentStack(MainActivity.class);
+	    stackBuilder.addNextIntent(intent);
+	    return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 	}
 
     /**

@@ -23,7 +23,7 @@ import de.qspool.clementineremote.backend.event.OnConnectionClosedListener;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessage.ErrorMessage;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
-import de.qspool.clementineremote.ui.ConnectDialog;
+import de.qspool.clementineremote.ui.MainActivity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -129,11 +129,12 @@ public class ClementineService extends Service {
 	    }
 	    
 	    // Set the result intent
-	    Intent resultIntent = new Intent(App.mApp, ConnectDialog.class);
+	    Intent resultIntent = new Intent(App.mApp, MainActivity.class);
 	    resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
 	    // Create a TaskStack, so the app navigates correctly backwards
 	    TaskStackBuilder stackBuilder = TaskStackBuilder.create(App.mApp);
-	    stackBuilder.addParentStack(ConnectDialog.class);
+	    stackBuilder.addParentStack(MainActivity.class);
 	    stackBuilder.addNextIntent(resultIntent);
 	    PendingIntent resultPendingintent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 	    mNotifyBuilder.setContentIntent(resultPendingintent);

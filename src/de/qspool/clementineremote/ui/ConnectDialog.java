@@ -34,7 +34,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
@@ -119,20 +118,6 @@ public class ConnectDialog extends SherlockActivity {
 	    mPdConnect.setOnCancelListener(oclProgressDialog);
 	    
 	    initializeUi();
-	    
-	    // When we have a download notifitication and it was clicked, cancel the download.
-	    // We have to do it here because otherwise the intent stack will be wrong. This dialog
-	    // would not shown when disconnecting
-		if (getIntent().hasExtra(App.NOTIFICATION_ID)) {
-			int i = getIntent().getIntExtra(App.NOTIFICATION_ID, -1);
-			// Check if the asynctask is running
-			if (i != -1
-			 && App.downloaders != null
-			 && App.downloaders.get(i) != null
-			 && App.downloaders.get(i).getStatus() == AsyncTask.Status.RUNNING) {
-				App.downloaders.get(i).cancel(true);
-			}
-		}
 		
 		// Check if we got a stack trace
 		CrashReportDialog crashReportDialog = new CrashReportDialog(this);

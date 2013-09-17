@@ -17,48 +17,33 @@
 
 package de.qspool.clementineremote.ui.fragments;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Spinner;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.widget.SearchView;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
-import de.qspool.clementineremote.backend.ClementineSongDownloader;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
-import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
-import de.qspool.clementineremote.backend.player.MyPlaylist;
 import de.qspool.clementineremote.backend.player.MySong;
-import de.qspool.clementineremote.ui.adapter.CustomSongAdapter;
 import de.qspool.clementineremote.ui.adapter.DownloadAdapter;
 
 public class DownloadsFragment extends AbstractDrawerFragment {
 	private ActionBar mActionBar; 
 	private ListView mList;
 	private DownloadAdapter mAdapter;
-	private Timer mUpdateTimer;	
+	private Timer mUpdateTimer;
+
+	private View mEmptyDownloads;
 	
 	public TimerTask getTimerTask() {
 		return new TimerTask() {
@@ -71,6 +56,9 @@ public class DownloadsFragment extends AbstractDrawerFragment {
 						@Override
 						public void run() {
 							mAdapter.notifyDataSetChanged();
+							if (App.downloaders.isEmpty()) {
+								mList.setEmptyView(mEmptyDownloads);
+							}
 						}
 						
 					});
@@ -110,6 +98,7 @@ public class DownloadsFragment extends AbstractDrawerFragment {
 				container, false);
 		
 		mList = (ListView) view.findViewById(R.id.downloads);
+		mEmptyDownloads = view.findViewById(R.id.downloads_empty);
 		
 		// Create the adapter
 		mAdapter = new DownloadAdapter(getActivity(), R.layout.download_row, App.downloaders);
