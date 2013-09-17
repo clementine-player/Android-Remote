@@ -55,8 +55,12 @@ public class MySong {
 	private boolean local;
 	
 	public boolean equals(MySong song) {
-		if (song.id == this.id
-		 && song.index == this.index) {
+		if (song.id          == this.id
+		 && song.index       == this.index
+		 && song.artist      == this.artist
+		 && song.title       == this.title
+		 && song.album       == this.album
+		 && song.albumartist == this.albumartist) {
 			return true;
 	} else {
 			return false;
