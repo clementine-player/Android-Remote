@@ -182,8 +182,6 @@ public class ClementineSongDownloader extends
 		
         // Displays the progress bar for the first time.
         mNotifyManager.notify(mId, mBuilder.build());
-        
-        mCurrentProgress = progress[0];
     }
 	
 	@Override
@@ -228,6 +226,8 @@ public class ClementineSongDownloader extends
 		
 		mBuilder.setContentTitle(mTitle);
 		mBuilder.setContentText(mSubtitle);
+		
+		mCurrentProgress = 100;
 			
         mBuilder.setOngoing(false);
         mBuilder.setProgress(0,0,false);
@@ -331,6 +331,11 @@ public class ClementineSongDownloader extends
 			// accept the song offered or not
 			if (chunk.getChunkNumber() == 0) {
 				processSongOffer(chunk);
+				
+				// Update progress here to. If the first (and only) file exists and shall not be
+				// overriten, the notification bar shows NULL.
+				mCurrentSong = MySong.fromProtocolBuffer(chunk.getSongMetadata());
+				publishProgress(mCurrentProgress);
 				continue;
 			}
 			
@@ -345,10 +350,6 @@ public class ClementineSongDownloader extends
 					
 					File dir = new File(BuildDirPath(chunk));
 					f = new File(BuildFilePath(chunk));
-					
-					// Save the songs Metadata on first chunk
-					mCurrentSong = MySong.fromProtocolBuffer(chunk.getSongMetadata());
-					updateProgress(chunk);
 					
 					// User wants to override files, so delete it here!
 					// The check was already done in processSongOffer()
@@ -421,6 +422,8 @@ public class ClementineSongDownloader extends
 				         * 100;
 		
 		publishProgress((int) progress);
+		
+		mCurrentProgress = (int) progress;
     }
     
     /**
