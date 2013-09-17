@@ -428,9 +428,19 @@ public class PlayerFragment extends AbstractDrawerFragment {
 	 */
     private String buildTrackPosition() {
     	StringBuilder sb = new StringBuilder();
-    	sb.append(Utilities.PrettyTime(App.mClementine.getSongPosition()));
-    	sb.append("/");
-    	sb.append(Utilities.PrettyTime(mCurrentSong.getLength()));
+    	
+    	if (!mCurrentSong.isLocal()) {
+    		sb.append(getString(R.string.player_stream));
+    		sb.append(" ");
+    	}
+    	
+    	if (mCurrentSong.getLength() == 0) {
+    		sb.append(Utilities.PrettyTime(App.mClementine.getSongPosition()));
+    	} else {
+	    	sb.append(Utilities.PrettyTime(App.mClementine.getSongPosition()));
+	    	sb.append("/");
+	    	sb.append(Utilities.PrettyTime(mCurrentSong.getLength()));
+    	}
     	
     	return sb.toString();
     }

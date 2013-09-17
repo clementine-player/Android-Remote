@@ -26,6 +26,7 @@
     <string name="player_no_lyrics">No lyrics found.</string>
     <string name="player_howto_cancel">Download queued, please wait. Click notification to cancel active download.</string>
     <string name="player_song_is_stream">Cannot download streams!</string>
+    <string name="player_stream">Stream</string>
     
     
     <string name="playlist_search_hint">Search track</string>
