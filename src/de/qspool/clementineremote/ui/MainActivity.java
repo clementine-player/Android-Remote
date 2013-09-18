@@ -129,6 +129,10 @@ public class MainActivity extends SherlockFragmentActivity {
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
     }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -303,7 +307,7 @@ public class MainActivity extends SherlockFragmentActivity {
     
     private class DrawerItemClickListener implements OnItemClickListener {
         @Override
-        public void onItemClick(AdapterView parent, View view, int position, long id) {
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             selectItem(position);
         }
     }

@@ -74,6 +74,7 @@ public class ClementineSongDownloader extends
 	private int mCurrentProgress;
 	private String mTitle;
 	private String mSubtitle;
+	private Uri mFileUri;
 	
 	public ClementineSongDownloader(Context context) {
 		mContext = context;
@@ -187,13 +188,16 @@ public class ClementineSongDownloader extends
 	@Override
     protected void onCancelled() {
 		// When the loop is finished, updates the notification
-        mBuilder.setContentText(mContext.getText(R.string.download_noti_canceled))
+		mSubtitle = mContext.getString(R.string.download_noti_canceled);
+        mBuilder.setContentText(mSubtitle)
         		.setOngoing(false)
         		.setAutoCancel(true)
                 .setProgress(0,0,false);
         mBuilder.setPriority(Notification.PRIORITY_MIN);
         mNotifyManager.cancel(mId);
         mNotifyManager.notify(mId, mBuilder.build());
+        
+        mCurrentProgress = 100;
     }
 
 	@Override
@@ -360,6 +364,9 @@ public class ClementineSongDownloader extends
 					dir.mkdirs();
 					f.createNewFile();
 					fo = new FileOutputStream(f);
+					
+					// File for download fragment
+					mFileUri = Uri.fromFile(f);
 				}
 				
 				// Write chunk to sdcard
@@ -488,5 +495,13 @@ public class ClementineSongDownloader extends
 
 	public String getSubtitle() {
 		return mSubtitle;
+	}
+	
+	/**
+	 * Get the last downloaded file
+	 * @return
+	 */
+	public Uri getLastFileUri() {
+		return mFileUri;
 	}
 }

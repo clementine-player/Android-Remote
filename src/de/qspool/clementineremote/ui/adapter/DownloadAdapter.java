@@ -21,12 +21,16 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filterable;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.ClementineSongDownloader;
@@ -57,6 +61,10 @@ public class DownloadAdapter extends ArrayAdapter<ClementineSongDownloader> impl
 		TextView tvDlTitle     = (TextView) convertView.findViewById(R.id.tvDlTitle);
 		TextView tvDlSubtitle  = (TextView) convertView.findViewById(R.id.tvDlSubtitle);
 		ProgressBar pbProgress = (ProgressBar) convertView.findViewById(R.id.pbDlProgress);
+		ImageButton ibCancel   = (ImageButton) convertView.findViewById(R.id.ibCancelDl);
+		
+		ibCancel.setOnClickListener(oclCancel);
+		ibCancel.setTag(downloader);
 		
 		pbProgress.setMax(100);
 		pbProgress.setProgress(downloader.getCurrentProgress());
@@ -65,4 +73,21 @@ public class DownloadAdapter extends ArrayAdapter<ClementineSongDownloader> impl
 		
 		return convertView;
 	}
+	
+	private OnClickListener oclCancel = new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			ClementineSongDownloader downloader = (ClementineSongDownloader) v.getTag();
+			
+			if (downloader.getStatus() == AsyncTask.Status.RUNNING) {
+				downloader.cancel(true);
+				Toast.makeText(mContext, R.string.download_noti_canceled, Toast.LENGTH_SHORT).show();
+			} else {
+				App.downloaders.remove(downloader);
+			}
+			
+			notifyDataSetChanged();
+		}
+	};
 }
