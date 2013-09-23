@@ -633,6 +633,10 @@ public final class ClementineRemoteProtocolBuffer {
     // optional int32 file_size = 17;
     boolean hasFileSize();
     int getFileSize();
+    
+    // optional float rating = 18;
+    boolean hasRating();
+    float getRating();
   }
   public static final class SongMetadata extends
       com.google.protobuf.GeneratedMessage
@@ -1009,6 +1013,16 @@ public final class ClementineRemoteProtocolBuffer {
       return fileSize_;
     }
     
+    // optional float rating = 18;
+    public static final int RATING_FIELD_NUMBER = 18;
+    private float rating_;
+    public boolean hasRating() {
+      return ((bitField0_ & 0x00020000) == 0x00020000);
+    }
+    public float getRating() {
+      return rating_;
+    }
+    
     private void initFields() {
       id_ = 0;
       index_ = 0;
@@ -1027,6 +1041,7 @@ public final class ClementineRemoteProtocolBuffer {
       isLocal_ = false;
       filename_ = "";
       fileSize_ = 0;
+      rating_ = 0F;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1090,6 +1105,9 @@ public final class ClementineRemoteProtocolBuffer {
       }
       if (((bitField0_ & 0x00010000) == 0x00010000)) {
         output.writeInt32(17, fileSize_);
+      }
+      if (((bitField0_ & 0x00020000) == 0x00020000)) {
+        output.writeFloat(18, rating_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -1167,6 +1185,10 @@ public final class ClementineRemoteProtocolBuffer {
       if (((bitField0_ & 0x00010000) == 0x00010000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(17, fileSize_);
+      }
+      if (((bitField0_ & 0x00020000) == 0x00020000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFloatSize(18, rating_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1326,6 +1348,8 @@ public final class ClementineRemoteProtocolBuffer {
         bitField0_ = (bitField0_ & ~0x00008000);
         fileSize_ = 0;
         bitField0_ = (bitField0_ & ~0x00010000);
+        rating_ = 0F;
+        bitField0_ = (bitField0_ & ~0x00020000);
         return this;
       }
       
@@ -1432,6 +1456,10 @@ public final class ClementineRemoteProtocolBuffer {
           to_bitField0_ |= 0x00010000;
         }
         result.fileSize_ = fileSize_;
+        if (((from_bitField0_ & 0x00020000) == 0x00020000)) {
+          to_bitField0_ |= 0x00020000;
+        }
+        result.rating_ = rating_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1498,6 +1526,9 @@ public final class ClementineRemoteProtocolBuffer {
         }
         if (other.hasFileSize()) {
           setFileSize(other.getFileSize());
+        }
+        if (other.hasRating()) {
+          setRating(other.getRating());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -1613,6 +1644,11 @@ public final class ClementineRemoteProtocolBuffer {
             case 136: {
               bitField0_ |= 0x00010000;
               fileSize_ = input.readInt32();
+              break;
+            }
+            case 149: {
+              bitField0_ |= 0x00020000;
+              rating_ = input.readFloat();
               break;
             }
           }
@@ -2097,6 +2133,27 @@ public final class ClementineRemoteProtocolBuffer {
       public Builder clearFileSize() {
         bitField0_ = (bitField0_ & ~0x00010000);
         fileSize_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // optional float rating = 18;
+      private float rating_ ;
+      public boolean hasRating() {
+        return ((bitField0_ & 0x00020000) == 0x00020000);
+      }
+      public float getRating() {
+        return rating_;
+      }
+      public Builder setRating(float value) {
+        bitField0_ |= 0x00020000;
+        rating_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearRating() {
+        bitField0_ = (bitField0_ & ~0x00020000);
+        rating_ = 0F;
         onChanged();
         return this;
       }
@@ -13461,9 +13518,9 @@ public final class ClementineRemoteProtocolBuffer {
   public interface RequestRateSongOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
     
-    // optional int32 rating = 1;
+    // optional float rating = 1;
     boolean hasRating();
-    int getRating();
+    float getRating();
   }
   public static final class RequestRateSong extends
       com.google.protobuf.GeneratedMessage
@@ -13494,18 +13551,18 @@ public final class ClementineRemoteProtocolBuffer {
     }
     
     private int bitField0_;
-    // optional int32 rating = 1;
+    // optional float rating = 1;
     public static final int RATING_FIELD_NUMBER = 1;
-    private int rating_;
+    private float rating_;
     public boolean hasRating() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
-    public int getRating() {
+    public float getRating() {
       return rating_;
     }
     
     private void initFields() {
-      rating_ = 0;
+      rating_ = 0F;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -13520,7 +13577,7 @@ public final class ClementineRemoteProtocolBuffer {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(1, rating_);
+        output.writeFloat(1, rating_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -13533,7 +13590,7 @@ public final class ClementineRemoteProtocolBuffer {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, rating_);
+          .computeFloatSize(1, rating_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -13659,7 +13716,7 @@ public final class ClementineRemoteProtocolBuffer {
       
       public Builder clear() {
         super.clear();
-        rating_ = 0;
+        rating_ = 0F;
         bitField0_ = (bitField0_ & ~0x00000001);
         return this;
       }
@@ -13753,9 +13810,9 @@ public final class ClementineRemoteProtocolBuffer {
               }
               break;
             }
-            case 8: {
+            case 13: {
               bitField0_ |= 0x00000001;
-              rating_ = input.readInt32();
+              rating_ = input.readFloat();
               break;
             }
           }
@@ -13764,15 +13821,15 @@ public final class ClementineRemoteProtocolBuffer {
       
       private int bitField0_;
       
-      // optional int32 rating = 1;
-      private int rating_ ;
+      // optional float rating = 1;
+      private float rating_ ;
       public boolean hasRating() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      public int getRating() {
+      public float getRating() {
         return rating_;
       }
-      public Builder setRating(int value) {
+      public Builder setRating(float value) {
         bitField0_ |= 0x00000001;
         rating_ = value;
         onChanged();
@@ -13780,7 +13837,7 @@ public final class ClementineRemoteProtocolBuffer {
       }
       public Builder clearRating() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        rating_ = 0;
+        rating_ = 0F;
         onChanged();
         return this;
       }
@@ -13799,7 +13856,7 @@ public final class ClementineRemoteProtocolBuffer {
   public interface MessageOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
     
-    // optional int32 version = 1 [default = 10];
+    // optional int32 version = 1 [default = 11];
     boolean hasVersion();
     int getVersion();
     
@@ -13961,7 +14018,7 @@ public final class ClementineRemoteProtocolBuffer {
     }
     
     private int bitField0_;
-    // optional int32 version = 1 [default = 10];
+    // optional int32 version = 1 [default = 11];
     public static final int VERSION_FIELD_NUMBER = 1;
     private int version_;
     public boolean hasVersion() {
@@ -14307,7 +14364,7 @@ public final class ClementineRemoteProtocolBuffer {
     }
     
     private void initFields() {
-      version_ = 10;
+      version_ = 11;
       type_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType.UNKNOWN;
       requestConnect_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestConnect.getDefaultInstance();
       requestPlaylists_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestPlaylists.getDefaultInstance();
@@ -14694,7 +14751,7 @@ public final class ClementineRemoteProtocolBuffer {
       
       public Builder clear() {
         super.clear();
-        version_ = 10;
+        version_ = 11;
         bitField0_ = (bitField0_ & ~0x00000001);
         type_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -15469,8 +15526,8 @@ public final class ClementineRemoteProtocolBuffer {
       
       private int bitField0_;
       
-      // optional int32 version = 1 [default = 10];
-      private int version_ = 10;
+      // optional int32 version = 1 [default = 11];
+      private int version_ = 11;
       public boolean hasVersion() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
@@ -15485,7 +15542,7 @@ public final class ClementineRemoteProtocolBuffer {
       }
       public Builder clearVersion() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        version_ = 10;
+        version_ = 11;
         onChanged();
         return this;
       }
@@ -17930,129 +17987,130 @@ public final class ClementineRemoteProtocolBuffer {
   static {
     java.lang.String[] descriptorData = {
       "\n\033remotecontrolmessages.proto\022\tpb.remote" +
-      "\"\253\002\n\014SongMetadata\022\n\n\002id\030\001 \001(\005\022\r\n\005index\030\002" +
+      "\"\273\002\n\014SongMetadata\022\n\n\002id\030\001 \001(\005\022\r\n\005index\030\002" +
       " \001(\005\022\r\n\005title\030\003 \001(\t\022\r\n\005album\030\004 \001(\t\022\016\n\006ar" +
       "tist\030\005 \001(\t\022\023\n\013albumartist\030\006 \001(\t\022\r\n\005track" +
       "\030\007 \001(\005\022\014\n\004disc\030\010 \001(\005\022\023\n\013pretty_year\030\t \001(" +
       "\t\022\r\n\005genre\030\n \001(\t\022\021\n\tplaycount\030\013 \001(\005\022\025\n\rp" +
       "retty_length\030\014 \001(\t\022\013\n\003art\030\r \001(\014\022\016\n\006lengt" +
       "h\030\016 \001(\005\022\020\n\010is_local\030\017 \001(\010\022\020\n\010filename\030\020 " +
-      "\001(\t\022\021\n\tfile_size\030\021 \001(\005\"X\n\010Playlist\022\n\n\002id" +
-      "\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\022\n\nitem_count\030\003 \001(\005",
-      "\022\016\n\006active\030\004 \001(\010\022\016\n\006closed\030\005 \001(\010\"*\n\020Requ" +
-      "estPlaylists\022\026\n\016include_closed\030\001 \001(\010\"\"\n\024" +
-      "RequestPlaylistSongs\022\n\n\002id\030\001 \001(\005\"<\n\021Requ" +
-      "estChangeSong\022\023\n\013playlist_id\030\001 \001(\005\022\022\n\nso" +
-      "ng_index\030\002 \001(\005\"\"\n\020RequestSetVolume\022\016\n\006vo" +
-      "lume\030\001 \001(\005\"4\n\006Repeat\022*\n\013repeat_mode\030\001 \001(" +
-      "\0162\025.pb.remote.RepeatMode\"7\n\007Shuffle\022,\n\014s" +
-      "huffle_mode\030\001 \001(\0162\026.pb.remote.ShuffleMod" +
-      "e\"P\n\026ResponseClementineInfo\022\017\n\007version\030\001" +
-      " \001(\t\022%\n\005state\030\002 \001(\0162\026.pb.remote.EngineSt",
-      "ate\"I\n\027ResponseCurrentMetadata\022.\n\rsong_m" +
-      "etadata\030\001 \001(\0132\027.pb.remote.SongMetadata\":" +
-      "\n\021ResponsePlaylists\022%\n\010playlist\030\001 \003(\0132\023." +
-      "pb.remote.Playlist\"p\n\025ResponsePlaylistSo" +
-      "ngs\022/\n\022requested_playlist\030\001 \001(\0132\023.pb.rem" +
-      "ote.Playlist\022&\n\005songs\030\002 \003(\0132\027.pb.remote." +
-      "SongMetadata\"C\n\032ResponseEngineStateChang" +
-      "ed\022%\n\005state\030\001 \001(\0162\026.pb.remote.EngineStat" +
-      "e\"/\n\033ResponseUpdateTrackPosition\022\020\n\010posi" +
-      "tion\030\001 \001(\005\"T\n\016RequestConnect\022\021\n\tauth_cod",
-      "e\030\001 \001(\005\022\033\n\023send_playlist_songs\030\002 \001(\010\022\022\n\n" +
-      "downloader\030\003 \001(\010\"L\n\022ResponseDisconnect\0226" +
-      "\n\021reason_disconnect\030\001 \001(\0162\033.pb.remote.Re" +
-      "asonDisconnect\"#\n\025ResponseActiveChanged\022" +
-      "\n\n\002id\030\001 \001(\005\"+\n\027RequestSetTrackPosition\022\020" +
-      "\n\010position\030\001 \001(\005\"}\n\021RequestInsertUrls\022\023\n" +
-      "\013playlist_id\030\001 \001(\005\022\014\n\004urls\030\002 \003(\t\022\024\n\010posi" +
-      "tion\030\003 \001(\005:\002-1\022\027\n\010play_now\030\004 \001(\010:\005false\022" +
-      "\026\n\007enqueue\030\005 \001(\010:\005false\"8\n\022RequestRemove" +
-      "Songs\022\023\n\013playlist_id\030\001 \001(\005\022\r\n\005songs\030\002 \003(",
-      "\005\"*\n\023RequestOpenPlaylist\022\023\n\013playlist_id\030" +
-      "\001 \001(\005\"+\n\024RequestClosePlaylist\022\023\n\013playlis" +
-      "t_id\030\001 \001(\005\"2\n\016ResponseLyrics\022 \n\006lyrics\030\001" +
-      " \003(\0132\020.pb.remote.Lyric\"3\n\005Lyric\022\n\n\002id\030\001 " +
-      "\001(\t\022\r\n\005title\030\002 \001(\t\022\017\n\007content\030\003 \001(\t\"[\n\024R" +
-      "equestDownloadSongs\022.\n\rdownload_item\030\001 \001" +
-      "(\0162\027.pb.remote.DownloadItem\022\023\n\013playlist_" +
-      "id\030\002 \001(\005\"\267\001\n\025ResponseSongFileChunk\022\024\n\014ch" +
-      "unk_number\030\001 \001(\005\022\023\n\013chunk_count\030\002 \001(\005\022\023\n" +
-      "\013file_number\030\003 \001(\005\022\022\n\nfile_count\030\004 \001(\005\022.",
-      "\n\rsong_metadata\030\006 \001(\0132\027.pb.remote.SongMe" +
-      "tadata\022\014\n\004data\030\007 \001(\014\022\014\n\004size\030\010 \001(\005\"%\n\021Re" +
-      "sponseSongOffer\022\020\n\010accepted\030\001 \001(\010\"!\n\017Req" +
-      "uestRateSong\022\016\n\006rating\030\001 \001(\005\"\303\014\n\007Message" +
-      "\022\023\n\007version\030\001 \001(\005:\00210\022)\n\004type\030\002 \001(\0162\022.pb" +
-      ".remote.MsgType:\007UNKNOWN\0222\n\017request_conn" +
-      "ect\030\025 \001(\0132\031.pb.remote.RequestConnect\0226\n\021" +
-      "request_playlists\030\033 \001(\0132\033.pb.remote.Requ" +
-      "estPlaylists\022?\n\026request_playlist_songs\030\n" +
-      " \001(\0132\037.pb.remote.RequestPlaylistSongs\0229\n",
-      "\023request_change_song\030\013 \001(\0132\034.pb.remote.R" +
-      "equestChangeSong\0227\n\022request_set_volume\030\014" +
-      " \001(\0132\033.pb.remote.RequestSetVolume\022F\n\032req" +
-      "uest_set_track_position\030\027 \001(\0132\".pb.remot" +
-      "e.RequestSetTrackPosition\0229\n\023request_ins" +
-      "ert_urls\030\031 \001(\0132\034.pb.remote.RequestInsert" +
-      "Urls\022;\n\024request_remove_songs\030\032 \001(\0132\035.pb." +
-      "remote.RequestRemoveSongs\022=\n\025request_ope" +
-      "n_playlist\030\034 \001(\0132\036.pb.remote.RequestOpen" +
-      "Playlist\022?\n\026request_close_playlist\030\035 \001(\013",
-      "2\037.pb.remote.RequestClosePlaylist\022?\n\026req" +
-      "uest_download_songs\030\037 \001(\0132\037.pb.remote.Re" +
-      "questDownloadSongs\0225\n\021request_rate_song\030" +
-      "# \001(\0132\032.pb.remote.RequestRateSong\022!\n\006rep" +
-      "eat\030\r \001(\0132\021.pb.remote.Repeat\022#\n\007shuffle\030" +
-      "\016 \001(\0132\022.pb.remote.Shuffle\022C\n\030response_cl" +
-      "ementine_info\030\017 \001(\0132!.pb.remote.Response" +
-      "ClementineInfo\022E\n\031response_current_metad" +
-      "ata\030\020 \001(\0132\".pb.remote.ResponseCurrentMet" +
-      "adata\0228\n\022response_playlists\030\021 \001(\0132\034.pb.r",
-      "emote.ResponsePlaylists\022A\n\027response_play" +
-      "list_songs\030\022 \001(\0132 .pb.remote.ResponsePla" +
-      "ylistSongs\022L\n\035response_engine_state_chan" +
-      "ged\030\023 \001(\0132%.pb.remote.ResponseEngineStat" +
-      "eChanged\022N\n\036response_update_track_positi" +
-      "on\030\024 \001(\0132&.pb.remote.ResponseUpdateTrack" +
-      "Position\022:\n\023response_disconnect\030\026 \001(\0132\035." +
-      "pb.remote.ResponseDisconnect\022A\n\027response" +
-      "_active_changed\030\030 \001(\0132 .pb.remote.Respon" +
-      "seActiveChanged\0222\n\017response_lyrics\030\036 \001(\013",
-      "2\031.pb.remote.ResponseLyrics\022B\n\030response_" +
-      "song_file_chunk\030  \001(\0132 .pb.remote.Respon" +
-      "seSongFileChunk\0229\n\023response_song_offer\030!" +
-      " \001(\0132\034.pb.remote.ResponseSongOffer*\313\005\n\007M" +
-      "sgType\022\013\n\007UNKNOWN\020\000\022\013\n\007CONNECT\020\001\022\025\n\021REQU" +
-      "EST_PLAYLISTS\020\003\022\032\n\026REQUEST_PLAYLIST_SONG" +
-      "S\020\004\022\017\n\013CHANGE_SONG\020\005\022\016\n\nSET_VOLUME\020\006\022\026\n\022" +
-      "SET_TRACK_POSITION\020\007\022\017\n\013INSERT_URLS\020\010\022\020\n" +
-      "\014REMOVE_SONGS\020\t\022\021\n\rOPEN_PLAYLIST\020\n\022\022\n\016CL" +
-      "OSE_PLAYLIST\020\013\022\016\n\nGET_LYRICS\020\016\022\022\n\016DOWNLO",
-      "AD_SONGS\020\017\022\027\n\023SONG_OFFER_RESPONSE\020\020\022\010\n\004L" +
-      "OVE\020\014\022\007\n\003BAN\020\r\022\016\n\nSTOP_AFTER\020\021\022\r\n\tRATE_S" +
-      "ONG\020\023\022\016\n\nDISCONNECT\020\002\022\010\n\004PLAY\020\024\022\r\n\tPLAYP" +
-      "AUSE\020\025\022\t\n\005PAUSE\020\026\022\010\n\004STOP\020\027\022\010\n\004NEXT\020\030\022\014\n" +
-      "\010PREVIOUS\020\031\022\024\n\020SHUFFLE_PLAYLIST\020\032\022\n\n\006REP" +
-      "EAT\020\033\022\013\n\007SHUFFLE\020\034\022\010\n\004INFO\020(\022\024\n\020CURRENT_" +
-      "METAINFO\020)\022\r\n\tPLAYLISTS\020*\022\022\n\016PLAYLIST_SO" +
-      "NGS\020+\022\030\n\024ENGINE_STATE_CHANGED\020,\022\016\n\nKEEP_" +
-      "ALIVE\020-\022\031\n\025UPDATE_TRACK_POSITION\020.\022\033\n\027AC" +
-      "TIVE_PLAYLIST_CHANGED\020/\022\034\n\030FIRST_DATA_SE",
-      "NT_COMPLETE\0200\022\n\n\006LYRICS\0201\022\023\n\017SONG_FILE_C" +
-      "HUNK\0202\022\030\n\024DOWNLOAD_QUEUE_EMPTY\0203*;\n\013Engi" +
-      "neState\022\t\n\005Empty\020\000\022\010\n\004Idle\020\001\022\013\n\007Playing\020" +
-      "\002\022\n\n\006Paused\020\003*U\n\nRepeatMode\022\016\n\nRepeat_Of" +
-      "f\020\000\022\020\n\014Repeat_Track\020\001\022\020\n\014Repeat_Album\020\002\022" +
-      "\023\n\017Repeat_Playlist\020\003*\\\n\013ShuffleMode\022\017\n\013S" +
-      "huffle_Off\020\000\022\017\n\013Shuffle_All\020\001\022\027\n\023Shuffle" +
-      "_InsideAlbum\020\002\022\022\n\016Shuffle_Albums\020\003*k\n\020Re" +
-      "asonDisconnect\022\023\n\017Server_Shutdown\020\001\022\023\n\017W" +
-      "rong_Auth_Code\020\002\022\025\n\021Not_Authenticated\020\003\022",
-      "\026\n\022Download_Forbidden\020\004*=\n\014DownloadItem\022" +
-      "\017\n\013CurrentItem\020\001\022\r\n\tItemAlbum\020\002\022\r\n\tAPlay" +
-      "list\020\003BG\n%de.qspool.clementineremote.bac" +
-      "kend.pbB\036ClementineRemoteProtocolBuffer"
+      "\001(\t\022\021\n\tfile_size\030\021 \001(\005\022\016\n\006rating\030\022 \001(\002\"X" +
+      "\n\010Playlist\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\022\n\n",
+      "item_count\030\003 \001(\005\022\016\n\006active\030\004 \001(\010\022\016\n\006clos" +
+      "ed\030\005 \001(\010\"*\n\020RequestPlaylists\022\026\n\016include_" +
+      "closed\030\001 \001(\010\"\"\n\024RequestPlaylistSongs\022\n\n\002" +
+      "id\030\001 \001(\005\"<\n\021RequestChangeSong\022\023\n\013playlis" +
+      "t_id\030\001 \001(\005\022\022\n\nsong_index\030\002 \001(\005\"\"\n\020Reques" +
+      "tSetVolume\022\016\n\006volume\030\001 \001(\005\"4\n\006Repeat\022*\n\013" +
+      "repeat_mode\030\001 \001(\0162\025.pb.remote.RepeatMode" +
+      "\"7\n\007Shuffle\022,\n\014shuffle_mode\030\001 \001(\0162\026.pb.r" +
+      "emote.ShuffleMode\"P\n\026ResponseClementineI" +
+      "nfo\022\017\n\007version\030\001 \001(\t\022%\n\005state\030\002 \001(\0162\026.pb",
+      ".remote.EngineState\"I\n\027ResponseCurrentMe" +
+      "tadata\022.\n\rsong_metadata\030\001 \001(\0132\027.pb.remot" +
+      "e.SongMetadata\":\n\021ResponsePlaylists\022%\n\010p" +
+      "laylist\030\001 \003(\0132\023.pb.remote.Playlist\"p\n\025Re" +
+      "sponsePlaylistSongs\022/\n\022requested_playlis" +
+      "t\030\001 \001(\0132\023.pb.remote.Playlist\022&\n\005songs\030\002 " +
+      "\003(\0132\027.pb.remote.SongMetadata\"C\n\032Response" +
+      "EngineStateChanged\022%\n\005state\030\001 \001(\0162\026.pb.r" +
+      "emote.EngineState\"/\n\033ResponseUpdateTrack" +
+      "Position\022\020\n\010position\030\001 \001(\005\"T\n\016RequestCon",
+      "nect\022\021\n\tauth_code\030\001 \001(\005\022\033\n\023send_playlist" +
+      "_songs\030\002 \001(\010\022\022\n\ndownloader\030\003 \001(\010\"L\n\022Resp" +
+      "onseDisconnect\0226\n\021reason_disconnect\030\001 \001(" +
+      "\0162\033.pb.remote.ReasonDisconnect\"#\n\025Respon" +
+      "seActiveChanged\022\n\n\002id\030\001 \001(\005\"+\n\027RequestSe" +
+      "tTrackPosition\022\020\n\010position\030\001 \001(\005\"}\n\021Requ" +
+      "estInsertUrls\022\023\n\013playlist_id\030\001 \001(\005\022\014\n\004ur" +
+      "ls\030\002 \003(\t\022\024\n\010position\030\003 \001(\005:\002-1\022\027\n\010play_n" +
+      "ow\030\004 \001(\010:\005false\022\026\n\007enqueue\030\005 \001(\010:\005false\"" +
+      "8\n\022RequestRemoveSongs\022\023\n\013playlist_id\030\001 \001",
+      "(\005\022\r\n\005songs\030\002 \003(\005\"*\n\023RequestOpenPlaylist" +
+      "\022\023\n\013playlist_id\030\001 \001(\005\"+\n\024RequestClosePla" +
+      "ylist\022\023\n\013playlist_id\030\001 \001(\005\"2\n\016ResponseLy" +
+      "rics\022 \n\006lyrics\030\001 \003(\0132\020.pb.remote.Lyric\"3" +
+      "\n\005Lyric\022\n\n\002id\030\001 \001(\t\022\r\n\005title\030\002 \001(\t\022\017\n\007co" +
+      "ntent\030\003 \001(\t\"[\n\024RequestDownloadSongs\022.\n\rd" +
+      "ownload_item\030\001 \001(\0162\027.pb.remote.DownloadI" +
+      "tem\022\023\n\013playlist_id\030\002 \001(\005\"\267\001\n\025ResponseSon" +
+      "gFileChunk\022\024\n\014chunk_number\030\001 \001(\005\022\023\n\013chun" +
+      "k_count\030\002 \001(\005\022\023\n\013file_number\030\003 \001(\005\022\022\n\nfi",
+      "le_count\030\004 \001(\005\022.\n\rsong_metadata\030\006 \001(\0132\027." +
+      "pb.remote.SongMetadata\022\014\n\004data\030\007 \001(\014\022\014\n\004" +
+      "size\030\010 \001(\005\"%\n\021ResponseSongOffer\022\020\n\010accep" +
+      "ted\030\001 \001(\010\"!\n\017RequestRateSong\022\016\n\006rating\030\001" +
+      " \001(\002\"\303\014\n\007Message\022\023\n\007version\030\001 \001(\005:\00211\022)\n" +
+      "\004type\030\002 \001(\0162\022.pb.remote.MsgType:\007UNKNOWN" +
+      "\0222\n\017request_connect\030\025 \001(\0132\031.pb.remote.Re" +
+      "questConnect\0226\n\021request_playlists\030\033 \001(\0132" +
+      "\033.pb.remote.RequestPlaylists\022?\n\026request_" +
+      "playlist_songs\030\n \001(\0132\037.pb.remote.Request",
+      "PlaylistSongs\0229\n\023request_change_song\030\013 \001" +
+      "(\0132\034.pb.remote.RequestChangeSong\0227\n\022requ" +
+      "est_set_volume\030\014 \001(\0132\033.pb.remote.Request" +
+      "SetVolume\022F\n\032request_set_track_position\030" +
+      "\027 \001(\0132\".pb.remote.RequestSetTrackPositio" +
+      "n\0229\n\023request_insert_urls\030\031 \001(\0132\034.pb.remo" +
+      "te.RequestInsertUrls\022;\n\024request_remove_s" +
+      "ongs\030\032 \001(\0132\035.pb.remote.RequestRemoveSong" +
+      "s\022=\n\025request_open_playlist\030\034 \001(\0132\036.pb.re" +
+      "mote.RequestOpenPlaylist\022?\n\026request_clos",
+      "e_playlist\030\035 \001(\0132\037.pb.remote.RequestClos" +
+      "ePlaylist\022?\n\026request_download_songs\030\037 \001(" +
+      "\0132\037.pb.remote.RequestDownloadSongs\0225\n\021re" +
+      "quest_rate_song\030# \001(\0132\032.pb.remote.Reques" +
+      "tRateSong\022!\n\006repeat\030\r \001(\0132\021.pb.remote.Re" +
+      "peat\022#\n\007shuffle\030\016 \001(\0132\022.pb.remote.Shuffl" +
+      "e\022C\n\030response_clementine_info\030\017 \001(\0132!.pb" +
+      ".remote.ResponseClementineInfo\022E\n\031respon" +
+      "se_current_metadata\030\020 \001(\0132\".pb.remote.Re" +
+      "sponseCurrentMetadata\0228\n\022response_playli",
+      "sts\030\021 \001(\0132\034.pb.remote.ResponsePlaylists\022" +
+      "A\n\027response_playlist_songs\030\022 \001(\0132 .pb.re" +
+      "mote.ResponsePlaylistSongs\022L\n\035response_e" +
+      "ngine_state_changed\030\023 \001(\0132%.pb.remote.Re" +
+      "sponseEngineStateChanged\022N\n\036response_upd" +
+      "ate_track_position\030\024 \001(\0132&.pb.remote.Res" +
+      "ponseUpdateTrackPosition\022:\n\023response_dis" +
+      "connect\030\026 \001(\0132\035.pb.remote.ResponseDiscon" +
+      "nect\022A\n\027response_active_changed\030\030 \001(\0132 ." +
+      "pb.remote.ResponseActiveChanged\0222\n\017respo",
+      "nse_lyrics\030\036 \001(\0132\031.pb.remote.ResponseLyr" +
+      "ics\022B\n\030response_song_file_chunk\030  \001(\0132 ." +
+      "pb.remote.ResponseSongFileChunk\0229\n\023respo" +
+      "nse_song_offer\030! \001(\0132\034.pb.remote.Respons" +
+      "eSongOffer*\313\005\n\007MsgType\022\013\n\007UNKNOWN\020\000\022\013\n\007C" +
+      "ONNECT\020\001\022\025\n\021REQUEST_PLAYLISTS\020\003\022\032\n\026REQUE" +
+      "ST_PLAYLIST_SONGS\020\004\022\017\n\013CHANGE_SONG\020\005\022\016\n\n" +
+      "SET_VOLUME\020\006\022\026\n\022SET_TRACK_POSITION\020\007\022\017\n\013" +
+      "INSERT_URLS\020\010\022\020\n\014REMOVE_SONGS\020\t\022\021\n\rOPEN_" +
+      "PLAYLIST\020\n\022\022\n\016CLOSE_PLAYLIST\020\013\022\016\n\nGET_LY",
+      "RICS\020\016\022\022\n\016DOWNLOAD_SONGS\020\017\022\027\n\023SONG_OFFER" +
+      "_RESPONSE\020\020\022\010\n\004LOVE\020\014\022\007\n\003BAN\020\r\022\016\n\nSTOP_A" +
+      "FTER\020\021\022\r\n\tRATE_SONG\020\023\022\016\n\nDISCONNECT\020\002\022\010\n" +
+      "\004PLAY\020\024\022\r\n\tPLAYPAUSE\020\025\022\t\n\005PAUSE\020\026\022\010\n\004STO" +
+      "P\020\027\022\010\n\004NEXT\020\030\022\014\n\010PREVIOUS\020\031\022\024\n\020SHUFFLE_P" +
+      "LAYLIST\020\032\022\n\n\006REPEAT\020\033\022\013\n\007SHUFFLE\020\034\022\010\n\004IN" +
+      "FO\020(\022\024\n\020CURRENT_METAINFO\020)\022\r\n\tPLAYLISTS\020" +
+      "*\022\022\n\016PLAYLIST_SONGS\020+\022\030\n\024ENGINE_STATE_CH" +
+      "ANGED\020,\022\016\n\nKEEP_ALIVE\020-\022\031\n\025UPDATE_TRACK_" +
+      "POSITION\020.\022\033\n\027ACTIVE_PLAYLIST_CHANGED\020/\022",
+      "\034\n\030FIRST_DATA_SENT_COMPLETE\0200\022\n\n\006LYRICS\020" +
+      "1\022\023\n\017SONG_FILE_CHUNK\0202\022\030\n\024DOWNLOAD_QUEUE" +
+      "_EMPTY\0203*;\n\013EngineState\022\t\n\005Empty\020\000\022\010\n\004Id" +
+      "le\020\001\022\013\n\007Playing\020\002\022\n\n\006Paused\020\003*U\n\nRepeatM" +
+      "ode\022\016\n\nRepeat_Off\020\000\022\020\n\014Repeat_Track\020\001\022\020\n" +
+      "\014Repeat_Album\020\002\022\023\n\017Repeat_Playlist\020\003*\\\n\013" +
+      "ShuffleMode\022\017\n\013Shuffle_Off\020\000\022\017\n\013Shuffle_" +
+      "All\020\001\022\027\n\023Shuffle_InsideAlbum\020\002\022\022\n\016Shuffl" +
+      "e_Albums\020\003*k\n\020ReasonDisconnect\022\023\n\017Server" +
+      "_Shutdown\020\001\022\023\n\017Wrong_Auth_Code\020\002\022\025\n\021Not_",
+      "Authenticated\020\003\022\026\n\022Download_Forbidden\020\004*" +
+      "=\n\014DownloadItem\022\017\n\013CurrentItem\020\001\022\r\n\tItem" +
+      "Album\020\002\022\r\n\tAPlaylist\020\003BG\n%de.qspool.clem" +
+      "entineremote.backend.pbB\036ClementineRemot" +
+      "eProtocolBuffer"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -18064,7 +18122,7 @@ public final class ClementineRemoteProtocolBuffer {
           internal_static_pb_remote_SongMetadata_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pb_remote_SongMetadata_descriptor,
-              new java.lang.String[] { "Id", "Index", "Title", "Album", "Artist", "Albumartist", "Track", "Disc", "PrettyYear", "Genre", "Playcount", "PrettyLength", "Art", "Length", "IsLocal", "Filename", "FileSize", },
+              new java.lang.String[] { "Id", "Index", "Title", "Album", "Artist", "Albumartist", "Track", "Disc", "PrettyYear", "Genre", "Playcount", "PrettyLength", "Art", "Length", "IsLocal", "Filename", "FileSize", "Rating", },
               de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.class,
               de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.Builder.class);
           internal_static_pb_remote_Playlist_descriptor =

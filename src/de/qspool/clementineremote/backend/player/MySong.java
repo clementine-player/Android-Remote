@@ -51,8 +51,9 @@ public class MySong {
 	private boolean loved;
 	private List<LyricsProvider> mLyricsProvider = new LinkedList<LyricsProvider>();
 	private String filename;
-	private int size;
+	private long size;
 	private boolean local;
+	private float rating;
 	
 	public boolean equals(MySong song) {
 		if (song.id          == this.id
@@ -106,6 +107,7 @@ public class MySong {
 		song.setFilename(songMetadata.getFilename());
 		song.setSize(songMetadata.getFileSize());
 		song.setLocal(songMetadata.getIsLocal());
+		song.setRating(songMetadata.getRating());
 		if (songMetadata.hasArt()) {
 			song.setArt   (songMetadata.getArt());
 		}
@@ -221,11 +223,11 @@ public class MySong {
 		this.filename = filename;
 	}
 
-	public int getSize() {
+	public long getSize() {
 		return size;
 	}
 
-	public void setSize(int size) {
+	public void setSize(long size) {
 		this.size = size;
 	}
 
@@ -235,5 +237,13 @@ public class MySong {
 
 	public void setLocal(boolean local) {
 		this.local = local;
+	}
+
+	public float getRating() {
+		return rating;
+	}
+
+	public void setRating(float rating) {
+		this.rating = rating;
 	}
 }

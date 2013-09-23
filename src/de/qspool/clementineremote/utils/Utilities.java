@@ -128,4 +128,29 @@ public class Utilities {
 
 		return mWifi.isConnected();
 	}
+	
+	/**
+	 * Convert bytes in a human readable format.
+	 * @param bytes The byte count
+	 * @param iec true for KB, false for KiB
+	 * @return The human readable file size
+	 */
+	public static String humanReadableBytes(long bytes, boolean iec) {
+		// Are we using xB or xiB?
+	    int byteUnit = iec ? 1024 : 1000;
+	    float newBytes = bytes;
+	    int exp = 0;
+	    
+	    // Calculate the file size in the best readable way
+	    while (newBytes > byteUnit) {
+	    	newBytes = newBytes / byteUnit;
+	    	exp++;
+	    }
+
+	    // What prefix do we have to use?
+	    String prefix = (iec ? " KMGTPE" : " kMGTPE").charAt(exp) + (iec ? "i" : "");
+	    
+	    // Return a human readable String
+	    return String.format("%.2f %sB", newBytes, prefix);
+	}
 }

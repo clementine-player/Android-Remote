@@ -201,10 +201,10 @@ public class ClementineMessageFactory {
 	
 	/**
 	 * Rate the current track
-	 * @param rating the rating from 0 to 5
+	 * @param rating the rating from 0 to 1. Multiply five times for star count
 	 * @return the Clementine Message
 	 */
-	public static ClementineMessage buildRateTrack(int rating) {
+	public static ClementineMessage buildRateTrack(float rating) {
 		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.RATE_SONG);
 		
 		RequestRateSong.Builder request = msg.getRequestRateSongBuilder();

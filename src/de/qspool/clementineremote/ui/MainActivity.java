@@ -49,6 +49,7 @@ import de.qspool.clementineremote.ui.fragments.AbstractDrawerFragment;
 import de.qspool.clementineremote.ui.fragments.DownloadsFragment;
 import de.qspool.clementineremote.ui.fragments.PlayerFragment;
 import de.qspool.clementineremote.ui.fragments.PlaylistFragment;
+import de.qspool.clementineremote.ui.fragments.SongInfoFragment;
 
 public class MainActivity extends SherlockFragmentActivity {
 
@@ -75,6 +76,7 @@ public class MainActivity extends SherlockFragmentActivity {
 	     * Define here the available fragments in the mail layout
 	     */
         mFragments.add(new PlayerFragment());
+        mFragments.add(new SongInfoFragment());
         mFragments.add(new PlaylistFragment());
         mFragments.add(new DownloadsFragment());
 	    
@@ -324,25 +326,30 @@ public class MainActivity extends SherlockFragmentActivity {
         	mCurrentFragment = 0;
         	mLastPosition = position;
         	break;
-    	case 2: // Playlist
+    	case 2: // Songinfo
         	fragmentManager.beginTransaction().replace(R.id.content_frame, mFragments.get(1)).commit();
         	mCurrentFragment = 1;
         	mLastPosition = position;
         	break;
-    	case 3: // Downloads
-    		fragmentManager.beginTransaction().replace(R.id.content_frame, mFragments.get(2)).commit();
-    		mCurrentFragment = 2;
+    	case 3: // Playlist
+        	fragmentManager.beginTransaction().replace(R.id.content_frame, mFragments.get(2)).commit();
+        	mCurrentFragment = 2;
+        	mLastPosition = position;
+        	break;
+    	case 4: // Downloads
+    		fragmentManager.beginTransaction().replace(R.id.content_frame, mFragments.get(3)).commit();
+    		mCurrentFragment = 3;
             mLastPosition = position;
     		break;
-    	case 4: // Header Settings
+    	case 5: // Header Settings
     		break;
-    	case 5: // Settings
+    	case 6: // Settings
     		Intent settingsIntent = new Intent(this, ClementineSettings.class);
             startActivity(settingsIntent);
             break;
-    	case 6: // Header Disconnect
+    	case 7: // Header Disconnect
     		break;
-    	case 7: // Disonnect
+    	case 8: // Disonnect
     		requestDisconnect();
     		break;
     	default:

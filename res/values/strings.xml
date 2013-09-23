@@ -48,6 +48,19 @@
     <string name="download_noti_only_wifi">Download only on wifi allowed.</string>
     
     
+    <string name="song_info_album">Album</string>
+    <string name="song_info_genre">Genre</string>
+    <string name="song_info_year">Year</string>
+    <string name="song_info_track">Track</string>
+    <string name="song_info_disc">Disc</string>
+    <string name="song_info_playcount">Playcount</string>
+    <string name="song_info_length">Length</string>
+    <string name="song_info_size">Size</string>
+    <string name="song_info_filename">Filename</string>
+    <string name="song_info_rating">Rating</string>
+    <string name="song_info_rated">Song rated $stars$ stars</string>
+    
+    
     <string name="menu_shuffle">Shuffle</string>
     <string name="menu_repeat">Repeat</string>
     <string name="menu_settings">Settings</string>
@@ -156,6 +169,7 @@
     </string-array>
     <string-array name="navigation_array_remote">
         <item>Player</item>
+        <item>Song information</item>
         <item>Playlists</item>
         <item>Downloads</item>
     </string-array>
