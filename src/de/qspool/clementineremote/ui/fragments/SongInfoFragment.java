@@ -80,7 +80,7 @@ public class SongInfoFragment extends AbstractDrawerFragment {
 			@Override
 			public void onRatingChanged(RatingBar ratingBar, float rating,
 					boolean fromUser) {
-				if (fromUser) {
+				if (fromUser && App.mClementine.getCurrentSong() != null) {
 					// Send the rat	ing message to Clementine
 					Message msg = Message.obtain();
 					msg.obj = ClementineMessageFactory.buildRateTrack(rating / 5);
@@ -126,7 +126,19 @@ public class SongInfoFragment extends AbstractDrawerFragment {
     	// Get the currently played song
     	MySong currentSong = App.mClementine.getCurrentSong();
     	if (currentSong == null) {
-  
+    		tv_artist.setText("");
+    		tv_title.setText(getString(R.string.player_nosong));
+    		tv_album.setText("");
+    		tv_genre.setText("");
+    		tv_year.setText("");
+    		tv_track.setText("");
+    		tv_disc.setText("");
+    		tv_playcount.setText("");
+    		tv_length.setText("");
+    		tv_size.setText("");
+    		tv_filename.setText("");
+    		
+    		rb_rating.setRating(0);
     	} else {
     		tv_artist.setText(currentSong.getArtist());
     		tv_title.setText(currentSong.getTitle());
