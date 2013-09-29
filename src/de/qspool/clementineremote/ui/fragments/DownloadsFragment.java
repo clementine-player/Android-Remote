@@ -112,9 +112,7 @@ public class DownloadsFragment extends AbstractDrawerFragment {
 	}
 	
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.playlist_menu, menu);
-		
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {		
 		super.onCreateOptionsMenu(menu,inflater);
 	}
 	
