@@ -378,6 +378,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 			if (mDownloadPlaylists == 0 && mProgressDialog.isShowing()) {
 				mProgressDialog.dismiss();
 				getSherlockActivity().supportInvalidateOptionsMenu();
+				mPlaylistSpinner.setSelection(App.mClementine.getPlaylists().indexOfValue(App.mClementine.getActivePlaylist()));
 			}
 		}
 	}

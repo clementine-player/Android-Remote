@@ -58,10 +58,10 @@ public class MySong {
 	public boolean equals(MySong song) {
 		if (song.id          == this.id
 		 && song.index       == this.index
-		 && song.artist      == this.artist
-		 && song.title       == this.title
-		 && song.album       == this.album
-		 && song.albumartist == this.albumartist) {
+		 && song.artist.equals(this.artist)
+		 && song.title.equals(this.title)
+		 && song.album.equals(this.album)
+		 && song.albumartist.equals(this.albumartist)) {
 			return true;
 	} else {
 			return false;
