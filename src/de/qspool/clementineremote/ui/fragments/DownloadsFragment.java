@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -42,12 +43,14 @@ import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.ui.adapter.DownloadAdapter;
+import de.qspool.clementineremote.utils.Utilities;
 
 public class DownloadsFragment extends AbstractDrawerFragment {
 	private ActionBar mActionBar; 
 	private ListView mList;
 	private DownloadAdapter mAdapter;
 	private Timer mUpdateTimer;
+	private TextView mFreeSpace;
 
 	private View mEmptyDownloads;
 
@@ -82,6 +85,7 @@ public class DownloadsFragment extends AbstractDrawerFragment {
 		
 		mList = (ListView) view.findViewById(R.id.downloads);
 		mEmptyDownloads = view.findViewById(R.id.downloads_empty);
+		mFreeSpace = (TextView) view.findViewById(R.id.downloads_freespace);
 		
 		// Create the adapter
 		mAdapter = new DownloadAdapter(getActivity(), R.layout.download_row, App.downloaders);
@@ -188,6 +192,12 @@ public class DownloadsFragment extends AbstractDrawerFragment {
 							if (App.downloaders.isEmpty()) {
 								mList.setEmptyView(mEmptyDownloads);
 							}
+							
+							StringBuilder sb = new StringBuilder();
+							sb.append(getActivity().getString(R.string.download_freespace));
+							sb.append(": ");
+							sb.append(Utilities.humanReadableBytes((long) Utilities.getFreeSpace(), true));
+							mFreeSpace.setText(sb.toString());
 						}
 						
 					});

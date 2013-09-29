@@ -5,6 +5,26 @@
     android:background="@drawable/background"
     android:orientation="vertical" >
     
+       <RelativeLayout
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+       android:background="@drawable/actionbar_2nd_bg" >
+        
+        <Space
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true" />
+
+        <TextView
+            android:id="@+id/downloads_freespace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp" />
+
+    </RelativeLayout>
+    
     <ListView android:id="@+id/downloads"
 					    android:paddingBottom="13dp"
 					    android:paddingLeft="13dp"
