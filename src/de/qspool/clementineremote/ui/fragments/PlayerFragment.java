@@ -211,6 +211,10 @@ public class PlayerFragment extends AbstractDrawerFragment {
 								makeToast(R.string.track_banned, Toast.LENGTH_SHORT);
 								break;
 		case R.id.download_song: 
+								if (App.mClementine.getCurrentSong() == null) {
+									Toast.makeText(getActivity(), R.string.player_nosong, Toast.LENGTH_LONG).show();
+									break;
+								}
 								if (App.mClementine.getCurrentSong().isLocal()) {
 									ClementineSongDownloader downloaderSong = new ClementineSongDownloader(getActivity());
 									downloaderSong.startDownload(ClementineMessageFactory.buildDownloadSongsMessage(-1, DownloadItem.CurrentItem));
@@ -219,6 +223,10 @@ public class PlayerFragment extends AbstractDrawerFragment {
 								}
 								break;
 		case R.id.download_album: 
+								if (App.mClementine.getCurrentSong() == null) {
+									Toast.makeText(getActivity(), R.string.player_nosong, Toast.LENGTH_LONG).show();
+									break;
+								}
 								if (App.mClementine.getCurrentSong().isLocal()) {
 									ClementineSongDownloader downloaderSong = new ClementineSongDownloader(getActivity());
 									downloaderSong.startDownload(ClementineMessageFactory.buildDownloadSongsMessage(-1, DownloadItem.ItemAlbum));
