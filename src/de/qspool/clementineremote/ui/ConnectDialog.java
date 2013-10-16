@@ -339,6 +339,19 @@ public class ConnectDialog extends SherlockActivity {
 		editor.commit();
 		
     	// Set the handler
+		// Check if the service is running. If not, then restart it and call
+        // this function later!
+        if (App.mClementineConnection == null) {
+                startBackgroundService();
+                mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                                connect();
+                        }
+                }, 250);
+                return;
+        }
+
 	    App.mClementineConnection.setUiHandler(mHandler);
 	    
 	    mPdConnect.setMessage(getString(R.string.connectdialog_connecting));
