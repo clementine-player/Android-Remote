@@ -1144,12 +1144,11 @@ containing a value of this type.
         public static final int drawer_list_item=0x7f030021;
         public static final int main_activity=0x7f030022;
         public static final int player_fragment=0x7f030023;
-        public static final int player_fragment_s=0x7f030024;
-        public static final int playlist_fragment=0x7f030025;
-        public static final int sherlock_spinner_dropdown_item=0x7f030026;
-        public static final int sherlock_spinner_item=0x7f030027;
-        public static final int song_row=0x7f030028;
-        public static final int songinfo_fragment=0x7f030029;
+        public static final int playlist_fragment=0x7f030024;
+        public static final int sherlock_spinner_dropdown_item=0x7f030025;
+        public static final int sherlock_spinner_item=0x7f030026;
+        public static final int song_row=0x7f030027;
+        public static final int songinfo_fragment=0x7f030028;
     }
     public static final class menu {
         public static final int connectdialog_menu=0x7f0d0000;

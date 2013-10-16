@@ -20,6 +20,7 @@ package de.qspool.clementineremote.backend;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -391,6 +392,11 @@ public class ClementineSongDownloader extends
 		// Disconnect at the end
 		mClient.disconnect(ClementineMessage.getMessage(MsgType.DISCONNECT));
 		
+        // Start Media indexing
+        String defaultPath = Environment.getExternalStorageDirectory() + "/ClementineMusic";
+        String path = mSharedPref.getString(App.SP_DOWNLOAD_DIR, defaultPath);
+        mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + path)));
+        
 		return result;
     }
     
