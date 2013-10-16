@@ -81,8 +81,7 @@ public class PlayerFragment extends AbstractDrawerFragment {
     private boolean mCoverUpdated = false;
     private ActionBar mActionBar;
 	
-	PlaylistFragment mPlaylistSongs;
-	View mPlaylistFragmentView;
+	AbstractDrawerFragment mPlaylistSongs;
 	
 	MenuItem mMenuRepeat;
 	MenuItem mMenuShuffle;
@@ -144,6 +143,8 @@ public class PlayerFragment extends AbstractDrawerFragment {
 	    mPdDownloadLyrics = new ProgressDialog(getActivity());
 	    mPdDownloadLyrics.setMessage(getString(R.string.player_download_lyrics));
 	    mPdDownloadLyrics.setCancelable(true);
+	    
+	    mPlaylistSongs = (PlaylistFragment) getFragmentManager().findFragmentById(R.id.playlist_fragment);
 	    
 	    // Get the actionbar
 	    mActionBar = getSherlockActivity().getSupportActionBar();
@@ -265,6 +266,9 @@ public class PlayerFragment extends AbstractDrawerFragment {
 		default:
 			break;
 		}
+		
+		if (mPlaylistSongs != null)
+			mPlaylistSongs.MessageFromClementine(clementineMessage);
 	}
 	
 	/**

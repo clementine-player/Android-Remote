@@ -9,42 +9,35 @@
   android:layout_marginRight="13dp"
   android:layout_marginTop="13dp">
 
-<LinearLayout
-    style="@style/ImgCoverGreyBorder"
-    android:layout_width="match_parent"
-    android:layout_height="0dip"
-    android:layout_gravity="center_vertical|center_horizontal"
-    android:layout_marginBottom="8dp"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
-    android:layout_marginTop="4dp"
-    android:layout_weight="1" >
-
-    <ImageView
-        android:id="@+id/imgArt"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="@string/player_desc_img"
-        android:paddingBottom="5dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:paddingTop="5dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/icon_large" />
-
-</LinearLayout>
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical" >
+  <FrameLayout 
+      style="@style/ImgCoverGreyBorder"
+      android:layout_width="fill_parent"
+      android:layout_height="0dip"
+      android:layout_weight="1"
+      android:layout_marginBottom="8dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginRight="8dp"
+      android:layout_marginTop="4dp">
+      
+		  <ImageView
+		      android:id="@+id/imgArt"
+		      android:layout_width="match_parent"
+		      android:layout_height="match_parent"
+		      android:contentDescription="@string/player_desc_img"
+		      android:paddingBottom="5dp"
+		      android:paddingLeft="5dp"
+		      android:paddingRight="5dp"
+		      android:paddingTop="5dp"
+		      android:scaleType="fitCenter"
+		      android:src="@drawable/icon_large" />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/tvArtist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@android:color/black" />
 
     <TextView
@@ -149,6 +142,5 @@
             android:src="@drawable/ic_media_next" />
 
     </LinearLayout>
-</LinearLayout>
 
 </LinearLayout>
