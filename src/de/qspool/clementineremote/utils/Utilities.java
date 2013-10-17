@@ -9,6 +9,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.text.Html;
@@ -113,9 +114,13 @@ public class Utilities {
 	 * Get the free space on the device
 	 * @return The free space in byte
 	 */
+	@SuppressWarnings("deprecation")
 	public static double getFreeSpace() { 
 		StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
-		return (double) stat.getAvailableBlocksLong() * (double)stat.getBlockSizeLong();
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2)
+			return (double) stat.getAvailableBlocks() * (double)stat.getBlockSize();
+		else
+			return (double) stat.getAvailableBlocksLong() * (double)stat.getBlockSizeLong();
 	}
 	
 	/**
