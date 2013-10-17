@@ -393,6 +393,8 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 	 * Update the notification with the new track info
 	 */
 	private void updateNotification() {
+		//RemoteViews remoteViews = new RemoteViews(App.mApp.getPackageName(), R.layout.clementine_notification);
+		//mNotifyBuilder.setContent(remoteViews);
 		if (mLastSong != null)  {
 			Bitmap scaledArt = Bitmap.createScaledBitmap(mLastSong.getArt(), 
 													mNotificationWidth, 
@@ -407,6 +409,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 			mNotifyBuilder.setContentTitle(App.mApp.getString(R.string.app_name));
 			mNotifyBuilder.setContentText(App.mApp.getString(R.string.player_nosong));
 		}
+	    
 		mNotificationManager.notify(App.NOTIFY_ID, mNotifyBuilder.build());
 	}
 	

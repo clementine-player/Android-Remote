@@ -52,6 +52,12 @@
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".backend.receivers.NotificationReceiver">
+            <intent-filter>
+                <action android:name="de.qspool.clementineremote.playpause" />
+                <action android:name="de.qspool.clementineremote.next" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

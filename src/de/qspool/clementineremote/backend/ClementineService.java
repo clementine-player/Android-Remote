@@ -23,6 +23,7 @@ import de.qspool.clementineremote.backend.event.OnConnectionClosedListener;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessage.ErrorMessage;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
+import de.qspool.clementineremote.backend.receivers.NotificationReceiver;
 import de.qspool.clementineremote.ui.MainActivity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -31,8 +32,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.view.KeyEvent;
 
 public class ClementineService extends Service {
 
@@ -138,6 +141,16 @@ public class ClementineService extends Service {
 	    stackBuilder.addNextIntent(resultIntent);
 	    PendingIntent resultPendingintent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 	    mNotifyBuilder.setContentIntent(resultPendingintent);
+	    
+	    // Create intents for buttons
+	    Intent playIntent = new Intent(NotificationReceiver.PLAYPAUSE);
+	    Intent nextIntent = new Intent(NotificationReceiver.NEXT);
+	    
+	    PendingIntent piPlay = PendingIntent.getBroadcast(App.mApp, 0, playIntent, 0);
+	    PendingIntent piNext = PendingIntent.getBroadcast(App.mApp, 0, nextIntent, 0);
+	    
+	    mNotifyBuilder.addAction(android.R.drawable.ic_media_play, App.mApp.getString(R.string.notification_action_playpause), piPlay);
+	    mNotifyBuilder.addAction(android.R.drawable.ic_media_next, App.mApp.getString(R.string.notification_action_next), piNext);
 	}
 	
 	/**
