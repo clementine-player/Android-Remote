@@ -24,6 +24,7 @@ enum MsgType {
   LOVE = 12;
   BAN = 13;
   STOP_AFTER = 17;
+  GET_LIBRARY = 18;
   RATE_SONG = 19;
 
   // Messages send by both
@@ -53,6 +54,7 @@ enum MsgType {
   LYRICS = 49;
   SONG_FILE_CHUNK = 50;
   DOWNLOAD_QUEUE_EMPTY = 51;
+  LIBRARY_CHUNK = 52;
 }
 
 // Valid Engine states
@@ -172,7 +174,7 @@ message ResponseEngineStateChanged {
 }
 
 // Sends the current position of the track
-message ResponseUpdateTrackPosition {
+message ResponseUpdateTrackPosition {  
   optional int32 position = 1;
 }
 
@@ -260,6 +262,13 @@ message ResponseSongFileChunk {
   optional int32 size = 8;
 }
 
+message ResponseLibraryChunk {
+  optional int32 chunk_number = 1;
+  optional int32 chunk_count = 2;
+  optional bytes data = 3;
+  optional int32 size = 4;
+}
+
 message ResponseSongOffer {
   optional bool accepted = 1; // true = client wants to download item
 }
@@ -285,10 +294,10 @@ message Message {
   optional RequestClosePlaylist request_close_playlist = 29;
   optional RequestDownloadSongs request_download_songs = 31;
   optional RequestRateSong request_rate_song = 35;
-
+  
   optional Repeat repeat = 13;
   optional Shuffle shuffle = 14;
-
+  
   optional ResponseClementineInfo response_clementine_info = 15;
   optional ResponseCurrentMetadata response_current_metadata = 16;
   optional ResponsePlaylists response_playlists = 17;
@@ -300,4 +309,5 @@ message Message {
   optional ResponseLyrics response_lyrics = 30;
   optional ResponseSongFileChunk response_song_file_chunk = 32;
   optional ResponseSongOffer response_song_offer = 33;
+  optional ResponseLibraryChunk response_library_chunk = 34;
 }

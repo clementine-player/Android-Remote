@@ -40,8 +40,8 @@ import android.support.v4.app.TaskStackBuilder;
 import android.widget.Toast;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
-import de.qspool.clementineremote.backend.elements.SongDownloadResult;
-import de.qspool.clementineremote.backend.elements.SongDownloadResult.DownloadResult;
+import de.qspool.clementineremote.backend.elements.DownloaderResult;
+import de.qspool.clementineremote.backend.elements.DownloaderResult.DownloadResult;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
@@ -52,7 +52,7 @@ import de.qspool.clementineremote.ui.MainActivity;
 import de.qspool.clementineremote.utils.Utilities;
 
 public class ClementineSongDownloader extends
-		AsyncTask<ClementineMessage, Integer, SongDownloadResult> {
+		AsyncTask<ClementineMessage, Integer, DownloaderResult> {
 	
 	private Context mContext;
 	private SharedPreferences mSharedPref;
@@ -90,7 +90,7 @@ public class ClementineSongDownloader extends
 		mId = App.downloaders.size() + 1;
 		
 		// Show a toast that the download is starting
-		Toast.makeText(mContext, R.string.player_howto_cancel, Toast.LENGTH_SHORT).show();
+		Toast.makeText(mContext, R.string.player_download_started, Toast.LENGTH_SHORT).show();
 		
 		mNotifyManager =
 		        (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -121,17 +121,17 @@ public class ClementineSongDownloader extends
 	}
 
 	@Override
-	protected SongDownloadResult doInBackground(ClementineMessage... params) {
+	protected DownloaderResult doInBackground(ClementineMessage... params) {
 		// Check if the sd card is writeable
 		if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
-			return new SongDownloadResult(SongDownloadResult.DownloadResult.NOT_MOUNTED);
+			return new DownloaderResult(DownloaderResult.DownloadResult.NOT_MOUNTED);
 		
 		if (mSharedPref.getBoolean(App.SP_WIFI_ONLY, false) && !Utilities.onWifi(mContext))
-			return new SongDownloadResult(SongDownloadResult.DownloadResult.ONLY_WIFI);
+			return new DownloaderResult(DownloaderResult.DownloadResult.ONLY_WIFI);
 		
 		// First create a connection
 		if (!connect())
-			return new SongDownloadResult(SongDownloadResult.DownloadResult.CONNECTION_ERROR);
+			return new DownloaderResult(DownloaderResult.DownloadResult.CONNECTION_ERROR);
 		
 		// Start the download
 		return startDownloading(params[0]);
@@ -202,7 +202,7 @@ public class ClementineSongDownloader extends
     }
 
 	@Override
-    protected void onPostExecute(SongDownloadResult result) {
+    protected void onPostExecute(DownloaderResult result) {
     	// When the loop is finished, updates the notification
 		if (result == null)
 			mSubtitle = mContext.getString(R.string.download_noti_canceled);
@@ -275,9 +275,9 @@ public class ClementineSongDownloader extends
     /**
      * Start the Downlaod
      */
-    private SongDownloadResult startDownloading(ClementineMessage clementineMessage) {
+    private DownloaderResult startDownloading(ClementineMessage clementineMessage) {
     	boolean downloadFinished = false;
-    	SongDownloadResult result = new SongDownloadResult(DownloadResult.SUCCESSFUL);
+    	DownloaderResult result = new DownloaderResult(DownloadResult.SUCCESSFUL);
     	File f = null;
     	FileOutputStream fo = null;
     	
@@ -311,13 +311,13 @@ public class ClementineSongDownloader extends
 			ClementineMessage message = mClient.getProtoc();
 			
 			if (message.isErrorMessage()) {
-				result = new SongDownloadResult(DownloadResult.CONNECTION_ERROR);
+				result = new DownloaderResult(DownloadResult.CONNECTION_ERROR);
 				break;
 			}
 			
 			// Is the download forbidden?
 			if (message.getMessageType() == MsgType.DISCONNECT) {
-				result = new SongDownloadResult(DownloadResult.FOBIDDEN);
+				result = new DownloaderResult(DownloadResult.FOBIDDEN);
 				break;
 			}
 			
@@ -349,7 +349,7 @@ public class ClementineSongDownloader extends
 				if (f == null) {
 					// Check if we have enougth free space
 					if (chunk.getSize() > Utilities.getFreeSpace()) {
-						result = new SongDownloadResult(DownloadResult.INSUFFIANT_SPACE);
+						result = new DownloaderResult(DownloadResult.INSUFFIANT_SPACE);
 						break;
 					}
 					
@@ -383,7 +383,7 @@ public class ClementineSongDownloader extends
 				// Update notification
 				updateProgress(chunk);
 			} catch (IOException e) {
-				result = new SongDownloadResult(DownloadResult.CONNECTION_ERROR);
+				result = new DownloaderResult(DownloadResult.CONNECTION_ERROR);
 				break;
 			}
 			

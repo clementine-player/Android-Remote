@@ -15,12 +15,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package de.qspool.clementineremote;
+package de.qspool.clementineremote.backend.elements;
 
-public class VendingKey {
-	private final static String VENDING_KEY = "";
+public class DownloaderResult extends ClementineElement {
+	public enum DownloadResult {SUCCESSFUL, INSUFFIANT_SPACE, NOT_MOUNTED, CONNECTION_ERROR, FOBIDDEN, ONLY_WIFI};
 	
-	public static String getVendingKey() {
-		return VENDING_KEY;
+	private DownloadResult mResult;
+	
+	public DownloaderResult(DownloadResult result) {
+		mResult = result;
 	}
+	  
+	public DownloadResult getResult() {
+		return mResult;
+	}
+	
 }

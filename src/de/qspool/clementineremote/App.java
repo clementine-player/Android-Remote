@@ -17,6 +17,7 @@
 
 package de.qspool.clementineremote;
 
+import java.io.File;
 import java.util.LinkedList;
 
 import android.app.Application;
@@ -66,5 +67,9 @@ public class App extends Application {
 		// Register new default uncaught exception handler
 		mClementineExceptionHandler = new ClementineExceptionHandler(this);
 		Thread.setDefaultUncaughtExceptionHandler(mClementineExceptionHandler);
+	}
+	
+	public static File getLibraryDb() {
+		return new File(App.mApp.getExternalFilesDir(null), "library.db");
 	}
 }
