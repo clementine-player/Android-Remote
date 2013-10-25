@@ -178,7 +178,8 @@ public class ClementineLibraryDownloader extends
 				// Check if we need to create a new file
 				if (f == null) {
 					// Check if we have enougth free space
-					if (chunk.getSize() > Utilities.getFreeSpace()) {
+					// size times 2, because we optimise the table later and need space for that too!
+					if ((chunk.getSize() * 2) > Utilities.getFreeSpace()) {
 						result = new DownloaderResult(DownloadResult.INSUFFIANT_SPACE);
 						break;
 					}
