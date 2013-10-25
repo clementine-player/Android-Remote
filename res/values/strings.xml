@@ -74,6 +74,16 @@
     <string name="menu_download_album">Download album</string>
     <string name="menu_download_playlist">Download playlist</string>
     
+    
+    <string name="donate_header"><u>Donations</u></string>
+    <string name="donate_text">Thank you for using my app, I hope you find it useful!\n\nIf you are really happy with my work, a small donation would be well appreciated.</string>
+    <string name="donate_one">A coke (1.00 €)</string>
+    <string name="donate_two">A coffee (2.00 €)</string>
+    <string name="donate_five">A pizza (5.00 €)</string>
+    <string name="donate_thanks">Thank you for your support! :-)</string>
+    <string name="donate_complete">Donation complete, thank you! :-)</string>
+    <string name="donate_try_again">Processing last donation, try again</string>
+    
 
     <string name="pref_cat_behavior">Behavior</string>
     <string name="pref_cat_player">Player</string>
@@ -177,6 +187,7 @@
     </string-array>
     <string-array name="navigation_array_settings">
         <item>Settings</item>
+        <item>Donate</item>
     </string-array>
     <string-array name="navigation_array_disconnect">
         <item>Disconnect</item>

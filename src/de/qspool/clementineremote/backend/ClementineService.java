@@ -32,10 +32,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.Message;
-import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.view.KeyEvent;
 
 public class ClementineService extends Service {
 
@@ -102,7 +100,7 @@ public class ClementineService extends Service {
 	@Override
 	public void onDestroy() {
 		stopForeground(true);
-		if (App.mClementine.isConnected()) {
+		if (App.mClementineConnection.isConnected()) {
 			// Create a new request
 			
 			// Move the request to the message
@@ -149,8 +147,8 @@ public class ClementineService extends Service {
 	    PendingIntent piPlay = PendingIntent.getBroadcast(App.mApp, 0, playIntent, 0);
 	    PendingIntent piNext = PendingIntent.getBroadcast(App.mApp, 0, nextIntent, 0);
 	    
-	    mNotifyBuilder.addAction(android.R.drawable.ic_media_play, App.mApp.getString(R.string.notification_action_playpause), piPlay);
-	    mNotifyBuilder.addAction(android.R.drawable.ic_media_next, App.mApp.getString(R.string.notification_action_next), piNext);
+	    mNotifyBuilder.addAction(R.drawable.ic_media_pause_resume, App.mApp.getString(R.string.notification_action_playpause), piPlay);
+	    mNotifyBuilder.addAction(R.drawable.ic_media_next_not, App.mApp.getString(R.string.notification_action_next), piNext);
 	}
 	
 	/**

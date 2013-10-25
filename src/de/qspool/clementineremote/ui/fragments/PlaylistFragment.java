@@ -77,13 +77,22 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 	}
 	
 	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+	    // Get the actionbar
+	    mActionBar = getSherlockActivity().getSupportActionBar();
+	    setHasOptionsMenu(true);
+	}
+	
+	@Override
 	public void onResume() {
 		super.onResume();
 		// Check if we are still connected
 		if (App.mClementineConnection == null
 		 || App.mClementine           == null
 		 || !App.mClementineConnection.isAlive()
-		 || !App.mClementine.isConnected()) {
+		 || !App.mClementineConnection.isConnected()) {
 		} else {
 			RequestPlaylistSongs();
 			setActionBarTitle();
@@ -134,11 +143,8 @@ public class PlaylistFragment extends AbstractDrawerFragment {
             public void onNothingSelected(AdapterView<?> arg0) { }
         });
 		
-		mActionBar = getSherlockActivity().getSupportActionBar();
 	    mActionBar.setTitle("");
 	    mActionBar.setSubtitle("");
-		
-		setHasOptionsMenu(true);
 		
 		return view;
 	}

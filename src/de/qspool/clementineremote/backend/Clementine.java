@@ -34,7 +34,6 @@ public class Clementine {
 	
 	private String mVersion;
 	private MySong mCurrentSong;
-	private boolean mIsConnected;
 	private int mVolume;
 	private State mState;
 	private RepeatMode mRepeatMode = RepeatMode.OFF;
@@ -74,14 +73,6 @@ public class Clementine {
 
 	public void setCurrentSong(MySong currentSong) {
 		this.mCurrentSong = currentSong;
-	}
-
-	public boolean isConnected() {
-		return mIsConnected;
-	}
-
-	public void setConnected(boolean isConnected) {
-		this.mIsConnected = isConnected;
 	}
 	
 	public int getVolume() {

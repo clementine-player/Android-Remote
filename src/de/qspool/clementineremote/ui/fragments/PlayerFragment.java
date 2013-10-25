@@ -95,6 +95,19 @@ public class PlayerFragment extends AbstractDrawerFragment {
     ProgressDialog mPdDownloadLyrics;
     
     private MySong mCurrentSong = new MySong();
+    
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+    	super.onActivityCreated(savedInstanceState);
+    	
+	    // Get the shared preferences
+	    mSharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+	    
+	    // Get the actionbar
+	    mActionBar = getSherlockActivity().getSupportActionBar();
+	    mActionBar.setTitle(R.string.player_playlist);
+	    setHasOptionsMenu(true);
+    }
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -145,14 +158,6 @@ public class PlayerFragment extends AbstractDrawerFragment {
 	    mPdDownloadLyrics.setCancelable(true);
 	    
 	    mPlaylistSongs = (PlaylistFragment) getFragmentManager().findFragmentById(R.id.playlist_fragment);
-	    
-	    // Get the actionbar
-	    mActionBar = getSherlockActivity().getSupportActionBar();
-	    mActionBar.setTitle(R.string.player_playlist);
-	    setHasOptionsMenu(true);
-		
-	    // Get the shared preferences
-	    mSharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 	    
 		// Initialize interface
 	    updateTrackMetadata();

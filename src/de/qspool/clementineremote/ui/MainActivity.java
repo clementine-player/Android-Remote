@@ -46,6 +46,7 @@ import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.ui.adapter.SeparatedListAdapter;
 import de.qspool.clementineremote.ui.fragments.AbstractDrawerFragment;
+import de.qspool.clementineremote.ui.fragments.DonateFragment;
 import de.qspool.clementineremote.ui.fragments.DownloadsFragment;
 import de.qspool.clementineremote.ui.fragments.PlayerFragment;
 import de.qspool.clementineremote.ui.fragments.PlaylistFragment;
@@ -64,7 +65,7 @@ public class MainActivity extends SherlockFragmentActivity {
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-    private int mLastPosition = 1;
+    private static int mLastPosition = 1;
     
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -79,6 +80,7 @@ public class MainActivity extends SherlockFragmentActivity {
         mFragments.add(new SongInfoFragment());
         mFragments.add(new PlaylistFragment());
         mFragments.add(new DownloadsFragment());
+        mFragments.add(new DonateFragment());
 	    
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
@@ -121,7 +123,7 @@ public class MainActivity extends SherlockFragmentActivity {
         
 		// When we have a download notifitication and it was clicked, show the download.
 		if (getIntent().hasExtra(App.NOTIFICATION_ID)) {
-			mLastPosition = 3;
+			mLastPosition = 4;
 		}
 	}
 	
@@ -140,6 +142,8 @@ public class MainActivity extends SherlockFragmentActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
+        
+        selectItem(mLastPosition);
     }
 	
 	@Override
@@ -150,7 +154,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		if (App.mClementineConnection == null
 		 || App.mClementine           == null
 		 || !App.mClementineConnection.isAlive()
-		 || !App.mClementine.isConnected()) {
+		 || !App.mClementineConnection.isConnected()) {
 			setResult(ConnectDialog.RESULT_DISCONNECT);
 			finish();
 		} else {
@@ -179,11 +183,17 @@ public class MainActivity extends SherlockFragmentActivity {
 		if (App.mClementineConnection == null
 		 || App.mClementine           == null
 		 || !App.mClementineConnection.isAlive()
-		 || !App.mClementine.isConnected()) {
+		 || !App.mClementineConnection.isConnected()) {
 			Intent connectDialog = new Intent(this, ConnectDialog.class);
 			connectDialog.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			startActivity(connectDialog);
 		}
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		mFragments.get(mCurrentFragment).onActivityResult(requestCode, resultCode, data);
 	}
 	
 	@Override
@@ -347,9 +357,14 @@ public class MainActivity extends SherlockFragmentActivity {
     		Intent settingsIntent = new Intent(this, ClementineSettings.class);
             startActivity(settingsIntent);
             break;
-    	case 7: // Header Disconnect
+    	case 7: // Donate
+    		fragmentManager.beginTransaction().replace(R.id.content_frame, mFragments.get(4)).commit();
+    		mCurrentFragment = 4;
+            mLastPosition = position;
     		break;
-    	case 8: // Disonnect
+    	case 8: // Header Disconnect
+    		break;
+    	case 9: // Disonnect
     		requestDisconnect();
     		break;
     	default:

@@ -101,11 +101,23 @@ public class ClementineSimpleConnection {
 	}
 	
 	/**
+	 * Check if the Socket is still connected
+	 * @return true if a connection is established
+	 */
+	public boolean isConnected() {
+		if (mSocket == null
+		 || !mSocket.isConnected())
+			return false;
+		else
+			return true;
+	}
+	
+	/**
 	 * Disconnect from Clementine
 	 * @param r The RequestDisconnect Object
 	 */
 	public void disconnect(ClementineMessage message) {
-		if (App.mClementine.isConnected()) {			
+		if (isConnected()) {			
 			// Send the disconnect message to clementine
 			byte[] data = message.getMessage().toByteArray();
 			

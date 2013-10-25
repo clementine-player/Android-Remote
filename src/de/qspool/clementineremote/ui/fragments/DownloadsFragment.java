@@ -53,6 +53,15 @@ public class DownloadsFragment extends AbstractDrawerFragment {
 	private TextView mFreeSpace;
 
 	private View mEmptyDownloads;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+	    // Get the actionbar
+	    mActionBar = getSherlockActivity().getSupportActionBar();
+	    setHasOptionsMenu(true);
+	}
 
 	@Override
 	public void onResume() {
@@ -61,7 +70,7 @@ public class DownloadsFragment extends AbstractDrawerFragment {
 		if (App.mClementineConnection == null
 		 || App.mClementine           == null
 		 || !App.mClementineConnection.isAlive()
-		 || !App.mClementine.isConnected()) {
+		 || !App.mClementineConnection.isConnected()) {
 		} else {
 			//RequestPlaylistSongs();
 			setActionBarTitle();
@@ -93,7 +102,6 @@ public class DownloadsFragment extends AbstractDrawerFragment {
 		mList.setOnItemClickListener(oiclDownload);
 		mList.setAdapter(mAdapter);
 		
-		mActionBar = getSherlockActivity().getSupportActionBar();
 	    mActionBar.setTitle("");
 	    mActionBar.setSubtitle("");
 		

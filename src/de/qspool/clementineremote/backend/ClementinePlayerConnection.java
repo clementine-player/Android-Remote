@@ -150,7 +150,6 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 	public boolean createConnection(ClementineMessage message) {
 		boolean connected = false;
 		// Reset the connected flag
-		App.mClementine.setConnected(false);
 		mLastKeepAlive = 0;
 		
 		// Now try to connect and set the input and output streams
@@ -165,7 +164,6 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 			mHandler.sendMessage(msg);
 			
 			// Now we are connected
-			App.mClementine.setConnected(true);
 			mLastSong = null;
 			mLastState = App.mClementine.getState();
 			
@@ -218,7 +216,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 		}
 		
 		// Let the looper send the message again
-		if (App.mClementine.isConnected()) {
+		if (isConnected()) {
 			Message msg = Message.obtain();
 			msg.arg1 = CHECK_FOR_DATA_ARG;
 			mHandler.sendMessageDelayed(msg, DELAY_MILLIS);
@@ -299,10 +297,9 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 	 */
 	@Override
 	public void disconnect(ClementineMessage message) {
-		if (App.mClementine.isConnected()) {
+		if (isConnected()) {
 			// Set the Connected flag to false, so the loop in
 			// checkForData() is interrupted
-			App.mClementine.setConnected(false);
 			
 			super.disconnect(message);
 			
@@ -324,8 +321,6 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 		unregisterRemoteControlClient();
 		
 		App.mApp.unregisterReceiver(mMediaButtonBroadcastReceiver);
-		
-		App.mClementine.setConnected(false);
 		
 		mWakeLock.release();
 		
@@ -393,8 +388,6 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 	 * Update the notification with the new track info
 	 */
 	private void updateNotification() {
-		//RemoteViews remoteViews = new RemoteViews(App.mApp.getPackageName(), R.layout.clementine_notification);
-		//mNotifyBuilder.setContent(remoteViews);
 		if (mLastSong != null)  {
 			Bitmap scaledArt = Bitmap.createScaledBitmap(mLastSong.getArt(), 
 													mNotificationWidth, 

@@ -37,7 +37,7 @@ public class ClementinePhoneStateCheck extends BroadcastReceiver {
 		 || App.mClementineConnection == null
 		 || App.mClementine           == null
 		 || !App.mClementineConnection.isAlive()
-		 || !App.mClementine.isConnected())
+		 || !App.mClementineConnection.isConnected())
 			return;
 		
 		// Check if we need to change the volume

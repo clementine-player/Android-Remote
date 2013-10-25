@@ -132,7 +132,9 @@ public class ConnectDialog extends SherlockActivity {
 		super.onResume();
 		
 		// Check if we are currently connected, then open the player dialog
-		if (!mPdConnect.isShowing() && App.mClementine.isConnected()) {
+		if (!mPdConnect.isShowing()
+		 && App.mClementineConnection != null
+		 && App.mClementineConnection.isConnected()) {
 			showPlayerDialog();
 			return;
 		}

@@ -93,6 +93,7 @@ public class CrashReportDialog {
 			char[] chars = new char[(int) f.length()];
 			reader.read(chars);
 			body = new String(chars);
+			reader.close();
 		} catch (FileNotFoundException e) {
 		} catch (IOException e) {
 		} 
