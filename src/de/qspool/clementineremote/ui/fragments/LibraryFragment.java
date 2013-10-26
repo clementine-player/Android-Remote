@@ -17,9 +17,6 @@
 
 package de.qspool.clementineremote.ui.fragments;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -28,10 +25,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
@@ -40,19 +36,23 @@ import com.actionbarsherlock.view.MenuItem;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.backend.ClementineLibraryDownloader;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
+import de.qspool.clementineremote.backend.player.MyLibrary;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.ui.adapter.DownloadAdapter;
-import de.qspool.clementineremote.utils.Utilities;
+import de.qspool.clementineremote.ui.adapter.LibraryAdapter;
 
-public class DownloadsFragment extends AbstractDrawerFragment {
+public class LibraryFragment extends AbstractDrawerFragment {
 	private ActionBar mActionBar; 
 	private ListView mList;
-	private DownloadAdapter mAdapter;
-	private Timer mUpdateTimer;
-	private TextView mFreeSpace;
+	private LibraryAdapter mAdapter;
+	
+	private MyLibrary mLibrary = new MyLibrary();
+	private ClementineLibraryDownloader mLibraryDownloader;
 
-	private View mEmptyDownloads;
+	private View mEmptyLibrary;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -74,30 +74,19 @@ public class DownloadsFragment extends AbstractDrawerFragment {
 		} else {
 			//RequestPlaylistSongs();
 			setActionBarTitle();
-			mUpdateTimer = new Timer();
-			mUpdateTimer.scheduleAtFixedRate(getTimerTask(), 250, 250);
 		}
-	}
-	
-	@Override
-	public void onPause() {
-		super.onPause();
-		
-		mUpdateTimer.cancel();
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 		      Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.download_fragment,
-				container, false);
+		View view = inflater.inflate(R.layout.library_fragment, container, false);
 		
-		mList = (ListView) view.findViewById(R.id.downloads);
-		mEmptyDownloads = view.findViewById(R.id.downloads_empty);
-		mFreeSpace = (TextView) view.findViewById(R.id.downloads_freespace);
+		mList = (ListView) view.findViewById(R.id.library);
+		mEmptyLibrary = view.findViewById(R.id.library_empty);
 		
 		// Create the adapter
-		mAdapter = new DownloadAdapter(getActivity(), R.layout.download_row, App.downloaders);
+		mAdapter = new LibraryAdapter(getActivity(), R.layout.library_row, mLibrary.getArtists());
 		
 		mList.setOnItemClickListener(oiclDownload);
 		mList.setAdapter(mAdapter);
@@ -113,14 +102,20 @@ public class DownloadsFragment extends AbstractDrawerFragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
-
-	        default:
-	            return super.onOptionsItemSelected(item);
+	    case R.id.library_menu_refresh:
+	    	mLibraryDownloader = new ClementineLibraryDownloader(getActivity());
+	    	mLibraryDownloader.startDownload(ClementineMessage.getMessage(MsgType.GET_LIBRARY));
+	    	break;
+	    default:    
+	    	return super.onOptionsItemSelected(item);
 	    }
+	    
+	    return true;
 	}
 	
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {		
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.library_menu, menu);
 		super.onCreateOptionsMenu(menu,inflater);
 	}
 	
@@ -179,37 +174,4 @@ public class DownloadsFragment extends AbstractDrawerFragment {
 			}
 		}
 	};
-
-	/**
-	 * Creates a timer task for refeshing the download list
-	 * @return Task to update download list
-	 */
-	private TimerTask getTimerTask() {
-		return new TimerTask() {
-
-			@Override
-			public void run() {
-				if (mAdapter != null) {
-					getActivity().runOnUiThread(new Runnable() {
-
-						@Override
-						public void run() {
-							mAdapter.notifyDataSetChanged();
-							if (App.downloaders.isEmpty()) {
-								mList.setEmptyView(mEmptyDownloads);
-							}
-							
-							StringBuilder sb = new StringBuilder();
-							sb.append(getActivity().getString(R.string.download_freespace));
-							sb.append(": ");
-							sb.append(Utilities.humanReadableBytes((long) Utilities.getFreeSpace(), true));
-							mFreeSpace.setText(sb.toString());
-						}
-						
-					});
-				}
-			}
-			
-		};
-	}
 }

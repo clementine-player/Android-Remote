@@ -38,6 +38,7 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseLibraryChunk;
+import de.qspool.clementineremote.backend.player.MyLibrary;
 import de.qspool.clementineremote.utils.Utilities;
 
 public class ClementineLibraryDownloader extends
@@ -48,6 +49,8 @@ public class ClementineLibraryDownloader extends
 	private ClementineSimpleConnection mClient = new ClementineSimpleConnection();
 	
 	private ProgressDialog mProgressDialog;
+	
+	private MyLibrary mLibrary = new MyLibrary();
 	
 	public ClementineLibraryDownloader(Context context) {
 		mContext = context;
@@ -183,7 +186,7 @@ public class ClementineLibraryDownloader extends
 						result = new DownloaderResult(DownloadResult.INSUFFIANT_SPACE);
 						break;
 					}
-					f = App.getLibraryDb();
+					f = mLibrary.getLibraryDb();
 					
 					// User wants to override files, so delete it here!
 					// The check was already done in processSongOffer()
@@ -217,10 +220,8 @@ public class ClementineLibraryDownloader extends
 		// Disconnect at the end
 		mClient.disconnect(ClementineMessage.getMessage(MsgType.DISCONNECT));
 		
-        // Optimize table
-		SQLiteDatabase db = SQLiteDatabase.openDatabase(App.getLibraryDb().getAbsolutePath(), null, SQLiteDatabase.OPEN_READWRITE);
-		db.execSQL("CREATE VIRTUAL TABLE songs_fts USING fts3(select * from songs);");
-		db.close();
+		// Optimize library table
+		mLibrary.optimizeTable();
         
 		return result;
     }

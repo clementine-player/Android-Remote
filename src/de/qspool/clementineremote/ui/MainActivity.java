@@ -48,6 +48,7 @@ import de.qspool.clementineremote.ui.adapter.SeparatedListAdapter;
 import de.qspool.clementineremote.ui.fragments.AbstractDrawerFragment;
 import de.qspool.clementineremote.ui.fragments.DonateFragment;
 import de.qspool.clementineremote.ui.fragments.DownloadsFragment;
+import de.qspool.clementineremote.ui.fragments.LibraryFragment;
 import de.qspool.clementineremote.ui.fragments.PlayerFragment;
 import de.qspool.clementineremote.ui.fragments.PlaylistFragment;
 import de.qspool.clementineremote.ui.fragments.SongInfoFragment;
@@ -79,6 +80,7 @@ public class MainActivity extends SherlockFragmentActivity {
         mFragments.add(new PlayerFragment());
         mFragments.add(new SongInfoFragment());
         mFragments.add(new PlaylistFragment());
+        mFragments.add(new LibraryFragment());
         mFragments.add(new DownloadsFragment());
         mFragments.add(new DonateFragment());
 	    
@@ -346,25 +348,30 @@ public class MainActivity extends SherlockFragmentActivity {
         	mCurrentFragment = 2;
         	mLastPosition = position;
         	break;
-    	case 4: // Downloads
+    	case 4: // Library
     		fragmentManager.beginTransaction().replace(R.id.content_frame, mFragments.get(3)).commit();
-    		mCurrentFragment = 3;
-            mLastPosition = position;
+        	mCurrentFragment = 3;
+        	mLastPosition = position;
     		break;
-    	case 5: // Header Settings
-    		break;
-    	case 6: // Settings
-    		Intent settingsIntent = new Intent(this, ClementineSettings.class);
-            startActivity(settingsIntent);
-            break;
-    	case 7: // Donate
+    	case 5: // Downloads
     		fragmentManager.beginTransaction().replace(R.id.content_frame, mFragments.get(4)).commit();
     		mCurrentFragment = 4;
             mLastPosition = position;
     		break;
-    	case 8: // Header Disconnect
+    	case 6: // Header Settings
     		break;
-    	case 9: // Disonnect
+    	case 7: // Settings
+    		Intent settingsIntent = new Intent(this, ClementineSettings.class);
+            startActivity(settingsIntent);
+            break;
+    	case 8: // Donate
+    		fragmentManager.beginTransaction().replace(R.id.content_frame, mFragments.get(5)).commit();
+    		mCurrentFragment = 5;
+            mLastPosition = position;
+    		break;
+    	case 9: // Header Disconnect
+    		break;
+    	case 10: // Disonnect
     		requestDisconnect();
     		break;
     	default:

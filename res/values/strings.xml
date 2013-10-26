@@ -52,6 +52,9 @@
     <string name="library_download">Downloading library</string>
     <string name="library_optimize">Optimizing database</string>
     <string name="library_please_wait">Please wait</string>
+    <string name="library_search_hint">Search library</string>
+    <string name="library_refresh">Refresh</string>
+    <string name="library_empty">Library empty. Hit refresh to download library!</string>
     
     
     <string name="song_info_album">Album</string>
@@ -188,6 +191,7 @@
         <item>Player</item>
         <item>Song information</item>
         <item>Playlists</item>
+        <item>Library</item>
         <item>Downloads</item>
     </string-array>
     <string-array name="navigation_array_settings">

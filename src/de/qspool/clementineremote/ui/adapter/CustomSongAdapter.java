@@ -74,7 +74,7 @@ public class CustomSongAdapter extends ArrayAdapter<MySong> implements Filterabl
 		
 		if (convertView == null) {
 			convertView = ((Activity)mContext).getLayoutInflater()
-							.inflate(R.layout.song_row, parent, false);
+							.inflate(R.layout.playlist_row, parent, false);
 		}
 		
 		if (App.mClementine.getCurrentSong() != null 
