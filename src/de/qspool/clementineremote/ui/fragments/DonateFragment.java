@@ -217,4 +217,9 @@ public class DonateFragment extends AbstractDrawerFragment {
 		      }
 		   }
 		};
+
+	@Override
+	public boolean onBackPressed() {
+		return false;
+	}
 }

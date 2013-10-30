@@ -621,4 +621,9 @@ public class PlayerFragment extends AbstractDrawerFragment {
 		}
 
 	};
+
+	@Override
+	public boolean onBackPressed() {
+		return false;
+	}
 }

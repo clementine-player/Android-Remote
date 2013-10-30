@@ -388,4 +388,9 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 			}
 		}
 	}
+
+	@Override
+	public boolean onBackPressed() {
+		return false;
+	}
 }

@@ -25,6 +25,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Repe
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestChangeSong;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestConnect;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestDownloadSongs;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestInsertUrls;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestPlaylistSongs;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestSetTrackPosition;
@@ -209,6 +210,16 @@ public class ClementineMessageFactory {
 		
 		RequestRateSong.Builder request = msg.getRequestRateSongBuilder();
 		request.setRating(rating);
+		
+		return new ClementineMessage(msg);
+	}
+	
+	public static ClementineMessage buildInsertUrl(int playistId, String url) {
+		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.INSERT_URLS);
+		
+		RequestInsertUrls.Builder insertUrls = msg.getRequestInsertUrlsBuilder();
+		insertUrls.setPlaylistId(playistId);
+		insertUrls.addUrls(url);
 		
 		return new ClementineMessage(msg);
 	}

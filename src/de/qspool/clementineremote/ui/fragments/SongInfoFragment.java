@@ -336,4 +336,9 @@ public class SongInfoFragment extends AbstractDrawerFragment {
 	        }
 	    });
 	}
+
+	@Override
+	public boolean onBackPressed() {
+		return false;
+	}
 }

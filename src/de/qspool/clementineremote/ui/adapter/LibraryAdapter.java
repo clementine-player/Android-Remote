@@ -21,19 +21,12 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filterable;
-import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
-import de.qspool.clementineremote.backend.ClementineSongDownloader;
 import de.qspool.clementineremote.backend.player.MyLibraryItem;
 
 /**
@@ -65,8 +58,8 @@ public class LibraryAdapter extends ArrayAdapter<MyLibraryItem> implements Filte
 		TextView tvTitle    = (TextView) convertView.findViewById(R.id.tv_lib_title);
 		TextView tvSubtitle = (TextView) convertView.findViewById(R.id.tv_lib_subtitle);
 		
-		tvTitle.setText(item.getTitle());
-		tvSubtitle.setText(item.getSubtitle());
+		tvTitle.setText(item.getText());
+		tvSubtitle.setText(item.getSubtext());
 		
 		return convertView;
 	}

@@ -147,7 +147,9 @@ public class DownloadsFragment extends AbstractDrawerFragment {
 	@Override
 	public void MessageFromClementine(ClementineMessage clementineMessage) {
 		switch (clementineMessage.getMessageType()) {
-
+		case CURRENT_METAINFO:
+			setActionBarTitle();
+			break;
 		default:
 			break;
 		}
@@ -211,5 +213,10 @@ public class DownloadsFragment extends AbstractDrawerFragment {
 			}
 			
 		};
+	}
+
+	@Override
+	public boolean onBackPressed() {
+		return false;
 	}
 }

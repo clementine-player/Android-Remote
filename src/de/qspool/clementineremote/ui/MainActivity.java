@@ -258,7 +258,16 @@ public class MainActivity extends SherlockFragmentActivity {
 		}
 
         return super.onOptionsItemSelected(item);
-
+	}
+	
+	@Override
+	public void onBackPressed() {
+		// Let the fragment handle the back button first
+		if (mFragments.get(mCurrentFragment) == null || 
+			!mFragments.get(mCurrentFragment).isVisible() ||
+			!mFragments.get(mCurrentFragment).onBackPressed()) {
+			super.onBackPressed();
+		}
 	}
 	
 	/**

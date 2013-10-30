@@ -17,17 +17,16 @@
 
 package de.qspool.clementineremote.ui.fragments;
 
-import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
+import java.util.LinkedList;
+
 import android.os.Bundle;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
@@ -37,19 +36,21 @@ import com.actionbarsherlock.view.MenuItem;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.ClementineLibraryDownloader;
+import de.qspool.clementineremote.backend.event.OnLibraryDownloadFinishedListener;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
+import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.player.MyLibrary;
+import de.qspool.clementineremote.backend.player.MyLibraryItem;
 import de.qspool.clementineremote.backend.player.MySong;
-import de.qspool.clementineremote.ui.adapter.DownloadAdapter;
 import de.qspool.clementineremote.ui.adapter.LibraryAdapter;
 
 public class LibraryFragment extends AbstractDrawerFragment {
 	private ActionBar mActionBar; 
 	private ListView mList;
-	private LibraryAdapter mAdapter;
+	private LinkedList<LibraryAdapter> mAdapters = new LinkedList<LibraryAdapter>();
 	
-	private MyLibrary mLibrary = new MyLibrary();
+	private MyLibrary mLibrary;
 	private ClementineLibraryDownloader mLibraryDownloader;
 
 	private View mEmptyLibrary;
@@ -82,14 +83,20 @@ public class LibraryFragment extends AbstractDrawerFragment {
 		      Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.library_fragment, container, false);
 		
+		mLibrary = new MyLibrary(getActivity());
+		
 		mList = (ListView) view.findViewById(R.id.library);
 		mEmptyLibrary = view.findViewById(R.id.library_empty);
 		
 		// Create the adapter
-		mAdapter = new LibraryAdapter(getActivity(), R.layout.library_row, mLibrary.getArtists());
+		if (mLibrary.databaseExists()) {
+			mLibrary.openDatabase();
+			mAdapters.add(new LibraryAdapter(getActivity(), R.layout.library_row, mLibrary.getArtists()));
+		}
 		
-		mList.setOnItemClickListener(oiclDownload);
-		mList.setAdapter(mAdapter);
+		mList.setOnItemClickListener(oiclLibraryClick);
+		
+		showList();
 		
 	    mActionBar.setTitle("");
 	    mActionBar.setSubtitle("");
@@ -104,6 +111,15 @@ public class LibraryFragment extends AbstractDrawerFragment {
 	    switch (item.getItemId()) {
 	    case R.id.library_menu_refresh:
 	    	mLibraryDownloader = new ClementineLibraryDownloader(getActivity());
+	    	mLibraryDownloader.addOnLibraryDownloadFinishedListener(new OnLibraryDownloadFinishedListener() {
+				
+				@Override
+				public void OnLibraryDownloadFinished(boolean successful) {
+					mLibrary.openDatabase();
+					mAdapters.add(new LibraryAdapter(getActivity(), R.layout.library_row, mLibrary.getArtists()));
+					showList();
+				}
+			});
 	    	mLibraryDownloader.startDownload(ClementineMessage.getMessage(MsgType.GET_LIBRARY));
 	    	break;
 	    default:    
@@ -136,42 +152,68 @@ public class LibraryFragment extends AbstractDrawerFragment {
         mList.setFastScrollEnabled(true);
         mList.setTextFilterEnabled(true);
         mList.setSelector(android.R.color.transparent);
-        mList.setOnItemClickListener(oiclDownload);
+        mList.setOnItemClickListener(oiclLibraryClick);
 	}
 	
 	@Override
 	public void MessageFromClementine(ClementineMessage clementineMessage) {
 		switch (clementineMessage.getMessageType()) {
-
+		case CURRENT_METAINFO:
+			setActionBarTitle();
+			break;
 		default:
 			break;
 		}
 	}
 	
-	private OnItemClickListener oiclDownload = new OnItemClickListener() {
+	@Override
+	public boolean onBackPressed() {
+		// When we have only one item left, just use the normal back behavior
+		if (mAdapters.size() == 1)
+			return false;
+		
+		// Remove the last element and show the new list
+		mAdapters.removeLast();
+		showList();
+		
+		return true;
+	}
+	
+	/**
+	 * Show the last element in the list of adapters 
+	 */
+	private void showList() {
+		if (mAdapters.isEmpty() || mAdapters.getLast().isEmpty()) {
+			mList.setEmptyView(mEmptyLibrary);
+		} else {
+			mList.setAdapter(mAdapters.getLast());
+		}
+	}
+	
+	private OnItemClickListener oiclLibraryClick = new OnItemClickListener() {
 
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			if (App.downloaders.get(position).getStatus() == AsyncTask.Status.FINISHED) {
-				Uri lastFile = App.downloaders.get(position).getLastFileUri();
-				if (lastFile == null) {
-					Toast.makeText(getActivity(), R.string.download_error, Toast.LENGTH_LONG).show();
-				} else {
-					Intent mediaIntent = new Intent();
-					mediaIntent.setAction(Intent.ACTION_VIEW);
-					mediaIntent.setDataAndType(lastFile, "audio/*");
-					mediaIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-					
-					if (mediaIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-					    startActivity(mediaIntent);
-					} else {
-					    Toast.makeText(getActivity(), R.string.app_not_available, Toast.LENGTH_LONG).show();
-					}
-				}
-			} else {
-				// Just do nothing
+			MyLibraryItem item = mAdapters.getLast().getItem(position);
+			
+			switch (item.getLevel()) {
+			case ARTIST:
+				mAdapters.add(new LibraryAdapter(getActivity(), R.layout.library_row, mLibrary.getAlbums(item.getArtist())));
+				break;
+			case ALBUM:
+				mAdapters.add(new LibraryAdapter(getActivity(), R.layout.library_row, mLibrary.getTitles(item.getArtist(), item.getAlbum())));
+				break;
+			case TITLE:
+				Message msg = Message.obtain();
+				msg.obj = ClementineMessageFactory.buildInsertUrl(App.mClementine.getActivePlaylist().getId(), item.getUrl());
+				App.mClementineConnection.mHandler.sendMessage(msg);
+				break;
+			default:
+				break;
 			}
+			
+			showList();
 		}
 	};
 }

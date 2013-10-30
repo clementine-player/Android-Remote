@@ -15,15 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package de.qspool.clementineremote.ui.fragments;
+package de.qspool.clementineremote.backend.event;
 
-import com.actionbarsherlock.app.SherlockFragment;
-
-import de.qspool.clementineremote.backend.pb.ClementineMessage;
-
-public abstract class AbstractDrawerFragment extends SherlockFragment implements
-		RemoteDataReceiver {
-
-	abstract public void MessageFromClementine(ClementineMessage clementineMessage);
-	abstract public boolean onBackPressed();
+public interface OnLibraryDownloadFinishedListener {
+	void OnLibraryDownloadFinished(boolean successful);
 }

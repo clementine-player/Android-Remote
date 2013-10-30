@@ -21,6 +21,9 @@ import java.io.File;
 import java.util.LinkedList;
 
 import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.backend.player.MyLibraryItem.Level;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -35,8 +38,22 @@ public class MyLibrary {
 	
 	private SQLiteDatabase db;
 	
-	public MyLibrary() {
+	private Context mContext;
+	
+	public MyLibrary(Context context) {
+		mContext = context;
+	}
+	
+	public void openDatabase() {
 		db = SQLiteDatabase.openDatabase(getLibraryDb().getAbsolutePath(), null, SQLiteDatabase.OPEN_READWRITE);
+	}
+	
+	public void closeDatabase() {
+		db.close();
+	}
+	
+	public boolean databaseExists() {
+		return getLibraryDb().exists();
 	}
 	
 	/**
@@ -56,7 +73,7 @@ public class MyLibrary {
 	 * 		songs_title  (artist, album, title)
 	 */
 	public void optimizeTable() {
-        // FTS Table for search
+		// FTS Table for search
 		db.execSQL("CREATE VIRTUAL TABLE " + SONGS_FTS + " USING fts3(select * from songs);");
 		
 		// Indices for fragment
@@ -68,14 +85,63 @@ public class MyLibrary {
 	public LinkedList<MyLibraryItem> getArtists() {
 		LinkedList<MyLibraryItem> itemList = new LinkedList<MyLibraryItem>();
 		
-		Cursor c = selectQuery("SELECT * from songs where artist <> ' ' group by artist");
+		Cursor c = selectQuery("SELECT artist from songs where artist <> \" \" group by artist");
 		
 		if (c != null && c.getCount() != 0) {
 			c.moveToFirst();
 			do {
 				MyLibraryItem item = new MyLibraryItem();
+				item.setText(c.getString(0));
+				item.setSubtext(String.format(mContext.getString(R.string.library_no_albums), 
+											   getAlbumCountForArtist(c.getString(0))));
+				item.setLevel(Level.ARTIST);
+				item.setArtist(c.getString(0));
+				itemList.add(item);
+			} while (c.moveToNext());
+		}
+		
+		return itemList;
+	}
+	
+	public LinkedList<MyLibraryItem> getAlbums(String artist) {
+		LinkedList<MyLibraryItem> itemList = new LinkedList<MyLibraryItem>();
+		
+		Cursor c = selectQuery("SELECT artist, album from songs where artist = \"" + artist + "\" group by album");
+		
+		if (c != null && c.getCount() != 0) {
+			c.moveToFirst();
+			do {
+				MyLibraryItem item = new MyLibraryItem();
+				item.setText(c.getString(1));
+				item.setSubtext(String.format(mContext.getString(R.string.library_no_tracks), 
+								 getTitleCountForAlbum(c.getString(0), c.getString(1))));
+				item.setLevel(Level.ALBUM);
+				item.setArtist(c.getString(0));
+				item.setAlbum(c.getString(1));
+				itemList.add(item);
+			} while (c.moveToNext());
+		}
+		
+		return itemList;
+	}
+	
+	public LinkedList<MyLibraryItem> getTitles(String artist, String album) {
+		LinkedList<MyLibraryItem> itemList = new LinkedList<MyLibraryItem>();
+		
+		Cursor c = selectQuery("SELECT artist, album, title, cast(filename as TEXT) FROM songs where artist = \"" + artist +
+							   "\" and album = \"" + album + "\"");
+		
+		if (c != null && c.getCount() != 0) {
+			c.moveToFirst();
+			do {
+				MyLibraryItem item = new MyLibraryItem();
+				item.setText(c.getString(2));
+				item.setSubtext(c.getString(1) + " / " + c.getString(0));
+				item.setUrl(c.getString(3));
+				item.setLevel(Level.TITLE);
+				item.setArtist(c.getString(0));
+				item.setAlbum(c.getString(1));
 				item.setTitle(c.getString(2));
-				item.setSubtitle(String.valueOf(getAlbumCountForArtist(c.getString(2))));
 				itemList.add(item);
 			} while (c.moveToNext());
 		}
@@ -89,9 +155,25 @@ public class MyLibrary {
 	 * @return The number of albums
 	 */
 	private int getAlbumCountForArtist(String artist) {
-		Cursor c = selectQuery("SELECT count(album) FROM songs where artist = '" + artist + "' group by album");
+		Cursor c = selectQuery("SELECT count(album) FROM songs where artist = \"" + artist + "\" group by album");
 		c.moveToFirst();
-		return c.getInt(0);
+		int count = c.getInt(0);
+		c.close();
+		return count;
+	}
+	
+	/**
+	 * How many albums does one artist have in the library?
+	 * @param artist The artist for which the count should be checked
+	 * @return The number of albums
+	 */
+	private int getTitleCountForAlbum(String artist, String album) {
+		Cursor c = selectQuery("SELECT count(title) FROM songs where artist = \"" + artist +
+							   "\" and album = \"" + album + "\"");
+		c.moveToFirst();
+		int count = c.getInt(0);
+		c.close();
+		return count;
 	}
 	
 	 private Cursor selectQuery(String query) {

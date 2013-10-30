@@ -17,26 +17,60 @@
 
 package de.qspool.clementineremote.backend.player;
 
-import java.io.File;
-
-import de.qspool.clementineremote.App;
-import android.database.sqlite.SQLiteDatabase;
-
 public class MyLibraryItem {
-	private String mTitle = new String();
-	private String mSubtitle = new String();
+	public enum Level {ARTIST, ALBUM, TITLE};
 	
+	private String mText = new String();
+	private String mSubtext = new String();
+	private String mUrl = new String();
+	
+	private String mArtist = new String();
+	private String mAlbum = new String();
+	private String mTitle = new String();
+	
+	private Level mLevel;
+	
+	public String getText() {
+		return mText;
+	}
+	public void setText(String mText) {
+		this.mText = mText;
+	}
+	public String getSubtext() {
+		return mSubtext;
+	}
+	public void setSubtext(String mSubtext) {
+		this.mSubtext = mSubtext;
+	}
+	public String getUrl() {
+		return mUrl;
+	}
+	public void setUrl(String mUrl) {
+		this.mUrl = mUrl;
+	}
+	public Level getLevel() {
+		return mLevel;
+	}
+	public void setLevel(Level mLevel) {
+		this.mLevel = mLevel;
+	}
+	public String getArtist() {
+		return mArtist;
+	}
+	public void setArtist(String mArtist) {
+		this.mArtist = mArtist;
+	}
+	public String getAlbum() {
+		return mAlbum;
+	}
+	public void setAlbum(String mAlbum) {
+		this.mAlbum = mAlbum;
+	}
 	public String getTitle() {
 		return mTitle;
 	}
 	public void setTitle(String mTitle) {
 		this.mTitle = mTitle;
-	}
-	public String getSubtitle() {
-		return mSubtitle;
-	}
-	public void setSubtitle(String mSubtitle) {
-		this.mSubtitle = mSubtitle;
 	}
 	
 }
