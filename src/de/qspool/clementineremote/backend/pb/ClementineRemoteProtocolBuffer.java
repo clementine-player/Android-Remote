@@ -14374,7 +14374,7 @@ public final class ClementineRemoteProtocolBuffer {
   public interface MessageOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
     
-    // optional int32 version = 1 [default = 11];
+    // optional int32 version = 1 [default = 12];
     boolean hasVersion();
     int getVersion();
     
@@ -14541,7 +14541,7 @@ public final class ClementineRemoteProtocolBuffer {
     }
     
     private int bitField0_;
-    // optional int32 version = 1 [default = 11];
+    // optional int32 version = 1 [default = 12];
     public static final int VERSION_FIELD_NUMBER = 1;
     private int version_;
     public boolean hasVersion() {
@@ -14900,7 +14900,7 @@ public final class ClementineRemoteProtocolBuffer {
     }
     
     private void initFields() {
-      version_ = 11;
+      version_ = 12;
       type_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType.UNKNOWN;
       requestConnect_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestConnect.getDefaultInstance();
       requestPlaylists_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestPlaylists.getDefaultInstance();
@@ -15296,7 +15296,7 @@ public final class ClementineRemoteProtocolBuffer {
       
       public Builder clear() {
         super.clear();
-        version_ = 11;
+        version_ = 12;
         bitField0_ = (bitField0_ & ~0x00000001);
         type_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -16097,8 +16097,8 @@ public final class ClementineRemoteProtocolBuffer {
       
       private int bitField0_;
       
-      // optional int32 version = 1 [default = 11];
-      private int version_ = 11;
+      // optional int32 version = 1 [default = 12];
+      private int version_ = 12;
       public boolean hasVersion() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
@@ -16113,7 +16113,7 @@ public final class ClementineRemoteProtocolBuffer {
       }
       public Builder clearVersion() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        version_ = 11;
+        version_ = 12;
         onChanged();
         return this;
       }
@@ -18709,7 +18709,7 @@ public final class ClementineRemoteProtocolBuffer {
       "\004data\030\003 \001(\014\022\014\n\004size\030\004 \001(\005\"%\n\021ResponseSon" +
       "gOffer\022\020\n\010accepted\030\001 \001(\010\"!\n\017RequestRateS" +
       "ong\022\016\n\006rating\030\001 \001(\002\"\204\r\n\007Message\022\023\n\007versi" +
-      "on\030\001 \001(\005:\00211\022)\n\004type\030\002 \001(\0162\022.pb.remote.M" +
+      "on\030\001 \001(\005:\00212\022)\n\004type\030\002 \001(\0162\022.pb.remote.M" +
       "sgType:\007UNKNOWN\0222\n\017request_connect\030\025 \001(\013" +
       "2\031.pb.remote.RequestConnect\0226\n\021request_p",
       "laylists\030\033 \001(\0132\033.pb.remote.RequestPlayli" +

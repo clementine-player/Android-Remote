@@ -28,11 +28,13 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Requ
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestInsertUrls;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestPlaylistSongs;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRemoveSongs;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestSetTrackPosition;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestSetVolume;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongOffer;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuffle;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ShuffleMode;
+import de.qspool.clementineremote.backend.player.MySong;
 
 /**
  * Creates the protocol buffer messages
@@ -214,12 +216,28 @@ public class ClementineMessageFactory {
 		return new ClementineMessage(msg);
 	}
 	
+	/**
+	 * Inserts a song into given playlist
+	 * @param playistId The id of the playlist
+	 * @param url The url to the item
+	 * @return the Clementine Message
+	 */
 	public static ClementineMessage buildInsertUrl(int playistId, String url) {
 		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.INSERT_URLS);
 		
 		RequestInsertUrls.Builder insertUrls = msg.getRequestInsertUrlsBuilder();
 		insertUrls.setPlaylistId(playistId);
 		insertUrls.addUrls(url);
+		
+		return new ClementineMessage(msg);
+	}
+	
+	public static ClementineMessage buildRemoveSongFromPlaylist(int playlistId, MySong song) {
+		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.REMOVE_SONGS);
+		
+		RequestRemoveSongs.Builder removeItems = msg.getRequestRemoveSongsBuilder();
+		removeItems.setPlaylistId(playlistId);
+		removeItems.addSongs(song.getIndex());
 		
 		return new ClementineMessage(msg);
 	}
