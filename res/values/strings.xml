@@ -53,6 +53,7 @@
     <string name="library_optimize">Optimizing database</string>
     <string name="library_please_wait">Please wait</string>
     <string name="library_search_hint">Search library</string>
+    <string name="library_loading">Loading</string>
     <string name="library_refresh">Refresh</string>
     <string name="library_empty">Library empty. Hit refresh to download library!</string>
     <string name="library_no_albums">%d albums</string>

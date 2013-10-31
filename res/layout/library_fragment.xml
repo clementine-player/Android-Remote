@@ -3,12 +3,66 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+    
+    <RelativeLayout
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+       android:background="@drawable/actionbar_2nd_bg" >
+        
+        <Space
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true" />
+
+        <TextView
+            android:id="@+id/library_path"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp" />
+
+    </RelativeLayout>
 
     <ListView android:id="@+id/library"
 					    android:layout_margin="13dp"
               android:background="@drawable/white_background"
               android:layout_width="match_parent"
               android:layout_height="match_parent"/>
+    
+    <RelativeLayout 
+       android:id="@+id/library_loading"
+       android:visibility="gone"
+       android:layout_margin="13dp"
+       android:gravity="center_vertical|center_horizontal"
+       android:background="@drawable/white_background"
+       android:layout_width="fill_parent"
+       android:layout_height="fill_parent">
+       
+       <ProgressBar
+           android:id="@+id/library_progressbar_loading"
+           style="?android:attr/progressBarStyle"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_centerHorizontal="true"
+           android:layout_centerVertical="true"
+           android:gravity="center_horizontal" />
+       
+       <TextView
+           android:id="@+id/library_loading_txt"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:layout_alignParentBottom="true"
+           android:gravity="center_horizontal"
+           android:layout_below="@id/library_progressbar_loading"
+           android:text="@string/library_loading"
+           android:textColor="#000000"
+           android:layout_marginBottom="50dp"
+           android:textSize="20sp" />
+
+
+   
+   </RelativeLayout>
     
     <RelativeLayout 
        android:id="@+id/library_empty"

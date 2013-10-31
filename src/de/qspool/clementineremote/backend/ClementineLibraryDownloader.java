@@ -255,9 +255,7 @@ public class ClementineLibraryDownloader extends
 		mClient.disconnect(ClementineMessage.getMessage(MsgType.DISCONNECT));
 
 		// Optimize library table
-		mLibrary.openDatabase();
 		mLibrary.optimizeTable();
-		mLibrary.closeDatabase();
 		
 		// Notify the listeners
 		fireOnLibraryDownloadFinishedListener(true);

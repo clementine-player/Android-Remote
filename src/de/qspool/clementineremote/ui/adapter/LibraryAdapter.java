@@ -17,6 +17,7 @@
 
 package de.qspool.clementineremote.ui.adapter;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import android.app.Activity;
@@ -24,6 +25,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 import de.qspool.clementineremote.R;
@@ -35,13 +37,17 @@ import de.qspool.clementineremote.backend.player.MyLibraryItem;
 public class LibraryAdapter extends ArrayAdapter<MyLibraryItem> implements Filterable {
 	private Context mContext;
 	
+	private Filter mFilter;
+	
 	private List<MyLibraryItem> mData;
+	private List<MyLibraryItem> mOrigData;
 
 	public LibraryAdapter(Context context, int resource,
 			List<MyLibraryItem> data) {
 		super(context, resource, data);
 		mContext = context;
 		mData = data;
+		mOrigData = new LinkedList<MyLibraryItem>(data);
 	}
 	
 	@Override
@@ -62,5 +68,52 @@ public class LibraryAdapter extends ArrayAdapter<MyLibraryItem> implements Filte
 		tvSubtitle.setText(item.getSubtext());
 		
 		return convertView;
+	}
+	
+	@Override
+	public Filter getFilter() {
+		if (mFilter == null) {
+			mFilter = new CustomFilter();
+		}
+		return mFilter;
+	}
+	
+	private class CustomFilter extends Filter {
+
+	    @Override
+	    protected FilterResults performFiltering(CharSequence constraint) {
+	    	String cs = constraint.toString().toLowerCase();
+	        FilterResults results = new FilterResults();
+
+	        if(constraint == null || constraint.length() == 0) {
+	            List<MyLibraryItem> list = new LinkedList<MyLibraryItem>(mOrigData);
+	            results.values = list;
+	            results.count = list.size();
+	        } else {
+	            List<MyLibraryItem> filteredItems = new LinkedList<MyLibraryItem>();
+	            for(int i = 0; i < mOrigData.size(); i++) {
+	            	MyLibraryItem item = mOrigData.get(i);
+	                if(item.getArtist().toLowerCase().contains(cs)
+	                 || item.getAlbum().toLowerCase().contains(cs)
+	                 || item.getTitle().toLowerCase().contains(cs)) {
+	                    filteredItems.add(item);
+	                }
+	            }
+	            results.values = filteredItems;
+	            results.count = filteredItems.size();
+	        }       
+
+	        return results;
+	    }
+
+	    @SuppressWarnings("unchecked")
+	    @Override
+	    protected void publishResults(CharSequence constraint,
+	            FilterResults results) {
+	    	mData.clear();
+	    	mData.addAll((List<MyLibraryItem>) results.values);
+	        notifyDataSetChanged();
+	    }
+
 	}
 }
