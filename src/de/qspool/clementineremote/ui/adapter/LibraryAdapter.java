@@ -59,7 +59,7 @@ public class LibraryAdapter extends ArrayAdapter<MyLibraryItem> implements Filte
 							.inflate(R.layout.library_row, parent, false);
 		}
 
-		convertView.setBackgroundResource(R.drawable.white_background);
+		convertView.setBackgroundResource(R.drawable.listitem_white);
 		
 		TextView tvTitle    = (TextView) convertView.findViewById(R.id.tv_lib_title);
 		TextView tvSubtitle = (TextView) convertView.findViewById(R.id.tv_lib_subtitle);

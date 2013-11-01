@@ -17,6 +17,8 @@
 
 package de.qspool.clementineremote.backend.pb;
 
+import java.util.LinkedList;
+
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message;
@@ -222,12 +224,14 @@ public class ClementineMessageFactory {
 	 * @param url The url to the item
 	 * @return the Clementine Message
 	 */
-	public static ClementineMessage buildInsertUrl(int playistId, String url) {
+	public static ClementineMessage buildInsertUrl(int playistId, LinkedList<String> urls) {
 		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.INSERT_URLS);
 		
 		RequestInsertUrls.Builder insertUrls = msg.getRequestInsertUrlsBuilder();
 		insertUrls.setPlaylistId(playistId);
-		insertUrls.addUrls(url);
+		for (String url : urls) {
+			insertUrls.addUrls(url);
+		}
 		
 		return new ClementineMessage(msg);
 	}

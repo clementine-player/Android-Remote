@@ -51,7 +51,7 @@ public class CustomClementinesAdapter extends ArrayAdapter<ServiceInfo> {
 							.inflate(R.layout.dialog_list_item, parent, false);
 		}
 
-		convertView.setBackgroundResource(R.drawable.white_background_border);
+		convertView.setBackgroundResource(R.drawable.listitem_white_border);
 		
 		TextView tvClHost = (TextView) convertView.findViewById(R.id.tvClItemHost);
 		TextView tvClIp  = (TextView) convertView.findViewById(R.id.tvClIp);

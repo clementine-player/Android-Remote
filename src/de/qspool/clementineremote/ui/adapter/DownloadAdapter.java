@@ -56,7 +56,7 @@ public class DownloadAdapter extends ArrayAdapter<ClementineSongDownloader> impl
 							.inflate(R.layout.download_row, parent, false);
 		}
 
-		convertView.setBackgroundResource(R.drawable.white_background);
+		convertView.setBackgroundResource(R.drawable.listitem_white);
 		
 		TextView tvDlTitle     = (TextView) convertView.findViewById(R.id.tvDlTitle);
 		TextView tvDlSubtitle  = (TextView) convertView.findViewById(R.id.tvDlSubtitle);

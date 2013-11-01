@@ -58,6 +58,7 @@
     <string name="library_empty">Library empty. Hit refresh to download library!</string>
     <string name="library_no_albums">%d albums</string>
     <string name="library_no_tracks">%d tracks</string>
+    <string name="library_songs_added">%d songs added to playlist</string>
     
     
     <string name="song_info_album">Album</string>

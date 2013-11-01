@@ -28,6 +28,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
@@ -146,38 +147,40 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 		inflater.inflate(R.menu.library_menu, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
-	
+
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
 		// Create a listener for search change
-		SearchView searchView = (SearchView) menu.findItem(R.id.library_menu_search).getActionView();
-		
-		final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextChange(String newText) {
-            	// Set the filter text as the fragments might not yet
-            	// created. Only the left and right fragment from the
-            	// currently active is created (onCreate() called).
-            	// Therefore the other adapters are not yet created,
-            	// onCreate filters for this string given in setFilterText()
-            	if (mAdapters.getLast() != null) {
-            		mAdapters.getLast().getFilter().filter(newText);
-            	}
-                return true;
-            }
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // Do something
-            	if (mAdapters.getLast() != null) {
-            		mAdapters.getLast().getFilter().filter(query);
-            	}
+		SearchView searchView = (SearchView) menu.findItem(
+				R.id.library_menu_search).getActionView();
 
-                return true;
-            }
-        };
-        searchView.setOnQueryTextListener(queryTextListener);
+		final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+			@Override
+			public boolean onQueryTextChange(String newText) {
+				// Set the filter text as the fragments might not yet
+				// created. Only the left and right fragment from the
+				// currently active is created (onCreate() called).
+				// Therefore the other adapters are not yet created,
+				// onCreate filters for this string given in setFilterText()
+				if (mAdapters.getLast() != null) {
+					mAdapters.getLast().getFilter().filter(newText);
+				}
+				return true;
+			}
+
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+				// Do something
+				if (mAdapters.getLast() != null) {
+					mAdapters.getLast().getFilter().filter(query);
+				}
+
+				return true;
+			}
+		};
+		searchView.setOnQueryTextListener(queryTextListener);
 		searchView.setQueryHint(getString(R.string.playlist_search_hint));
-		
+
 		super.onPrepareOptionsMenu(menu);
 	}
 
@@ -252,17 +255,17 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 			}
 		}
 	}
-	
+
 	private void buildSubActionBar(String artist, String album) {
 		StringBuilder sb = new StringBuilder();
-		
+
 		sb.append("/ ");
 		sb.append(artist);
 		if (!album.isEmpty()) {
 			sb.append(" / ");
 			sb.append(album);
 		}
-		
+
 		mLibraryPath.setText(sb.toString());
 	}
 
@@ -288,10 +291,15 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 				break;
 			case TITLE:
 				Message msg = Message.obtain();
+				LinkedList<String> urls = new LinkedList<String>();
+				urls.add(item.getUrl());
 				msg.obj = ClementineMessageFactory.buildInsertUrl(
-						App.mClementine.getActivePlaylist().getId(),
-						item.getUrl());
+						App.mClementine.getActivePlaylist().getId(), urls);
 				App.mClementineConnection.mHandler.sendMessage(msg);
+
+				Toast.makeText(getActivity(),
+						String.format(getString(R.string.library_songs_added), 1),
+						Toast.LENGTH_SHORT).show();
 				break;
 			default:
 				break;
