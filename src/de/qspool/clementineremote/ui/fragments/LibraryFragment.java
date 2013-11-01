@@ -24,8 +24,10 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +63,8 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 	private View mEmptyLibrary;
 	private View mLoadingLibrary;
 	private TextView mLibraryPath;
+	
+	private boolean mAddToPlaylist = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -106,6 +110,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 		}
 
 		mList.setOnItemClickListener(oiclLibraryClick);
+		mList.setOnItemLongClickListener(olclLibraryClick);
 
 		showList();
 
@@ -268,6 +273,23 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 
 		mLibraryPath.setText(sb.toString());
 	}
+	
+	private void addSongsToPlaylist(LinkedList<MyLibraryItem> l) {
+		Message msg = Message.obtain();
+		LinkedList<String> urls = new LinkedList<String>();
+		for (MyLibraryItem item : l) {
+			urls.add(item.getUrl());
+		}
+		
+		msg.obj = ClementineMessageFactory.buildInsertUrl(
+				App.mClementine.getActivePlaylist().getId(), urls);
+		
+		App.mClementineConnection.mHandler.sendMessage(msg);
+
+		Toast.makeText(getActivity(),
+				String.format(getString(R.string.library_songs_added), urls.size()),
+				Toast.LENGTH_SHORT).show();
+	}
 
 	private OnItemClickListener oiclLibraryClick = new OnItemClickListener() {
 
@@ -306,11 +328,43 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 			}
 		}
 	};
+	
+	private OnItemLongClickListener olclLibraryClick = new OnItemLongClickListener() {
+		
+		@Override
+		public boolean onItemLongClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			MyLibraryItem item = mAdapters.getLast().getItem(position);
+
+			switch (item.getLevel()) {
+			case ARTIST:
+				mAddToPlaylist = true;
+				mLibrary = new MyLibrary(getActivity());
+				mLibrary.addOnLibrarySelectFinishedListener(LibraryFragment.this);
+				mLibrary.getAllTitlesFromArtist(item.getArtist());
+				return true;
+			case ALBUM:
+				mAddToPlaylist = true;
+				mLibrary = new MyLibrary(getActivity());
+				mLibrary.addOnLibrarySelectFinishedListener(LibraryFragment.this);
+				mLibrary.getTitles(item.getArtist(), item.getAlbum());
+				return true;
+			case TITLE:
+				return false;
+			default:
+				return false;
+			}
+		}
+	};
 
 	@Override
 	public void OnLibrarySelectFinished(LinkedList<MyLibraryItem> l) {
-		mAdapters
-				.add(new LibraryAdapter(getActivity(), R.layout.library_row, l));
-		showList();
+		if (mAddToPlaylist) {
+			addSongsToPlaylist(l);
+		} else {
+			mAdapters.add(new LibraryAdapter(getActivity(), R.layout.library_row, l));
+			showList();
+		}
+		mAddToPlaylist = false;
 	}
 }

@@ -106,6 +106,12 @@ public class MyLibrary extends
 		mSelAlbum = album;
 		this.execute(MyLibraryItem.Level.TITLE);
 	}
+	
+	public void getAllTitlesFromArtist(String artist) {
+		mSelArtist = artist;
+		mSelAlbum  = "";
+		this.execute(MyLibraryItem.Level.TITLE);
+	}
 
 	/**
 	 * How many albums does one artist have in the library?
@@ -166,8 +172,13 @@ public class MyLibrary extends
 				c1 = db.rawQuery(query, new String[] { mSelArtist });
 				break;
 			case TITLE:
-				query = "SELECT artist, album, title, cast(filename as TEXT) FROM songs where artist = ? and album = ?";
-				c1 = db.rawQuery(query, new String[] { mSelArtist, mSelAlbum });
+				if (mSelAlbum.isEmpty()) {
+					query = "SELECT artist, album, title, cast(filename as TEXT) FROM songs where artist = ?";
+					c1 = db.rawQuery(query, new String[] { mSelArtist });
+				} else {
+					query = "SELECT artist, album, title, cast(filename as TEXT) FROM songs where artist = ? and album = ?";
+					c1 = db.rawQuery(query, new String[] { mSelArtist, mSelAlbum });
+				}
 				break;
 			default:
 				break;
