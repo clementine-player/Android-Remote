@@ -59,6 +59,7 @@ public class App extends Application {
 	public final static String SP_DOWNLOAD_PLAYLIST_CRT_ARTIST_DIR="pref_dl_pl_artist_dir";
 	public final static String SP_LAST_STACKTRACE = "last_stacktrace";
 	public final static String SP_LAST_SEND_STACKTRACE = "last_send_stacktrace";
+	public final static String SP_LIBRARY_IP = "library_ip";
 	
 	@Override
 	public void onCreate() {

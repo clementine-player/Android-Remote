@@ -21,9 +21,11 @@ import java.io.File;
 import java.util.LinkedList;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.event.OnLibrarySelectFinishedListener;
@@ -58,6 +60,29 @@ public class MyLibrary extends
 
 	public boolean databaseExists() {
 		return getLibraryDb().exists();
+	}
+	
+	/**
+	 * Check if the library file is from the currenly connected system. If not, we obviously cannot
+	 * add songs from this db to Clementine. So here we delete the wrong library file.
+	 * @return true if a database file existed and the current Clementine connection has a different
+	 * 		   ip that the ip from the library. False otherwise
+	 */
+	public boolean removeDatabaseIfFromOtherClementine() {
+		SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(mContext);
+		String libraryClementine = prefs.getString(App.SP_LIBRARY_IP, "");
+		String currentClementine = prefs.getString(App.SP_KEY_IP, "");
+		
+		if (libraryClementine.equals(currentClementine)) {
+			return false;
+		} else {
+			// Save the current library ip
+			SharedPreferences.Editor edit = prefs.edit();
+			edit.putString(App.SP_LIBRARY_IP, currentClementine);
+			edit.commit();
+			// Delete the file if exists
+			return getLibraryDb().delete();
+		}
 	}
 
 	/**

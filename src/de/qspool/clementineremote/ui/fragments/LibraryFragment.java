@@ -24,7 +24,6 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -95,6 +94,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 				false);
 
 		mLibrary = new MyLibrary(getActivity());
+		mLibrary.removeDatabaseIfFromOtherClementine();
 
 		mLibraryPath = (TextView) view.findViewById(R.id.library_path);
 		mList = (ListView) view.findViewById(R.id.library);
