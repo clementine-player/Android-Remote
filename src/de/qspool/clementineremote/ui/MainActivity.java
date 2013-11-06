@@ -147,7 +147,7 @@ public class MainActivity extends SherlockFragmentActivity {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
         
-        selectItem(mLastPosition);
+        selectItem(mLastPosition, 0);
     }
 	
 	@Override
@@ -165,7 +165,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		    // Set the handler
 		    mHandler = new PlayerHandler(this);
 		    App.mClementineConnection.setUiHandler(mHandler);
-		    selectItem(mLastPosition);
+		    selectItem(mLastPosition, 0);
 		}
 	}
 	
@@ -333,12 +333,12 @@ public class MainActivity extends SherlockFragmentActivity {
     private class DrawerItemClickListener implements OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItem(position);
+            selectItem(position, 300);
         }
     }
 
     /** Swaps fragments in the main content view */
-    private void selectItem(final int position) {
+    private void selectItem(final int position, int delay) {
         mDrawerLayout.closeDrawer(mDrawerList);
         
         new Handler().postDelayed(new Runnable() {
@@ -399,7 +399,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		    	}
 			}
         	
-        }, 300);
+        }, delay);
     }
 
 }

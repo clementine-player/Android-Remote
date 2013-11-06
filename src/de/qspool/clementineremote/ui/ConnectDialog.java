@@ -420,7 +420,7 @@ public class ConnectDialog extends SherlockActivity {
 		
 		// Start the player dialog
 		Intent playerDialog = new Intent(this, MainActivity.class);
-    	playerDialog.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+    	playerDialog.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP| Intent.FLAG_ACTIVITY_NO_ANIMATION);
     	startActivityForResult(playerDialog, ID_PLAYER_DIALOG);
 	}
 	
