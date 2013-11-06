@@ -38,14 +38,14 @@ import de.qspool.clementineremote.backend.player.MySong;
 /**
  * Class is used for displaying the song data
  */
-public class CustomSongAdapter extends ArrayAdapter<MySong> implements Filterable {
+public class PlaylistSongAdapter extends ArrayAdapter<MySong> implements Filterable {
 	private Context mContext;
 	private List<MySong> mData;
 	private List<MySong> mOrigData;
 	private Filter mFilter;
 	private boolean mShowTrackNo = true;
 
-	public CustomSongAdapter(Context context, int resource,
+	public PlaylistSongAdapter(Context context, int resource,
 			List<MySong> data) {
 		super(context, resource, data);
 		mContext = context;
@@ -71,10 +71,22 @@ public class CustomSongAdapter extends ArrayAdapter<MySong> implements Filterabl
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		PlaylistViewHolder playlistViewHolder;
 		
 		if (convertView == null) {
 			convertView = ((Activity)mContext).getLayoutInflater()
 							.inflate(R.layout.playlist_row, parent, false);
+			
+			playlistViewHolder = new PlaylistViewHolder();
+			
+			playlistViewHolder.artist  = (TextView) convertView.findViewById(R.id.tvRowArtist);
+			playlistViewHolder.title   = (TextView) convertView.findViewById(R.id.tvRowTitle);
+			playlistViewHolder.length  = (TextView) convertView.findViewById(R.id.tvRowLength);
+			playlistViewHolder.trackNo = (TextView) convertView.findViewById(R.id.tvTrackNo);
+			
+			convertView.setTag(playlistViewHolder);
+		} else {
+			playlistViewHolder = (PlaylistViewHolder) convertView.getTag();
 		}
 		
 		if (App.mClementine.getCurrentSong() != null 
@@ -83,26 +95,21 @@ public class CustomSongAdapter extends ArrayAdapter<MySong> implements Filterabl
 		} else {
 			convertView.setBackgroundResource(R.drawable.listitem_white);
 		}
-		
-		TextView tvTrackNo = (TextView) convertView.findViewById(R.id.tvTrackNo);
-		
+
 		// Hide the tracknumber  
 		if (!mShowTrackNo) {
-			LayoutParams params = tvTrackNo.getLayoutParams();
+			LayoutParams params = playlistViewHolder.trackNo.getLayoutParams();
 			params.width = 0;
 			params.height = 0;
-			tvTrackNo.setLayoutParams(params);
+			playlistViewHolder.trackNo.setLayoutParams(params);
 		}
-		TextView tvArtist = (TextView) convertView.findViewById(R.id.tvRowArtist);
-		TextView tvTitle  = (TextView) convertView.findViewById(R.id.tvRowTitle);
-		TextView tvLength = (TextView) convertView.findViewById(R.id.tvRowLength);
 		
-		tvTrackNo.setText(String.valueOf(mData.get(position).getTrack()) + ".");
-		tvArtist.setText(mData.get(position).getArtist());
-		tvTitle .setText(mData.get(position).getTitle() + 
+		playlistViewHolder.trackNo.setText(String.valueOf(mData.get(position).getTrack()) + ".");
+		playlistViewHolder.artist.setText(mData.get(position).getArtist());
+		playlistViewHolder.title .setText(mData.get(position).getTitle() + 
 						 " / " + 
 						 mData.get(position).getAlbum());
-		tvLength.setText(mData.get(position).getPrettyLength());
+		playlistViewHolder.length.setText(mData.get(position).getPrettyLength());
 		
 		return convertView;
 	}
@@ -163,5 +170,12 @@ public class CustomSongAdapter extends ArrayAdapter<MySong> implements Filterabl
 	        notifyDataSetChanged();
 	    }
 
+	}
+	
+	private class PlaylistViewHolder {
+		TextView artist;
+		TextView title;
+		TextView length;
+		TextView trackNo;
 	}
 }

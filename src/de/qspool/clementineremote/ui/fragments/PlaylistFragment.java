@@ -48,12 +48,12 @@ import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
 import de.qspool.clementineremote.backend.player.MyPlaylist;
 import de.qspool.clementineremote.backend.player.MySong;
-import de.qspool.clementineremote.ui.adapter.CustomSongAdapter;
+import de.qspool.clementineremote.ui.adapter.PlaylistSongAdapter;
 
 public class PlaylistFragment extends AbstractDrawerFragment {
 	public final static String PLAYLIST_ID = "playlist_id";
 	
-	private CustomSongAdapter mAdapter;
+	private PlaylistSongAdapter mAdapter;
 	private ProgressDialog mProgressDialog;
 	private ActionBar mActionBar; 
 	private ListView mList;
@@ -109,7 +109,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 		mEmptyPlaylist = view.findViewById(R.id.playlist_empty);
 		
 		// Create the adapter
-		mAdapter = new CustomSongAdapter(getActivity(), R.layout.playlist_row, mData);
+		mAdapter = new PlaylistSongAdapter(getActivity(), R.layout.playlist_row, mData);
 		
 		mList.setOnItemClickListener(oiclSong);
 		mList.setAdapter(mAdapter);
@@ -238,7 +238,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 		mData.addAll(App.mClementine.getPlaylists().get(mId).getPlaylistSongs());
 		
 		// Check if we should update the current view position
-		mAdapter = new CustomSongAdapter(getActivity(), R.layout.playlist_row, mData);
+		mAdapter = new PlaylistSongAdapter(getActivity(), R.layout.playlist_row, mData);
 		mList.setAdapter(mAdapter);
 		
 		updateViewPosition();
@@ -260,7 +260,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 	 * Get the song adapter
 	 * @return The CustomSongAdapter
 	 */
-	public CustomSongAdapter getAdapter() {
+	public PlaylistSongAdapter getAdapter() {
 		return mAdapter;
 	}
 	

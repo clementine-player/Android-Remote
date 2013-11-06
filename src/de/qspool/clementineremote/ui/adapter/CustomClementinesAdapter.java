@@ -45,22 +45,33 @@ public class CustomClementinesAdapter extends ArrayAdapter<ServiceInfo> {
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		ClementineViewHolder clementineViewHolder;
 		
 		if (convertView == null) {
 			convertView = ((Activity)mContext).getLayoutInflater()
 							.inflate(R.layout.dialog_list_item, parent, false);
+			
+			clementineViewHolder = new ClementineViewHolder();
+			clementineViewHolder.textViewHost = (TextView) convertView.findViewById(R.id.tvClItemHost);
+			clementineViewHolder.textViewIp   = (TextView) convertView.findViewById(R.id.tvClIp);
+			
+			convertView.setTag(clementineViewHolder);
+		} else {
+			clementineViewHolder = (ClementineViewHolder) convertView.getTag();
 		}
 
 		convertView.setBackgroundResource(R.drawable.listitem_white_border);
 		
-		TextView tvClHost = (TextView) convertView.findViewById(R.id.tvClItemHost);
-		TextView tvClIp  = (TextView) convertView.findViewById(R.id.tvClIp);
-		
-		tvClHost.setText(mData.get(position).getName());
-		tvClIp.setText( mData.get(position).getInet4Addresses()[0].toString().split("/")[1] + 
+		clementineViewHolder.textViewHost.setText(mData.get(position).getName());
+		clementineViewHolder.textViewIp.setText( mData.get(position).getInet4Addresses()[0].toString().split("/")[1] + 
 						":" + mData.get(position).getPort());
 		
 		return convertView;
+	}
+	
+	private class ClementineViewHolder {
+		public TextView textViewHost;
+		public TextView textViewIp;
 	}
 
 }

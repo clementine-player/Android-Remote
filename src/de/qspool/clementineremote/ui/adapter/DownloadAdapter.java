@@ -50,26 +50,33 @@ public class DownloadAdapter extends ArrayAdapter<ClementineSongDownloader> impl
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ClementineSongDownloader downloader = App.downloaders.get(position);
+		DownloadViewHolder downloadViewHolder;
 		
 		if (convertView == null) {
 			convertView = ((Activity)mContext).getLayoutInflater()
 							.inflate(R.layout.download_row, parent, false);
+			
+			downloadViewHolder = new DownloadViewHolder();
+			
+			downloadViewHolder.title    = (TextView) convertView.findViewById(R.id.tvDlTitle);
+			downloadViewHolder.subtitle = (TextView) convertView.findViewById(R.id.tvDlSubtitle);
+			downloadViewHolder.progress = (ProgressBar) convertView.findViewById(R.id.pbDlProgress);
+			downloadViewHolder.cancel   = (ImageButton) convertView.findViewById(R.id.ibCancelDl);
+			
+			convertView.setTag(downloadViewHolder);
+		} else {
+			downloadViewHolder = (DownloadViewHolder) convertView.getTag();
 		}
 
 		convertView.setBackgroundResource(R.drawable.listitem_white);
 		
-		TextView tvDlTitle     = (TextView) convertView.findViewById(R.id.tvDlTitle);
-		TextView tvDlSubtitle  = (TextView) convertView.findViewById(R.id.tvDlSubtitle);
-		ProgressBar pbProgress = (ProgressBar) convertView.findViewById(R.id.pbDlProgress);
-		ImageButton ibCancel   = (ImageButton) convertView.findViewById(R.id.ibCancelDl);
+		downloadViewHolder.cancel.setOnClickListener(oclCancel);
+		downloadViewHolder.cancel.setTag(downloader);
 		
-		ibCancel.setOnClickListener(oclCancel);
-		ibCancel.setTag(downloader);
-		
-		pbProgress.setMax(100);
-		pbProgress.setProgress(downloader.getCurrentProgress());
-		tvDlTitle.setText(downloader.getTitle());
-		tvDlSubtitle.setText(downloader.getSubtitle());
+		downloadViewHolder.progress.setMax(100);
+		downloadViewHolder.progress.setProgress(downloader.getCurrentProgress());
+		downloadViewHolder.title.setText(downloader.getTitle());
+		downloadViewHolder.subtitle.setText(downloader.getSubtitle());
 		
 		return convertView;
 	}
@@ -90,4 +97,11 @@ public class DownloadAdapter extends ArrayAdapter<ClementineSongDownloader> impl
 			notifyDataSetChanged();
 		}
 	};
+	
+	private class DownloadViewHolder {
+		TextView title;
+		TextView subtitle;
+		ProgressBar progress;
+		ImageButton cancel;
+	}
 }
