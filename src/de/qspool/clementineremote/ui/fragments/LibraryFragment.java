@@ -132,6 +132,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 							mLibrary.openDatabase();
 							LibraryAdapter a = new LibraryAdapter(getActivity(), mLibrary.getArtists(), mLibrary);
 							mAdapters.add(a);
+							showList();
 						}
 					});
 			mLibraryDownloader.startDownload(ClementineMessage
@@ -263,7 +264,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 
 		sb.append("/ ");
 		sb.append(artist);
-		if (!album.isEmpty()) {
+		if (album.length() > 0) {
 			sb.append(" / ");
 			sb.append(album);
 		}

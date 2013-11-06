@@ -268,7 +268,7 @@ public class MyLibrary extends
 				c1 = db.rawQuery(query, new String[] { mSelArtist });
 				break;
 			case LVL_TITLE:
-				if (mSelAlbum.isEmpty()) {
+				if (mSelAlbum.length() == 0) {
 					query += "WHERE artist = ?";
 					c1 = db.rawQuery(query, new String[] { mSelArtist });
 				} else {
