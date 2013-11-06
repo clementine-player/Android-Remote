@@ -22,10 +22,12 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,12 +39,15 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.utils.Utilities;
 
@@ -75,6 +80,18 @@ public class SongInfoFragment extends AbstractDrawerFragment {
     private int mShortAnimationDuration;
 
     private MySong mCurrentSong;
+    
+	private SharedPreferences mSharedPref;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+    	
+	    // Get the shared preferences
+	    mSharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+	    
+	    setHasOptionsMenu(true);
+	}
     
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -139,8 +156,38 @@ public class SongInfoFragment extends AbstractDrawerFragment {
 	}
 	
 	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.song_info_menu, menu);
+		
+		// Shall we show the lastfm buttons?
+		boolean showLastFm = mSharedPref.getBoolean(App.SP_LASTFM, true);
+		menu.findItem(R.id.love).setVisible(showLastFm);
+		menu.findItem(R.id.ban).setVisible(showLastFm);
+		
+		super.onCreateOptionsMenu(menu,inflater);
+	}
+	
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-
+		switch (item.getItemId())
+		{
+		case R.id.love:			if (App.mClementine.getCurrentSong() != null
+								 && !App.mClementine.getCurrentSong().isLoved()) {
+									// You can love only one
+									Message msg = Message.obtain();
+									msg.obj = ClementineMessage.getMessage(MsgType.LOVE);
+									App.mClementineConnection.mHandler.sendMessage(msg);	
+									App.mClementine.getCurrentSong().setLoved(true);
+								}
+								Toast.makeText(getActivity(), R.string.track_loved, Toast.LENGTH_SHORT).show();;
+								break;
+		case R.id.ban:			Message msg = Message.obtain();
+								msg.obj = ClementineMessage.getMessage(MsgType.BAN);
+								App.mClementineConnection.mHandler.sendMessage(msg);
+								Toast.makeText(getActivity(), R.string.track_banned, Toast.LENGTH_SHORT).show();
+								break;
+		default: break;
+		}
 		return true;
 	}
 	
@@ -266,13 +313,13 @@ public class SongInfoFragment extends AbstractDrawerFragment {
 	    // scale properties (X, Y, SCALE_X, and SCALE_Y).
 	    AnimatorSet set = new AnimatorSet();
 	    set
-	            .play(ObjectAnimator.ofFloat(iv_large_art, View.X,
+	            .play(ObjectAnimator.ofFloat(iv_large_art, "x",
 	                    startBounds.left, finalBounds.left))
-	            .with(ObjectAnimator.ofFloat(iv_large_art, View.Y,
+	            .with(ObjectAnimator.ofFloat(iv_large_art, "y",
 	                    startBounds.top, finalBounds.top))
-	            .with(ObjectAnimator.ofFloat(iv_large_art, View.SCALE_X,
+	            .with(ObjectAnimator.ofFloat(iv_large_art, "scaleX",
 	            startScale, 1f)).with(ObjectAnimator.ofFloat(iv_large_art,
-	                    View.SCALE_Y, startScale, 1f));
+	                    "scaleY", startScale, 1f));
 	    set.setDuration(mShortAnimationDuration);
 	    set.setInterpolator(new DecelerateInterpolator());
 	    set.addListener(new AnimatorListenerAdapter() {
@@ -304,16 +351,16 @@ public class SongInfoFragment extends AbstractDrawerFragment {
 	            // back to their original values.
 	            AnimatorSet set = new AnimatorSet();
 	            set.play(ObjectAnimator
-	                        .ofFloat(iv_large_art, View.X, startBounds.left))
+	                        .ofFloat(iv_large_art, "x", startBounds.left))
 	                        .with(ObjectAnimator
 	                                .ofFloat(iv_large_art, 
-	                                        View.Y,startBounds.top))
+	                                        "y",startBounds.top))
 	                        .with(ObjectAnimator
 	                                .ofFloat(iv_large_art, 
-	                                        View.SCALE_X, startScaleFinal))
+	                                        "scaleX", startScaleFinal))
 	                        .with(ObjectAnimator
 	                                .ofFloat(iv_large_art, 
-	                                        View.SCALE_Y, startScaleFinal));
+	                                        "scaleY", startScaleFinal));
 	            set.setDuration(mShortAnimationDuration);
 	            set.setInterpolator(new DecelerateInterpolator());
 	            set.addListener(new AnimatorListenerAdapter() {

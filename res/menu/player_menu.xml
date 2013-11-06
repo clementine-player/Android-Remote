@@ -8,14 +8,6 @@
           android:title="@string/menu_repeat"
           android:showAsAction="always"
           android:icon="@drawable/ab_repeat_off"></item>
-    <item android:id="@+id/love" 
-          android:title="@string/menu_love"
-          android:icon="@drawable/ab_love"
-          android:showAsAction="always"></item>
-    <item android:id="@+id/ban" 
-          android:title="@string/menu_ban"
-          android:icon="@drawable/ab_ban"
-          android:showAsAction="ifRoom"></item>
     <item android:id="@+id/download_song"
           android:title="@string/menu_download_song"
           android:showAsAction="ifRoom"></item>

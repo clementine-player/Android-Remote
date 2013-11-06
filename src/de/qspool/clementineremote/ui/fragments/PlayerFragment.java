@@ -20,11 +20,9 @@ package de.qspool.clementineremote.ui.fragments;
 import java.util.List;
 
 import android.app.ProgressDialog;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -88,8 +86,6 @@ public class PlayerFragment extends AbstractDrawerFragment {
 	
 	private Toast mToast;
 	
-	private SharedPreferences mSharedPref;
-	
     private boolean mFirstCall = true;
     
     ProgressDialog mPdDownloadLyrics;
@@ -99,9 +95,6 @@ public class PlayerFragment extends AbstractDrawerFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	super.onActivityCreated(savedInstanceState);
-    	
-	    // Get the shared preferences
-	    mSharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 	    
 	    // Get the actionbar
 	    mActionBar = getSherlockActivity().getSupportActionBar();
@@ -171,11 +164,6 @@ public class PlayerFragment extends AbstractDrawerFragment {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.player_menu, menu);
 		
-		// Shall we show the lastfm buttons?
-		boolean showLastFm = mSharedPref.getBoolean(App.SP_LASTFM, true);
-		menu.findItem(R.id.love).setVisible(showLastFm);
-		menu.findItem(R.id.ban).setVisible(showLastFm);
-		
 		mMenuRepeat =  menu.findItem(R.id.repeat);
 		mMenuShuffle = menu.findItem(R.id.shuffle);
 		
@@ -200,21 +188,6 @@ public class PlayerFragment extends AbstractDrawerFragment {
 		case R.id.shuffle:		doShuffle();
 								break;
 		case R.id.repeat:		doRepeat();
-								break;
-		case R.id.love:			if (App.mClementine.getCurrentSong() != null
-								 && !App.mClementine.getCurrentSong().isLoved()) {
-									// You can love only one
-									Message msg = Message.obtain();
-									msg.obj = ClementineMessage.getMessage(MsgType.LOVE);
-									App.mClementineConnection.mHandler.sendMessage(msg);	
-									App.mClementine.getCurrentSong().setLoved(true);
-								}
-								makeToast(R.string.track_loved, Toast.LENGTH_SHORT);
-								break;
-		case R.id.ban:			Message msg = Message.obtain();
-								msg.obj = ClementineMessage.getMessage(MsgType.BAN);
-								App.mClementineConnection.mHandler.sendMessage(msg);
-								makeToast(R.string.track_banned, Toast.LENGTH_SHORT);
 								break;
 		case R.id.download_song: 
 								if (App.mClementine.getCurrentSong() == null) {

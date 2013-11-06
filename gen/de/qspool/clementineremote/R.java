@@ -1018,7 +1018,7 @@ containing a value of this type.
         public static final int abs__title=0x7f05001b;
         public static final int abs__titleDivider=0x7f05001c;
         public static final int abs__up=0x7f05000b;
-        public static final int ban=0x7f050093;
+        public static final int ban=0x7f050097;
         public static final int btnClementineIcon=0x7f050033;
         public static final int btnClose=0x7f05004f;
         public static final int btnCloseAbout=0x7f050040;
@@ -1036,9 +1036,9 @@ containing a value of this type.
         public static final int donate_five=0x7f050052;
         public static final int donate_one=0x7f050050;
         public static final int donate_two=0x7f050051;
-        public static final int download_album=0x7f050095;
-        public static final int download_playlist=0x7f050097;
-        public static final int download_song=0x7f050094;
+        public static final int download_album=0x7f050093;
+        public static final int download_playlist=0x7f050095;
+        public static final int download_song=0x7f050092;
         public static final int downloads=0x7f050054;
         public static final int downloads_empty=0x7f050055;
         public static final int downloads_empty_icon=0x7f050057;
@@ -1065,7 +1065,7 @@ containing a value of this type.
         public static final int listMode=0x7f050002;
         public static final int list_header_title=0x7f05005c;
         public static final int llConnect=0x7f050034;
-        public static final int love=0x7f050092;
+        public static final int love=0x7f050096;
         public static final int lvClementines=0x7f050048;
         public static final int normal=0x7f050001;
         public static final int pbDlProgress=0x7f05005b;
@@ -1073,7 +1073,7 @@ containing a value of this type.
         public static final int playlist_empty_icon=0x7f050079;
         public static final int playlist_empty_txt=0x7f050078;
         public static final int playlist_fragment=0x7f050074;
-        public static final int playlist_menu_search=0x7f050096;
+        public static final int playlist_menu_search=0x7f050094;
         public static final int playlist_spinner=0x7f050075;
         public static final int repeat=0x7f050091;
         public static final int sbPosition=0x7f050070;
@@ -1182,6 +1182,7 @@ containing a value of this type.
         public static final int library_menu=0x7f0d0001;
         public static final int player_menu=0x7f0d0002;
         public static final int playlist_menu=0x7f0d0003;
+        public static final int song_info_menu=0x7f0d0004;
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
