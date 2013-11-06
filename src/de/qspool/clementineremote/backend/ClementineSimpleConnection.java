@@ -25,7 +25,6 @@ import java.net.Socket;
 import java.net.SocketAddress;
 
 import android.util.Log;
-import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementinePbParser;
 

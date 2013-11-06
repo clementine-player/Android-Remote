@@ -149,6 +149,8 @@ public class ClementinePbParser {
 			break;
 		case DOWNLOAD_QUEUE_EMPTY:
 			break;
+		default:
+			break;
 		}
 		
 		return clementineMessage;
