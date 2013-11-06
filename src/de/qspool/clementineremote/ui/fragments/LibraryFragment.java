@@ -60,10 +60,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 	private ClementineLibraryDownloader mLibraryDownloader;
 
 	private View mEmptyLibrary;
-	private View mLoadingLibrary;
 	private TextView mLibraryPath;
-	
-	private boolean mAddToPlaylist = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -99,14 +96,13 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 		mLibraryPath = (TextView) view.findViewById(R.id.library_path);
 		mList = (ListView) view.findViewById(R.id.library);
 		mEmptyLibrary = view.findViewById(R.id.library_empty);
-		mLoadingLibrary = view.findViewById(R.id.library_loading);
 
 		// Create the adapter
 		if (mLibrary.databaseExists()) {
 			mLibrary = new MyLibrary(getActivity());
-			mLibrary.addOnLibrarySelectFinishedListener(LibraryFragment.this);
-			mLibrary.getArtists();
-			mList.setEmptyView(mLoadingLibrary);
+			mLibrary.openDatabase();
+			LibraryAdapter a = new LibraryAdapter(getActivity(), mLibrary.getArtists(), mLibrary);
+			mAdapters.add(a);
 		}
 
 		mList.setOnItemClickListener(oiclLibraryClick);
@@ -133,8 +129,9 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 						@Override
 						public void OnLibraryDownloadFinished(boolean successful) {
 							mLibrary = new MyLibrary(getActivity());
-							mLibrary.addOnLibrarySelectFinishedListener(LibraryFragment.this);
-							mLibrary.getArtists();
+							mLibrary.openDatabase();
+							LibraryAdapter a = new LibraryAdapter(getActivity(), mLibrary.getArtists(), mLibrary);
+							mAdapters.add(a);
 						}
 					});
 			mLibraryDownloader.startDownload(ClementineMessage
@@ -242,15 +239,15 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 		} else {
 			LibraryAdapter adapter = mAdapters.getLast();
 			mList.setAdapter(adapter);
-			if (adapter.isEmpty()) {
+			if (adapter.isEmpty() || adapter.getCount() == 0) {
 				buildSubActionBar("", "");
 			} else {
 				MyLibraryItem item = adapter.getItem(0);
 				switch (item.getLevel()) {
-				case ARTIST:
+				case MyLibrary.LVL_ARTIST:
 					buildSubActionBar("", "");
 					break;
-				case ALBUM:
+				case MyLibrary.LVL_ALBUM:
 					buildSubActionBar(item.getArtist(), "");
 					break;
 				default:
@@ -299,19 +296,17 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 			MyLibraryItem item = mAdapters.getLast().getItem(position);
 
 			switch (item.getLevel()) {
-			case ARTIST:
-				mLibrary = new MyLibrary(getActivity());
-				mLibrary.addOnLibrarySelectFinishedListener(LibraryFragment.this);
-				mLibrary.getAlbums(item.getArtist());
-				mList.setEmptyView(mLoadingLibrary);
+			case MyLibrary.LVL_ARTIST:
+				LibraryAdapter album = new LibraryAdapter(getActivity(), mLibrary.getAlbums(item.getArtist()), mLibrary);
+				mAdapters.add(album);
+				showList();
 				break;
-			case ALBUM:
-				mLibrary = new MyLibrary(getActivity());
-				mLibrary.addOnLibrarySelectFinishedListener(LibraryFragment.this);
-				mLibrary.getTitles(item.getArtist(), item.getAlbum());
-				mList.setEmptyView(mLoadingLibrary);
+			case MyLibrary.LVL_ALBUM:
+				LibraryAdapter title = new LibraryAdapter(getActivity(), mLibrary.getTitles(item.getArtist(), item.getAlbum()), mLibrary);
+				mAdapters.add(title);
+				showList();
 				break;
-			case TITLE:
+			case MyLibrary.LVL_TITLE:
 				Message msg = Message.obtain();
 				LinkedList<String> urls = new LinkedList<String>();
 				urls.add(item.getUrl());
@@ -337,19 +332,17 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 			MyLibraryItem item = mAdapters.getLast().getItem(position);
 
 			switch (item.getLevel()) {
-			case ARTIST:
-				mAddToPlaylist = true;
-				mLibrary = new MyLibrary(getActivity());
-				mLibrary.addOnLibrarySelectFinishedListener(LibraryFragment.this);
-				mLibrary.getAllTitlesFromArtist(item.getArtist());
+			case MyLibrary.LVL_ARTIST:
+				MyLibrary addArtist = new MyLibrary(getActivity());
+				addArtist.addOnLibrarySelectFinishedListener(LibraryFragment.this);
+				addArtist.getAllTitlesFromArtistAsync(item.getArtist());
 				return true;
-			case ALBUM:
-				mAddToPlaylist = true;
-				mLibrary = new MyLibrary(getActivity());
-				mLibrary.addOnLibrarySelectFinishedListener(LibraryFragment.this);
-				mLibrary.getTitles(item.getArtist(), item.getAlbum());
+			case MyLibrary.LVL_ALBUM:
+				MyLibrary addAlbums = new MyLibrary(getActivity());
+				addAlbums.addOnLibrarySelectFinishedListener(LibraryFragment.this);
+				addAlbums.getTitlesAsync(item.getArtist(), item.getAlbum());
 				return true;
-			case TITLE:
+			case MyLibrary.LVL_TITLE:
 				return false;
 			default:
 				return false;
@@ -359,12 +352,6 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 
 	@Override
 	public void OnLibrarySelectFinished(LinkedList<MyLibraryItem> l) {
-		if (mAddToPlaylist) {
-			addSongsToPlaylist(l);
-		} else {
-			mAdapters.add(new LibraryAdapter(getActivity(), R.layout.library_row, l));
-			showList();
-		}
-		mAddToPlaylist = false;
+		addSongsToPlaylist(l);
 	}
 }

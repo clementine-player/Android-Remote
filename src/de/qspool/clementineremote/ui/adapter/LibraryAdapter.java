@@ -17,103 +17,93 @@
 
 package de.qspool.clementineremote.ui.adapter;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
+import android.database.Cursor;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Filter;
+import android.widget.CursorAdapter;
 import android.widget.Filterable;
 import android.widget.TextView;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.backend.player.MyLibrary;
 import de.qspool.clementineremote.backend.player.MyLibraryItem;
 
 /**
  * Class is used for displaying the song data
  */
-public class LibraryAdapter extends ArrayAdapter<MyLibraryItem> implements Filterable {
+public class LibraryAdapter extends CursorAdapter implements Filterable {
 	private Context mContext;
-	
-	private Filter mFilter;
-	
-	private List<MyLibraryItem> mData;
-	private List<MyLibraryItem> mOrigData;
+	private MyLibrary mLibrary;
+	private int mLevel;
 
-	public LibraryAdapter(Context context, int resource,
-			List<MyLibraryItem> data) {
-		super(context, resource, data);
+	public LibraryAdapter(Context context, Cursor c, MyLibrary library) {
+		super(context, c, false);
 		mContext = context;
-		mData = data;
-		mOrigData = new LinkedList<MyLibraryItem>(data);
+		mLibrary = library;
 	}
 	
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		MyLibraryItem item = mData.get(position);
-		
-		if (convertView == null) {
-			convertView = ((Activity)mContext).getLayoutInflater()
+	public View newView(Context context, Cursor cursor, ViewGroup parent) {
+		View convertView = ((Activity)mContext).getLayoutInflater()
 							.inflate(R.layout.library_row, parent, false);
-		}
-
+		
 		convertView.setBackgroundResource(R.drawable.listitem_white);
 		
-		TextView tvTitle    = (TextView) convertView.findViewById(R.id.tv_lib_title);
-		TextView tvSubtitle = (TextView) convertView.findViewById(R.id.tv_lib_subtitle);
+		LibraryViewHolder libraryViewHolder = new LibraryViewHolder();
+		libraryViewHolder.title    = (TextView) convertView.findViewById(R.id.tv_lib_title);
+		libraryViewHolder.subtitle = (TextView) convertView.findViewById(R.id.tv_lib_subtitle);
 		
-		tvTitle.setText(item.getText());
-		tvSubtitle.setText(item.getSubtext());
-		
+		convertView.setTag(libraryViewHolder);
+	
 		return convertView;
 	}
 	
 	@Override
-	public Filter getFilter() {
-		if (mFilter == null) {
-			mFilter = new CustomFilter();
+	public void bindView(View view, Context context, Cursor cursor) {
+		LibraryViewHolder libraryViewHolder = (LibraryViewHolder) view.getTag();
+		
+		mLevel = cursor.getInt(MyLibrary.IDX_LEVEL);
+		
+		switch (mLevel) {
+		case MyLibrary.LVL_ARTIST:
+			libraryViewHolder.title.setText(cursor.getString(MyLibrary.IDX_ARTIST));
+			libraryViewHolder.subtitle.setText(String.format(
+					mContext.getString(R.string.library_no_albums),
+					mLibrary.getAlbumCountForArtist(cursor.getString(MyLibrary.IDX_ARTIST))));
+			break;
+		case MyLibrary.LVL_ALBUM:
+			libraryViewHolder.title.setText(cursor.getString(MyLibrary.IDX_ALBUM));
+			libraryViewHolder.subtitle.setText(String.format(
+					mContext.getString(R.string.library_no_tracks),
+					mLibrary.getTitleCountForAlbum(cursor.getString(MyLibrary.IDX_ARTIST), cursor.getString(MyLibrary.IDX_ALBUM))));
+			break;
+		case MyLibrary.LVL_TITLE:
+			libraryViewHolder.title.setText(cursor.getString(MyLibrary.IDX_TITLE));
+			libraryViewHolder.subtitle.setText(cursor.getString(MyLibrary.IDX_ALBUM) + " / " + cursor.getString(MyLibrary.IDX_ARTIST));
+			break;
+		default:
+			break;
 		}
-		return mFilter;
 	}
 	
-	private class CustomFilter extends Filter {
-
-	    @Override
-	    protected FilterResults performFiltering(CharSequence constraint) {
-	    	String cs = constraint.toString().toLowerCase();
-	        FilterResults results = new FilterResults();
-
-	        if(constraint == null || constraint.length() == 0) {
-	            List<MyLibraryItem> list = new LinkedList<MyLibraryItem>(mOrigData);
-	            results.values = list;
-	            results.count = list.size();
-	        } else {
-	            List<MyLibraryItem> filteredItems = new LinkedList<MyLibraryItem>();
-	            for(int i = 0; i < mOrigData.size(); i++) {
-	            	MyLibraryItem item = mOrigData.get(i);
-	                if(item.getArtist().toLowerCase().contains(cs)
-	                 || item.getAlbum().toLowerCase().contains(cs)
-	                 || item.getTitle().toLowerCase().contains(cs)) {
-	                    filteredItems.add(item);
-	                }
-	            }
-	            results.values = filteredItems;
-	            results.count = filteredItems.size();
-	        }       
-
-	        return results;
-	    }
-
-	    @SuppressWarnings("unchecked")
-	    @Override
-	    protected void publishResults(CharSequence constraint,
-	            FilterResults results) {
-	    	mData.clear();
-	    	mData.addAll((List<MyLibraryItem>) results.values);
-	        notifyDataSetChanged();
-	    }
-
+	@Override
+	public MyLibraryItem getItem(int position) {
+		Cursor c = getCursor();
+		c.moveToPosition(position);
+		return mLibrary.createMyLibraryItem(c, c.getInt(MyLibrary.IDX_LEVEL));
+	}
+	
+	@Override
+	public Cursor runQueryOnBackgroundThread(CharSequence constraint) {
+		if (constraint.length() == 0)
+			return mLibrary.buildSelectSql(mLevel);
+		else
+			return mLibrary.buildSelectSql(mLevel, mLibrary.getMatchesSubQuery(mLevel, constraint.toString()));
+	}
+	
+	private class LibraryViewHolder {
+		TextView title;
+		TextView subtitle;
 	}
 }

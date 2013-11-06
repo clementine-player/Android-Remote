@@ -27,12 +27,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import de.qspool.clementineremote.App;
-import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.event.OnLibrarySelectFinishedListener;
-import de.qspool.clementineremote.backend.player.MyLibraryItem.Level;
 
 public class MyLibrary extends
-		AsyncTask<MyLibraryItem.Level, Void, LinkedList<MyLibraryItem>> {
+		AsyncTask<Integer, Void, LinkedList<MyLibraryItem>> {
 	private final static String LIBRARY_DB_FILE_NAME = "library.db";
 
 	// Table names
@@ -40,6 +38,20 @@ public class MyLibrary extends
 	private final static String SONGS_ARTIST = "songs_artist";
 	private final static String SONGS_ALBUM = "songs_album";
 	private final static String SONGS_TITLE = "songs_title";
+	
+	// Field indicies
+	public final static int IDX_ID     = 0;
+	public final static int IDX_LEVEL  = 1;
+	public final static int IDX_ARTIST = 2;
+	public final static int IDX_ALBUM  = 3;
+	public final static int IDX_TITLE  = 4;
+	public final static int IDX_URL    = 5;
+	public final static int IDX_COUNT  = 6;
+	
+	// Levels
+	public final static int LVL_ARTIST = 0;
+	public final static int LVL_ALBUM  = 1;
+	public final static int LVL_TITLE  = 2;
 
 	// Select values
 	private String mSelArtist = "";
@@ -104,9 +116,22 @@ public class MyLibrary extends
 	 */
 	public void optimizeTable() {
 		openDatabase();
+		
+		StringBuilder sb = new StringBuilder();
+		Cursor c = db.rawQuery("PRAGMA table_info(songs);", new String[] {});
+		
+		if (c != null && c.moveToFirst()) {
+			do {
+				if (sb.length() != 0)
+					sb.append(", ");
+				sb.append(c.getString(1));
+			} while (c.moveToNext());
+		}
+		
 		// FTS Table for search
 		db.execSQL("CREATE VIRTUAL TABLE " + SONGS_FTS
-				+ " USING fts3(select * from songs);");
+				+ " USING fts3(" + sb.toString() + ");");
+		db.execSQL("INSERT INTO " + SONGS_FTS + " SELECT * FROM songs");
 
 		// Indices for fragment
 		db.execSQL("CREATE INDEX " + SONGS_ARTIST + " ON songs (artist);");
@@ -117,25 +142,40 @@ public class MyLibrary extends
 		closeDatabase();
 	}
 
-	public void getArtists() {
-		this.execute(MyLibraryItem.Level.ARTIST);
+	public void getArtistsAsync() {
+		this.execute(LVL_ARTIST);
 	}
 
-	public void getAlbums(String artist) {
+	public void getAlbumsAsync(String artist) {
 		mSelArtist = artist;
-		this.execute(MyLibraryItem.Level.ALBUM);
+		this.execute(LVL_ALBUM);
 	}
 
-	public void getTitles(String artist, String album) {
+	public void getTitlesAsync(String artist, String album) {
 		mSelArtist = artist;
 		mSelAlbum = album;
-		this.execute(MyLibraryItem.Level.TITLE);
+		this.execute(LVL_TITLE);
 	}
 	
-	public void getAllTitlesFromArtist(String artist) {
+	public void getAllTitlesFromArtistAsync(String artist) {
 		mSelArtist = artist;
 		mSelAlbum  = "";
-		this.execute(MyLibraryItem.Level.TITLE);
+		this.execute(LVL_TITLE);
+	}
+	
+	public Cursor getArtists() {
+		return buildSelectSql(LVL_ARTIST);
+	}
+	
+	public Cursor getAlbums(String artist) {
+		mSelArtist = artist;
+		return buildSelectSql(LVL_ALBUM);
+	}
+	
+	public Cursor getTitles(String artist, String album) {
+		mSelArtist = artist;
+		mSelAlbum = album;
+		return buildSelectSql(LVL_TITLE);
 	}
 
 	/**
@@ -145,7 +185,7 @@ public class MyLibrary extends
 	 *            The artist for which the count should be checked
 	 * @return The number of albums
 	 */
-	private int getAlbumCountForArtist(String artist) {
+	public int getAlbumCountForArtist(String artist) {
 		Cursor c = db
 				.rawQuery(
 						"SELECT count(distinct(album)) FROM songs where artist = ?",
@@ -163,7 +203,7 @@ public class MyLibrary extends
 	 *            The artist for which the count should be checked
 	 * @return The number of albums
 	 */
-	private int getTitleCountForAlbum(String artist, String album) {
+	public int getTitleCountForAlbum(String artist, String album) {
 		Cursor c = db
 				.rawQuery(
 						"SELECT count(title) FROM songs where artist = ? and album = ?",
@@ -174,34 +214,65 @@ public class MyLibrary extends
 		return count;
 	}
 
-	private void openDatabase() {
+	public void openDatabase() {
 		db = SQLiteDatabase.openDatabase(getLibraryDb().getAbsolutePath(),
 				null, SQLiteDatabase.OPEN_READWRITE);
 	}
 
-	private void closeDatabase() {
+	public void closeDatabase() {
 		db.close();
 	}
+	
+	public String getMatchesSubQuery(int level, String match) {
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("(SELECT * FROM ");
+		sb.append(SONGS_FTS);
+		sb.append(" WHERE ");
+		
+		switch (level) {
+		case LVL_ARTIST:
+			sb.append("artist");
+			break;
+		case LVL_ALBUM:
+			sb.append("album");
+			break;
+		case LVL_TITLE:
+			sb.append("title");
+			break;
+		default:
+			break;
+		}
+		sb.append(" MATCH \"");
+		sb.append(match);
+		sb.append("*\")");
+		
+		return sb.toString();
+	}
+	
+	public Cursor buildSelectSql(int level) {
+		return buildSelectSql(level, "songs");
+	}
 
-	private Cursor buildSelectSql(Level level) {
+	public Cursor buildSelectSql(int level, String fromTable) {
 		Cursor c1 = null;
-		String query = "";
+		String query = "SELECT ROWID as _id, " + level + ", artist, album, title, cast(filename as TEXT) FROM " + fromTable + " ";
 		try {
 			switch (level) {
-			case ARTIST:
-				query = "SELECT artist from songs where artist <> \" \" group by artist";
+			case LVL_ARTIST:
+				query += "WHERE artist <> '' group by artist";
 				c1 = db.rawQuery(query, null);
 				break;
-			case ALBUM:
-				query = "SELECT artist, album from songs where artist = ? group by album";
+			case LVL_ALBUM:
+				query += "WHERE artist = ? group by album";
 				c1 = db.rawQuery(query, new String[] { mSelArtist });
 				break;
-			case TITLE:
+			case LVL_TITLE:
 				if (mSelAlbum.isEmpty()) {
-					query = "SELECT artist, album, title, cast(filename as TEXT) FROM songs where artist = ?";
+					query += "WHERE artist = ?";
 					c1 = db.rawQuery(query, new String[] { mSelArtist });
 				} else {
-					query = "SELECT artist, album, title, cast(filename as TEXT) FROM songs where artist = ? and album = ?";
+					query += "WHERE artist = ? and album = ?";
 					c1 = db.rawQuery(query, new String[] { mSelArtist, mSelAlbum });
 				}
 				break;
@@ -224,51 +295,45 @@ public class MyLibrary extends
 	 *            The level we are operating at
 	 * @return The list of items
 	 */
-	private LinkedList<MyLibraryItem> selectData(Cursor c, Level level) {
+	private LinkedList<MyLibraryItem> selectData(Cursor c, int level) {
 		LinkedList<MyLibraryItem> itemList = new LinkedList<MyLibraryItem>();
 
 		c.moveToFirst();
 
 		do {
-			MyLibraryItem item = new MyLibraryItem();
-
-			switch (level) {
-			case ARTIST:
-				item.setText(c.getString(0));
-				item.setSubtext(String.format(
-						mContext.getString(R.string.library_no_albums),
-						getAlbumCountForArtist(c.getString(0))));
-				item.setArtist(c.getString(0));
-				break;
-			case ALBUM:
-				item.setText(c.getString(1));
-				item.setSubtext(String.format(
-						mContext.getString(R.string.library_no_tracks),
-						getTitleCountForAlbum(c.getString(0), c.getString(1))));
-				item.setArtist(c.getString(0));
-				item.setAlbum(c.getString(1));
-				break;
-			case TITLE:
-				item.setText(c.getString(2));
-				item.setSubtext(c.getString(1) + " / " + c.getString(0));
-				item.setUrl(c.getString(3));
-				item.setArtist(c.getString(0));
-				item.setAlbum(c.getString(1));
-				item.setTitle(c.getString(2));
-				break;
-			default:
-				break;
-			}
-			item.setLevel(level);
-			itemList.add(item);
+			itemList.add(createMyLibraryItem(c, level));
 		} while (c.moveToNext());
 
 		return itemList;
 	}
+	
+	public MyLibraryItem createMyLibraryItem(Cursor c, int level) {
+		MyLibraryItem item = new MyLibraryItem();
+
+		switch (level) {
+		case LVL_ARTIST:
+			item.setArtist(c.getString(IDX_ARTIST));
+			break;
+		case LVL_ALBUM:
+			item.setArtist(c.getString(IDX_ARTIST));
+			item.setAlbum(c.getString(IDX_ALBUM));
+			break;
+		case LVL_TITLE:
+			item.setUrl(c.getString(IDX_URL));
+			item.setArtist(c.getString(IDX_ARTIST));
+			item.setAlbum(c.getString(IDX_ALBUM));
+			item.setTitle(c.getString(IDX_TITLE));
+			break;
+		default:
+			break;
+		}
+		item.setLevel(level);
+		return item;
+	}
 
 	@Override
 	protected LinkedList<MyLibraryItem> doInBackground(
-			MyLibraryItem.Level... params) {
+			Integer... params) {
 		openDatabase();
 
 		LinkedList<MyLibraryItem> itemList = new LinkedList<MyLibraryItem>();

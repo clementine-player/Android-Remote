@@ -9,13 +9,7 @@
        android:layout_width="fill_parent"
        android:layout_height="wrap_content"
        android:background="@drawable/actionbar_2nd_bg" >
-        
-        <Space
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true" />
-
+       
         <TextView
             android:id="@+id/downloads_freespace"
             android:layout_width="wrap_content"
@@ -59,6 +53,7 @@
            android:layout_above="@id/downloads_empty_txt"
            android:alpha="0.25"
            android:scaleType="fitCenter"
+           android:contentDescription="@string/empty_fragment"
            android:src="@drawable/icon_large" />
 
    

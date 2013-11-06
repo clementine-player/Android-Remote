@@ -132,6 +132,8 @@ public class ClementineLibraryDownloader extends
 	@Override
 	protected void onPostExecute(DownloaderResult result) {
 		mProgressDialog.dismiss();
+		// Notify the listeners
+		fireOnLibraryDownloadFinishedListener(result.getResult() == DownloaderResult.DownloadResult.SUCCESSFUL);
 	}
 
 	/**
@@ -255,9 +257,6 @@ public class ClementineLibraryDownloader extends
 
 		// Optimize library table
 		mLibrary.optimizeTable();
-		
-		// Notify the listeners
-		fireOnLibraryDownloadFinishedListener(true);
 
 		return result;
 	}

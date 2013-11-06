@@ -18,40 +18,23 @@
 package de.qspool.clementineremote.backend.player;
 
 public class MyLibraryItem {
-	public enum Level {ARTIST, ALBUM, TITLE};
-	
-	private String mText = new String();
-	private String mSubtext = new String();
-	private String mUrl = new String();
-	
+	private int mLevel;
+		
 	private String mArtist = new String();
 	private String mAlbum = new String();
 	private String mTitle = new String();
-	
-	private Level mLevel;
-	
-	public String getText() {
-		return mText;
-	}
-	public void setText(String mText) {
-		this.mText = mText;
-	}
-	public String getSubtext() {
-		return mSubtext;
-	}
-	public void setSubtext(String mSubtext) {
-		this.mSubtext = mSubtext;
-	}
+	private String mUrl = new String();
+
 	public String getUrl() {
 		return mUrl;
 	}
 	public void setUrl(String mUrl) {
 		this.mUrl = mUrl;
 	}
-	public Level getLevel() {
+	public int getLevel() {
 		return mLevel;
 	}
-	public void setLevel(Level mLevel) {
+	public void setLevel(int mLevel) {
 		this.mLevel = mLevel;
 	}
 	public String getArtist() {
