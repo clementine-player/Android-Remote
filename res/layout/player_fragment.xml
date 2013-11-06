@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
-  style="@style/WhiteBackground"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:layout_margin="13dp" >
+    style="@style/WhiteBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="top"
+    android:layout_margin="13dp"
+    android:orientation="vertical" >
 
-  <FrameLayout 
+  <FrameLayout
       style="@style/ImgCoverGreyBorder"
       android:layout_width="fill_parent"
       android:layout_height="0dip"
-      android:layout_weight="1"
       android:layout_marginBottom="8dp"
       android:layout_marginLeft="8dp"
       android:layout_marginRight="8dp"
-      android:layout_marginTop="4dp">
+      android:layout_marginTop="4dp"
+      android:layout_weight="1" >
       
 		  <ImageView
 		      android:id="@+id/imgArt"
