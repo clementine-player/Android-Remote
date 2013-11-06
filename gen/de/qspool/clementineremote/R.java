@@ -693,12 +693,31 @@ containing a value of this type.
         public static final int abs__bright_foreground_inverse_holo_dark=0x7f070006;
         public static final int abs__bright_foreground_inverse_holo_light=0x7f070007;
         public static final int abs__holo_blue_light=0x7f070008;
-        public static final int abs__primary_text_disable_only_holo_dark=0x7f07000b;
-        public static final int abs__primary_text_disable_only_holo_light=0x7f07000c;
-        public static final int abs__primary_text_holo_dark=0x7f07000d;
-        public static final int abs__primary_text_holo_light=0x7f07000e;
-        public static final int actionbar_subtitle=0x7f070009;
-        public static final int player_smalltext=0x7f07000a;
+        public static final int abs__primary_text_disable_only_holo_dark=0x7f07001e;
+        public static final int abs__primary_text_disable_only_holo_light=0x7f07001f;
+        public static final int abs__primary_text_holo_dark=0x7f070020;
+        public static final int abs__primary_text_holo_light=0x7f070021;
+        public static final int actionbar_end=0x7f07000a;
+        public static final int actionbar_start=0x7f070009;
+        public static final int actionbar_subtitle=0x7f07001c;
+        public static final int black=0x7f07001a;
+        public static final int button_end=0x7f070010;
+        public static final int button_pressed=0x7f070011;
+        public static final int button_start=0x7f07000f;
+        public static final int button_stroke=0x7f070012;
+        public static final int clementine_left=0x7f07000c;
+        public static final int clementine_right=0x7f07000b;
+        public static final int list_pressed_end=0x7f070014;
+        public static final int list_pressed_start=0x7f070013;
+        public static final int player_cover_border=0x7f07000d;
+        public static final int player_cover_transparent=0x7f07000e;
+        public static final int player_smalltext=0x7f07001d;
+        public static final int progress_bg_end=0x7f070019;
+        public static final int progress_bg_start=0x7f070018;
+        public static final int progress_center=0x7f070016;
+        public static final int progress_end=0x7f070017;
+        public static final int progress_start=0x7f070015;
+        public static final int white=0x7f07001b;
     }
     public static final class dimen {
         /**  Default height of an action bar. 
@@ -959,20 +978,18 @@ containing a value of this type.
         public static final int ic_menu_search=0x7f02008c;
         public static final int ic_menu_search_holo_light=0x7f02008d;
         public static final int icon_large=0x7f02008e;
-        public static final int img_cover_bg=0x7f02008f;
-        public static final int img_cover_grey_bg=0x7f020090;
-        public static final int listitem_orange=0x7f020091;
-        public static final int listitem_white=0x7f020092;
-        public static final int listitem_white_border=0x7f020093;
-        public static final int listselector=0x7f020094;
-        public static final int nocover=0x7f020095;
-        public static final int orange_button=0x7f020096;
-        public static final int progress=0x7f020097;
-        public static final int rating_bar=0x7f020098;
-        public static final int scrubber=0x7f020099;
-        public static final int scrubber_control=0x7f02009a;
-        public static final int scrubber_pressed=0x7f02009b;
-        public static final int white_background=0x7f02009c;
+        public static final int img_cover_grey_bg=0x7f02008f;
+        public static final int listitem_orange=0x7f020090;
+        public static final int listitem_white=0x7f020091;
+        public static final int listitem_white_border=0x7f020092;
+        public static final int nocover=0x7f020093;
+        public static final int orange_button=0x7f020094;
+        public static final int progress=0x7f020095;
+        public static final int rating_bar=0x7f020096;
+        public static final int scrubber=0x7f020097;
+        public static final int scrubber_control=0x7f020098;
+        public static final int scrubber_pressed=0x7f020099;
+        public static final int white_background=0x7f02009a;
     }
     public static final class id {
         public static final int ScrollView01=0x7f050039;
@@ -1383,18 +1400,17 @@ containing a value of this type.
         public static final int wifi_disabled=0x7f0a0094;
     }
     public static final class style {
-        public static final int ActionBarStyle=0x7f0b0061;
-        public static final int ActionBarSubtitleTextAppearance=0x7f0b0063;
-        public static final int ActionBarTextAppearance=0x7f0b0062;
-        public static final int ActionButtonStyle=0x7f0b0064;
+        public static final int ActionBarStyle=0x7f0b0060;
+        public static final int ActionBarSubtitleTextAppearance=0x7f0b0062;
+        public static final int ActionBarTextAppearance=0x7f0b0061;
+        public static final int ActionButtonStyle=0x7f0b0063;
         public static final int DialogWindowTitle_Sherlock=0x7f0b0036;
         public static final int DialogWindowTitle_Sherlock_Light=0x7f0b0037;
         public static final int Dialog_Transparent=0x7f0b005c;
-        public static final int ImgCoverGreyBorder=0x7f0b005e;
-        public static final int ImgCoverWhiteBorder=0x7f0b005d;
+        public static final int ImgCoverGreyBorder=0x7f0b005d;
         public static final int OrangeButton_Button=0x7f0b0059;
-        public static final int PlayerTheme=0x7f0b0060;
-        public static final int PreferencesTheme=0x7f0b005f;
+        public static final int PlayerTheme=0x7f0b005f;
+        public static final int PreferencesTheme=0x7f0b005e;
         public static final int Sherlock___TextAppearance_Small=0x7f0b004a;
         public static final int Sherlock___Theme=0x7f0b004e;
         public static final int Sherlock___Theme_DarkActionBar=0x7f0b0050;

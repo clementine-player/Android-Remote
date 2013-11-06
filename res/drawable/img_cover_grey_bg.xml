@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-	<solid android:color="#40FFFFFF" />
-	<stroke android:width="2dp" android:color="#6A6A6A" />
-	<padding android:left="2dp" android:top="2dp" android:right="2dp"
-	    android:bottom="2dp" />
-	<corners
-      android:radius="0dp" />
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <solid android:color="@color/player_cover_transparent" />
+
+    <stroke
+        android:width="2dp"
+        android:color="@color/player_cover_border" />
+
+    <padding
+        android:bottom="2dp"
+        android:left="2dp"
+        android:right="2dp"
+        android:top="2dp" />
+
+    <corners android:radius="0dp" />
+
 </shape>

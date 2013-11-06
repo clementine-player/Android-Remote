@@ -1,5 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="actionbar_start">#6A6A6A</color>
+    <color name="actionbar_end">#3A3A3A</color>
+    
+    <color name="clementine_right">#db6835</color>
+    <color name="clementine_left">#af597d</color>
+    
+    <color name="player_cover_border">#6A6A6A</color>
+    <color name="player_cover_transparent">#40FFFFFF</color>
+    
+    <color name="button_start">#FFA768</color>
+    <color name="button_end">#FD964E</color>
+    <color name="button_pressed">#B64C77</color>
+    <color name="button_stroke">#D15B4D</color>
+    
+    <color name="list_pressed_start">#55FFA768</color>
+    <color name="list_pressed_end">#55FD964E</color>
+    
+    <color name="progress_start">#80ffd300</color>
+    <color name="progress_center">#80ffb600</color>
+    <color name="progress_end">#a0ffcb00</color>
+    <color name="progress_bg_start">#5A5A5A</color>
+    <color name="progress_bg_end">#6A6A6A</color>
+    
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+    
     <color name="actionbar_subtitle">#888888</color>
     <color name="player_smalltext">#888888</color>
 </resources>
