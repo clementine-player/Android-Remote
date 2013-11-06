@@ -23,10 +23,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.view.KeyEvent;
 import android.view.View;
@@ -336,58 +338,68 @@ public class MainActivity extends SherlockFragmentActivity {
     }
 
     /** Swaps fragments in the main content view */
-    private void selectItem(int position) {
-		FragmentManager fragmentManager = getSupportFragmentManager();
-		
-    	switch (position) {
-    	case 0: // Header Remote
-    		break;
-    	case 1: // Player
-        	fragmentManager.beginTransaction().replace(R.id.content_frame, mFragments.get(0)).commit();
-        	mCurrentFragment = 0;
-        	mLastPosition = position;
-        	break;
-    	case 2: // Songinfo
-        	fragmentManager.beginTransaction().replace(R.id.content_frame, mFragments.get(1)).commit();
-        	mCurrentFragment = 1;
-        	mLastPosition = position;
-        	break;
-    	case 3: // Playlist
-        	fragmentManager.beginTransaction().replace(R.id.content_frame, mFragments.get(2)).commit();
-        	mCurrentFragment = 2;
-        	mLastPosition = position;
-        	break;
-    	case 4: // Library
-    		fragmentManager.beginTransaction().replace(R.id.content_frame, mFragments.get(3)).commit();
-        	mCurrentFragment = 3;
-        	mLastPosition = position;
-    		break;
-    	case 5: // Downloads
-    		fragmentManager.beginTransaction().replace(R.id.content_frame, mFragments.get(4)).commit();
-    		mCurrentFragment = 4;
-            mLastPosition = position;
-    		break;
-    	case 6: // Header Settings
-    		break;
-    	case 7: // Settings
-    		Intent settingsIntent = new Intent(this, ClementineSettings.class);
-            startActivity(settingsIntent);
-            break;
-    	case 8: // Donate
-    		fragmentManager.beginTransaction().replace(R.id.content_frame, mFragments.get(5)).commit();
-    		mCurrentFragment = 5;
-            mLastPosition = position;
-    		break;
-    	case 9: // Header Disconnect
-    		break;
-    	case 10: // Disonnect
-    		requestDisconnect();
-    		break;
-    	default:
-    		break;
-    	}
-        
+    private void selectItem(final int position) {
         mDrawerLayout.closeDrawer(mDrawerList);
+        
+        new Handler().postDelayed(new Runnable() {
+
+			@Override
+			public void run() {
+				FragmentManager fragmentManager = getSupportFragmentManager();
+				FragmentTransaction ft = fragmentManager.beginTransaction();
+				ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+				ft.setCustomAnimations(R.drawable.anim_fade_in, R.drawable.anim_fade_out);
+				
+		    	switch (position) {
+		    	case 0: // Header Remote
+		    		break;
+		    	case 1: // Player
+		        	ft.replace(R.id.content_frame, mFragments.get(0)).commit();
+		        	mCurrentFragment = 0;
+		        	mLastPosition = position;
+		        	break;
+		    	case 2: // Songinfo
+		        	ft.replace(R.id.content_frame, mFragments.get(1)).commit();
+		        	mCurrentFragment = 1;
+		        	mLastPosition = position;
+		        	break;
+		    	case 3: // Playlist
+		        	ft.replace(R.id.content_frame, mFragments.get(2)).commit();
+		        	mCurrentFragment = 2;
+		        	mLastPosition = position;
+		        	break;
+		    	case 4: // Library
+		    		ft.replace(R.id.content_frame, mFragments.get(3)).commit();
+		        	mCurrentFragment = 3;
+		        	mLastPosition = position;
+		    		break;
+		    	case 5: // Downloads
+		    		ft.replace(R.id.content_frame, mFragments.get(4)).commit();
+		    		mCurrentFragment = 4;
+		            mLastPosition = position;
+		    		break;
+		    	case 6: // Header Settings
+		    		break;
+		    	case 7: // Settings
+		    		Intent settingsIntent = new Intent(MainActivity.this, ClementineSettings.class);
+		            startActivity(settingsIntent);
+		            break;
+		    	case 8: // Donate
+		    		ft.replace(R.id.content_frame, mFragments.get(5)).commit();
+		    		mCurrentFragment = 5;
+		            mLastPosition = position;
+		    		break;
+		    	case 9: // Header Disconnect
+		    		break;
+		    	case 10: // Disonnect
+		    		requestDisconnect();
+		    		break;
+		    	default:
+		    		break;
+		    	}
+			}
+        	
+        }, 300);
     }
 
 }
