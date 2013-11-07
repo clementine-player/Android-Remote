@@ -21,18 +21,24 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
@@ -112,6 +118,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 		mAdapter = new PlaylistSongAdapter(getActivity(), R.layout.playlist_row, mData);
 		
 		mList.setOnItemClickListener(oiclSong);
+		mList.setOnItemLongClickListener(oilclSong);
 		mList.setAdapter(mAdapter);
 		
 		// Filter the results
@@ -284,18 +291,82 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 	    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 	        MySong song = (MySong) mData.get(position);
 	        
-	        Message msg = Message.obtain();
-	        msg.obj = ClementineMessageFactory.buildRequestChangeSong(song.getIndex(), mId);
-	        App.mClementineConnection.mHandler.sendMessage(msg);
-	        
-	        // save which playlist is the active one
-	        for (int i = 0; i<App.mClementine.getPlaylists().size(); i++) {
-	        	App.mClementine.getPlaylists().valueAt(i).setActive(false);
-	        }
-	        
-	        App.mClementine.getPlaylists().get(mId).setActive(true);
+	        playSong(song);
 	    }
 	};
+	
+	private OnItemLongClickListener oilclSong = new OnItemLongClickListener() {
+
+		@Override
+		public boolean onItemLongClick(AdapterView<?> parent, View v,
+				int position, long id) {
+			final MySong song = (MySong) mData.get(position);
+			
+			final Dialog listDialog = new Dialog(getActivity(), R.style.Dialog_Transparent);
+			listDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+			listDialog.setContentView(R.layout.dialog_list);
+			
+			// Set the title
+			TextView tvTitle = (TextView) listDialog.findViewById(R.id.tvListTitle);
+			tvTitle.setText(R.string.dialog_choose);
+			
+			// Set the close button
+			Button closeButton = (Button) listDialog.findViewById(R.id.btnListClose);
+			closeButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					listDialog.dismiss();
+				}
+		    });
+			
+			// Set the list adapter
+			ListView listView = (ListView) listDialog.findViewById(R.id.lvDialogList);
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+					R.layout.dialog_list_simple_item,
+					getResources().getStringArray(R.array.playlist_long_click));
+			
+			listView.setAdapter(adapter);
+			listView.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					listDialog.dismiss();
+					
+					switch (position) {
+					case 0:
+						playSong(song);
+						break;
+					case 1:
+						Message msg = Message.obtain();
+				        msg.obj = ClementineMessageFactory.buildRemoveSongFromPlaylist(mId, song);
+				        App.mClementineConnection.mHandler.sendMessage(msg);
+				        mData.remove(song);
+				        mAdapter.notifyDataSetChanged();
+						break;
+					default:
+						break;
+					}
+				}
+			});
+			
+			listDialog.show();
+			
+			return true;
+		}
+	};
+	
+	private void playSong(MySong song) {
+		Message msg = Message.obtain();
+        msg.obj = ClementineMessageFactory.buildRequestChangeSong(song.getIndex(), mId);
+        App.mClementineConnection.mHandler.sendMessage(msg);
+        
+        // save which playlist is the active one
+        for (int i = 0; i<App.mClementine.getPlaylists().size(); i++) {
+        	App.mClementine.getPlaylists().valueAt(i).setActive(false);
+        }
+        
+        App.mClementine.getPlaylists().get(mId).setActive(true);
+	}
 
     
     /**

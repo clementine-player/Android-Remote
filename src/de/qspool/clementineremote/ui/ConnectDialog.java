@@ -285,7 +285,7 @@ public class ConnectDialog extends SherlockActivity {
 			    });
 				
 				// Set the list adapter
-				ListView listView = (ListView) listDialog.findViewById(R.id.lvClementines);
+				ListView listView = (ListView) listDialog.findViewById(R.id.lvDialogList);
 				CustomClementinesAdapter adapter = new CustomClementinesAdapter(ConnectDialog.this,
 						R.layout.dialog_list_item, mClementineMDns.getServices());
 				listView.setAdapter(adapter);
