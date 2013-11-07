@@ -22,4 +22,5 @@
     android:paddingLeft="16dp" 
     android:paddingRight="16dp" 
     android:textColor="#111"
+    android:background="@color/white"
     android:minHeight="48dip"/>
