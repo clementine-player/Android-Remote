@@ -41,7 +41,9 @@ public class FileDialog {
     public FileDialog(Activity activity, File path) {
         this.activity = activity;
         if (!path.exists()) path = Environment.getExternalStorageDirectory();
-        loadFileList(path);
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+        	loadFileList(path);
+        }
     }
 
     /**
@@ -152,9 +154,10 @@ public class FileDialog {
                 }
             };
             String[] fileList1 = path.list(filter);
-            for (String file : fileList1) {
-                r.add(file);
-            }
+            if (fileList1 != null)
+            	for (String file : fileList1) {
+            		r.add(file);
+            	}
         }
         Collections.sort(r);
         fileList = (String[]) r.toArray(new String[]{});

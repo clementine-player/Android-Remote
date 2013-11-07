@@ -45,7 +45,7 @@
     <string name="download_noti_canceled">Download canceled</string>
     <string name="download_noti_insufficient_space">Insufficient space, aborting download.</string>
     <string name="download_noti_forbidden">Download forbidden. Activate in Clementine settings.</string>
-    <string name="download_noti_not_mounted">No storage device found, aborting download.</string>
+    <string name="download_noti_not_mounted">No storage device found!</string>
     <string name="download_noti_only_wifi">Download only on wifi allowed.</string>
     
     

@@ -228,7 +228,11 @@ public class ClementineSettings extends SherlockPreferenceActivity
 		
 		@Override
 		public boolean onPreferenceClick(Preference preference) {
-			mFileDialog.showDialog();
+			if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+				mFileDialog.showDialog();
+			} else {
+				Toast.makeText(ClementineSettings.this, R.string.download_noti_not_mounted, Toast.LENGTH_SHORT).show();
+			}
 			return true;
 		}
 	};
