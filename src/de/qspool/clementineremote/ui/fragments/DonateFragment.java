@@ -41,6 +41,7 @@ import de.qspool.clementineremote.utils.IabHelper.QueryInventoryFinishedListener
 import de.qspool.clementineremote.utils.IabResult;
 import de.qspool.clementineremote.utils.Inventory;
 import de.qspool.clementineremote.utils.Purchase;
+import de.qspool.clementineremote.utils.Utilities;
 
 public class DonateFragment extends AbstractDrawerFragment {
 	private final static String TAG = "DonateFragment";
@@ -54,6 +55,8 @@ public class DonateFragment extends AbstractDrawerFragment {
 	private final static String SKU_ONE_EURO  = "one_euro";
 	private final static String SKU_TWO_EURO  = "two_euros";
 	private final static String SKU_FIVE_EURO = "five_euros";
+	
+	private boolean mBillingAvailable = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -65,17 +68,18 @@ public class DonateFragment extends AbstractDrawerFragment {
 		mHelper = new IabHelper(getActivity(), VendingKey.getVendingKey());
 		
 		mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-		   public void onIabSetupFinished(IabResult result) {
-		      if (!result.isSuccess()) {
-		         // Oh noes, there was a problem.
-		         Log.d("DonateFragment", "Problem setting up In-app Billing: " + result);
-		      }            
-		      // Hooray, IAB is fully set up!
-		      
-		      // Now check for consumable items
-		      mHelper.queryInventoryAsync(mGotInventoryListener);
-		   }
-		});
+			   public void onIabSetupFinished(IabResult result) {
+			      if (!result.isSuccess()) {
+			         // Oh noes, there was a problem.
+			         Log.d("DonateFragment", "Problem setting up In-app Billing: " + result);
+			         mBillingAvailable = false;
+			      } else {
+			    	  mBillingAvailable = true;
+			    	  // Now check for consumable items
+				      mHelper.queryInventoryAsync(mGotInventoryListener);
+			      }
+			   }
+			});
 	}
 	
 	@Override
@@ -106,7 +110,7 @@ public class DonateFragment extends AbstractDrawerFragment {
 	   super.onDestroy();
 	   
 	   // Dispose helper class
-	   if (mHelper != null) mHelper.dispose();
+	   if (mHelper != null && mBillingAvailable) mHelper.dispose();
 	   mHelper = null;
 	}
 
@@ -149,6 +153,10 @@ public class DonateFragment extends AbstractDrawerFragment {
 		
 		@Override
 		public void onClick(View v) {
+			if (!mBillingAvailable) {
+				Utilities.ShowMessageDialog(getActivity(), R.string.donate_not_available, R.string.donate_not_available_text);
+				return;
+			}
 			String sku = "";
 			if (v.getId() == mDonateOne.getId()) {
 				sku = SKU_ONE_EURO;
