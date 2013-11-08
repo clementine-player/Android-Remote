@@ -61,218 +61,223 @@
 				    android:layout_marginTop="6dp"
 				    android:background="#000000" />
 		
-				<TableLayout
-				    android:layout_width="match_parent"
-				    android:layout_height="wrap_content" >
-				    
-				     <TableRow
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content" >
-		
-		            <TextView
-		                android:layout_width="0dp"
-		                android:layout_height="wrap_content"
-		                android:layout_marginRight="5dp"
-		                android:layout_weight="1"
-		                android:singleLine="true"
-		                android:text="@string/song_info_album"
-		                android:textColor="@android:color/black" />
-		
-		            <TextView
-		                android:id="@+id/si_album"
-		                android:layout_width="0dp"
-		                android:layout_height="wrap_content"
-		                android:layout_weight="2"
-		                android:singleLine="true"
-		                android:textColor="@android:color/black" />
-		
-		        </TableRow>
+				<ScrollView 
+				    android:layout_width="fill_parent"
+				    android:layout_height="wrap_content">
 		        
-				    <TableRow
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content" >
-		
-		            <TextView
-		                android:layout_width="0dp"
-		                android:layout_height="wrap_content"
-		                android:layout_marginRight="5dp"
-		                android:layout_weight="1"
-		                android:singleLine="true"
-		                android:text="@string/song_info_genre"
-		                android:textColor="@android:color/black" />
-		
-		            <TextView
-		                android:id="@+id/si_genre"
-		                android:layout_width="0dp"
-		                android:layout_height="wrap_content"
-		                android:layout_weight="2"
-		                android:singleLine="true"
-		                android:textColor="@android:color/black" />
-		
-		        </TableRow>
-		
-				    <TableRow
-				        android:layout_width="wrap_content"
-				        android:layout_height="wrap_content" >
-		
-				        <TextView
-				            android:layout_width="0dp"
-				            android:layout_height="wrap_content"
-				            android:layout_marginRight="5dp"
-				            android:layout_weight="1"
-				            android:singleLine="true"
-				            android:text="@string/song_info_year"
-				            android:textColor="@android:color/black" />
-		
-				        <TextView
-				            android:id="@+id/si_year"
-				            android:layout_width="0dp"
-				            android:layout_height="wrap_content"
-				            android:layout_weight="2"
-				            android:singleLine="true"
-				            android:textColor="@android:color/black" />
-		
-				    </TableRow>
-		
-		        <TableRow
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content" >
-		
-		            <TextView
-		                android:layout_width="0dp"
-		                android:layout_height="wrap_content"
-		                android:layout_marginRight="5dp"
-		                android:layout_weight="1"
-		                android:singleLine="true"
-		                android:text="@string/song_info_track"
-		                android:textColor="@android:color/black" />
-		
-		            <TextView
-		                android:id="@+id/si_track"
-		                android:layout_width="0dp"
-		                android:layout_height="wrap_content"
-		                android:layout_weight="2"
-		                android:singleLine="true"
-		                android:textColor="@android:color/black" />
-		
-		        </TableRow>
-		        
-		        <TableRow
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content" >
-		
-		            <TextView
-		                android:layout_width="0dp"
-		                android:layout_height="wrap_content"
-		                android:layout_marginRight="5dp"
-		                android:layout_weight="1"
-		                android:singleLine="true"
-		                android:text="@string/song_info_disc"
-		                android:textColor="@android:color/black" />
-		
-		            <TextView
-		                android:id="@+id/si_disc"
-		                android:layout_width="0dp"
-		                android:layout_height="wrap_content"
-		                android:layout_weight="2"
-		                android:singleLine="true"
-		                android:textColor="@android:color/black" />
-		
-		        </TableRow>
-		        
-		        <TableRow
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content" >
-		
-		            <TextView
-		                android:layout_width="0dp"
-		                android:layout_height="wrap_content"
-		                android:layout_marginRight="5dp"
-		                android:layout_weight="1"
-		                android:singleLine="true"
-		                android:text="@string/song_info_length"
-		                android:textColor="@android:color/black" />
-		
-		            <TextView
-		                android:id="@+id/si_length"
-		                android:layout_width="0dp"
-		                android:layout_height="wrap_content"
-		                android:layout_weight="2"
-		                android:singleLine="true"
-		                android:textColor="@android:color/black" />
-		
-		        </TableRow>
-		        
-		        <TableRow
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content" >
-		
-		            <TextView
-		                android:layout_width="0dp"
-		                android:layout_height="wrap_content"
-		                android:layout_marginRight="5dp"
-		                android:layout_weight="1"
-		                android:singleLine="true"
-		                android:text="@string/song_info_playcount"
-		                android:textColor="@android:color/black" />
-		
-		            <TextView
-		                android:id="@+id/si_playcount"
-		                android:layout_width="0dp"
-		                android:layout_height="wrap_content"
-		                android:layout_weight="2"
-		                android:singleLine="true"
-		                android:textColor="@android:color/black" />
-		
-		        </TableRow>
-		        
-		        <TableRow
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content" >
-		
-		            <TextView
-		                android:layout_width="0dp"
-		                android:layout_height="wrap_content"
-		                android:layout_marginRight="5dp"
-		                android:layout_weight="1"
-		                android:singleLine="true"
-		                android:text="@string/song_info_size"
-		                android:textColor="@android:color/black" />
-		
-		            <TextView
-		                android:id="@+id/si_size"
-		                android:layout_width="0dp"
-		                android:layout_height="wrap_content"
-		                android:layout_weight="2"
-		                android:singleLine="true"
-		                android:textColor="@android:color/black" />
-		
-		        </TableRow>
-		        
-		        <TableRow
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content" >
-		
-		            <TextView
-		                android:layout_width="0dp"
-		                android:layout_height="wrap_content"
-		                android:layout_marginRight="5dp"
-		                android:layout_weight="1"
-		                android:singleLine="true"
-		                android:text="@string/song_info_filename"
-		                android:textColor="@android:color/black" />
-		
-		            <TextView
-		                android:id="@+id/si_filename"
-		                android:layout_width="0dp"
-		                android:layout_height="wrap_content"
-		                android:layout_weight="2"
-		                android:singleLine="true"
-		                android:textColor="@android:color/black" />
-		
-		        </TableRow>
-		
-				</TableLayout>
+						<TableLayout
+						    android:layout_width="match_parent"
+						    android:layout_height="wrap_content" >
+						    
+						     <TableRow
+				            android:layout_width="wrap_content"
+				            android:layout_height="wrap_content" >
+				
+				            <TextView
+				                android:layout_width="0dp"
+				                android:layout_height="wrap_content"
+				                android:layout_marginRight="5dp"
+				                android:layout_weight="1"
+				                android:singleLine="true"
+				                android:text="@string/song_info_album"
+				                android:textColor="@android:color/black" />
+				
+				            <TextView
+				                android:id="@+id/si_album"
+				                android:layout_width="0dp"
+				                android:layout_height="wrap_content"
+				                android:layout_weight="2"
+				                android:singleLine="true"
+				                android:textColor="@android:color/black" />
+				
+				        </TableRow>
+				        
+						    <TableRow
+				            android:layout_width="wrap_content"
+				            android:layout_height="wrap_content" >
+				
+				            <TextView
+				                android:layout_width="0dp"
+				                android:layout_height="wrap_content"
+				                android:layout_marginRight="5dp"
+				                android:layout_weight="1"
+				                android:singleLine="true"
+				                android:text="@string/song_info_genre"
+				                android:textColor="@android:color/black" />
+				
+				            <TextView
+				                android:id="@+id/si_genre"
+				                android:layout_width="0dp"
+				                android:layout_height="wrap_content"
+				                android:layout_weight="2"
+				                android:singleLine="true"
+				                android:textColor="@android:color/black" />
+				
+				        </TableRow>
+				
+						    <TableRow
+						        android:layout_width="wrap_content"
+						        android:layout_height="wrap_content" >
+				
+						        <TextView
+						            android:layout_width="0dp"
+						            android:layout_height="wrap_content"
+						            android:layout_marginRight="5dp"
+						            android:layout_weight="1"
+						            android:singleLine="true"
+						            android:text="@string/song_info_year"
+						            android:textColor="@android:color/black" />
+				
+						        <TextView
+						            android:id="@+id/si_year"
+						            android:layout_width="0dp"
+						            android:layout_height="wrap_content"
+						            android:layout_weight="2"
+						            android:singleLine="true"
+						            android:textColor="@android:color/black" />
+				
+						    </TableRow>
+				
+				        <TableRow
+				            android:layout_width="wrap_content"
+				            android:layout_height="wrap_content" >
+				
+				            <TextView
+				                android:layout_width="0dp"
+				                android:layout_height="wrap_content"
+				                android:layout_marginRight="5dp"
+				                android:layout_weight="1"
+				                android:singleLine="true"
+				                android:text="@string/song_info_track"
+				                android:textColor="@android:color/black" />
+				
+				            <TextView
+				                android:id="@+id/si_track"
+				                android:layout_width="0dp"
+				                android:layout_height="wrap_content"
+				                android:layout_weight="2"
+				                android:singleLine="true"
+				                android:textColor="@android:color/black" />
+				
+				        </TableRow>
+				        
+				        <TableRow
+				            android:layout_width="wrap_content"
+				            android:layout_height="wrap_content" >
+				
+				            <TextView
+				                android:layout_width="0dp"
+				                android:layout_height="wrap_content"
+				                android:layout_marginRight="5dp"
+				                android:layout_weight="1"
+				                android:singleLine="true"
+				                android:text="@string/song_info_disc"
+				                android:textColor="@android:color/black" />
+				
+				            <TextView
+				                android:id="@+id/si_disc"
+				                android:layout_width="0dp"
+				                android:layout_height="wrap_content"
+				                android:layout_weight="2"
+				                android:singleLine="true"
+				                android:textColor="@android:color/black" />
+				
+				        </TableRow>
+				        
+				        <TableRow
+				            android:layout_width="wrap_content"
+				            android:layout_height="wrap_content" >
+				
+				            <TextView
+				                android:layout_width="0dp"
+				                android:layout_height="wrap_content"
+				                android:layout_marginRight="5dp"
+				                android:layout_weight="1"
+				                android:singleLine="true"
+				                android:text="@string/song_info_length"
+				                android:textColor="@android:color/black" />
+				
+				            <TextView
+				                android:id="@+id/si_length"
+				                android:layout_width="0dp"
+				                android:layout_height="wrap_content"
+				                android:layout_weight="2"
+				                android:singleLine="true"
+				                android:textColor="@android:color/black" />
+				
+				        </TableRow>
+				        
+				        <TableRow
+				            android:layout_width="wrap_content"
+				            android:layout_height="wrap_content" >
+				
+				            <TextView
+				                android:layout_width="0dp"
+				                android:layout_height="wrap_content"
+				                android:layout_marginRight="5dp"
+				                android:layout_weight="1"
+				                android:singleLine="true"
+				                android:text="@string/song_info_playcount"
+				                android:textColor="@android:color/black" />
+				
+				            <TextView
+				                android:id="@+id/si_playcount"
+				                android:layout_width="0dp"
+				                android:layout_height="wrap_content"
+				                android:layout_weight="2"
+				                android:singleLine="true"
+				                android:textColor="@android:color/black" />
+				
+				        </TableRow>
+				        
+				        <TableRow
+				            android:layout_width="wrap_content"
+				            android:layout_height="wrap_content" >
+				
+				            <TextView
+				                android:layout_width="0dp"
+				                android:layout_height="wrap_content"
+				                android:layout_marginRight="5dp"
+				                android:layout_weight="1"
+				                android:singleLine="true"
+				                android:text="@string/song_info_size"
+				                android:textColor="@android:color/black" />
+				
+				            <TextView
+				                android:id="@+id/si_size"
+				                android:layout_width="0dp"
+				                android:layout_height="wrap_content"
+				                android:layout_weight="2"
+				                android:singleLine="true"
+				                android:textColor="@android:color/black" />
+				
+				        </TableRow>
+				        
+				        <TableRow
+				            android:layout_width="wrap_content"
+				            android:layout_height="wrap_content" >
+				
+				            <TextView
+				                android:layout_width="0dp"
+				                android:layout_height="wrap_content"
+				                android:layout_marginRight="5dp"
+				                android:layout_weight="1"
+				                android:singleLine="true"
+				                android:text="@string/song_info_filename"
+				                android:textColor="@android:color/black" />
+				
+				            <TextView
+				                android:id="@+id/si_filename"
+				                android:layout_width="0dp"
+				                android:layout_height="wrap_content"
+				                android:layout_weight="2"
+				                android:singleLine="true"
+				                android:textColor="@android:color/black" />
+				
+				        </TableRow>
+				
+						</TableLayout>
+				</ScrollView>
 		
 				<TextView
 				    android:id="@+id/textView1"
@@ -300,6 +305,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitCenter"
+            android:contentDescription="@string/songinfo_image"
             android:visibility="invisible" />
 	           
 </FrameLayout>
