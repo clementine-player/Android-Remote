@@ -157,7 +157,6 @@ public class MainActivity extends SherlockFragmentActivity {
 		// Check if we are still connected
 		if (App.mClementineConnection == null
 		 || App.mClementine           == null
-		 || !App.mClementineConnection.isAlive()
 		 || !App.mClementineConnection.isConnected()) {
 			setResult(ConnectDialog.RESULT_DISCONNECT);
 			finish();
@@ -186,11 +185,10 @@ public class MainActivity extends SherlockFragmentActivity {
 		// If we disconnected, open connectdialog
 		if (App.mClementineConnection == null
 		 || App.mClementine           == null
-		 || !App.mClementineConnection.isAlive()
 		 || !App.mClementineConnection.isConnected()) {
 			Intent connectDialog = new Intent(this, ConnectDialog.class);
 			connectDialog.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-			startActivity(connectDialog);
+			//startActivity(connectDialog);
 		}
 	}
 	

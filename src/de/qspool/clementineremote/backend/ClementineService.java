@@ -31,6 +31,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -39,6 +40,8 @@ public class ClementineService extends Service {
 
 	private NotificationCompat.Builder mNotifyBuilder;
 	private NotificationManager mNotificationManager;
+	
+	private Thread mPlayerThread;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -71,7 +74,9 @@ public class ClementineService extends Service {
 				setupNotification(true);
 				App.mClementineConnection.setNotificationBuilder(mNotifyBuilder);
 				App.mClementineConnection.setOnConnectionClosedListener(occl);
-				App.mClementineConnection.start();
+				
+				mPlayerThread = new Thread(App.mClementineConnection);
+				mPlayerThread.start();
 			}
 			break;
 		case App.SERVICE_CONNECTED:
@@ -79,9 +84,7 @@ public class ClementineService extends Service {
 			break;
 		case App.SERVICE_DISCONNECTED:
 			stopForeground(true);
-			try {
-				App.mClementineConnection.join();
-			} catch (InterruptedException e) {}
+			intteruptThread();
 			App.mClementineConnection = null;
 			
 			// Check if we lost connection due a keep alive
@@ -110,10 +113,24 @@ public class ClementineService extends Service {
 			// Send the request to the thread
 			App.mClementineConnection.mHandler.sendMessage(msg);
 		}
-		try {
-			App.mClementineConnection.join();
-		} catch (InterruptedException e) {}
+		intteruptThread();
 		App.mClementineConnection = null;
+	}
+	
+	private void intteruptThread() {
+		if (mPlayerThread != null)
+			mPlayerThread.interrupt();
+		
+		if (App.mClementineConnection != null) {
+			App.mClementineConnection.mHandler.post(new Runnable() {
+	
+				@Override
+				public void run() {
+					Looper.myLooper().quit();
+				}
+				
+			});
+		}
 	}
 	
 	/**

@@ -36,7 +36,6 @@ public class ClementinePhoneStateCheck extends BroadcastReceiver {
 		if (App.mApp == null
 		 || App.mClementineConnection == null
 		 || App.mClementine           == null
-		 || !App.mClementineConnection.isAlive()
 		 || !App.mClementineConnection.isConnected())
 			return;
 		

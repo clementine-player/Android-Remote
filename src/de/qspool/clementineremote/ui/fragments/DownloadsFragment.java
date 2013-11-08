@@ -69,7 +69,6 @@ public class DownloadsFragment extends AbstractDrawerFragment {
 		// Check if we are still connected
 		if (App.mClementineConnection == null
 		 || App.mClementine           == null
-		 || !App.mClementineConnection.isAlive()
 		 || !App.mClementineConnection.isConnected()) {
 		} else {
 			//RequestPlaylistSongs();

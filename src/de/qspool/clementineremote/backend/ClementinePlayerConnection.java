@@ -68,7 +68,6 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 	private final int MAX_RECONNECTS = 5;
 	public final static int CHECK_FOR_DATA_ARG = 12387194;
 	
-	private Thread mThread;
 	private Handler mUiHandler;
 	
 	private int mLeftReconnects;
@@ -92,17 +91,6 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 	private PowerManager.WakeLock mWakeLock;
 	
 	private Pebble mPebble;
-	
-	public ClementinePlayerConnection() {
-		mThread = new Thread(this);
-	}
-	
-	/**
-	 * Start the thread
-	 */
-	public void start() {
-		mThread.start();
-	}
 	
 	/**
 	 * Add a new listener for closed connections
@@ -491,18 +479,6 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 			editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, mLastSong.getTitle());
 			editor.apply();
 		}
-	}
-	
-	/**
-	 * Is the thread still alive?
-	 * @return A boolean indicating the status
-	 */
-	public boolean isAlive() {
-		return mThread.isAlive();
-	}
-	
-	public void join() throws InterruptedException {
-		mThread.join();
 	}
 	
 	private OnAudioFocusChangeListener mOnAudioFocusChangeListener = new OnAudioFocusChangeListener() {
