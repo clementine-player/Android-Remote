@@ -260,19 +260,19 @@ public class MyLibrary extends
 		try {
 			switch (level) {
 			case LVL_ARTIST:
-				query += "WHERE artist <> '' group by artist";
+				query += "WHERE artist <> '' group by artist order by artist";
 				c1 = db.rawQuery(query, null);
 				break;
 			case LVL_ALBUM:
-				query += "WHERE artist = ? group by album";
+				query += "WHERE artist = ? group by album order by album";
 				c1 = db.rawQuery(query, new String[] { mSelArtist });
 				break;
 			case LVL_TITLE:
 				if (mSelAlbum.length() == 0) {
-					query += "WHERE artist = ?";
+					query += "WHERE artist = ? order by album, disc, track";
 					c1 = db.rawQuery(query, new String[] { mSelArtist });
 				} else {
-					query += "WHERE artist = ? and album = ?";
+					query += "WHERE artist = ? and album = ? order by disc, track";
 					c1 = db.rawQuery(query, new String[] { mSelArtist, mSelAlbum });
 				}
 				break;
