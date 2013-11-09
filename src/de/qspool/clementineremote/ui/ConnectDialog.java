@@ -38,6 +38,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -75,6 +76,7 @@ import de.qspool.clementineremote.utils.Utilities;
  * The connect dialog
  */
 public class ConnectDialog extends SherlockActivity {
+	private final static String TAG = "ConnectDialog";
 	private final static int ANIMATION_DURATION = 2000;
 	
 	private final int ID_PLAYER_DIALOG = 1;
@@ -106,6 +108,8 @@ public class ConnectDialog extends SherlockActivity {
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    
+	    Log.d(TAG, "onCreate");
+	    
 	    App.mApp = getApplication();
     	
 	    setContentView(R.layout.connectdialog);
@@ -131,16 +135,21 @@ public class ConnectDialog extends SherlockActivity {
 	public void onResume() {
 		super.onResume();
 		
+		 Log.d(TAG, "onResume");
+		
 		// Check if we are currently connected, then open the player dialog
 		if (!mPdConnect.isShowing()
 		 && App.mClementineConnection != null
 		 && App.mClementineConnection.isConnected()) {
 			showPlayerDialog();
+			 Log.d(TAG, "onResume - showPlayer");
 			return;
 		}
 		
 		// Start the background service
+		Log.d(TAG, "onResume - start service");
 		startBackgroundService();
+		Log.d(TAG, "onResume - start service done");
 		
 	    mFirstCall = doAutoConnect;
 	    

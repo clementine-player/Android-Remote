@@ -30,6 +30,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -56,7 +57,8 @@ import de.qspool.clementineremote.ui.fragments.PlaylistFragment;
 import de.qspool.clementineremote.ui.fragments.SongInfoFragment;
 
 public class MainActivity extends SherlockFragmentActivity {
-
+	private final static String TAG = "MainActivity";
+	
 	private SharedPreferences mSharedPref;
 	private PlayerHandler mHandler;
 	
@@ -73,6 +75,8 @@ public class MainActivity extends SherlockFragmentActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
+	    
+	    Log.d(TAG, "onCreate");
 	    
 	    setContentView(R.layout.main_activity);
 	    
@@ -136,6 +140,8 @@ public class MainActivity extends SherlockFragmentActivity {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
+        
+        Log.d(TAG, "onPostCreate");
     }
     
     @Override
@@ -153,14 +159,17 @@ public class MainActivity extends SherlockFragmentActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
+		Log.d(TAG, "onResume");
 		
 		// Check if we are still connected
 		if (App.mClementineConnection == null
 		 || App.mClementine           == null
 		 || !App.mClementineConnection.isConnected()) {
+			Log.d(TAG, "onResume - disconnect");
 			setResult(ConnectDialog.RESULT_DISCONNECT);
 			finish();
 		} else {
+			Log.d(TAG, "onResume - start");
 		    // Set the handler
 		    mHandler = new PlayerHandler(this);
 		    App.mClementineConnection.setUiHandler(mHandler);
@@ -172,6 +181,8 @@ public class MainActivity extends SherlockFragmentActivity {
 	public void onPause() {
 		super.onPause();
 		
+		Log.d(TAG, "onPause");
+		
 		mHandler = null;
 		if (App.mClementineConnection != null) {
 			App.mClementineConnection.setUiHandler(mHandler);
@@ -182,10 +193,13 @@ public class MainActivity extends SherlockFragmentActivity {
 	public void onDestroy() {
 		super.onDestroy();
 		
+		Log.d(TAG, "onDestroy");
+		
 		// If we disconnected, open connectdialog
 		if (App.mClementineConnection == null
 		 || App.mClementine           == null
 		 || !App.mClementineConnection.isConnected()) {
+			Log.d(TAG, "onDestroy - disconnect");
 			Intent connectDialog = new Intent(this, ConnectDialog.class);
 			connectDialog.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			//startActivity(connectDialog);

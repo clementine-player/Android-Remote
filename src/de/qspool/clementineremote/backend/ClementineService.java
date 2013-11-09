@@ -35,8 +35,10 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 
 public class ClementineService extends Service {
+	private final static String TAG = "ClementineService";
 
 	private NotificationCompat.Builder mNotifyBuilder;
 	private NotificationManager mNotificationManager;
@@ -50,6 +52,7 @@ public class ClementineService extends Service {
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		Log.d(TAG, "onStartCommand");
 		if (intent != null) {
 			handleServiceAction(intent);
 		}
@@ -62,9 +65,11 @@ public class ClementineService extends Service {
 	 * @param action The action to perform
 	 */
 	private void handleServiceAction(Intent intent) {
+		Log.d(TAG, "handleServiceAction - start");
 		mNotificationManager = (NotificationManager) App.mApp.getSystemService(Context.NOTIFICATION_SERVICE);
 		
 		int action = intent.getIntExtra(App.SERVICE_ID, 0);
+		Log.d(TAG, "handleServiceAction - action: " + action);
 		switch (action) {
 		case App.SERVICE_START:
 			// Create a new instance
@@ -98,6 +103,7 @@ public class ClementineService extends Service {
 			break;		
 		default: break;
 		}
+		Log.d(TAG, "handleServiceAction - end");
 	}
 	
 	@Override

@@ -28,6 +28,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -109,7 +110,7 @@ public class ClementineSongDownloader extends
 	    mTitle = mContext.getString(R.string.download_noti_title);
 	}
 	
-	@SuppressLint("InlinedApi")
+	@SuppressLint({ "InlinedApi", "NewApi" })
 	public void startDownload(ClementineMessage message) {
 		mItem = message.getMessage().getRequestDownloadSongs().getDownloadItem();
 		
@@ -374,9 +375,11 @@ public class ClementineSongDownloader extends
 				
 				// Have we downloaded all chunks?
 				if (chunk.getChunkCount() == chunk.getChunkNumber()) {
+					// Index file
+					MediaScannerConnection.scanFile(mContext, new String[]{f.getAbsolutePath()}, null, null);
 					fo.flush();
 					fo.close();
-					f = null;					
+					f = null;				
 				}
 				
 				// Update notification
@@ -390,12 +393,7 @@ public class ClementineSongDownloader extends
 		
 		// Disconnect at the end
 		mClient.disconnect(ClementineMessage.getMessage(MsgType.DISCONNECT));
-		
-        // Start Media indexing
-        String defaultPath = Environment.getExternalStorageDirectory() + "/ClementineMusic";
-        String path = mSharedPref.getString(App.SP_DOWNLOAD_DIR, defaultPath);
-        mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + path)));
-        
+	
 		return result;
     }
     
