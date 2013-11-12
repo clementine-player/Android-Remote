@@ -81,7 +81,7 @@ public class ClementineLibraryDownloader extends
 		listeners.add(l);
 	}
 
-	@SuppressLint("InlinedApi")
+	@SuppressLint({ "InlinedApi", "NewApi" })
 	public void startDownload(ClementineMessage message) {
 		mProgressDialog.show();
 
@@ -119,7 +119,12 @@ public class ClementineLibraryDownloader extends
 
 		// Progress = 100, then we are optimizing the table
 		if (progress[0] == 100) {
+			mProgressDialog.dismiss();
+			mProgressDialog = new ProgressDialog(mContext);
 			mProgressDialog.setTitle(R.string.library_optimize);
+			mProgressDialog.setMessage(mContext
+					.getText(R.string.library_please_wait));
+			mProgressDialog.show();
 		}
 	}
 
