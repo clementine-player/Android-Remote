@@ -14,10 +14,8 @@
     </item>
     <item>
         <shape>
-            <gradient
-                android:startColor="@color/button_start"
-                android:endColor="@color/button_end"
-                android:angle="270" />
+            <solid
+                android:color="@color/button" />
             <padding
                 android:left="10dp"
                 android:top="10dp"

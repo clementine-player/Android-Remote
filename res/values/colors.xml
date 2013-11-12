@@ -9,10 +9,8 @@
     <color name="player_cover_border">#6A6A6A</color>
     <color name="player_cover_transparent">#40FFFFFF</color>
     
-    <color name="button_start">#FFA768</color>
-    <color name="button_end">#FD964E</color>
-    <color name="button_pressed">#B64C77</color>
-    <color name="button_stroke">#D15B4D</color>
+    <color name="button">#db6835</color>
+    <color name="button_pressed">#edb49b</color>
     
     <color name="list_pressed_start">#55FFA768</color>
     <color name="list_pressed_end">#55FD964E</color>

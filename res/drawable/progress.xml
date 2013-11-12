@@ -34,12 +34,8 @@
         <clip>
             <shape>
                 <corners android:radius="5dip" />
-                <gradient
-                        android:startColor="@color/button_start"
-                        android:centerY="0.5"
-                        android:endColor="@color/button_end"
-                        android:angle="270"
-                />
+                <solid
+                android:color="@color/button" />
             </shape>
         </clip>
     </item>
