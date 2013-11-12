@@ -194,16 +194,6 @@ public class MainActivity extends SherlockFragmentActivity {
 		super.onDestroy();
 		
 		Log.d(TAG, "onDestroy");
-		
-		// If we disconnected, open connectdialog
-		if (App.mClementineConnection == null
-		 || App.mClementine           == null
-		 || !App.mClementineConnection.isConnected()) {
-			Log.d(TAG, "onDestroy - disconnect");
-			Intent connectDialog = new Intent(this, ConnectDialog.class);
-			connectDialog.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-			//startActivity(connectDialog);
-		}
 	}
 	
 	@Override

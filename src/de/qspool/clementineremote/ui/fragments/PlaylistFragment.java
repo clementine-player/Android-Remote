@@ -76,7 +76,6 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 	public PlaylistFragment() {
 		mFilterText = "";
 		mSelectionOffset = 3;
-		mId = App.mClementine.getPlaylists().valueAt(0).getId();
 	}
 	
 	@Override
@@ -86,6 +85,9 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 	    // Get the actionbar
 	    mActionBar = getSherlockActivity().getSupportActionBar();
 	    setHasOptionsMenu(true);
+	    
+	    if (App.mClementine.getPlaylists().size() != 0)
+	    	mId = App.mClementine.getPlaylists().valueAt(0).getId();
 	}
 	
 	@Override
