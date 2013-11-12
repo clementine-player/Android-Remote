@@ -21,12 +21,14 @@ import java.util.LinkedList;
 
 import android.os.Bundle;
 import android.os.Message;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -105,7 +107,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 		}
 
 		mList.setOnItemClickListener(oiclLibraryClick);
-		mList.setOnItemLongClickListener(olclLibraryClick);
+		registerForContextMenu(mList);
 
 		showList();
 
@@ -143,11 +145,47 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 
 		return true;
 	}
+	
+	@Override
+	public boolean onContextItemSelected(android.view.MenuItem item) {
+	    AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+	    switch (item.getItemId()) {
+	        case R.id.library_context_add:
+	        	MyLibraryItem libraryItem = mAdapters.getLast().getItem(info.position);
+
+				switch (libraryItem.getLevel()) {
+				case MyLibrary.LVL_ARTIST:
+					MyLibrary addArtist = new MyLibrary(getActivity());
+					addArtist.addOnLibrarySelectFinishedListener(LibraryFragment.this);
+					addArtist.getAllTitlesFromArtistAsync(libraryItem.getArtist());
+					return true;
+				case MyLibrary.LVL_ALBUM:
+					MyLibrary addAlbums = new MyLibrary(getActivity());
+					addAlbums.addOnLibrarySelectFinishedListener(LibraryFragment.this);
+					addAlbums.getTitlesAsync(libraryItem.getArtist(), libraryItem.getAlbum());
+					return true;
+				case MyLibrary.LVL_TITLE:
+					return false;
+				default:
+					return false;
+				}
+	        default:
+	            return super.onContextItemSelected(item);
+	    }
+	}
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.library_menu, menu);
 		super.onCreateOptionsMenu(menu, inflater);
+	}
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+	                                ContextMenuInfo menuInfo) {
+	    super.onCreateContextMenu(menu, v, menuInfo);
+	    android.view.MenuInflater inflater = getActivity().getMenuInflater();
+	    inflater.inflate(R.menu.library_context_menu, menu);
 	}
 
 	@Override
@@ -320,32 +358,6 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 				break;
 			default:
 				break;
-			}
-		}
-	};
-	
-	private OnItemLongClickListener olclLibraryClick = new OnItemLongClickListener() {
-		
-		@Override
-		public boolean onItemLongClick(AdapterView<?> parent, View view, int position,
-				long id) {
-			MyLibraryItem item = mAdapters.getLast().getItem(position);
-
-			switch (item.getLevel()) {
-			case MyLibrary.LVL_ARTIST:
-				MyLibrary addArtist = new MyLibrary(getActivity());
-				addArtist.addOnLibrarySelectFinishedListener(LibraryFragment.this);
-				addArtist.getAllTitlesFromArtistAsync(item.getArtist());
-				return true;
-			case MyLibrary.LVL_ALBUM:
-				MyLibrary addAlbums = new MyLibrary(getActivity());
-				addAlbums.addOnLibrarySelectFinishedListener(LibraryFragment.this);
-				addAlbums.getTitlesAsync(item.getArtist(), item.getAlbum());
-				return true;
-			case MyLibrary.LVL_TITLE:
-				return false;
-			default:
-				return false;
 			}
 		}
 	};

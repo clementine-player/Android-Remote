@@ -21,24 +21,21 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Message;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
@@ -117,8 +114,9 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 		mAdapter = new PlaylistSongAdapter(getActivity(), R.layout.playlist_row, mData);
 		
 		mList.setOnItemClickListener(oiclSong);
-		mList.setOnItemLongClickListener(oilclSong);
+		//mList.setOnItemLongClickListener(oilclSong);
 		mList.setAdapter(mAdapter);
+		registerForContextMenu(mList);
 		
 		// Filter the results
 		mAdapter.getFilter().filter(mFilterText);
@@ -177,6 +175,14 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 	}
 	
 	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+	                                ContextMenuInfo menuInfo) {
+	    super.onCreateContextMenu(menu, v, menuInfo);
+	    android.view.MenuInflater inflater = getActivity().getMenuInflater();
+	    inflater.inflate(R.menu.playlist_context_menu, menu);
+	}
+	
+	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
 		// Create a listener for search change
 		SearchView searchView = (SearchView) menu.findItem(R.id.playlist_menu_search).getActionView();
@@ -210,6 +216,26 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 		searchView.setQueryHint(getString(R.string.playlist_search_hint));
 		
 		super.onPrepareOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onContextItemSelected(android.view.MenuItem item) {
+	    AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+	    MySong song = (MySong) mData.get(info.position);
+	    switch (item.getItemId()) {
+	        case R.id.playlist_context_play:
+	        	playSong(song);
+	            return true;
+	        case R.id.playlist_context_remove:
+	            Message msg = Message.obtain();
+	            msg.obj = ClementineMessageFactory.buildRemoveSongFromPlaylist(mId, song);
+	            App.mClementineConnection.mHandler.sendMessage(msg);
+	            mAdapter.remove(song);
+	            mAdapter.notifyDataSetChanged();
+	            return true;
+	        default:
+	            return super.onContextItemSelected(item);
+	    }
 	}
 	
 	/**
@@ -292,66 +318,6 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 	        
 	        playSong(song);
 	    }
-	};
-	
-	private OnItemLongClickListener oilclSong = new OnItemLongClickListener() {
-
-		@Override
-		public boolean onItemLongClick(AdapterView<?> parent, View v,
-				int position, long id) {
-			final MySong song = (MySong) mData.get(position);
-			
-			final Dialog listDialog = new Dialog(getActivity(), R.style.Dialog_Transparent);
-			listDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-			listDialog.setContentView(R.layout.dialog_list);
-			
-			// Set the title
-			TextView tvTitle = (TextView) listDialog.findViewById(R.id.tvListTitle);
-			tvTitle.setText(R.string.dialog_choose);
-			
-			// Set the close button
-			Button closeButton = (Button) listDialog.findViewById(R.id.btnListClose);
-			closeButton.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					listDialog.dismiss();
-				}
-		    });
-			
-			// Set the list adapter
-			ListView listView = (ListView) listDialog.findViewById(R.id.lvDialogList);
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-					R.layout.dialog_list_simple_item,
-					getResources().getStringArray(R.array.playlist_long_click));
-			
-			listView.setAdapter(adapter);
-			listView.setOnItemClickListener(new OnItemClickListener() {
-				@Override
-				public void onItemClick(AdapterView<?> parent, View view,
-						int position, long id) {
-					listDialog.dismiss();
-					
-					switch (position) {
-					case 0:
-						playSong(song);
-						break;
-					case 1:
-						Message msg = Message.obtain();
-				        msg.obj = ClementineMessageFactory.buildRemoveSongFromPlaylist(mId, song);
-				        App.mClementineConnection.mHandler.sendMessage(msg);
-				        mData.remove(song);
-				        mAdapter.notifyDataSetChanged();
-						break;
-					default:
-						break;
-					}
-				}
-			});
-			
-			listDialog.show();
-			
-			return true;
-		}
 	};
 	
 	private void playSong(MySong song) {
