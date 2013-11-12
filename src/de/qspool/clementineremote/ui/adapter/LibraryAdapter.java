@@ -48,7 +48,7 @@ public class LibraryAdapter extends CursorAdapter implements Filterable {
 		View convertView = ((Activity)mContext).getLayoutInflater()
 							.inflate(R.layout.library_row, parent, false);
 		
-		convertView.setBackgroundResource(R.drawable.listitem_white);
+		convertView.setBackgroundResource(R.drawable.selector_white_orange_selected);
 		
 		LibraryViewHolder libraryViewHolder = new LibraryViewHolder();
 		libraryViewHolder.title    = (TextView) convertView.findViewById(R.id.tv_lib_title);

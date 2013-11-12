@@ -353,7 +353,7 @@ public class PlayerFragment extends AbstractDrawerFragment {
 						break;
 		case ALL:		mMenuShuffle.setIcon(R.drawable.ab_shuffle);
 						break;
-		case INSIDE_ALBUM:	mMenuShuffle.setIcon(R.drawable.ab_shuffle_albumtracks);
+		case INSIDE_ALBUM:	mMenuShuffle.setIcon(R.drawable.ab_shuffle_album);
 							break;
 		case ALBUMS:	mMenuShuffle.setIcon(R.drawable.ab_shuffle_albums);
 						break;
@@ -391,7 +391,7 @@ public class PlayerFragment extends AbstractDrawerFragment {
 		switch (App.mClementine.getRepeatMode()) {
 		case OFF: 		mMenuRepeat.setIcon(R.drawable.ab_repeat_off);
 						break;
-		case TRACK:		mMenuRepeat.setIcon(R.drawable.ab_repeat_single_track);
+		case TRACK:		mMenuRepeat.setIcon(R.drawable.ab_repeat_track);
 						break;
 		case ALBUM:		mMenuRepeat.setIcon(R.drawable.ab_repeat_album);
 						break;

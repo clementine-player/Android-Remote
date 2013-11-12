@@ -10,8 +10,10 @@
           android:icon="@drawable/ab_repeat_off"></item>
     <item android:id="@+id/download_song"
           android:title="@string/menu_download_song"
-          android:showAsAction="ifRoom"></item>
+          android:icon="@drawable/ab_download_track"
+          android:showAsAction="always"></item>
     <item android:id="@+id/download_album"
           android:title="@string/menu_download_album"
-          android:showAsAction="ifRoom"></item>
+          android:icon="@drawable/ab_download_album"
+          android:showAsAction="always"></item>
 </menu>

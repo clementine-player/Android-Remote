@@ -22,5 +22,5 @@
     android:paddingLeft="16dp" 
     android:paddingRight="16dp" 
     android:textColor="#111"
-    android:background="@drawable/listitem_white"
+    android:background="@drawable/selector_white_orange_selected"
     android:minHeight="48dip"/>

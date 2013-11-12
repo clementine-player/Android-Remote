@@ -68,7 +68,7 @@ public class DownloadAdapter extends ArrayAdapter<ClementineSongDownloader> impl
 			downloadViewHolder = (DownloadViewHolder) convertView.getTag();
 		}
 
-		convertView.setBackgroundResource(R.drawable.listitem_white);
+		convertView.setBackgroundResource(R.drawable.selector_white_orange_selected);
 		
 		downloadViewHolder.cancel.setOnClickListener(oclCancel);
 		downloadViewHolder.cancel.setTag(downloader);

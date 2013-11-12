@@ -8,6 +8,6 @@
     android:singleLine="true"
     android:layout_weight="1"
     android:layout_gravity="center_vertical"
-    android:background="@drawable/listitem_white"
+    android:background="@drawable/selector_white_orange_selected"
     android:textAppearance="?android:attr/textAppearanceMedium"
     android:textColor="@android:color/black" />
