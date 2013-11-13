@@ -155,7 +155,6 @@
     <string name="dialog_license_top"> This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY</string>
     
     <string name="dialog_close">Close</string>
-    <string name="dialog_choose">Choose</string>
     
     <string name="error_versions">Incompatible version</string>
     <string name="old_proto">Please update Clementine!</string>

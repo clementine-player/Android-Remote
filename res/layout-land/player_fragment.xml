@@ -118,6 +118,14 @@
 
             </LinearLayout>
             
+            <View
+				        android:id="@+id/view1"
+				        android:layout_width="fill_parent"
+				        android:layout_height="1dp"
+				        android:layout_marginTop="6dp"
+				        android:layout_marginBottom="6dp"
+				        android:background="#000000" />
+            
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -126,7 +134,7 @@
 
                 <ImageButton
                     android:id="@+id/btnPrev"
-                    style="@style/OrangeButton.Button"
+                    android:background="@drawable/selector_white_orange_selected"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
@@ -136,7 +144,7 @@
 
                 <ImageButton
                     android:id="@+id/btnPlaypause"
-                    style="@style/OrangeButton.Button"
+                    android:background="@drawable/selector_white_orange_selected"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -148,7 +156,7 @@
 
                 <ImageButton
                     android:id="@+id/btnNext"
-                    style="@style/OrangeButton.Button"
+                    android:background="@drawable/selector_white_orange_selected"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"

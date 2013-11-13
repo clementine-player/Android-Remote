@@ -63,7 +63,7 @@ public class MySong {
 		 && song.album.equals(this.album)
 		 && song.albumartist.equals(this.albumartist)) {
 			return true;
-	} else {
+		} else {
 			return false;
 		}
 	}
