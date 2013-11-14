@@ -61,12 +61,13 @@ public class ClementineLibraryDownloader extends
 		mSharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
 
 		mProgressDialog = new ProgressDialog(context);
-		mProgressDialog.setTitle(R.string.library_download);
+		mProgressDialog.setTitle(R.string.library_please_wait);
 		mProgressDialog.setMessage(context
-				.getText(R.string.library_please_wait));
+				.getText(R.string.library_download));
 		mProgressDialog.setMax(100);
 		mProgressDialog.setProgress(0);
 		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		mProgressDialog.setCancelable(false);
 	}
 
 	/**
@@ -121,9 +122,10 @@ public class ClementineLibraryDownloader extends
 		if (progress[0] == 100) {
 			mProgressDialog.dismiss();
 			mProgressDialog = new ProgressDialog(mContext);
-			mProgressDialog.setTitle(R.string.library_optimize);
+			mProgressDialog.setTitle(R.string.library_please_wait);
 			mProgressDialog.setMessage(mContext
-					.getText(R.string.library_please_wait));
+					.getText(R.string.library_optimize));
+			mProgressDialog.setCancelable(false);
 			mProgressDialog.show();
 		}
 	}

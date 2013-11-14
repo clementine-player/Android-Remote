@@ -155,6 +155,7 @@ public class ClementineService extends Service {
 	    // Set the result intent
 	    Intent resultIntent = new Intent(App.mApp, MainActivity.class);
 	    resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+	    resultIntent.putExtra(App.NOTIFICATION_ID, true);
 
 	    // Create a TaskStack, so the app navigates correctly backwards
 	    TaskStackBuilder stackBuilder = TaskStackBuilder.create(App.mApp);

@@ -133,6 +133,10 @@ public class MainActivity extends SherlockFragmentActivity {
 		if (getIntent().hasExtra(App.NOTIFICATION_ID)) {
 			mLastPosition = 4;
 		}
+		
+		if (getIntent().hasExtra(App.NOTIFICATION_ID)) {
+			mLastPosition = 1;
+		}
 	}
 	
     @Override

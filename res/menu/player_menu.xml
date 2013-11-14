@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/shuffle" 
           android:title="@string/menu_shuffle"
-          android:showAsAction="always"
+          app:showAsAction="always"
           android:icon="@drawable/ab_shuffle_off"></item>
     <item android:id="@+id/repeat" 
           android:title="@string/menu_repeat"
-          android:showAsAction="always"
+          app:showAsAction="always"
           android:icon="@drawable/ab_repeat_off"></item>
     <item android:id="@+id/download_song"
           android:title="@string/menu_download_song"
           android:icon="@drawable/ab_download_track"
-          android:showAsAction="always"></item>
+          app:showAsAction="ifroom"></item>
     <item android:id="@+id/download_album"
           android:title="@string/menu_download_album"
           android:icon="@drawable/ab_download_album"
-          android:showAsAction="always"></item>
+          app:showAsAction="ifroom"></item>
 </menu>
