@@ -293,6 +293,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 					break;
 				}
 			}
+			adapter.getFilter().filter("");
 		}
 	}
 
