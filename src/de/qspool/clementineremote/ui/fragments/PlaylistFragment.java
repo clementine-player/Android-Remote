@@ -100,6 +100,10 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 		} else {
 			RequestPlaylistSongs();
 			setActionBarTitle();
+			// Get the position of the current track if we have one
+	        if (App.mClementine.getCurrentSong() != null) {
+	        	updateViewPosition();
+	        }
 		}
 	}
 	
@@ -306,11 +310,6 @@ public class PlaylistFragment extends AbstractDrawerFragment {
         mList.setSelector(android.R.color.transparent);
         mList.setDivider(null);
         mList.setDividerHeight(0);
-         
-        // Get the position of the current track if we have one
-        if (App.mClementine.getCurrentSong() != null) {
-        	updateViewPosition();
-        }
 	}
 	
 	private OnItemClickListener oiclSong = new OnItemClickListener() {
