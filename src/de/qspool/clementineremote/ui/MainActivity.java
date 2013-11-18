@@ -307,6 +307,7 @@ public class MainActivity extends SherlockFragmentActivity {
 	void disconnect() {
 		makeToast(R.string.player_disconnected, Toast.LENGTH_SHORT);
 		setResult(ConnectDialog.RESULT_DISCONNECT);
+		mLastPosition = 1;
 		finish();
 	}
 	
