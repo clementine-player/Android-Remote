@@ -455,7 +455,7 @@ public class ClementineSongDownloader extends
     	// Create artist/album subfolder only when we have no playlist
     	// or user set the settings
     	if (!mIsPlaylist ||
-    		mIsPlaylist && mCreatePlaylistDir && mCreatePlaylistArtistDir) {
+    		mIsPlaylist && mCreatePlaylistArtistDir) {
     		// Append artist name
 	    	if (chunk.getSongMetadata().getAlbumartist().length() == 0)
 	    		sb.append(chunk.getSongMetadata().getArtist());
