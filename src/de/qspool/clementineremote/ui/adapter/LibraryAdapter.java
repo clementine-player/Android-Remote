@@ -37,10 +37,11 @@ public class LibraryAdapter extends CursorAdapter implements Filterable {
 	private MyLibrary mLibrary;
 	private int mLevel;
 
-	public LibraryAdapter(Context context, Cursor c, MyLibrary library) {
+	public LibraryAdapter(Context context, Cursor c, MyLibrary library, int level) {
 		super(context, c, false);
 		mContext = context;
 		mLibrary = library;
+		mLevel   = level;
 	}
 	
 	@Override
@@ -62,8 +63,6 @@ public class LibraryAdapter extends CursorAdapter implements Filterable {
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
 		LibraryViewHolder libraryViewHolder = (LibraryViewHolder) view.getTag();
-		
-		mLevel = cursor.getInt(MyLibrary.IDX_LEVEL);
 		
 		switch (mLevel) {
 		case MyLibrary.LVL_ARTIST:

@@ -102,7 +102,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 		if (mLibrary.databaseExists()) {
 			mLibrary = new MyLibrary(getActivity());
 			mLibrary.openDatabase();
-			LibraryAdapter a = new LibraryAdapter(getActivity(), mLibrary.getArtists(), mLibrary);
+			LibraryAdapter a = new LibraryAdapter(getActivity(), mLibrary.getArtists(), mLibrary, MyLibrary.LVL_ARTIST);
 			mAdapters.add(a);
 		}
 
@@ -131,7 +131,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 						public void OnLibraryDownloadFinished(boolean successful) {
 							mLibrary = new MyLibrary(getActivity());
 							mLibrary.openDatabase();
-							LibraryAdapter a = new LibraryAdapter(getActivity(), mLibrary.getArtists(), mLibrary);
+							LibraryAdapter a = new LibraryAdapter(getActivity(), mLibrary.getArtists(), mLibrary, MyLibrary.LVL_ARTIST);
 							mAdapters.add(a);
 							showList();
 						}
@@ -276,6 +276,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 			mList.setEmptyView(mEmptyLibrary);
 		} else {
 			LibraryAdapter adapter = mAdapters.getLast();
+			adapter.getFilter().filter("");
 			mList.setAdapter(adapter);
 			if (adapter.isEmpty() || adapter.getCount() == 0) {
 				buildSubActionBar("", "");
@@ -293,7 +294,6 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 					break;
 				}
 			}
-			adapter.getFilter().filter("");
 		}
 	}
 
@@ -336,12 +336,12 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 
 			switch (item.getLevel()) {
 			case MyLibrary.LVL_ARTIST:
-				LibraryAdapter album = new LibraryAdapter(getActivity(), mLibrary.getAlbums(item.getArtist()), mLibrary);
+				LibraryAdapter album = new LibraryAdapter(getActivity(), mLibrary.getAlbums(item.getArtist()), mLibrary, MyLibrary.LVL_ALBUM);
 				mAdapters.add(album);
 				showList();
 				break;
 			case MyLibrary.LVL_ALBUM:
-				LibraryAdapter title = new LibraryAdapter(getActivity(), mLibrary.getTitles(item.getArtist(), item.getAlbum()), mLibrary);
+				LibraryAdapter title = new LibraryAdapter(getActivity(), mLibrary.getTitles(item.getArtist(), item.getAlbum()), mLibrary, MyLibrary.LVL_TITLE);
 				mAdapters.add(title);
 				showList();
 				break;
