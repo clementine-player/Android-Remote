@@ -72,6 +72,8 @@ public class MainActivity extends SherlockFragmentActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private static int mLastPosition = 1;
     
+    private boolean mOpenConnectDialog = true;
+    
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
@@ -165,6 +167,8 @@ public class MainActivity extends SherlockFragmentActivity {
 		super.onResume();
 		Log.d(TAG, "onResume");
 		
+		mOpenConnectDialog = true;
+		
 		// Check if we are still connected
 		if (App.mClementineConnection == null
 		 || App.mClementine           == null
@@ -204,9 +208,11 @@ public class MainActivity extends SherlockFragmentActivity {
 		 || App.mClementine           == null
 		 || !App.mClementineConnection.isConnected()) {
 			Log.d(TAG, "onDestroy - disconnect");
-			Intent connectDialog = new Intent(this, ConnectDialog.class);
-			connectDialog.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-			startActivity(connectDialog);
+			if (mOpenConnectDialog) {
+				Intent connectDialog = new Intent(this, ConnectDialog.class);
+				connectDialog.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+				startActivity(connectDialog);
+			}
 		}
 	}
 	
@@ -306,7 +312,11 @@ public class MainActivity extends SherlockFragmentActivity {
 	 */
 	void disconnect() {
 		makeToast(R.string.player_disconnected, Toast.LENGTH_SHORT);
-		setResult(ConnectDialog.RESULT_DISCONNECT);
+		if (mOpenConnectDialog) {
+			setResult(ConnectDialog.RESULT_DISCONNECT);
+		} else {
+			setResult(ConnectDialog.RESULT_QUIT);	
+		}
 		mLastPosition = 1;
 		finish();
 	}
@@ -409,8 +419,12 @@ public class MainActivity extends SherlockFragmentActivity {
 		    	case 9: // Header Disconnect
 		    		break;
 		    	case 10: // Disonnect
+		    		mOpenConnectDialog = true;
 		    		requestDisconnect();
 		    		break;
+		    	case 11: // Quit
+		    		mOpenConnectDialog = false;
+		    		requestDisconnect();
 		    	default:
 		    		break;
 		    	}

@@ -84,6 +84,7 @@ public class ConnectDialog extends SherlockActivity {
 	public final static int RESULT_CONNECT = 1;
 	public final static int RESULT_DISCONNECT = 2;
 	public final static int RESULT_RESTART = 3;
+	public final static int RESULT_QUIT = 4;
 	
 	private Button mBtnConnect;
 	private ImageButton mBtnClementine;
@@ -487,7 +488,7 @@ public class ConnectDialog extends SherlockActivity {
 	 @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     	if (requestCode == ID_PLAYER_DIALOG) {
-    		if (resultCode == Activity.RESULT_CANCELED) {
+    		if (resultCode == Activity.RESULT_CANCELED || resultCode == RESULT_QUIT) {
     			finish();
     		} else {
     			doAutoConnect = false;

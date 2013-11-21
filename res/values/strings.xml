@@ -210,5 +210,6 @@
     </string-array>
     <string-array name="navigation_array_disconnect">
         <item>Disconnect</item>
+        <item>Quit</item>
     </string-array>
 </resources>
