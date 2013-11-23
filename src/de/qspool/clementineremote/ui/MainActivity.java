@@ -133,11 +133,12 @@ public class MainActivity extends SherlockFragmentActivity {
         
 		// When we have a download notifitication and it was clicked, show the download.
 		if (getIntent().hasExtra(App.NOTIFICATION_ID)) {
-			mLastPosition = 4;
-		}
-		
-		if (getIntent().hasExtra(App.NOTIFICATION_ID)) {
-			mLastPosition = 1;
+			int id = getIntent().getIntExtra(App.NOTIFICATION_ID, 0);
+			if (id == -1) {
+				mLastPosition = 1;
+			} else {
+				mLastPosition = 5;
+			}
 		}
 	}
 	
