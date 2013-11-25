@@ -416,6 +416,10 @@ public class ClementineSongDownloader extends
 
     	mClient.sendRequest(ClementineMessageFactory.buildSongOfferResponse(accept));
     	
+    	// File for download fragment
+    	if (f.exists())
+    		mFileUri = Uri.fromFile(f);
+    	
     	return accept;
 	}
 
