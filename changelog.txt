@@ -1,3 +1,36 @@
+Version 8
+  Features:
+    - Huge design rework, using navigation drawer on the left!
+    - Library browsing added
+    - Download list
+    - Rate songs
+    - Added song information section
+    - Added donate section
+  Improvements:
+    - PlayPause, Next Button in notification (expand to see them)
+    - Remove songs from playlist
+    - Add songs from library
+    - New icons
+    - Downloads are not canceled anymore when clicking the download notification
+    - Open last downloaded song with music player
+    - Show [s] when listening to a internet stream
+    - Ability to quit the app directly instead of disconnecting first
+    - Added animation when changing menu
+    - Various performance improvements
+    - Added XXHDPI icon resolution
+    - Compiled against Android 4.4 KITKAT
+  Bugfixes:
+    - Fix crash when downloading songs on Android 4.4
+    - Fix crash in settings dialog
+    - Fix trackupdate when listening to internetradio
+
+Version 7.1
+  Improvements:
+    - Update media library after download
+  Bugfixes:
+    - Fixed Nullpointer crash when trying to download a song (no song)
+    - Fixed Nullpointer crash when connecting to Clementine
+
 Version 7
   Features:
     - Display lyrics when clicking albumcover

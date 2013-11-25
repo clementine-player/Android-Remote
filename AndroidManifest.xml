@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.qspool.clementineremote"
     android:versionCode="20"
-    android:versionName="8 WIP" >
+    android:versionName="8" >
 
     <uses-sdk android:minSdkVersion="8"
               android:targetSdkVersion="19" />
