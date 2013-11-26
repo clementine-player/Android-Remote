@@ -8,6 +8,6 @@
 	<classpathentry kind="lib" path="libs/android-support-v4.jar"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/clementine-remote-android.dep-protocolbuffer"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/clementine-remote-android.dep-abs"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/clementine-remote-android.dep-jmdns"/>
+	<classpathentry exported="true" kind="lib" path="/home/amu/Eclipse/workspaces/workspace_android/clementine-remote-android/libs/jmdns.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
