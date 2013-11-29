@@ -132,7 +132,7 @@
   <string name="error_versions">Inkompatible Version</string>
   <string name="old_proto">Bitte Clementine updaten!</string>
   <string name="no_private_ip">Dein Android Gerät hat eine nicht lokale IP Addresse. Deaktiviere \"Akzeptiere nur lokale Clients\" in den Clementine Einstellungen.</string>
-  <string name="check_ip">1) Läuft Clementine?\n2) Nutzt du Clementine 1.2 oder höher?\n3) Hast du die Netzwerkfernsteuerung in den Clementine-Einstellungen aktiviert?\n4) Prüfe, ob die IP Adresse korrekt ist.</string>
+  <string name="check_ip">1) Läuft Clementine?\n2) Nutzt du Clementine 1.2.1 oder höher?\n3) Hast du die Netzwerkfernsteuerung in den Clementine-Einstellungen aktiviert?\n4) Prüfe, ob die IP Adresse korrekt ist.</string>
   <string name="wifi_disabled">Wifi ist deaktiviert. Wenn du über das Internet Clementine fernsteuern möchtest, stelle sicher, dass du die Ports korrekt weitergeleitet hast und \"Akzeptiere nur lokale Clients\" deaktiviert ist.</string>
   <string name="input_auth_code">Authentifizierungs-Code</string>
   <string name="invalid_code">Ungültiger Code</string>
@@ -145,7 +145,7 @@
   <string name="shuffle_inside_album">Zufällige Titelreihenfolge innerhalb eines Albums</string>
   <string name="shuffle_albums">Zufällige Albenreihenfolge</string>
   <string name="first_time_title">Willkommen</string>
-  <string name="first_time_text">Danke, dass du Clementine Remote nutzt!\nIch hoffe, dass dir die App gefällt. Um diese Fernsteuerung zu nutzen musst du mindestens Clementine 1.2 installiert haben. Download: &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;</string>
+  <string name="first_time_text">Danke, dass du Clementine Remote nutzt!\nIch hoffe, dass dir die App gefällt. Um diese Fernsteuerung zu nutzen musst du mindestens Clementine 1.2.1 installiert haben. Download: &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;</string>
   <string name="track_loved">Titel geliebt &lt;3</string>
   <string name="track_banned">Titel gebannt :-(</string>
   <string name="notification_disconnect_keep_alive">Verbindung verloren. Klicke zum Wiederverbinden.</string>

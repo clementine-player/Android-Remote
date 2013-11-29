@@ -132,7 +132,7 @@
   <string name="error_versions">Uyumsuz sürüm</string>
   <string name="old_proto">Lütfen Clementine\'i güncelleyin!</string>
   <string name="no_private_ip">Android cihazınızın yerel olmayan IP adresi var. Clementine ayarlarından \"Sadece yerel IP adresleri kullan\" seçeneğini devre dışı bırakmayı deneyin.</string>
-  <string name="check_ip">1) Clementine çalışıyor mu?\n2) Clementine 1.2 veya sonrasını mı kullanıyorsunuz?\n3) Clementine ayarlarından ağ denetimini etkinleştirdiniz mi?\n4) Doğru IP adresi girdiğinizden emin olun.\n</string>
+  <string name="check_ip">1) Clementine çalışıyor mu?\n2) Clementine 1.2.1 veya sonrasını mı kullanıyorsunuz?\n3) Clementine ayarlarından ağ denetimini etkinleştirdiniz mi?\n4) Doğru IP adresi girdiğinizden emin olun.\n</string>
   <string name="wifi_disabled">Kablosuz devre dışı. Eğer Clementine\'e İnternet ile bağlanmak isterseniz bağlantı noktalarının doğru bir şekilde yönlendirilmiş olduğundan ve \"Sadece yerel IP adreslerini kullan\" seçeneğinin devre dışı olduğundan emin olun.</string>
   <string name="input_auth_code">Doğrulama Kodu</string>
   <string name="invalid_code">Geçersiz Kod</string>
@@ -145,7 +145,7 @@
   <string name="shuffle_inside_album">Bu albümdeki parçaları karıştır</string>
   <string name="shuffle_albums">Albümleri karıştır</string>
   <string name="first_time_title">Hoş Geldiniz</string>
-  <string name="first_time_text">Clementine Kumanda\'yı kullandığınız için teşekkürler!\nUmarım bu uygulama size faydalı olur.&lt;br&gt;&lt;br&gt;Bu kumanda uygulamasını kullanabilmek için &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;buradan&lt;/a&gt; Clementine 1.2 veya daha üst sürümünü indirip kurmalınız.</string>
+  <string name="first_time_text">Clementine Kumanda\'yı kullandığınız için teşekkürler!\nUmarım bu uygulama size faydalı olur.&lt;br&gt;&lt;br&gt;Bu kumanda uygulamasını kullanabilmek için &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;buradan&lt;/a&gt; Clementine 1.2.1 veya daha üst sürümünü indirip kurmalınız.</string>
   <string name="track_loved">Parça beğenildi &lt;3</string>
   <string name="track_banned">Parça engellendi :-(</string>
   <string name="notification_disconnect_keep_alive">Bağlantı kaybedildi. Bağlanmak için dokunun.</string>

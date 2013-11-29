@@ -132,7 +132,7 @@
   <string name="error_versions">Несумісність версій</string>
   <string name="old_proto">Будь ласка, встановіть новішу версію Clementine!</string>
   <string name="no_private_ip">IP-адреса вашого пристрою Android не є локальною. Спробуйте зняти позначення з пункту «Використовувати лише локальні IP-адреси» у параметрах програми Clementine.</string>
-  <string name="check_ip">1) Чи запущено Clementine?\n2) Чи встановлено Clementine 1.2 або новішу версію?\n3) Чи увімкнули ви дистанційне керування з мережі у параметрах Clementine?\n4) Чи правильно ви вказали IP-адресу?\n</string>
+  <string name="check_ip">1) Чи запущено Clementine?\n2) Чи встановлено Clementine 1.2.1 або новішу версію?\n3) Чи увімкнули ви дистанційне керування з мережі у параметрах Clementine?\n4) Чи правильно ви вказали IP-адресу?\n</string>
   <string name="wifi_disabled">W-Fi вимкнено. Якщо ви хочете з’єднатися з Clementine за допомогою інтернету, переконайтеся, що правильно визначено переспрямування портів і що знято позначення з пункту «Використовувати лише локальні IP-адреси».</string>
   <string name="input_auth_code">Код розпізнавання</string>
   <string name="invalid_code">Некоректний код</string>
@@ -145,7 +145,7 @@
   <string name="shuffle_inside_album">Перемішувати композиції у альбомі</string>
   <string name="shuffle_albums">Перемішувати альбоми</string>
   <string name="first_time_title">Вітаємо</string>
-  <string name="first_time_text">Дякуємо за те, що скористалися Дистанційним керуванням Clementine!\nСподіваємося, що ця програма буде для вас корисною.&lt;br&gt;&lt;br&gt;Щоб скористатися нею, вам слід отримати і встановити пакунок з Clementine 1.2 або новішою версією з &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;цієї сторінки&lt;/a&gt;.</string>
+  <string name="first_time_text">Дякуємо за те, що скористалися Дистанційним керуванням Clementine!\nСподіваємося, що ця програма буде для вас корисною.&lt;br&gt;&lt;br&gt;Щоб скористатися нею, вам слід отримати і встановити пакунок з Clementine 1.2.1 або новішою версією з &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;цієї сторінки&lt;/a&gt;.</string>
   <string name="track_loved">Композицію уподобано &lt;3</string>
   <string name="track_banned">Композицію заблоковано :-(</string>
   <string name="notification_disconnect_keep_alive">З’єднання розірвано. Натисніть, щоб відновити з’єднання.</string>

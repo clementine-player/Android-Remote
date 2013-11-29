@@ -132,7 +132,7 @@
   <string name="error_versions">Versão não compatível</string>
   <string name="old_proto">Atualize o Clementine</string>
   <string name="no_private_ip">O seu dispositivo Android não tem um IP local. Desative \"Utilizar IP de endereços local\" nas definições do Clementine.</string>
-  <string name="check_ip">1) O Clementine está em execução?\n2) Tem a versão 1.2 ou superior do Clementine?\n3) Ativou a rede remota nas definições do Clementine?\n4) Verifique se o endereço IP está correto.\n</string>
+  <string name="check_ip">1) O Clementine está em execução?\n2) Tem a versão 1.2.1 ou superior do Clementine?\n3) Ativou a rede remota nas definições do Clementine?\n4) Verifique se o endereço IP está correto.\n</string>
   <string name="wifi_disabled">A rede sem fios está inativa. Se quiser ligar ao Clementine através da Internet, certifique-se se reencaminha as portas corretamente e que desativa a opção \"Utilizar IP de endereços local\"</string>
   <string name="input_auth_code">Código de autenticação</string>
   <string name="invalid_code">Código inválido</string>
@@ -145,7 +145,7 @@
   <string name="shuffle_inside_album">Baralhar faixas deste álbum</string>
   <string name="shuffle_albums">Baralhar álbuns</string>
   <string name="first_time_title">Bem-vindo</string>
-  <string name="first_time_text">Obrigado por utilizar o Clementine Remote!\nEspero que esta aplicação seja útil.&lt;br&gt;&lt;br&gt;Para poder utilizar, esta aplicação tem que transferir e instalar a versão 1.2 ou superior do Clementine, disponível &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;aqui&lt;/a&gt;.</string>
+  <string name="first_time_text">Obrigado por utilizar o Clementine Remote!\nEspero que esta aplicação seja útil.&lt;br&gt;&lt;br&gt;Para poder utilizar, esta aplicação tem que transferir e instalar a versão 1.2.1 ou superior do Clementine, disponível &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;aqui&lt;/a&gt;.</string>
   <string name="track_loved">Gosto da faixa &lt;3</string>
   <string name="track_banned">Faixa banida :-(</string>
   <string name="notification_disconnect_keep_alive">Ligação abortada. Clique para ligar novamente.</string>

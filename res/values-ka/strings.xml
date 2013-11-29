@@ -131,7 +131,7 @@
   <string name="error_versions">არათავსებადი ვერსია</string>
   <string name="old_proto">გთხოვთ განაახლოთ Clementine!</string>
   <string name="no_private_ip">თქვენს Android მოწყობილობას აქვს არაადგილობრივი IP მისამართი. სცადეთ გათიშოთ \"მხოლოდ ადგილობრივი IP მისამართების გამოყენება\" Clementine-ის პარამტრებიდან.</string>
-  <string name="check_ip">1) Clementine გაშვებულია?\n2) იყენებთ Clementine-ის 1.2 ან უფრო ახალ ვერსიას?\n3) ჩართეთ მოშორებული მართვა Clementine-ის პარამეტრებიდან?\n4) დარწმუნდით, რომ შეყვანილი IP მისამართი სწორია.\n\n</string>
+  <string name="check_ip">1) Clementine გაშვებულია?\n2) იყენებთ Clementine-ის 1.2.1 ან უფრო ახალ ვერსიას?\n3) ჩართეთ მოშორებული მართვა Clementine-ის პარამეტრებიდან?\n4) დარწმუნდით, რომ შეყვანილი IP მისამართი სწორია.\n\n</string>
   <string name="wifi_disabled">Wifi გათიშულია. თუ გსურთ, რომ Clementine-ის ინტერნეტის საშუალებით დაუკავშირდეთ, დარმწუნდით რომ პორტების გადამისამართება სწორად გაქვთ გაკეთებული, ხოლო პარამეტრებიდან გათიშული გაქვთ \"მხოლოდ ადგილობრივი IP მისამართების გამოიყენება\"\".</string>
   <string name="input_auth_code">ავთენტიკაციის კოდი</string>
   <string name="invalid_code">კოდი არასწორია</string>
@@ -140,7 +140,7 @@
   <string name="repeat_album">ალბომის გამეორება</string>
   <string name="repeat_playlist">რეპერტუარის გამეორება</string>
   <string name="first_time_title">მოგესალმებით</string>
-  <string name="first_time_text">გმადლობთ, რომ იყენებთ Clementine Remote-ს!\nიმედი მაქვს რომ ეს პროგრამა გამოგადგებათ.&lt;br&gt;&lt;br&gt;ამ პროგრამის გამოსაყენებლად თქვენ უნდა გადმოტვირთოთ და დააყენოთ Clementine 1.2 ან უფრო ახალი &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;ოფიციალური გვერდიდან&lt;/a&gt;.</string>
+  <string name="first_time_text">გმადლობთ, რომ იყენებთ Clementine Remote-ს!\nიმედი მაქვს რომ ეს პროგრამა გამოგადგებათ.&lt;br&gt;&lt;br&gt;ამ პროგრამის გამოსაყენებლად თქვენ უნდა გადმოტვირთოთ და დააყენოთ Clementine 1.2.1 ან უფრო ახალი &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;ოფიციალური გვერდიდან&lt;/a&gt;.</string>
   <string name="track_loved">ჩანაწერი საყვარელია &lt;3</string>
   <string name="track_banned">ჩანაწერი დაიბლოკა :-(</string>
   <string name="notification_disconnect_keep_alive">კავშირი გაწყდა. შეეხეთ ხელახალი ცდისთვის.</string>

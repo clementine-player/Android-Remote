@@ -132,7 +132,7 @@
   <string name="error_versions">Version incompatible</string>
   <string name="old_proto">Merci de mettre à jour Clementine</string>
   <string name="no_private_ip">Votre téléphone Android a une adresse IP non-locale. Essayez de désactiver « Utiliser seulement les adresses IP locales » dans les préférences de Clementine.</string>
-  <string name="check_ip">1) Est-ce que Clementine est en cours d\'exécution ?\n2) Utilisez-vous Clementine 1.2, ou une version plus récente ?\n3) Est-ce le contrôle à distance est activé dans les préférences de Clementine ?\n4) Vérifiez que vous avez saisi la bonne adresse IP.\n</string>
+  <string name="check_ip">1) Est-ce que Clementine est en cours d\'exécution ?\n2) Utilisez-vous Clementine 1.2.1, ou une version plus récente ?\n3) Est-ce le contrôle à distance est activé dans les préférences de Clementine ?\n4) Vérifiez que vous avez saisi la bonne adresse IP.\n</string>
   <string name="wifi_disabled">Le Wifi est désactivé. Si vous voulez vous connecter à Clementine via Internet, vérifiez que vous avez redirigé les ports et désactivé « Utiliser seulement les adresses IP locales ».</string>
   <string name="input_auth_code">Code d\'authentication</string>
   <string name="invalid_code">Code invalide</string>
@@ -145,7 +145,7 @@
   <string name="shuffle_inside_album">Aléatoire : pistes de cet album</string>
   <string name="shuffle_albums">Aléatoire : albums</string>
   <string name="first_time_title">Bienvenue</string>
-  <string name="first_time_text">Merci d\'utiliser Clementine à distance !\nJ\'espère que cette application vous sera utile.&lt;br&gt;&lt;br&gt;Pour pouvoir l\'utiliser, vous devez avoir une version de Clementine compatible (au moins 1.2), disponible &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;ici&lt;/a&gt;.</string>
+  <string name="first_time_text">Merci d\'utiliser Clementine à distance !\nJ\'espère que cette application vous sera utile.&lt;br&gt;&lt;br&gt;Pour pouvoir l\'utiliser, vous devez avoir une version de Clementine compatible (au moins 1.2.1), disponible &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;ici&lt;/a&gt;.</string>
   <string name="track_loved">Piste aimée &lt;3</string>
   <string name="track_banned">Piste détestée :-(</string>
   <string name="notification_disconnect_keep_alive">Connexion perdue. Touchez pour vous reconnecter.</string>
