@@ -464,7 +464,9 @@ public class ConnectDialog extends SherlockActivity {
 	 * We have an old Proto version. User has to update Clementine
 	 */
 	void oldProtoVersion() {
-		Utilities.ShowMessageDialog(this, R.string.error_versions, R.string.old_proto);
+		String title = getString(R.string.error_versions);
+		String message = getString(R.string.old_proto) + "\n(need Clementine 1.2.1 or later!)";
+		Utilities.ShowMessageDialog(this, title, message, false);
 	}
 	
 	/**
