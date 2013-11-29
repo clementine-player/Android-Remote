@@ -1,0 +1,177 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="app_name">Clementine daljinski upravljač</string>
+  <string name="app_not_available">Aplikacija nije dostupna!</string>
+  <string name="connectdialog_connect">Poveži se</string>
+  <string name="connectdialog_autoconnect">Automatsko povezivanje</string>
+  <string name="connectdialog_clementine_found">Clementine pronađen!</string>
+  <string name="connectdialog_connecting">Povezivanje sa Clementine</string>
+  <string name="connectdialog_download_data">Preuzimanje podataka</string>
+  <string name="connectdialog_connected">Povezano</string>
+  <string name="connectdialog_error">Udaljeno računalo nije u dosegu</string>
+  <string name="connectdialog_ip_hint">Upišite IP adresu</string>
+  <string name="connectdialog_mdns_found">Pronađeno više Clementina. Dotaknite ikonu za odabir jednoga.</string>
+  <string name="connectdialog_services">Clementine</string>
+  <string name="player_nosong">Trenutno se ne reproducira nijedna pjesma</string>
+  <string name="player_disconnected">Odspojeno</string>
+  <string name="player_playlist">Popis izvođenja:</string>
+  <string name="player_download_playlists">Preuzimanje popisa izvođenja</string>
+  <string name="playler_volume">Glasnoća zvuka</string>
+  <string name="player_stop_after_current">Uključi/Isključi zaustavljanje nakon završetka pjesme.</string>
+  <string name="player_download_lyrics">Preuzimanje tekstova pjesama</string>
+  <string name="player_no_lyrics">Nema pronađenih tekstova pjesama</string>
+  <string name="player_download_started">Preuzimanje pokrenuto!</string>
+  <string name="player_song_is_stream">Nemoguće preuzimanje streama!</string>
+  <string name="player_stream">[S]</string>
+  <string name="playlist_search_hint">Traži pjesmu</string>
+  <string name="playlist_empty">Popis izvođenja je prazan!</string>
+  <string name="playlist_context_play">Reproduciraj pjesmu</string>
+  <string name="playlist_context_remove">Ukloni s popisa izvođenja</string>
+  <string name="downloads_empty">Nema preuzimanja!</string>
+  <string name="download_error">Nemoguće otvaranje pjesme!</string>
+  <string name="download_freespace">Slobodan prostor</string>
+  <string name="download_noti_title">Početak preuzimanja</string>
+  <string name="download_noti_title_song">[Trenutna pjesma]</string>
+  <string name="download_noti_title_album">[Album]</string>
+  <string name="download_noti_title_playlist">[Popis izvođenja]</string>
+  <string name="download_noti_complete">Preuzimanje završeno</string>
+  <string name="download_noti_canceled">Preuzimanje prekinuto</string>
+  <string name="download_noti_insufficient_space">Nedovoljno slobodnog prostora, prekidam preuzimanje.</string>
+  <string name="download_noti_forbidden">Preuzimanje zabranjeno. Aktivirajte ga u Clementine postavkama.</string>
+  <string name="download_noti_not_mounted">Nema pronađenih uređaja pohrane!</string>
+  <string name="download_noti_only_wifi">Preuzimanje je samo dopušteno putem WI-FI-a.</string>
+  <string name="library_download">Preuzimanje fonoteke</string>
+  <string name="library_optimize">Optimiziranje baze podataka</string>
+  <string name="library_please_wait">Molim pričekajte</string>
+  <string name="library_search_hint">Pretraži fonoteku</string>
+  <string name="library_loading">Učitavanje</string>
+  <string name="library_refresh">Osvježi</string>
+  <string name="library_empty">Fonoteka je prazna. Pokrenite osvježavanje za preuzimanje fonoteke!</string>
+  <string name="library_no_albums">%d albuma</string>
+  <string name="library_no_tracks">%d pjesama</string>
+  <string name="library_songs_added">%d pjesama dodano na trenutni popis izvođenja</string>
+  <string name="library_context_add">Dodaj pjesmu na trenutni popis izvođenja</string>
+  <string name="song_info_album">Album</string>
+  <string name="song_info_genre">Vrsta glazbe</string>
+  <string name="song_info_year">Godina</string>
+  <string name="song_info_track">Pjesma</string>
+  <string name="song_info_disc">Disk</string>
+  <string name="song_info_playcount">Broj izvođenja</string>
+  <string name="song_info_length">Trajanje</string>
+  <string name="song_info_size">Veličina datoteke</string>
+  <string name="song_info_filename">Naziv datoteke</string>
+  <string name="song_info_rating">Ocjena</string>
+  <string name="song_info_rated">Ocjena pjesme $stars$ zvjejzdica</string>
+  <string name="menu_shuffle">Naizmjenično</string>
+  <string name="menu_repeat">Ponovi</string>
+  <string name="menu_settings">Postavke</string>
+  <string name="menu_playlist">Popis izvođenja</string>
+  <string name="menu_search">Traži</string>
+  <string name="menu_disconnect">Odspoji</string>
+  <string name="menu_love">Sviđa mi se</string>
+  <string name="menu_ban">Zabrana</string>
+  <string name="menu_download_song">Preuzmi pjesmu</string>
+  <string name="menu_download_album">Preuzmi album</string>
+  <string name="menu_download_playlist">Preuzmi popis izvođenja</string>
+  <string name="donate_header">Donacije</string>
+  <string name="donate_text">Hvala vam što koristite moju aplikaciju, nadam se da će vam biti korisna!\n\nAko vas uistinu veseli moj rad, mala donacija bi bila dobrodošla.</string>
+  <string name="donate_i_want">Želim donirati:</string>
+  <string name="donate_one">Krafna (1.00 €)</string>
+  <string name="donate_two">Kava (2.00 €)</string>
+  <string name="donate_five">Pica (5.00 €)</string>
+  <string name="donate_thanks">Hvala vam na vašoj podršci! :-)</string>
+  <string name="donate_complete">Doniranje završeno, hvala vam! :-)</string>
+  <string name="donate_try_again">Obrada posljednje donacije, pokušajte ponovno</string>
+  <string name="donate_not_available">Google trgovina nije dostupna</string>
+  <string name="donate_not_available_text">Provjerite imate li instaliranu najnoviju inačicu Google Play trgovine i pokušajte ponovno!</string>
+  <string name="pref_cat_behavior">Ponašanje</string>
+  <string name="pref_cat_player">Reproduktor</string>
+  <string name="pref_cat_downloads">Preuzimanja</string>
+  <string name="pref_cat_connection">Povezivanje</string>
+  <string name="pref_cat_info">Informacije</string>
+  <string name="pref_volume_title">Koristi tipke glasnoće zvuka</string>
+  <string name="pref_volume_summary">Koristi tipke glasnoće zvuka za upravljanje glasnoćom zvuka na Clementinu.</string>
+  <string name="pref_pebble_title">Koristi Pebble</string>
+  <string name="pref_pebble_summary">Pošalj trenutne metapodatke na Pebble glazbenu aplikaciju.</string>
+  <string name="pref_trackno_title">Prikaži broj pjesme</string>
+  <string name="pref_trackno_summary">Prikaži ili sakrij broj pjesme u popisima izvođenja.</string>
+  <string name="pref_port_title">Ulaz</string>
+  <string name="pref_port_summary">Trenutni ulaz:</string>
+  <string name="pref_port_default">5500</string>
+  <string name="pref_port_error">Nedopušten ulaz!</string>
+  <string name="pref_lastfm_title">Last.fm</string>
+  <string name="pref_lastfm_summary">Aktiviraj Sviđa mi se / Zabrani pjesme. (zahtijeva ponovno pokretanje)</string>
+  <string name="pref_lower_volume_title">Smanji glasnoću zvuka</string>
+  <string name="pref_lower_volume_summary">Smanji glasnoću zvuka kod dolaznih / odlaznih poziva.</string>
+  <string name="pref_call_volume_title">Razina glasnoće zvuka poziva</string>
+  <string name="pref_call_volume_summary">Trenutna razina glasnoće zvuka poziva: %s</string>
+  <string name="pref_version_summary">Kliknite za posjet web stranici projekta</string>
+  <string name="pref_version_title">Inačica</string>
+  <string name="pref_license_title">Licenca</string>
+  <string name="pref_license_summary">GNU GPLv3</string>
+  <string name="pref_about_title">O programu</string>
+  <string name="pref_about_summary">Ljudi koji rade na ovom projektu</string>
+  <string name="pref_clementine_title">Clementine</string>
+  <string name="pref_clementine_summary">Posjetite Clementine web stranicu</string>
+  <string name="pref_dl_wifi_only_title">Samo WI-FI</string>
+  <string name="pref_dl_wifi_only_summary">Preuzmi pjesme samo kada je povezana WI-FI mreža.</string>
+  <string name="pref_dl_dir">Postavi mapu preuzimanja</string>
+  <string name="pref_dl_override">Prepiši postojeće datoteke</string>
+  <string name="pref_dl_cat_playlist">Preuzmi popis izvođenja</string>
+  <string name="pref_dl_pl_save_own_dir_title">Spremi pjesme u mapu popisa izvođenja</string>
+  <string name="pref_dl_pl_save_own_dir_summary">Stvori mapu nazvanu po popisu izvođenja i spremi pjesme u mapu.</string>
+  <string name="pref_dl_pl_artist_dir_title">Stvori podmapu izvođača/albuma</string>
+  <string name="pref_dl_pl_artist_dir_summary">Stvori podmapu izvođača/albuma za svaku pjesmu posebno.</string>
+  <string name="file_dialog_set_dir">Odaberi direktorij</string>
+  <string name="dialog_about_header">O programu</string>
+  <string name="dialog_about_authors">Autori</string>
+  <string name="dialog_about_supporters">Podržatelji</string>
+  <string name="dialog_about_others">Ostalo</string>
+  <string name="dialog_license_top"> Ovaj program je distribuiran u nadi da će biti koristan, ali BEZ IKAKVOG JAMSTVA</string>
+  <string name="dialog_close">Zatvori</string>
+  <string name="error_versions">Nekompatibilna inačica</string>
+  <string name="old_proto">Molim, ažurirajte Clementine!</string>
+  <string name="no_private_ip">Vaš Android uređaj nema lokalnu IP adresu. Pokušajte onemogućiti \"Koristi samo lokalnu IP adresu\" u Clementine postavkama.</string>
+  <string name="check_ip">1) Je li Clementine pokrenut?\n2) Koristite li Clementine 1.2 ili noviju inačicu?\n3) Jeste li omogućili mrežno upravljanje u Clementine postavkama?\n4) Provjerite jeste li upisali ispravnu IP adresu.\n</string>
+  <string name="wifi_disabled">WI-FI je onemogućen. Ako se želite povezati sa Clementinom putem Interneta pobrinite se da ste otvorili ispravno ulaze i onemogućili \"Koristi samo lokalnu IP adresu\".</string>
+  <string name="input_auth_code">Kôd autentifikacije</string>
+  <string name="invalid_code">Pogrešan kôd</string>
+  <string name="repeat_off">Ne ponavljaj</string>
+  <string name="repeat_track">Ponovi pjesmu</string>
+  <string name="repeat_album">Ponovi album</string>
+  <string name="repeat_playlist">Ponovi popis izvođenja</string>
+  <string name="shuffle_off">Ne sviraj naizmjenično</string>
+  <string name="shuffle_all">Sviraj naizmjenično sve</string>
+  <string name="shuffle_inside_album">Sviraj naizmjenično pjesme u ovom albumu</string>
+  <string name="shuffle_albums">Sviraj naizmjenično albume</string>
+  <string name="first_time_title">Dobrodošli</string>
+  <string name="first_time_text">Hvala vam što koristite Clementine daljinski upravljač!\nNadam se da će vam ova aplikacija biti korisna.&lt;br&gt;&lt;br&gt;Da bi mogli koristiti ovu aplikaciju daljinskog upravljanja morate preuzeti i instalirati Clementine 1.2 ili noviju inačicu sa &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;.</string>
+  <string name="track_loved">Sviđa mi se pjesma &lt;3</string>
+  <string name="track_banned">Pjesma zabranjena :-(</string>
+  <string name="notification_disconnect_keep_alive">Izgubljena veza. Dotaknite za ponovno povezivanje.</string>
+  <string name="notification_action_next">Sljedeće</string>
+  <string name="notification_action_playpause">Reprodukcija / Pauziraj</string>
+  <string name="crash_report_title">Ups, nešto je pošlo po krivu!</string>
+  <string name="crash_report_message">Prošli puta Clementine daljinski upravljač se srušio! To se nebi trebalo događati! Molim vas da mi pomognete poboljšati aplikaciju i pošaljite mi datoteku zapisa. Hvala vam!</string>
+  <string name="crash_report_send">Pošalji!</string>
+  <string-array name="navigation_headers">
+    <item>Daljinski upravljač</item>
+    <item>Postavke</item>
+    <item>Odspoji</item>
+  </string-array>
+  <string-array name="navigation_array_remote">
+    <item>Reproduktor</item>
+    <item>Informacije pjesme</item>
+    <item>Popis izvođenja</item>
+    <item>Fonoteka</item>
+    <item>Preuzimanja</item>
+  </string-array>
+  <string-array name="navigation_array_settings">
+    <item>Postavke</item>
+    <item>Doniraj</item>
+  </string-array>
+  <string-array name="navigation_array_disconnect">
+    <item>Odspoji</item>
+    <item>Zatvori</item>
+  </string-array>
+</resources>

@@ -1,0 +1,177 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="app_name">Clementine Remote</string>
+  <string name="app_not_available">Anwendung nicht verfügbar!</string>
+  <string name="connectdialog_connect">Verbinden</string>
+  <string name="connectdialog_autoconnect">Direkt Verbinden</string>
+  <string name="connectdialog_clementine_found">Clementine gefunden!</string>
+  <string name="connectdialog_connecting">Verbinde mit Clementine</string>
+  <string name="connectdialog_download_data">Lade Daten herunter</string>
+  <string name="connectdialog_connected">Verbunden</string>
+  <string name="connectdialog_error">Host nicht gefunden</string>
+  <string name="connectdialog_ip_hint">IP-Adresse eingeben</string>
+  <string name="connectdialog_mdns_found">Clementinen gefunden, zur Auswahl das Icon berühren.</string>
+  <string name="connectdialog_services">Clementinen</string>
+  <string name="player_nosong">Kein Lied ausgewählt</string>
+  <string name="player_disconnected">Verbindung beendet</string>
+  <string name="player_playlist">Wiedergabeliste:</string>
+  <string name="player_download_playlists">Lade Wiedergabelisten</string>
+  <string name="playler_volume">Lautstärke</string>
+  <string name="player_stop_after_current">Nach Titel anhalten (de)aktiviert.</string>
+  <string name="player_download_lyrics">Lade Liedtexte</string>
+  <string name="player_no_lyrics">Keine Liedtexte gefunden.</string>
+  <string name="player_download_started">Download gestartet!</string>
+  <string name="player_song_is_stream">Streams können nicht heruntergeladen werden!</string>
+  <string name="player_stream">[S]</string>
+  <string name="playlist_search_hint">Suche Titel</string>
+  <string name="playlist_empty">Wiedergabeliste ist leer!</string>
+  <string name="playlist_context_play">Element wiedergeben</string>
+  <string name="playlist_context_remove">Aus Wiedergabeliste entfernen</string>
+  <string name="downloads_empty">Keine Downloads!</string>
+  <string name="download_error">Song konnte nicht geöffnet werden!</string>
+  <string name="download_freespace">Freier Speicher</string>
+  <string name="download_noti_title">Download gestartet</string>
+  <string name="download_noti_title_song">[Aktueller Song]</string>
+  <string name="download_noti_title_album">[Album]</string>
+  <string name="download_noti_title_playlist">[Wiedergabeliste]</string>
+  <string name="download_noti_complete">Download fertig</string>
+  <string name="download_noti_canceled">Download abgebrochen</string>
+  <string name="download_noti_insufficient_space">Zu wenig Speicher, Download abgebrochen</string>
+  <string name="download_noti_forbidden">Download verboten. In den Clementine Einstellungen aktivieren.</string>
+  <string name="download_noti_not_mounted">Kein Speichergerät gefunden!</string>
+  <string name="download_noti_only_wifi">Download nur über WiFi erlaubt.</string>
+  <string name="library_download">Bibliothek wird heruntergeladen</string>
+  <string name="library_optimize">Datenbank optimieren</string>
+  <string name="library_please_wait">Bitte warten</string>
+  <string name="library_search_hint">Bibliothek durchsuchen</string>
+  <string name="library_loading">Lade</string>
+  <string name="library_refresh">Aktualisieren</string>
+  <string name="library_empty">Bibliothek leer. Um die Bibliothek herunterzuladen, klicke auf aktualisieren!</string>
+  <string name="library_no_albums">%d Alben</string>
+  <string name="library_no_tracks">%d Titel</string>
+  <string name="library_songs_added">%d Titel wurden zur aktuellen Wiedergabeliste hinzugefügt</string>
+  <string name="library_context_add">Element der aktuellen Wiedergabeliste hinzufügen</string>
+  <string name="song_info_album">Album</string>
+  <string name="song_info_genre">Genre</string>
+  <string name="song_info_year">Jahr</string>
+  <string name="song_info_track">Titel-Nr.</string>
+  <string name="song_info_disc">CD-Nr.</string>
+  <string name="song_info_playcount">Abspielzähler</string>
+  <string name="song_info_length">Länge</string>
+  <string name="song_info_size">Dateigröße</string>
+  <string name="song_info_filename">Dateiname</string>
+  <string name="song_info_rating">Bewertung</string>
+  <string name="song_info_rated">Song mit $stars$ bewertet</string>
+  <string name="menu_shuffle">Zufallsmodus</string>
+  <string name="menu_repeat">Wiederholung</string>
+  <string name="menu_settings">Einstellungen</string>
+  <string name="menu_playlist">Wiedergabelisten</string>
+  <string name="menu_search">Suche</string>
+  <string name="menu_disconnect">Verbindung trennen</string>
+  <string name="menu_love">Lieben</string>
+  <string name="menu_ban">Bannen</string>
+  <string name="menu_download_song">Song herunterladen</string>
+  <string name="menu_download_album">Album herunterladen</string>
+  <string name="menu_download_playlist">Wiedergabeliste herunterladen</string>
+  <string name="donate_header">Spenden</string>
+  <string name="donate_text">Vielen Dank, dass du meine Anwendung nutzt! Ich hoffe, dass du sie nützlich findest!\n\nWenn du mit meiner Arbeit zufrieden bist, würde ich mich über eine kleine Spende sehr freuen.</string>
+  <string name="donate_i_want">Ich möchte folgendes spenden:</string>
+  <string name="donate_one">Donuts (1,00 €)</string>
+  <string name="donate_two">Kaffee (2,00 €)</string>
+  <string name="donate_five">Pizza (5,00€)</string>
+  <string name="donate_thanks">Vielen Dank für deine Unterstützung! :-)</string>
+  <string name="donate_complete">Spende abgeschlossen, vielen Dank! :-)</string>
+  <string name="donate_try_again">Letzte Spende wird bearbeitet, bitte erneut versuchen</string>
+  <string name="donate_not_available">Google Play nicht verfügbar</string>
+  <string name="donate_not_available_text">Überprüfe, ob du die neuste Google Play Store Version installiert hast und versuche es erneut!</string>
+  <string name="pref_cat_behavior">Verhalten</string>
+  <string name="pref_cat_player">Spieler</string>
+  <string name="pref_cat_downloads">Downloads</string>
+  <string name="pref_cat_connection">Verbindung</string>
+  <string name="pref_cat_info">Informationen</string>
+  <string name="pref_volume_title">Nutze Lautstärketasten</string>
+  <string name="pref_volume_summary">Nutzte die Lautstärketasten, um die Lautstärke von Clementine zu ändern.</string>
+  <string name="pref_pebble_title">Nutze Pebble</string>
+  <string name="pref_pebble_summary">Sendet die Metadaten des aktuellen Titels an die Pebble Musikanwendung.</string>
+  <string name="pref_trackno_title">Zeige Titelnummer</string>
+  <string name="pref_trackno_summary">Zeige oder verstecke Titelnummer in der Wiedergabeliste.</string>
+  <string name="pref_port_title">Port</string>
+  <string name="pref_port_summary">Aktueller Port:</string>
+  <string name="pref_port_default">5500</string>
+  <string name="pref_port_error">Ungültiger Port</string>
+  <string name="pref_lastfm_title">Last.fm</string>
+  <string name="pref_lastfm_summary">Aktivieren, um Titel zu lieben / bannen. (benötigt Neustart der App)</string>
+  <string name="pref_lower_volume_title">Lautstärke verringern</string>
+  <string name="pref_lower_volume_summary">Lautstärke bei eingehenden / ausgehenden Aufruf verringern.</string>
+  <string name="pref_call_volume_title">Läutstärke bei Anruf</string>
+  <string name="pref_call_volume_summary">Aktuelles Lautstärkelevel: %s</string>
+  <string name="pref_version_summary">Klicke für Projekt-Webseite</string>
+  <string name="pref_version_title">Version</string>
+  <string name="pref_license_title">Lizenz</string>
+  <string name="pref_license_summary">GNU GPLv3</string>
+  <string name="pref_about_title">Über</string>
+  <string name="pref_about_summary">Mitwirkende des Projekts</string>
+  <string name="pref_clementine_title">Clementine</string>
+  <string name="pref_clementine_summary">Besuche Clementine-Webseite</string>
+  <string name="pref_dl_wifi_only_title">Nur WiFi</string>
+  <string name="pref_dl_wifi_only_summary">Lade Songs nur über ein WiFi Netzwerk herunter.</string>
+  <string name="pref_dl_dir">Setze Downloadordner</string>
+  <string name="pref_dl_override">Existierende Dateien überschreiben</string>
+  <string name="pref_dl_cat_playlist">Download von Wiedergabelisten</string>
+  <string name="pref_dl_pl_save_own_dir_title">In Wiedergabelistenordner speichern</string>
+  <string name="pref_dl_pl_save_own_dir_summary">Erstellt einen nach der Wiedergabeliste benannten Ordner und speichert die Songs dort.</string>
+  <string name="pref_dl_pl_artist_dir_title">Künster/Album Unterordner erstellen</string>
+  <string name="pref_dl_pl_artist_dir_summary">Erstelle einen Künster/Album Unterordner für jeden Titel.</string>
+  <string name="file_dialog_set_dir">Ordner auswählen</string>
+  <string name="dialog_about_header">Über</string>
+  <string name="dialog_about_authors">Autoren</string>
+  <string name="dialog_about_supporters">Unterstützer</string>
+  <string name="dialog_about_others">Weitere</string>
+  <string name="dialog_license_top">Dieses Programm wird zur Verfügung gestellt in der Hoffnung, dass es nützlich sei, aber OHNE JEDE GARANTIE</string>
+  <string name="dialog_close">Schließen</string>
+  <string name="error_versions">Inkompatible Version</string>
+  <string name="old_proto">Bitte Clementine updaten!</string>
+  <string name="no_private_ip">Dein Android Gerät hat eine nicht lokale IP Addresse. Deaktiviere \"Akzeptiere nur lokale Clients\" in den Clementine Einstellungen.</string>
+  <string name="check_ip">1) Läuft Clementine?\n2) Nutzt du Clementine 1.2 oder höher?\n3) Hast du die Netzwerkfernsteuerung in den Clementine-Einstellungen aktiviert?\n4) Prüfe, ob die IP Adresse korrekt ist.</string>
+  <string name="wifi_disabled">Wifi ist deaktiviert. Wenn du über das Internet Clementine fernsteuern möchtest, stelle sicher, dass du die Ports korrekt weitergeleitet hast und \"Akzeptiere nur lokale Clients\" deaktiviert ist.</string>
+  <string name="input_auth_code">Authentifizierungs-Code</string>
+  <string name="invalid_code">Ungültiger Code</string>
+  <string name="repeat_off">Wiederholung aus</string>
+  <string name="repeat_track">Stück wiederholen</string>
+  <string name="repeat_album">Album wiederholen</string>
+  <string name="repeat_playlist">Wiedergabeliste wiederholen</string>
+  <string name="shuffle_off">Zufallsmodus aus</string>
+  <string name="shuffle_all">Zufällige Titelreihenfolge</string>
+  <string name="shuffle_inside_album">Zufällige Titelreihenfolge innerhalb eines Albums</string>
+  <string name="shuffle_albums">Zufällige Albenreihenfolge</string>
+  <string name="first_time_title">Willkommen</string>
+  <string name="first_time_text">Danke, dass du Clementine Remote nutzt!\nIch hoffe, dass dir die App gefällt. Um diese Fernsteuerung zu nutzen musst du mindestens Clementine 1.2 installiert haben. Download: &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;</string>
+  <string name="track_loved">Titel geliebt &lt;3</string>
+  <string name="track_banned">Titel gebannt :-(</string>
+  <string name="notification_disconnect_keep_alive">Verbindung verloren. Klicke zum Wiederverbinden.</string>
+  <string name="notification_action_next">Weiter</string>
+  <string name="notification_action_playpause">Wiedergabe / Pause</string>
+  <string name="crash_report_title">Huch, irgendwas ist schiefgelaufen!</string>
+  <string name="crash_report_message">Clementine Remote ist das letzte mal abgestürzt! Das hätte nicht passieren dürfen! Hilf mir die Anwendung zu verbessern und sende mir die Logdatei. Danke!</string>
+  <string name="crash_report_send">Senden!</string>
+  <string-array name="navigation_headers">
+    <item>Fernsteuerung</item>
+    <item>Einstellungen</item>
+    <item>Abmelden</item>
+  </string-array>
+  <string-array name="navigation_array_remote">
+    <item>Spieler</item>
+    <item>Titelinformationen</item>
+    <item>Wiedergabelisten</item>
+    <item>Bibliothek</item>
+    <item>Downloads</item>
+  </string-array>
+  <string-array name="navigation_array_settings">
+    <item>Einstellungen</item>
+    <item>Spenden</item>
+  </string-array>
+  <string-array name="navigation_array_disconnect">
+    <item>Abmelden</item>
+    <item>Beenden</item>
+  </string-array>
+</resources>
