@@ -60,7 +60,7 @@
 		             android:key="pref_dl_pl_artist_dir"
 		             android:title="@string/pref_dl_pl_artist_dir_title"
 		             android:summary="@string/pref_dl_pl_artist_dir_summary"
-		             android:defaultValue="false"/>
+		             android:defaultValue="true"/>
 		       </PreferenceCategory>
 	    </PreferenceScreen>
 	  </PreferenceCategory>

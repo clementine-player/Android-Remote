@@ -83,7 +83,7 @@ public class ClementineSongDownloader extends
 		
 		// Get preferences
 		mCreatePlaylistDir = mSharedPref.getBoolean(App.SP_DOWNLOAD_SAVE_OWN_DIR, false);
-		mCreatePlaylistArtistDir = mSharedPref.getBoolean(App.SP_DOWNLOAD_PLAYLIST_CRT_ARTIST_DIR, false);
+		mCreatePlaylistArtistDir = mSharedPref.getBoolean(App.SP_DOWNLOAD_PLAYLIST_CRT_ARTIST_DIR, true);
 		mOverrideExistingFiles = mSharedPref.getBoolean(App.SP_DOWNLOAD_OVERRIDE, false);
 		
 		// Get a new id
