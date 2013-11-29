@@ -58,6 +58,7 @@ import de.qspool.clementineremote.ui.fragments.SongInfoFragment;
 
 public class MainActivity extends SherlockFragmentActivity {
 	private final static String TAG = "MainActivity";
+	private final static String MENU_POSITION = "last_menu_position";
 	
 	private SharedPreferences mSharedPref;
 	private PlayerHandler mHandler;
@@ -70,7 +71,7 @@ public class MainActivity extends SherlockFragmentActivity {
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-    private static int mLastPosition = 1;
+    private int mLastPosition = 1;
     
     private boolean mOpenConnectDialog = true;
     
@@ -148,11 +149,16 @@ public class MainActivity extends SherlockFragmentActivity {
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
         
+        if (savedInstanceState != null && savedInstanceState.containsKey(MENU_POSITION)) {
+        	mLastPosition = savedInstanceState.getInt(MENU_POSITION);
+        }
+        
         Log.d(TAG, "onPostCreate");
     }
     
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+    	outState.putInt(MENU_POSITION, mLastPosition);
     }
 
     @Override
