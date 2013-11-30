@@ -21,6 +21,7 @@ import java.util.LinkedList;
 
 import android.app.Application;
 import de.qspool.clementineremote.backend.Clementine;
+import de.qspool.clementineremote.backend.ClementineLibraryDownloader;
 import de.qspool.clementineremote.backend.ClementinePlayerConnection;
 import de.qspool.clementineremote.backend.ClementineSongDownloader;
 
@@ -29,6 +30,7 @@ public class App extends Application {
 	public static Clementine mClementine = new Clementine();
 	public static Application mApp;
 	public static LinkedList<ClementineSongDownloader> downloaders = new LinkedList<ClementineSongDownloader>();
+	public static ClementineLibraryDownloader libraryDownloader;
 	public static ClementineExceptionHandler mClementineExceptionHandler;
 	
 	public final static int NOTIFY_ID = 78923748;

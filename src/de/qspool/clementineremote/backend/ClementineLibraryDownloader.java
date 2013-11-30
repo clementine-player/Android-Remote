@@ -23,18 +23,17 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import de.qspool.clementineremote.App;
-import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.elements.DownloaderResult;
 import de.qspool.clementineremote.backend.elements.DownloaderResult.DownloadResult;
-import de.qspool.clementineremote.backend.event.OnLibraryDownloadFinishedListener;
+import de.qspool.clementineremote.backend.event.OnLibraryDownloadListener;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
@@ -44,30 +43,20 @@ import de.qspool.clementineremote.utils.Utilities;
 
 public class ClementineLibraryDownloader extends
 		AsyncTask<ClementineMessage, Integer, DownloaderResult> {
-
+	private final String TAG ="ClementineLibraryDownloader";
+	
 	private Context mContext;
 	private SharedPreferences mSharedPref;
 	private ClementineSimpleConnection mClient = new ClementineSimpleConnection();
 
-	private ProgressDialog mProgressDialog;
-
 	private MyLibrary mLibrary;
 
-	private LinkedList<OnLibraryDownloadFinishedListener> listeners = new LinkedList<OnLibraryDownloadFinishedListener>();
+	private LinkedList<OnLibraryDownloadListener> listeners = new LinkedList<OnLibraryDownloadListener>();
 
 	public ClementineLibraryDownloader(Context context) {
 		mContext = context;
 		mLibrary = new MyLibrary(context);
 		mSharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
-
-		mProgressDialog = new ProgressDialog(context);
-		mProgressDialog.setTitle(R.string.library_please_wait);
-		mProgressDialog.setMessage(context
-				.getText(R.string.library_download));
-		mProgressDialog.setMax(100);
-		mProgressDialog.setProgress(0);
-		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-		mProgressDialog.setCancelable(false);
 	}
 
 	/**
@@ -77,14 +66,17 @@ public class ClementineLibraryDownloader extends
 	 * @param l
 	 *            The listener object
 	 */
-	public void addOnLibraryDownloadFinishedListener(
-			OnLibraryDownloadFinishedListener l) {
+	public void addOnLibraryDownloadListener(
+			OnLibraryDownloadListener l) {
 		listeners.add(l);
+	}
+	
+	public void removeOnLibraryDownloadListener(OnLibraryDownloadListener l) {
+		listeners.remove(l);
 	}
 
 	@SuppressLint({ "InlinedApi", "NewApi" })
 	public void startDownload(ClementineMessage message) {
-		mProgressDialog.show();
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 			this.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
@@ -116,29 +108,21 @@ public class ClementineLibraryDownloader extends
 
 	@Override
 	protected void onProgressUpdate(Integer... progress) {
-		mProgressDialog.setProgress(progress[0]);
+		fireOnProgressUpdateListener(progress[0]);
 
 		// Progress = 100, then we are optimizing the table
 		if (progress[0] == 100) {
-			mProgressDialog.dismiss();
-			mProgressDialog = new ProgressDialog(mContext);
-			mProgressDialog.setTitle(R.string.library_please_wait);
-			mProgressDialog.setMessage(mContext
-					.getText(R.string.library_optimize));
-			mProgressDialog.setCancelable(false);
-			mProgressDialog.show();
+			fireOnOptimizeLibraryListener();
 		}
 	}
 
 	@Override
 	protected void onCancelled() {
-		mProgressDialog.dismiss();
 		fireOnLibraryDownloadFinishedListener(false);
 	}
 
 	@Override
 	protected void onPostExecute(DownloaderResult result) {
-		mProgressDialog.dismiss();
 		// Notify the listeners
 		fireOnLibraryDownloadFinishedListener(result.getResult() == DownloaderResult.DownloadResult.SUCCESSFUL);
 	}
@@ -192,7 +176,7 @@ public class ClementineLibraryDownloader extends
 						f.delete();
 				} catch (IOException e) {
 				}
-
+				Log.d(TAG, "isCancelled");
 				break;
 			}
 
@@ -242,7 +226,7 @@ public class ClementineLibraryDownloader extends
 
 				// Write chunk to sdcard
 				fo.write(chunk.getData().toByteArray());
-
+				
 				// Have we downloaded all chunks?
 				if (chunk.getChunkCount() == chunk.getChunkNumber()) {
 					fo.flush();
@@ -256,12 +240,12 @@ public class ClementineLibraryDownloader extends
 			} catch (IOException e) {
 				result = new DownloaderResult(DownloadResult.CONNECTION_ERROR);
 				break;
-			}
+			} 
 		}
 
 		// Disconnect at the end
 		mClient.disconnect(ClementineMessage.getMessage(MsgType.DISCONNECT));
-
+		
 		// Optimize library table
 		mLibrary.optimizeTable();
 
@@ -286,8 +270,20 @@ public class ClementineLibraryDownloader extends
 	 * Fire the listeners
 	 */
 	private void fireOnLibraryDownloadFinishedListener(boolean successful) {
-		for (OnLibraryDownloadFinishedListener l : listeners) {
+		for (OnLibraryDownloadListener l : listeners) {
 			l.OnLibraryDownloadFinished(successful);
+		}
+	}
+	
+	private void fireOnOptimizeLibraryListener() {
+		for (OnLibraryDownloadListener l : listeners) {
+			l.OnOptimizeLibrary();
+		}
+	}
+	
+	private void fireOnProgressUpdateListener(int progress) {
+		for (OnLibraryDownloadListener l : listeners) {
+			l.OnProgressUpdate(progress);
 		}
 	}
 

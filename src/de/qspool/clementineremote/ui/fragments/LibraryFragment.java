@@ -19,8 +19,10 @@ package de.qspool.clementineremote.ui.fragments;
 
 import java.util.LinkedList;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Message;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -42,7 +44,7 @@ import com.actionbarsherlock.widget.SearchView;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.ClementineLibraryDownloader;
-import de.qspool.clementineremote.backend.event.OnLibraryDownloadFinishedListener;
+import de.qspool.clementineremote.backend.event.OnLibraryDownloadListener;
 import de.qspool.clementineremote.backend.event.OnLibrarySelectFinishedListener;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
@@ -54,19 +56,23 @@ import de.qspool.clementineremote.ui.adapter.LibraryAdapter;
 
 public class LibraryFragment extends AbstractDrawerFragment implements
 		OnLibrarySelectFinishedListener {
+	private final String TAG = "LibraryFragment";
+	
 	private ActionBar mActionBar;
 	private ListView mList;
 	private LinkedList<LibraryAdapter> mAdapters = new LinkedList<LibraryAdapter>();
 
 	private MyLibrary mLibrary;
-	private ClementineLibraryDownloader mLibraryDownloader;
 
 	private View mEmptyLibrary;
 	private TextView mLibraryPath;
+	
+	private ProgressDialog mProgressDialog;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.d(TAG, "onCreate");
 
 		// Get the actionbar
 		mActionBar = getSherlockActivity().getSupportActionBar();
@@ -76,12 +82,28 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
+		Log.d(TAG, "onResume");
 		// Check if we are still connected
 		if (App.mClementineConnection == null || App.mClementine == null
 				|| !App.mClementineConnection.isConnected()) {
 		} else {
 			// RequestPlaylistSongs();
 			setActionBarTitle();
+			if (App.libraryDownloader != null) {
+				createDownloadProgressDialog();
+				App.libraryDownloader.addOnLibraryDownloadListener(mOnLibraryDownloadListener);
+			}
+		}
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		Log.d(TAG, "onPause");
+		
+		if (App.libraryDownloader != null) {
+			App.libraryDownloader.removeOnLibraryDownloadListener(mOnLibraryDownloadListener);
+			mProgressDialog.dismiss();
 		}
 	}
 
@@ -90,6 +112,8 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.library_fragment, container,
 				false);
+		
+		Log.d(TAG, "onCreateView");
 
 		mLibrary = new MyLibrary(getActivity());
 		mLibrary.removeDatabaseIfFromOtherClementine();
@@ -99,7 +123,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 		mEmptyLibrary = view.findViewById(R.id.library_empty);
 
 		// Create the adapter
-		if (mLibrary.databaseExists()) {
+		if (App.libraryDownloader == null && mLibrary.databaseExists()) {
 			mLibrary = new MyLibrary(getActivity());
 			mLibrary.openDatabase();
 			LibraryAdapter a = new LibraryAdapter(getActivity(), mLibrary.getArtists(), mLibrary, MyLibrary.LVL_ARTIST);
@@ -123,27 +147,65 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.library_menu_refresh:
-			mLibraryDownloader = new ClementineLibraryDownloader(getActivity());
-			mLibraryDownloader
-					.addOnLibraryDownloadFinishedListener(new OnLibraryDownloadFinishedListener() {
-
-						@Override
-						public void OnLibraryDownloadFinished(boolean successful) {
-							mLibrary = new MyLibrary(getActivity());
-							mLibrary.openDatabase();
-							LibraryAdapter a = new LibraryAdapter(getActivity(), mLibrary.getArtists(), mLibrary, MyLibrary.LVL_ARTIST);
-							mAdapters.add(a);
-							showList();
-						}
-					});
-			mLibraryDownloader.startDownload(ClementineMessage
+			mAdapters.clear();
+			showList();
+			
+			App.libraryDownloader = new ClementineLibraryDownloader(getActivity());
+			App.libraryDownloader
+					.addOnLibraryDownloadListener(mOnLibraryDownloadListener);
+			App.libraryDownloader.startDownload(ClementineMessage
 					.getMessage(MsgType.GET_LIBRARY));
+			
+			createDownloadProgressDialog();
 			break;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 
 		return true;
+	}
+	
+	private OnLibraryDownloadListener mOnLibraryDownloadListener = new OnLibraryDownloadListener() {
+
+		@Override
+		public void OnLibraryDownloadFinished(boolean successful) {
+			mProgressDialog.dismiss();
+			App.libraryDownloader = null;
+			
+			mLibrary = new MyLibrary(getActivity());
+			mLibrary.openDatabase();
+			LibraryAdapter a = new LibraryAdapter(getActivity(), mLibrary.getArtists(), mLibrary, MyLibrary.LVL_ARTIST);
+			mAdapters.add(a);
+			showList();
+		}
+
+		@Override
+		public void OnProgressUpdate(int progress) {
+			mProgressDialog.setProgress(progress);
+		}
+
+		@Override
+		public void OnOptimizeLibrary() {
+			Log.d(TAG, "OnOptimizeLibrary");
+			mProgressDialog.dismiss();
+			mProgressDialog = new ProgressDialog(getActivity());
+			mProgressDialog.setTitle(R.string.library_please_wait);
+			mProgressDialog.setMessage(getText(R.string.library_optimize));
+			mProgressDialog.setCancelable(false);
+			mProgressDialog.show();
+		}
+	};
+	
+	private void createDownloadProgressDialog() {
+		mProgressDialog = new ProgressDialog(getActivity());
+		mProgressDialog.setTitle(R.string.library_please_wait);
+		mProgressDialog.setMessage(getText(R.string.library_download));
+		mProgressDialog.setMax(100);
+		mProgressDialog.setProgress(0);
+		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		mProgressDialog.setCancelable(false);
+		
+		mProgressDialog.show();
 	}
 	
 	@Override

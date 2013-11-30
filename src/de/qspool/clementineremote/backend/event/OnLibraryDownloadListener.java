@@ -17,6 +17,8 @@
 
 package de.qspool.clementineremote.backend.event;
 
-public interface OnLibraryDownloadFinishedListener {
+public interface OnLibraryDownloadListener {
+	void OnProgressUpdate(int progress);
+	void OnOptimizeLibrary();
 	void OnLibraryDownloadFinished(boolean successful);
 }
