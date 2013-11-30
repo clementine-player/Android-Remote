@@ -310,7 +310,8 @@ public class ClementineSongDownloader extends
 			// Get the raw protocol buffer
 			ClementineMessage message = mClient.getProtoc();
 			
-			if (message.isErrorMessage()) {
+			// Check if an error occured
+			if (message == null || message.isErrorMessage()) {
 				result = new DownloaderResult(DownloadResult.CONNECTION_ERROR);
 				break;
 			}
