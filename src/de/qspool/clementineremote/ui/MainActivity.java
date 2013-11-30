@@ -74,6 +74,7 @@ public class MainActivity extends SherlockFragmentActivity {
     private int mLastPosition = 1;
     
     private boolean mOpenConnectDialog = true;
+    private boolean mInstanceSaved = false;
     
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -159,6 +160,7 @@ public class MainActivity extends SherlockFragmentActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
     	outState.putInt(MENU_POSITION, mLastPosition);
+    	mInstanceSaved = true;
     }
 
     @Override
@@ -175,6 +177,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		Log.d(TAG, "onResume");
 		
 		mOpenConnectDialog = true;
+		mInstanceSaved = false;
 		
 		// Check if we are still connected
 		if (App.mClementineConnection == null
@@ -379,6 +382,9 @@ public class MainActivity extends SherlockFragmentActivity {
 
 			@Override
 			public void run() {
+				if (mInstanceSaved) {
+					return;
+				}
 				FragmentManager fragmentManager = getSupportFragmentManager();
 				FragmentTransaction ft = fragmentManager.beginTransaction();
 				ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
