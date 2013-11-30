@@ -320,7 +320,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 	@Override
 	public boolean onBackPressed() {
 		// When we have only one item left, just use the normal back behavior
-		if (mAdapters.size() == 1)
+		if (mAdapters.size() <= 1)
 			return false;
 
 		// Remove the last element and show the new list
