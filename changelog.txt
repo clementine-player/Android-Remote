@@ -1,3 +1,14 @@
+Version 8.1
+  Bugfixes:
+    - Fix orientation change when downloading library.
+    - Fix illigalStateExeption when commiting fragment. 
+    - Cancel download if we got an IO error when parsing protocol buffer.
+    - Fix crash when using back button on empty library. 
+    - Fix nullpointer when destroying service.
+    - Delete unavailable songs. Fixes issue 31.
+    - Fix nullpointer when we got invalid data.
+    - Fix database leak in library fragment when disconnecting.
+
 Version 8
   Features:
     - Huge design rework, using navigation drawer on the left!
