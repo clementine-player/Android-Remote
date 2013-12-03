@@ -117,6 +117,9 @@ public class MyLibrary extends
 	public void optimizeTable() {
 		openDatabase();
 		
+		// Remove unavailable songs
+		db.execSQL("DELETE from SONGS where unavailable <> 0");
+		
 		StringBuilder sb = new StringBuilder();
 		Cursor c = db.rawQuery("PRAGMA table_info(songs);", new String[] {});
 		
