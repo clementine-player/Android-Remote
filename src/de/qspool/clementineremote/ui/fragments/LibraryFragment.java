@@ -105,6 +105,10 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 			App.libraryDownloader.removeOnLibraryDownloadListener(mOnLibraryDownloadListener);
 			mProgressDialog.dismiss();
 		}
+		
+		if (mLibrary != null) {
+			mLibrary.closeDatabase();
+		}
 	}
 
 	@Override
