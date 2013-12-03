@@ -128,7 +128,8 @@ public class ClementineService extends Service {
 		if (mPlayerThread != null)
 			mPlayerThread.interrupt();
 		
-		if (App.mClementineConnection != null) {
+		if (App.mClementineConnection != null
+		 && mPlayerThread.isAlive()) {
 			App.mClementineConnection.mHandler.post(new Runnable() {
 	
 				@Override
