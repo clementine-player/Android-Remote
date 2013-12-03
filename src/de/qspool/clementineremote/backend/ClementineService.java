@@ -109,7 +109,8 @@ public class ClementineService extends Service {
 	@Override
 	public void onDestroy() {
 		stopForeground(true);
-		if (App.mClementineConnection.isConnected()) {
+		if (App.mClementineConnection != null
+		 && App.mClementineConnection.isConnected()) {
 			// Create a new request
 			
 			// Move the request to the message
