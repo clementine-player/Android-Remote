@@ -37,6 +37,7 @@
         </activity>
         <activity android:name=".ui.MainActivity"
                   android:theme="@style/PlayerTheme"
+                  android:exported="true"
                   android:launchMode="singleTop" ></activity>
         <activity android:name="de.qspool.clementineremote.ui.ClementineSettings"
                   android:theme="@style/PreferencesTheme"></activity>
