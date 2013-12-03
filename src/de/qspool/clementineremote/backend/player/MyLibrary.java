@@ -223,7 +223,9 @@ public class MyLibrary extends
 	}
 
 	public void closeDatabase() {
-		db.close();
+		if (db != null && db.isOpen()) {
+			db.close();
+		}
 	}
 	
 	public String getMatchesSubQuery(int level, String match) {
