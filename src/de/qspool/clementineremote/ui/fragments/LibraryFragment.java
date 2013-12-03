@@ -108,6 +108,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 		
 		if (mLibrary != null) {
 			mLibrary.closeDatabase();
+			mAdapters.clear();
 		}
 	}
 
