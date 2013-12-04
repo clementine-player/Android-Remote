@@ -86,13 +86,24 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 		// Check if we are still connected
 		if (App.mClementineConnection == null || App.mClementine == null
 				|| !App.mClementineConnection.isConnected()) {
-		} else {
-			// RequestPlaylistSongs();
-			setActionBarTitle();
-			if (App.libraryDownloader != null) {
-				createDownloadProgressDialog();
-				App.libraryDownloader.addOnLibraryDownloadListener(mOnLibraryDownloadListener);
-			}
+			return;
+		} 
+		
+		// Create the adapter
+		mLibrary = new MyLibrary(getActivity());
+		mLibrary.removeDatabaseIfFromOtherClementine();
+		if (App.libraryDownloader == null && mLibrary.databaseExists()) {
+			mLibrary.openDatabase();
+			LibraryAdapter a = new LibraryAdapter(getActivity(), mLibrary.getArtists(), mLibrary, MyLibrary.LVL_ARTIST);
+			mAdapters.add(a);
+		}
+		
+		showList();
+		
+		setActionBarTitle();
+		if (App.libraryDownloader != null) {
+			createDownloadProgressDialog();
+			App.libraryDownloader.addOnLibraryDownloadListener(mOnLibraryDownloadListener);
 		}
 	}
 	
@@ -120,25 +131,12 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 		
 		Log.d(TAG, "onCreateView");
 
-		mLibrary = new MyLibrary(getActivity());
-		mLibrary.removeDatabaseIfFromOtherClementine();
-
 		mLibraryPath = (TextView) view.findViewById(R.id.library_path);
 		mList = (ListView) view.findViewById(R.id.library);
 		mEmptyLibrary = view.findViewById(R.id.library_empty);
 
-		// Create the adapter
-		if (App.libraryDownloader == null && mLibrary.databaseExists()) {
-			mLibrary = new MyLibrary(getActivity());
-			mLibrary.openDatabase();
-			LibraryAdapter a = new LibraryAdapter(getActivity(), mLibrary.getArtists(), mLibrary, MyLibrary.LVL_ARTIST);
-			mAdapters.add(a);
-		}
-
 		mList.setOnItemClickListener(oiclLibraryClick);
 		registerForContextMenu(mList);
-
-		showList();
 
 		mActionBar.setTitle("");
 		mActionBar.setSubtitle("");
@@ -278,7 +276,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 			@Override
 			public boolean onQueryTextSubmit(String query) {
 				// Do something
-				if (mAdapters.getLast() != null) {
+				if (!mAdapters.isEmpty()) {
 					mAdapters.getLast().getFilter().filter(query);
 				}
 
