@@ -24,6 +24,7 @@ import java.util.List;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Message;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -54,6 +55,7 @@ import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.ui.adapter.PlaylistSongAdapter;
 
 public class PlaylistFragment extends AbstractDrawerFragment {
+	private final String TAG = "PlaylistFragment";
 	public final static String PLAYLIST_ID = "playlist_id";
 	
 	private PlaylistSongAdapter mAdapter;
@@ -272,18 +274,26 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 	 * Update the underlying data. It reloads the current playlist songs from the Clementine object.
 	 */
 	public void updateSongList() {
-		mData.clear();
-		mData.addAll(App.mClementine.getPlaylists().get(mId).getPlaylistSongs());
-		
-		// Check if we should update the current view position
-		mAdapter = new PlaylistSongAdapter(getActivity(), R.layout.playlist_row, mData);
-		mList.setAdapter(mAdapter);
-		
-		updateViewPosition();
-		
-		if (mData.isEmpty()) {
-			mList.setEmptyView(mEmptyPlaylist);
+		try {
+			App.mClementine.PlaylistsAvailable.acquire();
+			
+			mData.clear();
+			mData.addAll(App.mClementine.getPlaylists().get(mId).getPlaylistSongs());
+			
+			// Check if we should update the current view position
+			mAdapter = new PlaylistSongAdapter(getActivity(), R.layout.playlist_row, mData);
+			mList.setAdapter(mAdapter);
+			
+			updateViewPosition();
+			
+			if (mData.isEmpty()) {
+				mList.setEmptyView(mEmptyPlaylist);
+			}
+			
+			App.mClementine.PlaylistsAvailable.release();;
+		} catch (InterruptedException e) {
 		}
+		
 	}
 	
 	/**
@@ -363,7 +373,12 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 			setActionBarTitle();
 			break;
 		case PLAYLIST_SONGS:
-			checkGotAllPlaylists();
+			if (mProgressDialog != null && mProgressDialog.isShowing()) {
+				checkGotAllPlaylists();
+			} else {
+				updateSongList();
+			}
+			
 			break;
 		default:
 			break;

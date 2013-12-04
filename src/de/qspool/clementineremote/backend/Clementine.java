@@ -17,6 +17,8 @@
 
 package de.qspool.clementineremote.backend;
 
+import java.util.concurrent.Semaphore;
+
 import de.qspool.clementineremote.backend.player.MyPlaylist;
 import de.qspool.clementineremote.backend.player.MySong;
 import android.util.SparseArray;
@@ -40,6 +42,7 @@ public class Clementine {
 	private ShuffleMode mShuffleMode = ShuffleMode.OFF;
 	private int mSongPosition;
 	private SparseArray<MyPlaylist> mPlaylists = new SparseArray<MyPlaylist>();
+	public final Semaphore PlaylistsAvailable = new Semaphore(1);
 	private int mActivePlaylist;
 
 	public int getSongPosition() {

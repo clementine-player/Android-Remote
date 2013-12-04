@@ -236,23 +236,30 @@ public class ClementinePbParser {
 	 * @param responsePlaylists The Playlist Elements
 	 */
 	private void  parsePlaylists(ResponsePlaylists responsePlaylists) {
-		// First clear the current playlists
-		App.mClementine.getPlaylists().clear();
-		
-		List<Playlist> playlists = responsePlaylists.getPlaylistList();
-		
-		for (Playlist playlist : playlists) {
-			// Create the playlist and add the information
-			MyPlaylist myPlaylist = new MyPlaylist();
-			myPlaylist.setId(playlist.getId());
-			myPlaylist.setName(playlist.getName());
-			myPlaylist.setActive(playlist.getActive());
-			myPlaylist.setItemCount(playlist.getItemCount());
-			myPlaylist.setClosed(playlist.getClosed());
+		try {
+			App.mClementine.PlaylistsAvailable.acquire();
 			
-			// Add the playlist to the playlist list
-			App.mClementine.addPlaylist(myPlaylist);
-		}
+			// First clear the current playlists
+			App.mClementine.getPlaylists().clear();
+			
+			List<Playlist> playlists = responsePlaylists.getPlaylistList();
+			
+			for (Playlist playlist : playlists) {
+				// Create the playlist and add the information
+				MyPlaylist myPlaylist = new MyPlaylist();
+				myPlaylist.setId(playlist.getId());
+				myPlaylist.setName(playlist.getName());
+				myPlaylist.setActive(playlist.getActive());
+				myPlaylist.setItemCount(playlist.getItemCount());
+				myPlaylist.setClosed(playlist.getClosed());
+				
+				// Add the playlist to the playlist list
+				App.mClementine.addPlaylist(myPlaylist);
+				
+				App.mClementine.PlaylistsAvailable.release();
+			}
+		} catch (InterruptedException e) {
+		}		
 	}
 	
 	/**
@@ -260,15 +267,21 @@ public class ClementinePbParser {
 	 * @param response The message with the songs
 	 */
 	private void parsePlaylistSongs(ResponsePlaylistSongs response) {
-		Playlist playlist = response.getRequestedPlaylist();
-		LinkedList<MySong> playlistSongs = App.mClementine.getPlaylists().get(playlist.getId()).getPlaylistSongs();
-		playlistSongs.clear();
-		
-		List<SongMetadata> songs = response.getSongsList();
-		
-		for (SongMetadata s : songs) {
-			playlistSongs.add(MySong.fromProtocolBuffer(s));
-		}
+		try {
+			App.mClementine.PlaylistsAvailable.acquire();
+			
+			Playlist playlist = response.getRequestedPlaylist();
+			LinkedList<MySong> playlistSongs = App.mClementine.getPlaylists().get(playlist.getId()).getPlaylistSongs();
+			playlistSongs.clear();
+			
+			List<SongMetadata> songs = response.getSongsList();
+			
+			for (SongMetadata s : songs) {
+				playlistSongs.add(MySong.fromProtocolBuffer(s));
+			}
+			App.mClementine.PlaylistsAvailable.release();
+		} catch (InterruptedException e) {
+		}		
 	}
 	
 	/**
