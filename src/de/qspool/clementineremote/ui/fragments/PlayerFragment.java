@@ -182,6 +182,14 @@ public class PlayerFragment extends AbstractDrawerFragment {
 	}
 	
 	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		
+		if (mPlaylistSongs != null)
+			getFragmentManager().beginTransaction().remove(mPlaylistSongs).commit();
+	}
+	
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId())
 		{
