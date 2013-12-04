@@ -87,18 +87,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 		if (App.mClementineConnection == null || App.mClementine == null
 				|| !App.mClementineConnection.isConnected()) {
 			return;
-		} 
-		
-		// Create the adapter
-		mLibrary = new MyLibrary(getActivity());
-		mLibrary.removeDatabaseIfFromOtherClementine();
-		if (App.libraryDownloader == null && mLibrary.databaseExists()) {
-			mLibrary.openDatabase();
-			LibraryAdapter a = new LibraryAdapter(getActivity(), mLibrary.getArtists(), mLibrary, MyLibrary.LVL_ARTIST);
-			mAdapters.add(a);
 		}
-		
-		showList();
 		
 		setActionBarTitle();
 		if (App.libraryDownloader != null) {
@@ -116,11 +105,6 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 			App.libraryDownloader.removeOnLibraryDownloadListener(mOnLibraryDownloadListener);
 			mProgressDialog.dismiss();
 		}
-		
-		if (mLibrary != null) {
-			mLibrary.closeDatabase();
-			mAdapters.clear();
-		}
 	}
 
 	@Override
@@ -137,6 +121,17 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 
 		mList.setOnItemClickListener(oiclLibraryClick);
 		registerForContextMenu(mList);
+		
+		// Create the adapter
+		mLibrary = new MyLibrary(getActivity());
+		mLibrary.removeDatabaseIfFromOtherClementine();
+		if (App.libraryDownloader == null && mLibrary.databaseExists()) {
+			mLibrary.openDatabase();
+			LibraryAdapter a = new LibraryAdapter(getActivity(), mLibrary.getArtists(), mLibrary, MyLibrary.LVL_ARTIST);
+			mAdapters.add(a);
+		}
+		
+		showList();
 
 		mActionBar.setTitle("");
 		mActionBar.setSubtitle("");
@@ -144,6 +139,16 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 		setHasOptionsMenu(true);
 
 		return view;
+	}
+	
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		
+		if (mLibrary != null) {
+			mLibrary.closeDatabase();
+			mAdapters.clear();
+		}
 	}
 
 	@Override

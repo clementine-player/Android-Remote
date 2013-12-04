@@ -265,7 +265,9 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 		
 		// If we lost connection, try to reconnect
 		if (!ret) {
-			ret = super.createConnection(mRequestConnect);
+			// 
+			if (mRequestConnect != null)
+				ret = super.createConnection(mRequestConnect);
 			if (!ret) {
 				// Failed. Close connection
 				Builder builder = ClementineMessage.getMessageBuilder(MsgType.DISCONNECT);
