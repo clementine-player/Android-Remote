@@ -269,7 +269,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 				// currently active is created (onCreate() called).
 				// Therefore the other adapters are not yet created,
 				// onCreate filters for this string given in setFilterText()
-				if (mAdapters.getLast() != null) {
+				if (!mAdapters.isEmpty()) {
 					mAdapters.getLast().getFilter().filter(newText);
 				}
 				return true;
