@@ -1,3 +1,16 @@
+Version 8.2
+  Improvements:
+    - Updated project URL to new GitHub repository
+    - Updated polish translation
+  Bugfixes:
+    - Fix notificaion was not opening app on KITKAT
+    - Fix crash when searching on empty library
+    - Fix crash on tablets when returning to player from another menu
+    - Fix rare crash when connecting to Clementine
+    - Fix crash in playlists
+    - Check if multicast lock is held before releasing it.
+    - Fix crash in donate menu on devices without google apps. 
+
 Version 8.1
   Bugfixes:
     - Fix orientation change when downloading library.
