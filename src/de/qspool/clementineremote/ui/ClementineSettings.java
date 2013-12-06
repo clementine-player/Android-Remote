@@ -264,7 +264,7 @@ public class ClementineSettings extends SherlockPreferenceActivity
 		public boolean onPreferenceClick(Preference preference) {
 			Intent intent = new Intent(Intent.ACTION_VIEW);
 			if (preference.getKey().equals("pref_version")) {
-				intent.setData(Uri.parse("https://code.google.com/p/clementine-remote-android"));
+				intent.setData(Uri.parse("https://github.com/clementine-player/Android-Remote"));
 			} else if (preference.getKey().equals("pref_clementine_website")) {
 				intent.setData(Uri.parse("http://www.clementine-player.org/"));
 			}
