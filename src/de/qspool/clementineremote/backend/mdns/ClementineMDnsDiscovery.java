@@ -88,7 +88,8 @@ public class ClementineMDnsDiscovery {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				if (mMulticastLock != null) mMulticastLock.release();
+				if (mMulticastLock != null && mMulticastLock.isHeld())
+					mMulticastLock.release();
 			}
     		
     	});
