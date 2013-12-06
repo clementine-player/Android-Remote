@@ -24,7 +24,6 @@ import java.util.List;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Message;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -55,7 +54,6 @@ import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.ui.adapter.PlaylistSongAdapter;
 
 public class PlaylistFragment extends AbstractDrawerFragment {
-	private final String TAG = "PlaylistFragment";
 	public final static String PLAYLIST_ID = "playlist_id";
 	
 	private PlaylistSongAdapter mAdapter;
