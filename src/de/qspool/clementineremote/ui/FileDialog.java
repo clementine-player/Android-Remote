@@ -140,8 +140,7 @@ public class FileDialog {
         this.currentPath = path;
         List<String> r = new ArrayList<String>();
         if (path.exists()) {
-            if (path.getParentFile() != null
-             && !path.equals(Environment.getExternalStorageDirectory().getParentFile())) r.add(PARENT_DIR);
+            if (path.getParentFile() != null) r.add(PARENT_DIR);
             FilenameFilter filter = new FilenameFilter() {
                 public boolean accept(File dir, String filename) {
                     File sel = new File(dir, filename);
