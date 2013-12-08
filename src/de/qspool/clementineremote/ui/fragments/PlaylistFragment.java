@@ -145,7 +145,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                     int position, long id) {
-            	setId(App.mClementine.getPlaylists().valueAt(position).getId());
+            	mId = App.mClementine.getPlaylists().valueAt(position).getId();
             	updateSongList();
             }
 
@@ -242,15 +242,6 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 	        default:
 	            return super.onContextItemSelected(item);
 	    }
-	}
-	
-	/**
-	 * Set the playlist id
-	 * @param id The playlist id, from which the songs are displayed
-	 */
-	public void setId(int id) {
-		mId = id;
-		mData = new LinkedList<MySong>(App.mClementine.getPlaylists().get(mId).getPlaylistSongs());
 	}
 	
 	public int getPlaylistId() {

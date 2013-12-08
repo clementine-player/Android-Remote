@@ -63,6 +63,15 @@ public class MyLibrary extends
 
 	public MyLibrary(Context context) {
 		mContext = context;
+		
+		if (databaseExists()) {
+			openDatabase();
+			boolean dbOk = db.isDatabaseIntegrityOk();
+			closeDatabase();
+			
+			if (!dbOk)
+				getLibraryDb().delete();
+		}
 	}
 
 	public void addOnLibrarySelectFinishedListener(

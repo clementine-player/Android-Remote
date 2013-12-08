@@ -160,7 +160,7 @@
 		
 		</LinearLayout>
 		
-		<fragment android:name="de.qspool.clementineremote.ui.fragments.PlaylistFragment"
+		<FrameLayout
               android:id="@+id/playlist_fragment"
               android:layout_weight="1"
               android:layout_width="match_parent"

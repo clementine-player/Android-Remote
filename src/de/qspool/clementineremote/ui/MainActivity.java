@@ -340,7 +340,8 @@ public class MainActivity extends SherlockFragmentActivity {
 	void MessageFromClementine(ClementineMessage clementineMessage) {
 		// Update the Player Fragment
 		if (mFragments.get(mCurrentFragment) != null && 
-			mFragments.get(mCurrentFragment).isVisible()) {
+			mFragments.get(mCurrentFragment).isVisible() &&
+			mFragments.get(mCurrentFragment).isAdded() ) {
 			mFragments.get(mCurrentFragment).MessageFromClementine(clementineMessage);
 		}
 	}

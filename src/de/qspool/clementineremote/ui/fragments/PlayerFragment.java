@@ -104,7 +104,7 @@ public class PlayerFragment extends AbstractDrawerFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-		      Bundle savedInstanceState) {
+		      Bundle savedInstanceState) {		
 		View view = inflater.inflate(R.layout.player_fragment,
 				container, false);
     	
@@ -150,7 +150,10 @@ public class PlayerFragment extends AbstractDrawerFragment {
 	    mPdDownloadLyrics.setMessage(getString(R.string.player_download_lyrics));
 	    mPdDownloadLyrics.setCancelable(true);
 	    
-	    mPlaylistSongs = (PlaylistFragment) getFragmentManager().findFragmentById(R.id.playlist_fragment);
+	    if (view.findViewById(R.id.playlist_fragment) != null) {
+		    mPlaylistSongs = new PlaylistFragment(); 
+		    getFragmentManager().beginTransaction().replace(R.id.playlist_fragment, mPlaylistSongs).commit();
+	    }
 	    
 		// Initialize interface
 	    updateTrackMetadata();
@@ -179,14 +182,6 @@ public class PlayerFragment extends AbstractDrawerFragment {
 		mCurrentSong = new MySong();
 		mFirstCall = true;
 		updateTrackMetadata();
-	}
-	
-	@Override
-	public void onDestroyView() {
-		super.onDestroyView();
-		
-		if (mPlaylistSongs != null)
-			getFragmentManager().beginTransaction().remove(mPlaylistSongs).commit();
 	}
 	
 	@Override

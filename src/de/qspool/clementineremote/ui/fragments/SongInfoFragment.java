@@ -259,7 +259,7 @@ public class SongInfoFragment extends AbstractDrawerFragment {
 	    }
 	    
 	    // If we don't have an image, do not zoom!
-	    if (mCurrentSong.getArt() == null) 
+	    if (mCurrentSong == null || mCurrentSong.getArt() == null) 
 	    	return;
 
 	    // Load the high-resolution "zoomed-in" image.
