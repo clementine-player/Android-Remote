@@ -1,3 +1,8 @@
+Version 8.3
+  Bugfixes:
+    - Fixed crash on tablets.
+    - Fix crash in playlist.
+
 Version 8.2
   Improvements:
     - Updated project URL to new GitHub repository
