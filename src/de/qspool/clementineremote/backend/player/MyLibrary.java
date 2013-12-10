@@ -25,6 +25,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.event.OnLibrarySelectFinishedListener;
@@ -64,7 +65,8 @@ public class MyLibrary extends
 	public MyLibrary(Context context) {
 		mContext = context;
 		
-		if (databaseExists()) {
+		if (databaseExists() &&
+			Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			openDatabase();
 			boolean dbOk = db.isDatabaseIntegrityOk();
 			closeDatabase();
