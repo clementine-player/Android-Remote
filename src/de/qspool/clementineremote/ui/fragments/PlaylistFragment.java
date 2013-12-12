@@ -63,7 +63,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 	private Spinner mPlaylistSpinner = null;
 	private View mEmptyPlaylist;
 	
-	private LinkedList<MySong> mData = new LinkedList<MySong>();
+	private final LinkedList<MySong> mData = new LinkedList<MySong>();
 	private int mId;
 	
 	private String mFilterText;
