@@ -259,7 +259,7 @@ public class ClementinePbParser {
 				App.mClementine.PlaylistsAvailable.release();
 			}
 		} catch (InterruptedException e) {
-		}		
+		}
 	}
 	
 	/**

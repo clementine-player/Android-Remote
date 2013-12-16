@@ -117,7 +117,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 		mEmptyPlaylist = view.findViewById(R.id.playlist_empty);
 		
 		// Create the adapter
-		mAdapter = new PlaylistSongAdapter(getActivity(), R.layout.playlist_row, mData);
+		mAdapter = new PlaylistSongAdapter(getActivity(), R.layout.playlist_row, new LinkedList<MySong>(mData));
 		
 		mList.setOnItemClickListener(oiclSong);
 		//mList.setOnItemLongClickListener(oilclSong);
@@ -270,7 +270,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 			mData.addAll(App.mClementine.getPlaylists().get(mId).getPlaylistSongs());
 			
 			// Check if we should update the current view position
-			mAdapter = new PlaylistSongAdapter(getActivity(), R.layout.playlist_row, mData);
+			mAdapter = new PlaylistSongAdapter(getActivity(), R.layout.playlist_row, new LinkedList<MySong>(mData));
 			mList.setAdapter(mAdapter);
 			
 			updateViewPosition();
@@ -279,7 +279,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 				mList.setEmptyView(mEmptyPlaylist);
 			}
 			
-			App.mClementine.PlaylistsAvailable.release();;
+			App.mClementine.PlaylistsAvailable.release();
 		} catch (InterruptedException e) {
 		}
 		
