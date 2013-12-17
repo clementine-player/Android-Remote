@@ -19,7 +19,6 @@ package de.qspool.clementineremote.ui.fragments;
 
 import java.util.LinkedList;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
@@ -32,6 +31,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,8 +66,8 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 
 	private View mEmptyLibrary;
 	private TextView mLibraryPath;
-	
-	private ProgressDialog mProgressDialog;
+	private ProgressBar mDownloadProgress;
+	private TextView mEmptyText;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -91,7 +91,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 		
 		setActionBarTitle();
 		if (App.libraryDownloader != null) {
-			createDownloadProgressDialog();
+			showDownloadProgress();
 			App.libraryDownloader.addOnLibraryDownloadListener(mOnLibraryDownloadListener);
 		}
 	}
@@ -103,7 +103,6 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 		
 		if (App.libraryDownloader != null) {
 			App.libraryDownloader.removeOnLibraryDownloadListener(mOnLibraryDownloadListener);
-			mProgressDialog.dismiss();
 		}
 	}
 
@@ -118,6 +117,11 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 		mLibraryPath = (TextView) view.findViewById(R.id.library_path);
 		mList = (ListView) view.findViewById(R.id.library);
 		mEmptyLibrary = view.findViewById(R.id.library_empty);
+		
+		mDownloadProgress = (ProgressBar) view.findViewById(R.id.library_download_progress);
+		mDownloadProgress.setVisibility(View.INVISIBLE);
+		
+		mEmptyText = (TextView) view.findViewById(R.id.library_empty_txt);
 
 		mList.setOnItemClickListener(oiclLibraryClick);
 		registerForContextMenu(mList);
@@ -156,6 +160,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 		switch (item.getItemId()) {
 		case R.id.library_menu_refresh:
 			mAdapters.clear();
+			mList.setAdapter(null);
 			showList();
 			
 			App.libraryDownloader = new ClementineLibraryDownloader(getActivity());
@@ -164,7 +169,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 			App.libraryDownloader.startDownload(ClementineMessage
 					.getMessage(MsgType.GET_LIBRARY));
 			
-			createDownloadProgressDialog();
+			showDownloadProgress();
 			break;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -177,8 +182,10 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 
 		@Override
 		public void OnLibraryDownloadFinished(boolean successful) {
-			mProgressDialog.dismiss();
 			App.libraryDownloader = null;
+			
+			mDownloadProgress.setVisibility(View.INVISIBLE);
+			mEmptyText.setText(R.string.library_empty);
 			
 			mLibrary = new MyLibrary(getActivity());
 			mLibrary.openDatabase();
@@ -189,31 +196,22 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 
 		@Override
 		public void OnProgressUpdate(int progress) {
-			mProgressDialog.setProgress(progress);
+			mDownloadProgress.setProgress(progress);
 		}
 
 		@Override
 		public void OnOptimizeLibrary() {
 			Log.d(TAG, "OnOptimizeLibrary");
-			mProgressDialog.dismiss();
-			mProgressDialog = new ProgressDialog(getActivity());
-			mProgressDialog.setTitle(R.string.library_please_wait);
-			mProgressDialog.setMessage(getText(R.string.library_optimize));
-			mProgressDialog.setCancelable(false);
-			mProgressDialog.show();
+			mEmptyText.setText(R.string.library_optimize);
 		}
 	};
 	
-	private void createDownloadProgressDialog() {
-		mProgressDialog = new ProgressDialog(getActivity());
-		mProgressDialog.setTitle(R.string.library_please_wait);
-		mProgressDialog.setMessage(getText(R.string.library_download));
-		mProgressDialog.setMax(100);
-		mProgressDialog.setProgress(0);
-		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-		mProgressDialog.setCancelable(false);
-		
-		mProgressDialog.show();
+	private void showDownloadProgress() {
+		mEmptyText.setText(R.string.library_download);
+		mDownloadProgress.setMax(100);
+		mDownloadProgress.setProgress(0);
+
+		mDownloadProgress.setVisibility(View.VISIBLE);
 	}
 	
 	@Override
