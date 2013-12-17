@@ -142,6 +142,7 @@ public class MainActivity extends SherlockFragmentActivity {
 				mLastPosition = 5;
 			}
 		}
+		selectItem(mLastPosition, 0);
 	}
 	
     @Override
@@ -191,7 +192,6 @@ public class MainActivity extends SherlockFragmentActivity {
 		    // Set the handler
 		    mHandler = new PlayerHandler(this);
 		    App.mClementineConnection.setUiHandler(mHandler);
-		    selectItem(mLastPosition, 0);
 		}
 	}
 	

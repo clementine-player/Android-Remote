@@ -18,11 +18,12 @@
 package de.qspool.clementineremote.ui.fragments;
 
 import java.util.List;
-
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,12 +39,10 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.Clementine;
@@ -57,6 +56,7 @@ import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.utils.Utilities;
 
 public class PlayerFragment extends AbstractDrawerFragment {
+	private final String TAG = "PlayerFragment";
 	private final static int ANIMATION_DURATION = 750;
 	private TextView mTvArtist;
 	private TextView mTvTitle;
@@ -79,7 +79,7 @@ public class PlayerFragment extends AbstractDrawerFragment {
     private boolean mCoverUpdated = false;
     private ActionBar mActionBar;
 	
-	AbstractDrawerFragment mPlaylistSongs;
+    PlaylistFragment mPlaylistSongs;
 	
 	MenuItem mMenuRepeat;
 	MenuItem mMenuShuffle;
@@ -95,6 +95,7 @@ public class PlayerFragment extends AbstractDrawerFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	super.onActivityCreated(savedInstanceState);
+    	Log.d(TAG, "onCreate");
 	    
 	    // Get the actionbar
 	    mActionBar = getSherlockActivity().getSupportActionBar();
@@ -104,7 +105,8 @@ public class PlayerFragment extends AbstractDrawerFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-		      Bundle savedInstanceState) {		
+		      Bundle savedInstanceState) {
+		Log.d(TAG, "onCreateView");
 		View view = inflater.inflate(R.layout.player_fragment,
 				container, false);
     	
@@ -151,8 +153,8 @@ public class PlayerFragment extends AbstractDrawerFragment {
 	    mPdDownloadLyrics.setCancelable(true);
 	    
 	    if (view.findViewById(R.id.playlist_fragment) != null) {
-		    mPlaylistSongs = new PlaylistFragment(); 
-		    getFragmentManager().beginTransaction().replace(R.id.playlist_fragment, mPlaylistSongs).commit();
+		    mPlaylistSongs = new PlaylistFragment();
+		    getFragmentManager().beginTransaction().add(R.id.playlist_fragment, mPlaylistSongs).commit();
 	    }
 	    
 		// Initialize interface
@@ -165,6 +167,7 @@ public class PlayerFragment extends AbstractDrawerFragment {
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		Log.d(TAG, "onCreateOptionsMenu");
 		inflater.inflate(R.menu.player_menu, menu);
 		
 		mMenuRepeat =  menu.findItem(R.id.repeat);
@@ -179,6 +182,8 @@ public class PlayerFragment extends AbstractDrawerFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
+		Log.d(TAG, "onResume");
+		
 		mCurrentSong = new MySong();
 		mFirstCall = true;
 		updateTrackMetadata();
@@ -265,6 +270,7 @@ public class PlayerFragment extends AbstractDrawerFragment {
 	/**
 	 * The track changed. Update the metadata shown on the user interface
 	 */
+	@SuppressLint("NewApi")
 	public void updateTrackMetadata() {
     	// Get the currently played song
     	MySong currentSong = App.mClementine.getCurrentSong();

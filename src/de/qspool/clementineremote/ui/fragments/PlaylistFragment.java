@@ -248,6 +248,11 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 		return mId;
 	}
 	
+	public void setId(int id) {
+		mId = id;
+    	updateSongList();
+	}
+	
 	private void setActionBarTitle() {
 		MySong currentSong = App.mClementine.getCurrentSong();
 		if (currentSong == null) {
