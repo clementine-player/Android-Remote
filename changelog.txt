@@ -1,3 +1,8 @@
+Version 8.4
+  Bugfixes:
+    - Call isDatabaseIntegrityOk only when available
+    - Fix crash in Playlist (again)
+
 Version 8.3
   Bugfixes:
     - Fixed crash on tablets.
