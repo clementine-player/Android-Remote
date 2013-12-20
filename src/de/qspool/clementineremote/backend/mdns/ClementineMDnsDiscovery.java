@@ -155,7 +155,8 @@ public class ClementineMDnsDiscovery {
 				}
 				
 			});
-		} catch (IOException e) {
+		} catch (Exception e) {
+			mJmDNS = null;
 		}
 	}
 }
