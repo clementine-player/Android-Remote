@@ -247,7 +247,15 @@ public class ClementineLibraryDownloader extends
 		mClient.disconnect(ClementineMessage.getMessage(MsgType.DISCONNECT));
 		
 		// Optimize library table
-		mLibrary.optimizeTable();
+		try {
+			mLibrary.optimizeTable();
+		} catch (Exception e) {
+			f = mLibrary.getLibraryDb();
+			if (f.exists()) {
+				f.delete();
+			}
+			result = new DownloaderResult(DownloadResult.CONNECTION_ERROR);
+		}
 
 		return result;
 	}
