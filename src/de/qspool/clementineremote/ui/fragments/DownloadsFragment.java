@@ -190,7 +190,7 @@ public class DownloadsFragment extends AbstractDrawerFragment {
 
 			@Override
 			public void run() {
-				if (mAdapter != null) {
+				if (mAdapter != null && getActivity() != null) {
 					getActivity().runOnUiThread(new Runnable() {
 
 						@Override
