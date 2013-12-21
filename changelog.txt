@@ -1,3 +1,10 @@
+Version 8.5
+  Bugfixes:
+    - Fix crash on start
+    - Fix crash when downloaded library is corrupted
+    - Fix crash in download view
+    - Fix disappearing playlist view on tablets.
+
 Version 8.4
   Bugfixes:
     - Call isDatabaseIntegrityOk only when available

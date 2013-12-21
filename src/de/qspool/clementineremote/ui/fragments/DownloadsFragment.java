@@ -203,7 +203,7 @@ public class DownloadsFragment extends AbstractDrawerFragment {
 							StringBuilder sb = new StringBuilder();
 							sb.append(getActivity().getString(R.string.download_freespace));
 							sb.append(": ");
-							sb.append(Utilities.humanReadableBytes((long) Utilities.getFreeSpace(), true));
+							sb.append(Utilities.humanReadableBytes((long) Utilities.getFreeSpaceExternal(), true));
 							mFreeSpace.setText(sb.toString());
 						}
 						

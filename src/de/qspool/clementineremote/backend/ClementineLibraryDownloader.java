@@ -86,12 +86,6 @@ public class ClementineLibraryDownloader extends
 
 	@Override
 	protected DownloaderResult doInBackground(ClementineMessage... params) {
-		// Check if the sd card is writeable
-		if (!Environment.getExternalStorageState().equals(
-				Environment.MEDIA_MOUNTED))
-			return new DownloaderResult(
-					DownloaderResult.DownloadResult.NOT_MOUNTED);
-
 		if (mSharedPref.getBoolean(App.SP_WIFI_ONLY, false)
 				&& !Utilities.onWifi(mContext))
 			return new DownloaderResult(
@@ -118,13 +112,14 @@ public class ClementineLibraryDownloader extends
 
 	@Override
 	protected void onCancelled() {
-		fireOnLibraryDownloadFinishedListener(false);
+		fireOnLibraryDownloadFinishedListener(new DownloaderResult(
+				DownloaderResult.DownloadResult.CANCELLED));
 	}
 
 	@Override
 	protected void onPostExecute(DownloaderResult result) {
 		// Notify the listeners
-		fireOnLibraryDownloadFinishedListener(result.getResult() == DownloaderResult.DownloadResult.SUCCESSFUL);
+		fireOnLibraryDownloadFinishedListener(result);
 	}
 
 	/**
@@ -207,7 +202,7 @@ public class ClementineLibraryDownloader extends
 					// Check if we have enougth free space
 					// size times 2, because we optimise the table later and
 					// need space for that too!
-					if ((chunk.getSize() * 2) > Utilities.getFreeSpace()) {
+					if ((chunk.getSize() * 2) > Utilities.getFreeSpaceExternal()) {
 						result = new DownloaderResult(
 								DownloadResult.INSUFFIANT_SPACE);
 						break;
@@ -238,7 +233,8 @@ public class ClementineLibraryDownloader extends
 				// Update notification
 				updateProgress(chunk);
 			} catch (IOException e) {
-				result = new DownloaderResult(DownloadResult.CONNECTION_ERROR);
+				result = new DownloaderResult(
+						DownloaderResult.DownloadResult.NOT_MOUNTED);
 				break;
 			} 
 		}
@@ -247,14 +243,8 @@ public class ClementineLibraryDownloader extends
 		mClient.disconnect(ClementineMessage.getMessage(MsgType.DISCONNECT));
 		
 		// Optimize library table
-		try {
+		if (mLibrary.getLibraryDb().exists()) {
 			mLibrary.optimizeTable();
-		} catch (Exception e) {
-			f = mLibrary.getLibraryDb();
-			if (f.exists()) {
-				f.delete();
-			}
-			result = new DownloaderResult(DownloadResult.CONNECTION_ERROR);
 		}
 
 		return result;
@@ -277,9 +267,9 @@ public class ClementineLibraryDownloader extends
 	/*
 	 * Fire the listeners
 	 */
-	private void fireOnLibraryDownloadFinishedListener(boolean successful) {
+	private void fireOnLibraryDownloadFinishedListener(DownloaderResult result) {
 		for (OnLibraryDownloadListener l : listeners) {
-			l.OnLibraryDownloadFinished(successful);
+			l.OnLibraryDownloadFinished(result);
 		}
 	}
 	

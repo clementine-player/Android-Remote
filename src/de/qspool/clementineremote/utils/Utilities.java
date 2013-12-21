@@ -3,6 +3,7 @@ package de.qspool.clementineremote.utils;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -111,12 +112,25 @@ public class Utilities {
 	}
 	
 	/**
-	 * Get the free space on the device
+	 * Get the free space on the external storage device (like sd card)
 	 * @return The free space in byte
 	 */
 	@SuppressWarnings("deprecation")
-	public static double getFreeSpace() { 
+	public static double getFreeSpaceExternal() { 
 		StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2)
+			return (double) stat.getAvailableBlocks() * (double)stat.getBlockSize();
+		else
+			return (double) stat.getAvailableBlocksLong() * (double)stat.getBlockSizeLong();
+	}
+	
+	/**
+	 * Get the free space on the internal storage device
+	 * @return The free space in byte
+	 */
+	@SuppressWarnings("deprecation")
+	public static double getFreeSpaceInternal() { 
+		StatFs stat = new StatFs(App.mApp.getFilesDir().getPath());
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2)
 			return (double) stat.getAvailableBlocks() * (double)stat.getBlockSize();
 		else

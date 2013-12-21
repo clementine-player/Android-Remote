@@ -122,10 +122,6 @@ public class ClementineSongDownloader extends
 
 	@Override
 	protected DownloaderResult doInBackground(ClementineMessage... params) {
-		// Check if the sd card is writeable
-		if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
-			return new DownloaderResult(DownloaderResult.DownloadResult.NOT_MOUNTED);
-		
 		if (mSharedPref.getBoolean(App.SP_WIFI_ONLY, false) && !Utilities.onWifi(mContext))
 			return new DownloaderResult(DownloaderResult.DownloadResult.ONLY_WIFI);
 		
@@ -207,26 +203,7 @@ public class ClementineSongDownloader extends
 		if (result == null)
 			mSubtitle = mContext.getString(R.string.download_noti_canceled);
 		else {
-			switch (result.getResult()) {
-			case CONNECTION_ERROR:
-				mSubtitle = mContext.getString(R.string.download_noti_canceled);
-				break;
-			case FOBIDDEN:
-				mSubtitle = mContext.getString(R.string.download_noti_forbidden);
-				break;
-			case INSUFFIANT_SPACE:
-				mSubtitle = mContext.getString(R.string.download_noti_insufficient_space);
-				break;
-			case NOT_MOUNTED:
-				mSubtitle = mContext.getString(R.string.download_noti_not_mounted);
-				break;
-			case ONLY_WIFI:
-				mSubtitle = mContext.getString(R.string.download_noti_only_wifi);
-				break;
-			case SUCCESSFUL:
-				mSubtitle = mContext.getString(R.string.download_noti_complete);
-				break;
-			}
+			mSubtitle = mContext.getString(result.getMessageId());
 		}
 		
 		mBuilder.setContentTitle(mTitle);
@@ -349,7 +326,7 @@ public class ClementineSongDownloader extends
 				// Check if we need to create a new file
 				if (f == null) {
 					// Check if we have enougth free space
-					if (chunk.getSize() > Utilities.getFreeSpace()) {
+					if (chunk.getSize() > Utilities.getFreeSpaceExternal()) {
 						result = new DownloaderResult(DownloadResult.INSUFFIANT_SPACE);
 						break;
 					}
@@ -386,7 +363,7 @@ public class ClementineSongDownloader extends
 				// Update notification
 				updateProgress(chunk);
 			} catch (IOException e) {
-				result = new DownloaderResult(DownloadResult.CONNECTION_ERROR);
+				result = new DownloaderResult(DownloaderResult.DownloadResult.NOT_MOUNTED);
 				break;
 			}
 			

@@ -44,6 +44,8 @@ import com.actionbarsherlock.widget.SearchView;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.ClementineLibraryDownloader;
+import de.qspool.clementineremote.backend.elements.DownloaderResult;
+import de.qspool.clementineremote.backend.elements.DownloaderResult.DownloadResult;
 import de.qspool.clementineremote.backend.event.OnLibraryDownloadListener;
 import de.qspool.clementineremote.backend.event.OnLibrarySelectFinishedListener;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
@@ -53,6 +55,7 @@ import de.qspool.clementineremote.backend.player.MyLibrary;
 import de.qspool.clementineremote.backend.player.MyLibraryItem;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.ui.adapter.LibraryAdapter;
+import de.qspool.clementineremote.utils.Utilities;
 
 public class LibraryFragment extends AbstractDrawerFragment implements
 		OnLibrarySelectFinishedListener {
@@ -176,15 +179,22 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 	private OnLibraryDownloadListener mOnLibraryDownloadListener = new OnLibraryDownloadListener() {
 
 		@Override
-		public void OnLibraryDownloadFinished(boolean successful) {
+		public void OnLibraryDownloadFinished(DownloaderResult result) {
 			mProgressDialog.dismiss();
 			App.libraryDownloader = null;
 			
-			mLibrary = new MyLibrary(getActivity());
-			mLibrary.openDatabase();
-			LibraryAdapter a = new LibraryAdapter(getActivity(), mLibrary.getArtists(), mLibrary, MyLibrary.LVL_ARTIST);
-			mAdapters.add(a);
-			showList();
+			if (result.getResult() == DownloadResult.SUCCESSFUL) {
+				if (mLibrary != null) {
+					mLibrary.closeDatabase();
+				}
+				mLibrary = new MyLibrary(getActivity());
+				mLibrary.openDatabase();
+				LibraryAdapter a = new LibraryAdapter(getActivity(), mLibrary.getArtists(), mLibrary, MyLibrary.LVL_ARTIST);
+				mAdapters.add(a);
+				showList();
+			} else {
+				Utilities.ShowMessageDialog(getActivity(), R.string.library_download_error, result.getMessageId());
+			}
 		}
 
 		@Override
