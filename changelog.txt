@@ -1,7 +1,8 @@
 Version 8.5
   Improvements:
+    - Library: Search applies for artist, album and title now
     - Show proper error message when library loading fails
-    - Database integrity check for all andorid versions.
+    - Database integrity check for all andorid versions
   Bugfixes:
     - Fix crash on start
     - Fix crash when downloaded library is corrupted

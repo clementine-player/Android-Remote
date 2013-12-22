@@ -71,6 +71,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 	private TextView mLibraryPath;
 	
 	private ProgressDialog mProgressDialog;
+	private String mLastFilter = "";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -284,6 +285,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 				// onCreate filters for this string given in setFilterText()
 				if (!mAdapters.isEmpty()) {
 					mAdapters.getLast().getFilter().filter(newText);
+					mLastFilter = newText;
 				}
 				return true;
 			}
@@ -293,6 +295,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 				// Do something
 				if (!mAdapters.isEmpty()) {
 					mAdapters.getLast().getFilter().filter(query);
+					mLastFilter = query;
 				}
 
 				return true;
@@ -356,7 +359,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 			mList.setEmptyView(mEmptyLibrary);
 		} else {
 			LibraryAdapter adapter = mAdapters.getLast();
-			adapter.getFilter().filter("");
+			adapter.getFilter().filter(mLastFilter);
 			mList.setAdapter(adapter);
 			if (adapter.isEmpty() || adapter.getCount() == 0) {
 				buildSubActionBar("", "");
