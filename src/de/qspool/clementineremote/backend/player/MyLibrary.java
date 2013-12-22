@@ -24,8 +24,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.preference.PreferenceManager;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.event.OnLibrarySelectFinishedListener;
@@ -65,14 +65,22 @@ public class MyLibrary extends
 	public MyLibrary(Context context) {
 		mContext = context;
 		
-		if (databaseExists() &&
-			Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			openDatabase();
-			boolean dbOk = db.isDatabaseIntegrityOk();
-			closeDatabase();
+		// Check the consistency of the database
+		if (databaseExists()) {
+			boolean dbMalformed = false;
+			try {
+				openDatabase();
+				
+				dbMalformed = databaseIntegrityOk();
+				
+				closeDatabase();
+			} catch (SQLiteException e) {
+				dbMalformed = true;
+			}
 			
-			if (!dbOk)
+			if (!dbMalformed) {
 				getLibraryDb().delete();
+			}
 		}
 	}
 
@@ -237,6 +245,19 @@ public class MyLibrary extends
 		if (db != null && db.isOpen()) {
 			db.close();
 		}
+	}
+	
+	private boolean databaseIntegrityOk() {
+		boolean result = true;
+		try {
+			Cursor c = db.rawQuery("PRAGMA main.integrity_check(1)", null);
+			c.moveToFirst();
+			
+			result = c.getString(0).equalsIgnoreCase("ok");
+		} catch (SQLiteException e) {
+			result = false;
+		} 
+		return result;
 	}
 	
 	public String getMatchesSubQuery(int level, String match) {
