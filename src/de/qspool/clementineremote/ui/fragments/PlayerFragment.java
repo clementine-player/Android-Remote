@@ -79,8 +79,6 @@ public class PlayerFragment extends AbstractDrawerFragment {
     private boolean mCoverUpdated = false;
     private ActionBar mActionBar;
 	
-    PlaylistFragment mPlaylistSongs;
-	
 	MenuItem mMenuRepeat;
 	MenuItem mMenuShuffle;
 	
@@ -152,11 +150,6 @@ public class PlayerFragment extends AbstractDrawerFragment {
 	    mPdDownloadLyrics.setMessage(getString(R.string.player_download_lyrics));
 	    mPdDownloadLyrics.setCancelable(true);
 	    
-	    if (view.findViewById(R.id.playlist_fragment) != null) {
-		    mPlaylistSongs = new PlaylistFragment();
-		    getFragmentManager().beginTransaction().add(R.id.playlist_fragment, mPlaylistSongs).commit();
-	    }
-	    
 		// Initialize interface
 	    updateTrackMetadata();
 	    updateTrackPosition();
@@ -221,7 +214,8 @@ public class PlayerFragment extends AbstractDrawerFragment {
 									Toast.makeText(getActivity(), R.string.player_song_is_stream, Toast.LENGTH_LONG).show();
 								}
 								break;
-		default: break;
+		default: 
+			return false;
 		}
 		return true;
 	}
@@ -252,9 +246,6 @@ public class PlayerFragment extends AbstractDrawerFragment {
 		default:
 			break;
 		}
-		
-		if (mPlaylistSongs != null)
-			mPlaylistSongs.MessageFromClementine(clementineMessage);
 	}
 	
 	/**

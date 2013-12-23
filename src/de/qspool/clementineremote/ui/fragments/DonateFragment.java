@@ -194,8 +194,7 @@ public class DonateFragment extends AbstractDrawerFragment {
 			   Log.d(TAG, "mConsumeFinishedListener " + result);
 		      if (result.isSuccess()) {
 		         Toast.makeText(getActivity(), R.string.donate_complete, Toast.LENGTH_LONG).show();
-		      }
-		      else {
+		      } else {
 		    	  Log.d(TAG, "Error consuming product: " + result);
 		      }
 		   }

@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
     android:orientation="vertical" >
     
        <RelativeLayout
@@ -48,14 +47,13 @@
        
        <ImageView
            android:id="@+id/downloads_empty_icon"
-           android:layout_width="wrap_content"
+           android:layout_width="fill_parent"
            android:layout_height="wrap_content"
            android:layout_above="@id/downloads_empty_txt"
            android:alpha="0.25"
-           android:scaleType="fitCenter"
            android:contentDescription="@string/empty_fragment"
+           android:scaleType="fitCenter"
            android:src="@drawable/icon_large" />
-
    
    </RelativeLayout>
     

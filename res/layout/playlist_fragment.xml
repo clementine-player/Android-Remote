@@ -15,14 +15,14 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true" />
 
-
     </RelativeLayout>
     
-    <ListView android:id="@+id/songs"
-					    android:layout_margin="13dp"
-              android:background="@drawable/white_background"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"/>
+    <ListView 
+        android:id="@+id/songs"
+		android:layout_margin="13dp"
+        android:background="@drawable/white_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
     
     <RelativeLayout 
        android:id="@+id/playlist_empty"

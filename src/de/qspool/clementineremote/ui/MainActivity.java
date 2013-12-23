@@ -67,6 +67,7 @@ public class MainActivity extends SherlockFragmentActivity {
 	
 	private int mCurrentFragment;
 	private LinkedList<AbstractDrawerFragment> mFragments = new LinkedList<AbstractDrawerFragment>();
+	private AbstractDrawerFragment mPlayerFragment;
 	
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
@@ -95,6 +96,13 @@ public class MainActivity extends SherlockFragmentActivity {
         mFragments.add(new DonateFragment());
 	    
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        
+	    
+	    if (findViewById(R.id.player_frame) != null) {
+	    	mPlayerFragment = new PlayerFragment();
+	    	getSupportFragmentManager().beginTransaction().add(R.id.player_frame, mPlayerFragment).commit();
+	    	mLastPosition = 3;
+	    }
 
         // Create the adapters for the sections
         ArrayAdapter<String> remoteAdapter = new ArrayAdapter<String>(this,
@@ -344,6 +352,10 @@ public class MainActivity extends SherlockFragmentActivity {
 			mFragments.get(mCurrentFragment).isAdded() ) {
 			mFragments.get(mCurrentFragment).MessageFromClementine(clementineMessage);
 		}
+		
+		if (mPlayerFragment != null) {
+			mPlayerFragment.MessageFromClementine(clementineMessage);
+		}
 	}
     
     /**
@@ -395,7 +407,11 @@ public class MainActivity extends SherlockFragmentActivity {
 		    	case 0: // Header Remote
 		    		break;
 		    	case 1: // Player
-		        	ft.replace(R.id.content_frame, mFragments.get(0)).commit();
+		    		if (mPlayerFragment != null) {
+		    			ft.replace(R.id.content_frame, mFragments.get(2)).commit();
+		    		} else {
+		    			ft.replace(R.id.content_frame, mFragments.get(0)).commit();
+		    		}
 		        	mCurrentFragment = 0;
 		        	mLastPosition = position;
 		        	break;
