@@ -148,8 +148,15 @@ public class ClementineSettings extends SherlockPreferenceActivity
 			String key) {
 		if (key.equals(App.SP_KEY_PORT)) {
 			String port = sharedPreferences.getString(App.SP_KEY_PORT, String.valueOf(Clementine.DefaultPort));
+			int intPort = 0;
+			try {
+				intPort = Integer.parseInt(port);
+			} catch (NumberFormatException e) {
+				intPort = 0;
+			}
+			
 			// Check if the port is in a valid range
-			if (Integer.parseInt(port) < 1024 || Integer.parseInt(port) > 65535) {
+			if (intPort < 1024 || intPort > 65535) {
 				port = String.valueOf(Clementine.DefaultPort);
 				SharedPreferences.Editor editor = sharedPreferences.edit();
 				editor.putString(App.SP_KEY_PORT, port);
