@@ -40,6 +40,7 @@ import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
@@ -110,6 +111,11 @@ public class ConnectDialog extends SherlockActivity {
 	    super.onCreate(savedInstanceState);
 	    
 	    Log.d(TAG, "onCreate");
+	    
+	    // Keep screen on if user has requested this in preferences
+		if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(App.SP_KEEP_SCREEN_ON, true)) {
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		}
 	    
 	    App.mApp = getApplication();
     	

@@ -33,6 +33,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -82,6 +83,11 @@ public class MainActivity extends SherlockFragmentActivity {
 	    super.onCreate(savedInstanceState);
 	    
 	    Log.d(TAG, "onCreate");
+	    
+	    // Keep screen on if user has requested this in preferences
+		if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(App.SP_KEEP_SCREEN_ON, true)) {
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		}
 	    
 	    setContentView(R.layout.main_activity);
 	    

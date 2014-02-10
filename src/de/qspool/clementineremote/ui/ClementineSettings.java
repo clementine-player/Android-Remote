@@ -39,6 +39,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -130,6 +131,11 @@ public class ClementineSettings extends SherlockPreferenceActivity
         });
         mFileDialog.setSelectDirectoryOption(true);
         mDownloadDir.setSummary(path);
+        
+        // Keep screen on if user has requested this in preferences
+		if (sharedPreferences.getBoolean(App.SP_KEEP_SCREEN_ON, true)) {
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		}
     }
 	
 	@SuppressWarnings("deprecation")
