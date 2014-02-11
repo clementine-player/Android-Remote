@@ -172,4 +172,13 @@ public class Utilities {
 	    // Return a human readable String
 	    return String.format("%.2f %sB", newBytes, prefix);
 	}
+
+	/**
+	 * Checks if Clementine Remote is connected to an instance
+	 * of Clementine.
+	 * @return true if connected, false otherwise
+	 */
+	public static boolean isRemoteConnected() {
+		return App.mClementineConnection != null && App.mClementineConnection.isConnected();
+	}
 }

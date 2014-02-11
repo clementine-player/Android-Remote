@@ -112,11 +112,6 @@ public class ConnectDialog extends SherlockActivity {
 	    
 	    Log.d(TAG, "onCreate");
 	    
-	    // Keep screen on if user has requested this in preferences
-		if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(App.SP_KEEP_SCREEN_ON, true)) {
-			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-		}
-	    
 	    App.mApp = getApplication();
     	
 	    setContentView(R.layout.connectdialog);

@@ -50,6 +50,7 @@ import com.actionbarsherlock.view.MenuItem;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.Clementine;
+import de.qspool.clementineremote.utils.Utilities;
 
 /**
  * The settings screen of Clementine Remote
@@ -133,7 +134,8 @@ public class ClementineSettings extends SherlockPreferenceActivity
         mDownloadDir.setSummary(path);
         
         // Keep screen on if user has requested this in preferences
-		if (sharedPreferences.getBoolean(App.SP_KEEP_SCREEN_ON, true)) {
+		if (sharedPreferences.getBoolean(App.SP_KEEP_SCREEN_ON, true)
+				&& Utilities.isRemoteConnected()) {
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
     }

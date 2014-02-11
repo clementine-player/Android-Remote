@@ -56,6 +56,7 @@ import de.qspool.clementineremote.ui.fragments.LibraryFragment;
 import de.qspool.clementineremote.ui.fragments.PlayerFragment;
 import de.qspool.clementineremote.ui.fragments.PlaylistFragment;
 import de.qspool.clementineremote.ui.fragments.SongInfoFragment;
+import de.qspool.clementineremote.utils.Utilities;
 
 public class MainActivity extends SherlockFragmentActivity {
 	private final static String TAG = "MainActivity";
@@ -85,7 +86,8 @@ public class MainActivity extends SherlockFragmentActivity {
 	    Log.d(TAG, "onCreate");
 	    
 	    // Keep screen on if user has requested this in preferences
-		if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(App.SP_KEEP_SCREEN_ON, true)) {
+		if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(App.SP_KEEP_SCREEN_ON, true)
+				&& Utilities.isRemoteConnected()) {
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
 	    
@@ -191,6 +193,14 @@ public class MainActivity extends SherlockFragmentActivity {
 		super.onResume();
 		Log.d(TAG, "onResume");
 		
+	    // Check if the user has changed the preferences to keep the screen on
+		if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(App.SP_KEEP_SCREEN_ON, true)
+				&& Utilities.isRemoteConnected()) {
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		} else {
+			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		}
+
 		mOpenConnectDialog = true;
 		mInstanceSaved = false;
 		
