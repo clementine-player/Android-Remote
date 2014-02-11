@@ -33,6 +33,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -55,6 +56,7 @@ import de.qspool.clementineremote.ui.fragments.LibraryFragment;
 import de.qspool.clementineremote.ui.fragments.PlayerFragment;
 import de.qspool.clementineremote.ui.fragments.PlaylistFragment;
 import de.qspool.clementineremote.ui.fragments.SongInfoFragment;
+import de.qspool.clementineremote.utils.Utilities;
 
 public class MainActivity extends SherlockFragmentActivity {
 	private final static String TAG = "MainActivity";
@@ -82,6 +84,12 @@ public class MainActivity extends SherlockFragmentActivity {
 	    super.onCreate(savedInstanceState);
 	    
 	    Log.d(TAG, "onCreate");
+	    
+	    // Keep screen on if user has requested this in preferences
+		if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(App.SP_KEEP_SCREEN_ON, true)
+				&& Utilities.isRemoteConnected()) {
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		}
 	    
 	    setContentView(R.layout.main_activity);
 	    
@@ -185,6 +193,14 @@ public class MainActivity extends SherlockFragmentActivity {
 		super.onResume();
 		Log.d(TAG, "onResume");
 		
+	    // Check if the user has changed the preferences to keep the screen on
+		if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(App.SP_KEEP_SCREEN_ON, true)
+				&& Utilities.isRemoteConnected()) {
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		} else {
+			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		}
+
 		mOpenConnectDialog = true;
 		mInstanceSaved = false;
 		

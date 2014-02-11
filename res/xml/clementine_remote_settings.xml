@@ -24,6 +24,11 @@
 	          android:summary="@string/pref_lastfm_summary"
 	          android:defaultValue="true"/>
 	      <CheckBoxPreference 
+	          android:key="pref_keep_screen_on"
+	          android:title="@string/pref_keep_screen_on_title"
+	          android:summary="@string/pref_keep_screen_on_summary"
+	          android:defaultValue="false"/>
+	      <CheckBoxPreference 
 	          android:key="pref_lower_volume"
 	          android:title="@string/pref_lower_volume_title"
 	          android:summary="@string/pref_lower_volume_summary"
