@@ -33,6 +33,7 @@ public class Clementine {
 	public static enum ShuffleMode {OFF, ALL, INSIDE_ALBUM, ALBUMS};
 	public final static int DefaultPort = 5500; // Change also strings.xml! 
 	public final static String DefaultCallVolume = "20";
+	public final static String DefaultVolumeInc = "10";
 	
 	private String mVersion;
 	private MySong mCurrentSong;

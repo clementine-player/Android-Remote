@@ -64,6 +64,7 @@ public class ClementineSettings extends SherlockPreferenceActivity
 	private Dialog mCustomDialog;
 	private EditTextPreference mPortPreference;
 	private ListPreference mCallVolume;
+	private ListPreference mVolumeInc;
 	private FileDialog mFileDialog;
 	private Preference mDownloadDir;
 	private Preference mClementine;
@@ -108,6 +109,10 @@ public class ClementineSettings extends SherlockPreferenceActivity
 		mCallVolume = (ListPreference) getPreferenceScreen().findPreference(App.SP_CALL_VOLUME);
 		String currentCallVolume = sharedPreferences.getString(App.SP_CALL_VOLUME, "20");
 		mCallVolume.setSummary(getString(R.string.pref_call_volume_summary).replace("%s", currentCallVolume));
+
+		mVolumeInc = (ListPreference) getPreferenceScreen().findPreference(App.SP_VOLUME_INC);
+		String currentVolumeInc = sharedPreferences.getString(App.SP_VOLUME_INC, Clementine.DefaultVolumeInc);
+		mVolumeInc.setSummary(getString(R.string.pref_volume_inc_summary).replace("%s", currentVolumeInc));
         
 		// Set the onclicklistener for the dialogs
         mLicenseDialogPreference.setOnPreferenceClickListener(opclLicense);
@@ -179,6 +184,9 @@ public class ClementineSettings extends SherlockPreferenceActivity
 		} else if (key.equals(App.SP_CALL_VOLUME)) {
 			String currentCallVolume = sharedPreferences.getString(App.SP_CALL_VOLUME, "20");
 			mCallVolume.setSummary(getString(R.string.pref_call_volume_summary).replace("%s", currentCallVolume));
+		} else if (key.equals(App.SP_VOLUME_INC)) {
+			String currentVolumeInc = sharedPreferences.getString(App.SP_VOLUME_INC, Clementine.DefaultVolumeInc);
+			mVolumeInc.setSummary(getString(R.string.pref_volume_inc_summary).replace("%s", currentVolumeInc));
 		}
 	}
 	
