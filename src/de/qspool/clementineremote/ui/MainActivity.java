@@ -271,8 +271,7 @@ public class MainActivity extends SherlockFragmentActivity {
 					App.mClementineConnection.mHandler.sendMessage(msgDown);
 					if (currentVolume >= volumeInc) {
 						currentVolume -= volumeInc;
-					}
-					else {
+					} else {
 						currentVolume = 0;
 					}
 					makeToast(getString(R.string.playler_volume) + " " + currentVolume + "%", Toast.LENGTH_SHORT);
@@ -283,8 +282,7 @@ public class MainActivity extends SherlockFragmentActivity {
 					App.mClementineConnection.mHandler.sendMessage(msgUp);
 					if ((currentVolume+volumeInc) >= 100) {
 						currentVolume = 100;
-					}
-					else {
+					} else {
 						currentVolume += volumeInc;
 					}
 					makeToast(getString(R.string.playler_volume) + " " + currentVolume + "%", Toast.LENGTH_SHORT);
