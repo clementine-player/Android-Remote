@@ -23,7 +23,7 @@ import java.io.PrintWriter;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -91,6 +91,7 @@ public class ClementineExceptionHandler implements UncaughtExceptionHandler {
 	 * Builds the filename for the stacktrace file (/data/data/de.qspool....)
 	 * @return The filename with path as a string
 	 */
+	@SuppressLint("SimpleDateFormat")
 	private String buildTraceFileName() {
 		SimpleDateFormat ft = 
 			      new SimpleDateFormat ("yyyy.MM.dd-hh:mm:ss");

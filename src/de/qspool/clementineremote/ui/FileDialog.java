@@ -5,6 +5,7 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -147,7 +148,7 @@ public class FileDialog {
                     if (!sel.canRead()) return false;
                     if (selectDirectoryOption) return sel.isDirectory();
                     else {
-                        boolean endsWith = fileEndsWith != null ? filename.toLowerCase().endsWith(fileEndsWith) : true;
+                        boolean endsWith = fileEndsWith != null ? filename.toLowerCase(Locale.getDefault()).endsWith(fileEndsWith) : true;
                         return endsWith || sel.isDirectory();
                     }
                 }
@@ -168,7 +169,7 @@ public class FileDialog {
     }
 
     public void setFileEndsWith(String fileEndsWith) {
-        this.fileEndsWith = fileEndsWith != null ? fileEndsWith.toLowerCase() : fileEndsWith;
+        this.fileEndsWith = fileEndsWith != null ? fileEndsWith.toLowerCase(Locale.getDefault()) : fileEndsWith;
     }
  }
 

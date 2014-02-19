@@ -69,6 +69,9 @@ public class ClementineSettings extends SherlockPreferenceActivity
 	private Preference mDownloadDir;
 	private Preference mClementine;
 	
+	//suppress warnings about deprecation as we intend to support
+	//Android API 8 which requires the deprecated methods.
+	@SuppressWarnings("deprecation")
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
