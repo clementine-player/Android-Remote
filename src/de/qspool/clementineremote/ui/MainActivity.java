@@ -45,6 +45,7 @@ import com.actionbarsherlock.view.MenuItem;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
@@ -261,34 +262,33 @@ public class MainActivity extends SherlockFragmentActivity {
 		if (event.getAction() == KeyEvent.ACTION_DOWN) {
 			int currentVolume = App.mClementine.getVolume();
 			// Control the volume of clementine if enabled in the options
-			switch (keyCode) {
-			case KeyEvent.KEYCODE_VOLUME_DOWN:
-				if (mSharedPref.getBoolean(App.SP_KEY_USE_VOLUMEKEYS, true)) {
+			if (mSharedPref.getBoolean(App.SP_KEY_USE_VOLUMEKEYS, true)) {
+				int volumeInc = Integer.parseInt(mSharedPref.getString(App.SP_VOLUME_INC, Clementine.DefaultVolumeInc));
+				switch (keyCode) {
+				case KeyEvent.KEYCODE_VOLUME_DOWN:
 					Message msgDown = Message.obtain();
-					msgDown.obj = ClementineMessageFactory.buildVolumeMessage(App.mClementine.getVolume() - 10);
+					msgDown.obj = ClementineMessageFactory.buildVolumeMessage(App.mClementine.getVolume() - volumeInc);
 					App.mClementineConnection.mHandler.sendMessage(msgDown);
-					if (currentVolume >= 10)
-						currentVolume -= 10;
-					else
+					if (currentVolume >= volumeInc) {
+						currentVolume -= volumeInc;
+					} else {
 						currentVolume = 0;
+					}
 					makeToast(getString(R.string.playler_volume) + " " + currentVolume + "%", Toast.LENGTH_SHORT);
 					return true;
-				}
-				break;
-			case KeyEvent.KEYCODE_VOLUME_UP:
-				if (mSharedPref.getBoolean(App.SP_KEY_USE_VOLUMEKEYS, true)) {
+				case KeyEvent.KEYCODE_VOLUME_UP:
 					Message msgUp = Message.obtain();
-					msgUp.obj = ClementineMessageFactory.buildVolumeMessage(App.mClementine.getVolume() + 10);
+					msgUp.obj = ClementineMessageFactory.buildVolumeMessage(App.mClementine.getVolume() + volumeInc);
 					App.mClementineConnection.mHandler.sendMessage(msgUp);
-					if (currentVolume > 90)
+					if ((currentVolume+volumeInc) >= 100) {
 						currentVolume = 100;
-					else
-						currentVolume += 10;
+					} else {
+						currentVolume += volumeInc;
+					}
 					makeToast(getString(R.string.playler_volume) + " " + currentVolume + "%", Toast.LENGTH_SHORT);
 					return true;
+				default: break;
 				}
-				break;
-			default: break;
 			}
 		}
 		return super.onKeyDown(keyCode, event);
