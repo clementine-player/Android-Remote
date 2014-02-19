@@ -22,7 +22,9 @@ package de.qspool.clementineremote.utils;
  * call {@link #getResult()}.
  */
 public class IabException extends Exception {
-    IabResult mResult;
+
+	private static final long serialVersionUID = -7076371973656036636L;
+	IabResult mResult;
 
     public IabException(IabResult r) {
         this(r, null);
