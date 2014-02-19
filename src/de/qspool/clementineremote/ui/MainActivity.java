@@ -269,8 +269,9 @@ public class MainActivity extends SherlockFragmentActivity {
 					Message msgDown = Message.obtain();
 					msgDown.obj = ClementineMessageFactory.buildVolumeMessage(App.mClementine.getVolume() - volumeInc);
 					App.mClementineConnection.mHandler.sendMessage(msgDown);
-					if (currentVolume >= volumeInc)
+					if (currentVolume >= volumeInc) {
 						currentVolume -= volumeInc;
+					}
 					else {
 						currentVolume = 0;
 					}
@@ -280,8 +281,9 @@ public class MainActivity extends SherlockFragmentActivity {
 					Message msgUp = Message.obtain();
 					msgUp.obj = ClementineMessageFactory.buildVolumeMessage(App.mClementine.getVolume() + volumeInc);
 					App.mClementineConnection.mHandler.sendMessage(msgUp);
-					if ((currentVolume+volumeInc) >= 100)
+					if ((currentVolume+volumeInc) >= 100) {
 						currentVolume = 100;
+					}
 					else {
 						currentVolume += volumeInc;
 					}
