@@ -63,8 +63,7 @@ public class CustomClementinesAdapter extends ArrayAdapter<ServiceInfo> {
 		convertView.setBackgroundResource(R.drawable.listitem_white_border);
 		
 		clementineViewHolder.textViewHost.setText(mData.get(position).getName());
-		clementineViewHolder.textViewIp.setText( mData.get(position).getInet4Addresses()[0].toString().split("/")[1] + 
-						":" + mData.get(position).getPort());
+		clementineViewHolder.textViewIp.setText( mData.get(position).getInet4Addresses()[0].toString().split("/")[1] + ":" + mData.get(position).getPort());
 		
 		return convertView;
 	}
