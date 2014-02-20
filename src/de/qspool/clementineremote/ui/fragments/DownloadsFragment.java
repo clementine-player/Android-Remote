@@ -82,7 +82,8 @@ public class DownloadsFragment extends AbstractDrawerFragment {
 	public void onPause() {
 		super.onPause();
 		
-		mUpdateTimer.cancel();
+		if (mUpdateTimer != null)
+			mUpdateTimer.cancel();
 	}
 	
 	@Override
