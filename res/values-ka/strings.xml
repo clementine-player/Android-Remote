@@ -4,10 +4,8 @@
   <string name="app_not_available">აპლიკაცია მიუწვდომელია!</string>
   <string name="connectdialog_connect">დაკავშირება</string>
   <string name="connectdialog_autoconnect">ავტოკავშირი</string>
-  <string name="connectdialog_clementine_found">Clementine მოიძებნა!</string>
   <string name="connectdialog_connecting">Clementine-თან დაკავშირება</string>
   <string name="connectdialog_download_data">მონაცემების ჩამოტვირთვა</string>
-  <string name="connectdialog_connected">კავშირი დამყარდა</string>
   <string name="connectdialog_error">ჰოსთან დაკავშირება ვერ მოხერხდა</string>
   <string name="connectdialog_ip_hint">შეიყვანეთ IP მისამართი</string>
   <string name="connectdialog_mdns_found">აღმოჩენილია Clementines-ები. ასარჩევად შეეხეთ ხატულას.</string>
@@ -43,14 +41,13 @@
   <string name="library_download">ბიბლიოთეკის ჩამოტვირთვა</string>
   <string name="library_optimize">ბაზის ოპტიმიზება</string>
   <string name="library_please_wait">გთხოვთ დაიცადოთ</string>
-  <string name="library_search_hint">ბიბლიოთეკაში ძებნა</string>
-  <string name="library_loading">ჩატვირთვა</string>
   <string name="library_refresh">განახლება</string>
   <string name="library_empty">ბიბლიოთეკა ცარიელია. ჩამოსატვირთად დააჭირეთ განახლებას!</string>
   <string name="library_no_albums">%d ალბომი</string>
   <string name="library_no_tracks">%d ჩანაწერი</string>
   <string name="library_songs_added">მიმდინარე რეპერტუარში დაემატა %d სიმღერა</string>
   <string name="library_context_add">მონიშნულის მიმდინარე რეპერტუარში დამატება</string>
+  <string name="library_download_error">ბიბლიოთეკის ჩამოტვირთვა ვერ მოხერხდა</string>
   <string name="song_info_album">ალბომი</string>
   <string name="song_info_genre">ჟანრი</string>
   <string name="song_info_year">წელი</string>
@@ -62,11 +59,10 @@
   <string name="song_info_filename">ფაილი</string>
   <string name="song_info_rating">შეფასება</string>
   <string name="song_info_rated">სიმღერა შეფასებულია $stars$ ვარსკვლავით</string>
+  <string name="menu_shuffle">შერევა</string>
   <string name="menu_repeat">გამეორება</string>
   <string name="menu_settings">პარამეტრები</string>
-  <string name="menu_playlist">რეპერტუარები</string>
   <string name="menu_search">ძებნა</string>
-  <string name="menu_disconnect">კავშირის გაწყვეტა</string>
   <string name="menu_love">შეყვარება</string>
   <string name="menu_ban">დაბლოკვა</string>
   <string name="menu_download_song">სიმღერის ჩამოტვირთვა</string>
@@ -131,7 +127,6 @@
   <string name="error_versions">არათავსებადი ვერსია</string>
   <string name="old_proto">გთხოვთ განაახლოთ Clementine!</string>
   <string name="no_private_ip">თქვენს Android მოწყობილობას აქვს არაადგილობრივი IP მისამართი. სცადეთ გათიშოთ \"მხოლოდ ადგილობრივი IP მისამართების გამოყენება\" Clementine-ის პარამტრებიდან.</string>
-  <string name="check_ip">1) Clementine გაშვებულია?\n2) იყენებთ Clementine-ის 1.2.1 ან უფრო ახალ ვერსიას?\n3) ჩართეთ მოშორებული მართვა Clementine-ის პარამეტრებიდან?\n4) დარწმუნდით, რომ შეყვანილი IP მისამართი სწორია.\n\n</string>
   <string name="wifi_disabled">Wifi გათიშულია. თუ გსურთ, რომ Clementine-ის ინტერნეტის საშუალებით დაუკავშირდეთ, დარმწუნდით რომ პორტების გადამისამართება სწორად გაქვთ გაკეთებული, ხოლო პარამეტრებიდან გათიშული გაქვთ \"მხოლოდ ადგილობრივი IP მისამართების გამოიყენება\"\".</string>
   <string name="input_auth_code">ავთენტიკაციის კოდი</string>
   <string name="invalid_code">კოდი არასწორია</string>
@@ -139,8 +134,11 @@
   <string name="repeat_track">ჩანაწერის გამეორება</string>
   <string name="repeat_album">ალბომის გამეორება</string>
   <string name="repeat_playlist">რეპერტუარის გამეორება</string>
+  <string name="shuffle_off">არ შეურიო</string>
+  <string name="shuffle_all">ყველას შერევა</string>
+  <string name="shuffle_inside_album">შეურიე ამ ალბომის ჩანაწერები</string>
+  <string name="shuffle_albums">ალბომების შერევა</string>
   <string name="first_time_title">მოგესალმებით</string>
-  <string name="first_time_text">გმადლობთ, რომ იყენებთ Clementine Remote-ს!\nიმედი მაქვს რომ ეს პროგრამა გამოგადგებათ.&lt;br&gt;&lt;br&gt;ამ პროგრამის გამოსაყენებლად თქვენ უნდა გადმოტვირთოთ და დააყენოთ Clementine 1.2.1 ან უფრო ახალი &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;ოფიციალური გვერდიდან&lt;/a&gt;.</string>
   <string name="track_loved">ჩანაწერი საყვარელია &lt;3</string>
   <string name="track_banned">ჩანაწერი დაიბლოკა :-(</string>
   <string name="notification_disconnect_keep_alive">კავშირი გაწყდა. შეეხეთ ხელახალი ცდისთვის.</string>

@@ -4,10 +4,8 @@
   <string name="app_not_available">Aplikace je nedostupná!</string>
   <string name="connectdialog_connect">Připojit</string>
   <string name="connectdialog_autoconnect">Automaticky připojit</string>
-  <string name="connectdialog_clementine_found">Nalezena Clementine!</string>
   <string name="connectdialog_connecting">Připojuje se s Clementine</string>
   <string name="connectdialog_download_data">Stahují se data</string>
-  <string name="connectdialog_connected">Připojeno</string>
   <string name="connectdialog_error">Nepodařilo se dostat se k hostiteli</string>
   <string name="connectdialog_ip_hint">Zadat adresu IP</string>
   <string name="connectdialog_mdns_found">Nalezeno více Clementin. Dotknutím se ikony s vámi vybranou jednu zvolte.</string>
@@ -43,8 +41,6 @@
   <string name="library_download">Stahuje se sbírka</string>
   <string name="library_optimize">Optimalizuje se databáze</string>
   <string name="library_please_wait">Počkejte, prosím</string>
-  <string name="library_search_hint">Hledat sbírku</string>
-  <string name="library_loading">Nahrává se</string>
   <string name="library_refresh">Obnovit</string>
   <string name="library_empty">Sbírka je prázdná. Stiskněte Obnovit pro stažení sbírky!</string>
   <string name="library_no_albums">%d alb</string>
@@ -65,9 +61,7 @@
   <string name="menu_shuffle">Zamíchat</string>
   <string name="menu_repeat">Opakovat</string>
   <string name="menu_settings">Nastavení</string>
-  <string name="menu_playlist">Seznamy skladeb</string>
   <string name="menu_search">Hledat</string>
-  <string name="menu_disconnect">Odpojit</string>
   <string name="menu_love">Oblíbit</string>
   <string name="menu_ban">Zakázat</string>
   <string name="menu_download_song">Stáhnout píseň</string>
@@ -132,7 +126,6 @@
   <string name="error_versions">Nekompatibilní verze</string>
   <string name="old_proto">Aktualizujte Clementine!</string>
   <string name="no_private_ip">Zařízení Android má adresu IP, která není místní. Zkuste v nastavení Clementine zakázat Použít pouze místní adresu IP.</string>
-  <string name="check_ip">1) Clementine běží?\n2) Používáte Clementine 1.2.1 či vyšší?\n3) Povolili jste vzdálené síťové připojení v nastavení Clementine?\n4) Ověřte, že jste zadali správnou adresu IP.\n</string>
   <string name="wifi_disabled">Wifi je vypnuta. Pokud se chcete spojit s Clementine přes internet, ujistěte se, že jste přípojky (port) odeslali správně a že jste zakázali Použít pouze místní adresu IP.</string>
   <string name="input_auth_code">Ověřovací kód</string>
   <string name="invalid_code">Neplatný kód</string>
@@ -145,7 +138,6 @@
   <string name="shuffle_inside_album">Zamíchat skladby v tomto albu</string>
   <string name="shuffle_albums">Zamíchat alba</string>
   <string name="first_time_title">Vítejte</string>
-  <string name="first_time_text">Děkujeme vám, že používáte Clementine Remote!\nDoufáme, že pro vás tato aplikace bude užitečná.&lt;br&gt;&lt;br&gt;Abyste tento program mohli využívat, musíte stáhnout a nainstalovat Clementine 1.2.1 nebo vyšší z &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;.</string>
   <string name="track_loved">Skladba je oblíbená &lt;3</string>
   <string name="track_banned">Skladba je zakázaná :-(</string>
   <string name="notification_disconnect_keep_alive">Spojení ztraceno. Ťukněte pro opětovné připojení.</string>

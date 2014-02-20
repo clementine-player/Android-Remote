@@ -4,10 +4,8 @@
   <string name="app_not_available">Aplicação não disponível!</string>
   <string name="connectdialog_connect">Ligar</string>
   <string name="connectdialog_autoconnect">Ligar automaticamente</string>
-  <string name="connectdialog_clementine_found">Clementine encontrado!</string>
   <string name="connectdialog_connecting">A ligar ao Clementine</string>
   <string name="connectdialog_download_data">A transferir dados</string>
-  <string name="connectdialog_connected">Ligado</string>
   <string name="connectdialog_error">Endereço não encontrado</string>
   <string name="connectdialog_ip_hint">Introduza o endereço IP</string>
   <string name="connectdialog_mdns_found">Clementine encontrado. Clique no ícone para escolher um.</string>
@@ -43,14 +41,13 @@
   <string name="library_download">Transferência de coleção</string>
   <string name="library_optimize">Otimização da base de dados</string>
   <string name="library_please_wait">Por favor aguarde</string>
-  <string name="library_search_hint">Procurar coleção</string>
-  <string name="library_loading">A carregar</string>
   <string name="library_refresh">Atualizar</string>
   <string name="library_empty">Coleção vazia. Clique Atualizar para transferir a coleção!</string>
   <string name="library_no_albums">%d álbuns</string>
   <string name="library_no_tracks">%d faixas</string>
   <string name="library_songs_added">%d faixas adicionadas à lista de reprodução atual</string>
   <string name="library_context_add">Adicionar item à lista de reprodução atual</string>
+  <string name="library_download_error">Não foi possível transferir a coleção</string>
   <string name="song_info_album">Álbum</string>
   <string name="song_info_genre">Género</string>
   <string name="song_info_year">Ano</string>
@@ -65,9 +62,7 @@
   <string name="menu_shuffle">Aleatório</string>
   <string name="menu_repeat">Repetir</string>
   <string name="menu_settings">Definições</string>
-  <string name="menu_playlist">Listas de reprodução</string>
   <string name="menu_search">Procurar</string>
-  <string name="menu_disconnect">Desligar</string>
   <string name="menu_love">Gosto</string>
   <string name="menu_ban">Banir</string>
   <string name="menu_download_song">Transferir faixa</string>
@@ -101,6 +96,8 @@
   <string name="pref_port_error">Porta inválida</string>
   <string name="pref_lastfm_title">Last.fm</string>
   <string name="pref_lastfm_summary">Ativar gosto/banir (tem que reiniciar).</string>
+  <string name="pref_keep_screen_on_title">Manter ecrã ligado</string>
+  <string name="pref_keep_screen_on_summary">Manter o ecrã ligado se a aplicação estiver conectada ao Clementine.</string>
   <string name="pref_lower_volume_title">Baixar volume</string>
   <string name="pref_lower_volume_summary">Baixar volume ao receber ou efetuar chamadas</string>
   <string name="pref_call_volume_title">Volume das chamadas</string>
@@ -145,7 +142,7 @@
   <string name="shuffle_inside_album">Baralhar faixas deste álbum</string>
   <string name="shuffle_albums">Baralhar álbuns</string>
   <string name="first_time_title">Bem-vindo</string>
-  <string name="first_time_text">Obrigado por utilizar o Clementine Remote!\nEspero que esta aplicação seja útil.&lt;br&gt;&lt;br&gt;Para poder utilizar, esta aplicação tem que transferir e instalar a versão 1.2.1 ou superior do Clementine, disponível &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;aqui&lt;/a&gt;.</string>
+  <string name="first_time_text">Obrigado por utilizar o Clementine Remote!\nEspero que esta aplicação seja útil.&lt;br&gt;&lt;br&gt;Para poder utilizar, esta aplicação tem que transferir e instalar a versão 1.2.1 ou superior do Clementine, disponível em &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;.</string>
   <string name="track_loved">Gosto da faixa &lt;3</string>
   <string name="track_banned">Faixa banida :-(</string>
   <string name="notification_disconnect_keep_alive">Ligação abortada. Clique para ligar novamente.</string>

@@ -4,10 +4,8 @@
   <string name="app_not_available">La aplicación no está disponible</string>
   <string name="connectdialog_connect">Conectar</string>
   <string name="connectdialog_autoconnect">Autoconectar</string>
-  <string name="connectdialog_clementine_found">Se encontró Clementine.</string>
   <string name="connectdialog_connecting">Conectando con Clementine</string>
   <string name="connectdialog_download_data">Descargando datos</string>
-  <string name="connectdialog_connected">Conectado</string>
   <string name="connectdialog_error">No se pudo alcanzar el host</string>
   <string name="connectdialog_ip_hint">Escriba la dirección IP</string>
   <string name="connectdialog_mdns_found">Se encontraron instancias de Clementine. Toque el icono para elegir una.</string>
@@ -43,14 +41,13 @@
   <string name="library_download">Descargando la colección</string>
   <string name="library_optimize">Optimizando la base de datos</string>
   <string name="library_please_wait">Espere</string>
-  <string name="library_search_hint">Buscar en la colección</string>
-  <string name="library_loading">Cargando</string>
   <string name="library_refresh">Actualizar</string>
   <string name="library_empty">La colección está vacía. Pulse Actualizar para descargarla.</string>
   <string name="library_no_albums">%d álbumes</string>
   <string name="library_no_tracks">%d pistas</string>
   <string name="library_songs_added">Se añadieron %d canciones a la lista de reprod. actual</string>
   <string name="library_context_add">Añadir elemento a la lista actual</string>
+  <string name="library_download_error">No se pudo descargar la colección</string>
   <string name="song_info_album">Álbum</string>
   <string name="song_info_genre">Género</string>
   <string name="song_info_year">Año</string>
@@ -65,9 +62,7 @@
   <string name="menu_shuffle">Aleatorio</string>
   <string name="menu_repeat">Repetir</string>
   <string name="menu_settings">Configuración</string>
-  <string name="menu_playlist">Listas de reproducción</string>
   <string name="menu_search">Buscar</string>
-  <string name="menu_disconnect">Desconectar</string>
   <string name="menu_love">Me encanta</string>
   <string name="menu_ban">Vetar</string>
   <string name="menu_download_song">Descargar canción</string>
@@ -132,7 +127,7 @@
   <string name="error_versions">Versión incompatible</string>
   <string name="old_proto">Actualice Clementine.</string>
   <string name="no_private_ip">Su dispositivo Android tiene una dirección IP no local. Pruebe a desactivar «Solo usar direcciones IP locales» en la configuración de Clementine.</string>
-  <string name="check_ip">1) ¿Clementine está en ejecución?\n2) ¿La versión de Clementine es la 1.2.1 o superior?\n3) ¿Ha activado el control remoto en la configuración de Clementine?\n4) Compruebe si ha escrito la dirección IP correcta.\n</string>
+  <string name="check_ip">1) ¿Clementine está en ejecución?\n2) ¿Está usando Clementine 1.2.1 o superior?\n3) ¿Está activado el control remoto en la configuración de Clementine?\n4) Compruebe que escribió la dirección IP correcta.\n</string>
   <string name="wifi_disabled">WiFi está desactivado. Si quiere conectarse a Clementine mediante Internet, asegúrese de que redireccionó los puertos adecuadamente y de que desactivó «Solo usar direcciones IP locales».</string>
   <string name="input_auth_code">Código de autenticación</string>
   <string name="invalid_code">Código no válido</string>
@@ -145,7 +140,7 @@
   <string name="shuffle_inside_album">Mezclar pistas en este álbum</string>
   <string name="shuffle_albums">Mezclar álbumes</string>
   <string name="first_time_title">Bienvenido/a</string>
-  <string name="first_time_text">¡Gracias por utilizar el control remoto de Clementine!\nEsperamos que la aplicación le resulte útil.&lt;br&gt;&lt;br&gt;Para usar esta aplicación debe descargar e instalar Clementine 1.2.1 o superior desde &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;aquí&lt;/a&gt;.</string>
+  <string name="first_time_text">¡Gracias por usar el Control remoto de Clementine!\nEsperamos que le resulte útil.&lt;br&gt;&lt;br&gt;Para usar esta aplicación, descargue e instale Clementine 1.2.1 o superior desde &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;aquí&lt;/a&gt;.</string>
   <string name="track_loved">Le encanta esta pista &lt;3</string>
   <string name="track_banned">Ha vetado esta pista :-(</string>
   <string name="notification_disconnect_keep_alive">Se perdió la conexión. Toque para reconectar.</string>
@@ -169,5 +164,9 @@
   <string-array name="navigation_array_settings">
     <item>Configuración</item>
     <item>Donar</item>
+  </string-array>
+  <string-array name="navigation_array_disconnect">
+    <item>Desconectar</item>
+    <item>Salir</item>
   </string-array>
 </resources>

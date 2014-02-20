@@ -4,10 +4,8 @@
   <string name="app_not_available">Програма недоступна!</string>
   <string name="connectdialog_connect">З’єднатися</string>
   <string name="connectdialog_autoconnect">Автоз’єднання</string>
-  <string name="connectdialog_clementine_found">Знайдено Clementine!</string>
   <string name="connectdialog_connecting">З’єднуємося з Clementine</string>
   <string name="connectdialog_download_data">Отримуємо дані</string>
-  <string name="connectdialog_connected">З’єднано</string>
   <string name="connectdialog_error">Не вдалося встановити зв’язок</string>
   <string name="connectdialog_ip_hint">Вкажіть IP-адресу</string>
   <string name="connectdialog_mdns_found">Виявлено декілька Clementine. Натисніть піктограму, щоб вибрати потрібну.</string>
@@ -43,14 +41,13 @@
   <string name="library_download">Отримуємо бібліотеку даних</string>
   <string name="library_optimize">Оптимізуємо базу даних</string>
   <string name="library_please_wait">Зачекайте</string>
-  <string name="library_search_hint">Пошук у бібліотеці</string>
-  <string name="library_loading">Завантаження</string>
   <string name="library_refresh">Оновити</string>
   <string name="library_empty">Бібліотека порожня. Натисніть «Оновити», щоб отримати бібліотеку!</string>
   <string name="library_no_albums">%d альбомів</string>
   <string name="library_no_tracks">%d композицій</string>
   <string name="library_songs_added">До поточного списку відтворення додано %d композицій</string>
   <string name="library_context_add">Додати запис до поточного списку відтворення</string>
+  <string name="library_download_error">Не вдалося отримати бібліотеку</string>
   <string name="song_info_album">Альбом</string>
   <string name="song_info_genre">Жанр</string>
   <string name="song_info_year">Рік</string>
@@ -65,9 +62,7 @@
   <string name="menu_shuffle">Перемішати</string>
   <string name="menu_repeat">Повторити</string>
   <string name="menu_settings">Параметри</string>
-  <string name="menu_playlist">Списки відтворення</string>
   <string name="menu_search">Пошук</string>
-  <string name="menu_disconnect">Роз’єднати</string>
   <string name="menu_love">Уподобати</string>
   <string name="menu_ban">Заблокувати</string>
   <string name="menu_download_song">Отримати композицію</string>
@@ -101,10 +96,14 @@
   <string name="pref_port_error">Некоректний порт!</string>
   <string name="pref_lastfm_title">Last.fm</string>
   <string name="pref_lastfm_summary">Увімкніть для уподобання та блокування композицій. (потрібен перезапуск)</string>
+  <string name="pref_keep_screen_on_title">Не вимикати екран</string>
+  <string name="pref_keep_screen_on_summary">Запобігати вимиканню екрана, доки Clementine Remote з’єднано з Clementine.</string>
   <string name="pref_lower_volume_title">Зменшувати гучність</string>
   <string name="pref_lower_volume_summary">Зменшувати гучність під час вихідних та вхідних дзвінків.</string>
   <string name="pref_call_volume_title">Гучність під час дзвінка</string>
   <string name="pref_call_volume_summary">Поточна гучність під час дзвінка: %s</string>
+  <string name="pref_volume_inc_title">Крок зміни гучності</string>
+  <string name="pref_volume_inc_summary">Поточний крок зміни гучності: %s</string>
   <string name="pref_version_summary">Натисніть, щоб відвідати сайт проекту</string>
   <string name="pref_version_title">Версія</string>
   <string name="pref_license_title">Ліцензування</string>
@@ -132,7 +131,7 @@
   <string name="error_versions">Несумісність версій</string>
   <string name="old_proto">Будь ласка, встановіть новішу версію Clementine!</string>
   <string name="no_private_ip">IP-адреса вашого пристрою Android не є локальною. Спробуйте зняти позначення з пункту «Використовувати лише локальні IP-адреси» у параметрах програми Clementine.</string>
-  <string name="check_ip">1) Чи запущено Clementine?\n2) Чи встановлено Clementine 1.2.1 або новішу версію?\n3) Чи увімкнули ви дистанційне керування з мережі у параметрах Clementine?\n4) Чи правильно ви вказали IP-адресу?\n</string>
+  <string name="check_ip">1) Чи запущено Clementine?\n2) Чи користуєтеся ви Clementine 1.2.1 або новішою версією?\n3) Чи було увімкнено віддалене керування з мережі у параметрах Clementine?\n4) Чи правильно було введено IP-адресу?\n</string>
   <string name="wifi_disabled">W-Fi вимкнено. Якщо ви хочете з’єднатися з Clementine за допомогою інтернету, переконайтеся, що правильно визначено переспрямування портів і що знято позначення з пункту «Використовувати лише локальні IP-адреси».</string>
   <string name="input_auth_code">Код розпізнавання</string>
   <string name="invalid_code">Некоректний код</string>
@@ -145,7 +144,7 @@
   <string name="shuffle_inside_album">Перемішувати композиції у альбомі</string>
   <string name="shuffle_albums">Перемішувати альбоми</string>
   <string name="first_time_title">Вітаємо</string>
-  <string name="first_time_text">Дякуємо за те, що скористалися Дистанційним керуванням Clementine!\nСподіваємося, що ця програма буде для вас корисною.&lt;br&gt;&lt;br&gt;Щоб скористатися нею, вам слід отримати і встановити пакунок з Clementine 1.2.1 або новішою версією з &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;цієї сторінки&lt;/a&gt;.</string>
+  <string name="first_time_text">Дякуємо за те, що скористалися Clementine Remote!\nСподіваюся, ця програма виявилася для вас корисною.&lt;br&gt;&lt;br&gt;Щоб скористатися цією програмою для віддаленого керування, вам слід отримати і встановити пакунок Clementine 1.2.1 або новішої версії з &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;цієї сторінки&lt;/a&gt;.</string>
   <string name="track_loved">Композицію уподобано &lt;3</string>
   <string name="track_banned">Композицію заблоковано :-(</string>
   <string name="notification_disconnect_keep_alive">З’єднання розірвано. Натисніть, щоб відновити з’єднання.</string>

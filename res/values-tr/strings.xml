@@ -4,10 +4,8 @@
   <string name="app_not_available">Uygulama mevcut değil!</string>
   <string name="connectdialog_connect">Bağla</string>
   <string name="connectdialog_autoconnect">Otomatik Bağlan</string>
-  <string name="connectdialog_clementine_found">Clementine Bulundu!</string>
   <string name="connectdialog_connecting">Clementine\'e bağlanılıyor</string>
   <string name="connectdialog_download_data">Veri indiriliyor</string>
-  <string name="connectdialog_connected">Bağlandı</string>
   <string name="connectdialog_error">Makineye ulaşılamadı</string>
   <string name="connectdialog_ip_hint">IP adresi girin</string>
   <string name="connectdialog_mdns_found">Birden fazla Clementine bulundu. Birini seçmek için simgeye dokunun</string>
@@ -43,14 +41,13 @@
   <string name="library_download">Kütüphane indiriliyor</string>
   <string name="library_optimize">Veritabanı iyileştiriliyor</string>
   <string name="library_please_wait">Lütfen bekleyin</string>
-  <string name="library_search_hint">Kütüphanede ara</string>
-  <string name="library_loading">Yükleniyor</string>
   <string name="library_refresh">Yenile</string>
   <string name="library_empty">Kütüphane boş. Kütüphaneyi indirmek için yenileyin!</string>
   <string name="library_no_albums">%d albüm</string>
   <string name="library_no_tracks">%d parça</string>
   <string name="library_songs_added">Geçerli oynatma listesine %d şarkı eklendi</string>
   <string name="library_context_add">Ögeyi geçerli oynatma listesine ekle</string>
+  <string name="library_download_error">Kütüphane indirilemedi</string>
   <string name="song_info_album">Albüm</string>
   <string name="song_info_genre">Tarz</string>
   <string name="song_info_year">Yıl</string>
@@ -65,9 +62,7 @@
   <string name="menu_shuffle">Karıştır</string>
   <string name="menu_repeat">Tekrarla</string>
   <string name="menu_settings">Ayarlar</string>
-  <string name="menu_playlist">Oynatma listeleri</string>
   <string name="menu_search">Ara</string>
-  <string name="menu_disconnect">Bağlantıyı Kes</string>
   <string name="menu_love">Beğen</string>
   <string name="menu_ban">Engelle</string>
   <string name="menu_download_song">Şarkı indir</string>
@@ -89,8 +84,8 @@
   <string name="pref_cat_downloads">İndirmeler</string>
   <string name="pref_cat_connection">Bağlantı</string>
   <string name="pref_cat_info">Bilgi</string>
-  <string name="pref_volume_title">Ses Tuşlarını Kıllan</string>
-  <string name="pref_volume_summary">Clementine sesini denetlemek için ses tuşlarını kullan</string>
+  <string name="pref_volume_title">Ses Tuşlarını Kullan</string>
+  <string name="pref_volume_summary">Clementine sesini denetlemek için ses tuşlarını kullan.</string>
   <string name="pref_pebble_title">Pebble Kullan</string>
   <string name="pref_pebble_summary">Geçerli parça üst verisini Pebble müzik uygulamasına gönder.</string>
   <string name="pref_trackno_title">Parça numarasını göster</string>
@@ -100,7 +95,9 @@
   <string name="pref_port_default">5500</string>
   <string name="pref_port_error">Geçersiz Bağlantı Noktası!</string>
   <string name="pref_lastfm_title">Last.fm</string>
-  <string name="pref_lastfm_summary">Parçaları beğen/engelle özelliğini aç. (yeniden başlatma gerektirir)</string>
+  <string name="pref_lastfm_summary">Parçaları beğen/engelle özelliğini aç (yeniden başlatma gerektirir).</string>
+  <string name="pref_keep_screen_on_title">Ekranı Açık Tut</string>
+  <string name="pref_keep_screen_on_summary">Clementine Kumanda Clementine\'iniz ile bağlantı kurmuşsa, ekranın kapanmasını engelle.</string>
   <string name="pref_lower_volume_title">Sesi kıs</string>
   <string name="pref_lower_volume_summary">Gelen/Giden aramada sesi kıs.</string>
   <string name="pref_call_volume_title">Arama ses seviyesi</string>
@@ -119,7 +116,7 @@
   <string name="pref_dl_override">Mevcut dosyaların üzerine yaz</string>
   <string name="pref_dl_cat_playlist">Oynatma listesi indir</string>
   <string name="pref_dl_pl_save_own_dir_title">Parçaları oynatma listesi klasörüne kaydet</string>
-  <string name="pref_dl_pl_save_own_dir_summary">Oynatma listesi adında klasör oluşturur ve parçaları oraya kaydeder</string>
+  <string name="pref_dl_pl_save_own_dir_summary">Oynatma listesi adında klasör oluşturur ve parçaları oraya kaydeder.</string>
   <string name="pref_dl_pl_artist_dir_title">Sanatçı/Albüm alt klasörünü oluştur</string>
   <string name="pref_dl_pl_artist_dir_summary">Her bağımsız parça için bir sanatçı/albüm alt klasörü oluştur.</string>
   <string name="file_dialog_set_dir">Dizin seç</string>
@@ -131,8 +128,8 @@
   <string name="dialog_close">Kapat</string>
   <string name="error_versions">Uyumsuz sürüm</string>
   <string name="old_proto">Lütfen Clementine\'i güncelleyin!</string>
-  <string name="no_private_ip">Android cihazınızın yerel olmayan IP adresi var. Clementine ayarlarından \"Sadece yerel IP adresleri kullan\" seçeneğini devre dışı bırakmayı deneyin.</string>
-  <string name="check_ip">1) Clementine çalışıyor mu?\n2) Clementine 1.2.1 veya sonrasını mı kullanıyorsunuz?\n3) Clementine ayarlarından ağ denetimini etkinleştirdiniz mi?\n4) Doğru IP adresi girdiğinizden emin olun.\n</string>
+  <string name="no_private_ip">Android cihazınızın yerel olmayan IP adresi var. Clementine ayarlarından \"Sadece yerel IP adreslerini kullan\" seçeneğini devre dışı bırakmayı deneyin.</string>
+  <string name="check_ip">1) Clementine çalışıyor mu?\n2) Clementine 1.2.1 veya üstünü mü kullanıyorsunuz?\n3) Clementine ayarlarında ağ denetimini etkinleştirdiniz mi?\n4) Geçerli IP adresi girdiğinizi denetleyin.\n\n</string>
   <string name="wifi_disabled">Kablosuz devre dışı. Eğer Clementine\'e İnternet ile bağlanmak isterseniz bağlantı noktalarının doğru bir şekilde yönlendirilmiş olduğundan ve \"Sadece yerel IP adreslerini kullan\" seçeneğinin devre dışı olduğundan emin olun.</string>
   <string name="input_auth_code">Doğrulama Kodu</string>
   <string name="invalid_code">Geçersiz Kod</string>
@@ -162,7 +159,7 @@
   <string-array name="navigation_array_remote">
     <item>Oynatıcı</item>
     <item>Şarkı bilgisi</item>
-    <item>Oynatma Listeleri</item>
+    <item>Oynatma listeleri</item>
     <item>Kütüphane</item>
     <item>İndirmeler</item>
   </string-array>
