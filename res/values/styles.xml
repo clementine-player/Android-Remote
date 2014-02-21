@@ -26,11 +26,17 @@
       <item name="android:homeAsUpIndicator">@drawable/abs__ic_ab_back_holo_dark</item>
     </style>
     <style name="PlayerTheme" parent="@style/Theme.Sherlock">
-	    <item name="actionBarStyle">@style/ActionBarStyle</item>
-	    <item name="android:actionBarStyle">@style/ActionBarStyle</item>
-	    <item name="actionButtonStyle">@style/ActionButtonStyle</item>
+	  <item name="actionBarStyle">@style/ActionBarStyle</item>
+	  <item name="android:actionBarStyle">@style/ActionBarStyle</item>
+	  <item name="actionButtonStyle">@style/ActionButtonStyle</item>
       <item name="@android:actionButtonStyle">@style/ActionButtonStyle</item>
-		</style>
+      <item name="actionModeBackground">@drawable/cab_background_top_example</item>
+      <item name="actionModeSplitBackground">@drawable/cab_background_bottom_example</item>
+      <item name="android:actionModeBackground">@drawable/cab_background_top_example</item>
+      <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_example</item>
+      <item name="android:activatedBackgroundIndicator">@drawable/selector_white_orange_selected</item>
+      <item name="activatedBackgroundIndicator">@drawable/selector_white_orange_selected</item>
+	</style>
     <style name="ActionBarStyle" parent="Widget.Sherlock.ActionBar">
       <item name="background">@drawable/actionbar_bg</item>
       <item name="android:background">@drawable/actionbar_bg</item>

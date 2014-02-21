@@ -27,10 +27,10 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage;
  * This class is used to handle the messages sent from the
  * connection thread
  */
-public class PlayerHandler extends Handler {	
+public class MainActivityHandler extends Handler {	
 	WeakReference<MainActivity> mDialog;
 	
-	PlayerHandler(MainActivity playerDialog) {
+	MainActivityHandler(MainActivity playerDialog) {
 		mDialog = new WeakReference<MainActivity>(playerDialog);
 	}
 	

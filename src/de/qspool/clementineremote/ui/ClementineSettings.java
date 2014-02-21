@@ -246,6 +246,7 @@ public class ClementineSettings extends SherlockPreferenceActivity
 			// Others
 			tvOthers.setText(Html.fromHtml("<a href=\"http://actionbarsherlock.com/\">ActionBarSherlock</a> (<a href=\"http://www.apache.org/licenses/LICENSE-2.0.html\">License</a>)<br>" +
 										   "<a href=\"http://jmdns.sourceforge.net/\">JmDNS</a> (<a href=\"http://jmdns.sourceforge.net/license.html\">License</a>)<br>" +
+										   "<a href=\"http://jgilfelt.github.io/android-actionbarstylegenerator\">Android Action Bar Style Generator</a><br>"+
 										   "and all the <a href=\"https://www.transifex.com/projects/p/clementine-remote/\">translators</a>!"));
 			tvOthers.setMovementMethod(LinkMovementMethod.getInstance());
 			

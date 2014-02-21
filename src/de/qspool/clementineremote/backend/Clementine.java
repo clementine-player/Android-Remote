@@ -17,11 +17,8 @@
 
 package de.qspool.clementineremote.backend;
 
-import java.util.concurrent.Semaphore;
-
-import de.qspool.clementineremote.backend.player.MyPlaylist;
 import de.qspool.clementineremote.backend.player.MySong;
-import android.util.SparseArray;
+import de.qspool.clementineremote.backend.player.PlaylistManager;
 
 /**
  * This Class stores the attributes of Clementine, like the version,
@@ -42,9 +39,7 @@ public class Clementine {
 	private RepeatMode mRepeatMode = RepeatMode.OFF;
 	private ShuffleMode mShuffleMode = ShuffleMode.OFF;
 	private int mSongPosition;
-	private SparseArray<MyPlaylist> mPlaylists = new SparseArray<MyPlaylist>();
-	public final Semaphore PlaylistsAvailable = new Semaphore(1);
-	private int mActivePlaylist;
+	private PlaylistManager mPlaylistManager = new PlaylistManager();
 
 	public int getSongPosition() {
 		return mSongPosition;
@@ -137,24 +132,8 @@ public class Clementine {
 						break;
 		}
 	}
-
-	public SparseArray<MyPlaylist> getPlaylists() {
-		return mPlaylists;
-	}
-
-	public void addPlaylist(MyPlaylist playlist) {
-		mPlaylists.append(playlist.getId(), playlist);
-		// Check if we have the active playlist
-		if (playlist.isActive()) {
-			mActivePlaylist = playlist.getId();
-		}
-	}
-
-	public MyPlaylist getActivePlaylist() {
-		return mPlaylists.get(mActivePlaylist);
-	}
 	
-	public void setActivePlaylistId(int id) {
-		mActivePlaylist = id;
+	public PlaylistManager getPlaylistManager() {
+		return mPlaylistManager;
 	}
 }

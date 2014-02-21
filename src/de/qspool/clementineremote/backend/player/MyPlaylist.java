@@ -17,6 +17,7 @@
 
 package de.qspool.clementineremote.backend.player;
 
+import java.util.Collection;
 import java.util.LinkedList;
 
 /**
@@ -27,11 +28,10 @@ public class MyPlaylist {
 	private String mName;
 	private int mItemCount;
 	private boolean mActive;
-	private LinkedList<MySong> mPlaylistSongs;
+	private LinkedList<MySong> mPlaylistSongs = new LinkedList<MySong>();
 	private boolean mClosed;
 	
 	public MyPlaylist() {
-		mPlaylistSongs = new LinkedList<MySong>();
 	}
 	
 	public int getId() {
@@ -60,11 +60,21 @@ public class MyPlaylist {
 	}
 
 	public LinkedList<MySong> getPlaylistSongs() {
-		return mPlaylistSongs;
+		return new LinkedList<MySong>(mPlaylistSongs);
 	}
 	
-	public void addSong(MySong song) {
-		mPlaylistSongs.push(song);
+	public boolean hasSongs() {
+		return !mPlaylistSongs.isEmpty();
+	}
+	
+	/**
+	 * Set the songs the current playlist has. This clears the 
+	 * current List of songs!
+	 * @param songs The songs from the playlist
+	 */
+	public void setSongs(Collection<MySong> songs) {
+		mPlaylistSongs.clear();
+		mPlaylistSongs.addAll(songs);
 	}
 
 	public boolean isClosed() {

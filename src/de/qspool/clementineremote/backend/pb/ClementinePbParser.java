@@ -20,6 +20,7 @@ package de.qspool.clementineremote.backend.pb;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.os.Handler;
 import android.util.Log;
 
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -47,10 +48,13 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Song
 import de.qspool.clementineremote.backend.player.LyricsProvider;
 import de.qspool.clementineremote.backend.player.MyPlaylist;
 import de.qspool.clementineremote.backend.player.MySong;
+import de.qspool.clementineremote.backend.player.PlaylistManager;
 
 public class ClementinePbParser {
+	private PlaylistManager mPlaylistManager;
 	
 	public ClementinePbParser() {
+		mPlaylistManager = App.mClementine.getPlaylistManager();
 	}
 	
 	/**
@@ -181,8 +185,7 @@ public class ClementinePbParser {
 	 */
 	private void parseActivePlaylistChanged(
 			ResponseActiveChanged responseActiveChanged) {
-		int id = responseActiveChanged.getId();
-		App.mClementine.setActivePlaylistId(id);
+
 	}
 
 	/**
@@ -236,29 +239,20 @@ public class ClementinePbParser {
 	 * @param responsePlaylists The Playlist Elements
 	 */
 	private void  parsePlaylists(ResponsePlaylists responsePlaylists) {
-		try {
-			App.mClementine.PlaylistsAvailable.acquire();
+		mPlaylistManager.removeAll();
+		
+		List<Playlist> playlists = responsePlaylists.getPlaylistList();
+		
+		for (Playlist playlist : playlists) {
+			// Create the playlist and add the information
+			MyPlaylist myPlaylist = new MyPlaylist();
+			myPlaylist.setId(playlist.getId());
+			myPlaylist.setName(playlist.getName());
+			myPlaylist.setActive(playlist.getActive());
+			myPlaylist.setItemCount(playlist.getItemCount());
+			myPlaylist.setClosed(playlist.getClosed());
 			
-			// First clear the current playlists
-			App.mClementine.getPlaylists().clear();
-			
-			List<Playlist> playlists = responsePlaylists.getPlaylistList();
-			
-			for (Playlist playlist : playlists) {
-				// Create the playlist and add the information
-				MyPlaylist myPlaylist = new MyPlaylist();
-				myPlaylist.setId(playlist.getId());
-				myPlaylist.setName(playlist.getName());
-				myPlaylist.setActive(playlist.getActive());
-				myPlaylist.setItemCount(playlist.getItemCount());
-				myPlaylist.setClosed(playlist.getClosed());
-				
-				// Add the playlist to the playlist list
-				App.mClementine.addPlaylist(myPlaylist);
-				
-				App.mClementine.PlaylistsAvailable.release();
-			}
-		} catch (InterruptedException e) {
+			mPlaylistManager.addPlaylist(myPlaylist);
 		}
 	}
 	
@@ -267,21 +261,16 @@ public class ClementinePbParser {
 	 * @param response The message with the songs
 	 */
 	private void parsePlaylistSongs(ResponsePlaylistSongs response) {
-		try {
-			App.mClementine.PlaylistsAvailable.acquire();
-			
-			Playlist playlist = response.getRequestedPlaylist();
-			LinkedList<MySong> playlistSongs = App.mClementine.getPlaylists().get(playlist.getId()).getPlaylistSongs();
-			playlistSongs.clear();
-			
-			List<SongMetadata> songs = response.getSongsList();
-			
-			for (SongMetadata s : songs) {
-				playlistSongs.add(MySong.fromProtocolBuffer(s));
-			}
-			App.mClementine.PlaylistsAvailable.release();
-		} catch (InterruptedException e) {
-		}		
+		Playlist playlist = response.getRequestedPlaylist();
+		
+		List<SongMetadata> songs = response.getSongsList();
+		List<MySong> mySongs = new LinkedList<MySong>();
+		
+		for (SongMetadata s : songs) {
+			mySongs.add(MySong.fromProtocolBuffer(s));
+		}
+		
+		mPlaylistManager.playlistSongsDownloaded(playlist.getId(), mySongs);
 	}
 	
 	/**

@@ -401,7 +401,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 		}
 		
 		msg.obj = ClementineMessageFactory.buildInsertUrl(
-				App.mClementine.getActivePlaylist().getId(), urls);
+				App.mClementine.getPlaylistManager().getActivePlaylistId(), urls);
 		
 		App.mClementineConnection.mHandler.sendMessage(msg);
 
@@ -433,7 +433,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 				LinkedList<String> urls = new LinkedList<String>();
 				urls.add(item.getUrl());
 				msg.obj = ClementineMessageFactory.buildInsertUrl(
-						App.mClementine.getActivePlaylist().getId(), urls);
+						App.mClementine.getPlaylistManager().getActivePlaylistId(), urls);
 				App.mClementineConnection.mHandler.sendMessage(msg);
 
 				Toast.makeText(getActivity(),

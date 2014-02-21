@@ -31,6 +31,7 @@
     <string name="playlist_empty">Playlist is empty!</string>
     <string name="playlist_context_play">Play item</string>
     <string name="playlist_context_remove">Remove from playlist</string>
+    <string name="playlist_loading">Loading</string>
     
     
     <string name="downloads_empty">No downloads!</string>

@@ -64,7 +64,7 @@ public class MainActivity extends SherlockFragmentActivity {
 	private final static String MENU_POSITION = "last_menu_position";
 	
 	private SharedPreferences mSharedPref;
-	private PlayerHandler mHandler;
+	private MainActivityHandler mHandler;
 	
 	private Toast mToast;
 	
@@ -215,7 +215,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		} else {
 			Log.d(TAG, "onResume - start");
 		    // Set the handler
-		    mHandler = new PlayerHandler(this);
+		    mHandler = new MainActivityHandler(this);
 		    App.mClementineConnection.setUiHandler(mHandler);
 		}
 	}

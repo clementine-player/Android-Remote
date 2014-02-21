@@ -305,8 +305,8 @@ public class PlayerFragment extends AbstractDrawerFragment {
     	}
     	
     	// ActionBar shows the current playlist
-    	if (App.mClementine.getActivePlaylist() != null) {
-    		mActionBar.setSubtitle(App.mClementine.getActivePlaylist().getName());
+    	if (App.mClementine.getPlaylistManager().getActivePlaylist() != null) {
+    		mActionBar.setSubtitle(App.mClementine.getPlaylistManager().getActivePlaylist().getName());
     	}
     	
     	mFirstCall = false;

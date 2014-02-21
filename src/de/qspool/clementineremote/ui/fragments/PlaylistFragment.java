@@ -21,7 +21,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.ContextMenu;
@@ -32,12 +35,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -46,11 +51,13 @@ import com.actionbarsherlock.widget.SearchView;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.ClementineSongDownloader;
+import de.qspool.clementineremote.backend.event.OnPlaylistReceivedListener;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
 import de.qspool.clementineremote.backend.player.MyPlaylist;
 import de.qspool.clementineremote.backend.player.MySong;
+import de.qspool.clementineremote.backend.player.PlaylistManager;
 import de.qspool.clementineremote.ui.adapter.PlaylistSongAdapter;
 
 public class PlaylistFragment extends AbstractDrawerFragment {
@@ -58,20 +65,24 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 	
 	private PlaylistSongAdapter mAdapter;
 	private ProgressDialog mProgressDialog;
-	private ActionBar mActionBar; 
+	private ActionBar mActionBar;
+	private ActionMode mActionMode;
 	private ListView mList;
 	private Spinner mPlaylistSpinner = null;
 	private View mEmptyPlaylist;
 	
-	private final LinkedList<MySong> mData = new LinkedList<MySong>();
-	private int mId;
+	private View mSelectedItem;
+	private Drawable mSelectedItemDrawable;
+	private MySong mSelectedSong;
+	
+	private PlaylistManager mPlaylistManager;
+	private OnPlaylistReceivedListener mPlaylistListener;
+	
+	private LinkedList<MyPlaylist> mPlaylists = new LinkedList<MyPlaylist>();
 	
 	private String mFilterText;
 	private boolean mUpdateTrackPositionOnNewTrack = false;
 	private int mSelectionOffset;
-	
-	private int mDownloadPlaylists;
-	private LinkedList<String> mDownloadPlaylistNames;
 	
 	public PlaylistFragment() {
 		mFilterText = "";
@@ -86,8 +97,48 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 	    mActionBar = getSherlockActivity().getSupportActionBar();
 	    setHasOptionsMenu(true);
 	    
-	    if (App.mClementine.getPlaylists().size() != 0)
-	    	mId = App.mClementine.getPlaylists().valueAt(0).getId();
+	    mPlaylistManager = App.mClementine.getPlaylistManager();
+	    mPlaylistListener = new OnPlaylistReceivedListener() {
+			@Override
+			public void onPlaylistSongsReceived(final MyPlaylist p) {
+				getSherlockActivity().runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						if (mProgressDialog != null) {
+							mProgressDialog.setProgress(mProgressDialog.getProgress()+1);
+							mProgressDialog.setMessage(p.getName());
+						}
+					}
+				});
+			}
+			
+			@Override
+			public void onPlaylistReceived(final MyPlaylist p) {
+				getSherlockActivity().runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						updatePlaylistSpinner();
+					}
+				});
+			}
+			
+			@Override
+			public void onAllRequestedPlaylistSongsReceived() {
+				getSherlockActivity().runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						if (mProgressDialog != null && mProgressDialog.isShowing()) {
+							mPlaylists = mPlaylistManager.getAllPlaylists();
+							
+							mProgressDialog.dismiss();
+							getSherlockActivity().supportInvalidateOptionsMenu();
+							
+							mPlaylistSpinner.setSelection(mPlaylists.indexOf(mPlaylistManager.getActivePlaylist()));
+						}
+					}
+				});
+			}
+		};
 	}
 	
 	@Override
@@ -97,14 +148,26 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 		if (App.mClementineConnection == null
 		 || App.mClementine           == null
 		 || !App.mClementineConnection.isConnected()) {
-		} else {
-			RequestPlaylistSongs();
-			setActionBarTitle();
-			// Get the position of the current track if we have one
-	        if (App.mClementine.getCurrentSong() != null) {
-	        	updateViewPosition();
-	        }
-		}
+			return;
+		} 
+
+		RequestPlaylistSongs();
+		setActionBarTitle();
+		
+		mPlaylistManager.addOnPlaylistReceivedListener(mPlaylistListener);
+		mPlaylists = mPlaylistManager.getAllPlaylists();
+		
+		// Get the position of the current track if we have one
+        if (App.mClementine.getCurrentSong() != null) {
+        	updateViewPosition();
+        }
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		
+		mPlaylistManager.removeOnPlaylistReceivedListener(mPlaylistListener);
 	}
 	
 	@Override
@@ -113,50 +176,60 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 		View view = inflater.inflate(R.layout.playlist_fragment,
 				container, false);
 		
+		mPlaylists = mPlaylistManager.getAllPlaylists();
+		
 		mList = (ListView) view.findViewById(R.id.songs);
 		mEmptyPlaylist = view.findViewById(R.id.playlist_empty);
 		
+		// update spinner
+		mPlaylistSpinner = (Spinner) view.findViewById(R.id.playlist_spinner);
+		updatePlaylistSpinner();
+
 		// Create the adapter
-		mAdapter = new PlaylistSongAdapter(getActivity(), R.layout.playlist_row, new LinkedList<MySong>(mData));
+		mAdapter = new PlaylistSongAdapter(getActivity(), R.layout.playlist_row, getSelectedPlaylistSongs());
 		
 		mList.setOnItemClickListener(oiclSong);
-		//mList.setOnItemLongClickListener(oilclSong);
 		mList.setAdapter(mAdapter);
-		registerForContextMenu(mList);
+		mList.setLongClickable(true);
+		mList.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				if (mActionMode != null) {
+		            return false;
+		        }
+				
+				mSelectedItem = view;
+				mSelectedItemDrawable = mSelectedItem.getBackground();
+				mSelectedItem.setBackgroundColor(getResources().getColor(R.color.orange_light));
+				
+				mSelectedSong = (MySong) getSelectedPlaylistSongs().get(position);
+
+		        // Start the CAB using the ActionMode.Callback defined above
+		        mActionMode = getSherlockActivity().startActionMode(mActionModeCallback);
+		        view.setSelected(true);
+		        return true;
+			}
+		});
 		
 		// Filter the results
 		mAdapter.getFilter().filter(mFilterText);
-		
-		mPlaylistSpinner = (Spinner) view.findViewById(R.id.playlist_spinner);
-        List<CharSequence> arrayList = new ArrayList<CharSequence>();
-        for (int i = 0; i < App.mClementine.getPlaylists().size(); i++) {
-            arrayList.add(App.mClementine.getPlaylists().valueAt(i).getName());
-        }
-        
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(getActivity(),
-                android.R.layout.simple_spinner_item, arrayList);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        mPlaylistSpinner.setAdapter(adapter);
-
-        mPlaylistSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                    int position, long id) {
-            	mId = App.mClementine.getPlaylists().valueAt(position).getId();
-            	updateSongList();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) { }
-        });
 		
 	    mActionBar.setTitle("");
 	    mActionBar.setSubtitle("");
 		
 		return view;
+	}
+	
+	@Override
+    public void onViewCreated(final View view, final Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mList.setFastScrollEnabled(true);
+        mList.setTextFilterEnabled(true);
+        mList.setSelector(android.R.color.transparent);
+        mList.setDivider(null);
+        mList.setDividerHeight(0);
 	}
 	
 	@Override
@@ -224,68 +297,18 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 		super.onPrepareOptionsMenu(menu);
 	}
 	
-	@Override
-	public boolean onContextItemSelected(android.view.MenuItem item) {
-	    AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-	    MySong song = (MySong) mData.get(info.position);
-	    switch (item.getItemId()) {
-	        case R.id.playlist_context_play:
-	        	playSong(song);
-	            return true;
-	        case R.id.playlist_context_remove:
-	            Message msg = Message.obtain();
-	            msg.obj = ClementineMessageFactory.buildRemoveSongFromPlaylist(mId, song);
-	            App.mClementineConnection.mHandler.sendMessage(msg);
-	            mAdapter.remove(song);
-	            mAdapter.notifyDataSetChanged();
-	            return true;
-	        default:
-	            return super.onContextItemSelected(item);
-	    }
-	}
-	
-	public int getPlaylistId() {
-		return mId;
-	}
-	
-	public void setId(int id) {
-		mId = id;
-    	updateSongList();
-	}
-	
-	private void setActionBarTitle() {
-		MySong currentSong = App.mClementine.getCurrentSong();
-		if (currentSong == null) {
-			mActionBar.setTitle(getString(R.string.player_nosong));
-			mActionBar.setSubtitle("");
-		} else {
-			mActionBar.setTitle(currentSong.getArtist());
-			mActionBar.setSubtitle(currentSong.getTitle());
-		}
-	}
-	
 	/**
 	 * Update the underlying data. It reloads the current playlist songs from the Clementine object.
 	 */
 	public void updateSongList() {
-		try {
-			App.mClementine.PlaylistsAvailable.acquire();
-			
-			mData.clear();
-			mData.addAll(App.mClementine.getPlaylists().get(mId).getPlaylistSongs());
-			
-			// Check if we should update the current view position
-			mAdapter = new PlaylistSongAdapter(getActivity(), R.layout.playlist_row, new LinkedList<MySong>(mData));
-			mList.setAdapter(mAdapter);
-			
-			updateViewPosition();
-			
-			if (mData.isEmpty()) {
-				mList.setEmptyView(mEmptyPlaylist);
-			}
-			
-			App.mClementine.PlaylistsAvailable.release();
-		} catch (InterruptedException e) {
+		// Check if we should update the current view position
+		mAdapter = new PlaylistSongAdapter(getActivity(), R.layout.playlist_row, getSelectedPlaylistSongs());
+		mList.setAdapter(mAdapter);
+		
+		updateViewPosition();
+		
+		if (mPlaylists.isEmpty()) {
+			mList.setEmptyView(mEmptyPlaylist);
 		}
 		
 	}
@@ -306,20 +329,10 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 		return mAdapter;
 	}
 	
-	@Override
-    public void onViewCreated(final View view, final Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mList.setFastScrollEnabled(true);
-        mList.setTextFilterEnabled(true);
-        mList.setSelector(android.R.color.transparent);
-        mList.setDivider(null);
-        mList.setDividerHeight(0);
-	}
-	
 	private OnItemClickListener oiclSong = new OnItemClickListener() {
 	    @Override
 	    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-	        MySong song = (MySong) mData.get(position);
+	        MySong song = (MySong) getSelectedPlaylistSongs().get(position);
 	        
 	        playSong(song);
 	    }
@@ -327,15 +340,10 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 	
 	private void playSong(MySong song) {
 		Message msg = Message.obtain();
-        msg.obj = ClementineMessageFactory.buildRequestChangeSong(song.getIndex(), mId);
+        msg.obj = ClementineMessageFactory.buildRequestChangeSong(song.getIndex(), getPlaylistId());
         App.mClementineConnection.mHandler.sendMessage(msg);
         
-        // save which playlist is the active one
-        for (int i = 0; i<App.mClementine.getPlaylists().size(); i++) {
-        	App.mClementine.getPlaylists().valueAt(i).setActive(false);
-        }
-        
-        App.mClementine.getPlaylists().get(mId).setActive(true);
+        mPlaylistManager.setActivePlaylist(getPlaylistId());
 	}
 
     
@@ -366,14 +374,6 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 			updateSongList();
 			setActionBarTitle();
 			break;
-		case PLAYLIST_SONGS:
-			if (mProgressDialog != null && mProgressDialog.isShowing()) {
-				checkGotAllPlaylists();
-			} else {
-				updateSongList();
-			}
-			
-			break;
 		default:
 			break;
 		}
@@ -383,55 +383,21 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 	 * Sends a request to Clementine to send all songs in all active playlists.
 	 */
 	public void RequestPlaylistSongs() {
-		checkGotAllPlaylists();
-		
 		// If a progress is showing, do not show again!
 		if (mProgressDialog != null && mProgressDialog.isShowing())
 			return;
 		
-		mDownloadPlaylists = 0;
-		mDownloadPlaylistNames = new LinkedList<String>();
-		
-		for (int i=0;i<App.mClementine.getPlaylists().size();i++) {
-			// Get the Playlsit
-			int key = App.mClementine.getPlaylists().keyAt(i);
-			MyPlaylist playlist = App.mClementine.getPlaylists().get(key);
-			if (playlist.getPlaylistSongs().size() == 0) {
-				Message msg = Message.obtain();
-				msg.obj = ClementineMessageFactory.buildRequestPlaylistSongs(playlist.getId());
-				App.mClementineConnection.mHandler.sendMessage(msg);
-				mDownloadPlaylists++;
-				mDownloadPlaylistNames.add(playlist.getName());
-			}
-		}
-		
 		// Open it directly only when we got all playlists
-		if (mDownloadPlaylists != 0) {
+		int requests = mPlaylistManager.requestAllPlaylistSongs();
+		if (requests > 0) {
 			// Start a Progressbar
 			mProgressDialog = new ProgressDialog(getActivity());
-			mProgressDialog.setMax(mDownloadPlaylists);
+			mProgressDialog.setMax(requests);
 			mProgressDialog.setCancelable(true);
 			mProgressDialog.setTitle(R.string.player_download_playlists);
-			mProgressDialog.setMessage(mDownloadPlaylistNames.poll());
+			mProgressDialog.setMessage(getString(R.string.playlist_loading));
 			mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 			mProgressDialog.show();
-		}
-	}
-	
-	/**
-	 * Update the Progressbar and open the intent if necessary
-	 */
-	void checkGotAllPlaylists() {
-		if (mProgressDialog != null) {
-			mProgressDialog.setProgress(mProgressDialog.getProgress()+1);
-			mProgressDialog.setMessage(mDownloadPlaylistNames.poll());
-			mDownloadPlaylists--;
-			
-			if (mDownloadPlaylists == 0 && mProgressDialog.isShowing()) {
-				mProgressDialog.dismiss();
-				getSherlockActivity().supportInvalidateOptionsMenu();
-				mPlaylistSpinner.setSelection(App.mClementine.getPlaylists().indexOfValue(App.mClementine.getActivePlaylist()));
-			}
 		}
 	}
 
@@ -439,4 +405,106 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 	public boolean onBackPressed() {
 		return false;
 	}
+	
+	private void updatePlaylistSpinner() {
+		List<CharSequence> arrayList = new ArrayList<CharSequence>();
+        for (int i = 0; i < mPlaylists.size(); i++) {
+            arrayList.add(mPlaylists.get(i).getName());
+        }
+        
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(getActivity(),
+                android.R.layout.simple_spinner_item, arrayList);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        mPlaylistSpinner.setAdapter(adapter);
+
+        mPlaylistSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                    int position, long id) {
+            	updateSongList();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) { }
+        });
+	}
+	
+	private int getPlaylistId() {
+		return mPlaylists.get(mPlaylistSpinner.getSelectedItemPosition()).getId();
+	}
+	
+	private LinkedList<MySong> getSelectedPlaylistSongs() {
+		int pos = mPlaylistSpinner.getSelectedItemPosition();
+		if (pos == Spinner.INVALID_POSITION) {
+			pos = 0; // We have always at least one playlist!
+		}
+		return mPlaylists.get(pos).getPlaylistSongs();
+	}
+	
+	private void setActionBarTitle() {
+		MySong currentSong = App.mClementine.getCurrentSong();
+		if (currentSong == null) {
+			mActionBar.setTitle(getString(R.string.player_nosong));
+			mActionBar.setSubtitle("");
+		} else {
+			mActionBar.setTitle(currentSong.getArtist());
+			mActionBar.setSubtitle(currentSong.getTitle());
+		}
+	}
+	
+	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+
+	    // Called when the action mode is created; startActionMode() was called
+	    @Override
+	    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+	        // Inflate a menu resource providing context menu items
+	        MenuInflater inflater = mode.getMenuInflater();
+	        inflater.inflate(R.menu.playlist_context_menu, menu);
+	        return true;
+	    }
+
+	    // Called each time the action mode is shown. Always called after onCreateActionMode, but
+	    // may be called multiple times if the mode is invalidated.
+	    @Override
+	    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+	        return false; // Return false if nothing is done
+	    }
+
+	    // Called when the user selects a contextual menu item
+	    @Override
+	    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {		    
+	        switch (item.getItemId()) {
+	        case R.id.playlist_context_play:
+	        	playSong(mSelectedSong);
+	        	mode.finish();
+	            return true;
+	        case R.id.playlist_context_remove:
+	            Message msg = Message.obtain();
+	            msg.obj = ClementineMessageFactory.buildRemoveSongFromPlaylist(getPlaylistId(), mSelectedSong);
+	            App.mClementineConnection.mHandler.sendMessage(msg);
+	            mAdapter.remove(mSelectedSong);
+	            mAdapter.notifyDataSetChanged();
+	            mode.finish();
+	            return true;
+	        default:
+	        	return false;
+	        }
+	    }
+
+	    // Called when the user exits the action mode
+	    @SuppressWarnings("deprecation")
+		@SuppressLint("NewApi")
+		@Override
+	    public void onDestroyActionMode(ActionMode mode) {
+	        mActionMode = null;
+	        mSelectedSong = null;
+	        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+	        	mSelectedItem.setBackground(mSelectedItemDrawable);
+	        else
+	        	mSelectedItem.setBackgroundDrawable(mSelectedItemDrawable);
+	    }
+	};
 }

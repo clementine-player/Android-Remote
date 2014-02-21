@@ -64,7 +64,7 @@ public class ClementineSongDownloader extends
 	private int mFileCount;
 	private int mCurrentFile;
 	
-	private int mPlaylistId;
+	private String mPlaylistName;
 	
 	private boolean mIsPlaylist = false;
 	private boolean mCreatePlaylistDir = false;
@@ -142,7 +142,7 @@ public class ClementineSongDownloader extends
 		case APlaylist:
 			sb.append(mContext.getString(R.string.download_noti_title_playlist));
 			sb.append(" ");
-			sb.append(App.mClementine.getPlaylists().get(mPlaylistId).getName());
+			sb.append(mPlaylistName);
 			break;
 		case CurrentItem:
 			sb.append(mContext.getString(R.string.download_noti_title_song));
@@ -261,7 +261,8 @@ public class ClementineSongDownloader extends
     	// Do we have a playlist?
     	mIsPlaylist = (clementineMessage.getMessage().getRequestDownloadSongs().getDownloadItem() == DownloadItem.APlaylist);
     	if (mIsPlaylist) {
-    		mPlaylistId = clementineMessage.getMessage().getRequestDownloadSongs().getPlaylistId();
+    		int id = clementineMessage.getMessage().getRequestDownloadSongs().getPlaylistId();
+    		mPlaylistName = App.mClementine.getPlaylistManager().getPlaylist(id).getName();
     	}
     	
     	publishProgress(0);
@@ -430,7 +431,7 @@ public class ClementineSongDownloader extends
     	sb.append(path);
     	sb.append(File.separator);
     	if (mIsPlaylist && mCreatePlaylistDir) {
-    		sb.append(App.mClementine.getPlaylists().get(mPlaylistId).getName());
+    		sb.append(mPlaylistName);
     		sb.append(File.separator);
     	}
     	
