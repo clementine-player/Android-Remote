@@ -196,6 +196,9 @@ public class DownloadsFragment extends AbstractDrawerFragment {
 
 						@Override
 						public void run() {
+							if (getActivity() == null) 
+								return;
+							
 							mAdapter.notifyDataSetChanged();
 							if (App.downloaders.isEmpty()) {
 								mList.setEmptyView(mEmptyDownloads);
