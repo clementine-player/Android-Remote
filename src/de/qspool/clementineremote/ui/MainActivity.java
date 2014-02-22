@@ -105,7 +105,6 @@ public class MainActivity extends SherlockFragmentActivity {
         mFragments.add(new DonateFragment());
 	    
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        
 	    
 	    if (findViewById(R.id.player_frame) != null) {
 	    	mPlayerFragment = new PlayerFragment();
@@ -160,6 +159,9 @@ public class MainActivity extends SherlockFragmentActivity {
 			}
 		}
 		selectItem(mLastPosition, 0);
+		mDrawerList.performItemClick(mDrawerList.getAdapter().getView(1, null, null),
+				1,
+				mDrawerList.getAdapter().getItemId(1));
 	}
 	
     @Override

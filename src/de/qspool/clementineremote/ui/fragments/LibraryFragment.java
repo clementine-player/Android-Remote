@@ -19,15 +19,20 @@ package de.qspool.clementineremote.ui.fragments;
 
 import java.util.LinkedList;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
@@ -111,6 +116,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 		}
 	}
 
+	@SuppressLint({ "InlinedApi", "NewApi" })
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -124,7 +130,56 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 		mEmptyLibrary = view.findViewById(R.id.library_empty);
 
 		mList.setOnItemClickListener(oiclLibraryClick);
-		registerForContextMenu(mList);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			mList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+			mList.setMultiChoiceModeListener(new MultiChoiceModeListener() {
+				@Override
+				public boolean onActionItemClicked(ActionMode mode,
+						android.view.MenuItem item) {
+					SparseBooleanArray checkedPositions = mList.getCheckedItemPositions();
+					
+					switch(item.getItemId()) {
+					case R.id.library_context_add:
+						for (int i=0;i<checkedPositions.size();++i) {
+							int position = checkedPositions.keyAt(i);
+							if (checkedPositions.valueAt(i)) {
+								MyLibraryItem libraryItem = mAdapters.getLast().getItem(position);
+								addSongsToPlaylist(libraryItem);
+							}
+						}
+						mode.finish();
+						return true;
+					default:
+						return false;
+					}
+				}
+
+				@Override
+				public boolean onCreateActionMode(ActionMode mode,
+						android.view.Menu menu) {
+					android.view.MenuInflater inflater = mode.getMenuInflater();
+			        inflater.inflate(R.menu.library_context_menu, menu);
+			        return true;
+				}
+
+				@Override
+				public boolean onPrepareActionMode(ActionMode mode,
+						android.view.Menu menu) {
+					return false;
+				}
+
+				@Override
+				public void onDestroyActionMode(ActionMode mode) {
+				}
+
+				@Override
+				public void onItemCheckedStateChanged(ActionMode mode,
+						int position, long id, boolean checked) {
+				}
+			});
+		} else {
+			registerForContextMenu(mList);
+		}
 		
 		// Create the adapter
 		mLibrary = new MyLibrary(getActivity());
@@ -233,23 +288,8 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 	    switch (item.getItemId()) {
 	        case R.id.library_context_add:
 	        	MyLibraryItem libraryItem = mAdapters.getLast().getItem(info.position);
-
-				switch (libraryItem.getLevel()) {
-				case MyLibrary.LVL_ARTIST:
-					MyLibrary addArtist = new MyLibrary(getActivity());
-					addArtist.addOnLibrarySelectFinishedListener(LibraryFragment.this);
-					addArtist.getAllTitlesFromArtistAsync(libraryItem.getArtist());
-					return true;
-				case MyLibrary.LVL_ALBUM:
-					MyLibrary addAlbums = new MyLibrary(getActivity());
-					addAlbums.addOnLibrarySelectFinishedListener(LibraryFragment.this);
-					addAlbums.getTitlesAsync(libraryItem.getArtist(), libraryItem.getAlbum());
-					return true;
-				case MyLibrary.LVL_TITLE:
-					return false;
-				default:
-					return false;
-				}
+	        	return addSongsToPlaylist(libraryItem);
+				
 	        default:
 	            return super.onContextItemSelected(item);
 	    }
@@ -305,6 +345,31 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 		searchView.setQueryHint(getString(R.string.playlist_search_hint));
 
 		super.onPrepareOptionsMenu(menu);
+	}
+	
+	private boolean addSongsToPlaylist(MyLibraryItem libraryItem) {
+		switch (libraryItem.getLevel()) {
+		case MyLibrary.LVL_ARTIST:
+			MyLibrary addArtist = new MyLibrary(getActivity());
+			addArtist.addOnLibrarySelectFinishedListener(LibraryFragment.this);
+			addArtist.getAllTitlesFromArtistAsync(libraryItem.getArtist());
+			return true;
+		case MyLibrary.LVL_ALBUM:
+			MyLibrary addAlbums = new MyLibrary(getActivity());
+			addAlbums.addOnLibrarySelectFinishedListener(LibraryFragment.this);
+			addAlbums.getTitlesAsync(libraryItem.getArtist(), libraryItem.getAlbum());
+			return true;
+		case MyLibrary.LVL_TITLE:
+			Message msg = Message.obtain();
+			LinkedList<String> urls = new LinkedList<String>();
+			urls.add(libraryItem.getUrl());
+			msg.obj = ClementineMessageFactory.buildInsertUrl(
+					App.mClementine.getPlaylistManager().getActivePlaylistId(), urls);
+			App.mClementineConnection.mHandler.sendMessage(msg);
+			return false;
+		default:
+			return false;
+		}
 	}
 
 	private void setActionBarTitle() {
