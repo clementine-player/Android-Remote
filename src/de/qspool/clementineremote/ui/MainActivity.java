@@ -230,7 +230,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		
 		mHandler = null;
 		if (App.mClementineConnection != null) {
-			App.mClementineConnection.setUiHandler(mHandler);
+			App.mClementineConnection.setUiHandler(null);
 		}
 	}
 	

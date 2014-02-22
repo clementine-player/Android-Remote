@@ -17,8 +17,12 @@
 
 package de.qspool.clementineremote.ui;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import javax.jmdns.ServiceInfo;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.NotificationManager;
@@ -34,6 +38,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
@@ -48,6 +53,8 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -88,7 +95,7 @@ public class ConnectDialog extends SherlockActivity {
 	
 	private Button mBtnConnect;
 	private ImageButton mBtnClementine;
-	private EditText mEtIp;
+	private AutoCompleteTextView mEtIp;
 	
 	ProgressDialog mPdConnect;
 	
@@ -104,7 +111,10 @@ public class ConnectDialog extends SherlockActivity {
     
     private Intent mServiceIntent;
     private boolean doAutoConnect = true;
+    
+    private Set<String> mKnownIps;
 	
+	@SuppressLint("NewApi")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
@@ -116,6 +126,11 @@ public class ConnectDialog extends SherlockActivity {
 	    setContentView(R.layout.connectdialog);
 	    
 	    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+	    
+	    mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+	    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+	    	mKnownIps = mSharedPref.getStringSet(App.SP_KNOWN_IP, new LinkedHashSet<String>());
+	    }
 	    
 	    // Create a progress dialog
 	    mPdConnect = new ProgressDialog(this);
@@ -238,11 +253,14 @@ public class ConnectDialog extends SherlockActivity {
 	    mAnimationCancel = false;
 	    
 	    // Ip and Autoconnect
-	    mEtIp = (EditText) findViewById(R.id.etIp);
+	    mEtIp = (AutoCompleteTextView) findViewById(R.id.etIp);
 	    mEtIp.setRawInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+	    mEtIp.setThreshold(3);
+	    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.select_dialog_item, mKnownIps.toArray(new String[0]));
+	    mEtIp.setAdapter(adapter);
 	    
 	    // Get old ip and auto-connect from shared prefences
-	    mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 	    mEtIp.setText(mSharedPref.getString(App.SP_KEY_IP, ""));
 	    mEtIp.setSelection(mEtIp.length());
 	    
@@ -339,15 +357,25 @@ public class ConnectDialog extends SherlockActivity {
 	/**
 	 * Connect to clementine
 	 */
+	@SuppressLint("NewApi")
 	private void connect() {
 		// Do not connect if the activity has finished!
 		if (this.isFinishing())
 			return;
 		
+		if (!mKnownIps.contains(mEtIp.getText().toString())) {
+			mKnownIps.add(mEtIp.getText().toString());
+		}
+		
 		// Save the data
 		SharedPreferences.Editor editor = mSharedPref.edit();
 		editor.putString(App.SP_KEY_IP, mEtIp.getText().toString());
 		editor.putInt(App.SP_LAST_AUTH_CODE, mAuthCode);
+		
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			editor.putStringSet(App.SP_KNOWN_IP, mKnownIps);
+		}
+		
 		editor.commit();
 		
     	// Set the handler

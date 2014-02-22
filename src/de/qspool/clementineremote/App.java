@@ -64,6 +64,7 @@ public class App extends Application {
 	public final static String SP_LAST_STACKTRACE = "last_stacktrace";
 	public final static String SP_LAST_SEND_STACKTRACE = "last_send_stacktrace";
 	public final static String SP_LIBRARY_IP = "library_ip";
+	public final static String SP_KNOWN_IP = "known_ips";
 	
 	@Override
 	public void onCreate() {
