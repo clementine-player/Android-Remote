@@ -159,9 +159,6 @@ public class MainActivity extends SherlockFragmentActivity {
 			}
 		}
 		selectItem(mLastPosition, 0);
-		mDrawerList.performItemClick(mDrawerList.getAdapter().getView(1, null, null),
-				1,
-				mDrawerList.getAdapter().getItemId(1));
 	}
 	
     @Override
@@ -219,6 +216,10 @@ public class MainActivity extends SherlockFragmentActivity {
 		    // Set the handler
 		    mHandler = new MainActivityHandler(this);
 		    App.mClementineConnection.setUiHandler(mHandler);
+		    
+		    mDrawerList.performItemClick(mDrawerList.getAdapter().getView(mLastPosition, null, null),
+					mLastPosition,
+					mDrawerList.getAdapter().getItemId(mLastPosition));
 		}
 	}
 	
@@ -401,7 +402,8 @@ public class MainActivity extends SherlockFragmentActivity {
     private class DrawerItemClickListener implements OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItem(position, 300);
+        	if (position != mLastPosition)
+        		selectItem(position, 300);
         }
     }
 
