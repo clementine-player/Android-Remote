@@ -102,8 +102,6 @@
   <string name="pref_lower_volume_summary">Ścisz w trakcie połączenia telefonicznego.</string>
   <string name="pref_call_volume_title">Poziom głośności w trakcie połączenia</string>
   <string name="pref_call_volume_summary">Aktualny poziom głośności w trakcie połączenia: %s</string>
-  <string name="pref_volume_inc_title">Skok głośności</string>
-  <string name="pref_volume_inc_summary">Obecny skok głośności: %s</string>
   <string name="pref_version_summary">Kliknij by odwiedzić naszą stronę</string>
   <string name="pref_version_title">Wersja</string>
   <string name="pref_license_title">Licencja</string>

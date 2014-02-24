@@ -25,6 +25,7 @@
   <string name="playlist_empty">Popis izvođenja je prazan!</string>
   <string name="playlist_context_play">Reproduciraj pjesmu</string>
   <string name="playlist_context_remove">Ukloni s popisa izvođenja</string>
+  <string name="playlist_loading">Učitavanje</string>
   <string name="downloads_empty">Nema preuzimanja!</string>
   <string name="download_error">Nemoguće otvaranje pjesme!</string>
   <string name="download_freespace">Slobodan prostor</string>
@@ -47,7 +48,7 @@
   <string name="library_no_tracks">%d pjesama</string>
   <string name="library_songs_added">%d pjesama dodano na trenutni popis izvođenja</string>
   <string name="library_context_add">Dodaj pjesmu na trenutni popis izvođenja</string>
-  <string name="library_download_error">Nemoguće preuzimanje zbirke</string>
+  <string name="library_download_error">Nemoguće preuzimanje fonoteke</string>
   <string name="song_info_album">Album</string>
   <string name="song_info_genre">Vrsta glazbe</string>
   <string name="song_info_year">Godina</string>
@@ -102,6 +103,8 @@
   <string name="pref_lower_volume_summary">Smanji glasnoću zvuka kod dolaznih / odlaznih poziva.</string>
   <string name="pref_call_volume_title">Razina glasnoće zvuka poziva</string>
   <string name="pref_call_volume_summary">Trenutna razina glasnoće zvuka poziva: %s</string>
+  <string name="pref_volume_inc_title">Razina glasnoće zvuka</string>
+  <string name="pref_volume_inc_summary">Trenutna razina glasnoće zvuka : %s</string>
   <string name="pref_version_summary">Kliknite za posjet web stranici projekta</string>
   <string name="pref_version_title">Inačica</string>
   <string name="pref_license_title">Licenca</string>
@@ -129,7 +132,7 @@
   <string name="error_versions">Nekompatibilna inačica</string>
   <string name="old_proto">Molim, ažurirajte Clementine!</string>
   <string name="no_private_ip">Vaš Android uređaj nema lokalnu IP adresu. Pokušajte onemogućiti \"Koristi samo lokalnu IP adresu\" u Clementine postavkama.</string>
-  <string name="check_ip">1) Je li Clementine pokrenut?\n2) Koristite li Clementine 1.2.1 ili noviju inačicu?\n3) Jeste li omogućili mrežno upravljanje u Clementine ?\n4) Provjerite jeste li upisli ispravnu IP adresu.\n</string>
+  <string name="check_ip">1) Je li Clementine pokrenut?\n2) Koristite li Clementine 1.2.1 ili noviju inačicu?\n3) Jeste li omogućili mrežno upravljanje u Clementineu?\n4) Provjerite jeste li upisli ispravnu IP adresu.\n</string>
   <string name="wifi_disabled">WI-FI je onemogućen. Ako se želite povezati s Clementinom putem Interneta pobrinite se da ste otvorili ispravno ulaze i onemogućili \"Koristi samo lokalnu IP adresu\".</string>
   <string name="input_auth_code">Kôd autentifikacije</string>
   <string name="invalid_code">Pogrešan kôd</string>
