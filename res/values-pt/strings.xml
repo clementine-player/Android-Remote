@@ -25,6 +25,7 @@
   <string name="playlist_empty">Listas de reprodução vazia!</string>
   <string name="playlist_context_play">Reproduzir item</string>
   <string name="playlist_context_remove">Remover da lista de reprodução</string>
+  <string name="playlist_loading">A carregar</string>
   <string name="downloads_empty">Nenhuma transferÊncia!</string>
   <string name="download_error">Não foi possível carregar a faixa!</string>
   <string name="download_freespace">Espaço livre</string>
@@ -102,8 +103,8 @@
   <string name="pref_lower_volume_summary">Baixar volume ao receber ou efetuar chamadas</string>
   <string name="pref_call_volume_title">Volume das chamadas</string>
   <string name="pref_call_volume_summary">Nível de volume atual: %S</string>
-  <string name="pref_volume_inc_title">Incremento da mudança de volume</string>
-  <string name="pref_volume_inc_summary">Atual incremento da mudança de volume: %s</string>
+  <string name="pref_volume_inc_title">Nível da mudança de volume</string>
+  <string name="pref_volume_inc_summary">Nível atual da mudança de volume: %s</string>
   <string name="pref_version_summary">Clique para aceder ao sítio do projeto</string>
   <string name="pref_version_title">Versão</string>
   <string name="pref_license_title">Licença</string>
