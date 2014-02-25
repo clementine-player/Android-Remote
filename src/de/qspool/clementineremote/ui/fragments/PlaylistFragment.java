@@ -35,12 +35,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -67,7 +67,6 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 	private ActionBar mActionBar;
 	private ActionMode mActionMode;
 	private ListView mList;
-	private Spinner mPlaylistSpinner = null;
 	private View mEmptyPlaylist;
 	
 	private View mSelectedItem;
@@ -132,7 +131,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 							mProgressDialog.dismiss();
 							getSherlockActivity().supportInvalidateOptionsMenu();
 							
-							mPlaylistSpinner.setSelection(mPlaylists.indexOf(mPlaylistManager.getActivePlaylist()));
+							mActionBar.setSelectedNavigationItem(mPlaylists.indexOf(mPlaylistManager.getActivePlaylist()));
 						}
 					}
 				});
@@ -151,7 +150,6 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 		} 
 
 		RequestPlaylistSongs();
-		setActionBarTitle();
 		
 		mPlaylistManager.addOnPlaylistReceivedListener(mPlaylistListener);
 		mPlaylists = mPlaylistManager.getAllPlaylists();
@@ -181,7 +179,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 		mEmptyPlaylist = view.findViewById(R.id.playlist_empty);
 		
 		// update spinner
-		mPlaylistSpinner = (Spinner) view.findViewById(R.id.playlist_spinner);
+		mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 		updatePlaylistSpinner();
 
 		// Create the adapter
@@ -371,7 +369,6 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 		switch (clementineMessage.getMessageType()) {
 		case CURRENT_METAINFO:
 			updateSongList();
-			setActionBarTitle();
 			break;
 		default:
 			break;
@@ -416,42 +413,26 @@ public class PlaylistFragment extends AbstractDrawerFragment {
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        mPlaylistSpinner.setAdapter(adapter);
-
-        mPlaylistSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                    int position, long id) {
-            	updateSongList();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) { }
-        });
+        mActionBar.setListNavigationCallbacks(adapter, new OnNavigationListener() {
+			
+			@Override
+			public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+				updateSongList();
+				return true;
+			}
+		});
 	}
 	
 	private int getPlaylistId() {
-		return mPlaylists.get(mPlaylistSpinner.getSelectedItemPosition()).getId();
+		return mPlaylists.get(mActionBar.getSelectedNavigationIndex()).getId();
 	}
 	
 	private LinkedList<MySong> getSelectedPlaylistSongs() {
-		int pos = mPlaylistSpinner.getSelectedItemPosition();
+		int pos = mActionBar.getSelectedNavigationIndex();
 		if (pos == Spinner.INVALID_POSITION) {
 			pos = 0; // We have always at least one playlist!
 		}
 		return mPlaylists.get(pos).getPlaylistSongs();
-	}
-	
-	private void setActionBarTitle() {
-		MySong currentSong = App.mClementine.getCurrentSong();
-		if (currentSong == null) {
-			mActionBar.setTitle(getString(R.string.player_nosong));
-			mActionBar.setSubtitle("");
-		} else {
-			mActionBar.setTitle(currentSong.getArtist());
-			mActionBar.setSubtitle(currentSong.getTitle());
-		}
 	}
 	
 	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
