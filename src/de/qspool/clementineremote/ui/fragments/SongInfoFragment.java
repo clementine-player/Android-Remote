@@ -41,6 +41,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -85,6 +86,8 @@ public class SongInfoFragment extends AbstractDrawerFragment {
     
 	private SharedPreferences mSharedPref;
 	
+	private ActionBar mActionBar;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -100,6 +103,8 @@ public class SongInfoFragment extends AbstractDrawerFragment {
 		      Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.songinfo_fragment,
 				container, false);
+		
+		mActionBar = getSherlockActivity().getSupportActionBar();
 		
 		mContainer = (FrameLayout) view.findViewById(R.id.si_container);
 		
@@ -245,7 +250,20 @@ public class SongInfoFragment extends AbstractDrawerFragment {
     	}
     	
     	mCurrentSong = currentSong;
+    	
+    	setActionBarTitle();
     }
+	
+	private void setActionBarTitle() {
+		MySong currentSong = App.mClementine.getCurrentSong();
+		if (currentSong == null) {
+			mActionBar.setTitle(getString(R.string.player_nosong));
+			mActionBar.setSubtitle("");
+		} else {
+			mActionBar.setTitle(currentSong.getArtist());
+			mActionBar.setSubtitle(currentSong.getTitle());
+		}
+	}
 	
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void zoomImageFromThumb(final View thumbView) {

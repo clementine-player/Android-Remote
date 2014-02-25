@@ -165,6 +165,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 		super.onPause();
 		
 		mPlaylistManager.removeOnPlaylistReceivedListener(mPlaylistListener);
+		mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 	}
 	
 	@Override
