@@ -176,6 +176,8 @@ public class ClementineService extends Service {
 	    if (ongoing) {
 		    mNotifyBuilder.addAction(R.drawable.ic_media_pause_resume, App.mApp.getString(R.string.notification_action_playpause), piPlay);
 		    mNotifyBuilder.addAction(R.drawable.ic_media_next_not, App.mApp.getString(R.string.notification_action_next), piNext);
+		    
+		    mNotifyBuilder.setPriority(1);
 	    }
 	}
 	

@@ -22,7 +22,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import android.annotation.SuppressLint;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -102,7 +101,7 @@ public class ClementineSongDownloader extends
 		// Set the result intent
 	    mBuilder.setContentIntent(buildNotificationIntent());
 	    
-	    mBuilder.setPriority(Notification.PRIORITY_LOW);
+	    mBuilder.setPriority(-1);
 	    
 	    // Add this downloader to list
 	    App.downloaders.add(this);
@@ -190,7 +189,7 @@ public class ClementineSongDownloader extends
         		.setOngoing(false)
         		.setAutoCancel(true)
                 .setProgress(0,0,false);
-        mBuilder.setPriority(Notification.PRIORITY_MIN);
+        mBuilder.setPriority(-2);
         mNotifyManager.cancel(mId);
         mNotifyManager.notify(mId, mBuilder.build());
         
@@ -214,7 +213,7 @@ public class ClementineSongDownloader extends
         mBuilder.setOngoing(false);
         mBuilder.setProgress(0,0,false);
         mBuilder.setAutoCancel(true);
-        mBuilder.setPriority(Notification.PRIORITY_MIN);
+        mBuilder.setPriority(-2);
         mNotifyManager.cancel(mId);
         mNotifyManager.notify(mId, mBuilder.build());
     }
