@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:ignore="MissingTranslation">
     <string name="player_desc_img">Cover Image</string>
     <string name="player_desc_buttons">Buttons to control the player</string>
     <string name="connect_desc_icon">Clementine Icon</string>
