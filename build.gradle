@@ -32,12 +32,21 @@ def getVersionName = { ->
     }
     return stdout.toString().trim()
 }
+def getVersionCode = { ->
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-list', '--count', "HEAD"
+        standardOutput = stdout
+    }
+    return Integer.valueOf(stdout.toString().trim())
+}
 
 android {
     compileSdkVersion 19
     buildToolsVersion "19.0.2"
 
     defaultConfig {
+        versionCode getVersionCode()
         versionName getVersionName()
     }
 
