@@ -27,7 +27,15 @@ dependencies {
 def getVersionName = { ->
     def stdout = new ByteArrayOutputStream()
     exec {
-        commandLine 'git', 'describe', '--tags'
+        commandLine 'git', 'describe', '--abbrev=0', '--tags'
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
+}
+def getGitHeadHash = { ->
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-parse', '--short', 'HEAD'
         standardOutput = stdout
     }
     return stdout.toString().trim()
@@ -39,6 +47,12 @@ android {
 
     defaultConfig {
         versionName getVersionName()
+    }
+
+    buildTypes {
+        debug {
+            versionNameSuffix "-" + getGitHeadHash()
+        }
     }
 
     sourceSets {
@@ -60,5 +74,20 @@ android {
         // by a similar customization.
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
+    }
+
+    signingConfigs {
+        release {
+            //storeFile file(System.console().readLine("\n\$ Enter keystore path: "))
+            //storePassword System.console().readLine("\n\$ Enter keystore password: ")
+            //keyAlias System.console().readLine("\n\$ Enter key alias: ")
+            //keyPassword System.console().readLine("\n\$ Enter key password: ")
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
     }
 }
