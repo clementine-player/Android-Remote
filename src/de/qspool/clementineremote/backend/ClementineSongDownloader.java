@@ -430,7 +430,7 @@ public class ClementineSongDownloader extends
     	sb.append(path);
     	sb.append(File.separator);
     	if (mIsPlaylist && mCreatePlaylistDir) {
-    		sb.append(mPlaylistName);
+    		sb.append(Utilities.removeInvalidFileCharacters(mPlaylistName));
     		sb.append(File.separator);
     	}
     	
@@ -440,28 +440,28 @@ public class ClementineSongDownloader extends
     		mIsPlaylist && mCreatePlaylistArtistDir) {
     		// Append artist name
 	    	if (chunk.getSongMetadata().getAlbumartist().length() == 0)
-	    		sb.append(chunk.getSongMetadata().getArtist());
+	    		sb.append(Utilities.removeInvalidFileCharacters(chunk.getSongMetadata().getArtist()));
 	    	else
-	    		sb.append(chunk.getSongMetadata().getAlbumartist());
+	    		sb.append(Utilities.removeInvalidFileCharacters(chunk.getSongMetadata().getAlbumartist()));
 	    	
 	    	// append album
 	    	sb.append(File.separator);
-    		sb.append(chunk.getSongMetadata().getAlbum());
+    		sb.append(Utilities.removeInvalidFileCharacters(chunk.getSongMetadata().getAlbum()));
     	}
-    	
-    	return sb.toString();
+
+        return sb.toString();
     }
     
     /**
      * Build the filename
-     * @param e The SongFileChunk
+     * @param chunk The SongFileChunk
      * @return /sdcard/Music/Artist/Album/file.mp3
      */
     private String BuildFilePath(ResponseSongFileChunk chunk) {
     	StringBuilder sb = new StringBuilder();
     	sb.append(BuildDirPath(chunk));
     	sb.append(File.separator);
-    	sb.append(chunk.getSongMetadata().getFilename());
+    	sb.append(Utilities.removeInvalidFileCharacters(chunk.getSongMetadata().getFilename()));
     	
     	return sb.toString();
     }

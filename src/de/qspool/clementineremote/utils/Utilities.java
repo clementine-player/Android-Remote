@@ -181,4 +181,14 @@ public class Utilities {
 	public static boolean isRemoteConnected() {
 		return App.mClementineConnection != null && App.mClementineConnection.isConnected();
 	}
+
+    /**
+     * This method removes all illegal characters in a file name.
+     * @param str The string containing a file or folder name
+     * @return A string that is a vaild file name
+     */
+    public static String removeInvalidFileCharacters(String str) {
+        String illegal = "[\\\\~#%&*{}/:<>?|\\\"-]";
+        return str.replaceAll(illegal, "");
+    }
 }
