@@ -1,4 +1,15 @@
 *.apk
 asserts/
 bin/
+build/
+classes/
 gen/
+
+.settings/
+.idea/
+.gradle/
+
+.classpath
+.project
+
+*.iml
