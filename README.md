@@ -37,7 +37,7 @@ This application is licensed under the GNU GPLv3.
 
 If you have questions, suggestions etc. please write an e-mail.
 
-Help: http://code.google.com/p/clementine-player/wiki/RemoteControl
+Help: https://github.com/clementine-player/Android-Remote/wiki
 
 __PERMISSIONS:__<br />
 * android.permission.ACCESS_NETWORK_STATE: Check if you are connected to a wifi network.
