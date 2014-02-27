@@ -1,3 +1,5 @@
+import java.util.regex.Pattern
+
 buildscript {
     repositories {
         mavenCentral()
@@ -13,23 +15,38 @@ repositories {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
+    compile 'com.android.support:support-v4:18.0.+'
     compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
+    compile 'com.google.protobuf:protobuf-java:2.4.1'
+    compile 'javax.jmdns:jmdns:3.4.0'
+}
+
+/*
+ * Gets the version name from the latest Git tag
+ */
+def getVersionName = { ->
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'describe', '--tags'
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
 }
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.0.1"
+    buildToolsVersion "19.0.2"
+
+    defaultConfig {
+        versionName getVersionName()
+    }
 
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
             java.srcDirs = ['src']
-            resources.srcDirs = ['src']
             aidl.srcDirs = ['src']
-            renderscript.srcDirs = ['src']
             res.srcDirs = ['res']
-            assets.srcDirs = ['assets']
         }
 
         // Move the tests to tests/java, tests/res, etc...
