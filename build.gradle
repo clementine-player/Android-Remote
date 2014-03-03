@@ -83,9 +83,9 @@ android {
 
             // Signing code for manual signing
             //storeFile file(System.console().readLine("\n\$ Enter keystore path: "))
-            //storePassword System.console().readLine("\n\$ Enter keystore password: ")
+            //storePassword System.console().readPassword("\n\$ Enter keystore password: ").toString()
             //keyAlias System.console().readLine("\n\$ Enter key alias: ")
-            //keyPassword System.console().readLine("\n\$ Enter key password: ")
+            //keyPassword System.console().readPassword("\n\$ Enter key password: ").toString()
         }
     }
 
