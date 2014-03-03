@@ -55,8 +55,13 @@ public class CrashReportDialog {
 	public void showDialogIfTraceExists() {
 		if (!hasTrace())
 			return;
-		
-		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+
+        AlertDialog.Builder builder;
+        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+            builder = new AlertDialog.Builder(mContext, AlertDialog.THEME_HOLO_LIGHT);
+        } else {
+            builder = new AlertDialog.Builder(mContext);
+        }
 		
 		DialogInterface.OnClickListener dialogOnClickListener = new DialogInterface.OnClickListener() {
 		    @Override

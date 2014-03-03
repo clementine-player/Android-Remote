@@ -133,7 +133,11 @@ public class ConnectDialog extends SherlockActivity {
 	    }
 	    
 	    // Create a progress dialog
-	    mPdConnect = new ProgressDialog(this);
+        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+	        mPdConnect = new ProgressDialog(this, ProgressDialog.THEME_HOLO_LIGHT);
+        } else {
+            mPdConnect = new ProgressDialog(this);
+        }
 	    mPdConnect.setCancelable(true);
 	    mPdConnect.setOnCancelListener(oclProgressDialog);
 	    

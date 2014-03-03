@@ -262,7 +262,11 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 		public void OnOptimizeLibrary() {
 			Log.d(TAG, "OnOptimizeLibrary");
 			mProgressDialog.dismiss();
-			mProgressDialog = new ProgressDialog(getActivity());
+            if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+                mProgressDialog = new ProgressDialog(getActivity(), ProgressDialog.THEME_HOLO_LIGHT);
+            } else {
+                mProgressDialog = new ProgressDialog(getActivity());
+            }
 			mProgressDialog.setTitle(R.string.library_please_wait);
 			mProgressDialog.setMessage(getText(R.string.library_optimize));
 			mProgressDialog.setCancelable(false);
@@ -271,7 +275,11 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 	};
 	
 	private void createDownloadProgressDialog() {
-		mProgressDialog = new ProgressDialog(getActivity());
+        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+            mProgressDialog = new ProgressDialog(getActivity(), ProgressDialog.THEME_HOLO_LIGHT);
+        } else {
+            mProgressDialog = new ProgressDialog(getActivity());
+        }
 		mProgressDialog.setTitle(R.string.library_please_wait);
 		mProgressDialog.setMessage(getText(R.string.library_download));
 		mProgressDialog.setMax(100);

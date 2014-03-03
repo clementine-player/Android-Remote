@@ -146,7 +146,7 @@ public class ClementineService extends Service {
 	 */
 	private void setupNotification(boolean ongoing) {
 	    mNotifyBuilder = new NotificationCompat.Builder(App.mApp);
-	    mNotifyBuilder.setSmallIcon(R.drawable.ic_launcher);
+	    mNotifyBuilder.setSmallIcon(R.drawable.notification);
 	    mNotifyBuilder.setOngoing(ongoing);
 	    
 	    // If we don't have an ongoing notification, it shall be closed after clicked.
