@@ -42,14 +42,9 @@
       <item name="android:background">@drawable/actionbar_bg</item>
       <item name="titleTextStyle">@style/ActionBarTextAppearance</item>
       <item name="@android:titleTextStyle">@style/ActionBarTextAppearance</item>
-      <item name="subtitleTextStyle">@style/ActionBarSubtitleTextAppearance</item>
-      <item name="@android:subtitleTextStyle">@style/ActionBarSubtitleTextAppearance</item>
-	  </style>
-	  <style name="ActionBarTextAppearance" parent="@android:style/TextAppearance">
+	</style>
+	<style name="ActionBarTextAppearance" parent="@android:style/TextAppearance">
       <item name="android:textColor">@android:color/white</item>
-    </style>
-    <style name="ActionBarSubtitleTextAppearance" parent="TextAppearance.Sherlock.Widget.ActionBar.Subtitle">
-      <item name="android:textColor">@color/actionbar_subtitle</item>
     </style>
     <style name="ActionButtonStyle" parent="Widget.Sherlock.ActionButton">
 	    <item name="android:minWidth">0dip</item>

@@ -145,8 +145,12 @@ public class PlayerFragment extends AbstractDrawerFragment {
 	    mAlphaDown.setAnimationListener(mAnimationListener);
 	    mAlphaDown.setInterpolator(new AccelerateInterpolator());
 	    mAlphaUp.setInterpolator(new AccelerateInterpolator());
-	    
-	    mPdDownloadLyrics = new ProgressDialog(getActivity());
+
+        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+            mPdDownloadLyrics = new ProgressDialog(getActivity(), ProgressDialog.THEME_HOLO_LIGHT);
+        } else {
+            mPdDownloadLyrics = new ProgressDialog(getActivity());
+        }
 	    mPdDownloadLyrics.setMessage(getString(R.string.player_download_lyrics));
 	    mPdDownloadLyrics.setCancelable(true);
 	    

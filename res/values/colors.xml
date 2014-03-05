@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="actionbar_start">#6A6A6A</color>
-    <color name="actionbar_end">#3A3A3A</color>
+    <color name="actionbar_border">#edb49b</color>
+    <color name="actionbar">#db6835</color>
     
     <color name="clementine_right">#db6835</color>
     <color name="clementine_left">#af597d</color>
