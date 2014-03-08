@@ -17,15 +17,15 @@
 
 package de.qspool.clementineremote.backend.receivers;
 
-import de.qspool.clementineremote.App;
-import de.qspool.clementineremote.backend.pb.ClementineMessage;
-import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Message;
 import android.view.KeyEvent;
+import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.backend.pb.ClementineMessage;
+import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 
 public class ClementineMediaButtonEventReceiver extends BroadcastReceiver {
 	

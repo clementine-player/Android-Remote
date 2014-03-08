@@ -17,18 +17,16 @@
 
 package de.qspool.clementineremote.backend.player;
 
-import java.util.LinkedList;
-import java.util.List;
-
+import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import com.google.protobuf.ByteString;
-
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata;
 
-import android.annotation.SuppressLint;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Representation of a song

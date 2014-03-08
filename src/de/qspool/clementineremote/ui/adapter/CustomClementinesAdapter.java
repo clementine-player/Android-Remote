@@ -17,10 +17,6 @@
 
 package de.qspool.clementineremote.ui.adapter;
 
-import java.util.List;
-
-import javax.jmdns.ServiceInfo;
-
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
@@ -28,6 +24,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import de.qspool.clementineremote.R;
+
+import javax.jmdns.ServiceInfo;
+import java.util.List;
 
 /**
  * Class is used for displaying the song data

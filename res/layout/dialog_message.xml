@@ -9,7 +9,7 @@
     android:layout_marginTop="7dp"
     android:orientation="vertical"
     android:paddingLeft="15dp"
-    android:paddingRight="15dp" >
+    android:paddingRight="15dp">
 
     <TextView
         android:id="@+id/tvTitle"

@@ -17,17 +17,10 @@
 
 package de.qspool.clementineremote.backend;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import android.annotation.TargetApi;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.*;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
@@ -35,11 +28,7 @@ import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaMetadataRetriever;
 import android.media.RemoteControlClient;
 import android.media.RemoteControlClient.MetadataEditor;
-import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.os.PowerManager;
+import android.os.*;
 import android.support.v4.app.NotificationCompat;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
@@ -55,6 +44,9 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Resp
 import de.qspool.clementineremote.backend.pebble.Pebble;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.backend.receivers.ClementineMediaButtonEventReceiver;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * This Thread-Class is used to communicate with Clementine
@@ -132,7 +124,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 	
 	/**
 	 * Try to connect to Clementine
-	 * @param r The Request Object. Stores the ip to connect to.
+	 * @param message The Request Object. Stores the ip to connect to.
 	 */
 	@Override
 	public boolean createConnection(ClementineMessage message) {

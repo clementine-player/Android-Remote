@@ -17,14 +17,6 @@
 
 package de.qspool.clementineremote.backend;
 
-import de.qspool.clementineremote.App;
-import de.qspool.clementineremote.R;
-import de.qspool.clementineremote.backend.event.OnConnectionClosedListener;
-import de.qspool.clementineremote.backend.pb.ClementineMessage;
-import de.qspool.clementineremote.backend.pb.ClementineMessage.ErrorMessage;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
-import de.qspool.clementineremote.backend.receivers.NotificationReceiver;
-import de.qspool.clementineremote.ui.MainActivity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -36,6 +28,14 @@ import android.os.Message;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
+import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.backend.event.OnConnectionClosedListener;
+import de.qspool.clementineremote.backend.pb.ClementineMessage;
+import de.qspool.clementineremote.backend.pb.ClementineMessage.ErrorMessage;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
+import de.qspool.clementineremote.backend.receivers.NotificationReceiver;
+import de.qspool.clementineremote.ui.MainActivity;
 
 public class ClementineService extends Service {
 	private final static String TAG = "ClementineService";
@@ -62,7 +62,7 @@ public class ClementineService extends Service {
 	
 	/**
 	 * Handle the requests to the service
-	 * @param action The action to perform
+	 * @param intent The action to perform
 	 */
 	private void handleServiceAction(Intent intent) {
 		Log.d(TAG, "handleServiceAction - start");

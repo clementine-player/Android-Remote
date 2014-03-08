@@ -1,10 +1,5 @@
 package de.qspool.clementineremote.utils;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
-import de.qspool.clementineremote.App;
-import de.qspool.clementineremote.R;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
@@ -16,10 +11,15 @@ import android.os.StatFs;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
+import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.R;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class Utilities {
 	@SuppressLint("DefaultLocale")

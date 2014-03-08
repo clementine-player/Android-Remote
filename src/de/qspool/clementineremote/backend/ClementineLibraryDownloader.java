@@ -17,11 +17,6 @@
 
 package de.qspool.clementineremote.backend;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.LinkedList;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -39,6 +34,11 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgT
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseLibraryChunk;
 import de.qspool.clementineremote.backend.player.MyLibrary;
 import de.qspool.clementineremote.utils.Utilities;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.LinkedList;
 
 public class ClementineLibraryDownloader extends
 		AsyncTask<ClementineMessage, Integer, DownloaderResult> {

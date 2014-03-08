@@ -17,11 +17,11 @@
 
 package de.qspool.clementineremote.backend;
 
-import java.lang.ref.WeakReference;
-
 import android.os.Handler;
 import android.os.Message;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
+
+import java.lang.ref.WeakReference;
 
 /**
  * This class receives the handler messages from the ui thread

@@ -17,24 +17,22 @@
 
 package de.qspool.clementineremote.backend.mdns;
 
-import java.io.IOException;
-import java.net.Inet4Address;
-import java.util.LinkedList;
-
-import javax.jmdns.JmDNS;
-import javax.jmdns.ServiceEvent;
-import javax.jmdns.ServiceInfo;
-import javax.jmdns.ServiceListener;
-
-import de.qspool.clementineremote.App;
-import de.qspool.clementineremote.backend.elements.ServiceFound;
-
 import android.annotation.TargetApi;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.MulticastLock;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.backend.elements.ServiceFound;
+
+import javax.jmdns.JmDNS;
+import javax.jmdns.ServiceEvent;
+import javax.jmdns.ServiceInfo;
+import javax.jmdns.ServiceListener;
+import java.io.IOException;
+import java.net.Inet4Address;
+import java.util.LinkedList;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class ClementineMDnsDiscovery {

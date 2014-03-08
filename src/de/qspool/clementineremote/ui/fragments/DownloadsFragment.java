@@ -17,9 +17,6 @@
 
 package de.qspool.clementineremote.ui.fragments;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -28,22 +25,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
-
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.ui.adapter.DownloadAdapter;
 import de.qspool.clementineremote.utils.Utilities;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class DownloadsFragment extends AbstractDrawerFragment {
 	private ActionBar mActionBar; 

@@ -17,16 +17,16 @@
 
 package de.qspool.clementineremote.ui.adapter;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import de.qspool.clementineremote.R;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import de.qspool.clementineremote.R;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class SeparatedListAdapter extends BaseAdapter
 	{

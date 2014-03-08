@@ -8,7 +8,7 @@
     android:layout_marginLeft="13dp"
     android:layout_marginRight="13dp"
     android:layout_marginTop="13dp"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/textView1"
@@ -19,7 +19,7 @@
         android:textColor="@android:color/black"
         android:textSize="30sp"
         android:textStyle="bold" />
-    
+
     <View
         android:id="@+id/view1"
         android:layout_width="fill_parent"
@@ -58,7 +58,7 @@
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:text="@string/donate_one" />
-    
+
     <Button
         android:id="@+id/donate_two"
         style="@style/OrangeButton.Button"
@@ -69,7 +69,7 @@
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:text="@string/donate_two" />
-    
+
     <Button
         android:id="@+id/donate_five"
         style="@style/OrangeButton.Button"

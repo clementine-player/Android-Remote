@@ -17,38 +17,22 @@
 
 package de.qspool.clementineremote.backend.pb;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import android.os.Handler;
 import android.util.Log;
-
 import com.google.protobuf.InvalidProtocolBufferException;
-
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.Clementine.RepeatMode;
 import de.qspool.clementineremote.backend.Clementine.ShuffleMode;
 import de.qspool.clementineremote.backend.pb.ClementineMessage.ErrorMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessage.MessageGroup;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.EngineState;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Lyric;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Playlist;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Repeat;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseActiveChanged;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseClementineInfo;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseCurrentMetadata;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseLyrics;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylistSongs;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylists;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseUpdateTrackPosition;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuffle;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.*;
 import de.qspool.clementineremote.backend.player.LyricsProvider;
 import de.qspool.clementineremote.backend.player.MyPlaylist;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.backend.player.PlaylistManager;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class ClementinePbParser {
 	private PlaylistManager mPlaylistManager;

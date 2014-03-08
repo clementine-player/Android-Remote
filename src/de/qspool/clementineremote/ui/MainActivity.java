@@ -17,8 +17,6 @@
 
 package de.qspool.clementineremote.ui;
 
-import java.util.LinkedList;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -39,10 +37,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
-
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.Clementine;
@@ -52,6 +48,8 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgT
 import de.qspool.clementineremote.ui.adapter.SeparatedListAdapter;
 import de.qspool.clementineremote.ui.fragments.*;
 import de.qspool.clementineremote.utils.Utilities;
+
+import java.util.LinkedList;
 
 public class MainActivity extends SherlockFragmentActivity {
 	private final static String TAG = "MainActivity";

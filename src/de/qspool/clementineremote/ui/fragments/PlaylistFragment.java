@@ -17,10 +17,6 @@
 
 package de.qspool.clementineremote.ui.fragments;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.graphics.drawable.Drawable;
@@ -38,7 +34,6 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
-
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 import com.actionbarsherlock.view.ActionMode;
@@ -46,7 +41,6 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
-
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.ClementineSongDownloader;
@@ -58,6 +52,10 @@ import de.qspool.clementineremote.backend.player.MyPlaylist;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.backend.player.PlaylistManager;
 import de.qspool.clementineremote.ui.adapter.PlaylistSongAdapter;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class PlaylistFragment extends AbstractDrawerFragment {
 	public final static String PLAYLIST_ID = "playlist_id";

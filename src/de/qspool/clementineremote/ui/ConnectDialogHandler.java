@@ -17,13 +17,13 @@
 
 package de.qspool.clementineremote.ui;
 
-import java.lang.ref.WeakReference;
-
 import android.os.Handler;
 import android.os.Message;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.elements.ServiceFound;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
+
+import java.lang.ref.WeakReference;
 
 /**
  * This class is used to handle the messages sent from the

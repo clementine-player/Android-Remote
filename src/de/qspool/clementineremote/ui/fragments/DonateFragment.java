@@ -26,22 +26,16 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
-
 import com.actionbarsherlock.app.ActionBar;
-
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.VendingKey;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.player.MySong;
-import de.qspool.clementineremote.utils.IabHelper;
+import de.qspool.clementineremote.utils.*;
 import de.qspool.clementineremote.utils.IabHelper.OnConsumeFinishedListener;
 import de.qspool.clementineremote.utils.IabHelper.OnIabPurchaseFinishedListener;
 import de.qspool.clementineremote.utils.IabHelper.QueryInventoryFinishedListener;
-import de.qspool.clementineremote.utils.IabResult;
-import de.qspool.clementineremote.utils.Inventory;
-import de.qspool.clementineremote.utils.Purchase;
-import de.qspool.clementineremote.utils.Utilities;
 
 public class DonateFragment extends AbstractDrawerFragment {
 	private final static String TAG = "DonateFragment";

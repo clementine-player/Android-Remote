@@ -17,8 +17,6 @@
 
 package de.qspool.clementineremote.ui.fragments;
 
-import java.util.LinkedList;
-
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.os.Build;
@@ -26,12 +24,8 @@ import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
 import android.util.SparseBooleanArray;
-import android.view.ActionMode;
-import android.view.ContextMenu;
+import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
@@ -39,13 +33,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
-
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.ClementineLibraryDownloader;
@@ -61,6 +53,8 @@ import de.qspool.clementineremote.backend.player.MyLibraryItem;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.ui.adapter.LibraryAdapter;
 import de.qspool.clementineremote.utils.Utilities;
+
+import java.util.LinkedList;
 
 public class LibraryFragment extends AbstractDrawerFragment implements
 		OnLibrarySelectFinishedListener {

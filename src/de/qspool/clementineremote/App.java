@@ -17,13 +17,13 @@
 
 package de.qspool.clementineremote;
 
-import java.util.LinkedList;
-
 import android.app.Application;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementineLibraryDownloader;
 import de.qspool.clementineremote.backend.ClementinePlayerConnection;
 import de.qspool.clementineremote.backend.ClementineSongDownloader;
+
+import java.util.LinkedList;
 
 public class App extends Application {
 	public static ClementinePlayerConnection mClementineConnection = null;

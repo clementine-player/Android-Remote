@@ -17,17 +17,17 @@
 
 package de.qspool.clementineremote.backend;
 
+import android.util.Log;
+import de.qspool.clementineremote.backend.pb.ClementineMessage;
+import de.qspool.clementineremote.backend.pb.ClementineMessage.ErrorMessage;
+import de.qspool.clementineremote.backend.pb.ClementinePbParser;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
-
-import android.util.Log;
-import de.qspool.clementineremote.backend.pb.ClementineMessage;
-import de.qspool.clementineremote.backend.pb.ClementinePbParser;
-import de.qspool.clementineremote.backend.pb.ClementineMessage.ErrorMessage;
 
 public class ClementineSimpleConnection {
 	// Socket, input and output streams
@@ -40,7 +40,7 @@ public class ClementineSimpleConnection {
 	
 	/**
 	 * Try to connect to Clementine
-	 * @param r The Request Object. Stores the ip to connect to.
+	 * @param message The Request Object. Stores the ip to connect to.
 	 * @throws IOException 
 	 */
 	public boolean createConnection(ClementineMessage message) {
@@ -62,7 +62,7 @@ public class ClementineSimpleConnection {
 	
 	/**
 	 * Send a request to clementine
-	 * @param r The request as a RequestToThread object
+	 * @param message The request as a RequestToThread object
 	 * @return true if data was sent, false if not
 	 */
 	public boolean sendRequest(ClementineMessage message) {
@@ -115,7 +115,7 @@ public class ClementineSimpleConnection {
 	
 	/**
 	 * Disconnect from Clementine
-	 * @param r The RequestDisconnect Object
+	 * @param message The RequestDisconnect Object
 	 */
 	public void disconnect(ClementineMessage message) {
 		if (isConnected()) {			

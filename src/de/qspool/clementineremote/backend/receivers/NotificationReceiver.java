@@ -17,13 +17,13 @@
 
 package de.qspool.clementineremote.backend.receivers;
 
-import de.qspool.clementineremote.App;
-import de.qspool.clementineremote.backend.pb.ClementineMessage;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Message;
+import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.backend.pb.ClementineMessage;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 
 public class NotificationReceiver extends BroadcastReceiver {
 	public static final String PLAYPAUSE = "de.qspool.clementineremote.playpause";

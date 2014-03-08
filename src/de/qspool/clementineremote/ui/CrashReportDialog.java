@@ -17,19 +17,19 @@
 
 package de.qspool.clementineremote.ui;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-
-import de.qspool.clementineremote.App;
-import de.qspool.clementineremote.R;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.R;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class CrashReportDialog {
 	private Context mContext;

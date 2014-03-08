@@ -17,23 +17,18 @@
 
 package de.qspool.clementineremote.ui.adapter;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Filterable;
-import android.widget.ImageButton;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.ClementineSongDownloader;
+
+import java.util.List;
 
 /**
  * Class is used for displaying the song data

@@ -29,9 +29,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
-
 import com.android.vending.billing.IInAppBillingService;
-
 import org.json.JSONException;
 
 import java.util.ArrayList;

@@ -1,29 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true" >
+    <item android:state_pressed="true">
         <shape>
-          <solid
-            android:color="@color/orange_light" />
-            <corners
-                android:radius="0dp" />
-            <padding
-                android:left="10dp"
-                android:top="10dp"
-                android:right="10dp"
-                android:bottom="10dp" />
+            <solid android:color="@color/orange_light" />
+            <corners android:radius="0dp" />
+            <padding android:left="10dp" android:top="10dp" android:right="10dp" android:bottom="10dp" />
         </shape>
     </item>
     <item>
         <shape>
-            <solid
-              android:color="@color/orange" />
-            <corners
-                android:radius="0dp" />
-            <padding
-                android:left="10dp"
-                android:top="10dp"
-                android:right="10dp"
-                android:bottom="10dp" />
+            <solid android:color="@color/orange" />
+            <corners android:radius="0dp" />
+            <padding android:left="10dp" android:top="10dp" android:right="10dp" android:bottom="10dp" />
         </shape>
     </item>
 </selector>

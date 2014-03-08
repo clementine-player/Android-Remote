@@ -17,10 +17,6 @@
 
 package de.qspool.clementineremote.backend;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -49,6 +45,10 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Resp
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.ui.MainActivity;
 import de.qspool.clementineremote.utils.Utilities;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class ClementineSongDownloader extends
 		AsyncTask<ClementineMessage, Integer, DownloaderResult> {

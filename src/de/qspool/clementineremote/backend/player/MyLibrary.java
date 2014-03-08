@@ -17,9 +17,6 @@
 
 package de.qspool.clementineremote.backend.player;
 
-import java.io.File;
-import java.util.LinkedList;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -29,6 +26,9 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.event.OnLibrarySelectFinishedListener;
+
+import java.io.File;
+import java.util.LinkedList;
 
 public class MyLibrary extends
 		AsyncTask<Integer, Void, LinkedList<MyLibraryItem>> {

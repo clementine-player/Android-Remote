@@ -1,12 +1,5 @@
 package de.qspool.clementineremote.ui;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -15,8 +8,14 @@ import android.content.DialogInterface.OnClickListener;
 import android.os.Environment;
 import android.util.Log;
 import de.qspool.clementineremote.R;
-import de.qspool.clementineremote.ui.ListenerList;
 import de.qspool.clementineremote.ui.ListenerList.FireHandler;
+
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
 
 public class FileDialog {
     private static final String PARENT_DIR = "..";
@@ -35,10 +34,6 @@ public class FileDialog {
     private boolean selectDirectoryOption;
     private String fileEndsWith;    
 
-    /**
-     * @param activity 
-     * @param initialPath
-     */
     public FileDialog(Activity activity, File path) {
         this.activity = activity;
         if (!path.exists()) path = Environment.getExternalStorageDirectory();

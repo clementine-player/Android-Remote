@@ -17,26 +17,11 @@
 
 package de.qspool.clementineremote.backend.pb;
 
-import java.util.LinkedList;
-
 import de.qspool.clementineremote.App;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Repeat;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestChangeSong;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestConnect;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestDownloadSongs;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestInsertUrls;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestPlaylistSongs;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRemoveSongs;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestSetTrackPosition;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestSetVolume;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongOffer;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuffle;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ShuffleMode;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.*;
 import de.qspool.clementineremote.backend.player.MySong;
+
+import java.util.LinkedList;
 
 /**
  * Creates the protocol buffer messages

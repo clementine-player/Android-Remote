@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/love" 
-          android:title="@string/menu_love"
-          android:icon="@drawable/ab_love"
-          android:showAsAction="always"></item>
-    <item android:id="@+id/ban" 
-          android:title="@string/menu_ban"
-          android:icon="@drawable/ab_ban"
-          android:showAsAction="always"></item>
+    <item
+        android:id="@+id/love"
+        android:title="@string/menu_love"
+        android:icon="@drawable/ab_love"
+        android:showAsAction="always"></item>
+    <item
+        android:id="@+id/ban"
+        android:title="@string/menu_ban"
+        android:icon="@drawable/ab_ban"
+        android:showAsAction="always"></item>
 </menu>

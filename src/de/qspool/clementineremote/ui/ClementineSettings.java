@@ -17,8 +17,6 @@
 
 package de.qspool.clementineremote.ui;
 
-import java.io.File;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,12 +25,8 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
-import android.preference.Preference;
+import android.preference.*;
 import android.preference.Preference.OnPreferenceClickListener;
-import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
@@ -43,14 +37,14 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import com.actionbarsherlock.view.MenuItem;
-
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.utils.Utilities;
+
+import java.io.File;
 
 /**
  * The settings screen of Clementine Remote

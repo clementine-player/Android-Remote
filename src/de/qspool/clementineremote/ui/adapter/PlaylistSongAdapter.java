@@ -17,9 +17,6 @@
 
 package de.qspool.clementineremote.ui.adapter;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -34,6 +31,9 @@ import android.widget.TextView;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.player.MySong;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Class is used for displaying the song data

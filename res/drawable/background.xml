@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-	<item>
-	    <shape>
-	        <gradient
-	            android:startColor="@color/clementine_left"
-	            android:endColor="@color/clementine_right" />
-	    </shape>
-	</item>
+    <item>
+        <shape>
+            <gradient android:startColor="@color/clementine_left" android:endColor="@color/clementine_right" />
+        </shape>
+    </item>
 </selector>

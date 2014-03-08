@@ -17,14 +17,14 @@
 
 package de.qspool.clementineremote.backend.player;
 
-import java.util.Collection;
-import java.util.LinkedList;
-
 import android.os.Message;
 import android.util.SparseArray;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.event.OnPlaylistReceivedListener;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
+
+import java.util.Collection;
+import java.util.LinkedList;
 
 public class PlaylistManager {
 	private LinkedList<OnPlaylistReceivedListener> listeners = new LinkedList<OnPlaylistReceivedListener>();
