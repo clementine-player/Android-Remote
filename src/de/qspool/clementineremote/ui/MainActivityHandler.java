@@ -19,49 +19,51 @@ package de.qspool.clementineremote.ui;
 
 import android.os.Handler;
 import android.os.Message;
-import de.qspool.clementineremote.backend.pb.ClementineMessage;
 
 import java.lang.ref.WeakReference;
+
+import de.qspool.clementineremote.backend.pb.ClementineMessage;
 
 /**
  * This class is used to handle the messages sent from the
  * connection thread
  */
-public class MainActivityHandler extends Handler {	
-	WeakReference<MainActivity> mDialog;
-	
-	MainActivityHandler(MainActivity playerDialog) {
-		mDialog = new WeakReference<MainActivity>(playerDialog);
-	}
-	
-	@Override
-	public void handleMessage(Message msg) {
-		MainActivity pd = mDialog.get();
-		
-		if (msg.obj instanceof ClementineMessage) {
-			ClementineMessage clementineMessage = (ClementineMessage) msg.obj;
-			
-			if (clementineMessage.isErrorMessage()) {
-				// We have got an error
-				switch (clementineMessage.getErrorMessage()) {
-				case NO_CONNECTION:
-					pd.disconnect();
-					break;
-				default:
-					pd.disconnect();
-					break;
-				}
-			} else {
-				// Okay, normal message
-				switch (clementineMessage.getMessageType()) {
-				case DISCONNECT:
-					pd.disconnect();
-					break;
-				default:
-					pd.MessageFromClementine(clementineMessage);
-					break;
-				}
-			}
-		}
-	}
+public class MainActivityHandler extends Handler {
+
+    WeakReference<MainActivity> mDialog;
+
+    MainActivityHandler(MainActivity playerDialog) {
+        mDialog = new WeakReference<MainActivity>(playerDialog);
+    }
+
+    @Override
+    public void handleMessage(Message msg) {
+        MainActivity pd = mDialog.get();
+
+        if (msg.obj instanceof ClementineMessage) {
+            ClementineMessage clementineMessage = (ClementineMessage) msg.obj;
+
+            if (clementineMessage.isErrorMessage()) {
+                // We have got an error
+                switch (clementineMessage.getErrorMessage()) {
+                    case NO_CONNECTION:
+                        pd.disconnect();
+                        break;
+                    default:
+                        pd.disconnect();
+                        break;
+                }
+            } else {
+                // Okay, normal message
+                switch (clementineMessage.getMessageType()) {
+                    case DISCONNECT:
+                        pd.disconnect();
+                        break;
+                    default:
+                        pd.MessageFromClementine(clementineMessage);
+                        break;
+                }
+            }
+        }
+    }
 }

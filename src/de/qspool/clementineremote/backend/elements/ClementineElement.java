@@ -17,7 +17,8 @@
 
 package de.qspool.clementineremote.backend.elements;
 
-public class ClementineElement {	
-	ClementineElement() {
-	}
+public class ClementineElement {
+
+    ClementineElement() {
+    }
 }

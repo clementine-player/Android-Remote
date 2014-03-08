@@ -20,42 +20,46 @@ package de.qspool.clementineremote.backend.elements;
 import de.qspool.clementineremote.R;
 
 public class DownloaderResult extends ClementineElement {
-	public enum DownloadResult {SUCCESSFUL, INSUFFIANT_SPACE, NOT_MOUNTED, CONNECTION_ERROR, FOBIDDEN, ONLY_WIFI, CANCELLED};
-	
-	private DownloadResult mResult;
-	
-	public DownloaderResult(DownloadResult result) {
-		mResult = result;
-	}
-	  
-	public DownloadResult getResult() {
-		return mResult;
-	}
-	
-	/**
-	 * Returns the resource ID for the corresponding errormessage. 
-	 * For example CONNECTION_ERROR = Connection error
-	 * @return The resource ID for the specific message
-	 */
-	public int getMessageId() {
-		switch (mResult) {
-		case CONNECTION_ERROR:
-			return R.string.download_noti_canceled;
-		case FOBIDDEN:
-			return R.string.download_noti_forbidden;
-		case INSUFFIANT_SPACE:
-			return R.string.download_noti_insufficient_space;
-		case NOT_MOUNTED:
-			return R.string.download_noti_not_mounted;
-		case ONLY_WIFI:
-			return R.string.download_noti_only_wifi;
-		case SUCCESSFUL:
-			return R.string.download_noti_complete;
-		case CANCELLED:
-			return R.string.download_noti_canceled;
-		}
-		
-		return -1;
-	}
-	
+
+    public enum DownloadResult {SUCCESSFUL, INSUFFIANT_SPACE, NOT_MOUNTED, CONNECTION_ERROR, FOBIDDEN, ONLY_WIFI, CANCELLED}
+
+    ;
+
+    private DownloadResult mResult;
+
+    public DownloaderResult(DownloadResult result) {
+        mResult = result;
+    }
+
+    public DownloadResult getResult() {
+        return mResult;
+    }
+
+    /**
+     * Returns the resource ID for the corresponding errormessage.
+     * For example CONNECTION_ERROR = Connection error
+     *
+     * @return The resource ID for the specific message
+     */
+    public int getMessageId() {
+        switch (mResult) {
+            case CONNECTION_ERROR:
+                return R.string.download_noti_canceled;
+            case FOBIDDEN:
+                return R.string.download_noti_forbidden;
+            case INSUFFIANT_SPACE:
+                return R.string.download_noti_insufficient_space;
+            case NOT_MOUNTED:
+                return R.string.download_noti_not_mounted;
+            case ONLY_WIFI:
+                return R.string.download_noti_only_wifi;
+            case SUCCESSFUL:
+                return R.string.download_noti_complete;
+            case CANCELLED:
+                return R.string.download_noti_canceled;
+        }
+
+        return -1;
+    }
+
 }

@@ -24,6 +24,12 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.LinkedList;
+
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.elements.DownloaderResult;
 import de.qspool.clementineremote.backend.elements.DownloaderResult.DownloadResult;
@@ -35,253 +41,255 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Resp
 import de.qspool.clementineremote.backend.player.MyLibrary;
 import de.qspool.clementineremote.utils.Utilities;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.LinkedList;
-
 public class ClementineLibraryDownloader extends
-		AsyncTask<ClementineMessage, Integer, DownloaderResult> {
-	private final String TAG ="ClementineLibraryDownloader";
-	
-	private Context mContext;
-	private SharedPreferences mSharedPref;
-	private ClementineSimpleConnection mClient = new ClementineSimpleConnection();
+        AsyncTask<ClementineMessage, Integer, DownloaderResult> {
 
-	private MyLibrary mLibrary;
+    private final String TAG = "ClementineLibraryDownloader";
 
-	private LinkedList<OnLibraryDownloadListener> listeners = new LinkedList<OnLibraryDownloadListener>();
+    private Context mContext;
 
-	public ClementineLibraryDownloader(Context context) {
-		mContext = context;
-		mLibrary = new MyLibrary(context);
-		mSharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
-	}
+    private SharedPreferences mSharedPref;
 
-	/**
-	 * Add a OnLibraryDownloadFinishedListener. It is emitted when the download
-	 * is finished and the library file is available
-	 * 
-	 * @param l
-	 *            The listener object
-	 */
-	public void addOnLibraryDownloadListener(
-			OnLibraryDownloadListener l) {
-		listeners.add(l);
-	}
-	
-	public void removeOnLibraryDownloadListener(OnLibraryDownloadListener l) {
-		listeners.remove(l);
-	}
+    private ClementineSimpleConnection mClient = new ClementineSimpleConnection();
 
-	@SuppressLint({ "InlinedApi", "NewApi" })
-	public void startDownload(ClementineMessage message) {
+    private MyLibrary mLibrary;
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-			this.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
-		else
-			this.execute(message);
-	}
+    private LinkedList<OnLibraryDownloadListener> listeners
+            = new LinkedList<OnLibraryDownloadListener>();
 
-	@Override
-	protected DownloaderResult doInBackground(ClementineMessage... params) {
-		if (mSharedPref.getBoolean(App.SP_WIFI_ONLY, false)
-				&& !Utilities.onWifi(mContext))
-			return new DownloaderResult(
-					DownloaderResult.DownloadResult.ONLY_WIFI);
+    public ClementineLibraryDownloader(Context context) {
+        mContext = context;
+        mLibrary = new MyLibrary(context);
+        mSharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
+    }
 
-		// First create a connection
-		if (!connect())
-			return new DownloaderResult(
-					DownloaderResult.DownloadResult.CONNECTION_ERROR);
+    /**
+     * Add a OnLibraryDownloadFinishedListener. It is emitted when the download
+     * is finished and the library file is available
+     *
+     * @param l The listener object
+     */
+    public void addOnLibraryDownloadListener(
+            OnLibraryDownloadListener l) {
+        listeners.add(l);
+    }
 
-		// Start the download
-		return startDownloading(params[0]);
-	}
+    public void removeOnLibraryDownloadListener(OnLibraryDownloadListener l) {
+        listeners.remove(l);
+    }
 
-	@Override
-	protected void onProgressUpdate(Integer... progress) {
-		fireOnProgressUpdateListener(progress[0]);
+    @SuppressLint({"InlinedApi", "NewApi"})
+    public void startDownload(ClementineMessage message) {
 
-		// Progress = 100, then we are optimizing the table
-		if (progress[0] == 100) {
-			fireOnOptimizeLibraryListener();
-		}
-	}
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            this.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
+        } else {
+            this.execute(message);
+        }
+    }
 
-	@Override
-	protected void onCancelled() {
-		fireOnLibraryDownloadFinishedListener(new DownloaderResult(
-				DownloaderResult.DownloadResult.CANCELLED));
-	}
+    @Override
+    protected DownloaderResult doInBackground(ClementineMessage... params) {
+        if (mSharedPref.getBoolean(App.SP_WIFI_ONLY, false)
+                && !Utilities.onWifi(mContext)) {
+            return new DownloaderResult(
+                    DownloaderResult.DownloadResult.ONLY_WIFI);
+        }
 
-	@Override
-	protected void onPostExecute(DownloaderResult result) {
-		// Notify the listeners
-		fireOnLibraryDownloadFinishedListener(result);
-	}
+        // First create a connection
+        if (!connect()) {
+            return new DownloaderResult(
+                    DownloaderResult.DownloadResult.CONNECTION_ERROR);
+        }
 
-	/**
-	 * Connect to Clementine
-	 * 
-	 * @return true if the connection was established, false if not
-	 */
-	private boolean connect() {
-		String ip = mSharedPref.getString(App.SP_KEY_IP, "");
-		int port;
-		try {
-			port = Integer.valueOf(mSharedPref.getString(App.SP_KEY_PORT,
-					String.valueOf(Clementine.DefaultPort)));
-		} catch (NumberFormatException e) {
-			port = Clementine.DefaultPort;
-		}
-		int authCode = mSharedPref.getInt(App.SP_LAST_AUTH_CODE, 0);
+        // Start the download
+        return startDownloading(params[0]);
+    }
 
-		return mClient.createConnection(ClementineMessageFactory
-				.buildConnectMessage(ip, port, authCode, false, true));
-	}
+    @Override
+    protected void onProgressUpdate(Integer... progress) {
+        fireOnProgressUpdateListener(progress[0]);
 
-	/**
-	 * Start the Download
-	 */
-	private DownloaderResult startDownloading(
-			ClementineMessage clementineMessage) {
-		boolean downloadFinished = false;
-		DownloaderResult result = new DownloaderResult(
-				DownloadResult.SUCCESSFUL);
-		File f = null;
-		FileOutputStream fo = null;
+        // Progress = 100, then we are optimizing the table
+        if (progress[0] == 100) {
+            fireOnOptimizeLibraryListener();
+        }
+    }
 
-		publishProgress(0);
+    @Override
+    protected void onCancelled() {
+        fireOnLibraryDownloadFinishedListener(new DownloaderResult(
+                DownloaderResult.DownloadResult.CANCELLED));
+    }
 
-		// Now request the songs
-		mClient.sendRequest(clementineMessage);
+    @Override
+    protected void onPostExecute(DownloaderResult result) {
+        // Notify the listeners
+        fireOnLibraryDownloadFinishedListener(result);
+    }
 
-		while (!downloadFinished) {
-			// Check if the user canceled the process
-			if (isCancelled()) {
-				// Close the stream and delete the incomplete file
-				try {
-					if (fo != null) {
-						fo.flush();
-						fo.close();
-					}
-					if (f != null)
-						f.delete();
-				} catch (IOException e) {
-				}
-				Log.d(TAG, "isCancelled");
-				break;
-			}
+    /**
+     * Connect to Clementine
+     *
+     * @return true if the connection was established, false if not
+     */
+    private boolean connect() {
+        String ip = mSharedPref.getString(App.SP_KEY_IP, "");
+        int port;
+        try {
+            port = Integer.valueOf(mSharedPref.getString(App.SP_KEY_PORT,
+                    String.valueOf(Clementine.DefaultPort)));
+        } catch (NumberFormatException e) {
+            port = Clementine.DefaultPort;
+        }
+        int authCode = mSharedPref.getInt(App.SP_LAST_AUTH_CODE, 0);
 
-			// Get the raw protocol buffer
-			ClementineMessage message = mClient.getProtoc();
+        return mClient.createConnection(ClementineMessageFactory
+                .buildConnectMessage(ip, port, authCode, false, true));
+    }
 
-			if (message.isErrorMessage()) {
-				result = new DownloaderResult(DownloadResult.CONNECTION_ERROR);
-				break;
-			}
+    /**
+     * Start the Download
+     */
+    private DownloaderResult startDownloading(
+            ClementineMessage clementineMessage) {
+        boolean downloadFinished = false;
+        DownloaderResult result = new DownloaderResult(
+                DownloadResult.SUCCESSFUL);
+        File f = null;
+        FileOutputStream fo = null;
 
-			// Is the download forbidden?
-			if (message.getMessageType() == MsgType.DISCONNECT) {
-				result = new DownloaderResult(DownloadResult.FOBIDDEN);
-				break;
-			}
+        publishProgress(0);
 
-			// Ignore other elements!
-			if (message.getMessageType() != MsgType.LIBRARY_CHUNK)
-				continue;
+        // Now request the songs
+        mClient.sendRequest(clementineMessage);
 
-			ResponseLibraryChunk chunk = message.getMessage()
-					.getResponseLibraryChunk();
+        while (!downloadFinished) {
+            // Check if the user canceled the process
+            if (isCancelled()) {
+                // Close the stream and delete the incomplete file
+                try {
+                    if (fo != null) {
+                        fo.flush();
+                        fo.close();
+                    }
+                    if (f != null) {
+                        f.delete();
+                    }
+                } catch (IOException e) {
+                }
+                Log.d(TAG, "isCancelled");
+                break;
+            }
 
-			try {
-				// Check if we need to create a new file
-				if (f == null) {
-					// Check if we have enougth free space
-					// size times 2, because we optimise the table later and
-					// need space for that too!
-					if ((chunk.getSize() * 2) > Utilities.getFreeSpaceExternal()) {
-						result = new DownloaderResult(
-								DownloadResult.INSUFFIANT_SPACE);
-						break;
-					}
-					f = mLibrary.getLibraryDb();
+            // Get the raw protocol buffer
+            ClementineMessage message = mClient.getProtoc();
 
-					// User wants to override files, so delete it here!
-					// The check was already done in processSongOffer()
-					if (f.exists()) {
-						f.delete();
-					}
+            if (message.isErrorMessage()) {
+                result = new DownloaderResult(DownloadResult.CONNECTION_ERROR);
+                break;
+            }
 
-					f.createNewFile();
-					fo = new FileOutputStream(f);
-				}
+            // Is the download forbidden?
+            if (message.getMessageType() == MsgType.DISCONNECT) {
+                result = new DownloaderResult(DownloadResult.FOBIDDEN);
+                break;
+            }
 
-				// Write chunk to sdcard
-				fo.write(chunk.getData().toByteArray());
-				
-				// Have we downloaded all chunks?
-				if (chunk.getChunkCount() == chunk.getChunkNumber()) {
-					fo.flush();
-					fo.close();
-					f = null;
-					downloadFinished = true;
-				}
+            // Ignore other elements!
+            if (message.getMessageType() != MsgType.LIBRARY_CHUNK) {
+                continue;
+            }
 
-				// Update notification
-				updateProgress(chunk);
-			} catch (IOException e) {
-				result = new DownloaderResult(
-						DownloaderResult.DownloadResult.NOT_MOUNTED);
-				break;
-			} 
-		}
+            ResponseLibraryChunk chunk = message.getMessage()
+                    .getResponseLibraryChunk();
 
-		// Disconnect at the end
-		mClient.disconnect(ClementineMessage.getMessage(MsgType.DISCONNECT));
-		
-		// Optimize library table
-		if (mLibrary.getLibraryDb().exists()) {
-			mLibrary.optimizeTable();
-		}
+            try {
+                // Check if we need to create a new file
+                if (f == null) {
+                    // Check if we have enougth free space
+                    // size times 2, because we optimise the table later and
+                    // need space for that too!
+                    if ((chunk.getSize() * 2) > Utilities.getFreeSpaceExternal()) {
+                        result = new DownloaderResult(
+                                DownloadResult.INSUFFIANT_SPACE);
+                        break;
+                    }
+                    f = mLibrary.getLibraryDb();
 
-		return result;
-	}
+                    // User wants to override files, so delete it here!
+                    // The check was already done in processSongOffer()
+                    if (f.exists()) {
+                        f.delete();
+                    }
 
-	/**
-	 * Updates the current notification
-	 * 
-	 * @param chunk
-	 *            The current downloaded chunk
-	 */
-	private void updateProgress(ResponseLibraryChunk chunk) {
-		// Update notification
-		double progress = ((double) chunk.getChunkNumber() / (double) chunk
-				.getChunkCount()) * 100;
+                    f.createNewFile();
+                    fo = new FileOutputStream(f);
+                }
 
-		publishProgress((int) progress);
-	}
+                // Write chunk to sdcard
+                fo.write(chunk.getData().toByteArray());
 
-	/*
-	 * Fire the listeners
-	 */
-	private void fireOnLibraryDownloadFinishedListener(DownloaderResult result) {
-		for (OnLibraryDownloadListener l : listeners) {
-			l.OnLibraryDownloadFinished(result);
-		}
-	}
-	
-	private void fireOnOptimizeLibraryListener() {
-		for (OnLibraryDownloadListener l : listeners) {
-			l.OnOptimizeLibrary();
-		}
-	}
-	
-	private void fireOnProgressUpdateListener(int progress) {
-		for (OnLibraryDownloadListener l : listeners) {
-			l.OnProgressUpdate(progress);
-		}
-	}
+                // Have we downloaded all chunks?
+                if (chunk.getChunkCount() == chunk.getChunkNumber()) {
+                    fo.flush();
+                    fo.close();
+                    f = null;
+                    downloadFinished = true;
+                }
+
+                // Update notification
+                updateProgress(chunk);
+            } catch (IOException e) {
+                result = new DownloaderResult(
+                        DownloaderResult.DownloadResult.NOT_MOUNTED);
+                break;
+            }
+        }
+
+        // Disconnect at the end
+        mClient.disconnect(ClementineMessage.getMessage(MsgType.DISCONNECT));
+
+        // Optimize library table
+        if (mLibrary.getLibraryDb().exists()) {
+            mLibrary.optimizeTable();
+        }
+
+        return result;
+    }
+
+    /**
+     * Updates the current notification
+     *
+     * @param chunk The current downloaded chunk
+     */
+    private void updateProgress(ResponseLibraryChunk chunk) {
+        // Update notification
+        double progress = ((double) chunk.getChunkNumber() / (double) chunk
+                .getChunkCount()) * 100;
+
+        publishProgress((int) progress);
+    }
+
+    /*
+     * Fire the listeners
+     */
+    private void fireOnLibraryDownloadFinishedListener(DownloaderResult result) {
+        for (OnLibraryDownloadListener l : listeners) {
+            l.OnLibraryDownloadFinished(result);
+        }
+    }
+
+    private void fireOnOptimizeLibraryListener() {
+        for (OnLibraryDownloadListener l : listeners) {
+            l.OnOptimizeLibrary();
+        }
+    }
+
+    private void fireOnProgressUpdateListener(int progress) {
+        for (OnLibraryDownloadListener l : listeners) {
+            l.OnProgressUpdate(progress);
+        }
+    }
 
 }

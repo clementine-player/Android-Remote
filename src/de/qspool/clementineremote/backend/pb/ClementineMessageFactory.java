@@ -17,217 +17,254 @@
 
 package de.qspool.clementineremote.backend.pb;
 
-import de.qspool.clementineremote.App;
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.*;
-import de.qspool.clementineremote.backend.player.MySong;
-
 import java.util.LinkedList;
+
+import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Repeat;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestChangeSong;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestConnect;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestDownloadSongs;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestInsertUrls;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestPlaylistSongs;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRateSong;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRemoveSongs;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestSetTrackPosition;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestSetVolume;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongOffer;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuffle;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ShuffleMode;
+import de.qspool.clementineremote.backend.player.MySong;
 
 /**
  * Creates the protocol buffer messages
  */
 public class ClementineMessageFactory {
-	
-	private ClementineMessageFactory() {}
-	
-	/**
-	 * Create a song offer response
-	 * @param msg The message itself
-	 * @param r A SongOfferResponse
-	 * @return ResponseSongOffer Builder for protocol buffer message
-	 */
-	public static ClementineMessage buildSongOfferResponse(boolean accepted) {
-		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.SONG_OFFER_RESPONSE);
-		ResponseSongOffer.Builder offer = msg.getResponseSongOfferBuilder();
-		offer.setAccepted(accepted);
-		return new ClementineMessage(msg);
-	}
 
-	/**
-	 * Create a download song message
-	 * @param msg The message itself
-	 * @param r The download request
-	 * @return The built request
-	 */
-	public static ClementineMessage buildDownloadSongsMessage(int playlistId, DownloadItem downloadItem) {
-		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.DOWNLOAD_SONGS);
-		RequestDownloadSongs.Builder request = msg.getRequestDownloadSongsBuilder();
-		
-		request.setPlaylistId(playlistId);
-		request.setDownloadItem(downloadItem);
-		
-		return new ClementineMessage(msg);
-	}
+    private ClementineMessageFactory() {
+    }
 
-	/**
-	 * Create the volume specific message
-	 * @param msg The Message itself
-	 * @param r The Request
-	 * @return the Volume message part
-	 */
-	public static ClementineMessage buildVolumeMessage(int volume) {
-		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.SET_VOLUME);
-		
-		RequestSetVolume.Builder requestSetVolume = msg.getRequestSetVolumeBuilder();
-		requestSetVolume.setVolume(volume);
-		
-		return new ClementineMessage(msg);
-	}
-	
-	/**
-	 * Create the connect specific message
-	 * @param msg The Message itself
-	 * @param r The Request
-	 * @return the connect message part
-	 */
-	public static ClementineMessage buildConnectMessage(String ip, int port, int authCode, boolean getPlaylistSongs, boolean isDownloader) {
-		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.CONNECT);
-		
-		RequestConnect.Builder requestConnect = msg.getRequestConnectBuilder();
-		
-		requestConnect.setAuthCode(authCode);
-		requestConnect.setSendPlaylistSongs(getPlaylistSongs);
-		requestConnect.setDownloader(isDownloader);
-		
-		ClementineMessage clementineMessage = new ClementineMessage(msg);
-		clementineMessage.setIp(ip);
-		clementineMessage.setPort(port);
-		
-		return clementineMessage;
-	}
-	
-	/**
-	 * Build shuffle Message
-	 * @param msg The root message
-	 * @return The created element
-	 */
-	public static ClementineMessage buildShuffle() {
-		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.SHUFFLE);
-		
-		Shuffle.Builder shuffle = msg.getShuffleBuilder();
-		
-		switch (App.mClementine.getShuffleMode()) {
-		case OFF: 		shuffle.setShuffleMode(ShuffleMode.Shuffle_Off);
-						break;
-		case ALL:		shuffle.setShuffleMode(ShuffleMode.Shuffle_All);
-						break;
-		case INSIDE_ALBUM:	shuffle.setShuffleMode(ShuffleMode.Shuffle_InsideAlbum);
-							break;
-		case ALBUMS:	shuffle.setShuffleMode(ShuffleMode.Shuffle_Albums);
-						break;
-		}
-		return new ClementineMessage(msg);
-	}
+    /**
+     * Create a song offer response
+     *
+     * @param msg The message itself
+     * @param r   A SongOfferResponse
+     * @return ResponseSongOffer Builder for protocol buffer message
+     */
+    public static ClementineMessage buildSongOfferResponse(boolean accepted) {
+        Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.SONG_OFFER_RESPONSE);
+        ResponseSongOffer.Builder offer = msg.getResponseSongOfferBuilder();
+        offer.setAccepted(accepted);
+        return new ClementineMessage(msg);
+    }
 
-	/**
-	 * Build Repeat Message
-	 * @param msg The root message
-	 * @return The created element
-	 */
-	public static ClementineMessage buildRepeat() {
-		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.REPEAT);
-		
-		Repeat.Builder repeat = msg.getRepeatBuilder();
-		
-		switch (App.mClementine.getRepeatMode()) {
-		case OFF: 		repeat.setRepeatMode(ClementineRemoteProtocolBuffer.RepeatMode.Repeat_Off);
-						break;
-		case TRACK:		repeat.setRepeatMode(ClementineRemoteProtocolBuffer.RepeatMode.Repeat_Track);
-						break;
-		case ALBUM:		repeat.setRepeatMode(ClementineRemoteProtocolBuffer.RepeatMode.Repeat_Album);
-						break;
-		case PLAYLIST:	repeat.setRepeatMode(ClementineRemoteProtocolBuffer.RepeatMode.Repeat_Playlist);
-						break;
-		}
-		return new ClementineMessage(msg);
-	}
-	
-	/**
-	 * Request all Songs in current playlist
-	 * @param msg The root message
-	 * @param r The Request Object
-	 * @return The Builder for the Message
-	 */
-	public static ClementineMessage buildRequestPlaylistSongs(int playlistId) {
-		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.REQUEST_PLAYLIST_SONGS);
-		
-		RequestPlaylistSongs.Builder requestPlaylistSongs = msg.getRequestPlaylistSongsBuilder();
-		
-		requestPlaylistSongs.setId(playlistId);
-		
-		return new ClementineMessage(msg);
-	}
-	
-	/**
-	 * Request all Songs in current playlist
-	 * @param msg The root message
-	 * @param r The Request Object
-	 * @return The Builder for the Message
-	 */
-	public static ClementineMessage buildRequestChangeSong(int songIndex, int playlistId) {
-		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.CHANGE_SONG);
-		
-		RequestChangeSong.Builder request = msg.getRequestChangeSongBuilder();
-		
-		request.setSongIndex(songIndex);
-		request.setPlaylistId(playlistId);
-		
-		return new ClementineMessage(msg);
-	}
-	
-	/**
-	 * Request to set the track position
-	 * @param msg The root message
-	 * @return The Clementine message
-	 */
-	public static ClementineMessage buildTrackPosition(int position) {
-		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.SET_TRACK_POSITION);
-		
-		RequestSetTrackPosition.Builder request = msg.getRequestSetTrackPositionBuilder();
-		request.setPosition(position);
-		
-		return new ClementineMessage(msg);
-	}
-	
-	/**
-	 * Rate the current track
-	 * @param rating the rating from 0 to 1. Multiply five times for star count
-	 * @return the Clementine Message
-	 */
-	public static ClementineMessage buildRateTrack(float rating) {
-		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.RATE_SONG);
-		
-		RequestRateSong.Builder request = msg.getRequestRateSongBuilder();
-		request.setRating(rating);
-		
-		return new ClementineMessage(msg);
-	}
-	
-	/**
-	 * Inserts a song into given playlist
-	 * @param playistId The id of the playlist
-	 * @param url The url to the item
-	 * @return the Clementine Message
-	 */
-	public static ClementineMessage buildInsertUrl(int playistId, LinkedList<String> urls) {
-		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.INSERT_URLS);
-		
-		RequestInsertUrls.Builder insertUrls = msg.getRequestInsertUrlsBuilder();
-		insertUrls.setPlaylistId(playistId);
-		for (String url : urls) {
-			insertUrls.addUrls(url);
-		}
-		
-		return new ClementineMessage(msg);
-	}
-	
-	public static ClementineMessage buildRemoveSongFromPlaylist(int playlistId, MySong song) {
-		Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.REMOVE_SONGS);
-		
-		RequestRemoveSongs.Builder removeItems = msg.getRequestRemoveSongsBuilder();
-		removeItems.setPlaylistId(playlistId);
-		removeItems.addSongs(song.getIndex());
-		
-		return new ClementineMessage(msg);
-	}
+    /**
+     * Create a download song message
+     *
+     * @param msg The message itself
+     * @param r   The download request
+     * @return The built request
+     */
+    public static ClementineMessage buildDownloadSongsMessage(int playlistId,
+            DownloadItem downloadItem) {
+        Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.DOWNLOAD_SONGS);
+        RequestDownloadSongs.Builder request = msg.getRequestDownloadSongsBuilder();
+
+        request.setPlaylistId(playlistId);
+        request.setDownloadItem(downloadItem);
+
+        return new ClementineMessage(msg);
+    }
+
+    /**
+     * Create the volume specific message
+     *
+     * @param msg The Message itself
+     * @param r   The Request
+     * @return the Volume message part
+     */
+    public static ClementineMessage buildVolumeMessage(int volume) {
+        Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.SET_VOLUME);
+
+        RequestSetVolume.Builder requestSetVolume = msg.getRequestSetVolumeBuilder();
+        requestSetVolume.setVolume(volume);
+
+        return new ClementineMessage(msg);
+    }
+
+    /**
+     * Create the connect specific message
+     *
+     * @param msg The Message itself
+     * @param r   The Request
+     * @return the connect message part
+     */
+    public static ClementineMessage buildConnectMessage(String ip, int port, int authCode,
+            boolean getPlaylistSongs, boolean isDownloader) {
+        Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.CONNECT);
+
+        RequestConnect.Builder requestConnect = msg.getRequestConnectBuilder();
+
+        requestConnect.setAuthCode(authCode);
+        requestConnect.setSendPlaylistSongs(getPlaylistSongs);
+        requestConnect.setDownloader(isDownloader);
+
+        ClementineMessage clementineMessage = new ClementineMessage(msg);
+        clementineMessage.setIp(ip);
+        clementineMessage.setPort(port);
+
+        return clementineMessage;
+    }
+
+    /**
+     * Build shuffle Message
+     *
+     * @param msg The root message
+     * @return The created element
+     */
+    public static ClementineMessage buildShuffle() {
+        Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.SHUFFLE);
+
+        Shuffle.Builder shuffle = msg.getShuffleBuilder();
+
+        switch (App.mClementine.getShuffleMode()) {
+            case OFF:
+                shuffle.setShuffleMode(ShuffleMode.Shuffle_Off);
+                break;
+            case ALL:
+                shuffle.setShuffleMode(ShuffleMode.Shuffle_All);
+                break;
+            case INSIDE_ALBUM:
+                shuffle.setShuffleMode(ShuffleMode.Shuffle_InsideAlbum);
+                break;
+            case ALBUMS:
+                shuffle.setShuffleMode(ShuffleMode.Shuffle_Albums);
+                break;
+        }
+        return new ClementineMessage(msg);
+    }
+
+    /**
+     * Build Repeat Message
+     *
+     * @param msg The root message
+     * @return The created element
+     */
+    public static ClementineMessage buildRepeat() {
+        Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.REPEAT);
+
+        Repeat.Builder repeat = msg.getRepeatBuilder();
+
+        switch (App.mClementine.getRepeatMode()) {
+            case OFF:
+                repeat.setRepeatMode(ClementineRemoteProtocolBuffer.RepeatMode.Repeat_Off);
+                break;
+            case TRACK:
+                repeat.setRepeatMode(ClementineRemoteProtocolBuffer.RepeatMode.Repeat_Track);
+                break;
+            case ALBUM:
+                repeat.setRepeatMode(ClementineRemoteProtocolBuffer.RepeatMode.Repeat_Album);
+                break;
+            case PLAYLIST:
+                repeat.setRepeatMode(ClementineRemoteProtocolBuffer.RepeatMode.Repeat_Playlist);
+                break;
+        }
+        return new ClementineMessage(msg);
+    }
+
+    /**
+     * Request all Songs in current playlist
+     *
+     * @param msg The root message
+     * @param r   The Request Object
+     * @return The Builder for the Message
+     */
+    public static ClementineMessage buildRequestPlaylistSongs(int playlistId) {
+        Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.REQUEST_PLAYLIST_SONGS);
+
+        RequestPlaylistSongs.Builder requestPlaylistSongs = msg.getRequestPlaylistSongsBuilder();
+
+        requestPlaylistSongs.setId(playlistId);
+
+        return new ClementineMessage(msg);
+    }
+
+    /**
+     * Request all Songs in current playlist
+     *
+     * @param msg The root message
+     * @param r   The Request Object
+     * @return The Builder for the Message
+     */
+    public static ClementineMessage buildRequestChangeSong(int songIndex, int playlistId) {
+        Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.CHANGE_SONG);
+
+        RequestChangeSong.Builder request = msg.getRequestChangeSongBuilder();
+
+        request.setSongIndex(songIndex);
+        request.setPlaylistId(playlistId);
+
+        return new ClementineMessage(msg);
+    }
+
+    /**
+     * Request to set the track position
+     *
+     * @param msg The root message
+     * @return The Clementine message
+     */
+    public static ClementineMessage buildTrackPosition(int position) {
+        Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.SET_TRACK_POSITION);
+
+        RequestSetTrackPosition.Builder request = msg.getRequestSetTrackPositionBuilder();
+        request.setPosition(position);
+
+        return new ClementineMessage(msg);
+    }
+
+    /**
+     * Rate the current track
+     *
+     * @param rating the rating from 0 to 1. Multiply five times for star count
+     * @return the Clementine Message
+     */
+    public static ClementineMessage buildRateTrack(float rating) {
+        Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.RATE_SONG);
+
+        RequestRateSong.Builder request = msg.getRequestRateSongBuilder();
+        request.setRating(rating);
+
+        return new ClementineMessage(msg);
+    }
+
+    /**
+     * Inserts a song into given playlist
+     *
+     * @param playistId The id of the playlist
+     * @param url       The url to the item
+     * @return the Clementine Message
+     */
+    public static ClementineMessage buildInsertUrl(int playistId, LinkedList<String> urls) {
+        Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.INSERT_URLS);
+
+        RequestInsertUrls.Builder insertUrls = msg.getRequestInsertUrlsBuilder();
+        insertUrls.setPlaylistId(playistId);
+        for (String url : urls) {
+            insertUrls.addUrls(url);
+        }
+
+        return new ClementineMessage(msg);
+    }
+
+    public static ClementineMessage buildRemoveSongFromPlaylist(int playlistId, MySong song) {
+        Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.REMOVE_SONGS);
+
+        RequestRemoveSongs.Builder removeItems = msg.getRequestRemoveSongsBuilder();
+        removeItems.setPlaylistId(playlistId);
+        removeItems.addSongs(song.getIndex());
+
+        return new ClementineMessage(msg);
+    }
 }

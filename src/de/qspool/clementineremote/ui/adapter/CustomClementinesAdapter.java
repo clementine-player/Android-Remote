@@ -23,53 +23,62 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import de.qspool.clementineremote.R;
+
+import java.util.List;
 
 import javax.jmdns.ServiceInfo;
-import java.util.List;
+
+import de.qspool.clementineremote.R;
 
 /**
  * Class is used for displaying the song data
  */
 public class CustomClementinesAdapter extends ArrayAdapter<ServiceInfo> {
-	private Context mContext;
-	private List<ServiceInfo> mData;
 
-	public CustomClementinesAdapter(Context context, int resource,
-			List<ServiceInfo> data) {
-		super(context, resource, data);
-		mContext = context;
-		mData = data;
-	}
-	
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		ClementineViewHolder clementineViewHolder;
-		
-		if (convertView == null) {
-			convertView = ((Activity)mContext).getLayoutInflater()
-							.inflate(R.layout.dialog_list_item, parent, false);
-			
-			clementineViewHolder = new ClementineViewHolder();
-			clementineViewHolder.textViewHost = (TextView) convertView.findViewById(R.id.tvClItemHost);
-			clementineViewHolder.textViewIp   = (TextView) convertView.findViewById(R.id.tvClIp);
-			
-			convertView.setTag(clementineViewHolder);
-		} else {
-			clementineViewHolder = (ClementineViewHolder) convertView.getTag();
-		}
+    private Context mContext;
 
-		convertView.setBackgroundResource(R.drawable.listitem_white_border);
-		
-		clementineViewHolder.textViewHost.setText(mData.get(position).getName());
-		clementineViewHolder.textViewIp.setText( mData.get(position).getInet4Addresses()[0].toString().split("/")[1] + ":" + mData.get(position).getPort());
-		
-		return convertView;
-	}
-	
-	private class ClementineViewHolder {
-		public TextView textViewHost;
-		public TextView textViewIp;
-	}
+    private List<ServiceInfo> mData;
+
+    public CustomClementinesAdapter(Context context, int resource,
+            List<ServiceInfo> data) {
+        super(context, resource, data);
+        mContext = context;
+        mData = data;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ClementineViewHolder clementineViewHolder;
+
+        if (convertView == null) {
+            convertView = ((Activity) mContext).getLayoutInflater()
+                    .inflate(R.layout.dialog_list_item, parent, false);
+
+            clementineViewHolder = new ClementineViewHolder();
+            clementineViewHolder.textViewHost = (TextView) convertView
+                    .findViewById(R.id.tvClItemHost);
+            clementineViewHolder.textViewIp = (TextView) convertView.findViewById(R.id.tvClIp);
+
+            convertView.setTag(clementineViewHolder);
+        } else {
+            clementineViewHolder = (ClementineViewHolder) convertView.getTag();
+        }
+
+        convertView.setBackgroundResource(R.drawable.listitem_white_border);
+
+        clementineViewHolder.textViewHost.setText(mData.get(position).getName());
+        clementineViewHolder.textViewIp.setText(
+                mData.get(position).getInet4Addresses()[0].toString().split("/")[1] + ":" + mData
+                        .get(position).getPort());
+
+        return convertView;
+    }
+
+    private class ClementineViewHolder {
+
+        public TextView textViewHost;
+
+        public TextView textViewIp;
+    }
 
 }

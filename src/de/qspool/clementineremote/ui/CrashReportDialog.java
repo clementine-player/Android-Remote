@@ -23,91 +23,99 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import de.qspool.clementineremote.App;
-import de.qspool.clementineremote.R;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.R;
+
 public class CrashReportDialog {
-	private Context mContext;
-	private String mLastTraceFileName;
-	private String mLastSentTraceFileName;
-	private SharedPreferences mSharedPref;
 
-	public CrashReportDialog(Context context) {
-		mContext = context;
-		mSharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-		mLastTraceFileName = App.mClementineExceptionHandler.getLastStracktraceFile();
-		mLastSentTraceFileName = mSharedPref.getString(App.SP_LAST_SEND_STACKTRACE, "");
-	}
-	
-	/**
-	 * Did the app crash last time?
-	 * @return true if it crashed and a dialog will show on showDialogIfTraceExists.
-	 */
-	public boolean hasTrace() {
-		return !(mLastTraceFileName.equals(mLastSentTraceFileName));
-	}
+    private Context mContext;
 
-	public void showDialogIfTraceExists() {
-		if (!hasTrace())
-			return;
+    private String mLastTraceFileName;
+
+    private String mLastSentTraceFileName;
+
+    private SharedPreferences mSharedPref;
+
+    public CrashReportDialog(Context context) {
+        mContext = context;
+        mSharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        mLastTraceFileName = App.mClementineExceptionHandler.getLastStracktraceFile();
+        mLastSentTraceFileName = mSharedPref.getString(App.SP_LAST_SEND_STACKTRACE, "");
+    }
+
+    /**
+     * Did the app crash last time?
+     *
+     * @return true if it crashed and a dialog will show on showDialogIfTraceExists.
+     */
+    public boolean hasTrace() {
+        return !(mLastTraceFileName.equals(mLastSentTraceFileName));
+    }
+
+    public void showDialogIfTraceExists() {
+        if (!hasTrace()) {
+            return;
+        }
 
         AlertDialog.Builder builder;
-        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
             builder = new AlertDialog.Builder(mContext, AlertDialog.THEME_HOLO_LIGHT);
         } else {
             builder = new AlertDialog.Builder(mContext);
         }
-		
-		DialogInterface.OnClickListener dialogOnClickListener = new DialogInterface.OnClickListener() {
-		    @Override
-		    public void onClick(DialogInterface dialog, int which) {
-		        switch (which){
-		        case DialogInterface.BUTTON_POSITIVE:
-		            SendMail();
-		            break;
 
-		        case DialogInterface.BUTTON_NEGATIVE:
-		            break;
-		        }
-		    }
-		};
+        DialogInterface.OnClickListener dialogOnClickListener
+                = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        SendMail();
+                        break;
 
-		builder.setTitle(R.string.crash_report_title);
-		builder.setMessage(R.string.crash_report_message);
-		builder.setPositiveButton(R.string.crash_report_send, dialogOnClickListener);
-		builder.setNegativeButton(R.string.dialog_close, dialogOnClickListener);
-		
-		builder.show();
-		
-		// Save the latest send file (even if it was not send)
-		SharedPreferences.Editor edit = mSharedPref.edit();
-		edit.putString(App.SP_LAST_SEND_STACKTRACE, mLastTraceFileName);
-		edit.commit();
-	}
-	
-	private void SendMail() {
-		String body = "";
-		File f = new File(mLastTraceFileName);
-		try {
-			FileReader reader = new FileReader(f);
-			char[] chars = new char[(int) f.length()];
-			reader.read(chars);
-			body = new String(chars);
-			reader.close();
-		} catch (FileNotFoundException e) {
-		} catch (IOException e) {
-		} 
-		
-		Intent mailIntent = new Intent(Intent.ACTION_SEND);
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+                }
+            }
+        };
+
+        builder.setTitle(R.string.crash_report_title);
+        builder.setMessage(R.string.crash_report_message);
+        builder.setPositiveButton(R.string.crash_report_send, dialogOnClickListener);
+        builder.setNegativeButton(R.string.dialog_close, dialogOnClickListener);
+
+        builder.show();
+
+        // Save the latest send file (even if it was not send)
+        SharedPreferences.Editor edit = mSharedPref.edit();
+        edit.putString(App.SP_LAST_SEND_STACKTRACE, mLastTraceFileName);
+        edit.commit();
+    }
+
+    private void SendMail() {
+        String body = "";
+        File f = new File(mLastTraceFileName);
+        try {
+            FileReader reader = new FileReader(f);
+            char[] chars = new char[(int) f.length()];
+            reader.read(chars);
+            body = new String(chars);
+            reader.close();
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+        }
+
+        Intent mailIntent = new Intent(Intent.ACTION_SEND);
         mailIntent.setType("message/rfc822");
-        mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"asfa194@gmail.com"});
+        mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"asfa194@gmail.com"});
         mailIntent.putExtra(Intent.EXTRA_SUBJECT, "New Crashreport from Clementine Remote");
         mailIntent.putExtra(Intent.EXTRA_TEXT, body);
         mContext.startActivity(Intent.createChooser(mailIntent, "Send email..."));
-	}
+    }
 }

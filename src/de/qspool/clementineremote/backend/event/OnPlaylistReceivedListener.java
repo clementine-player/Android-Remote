@@ -20,7 +20,10 @@ package de.qspool.clementineremote.backend.event;
 import de.qspool.clementineremote.backend.player.MyPlaylist;
 
 public interface OnPlaylistReceivedListener {
-	void onAllRequestedPlaylistSongsReceived();
-	void onPlaylistSongsReceived(final MyPlaylist p);
-	void onPlaylistReceived(final MyPlaylist p);
+
+    void onAllRequestedPlaylistSongsReceived();
+
+    void onPlaylistSongsReceived(final MyPlaylist p);
+
+    void onPlaylistReceived(final MyPlaylist p);
 }

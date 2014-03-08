@@ -24,64 +24,78 @@ import java.util.LinkedList;
  * Representation of a playlist
  */
 public class MyPlaylist {
-	private int mId;
-	private String mName;
-	private int mItemCount;
-	private boolean mActive;
-	private LinkedList<MySong> mPlaylistSongs = new LinkedList<MySong>();
-	private boolean mClosed;
-	
-	public MyPlaylist() {
-	}
-	
-	public int getId() {
-		return mId;
-	}
-	public void setId(int mId) {
-		this.mId = mId;
-	}
-	public String getName() {
-		return mName;
-	}
-	public void setName(String mName) {
-		this.mName = mName;
-	}
-	public int getItemCount() {
-		return mItemCount;
-	}
-	public void setItemCount(int mItemCount) {
-		this.mItemCount = mItemCount;
-	}
-	public boolean isActive() {
-		return mActive;
-	}
-	public void setActive(boolean mActive) {
-		this.mActive = mActive;
-	}
 
-	public LinkedList<MySong> getPlaylistSongs() {
-		return new LinkedList<MySong>(mPlaylistSongs);
-	}
-	
-	public boolean hasSongs() {
-		return !mPlaylistSongs.isEmpty();
-	}
-	
-	/**
-	 * Set the songs the current playlist has. This clears the 
-	 * current List of songs!
-	 * @param songs The songs from the playlist
-	 */
-	public void setSongs(Collection<MySong> songs) {
-		mPlaylistSongs.clear();
-		mPlaylistSongs.addAll(songs);
-	}
+    private int mId;
 
-	public boolean isClosed() {
-		return mClosed;
-	}
+    private String mName;
 
-	public void setClosed(boolean mClosed) {
-		this.mClosed = mClosed;
-	}
+    private int mItemCount;
+
+    private boolean mActive;
+
+    private LinkedList<MySong> mPlaylistSongs = new LinkedList<MySong>();
+
+    private boolean mClosed;
+
+    public MyPlaylist() {
+    }
+
+    public int getId() {
+        return mId;
+    }
+
+    public void setId(int mId) {
+        this.mId = mId;
+    }
+
+    public String getName() {
+        return mName;
+    }
+
+    public void setName(String mName) {
+        this.mName = mName;
+    }
+
+    public int getItemCount() {
+        return mItemCount;
+    }
+
+    public void setItemCount(int mItemCount) {
+        this.mItemCount = mItemCount;
+    }
+
+    public boolean isActive() {
+        return mActive;
+    }
+
+    public void setActive(boolean mActive) {
+        this.mActive = mActive;
+    }
+
+    public LinkedList<MySong> getPlaylistSongs() {
+        return new LinkedList<MySong>(mPlaylistSongs);
+    }
+
+    public boolean hasSongs() {
+        return !mPlaylistSongs.isEmpty();
+    }
+
+    /**
+     * Set the songs the current playlist has. This clears the
+     * current List of songs!
+     *
+     * @param songs The songs from the playlist
+     */
+    public void setSongs(Collection<MySong> songs) {
+        mPlaylistSongs.clear();
+        mPlaylistSongs.addAll(songs);
+    }
+
+    public boolean isClosed() {
+        return mClosed;
+    }
+
+    public void setClosed(boolean mClosed) {
+        this.mClosed = mClosed;
+    }
 }

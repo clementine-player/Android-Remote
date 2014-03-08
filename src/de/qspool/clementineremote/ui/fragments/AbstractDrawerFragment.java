@@ -18,11 +18,13 @@
 package de.qspool.clementineremote.ui.fragments;
 
 import com.actionbarsherlock.app.SherlockFragment;
+
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 
 public abstract class AbstractDrawerFragment extends SherlockFragment implements
-		RemoteDataReceiver {
+        RemoteDataReceiver {
 
-	abstract public void MessageFromClementine(ClementineMessage clementineMessage);
-	abstract public boolean onBackPressed();
+    abstract public void MessageFromClementine(ClementineMessage clementineMessage);
+
+    abstract public boolean onBackPressed();
 }

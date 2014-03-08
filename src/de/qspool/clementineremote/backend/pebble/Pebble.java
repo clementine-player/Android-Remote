@@ -17,98 +17,110 @@
 
 package de.qspool.clementineremote.backend.pebble;
 
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
-import de.qspool.clementineremote.App;
 
 import java.util.LinkedList;
 
+import de.qspool.clementineremote.App;
+
 public class Pebble {
-	private LinkedList<String> mPebbles = new LinkedList<String>();
-	private boolean mUsePebble;
-	private ConnectedBroadcastReceiver mConnectedBroadcastReceiver;
-	private DisconnectedBroadcastReceiver mDisconnectedBroadcastReceiver;
-	
-	public Pebble() {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(App.mApp);
-		
-		// Get the pebble settings
-		mUsePebble = prefs.getBoolean(App.SP_USE_PEBBLE, true);
-		
-		// If we use Pebble, register the broadcast receivers
-		if (mUsePebble) {
-			registerBroadcastReceiver();
-		}
-		
-		// Register a preference change listener
-		prefs.registerOnSharedPreferenceChangeListener(onPrefChangedListener);
-	}
-	
-	/**
-	 * Send the current Song (App.mClementine.getCurrentSong()
-	 * to the pebble
-	 */
-	public void sendMusicUpdateToPebble() {
-		if (mUsePebble && App.mClementine.getCurrentSong() != null) {
-			final Intent i = new Intent("com.getpebble.action.NOW_PLAYING");
-			i.putExtra("artist", App.mClementine.getCurrentSong().getArtist());
-			i.putExtra("album", App.mClementine.getCurrentSong().getAlbum());
-			i.putExtra("track", App.mClementine.getCurrentSong().getTitle());
-			
-			App.mApp.sendBroadcast(i);
-		}
-	}
-	
-	/**
-	 * Register the Pebble broadcast receivers
-	 */
-	private void registerBroadcastReceiver() {
-		 IntentFilter connectedBroadcastFilter = new IntentFilter("com.getpebble.action.PEBBLE_CONNECTED");
-		 mConnectedBroadcastReceiver = new ConnectedBroadcastReceiver();
-		 App.mApp.registerReceiver(mConnectedBroadcastReceiver, connectedBroadcastFilter);
-		  
-		 IntentFilter disconnectedBroadcastFilter = new IntentFilter("com.getpebble.action.PEBBLE_DISCONNECTED");
-		 mDisconnectedBroadcastReceiver = new DisconnectedBroadcastReceiver();
-		 App.mApp.registerReceiver(mDisconnectedBroadcastReceiver, disconnectedBroadcastFilter);
-	}
-	
-	private void unregisterBroadcastReceivers() {
-		App.mApp.unregisterReceiver(mConnectedBroadcastReceiver);
-		App.mApp.unregisterReceiver(mDisconnectedBroadcastReceiver);
-	}
-	
-	private OnSharedPreferenceChangeListener onPrefChangedListener = new OnSharedPreferenceChangeListener() {
-		@Override
-		public void onSharedPreferenceChanged(
-				SharedPreferences sharedPreferences, String key) {
-			// Check only for pebble setting
-			if (key.equals(App.SP_USE_PEBBLE)) {
-				if (sharedPreferences.getBoolean(key, true)) {
-					registerBroadcastReceiver();
-				} else {
-					unregisterBroadcastReceivers();
-				}
-			}
-		}
-	};
 
-	private class ConnectedBroadcastReceiver extends BroadcastReceiver {
+    private LinkedList<String> mPebbles = new LinkedList<String>();
 
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			String address = intent.getStringExtra("address");
-			mPebbles.add(address);
-		}
-	}
-	
-	private class DisconnectedBroadcastReceiver extends BroadcastReceiver {
+    private boolean mUsePebble;
 
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			String address = intent.getStringExtra("address");
-			mPebbles.remove(address);
-		}
-	}
+    private ConnectedBroadcastReceiver mConnectedBroadcastReceiver;
+
+    private DisconnectedBroadcastReceiver mDisconnectedBroadcastReceiver;
+
+    public Pebble() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(App.mApp);
+
+        // Get the pebble settings
+        mUsePebble = prefs.getBoolean(App.SP_USE_PEBBLE, true);
+
+        // If we use Pebble, register the broadcast receivers
+        if (mUsePebble) {
+            registerBroadcastReceiver();
+        }
+
+        // Register a preference change listener
+        prefs.registerOnSharedPreferenceChangeListener(onPrefChangedListener);
+    }
+
+    /**
+     * Send the current Song (App.mClementine.getCurrentSong()
+     * to the pebble
+     */
+    public void sendMusicUpdateToPebble() {
+        if (mUsePebble && App.mClementine.getCurrentSong() != null) {
+            final Intent i = new Intent("com.getpebble.action.NOW_PLAYING");
+            i.putExtra("artist", App.mClementine.getCurrentSong().getArtist());
+            i.putExtra("album", App.mClementine.getCurrentSong().getAlbum());
+            i.putExtra("track", App.mClementine.getCurrentSong().getTitle());
+
+            App.mApp.sendBroadcast(i);
+        }
+    }
+
+    /**
+     * Register the Pebble broadcast receivers
+     */
+    private void registerBroadcastReceiver() {
+        IntentFilter connectedBroadcastFilter = new IntentFilter(
+                "com.getpebble.action.PEBBLE_CONNECTED");
+        mConnectedBroadcastReceiver = new ConnectedBroadcastReceiver();
+        App.mApp.registerReceiver(mConnectedBroadcastReceiver, connectedBroadcastFilter);
+
+        IntentFilter disconnectedBroadcastFilter = new IntentFilter(
+                "com.getpebble.action.PEBBLE_DISCONNECTED");
+        mDisconnectedBroadcastReceiver = new DisconnectedBroadcastReceiver();
+        App.mApp.registerReceiver(mDisconnectedBroadcastReceiver, disconnectedBroadcastFilter);
+    }
+
+    private void unregisterBroadcastReceivers() {
+        App.mApp.unregisterReceiver(mConnectedBroadcastReceiver);
+        App.mApp.unregisterReceiver(mDisconnectedBroadcastReceiver);
+    }
+
+    private OnSharedPreferenceChangeListener onPrefChangedListener
+            = new OnSharedPreferenceChangeListener() {
+        @Override
+        public void onSharedPreferenceChanged(
+                SharedPreferences sharedPreferences, String key) {
+            // Check only for pebble setting
+            if (key.equals(App.SP_USE_PEBBLE)) {
+                if (sharedPreferences.getBoolean(key, true)) {
+                    registerBroadcastReceiver();
+                } else {
+                    unregisterBroadcastReceivers();
+                }
+            }
+        }
+    };
+
+    private class ConnectedBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String address = intent.getStringExtra("address");
+            mPebbles.add(address);
+        }
+    }
+
+    private class DisconnectedBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String address = intent.getStringExtra("address");
+            mPebbles.remove(address);
+        }
+    }
 
 }

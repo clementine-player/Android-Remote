@@ -19,9 +19,11 @@ package de.qspool.clementineremote;
 
 
 public class VendingKey {
-	private final static String VENDING_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmx5ft92HIVayAYhiFLFIge3LVwl8kDW8i+Cl9Z4XUtUhy5jZfO79mih16rX/AHjgzJyN0HngkVLEakKFyQXDwp+iiOUkyQTysjF6Q8/uqvAr+t/HKI9hHTlco5r/kULvT9YkkFzdeB09KF0PhCDnRURkGaFun799OBhKpOjvrcRwGs5kX6vaJS4MP9q6c+9W0RF3IHgATQ3CN23DXW+4PbxrK2ogNZdX1wz+ZYkXHfwNsmr/k/+Wmj9v1dN8HwS5vKEHXInUEQwmbM5iA+EnN/g+CYFkGTNPlVvLKZbYA6h4rAVk20pRhnu1OrCklOj2Hwv5HAROSLYGB4Y1qQVcgQIDAQAB";
-	
-	public static String getVendingKey() {
-		return VENDING_KEY;
-	}
+
+    private final static String VENDING_KEY
+            = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmx5ft92HIVayAYhiFLFIge3LVwl8kDW8i+Cl9Z4XUtUhy5jZfO79mih16rX/AHjgzJyN0HngkVLEakKFyQXDwp+iiOUkyQTysjF6Q8/uqvAr+t/HKI9hHTlco5r/kULvT9YkkFzdeB09KF0PhCDnRURkGaFun799OBhKpOjvrcRwGs5kX6vaJS4MP9q6c+9W0RF3IHgATQ3CN23DXW+4PbxrK2ogNZdX1wz+ZYkXHfwNsmr/k/+Wmj9v1dN8HwS5vKEHXInUEQwmbM5iA+EnN/g+CYFkGTNPlVvLKZbYA6h4rAVk20pRhnu1OrCklOj2Hwv5HAROSLYGB4Y1qQVcgQIDAQAB";
+
+    public static String getVendingKey() {
+        return VENDING_KEY;
+    }
 }

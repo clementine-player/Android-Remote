@@ -23,80 +23,92 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.Filterable;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.List;
+
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.ClementineSongDownloader;
-
-import java.util.List;
 
 /**
  * Class is used for displaying the song data
  */
 public class DownloadAdapter extends ArrayAdapter<ClementineSongDownloader> implements Filterable {
-	private Context mContext;
 
-	public DownloadAdapter(Context context, int resource,
-			List<ClementineSongDownloader> data) {
-		super(context, resource, data);
-		mContext = context;
-	}
-	
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		ClementineSongDownloader downloader = App.downloaders.get(position);
-		DownloadViewHolder downloadViewHolder;
-		
-		if (convertView == null) {
-			convertView = ((Activity)mContext).getLayoutInflater()
-							.inflate(R.layout.download_row, parent, false);
-			
-			downloadViewHolder = new DownloadViewHolder();
-			
-			downloadViewHolder.title    = (TextView) convertView.findViewById(R.id.tvDlTitle);
-			downloadViewHolder.subtitle = (TextView) convertView.findViewById(R.id.tvDlSubtitle);
-			downloadViewHolder.progress = (ProgressBar) convertView.findViewById(R.id.pbDlProgress);
-			downloadViewHolder.cancel   = (ImageButton) convertView.findViewById(R.id.ibCancelDl);
-			
-			convertView.setTag(downloadViewHolder);
-		} else {
-			downloadViewHolder = (DownloadViewHolder) convertView.getTag();
-		}
+    private Context mContext;
 
-		convertView.setBackgroundResource(R.drawable.selector_white_orange_selected);
-		
-		downloadViewHolder.cancel.setOnClickListener(oclCancel);
-		downloadViewHolder.cancel.setTag(downloader);
-		
-		downloadViewHolder.progress.setMax(100);
-		downloadViewHolder.progress.setProgress(downloader.getCurrentProgress());
-		downloadViewHolder.title.setText(downloader.getTitle());
-		downloadViewHolder.subtitle.setText(downloader.getSubtitle());
-		
-		return convertView;
-	}
-	
-	private OnClickListener oclCancel = new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			ClementineSongDownloader downloader = (ClementineSongDownloader) v.getTag();
-			
-			if (downloader.getStatus() == AsyncTask.Status.RUNNING) {
-				downloader.cancel(true);
-				Toast.makeText(mContext, R.string.download_noti_canceled, Toast.LENGTH_SHORT).show();
-			} else {
-				App.downloaders.remove(downloader);
-			}
-			
-			notifyDataSetChanged();
-		}
-	};
-	
-	private class DownloadViewHolder {
-		TextView title;
-		TextView subtitle;
-		ProgressBar progress;
-		ImageButton cancel;
-	}
+    public DownloadAdapter(Context context, int resource,
+            List<ClementineSongDownloader> data) {
+        super(context, resource, data);
+        mContext = context;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ClementineSongDownloader downloader = App.downloaders.get(position);
+        DownloadViewHolder downloadViewHolder;
+
+        if (convertView == null) {
+            convertView = ((Activity) mContext).getLayoutInflater()
+                    .inflate(R.layout.download_row, parent, false);
+
+            downloadViewHolder = new DownloadViewHolder();
+
+            downloadViewHolder.title = (TextView) convertView.findViewById(R.id.tvDlTitle);
+            downloadViewHolder.subtitle = (TextView) convertView.findViewById(R.id.tvDlSubtitle);
+            downloadViewHolder.progress = (ProgressBar) convertView.findViewById(R.id.pbDlProgress);
+            downloadViewHolder.cancel = (ImageButton) convertView.findViewById(R.id.ibCancelDl);
+
+            convertView.setTag(downloadViewHolder);
+        } else {
+            downloadViewHolder = (DownloadViewHolder) convertView.getTag();
+        }
+
+        convertView.setBackgroundResource(R.drawable.selector_white_orange_selected);
+
+        downloadViewHolder.cancel.setOnClickListener(oclCancel);
+        downloadViewHolder.cancel.setTag(downloader);
+
+        downloadViewHolder.progress.setMax(100);
+        downloadViewHolder.progress.setProgress(downloader.getCurrentProgress());
+        downloadViewHolder.title.setText(downloader.getTitle());
+        downloadViewHolder.subtitle.setText(downloader.getSubtitle());
+
+        return convertView;
+    }
+
+    private OnClickListener oclCancel = new OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            ClementineSongDownloader downloader = (ClementineSongDownloader) v.getTag();
+
+            if (downloader.getStatus() == AsyncTask.Status.RUNNING) {
+                downloader.cancel(true);
+                Toast.makeText(mContext, R.string.download_noti_canceled, Toast.LENGTH_SHORT)
+                        .show();
+            } else {
+                App.downloaders.remove(downloader);
+            }
+
+            notifyDataSetChanged();
+        }
+    };
+
+    private class DownloadViewHolder {
+
+        TextView title;
+
+        TextView subtitle;
+
+        ProgressBar progress;
+
+        ImageButton cancel;
+    }
 }

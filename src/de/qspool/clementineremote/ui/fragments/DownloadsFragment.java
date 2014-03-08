@@ -17,6 +17,11 @@
 
 package de.qspool.clementineremote.ui.fragments;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -29,10 +34,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
@@ -40,184 +45,194 @@ import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.ui.adapter.DownloadAdapter;
 import de.qspool.clementineremote.utils.Utilities;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 public class DownloadsFragment extends AbstractDrawerFragment {
-	private ActionBar mActionBar; 
-	private ListView mList;
-	private DownloadAdapter mAdapter;
-	private Timer mUpdateTimer;
-	private TextView mFreeSpace;
 
-	private View mEmptyDownloads;
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-	    // Get the actionbar
-	    mActionBar = getSherlockActivity().getSupportActionBar();
-	    setHasOptionsMenu(true);
-	}
+    private ActionBar mActionBar;
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		// Check if we are still connected
-		if (App.mClementineConnection == null
-		 || App.mClementine           == null
-		 || !App.mClementineConnection.isConnected()) {
-		} else {
-			//RequestPlaylistSongs();
-			setActionBarTitle();
-			mUpdateTimer = new Timer();
-			mUpdateTimer.scheduleAtFixedRate(getTimerTask(), 250, 250);
-		}
-	}
-	
-	@Override
-	public void onPause() {
-		super.onPause();
-		
-		if (mUpdateTimer != null)
-			mUpdateTimer.cancel();
-	}
-	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-		      Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.download_fragment,
-				container, false);
-		
-		mList = (ListView) view.findViewById(R.id.downloads);
-		mEmptyDownloads = view.findViewById(R.id.downloads_empty);
-		mFreeSpace = (TextView) view.findViewById(R.id.downloads_freespace);
-		
-		// Create the adapter
-		mAdapter = new DownloadAdapter(getActivity(), R.layout.download_row, App.downloaders);
-		
-		mList.setOnItemClickListener(oiclDownload);
-		mList.setAdapter(mAdapter);
-		
-	    mActionBar.setTitle("");
-	    mActionBar.setSubtitle("");
-		
-		setHasOptionsMenu(true);
-		
-		return view;
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
+    private ListView mList;
 
-	        default:
-	            return super.onOptionsItemSelected(item);
-	    }
-	}
-	
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {		
-		super.onCreateOptionsMenu(menu,inflater);
-	}
-	
-	private void setActionBarTitle() {
-		MySong currentSong = App.mClementine.getCurrentSong();
-		if (currentSong == null) {
-			mActionBar.setTitle(getString(R.string.player_nosong));
-			mActionBar.setSubtitle("");
-		} else {
-			mActionBar.setTitle(currentSong.getArtist());
-			mActionBar.setSubtitle(currentSong.getTitle());
-		}
-	}
-	
-	@Override
+    private DownloadAdapter mAdapter;
+
+    private Timer mUpdateTimer;
+
+    private TextView mFreeSpace;
+
+    private View mEmptyDownloads;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Get the actionbar
+        mActionBar = getSherlockActivity().getSupportActionBar();
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Check if we are still connected
+        if (App.mClementineConnection == null
+                || App.mClementine == null
+                || !App.mClementineConnection.isConnected()) {
+        } else {
+            //RequestPlaylistSongs();
+            setActionBarTitle();
+            mUpdateTimer = new Timer();
+            mUpdateTimer.scheduleAtFixedRate(getTimerTask(), 250, 250);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if (mUpdateTimer != null) {
+            mUpdateTimer.cancel();
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.download_fragment,
+                container, false);
+
+        mList = (ListView) view.findViewById(R.id.downloads);
+        mEmptyDownloads = view.findViewById(R.id.downloads_empty);
+        mFreeSpace = (TextView) view.findViewById(R.id.downloads_freespace);
+
+        // Create the adapter
+        mAdapter = new DownloadAdapter(getActivity(), R.layout.download_row, App.downloaders);
+
+        mList.setOnItemClickListener(oiclDownload);
+        mList.setAdapter(mAdapter);
+
+        mActionBar.setTitle("");
+        mActionBar.setSubtitle("");
+
+        setHasOptionsMenu(true);
+
+        return view;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    private void setActionBarTitle() {
+        MySong currentSong = App.mClementine.getCurrentSong();
+        if (currentSong == null) {
+            mActionBar.setTitle(getString(R.string.player_nosong));
+            mActionBar.setSubtitle("");
+        } else {
+            mActionBar.setTitle(currentSong.getArtist());
+            mActionBar.setSubtitle(currentSong.getTitle());
+        }
+    }
+
+    @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mList.setFastScrollEnabled(true);
         mList.setTextFilterEnabled(true);
         mList.setSelector(android.R.color.transparent);
         mList.setOnItemClickListener(oiclDownload);
-	}
-	
-	@Override
-	public void MessageFromClementine(ClementineMessage clementineMessage) {
-		switch (clementineMessage.getMessageType()) {
-		case CURRENT_METAINFO:
-			setActionBarTitle();
-			break;
-		default:
-			break;
-		}
-	}
-	
-	private OnItemClickListener oiclDownload = new OnItemClickListener() {
+    }
 
-		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position,
-				long id) {
-			if (App.downloaders.get(position).getStatus() == AsyncTask.Status.FINISHED) {
-				Uri lastFile = App.downloaders.get(position).getLastFileUri();
-				if (lastFile == null) {
-					Toast.makeText(getActivity(), R.string.download_error, Toast.LENGTH_LONG).show();
-				} else {
-					Intent mediaIntent = new Intent();
-					mediaIntent.setAction(Intent.ACTION_VIEW);
-					mediaIntent.setDataAndType(lastFile, "audio/*");
-					mediaIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-					
-					if (mediaIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-					    startActivity(mediaIntent);
-					} else {
-					    Toast.makeText(getActivity(), R.string.app_not_available, Toast.LENGTH_LONG).show();
-					}
-				}
-			} else {
-				// Just do nothing
-			}
-		}
-	};
+    @Override
+    public void MessageFromClementine(ClementineMessage clementineMessage) {
+        switch (clementineMessage.getMessageType()) {
+            case CURRENT_METAINFO:
+                setActionBarTitle();
+                break;
+            default:
+                break;
+        }
+    }
 
-	/**
-	 * Creates a timer task for refeshing the download list
-	 * @return Task to update download list
-	 */
-	private TimerTask getTimerTask() {
-		return new TimerTask() {
+    private OnItemClickListener oiclDownload = new OnItemClickListener() {
 
-			@Override
-			public void run() {
-				if (mAdapter != null && getActivity() != null) {
-					getActivity().runOnUiThread(new Runnable() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position,
+                long id) {
+            if (App.downloaders.get(position).getStatus() == AsyncTask.Status.FINISHED) {
+                Uri lastFile = App.downloaders.get(position).getLastFileUri();
+                if (lastFile == null) {
+                    Toast.makeText(getActivity(), R.string.download_error, Toast.LENGTH_LONG)
+                            .show();
+                } else {
+                    Intent mediaIntent = new Intent();
+                    mediaIntent.setAction(Intent.ACTION_VIEW);
+                    mediaIntent.setDataAndType(lastFile, "audio/*");
+                    mediaIntent.addFlags(
+                            Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-						@Override
-						public void run() {
-							if (getActivity() == null) 
-								return;
-							
-							mAdapter.notifyDataSetChanged();
-							if (App.downloaders.isEmpty()) {
-								mList.setEmptyView(mEmptyDownloads);
-							}
-							
-							StringBuilder sb = new StringBuilder();
-							sb.append(getActivity().getString(R.string.download_freespace));
-							sb.append(": ");
-							sb.append(Utilities.humanReadableBytes((long) Utilities.getFreeSpaceExternal(), true));
-							mFreeSpace.setText(sb.toString());
-						}
-						
-					});
-				}
-			}
-			
-		};
-	}
+                    if (mediaIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                        startActivity(mediaIntent);
+                    } else {
+                        Toast.makeText(getActivity(), R.string.app_not_available, Toast.LENGTH_LONG)
+                                .show();
+                    }
+                }
+            } else {
+                // Just do nothing
+            }
+        }
+    };
 
-	@Override
-	public boolean onBackPressed() {
-		return false;
-	}
+    /**
+     * Creates a timer task for refeshing the download list
+     *
+     * @return Task to update download list
+     */
+    private TimerTask getTimerTask() {
+        return new TimerTask() {
+
+            @Override
+            public void run() {
+                if (mAdapter != null && getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            if (getActivity() == null) {
+                                return;
+                            }
+
+                            mAdapter.notifyDataSetChanged();
+                            if (App.downloaders.isEmpty()) {
+                                mList.setEmptyView(mEmptyDownloads);
+                            }
+
+                            StringBuilder sb = new StringBuilder();
+                            sb.append(getActivity().getString(R.string.download_freespace));
+                            sb.append(": ");
+                            sb.append(Utilities
+                                    .humanReadableBytes((long) Utilities.getFreeSpaceExternal(),
+                                            true));
+                            mFreeSpace.setText(sb.toString());
+                        }
+
+                    });
+                }
+            }
+
+        };
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        return false;
+    }
 }

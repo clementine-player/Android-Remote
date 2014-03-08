@@ -28,6 +28,7 @@ import android.os.Message;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
+
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.event.OnConnectionClosedListener;
@@ -38,166 +39,177 @@ import de.qspool.clementineremote.backend.receivers.NotificationReceiver;
 import de.qspool.clementineremote.ui.MainActivity;
 
 public class ClementineService extends Service {
-	private final static String TAG = "ClementineService";
 
-	private NotificationCompat.Builder mNotifyBuilder;
-	private NotificationManager mNotificationManager;
-	
-	private Thread mPlayerThread;
+    private final static String TAG = "ClementineService";
 
-	@Override
-	public IBinder onBind(Intent intent) {
-		return null;
-	}
-	
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		Log.d(TAG, "onStartCommand");
-		if (intent != null) {
-			handleServiceAction(intent);
-		}
+    private NotificationCompat.Builder mNotifyBuilder;
 
-		return START_STICKY;
-	}
-	
-	/**
-	 * Handle the requests to the service
-	 * @param intent The action to perform
-	 */
-	private void handleServiceAction(Intent intent) {
-		Log.d(TAG, "handleServiceAction - start");
-		mNotificationManager = (NotificationManager) App.mApp.getSystemService(Context.NOTIFICATION_SERVICE);
-		
-		int action = intent.getIntExtra(App.SERVICE_ID, 0);
-		Log.d(TAG, "handleServiceAction - action: " + action);
-		switch (action) {
-		case App.SERVICE_START:
-			// Create a new instance
-			if (App.mClementineConnection == null) {
-				App.mClementineConnection = new ClementinePlayerConnection();
-	
-				setupNotification(true);
-				App.mClementineConnection.setNotificationBuilder(mNotifyBuilder);
-				App.mClementineConnection.setOnConnectionClosedListener(occl);
-				
-				mPlayerThread = new Thread(App.mClementineConnection);
-				mPlayerThread.start();
-			}
-			break;
-		case App.SERVICE_CONNECTED:
-			startForeground(App.NOTIFY_ID, mNotifyBuilder.build());
-			break;
-		case App.SERVICE_DISCONNECTED:
-			stopForeground(true);
-			intteruptThread();
-			App.mClementineConnection = null;
-			
-			// Check if we lost connection due a keep alive
-			if (intent.hasExtra(App.SERVICE_DISCONNECT_DATA)) {
-				int reason = intent.getIntExtra(App.SERVICE_DISCONNECT_DATA, 0);
-				if (reason == ErrorMessage.KEEP_ALIVE_TIMEOUT.ordinal()) {
-					setupNotification(false);
-					showKeepAliveDisconnectNotification();
-				}
-			}
-			break;		
-		default: break;
-		}
-		Log.d(TAG, "handleServiceAction - end");
-	}
-	
-	@Override
-	public void onDestroy() {
-		stopForeground(true);
-		if (App.mClementineConnection != null
-		 && App.mClementineConnection.isConnected()) {
-			// Create a new request
-			
-			// Move the request to the message
-			Message msg = Message.obtain();
-			msg.obj = ClementineMessage.getMessage(MsgType.DISCONNECT);
-			
-			// Send the request to the thread
-			App.mClementineConnection.mHandler.sendMessage(msg);
-		}
-		intteruptThread();
-		App.mClementineConnection = null;
-	}
-	
-	private void intteruptThread() {
-		if (mPlayerThread != null)
-			mPlayerThread.interrupt();
-		
-		if (App.mClementineConnection != null
-		 && mPlayerThread.isAlive()) {
-			App.mClementineConnection.mHandler.post(new Runnable() {
-	
-				@Override
-				public void run() {
-					Looper.myLooper().quit();
-				}
-				
-			});
-		}
-	}
-	
-	/**
-	 * Setup the Notification
-	 */
-	private void setupNotification(boolean ongoing) {
-	    mNotifyBuilder = new NotificationCompat.Builder(App.mApp);
-	    mNotifyBuilder.setSmallIcon(R.drawable.notification);
-	    mNotifyBuilder.setOngoing(ongoing);
-	    
-	    // If we don't have an ongoing notification, it shall be closed after clicked.
-	    if (!ongoing) {
-	    	mNotifyBuilder.setAutoCancel(true);
-	    }
-	    
-	    // Set the result intent
-	    Intent resultIntent = new Intent(App.mApp, MainActivity.class);
-	    resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-	    resultIntent.putExtra(App.NOTIFICATION_ID, -1);
+    private NotificationManager mNotificationManager;
 
-	    // Create a TaskStack, so the app navigates correctly backwards
-	    TaskStackBuilder stackBuilder = TaskStackBuilder.create(App.mApp);
-	    stackBuilder.addParentStack(MainActivity.class);
-	    stackBuilder.addNextIntent(resultIntent);
-	    PendingIntent resultPendingintent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-	    mNotifyBuilder.setContentIntent(resultPendingintent);
-	    
-	    // Create intents for buttons
-	    Intent playIntent = new Intent(NotificationReceiver.PLAYPAUSE);
-	    Intent nextIntent = new Intent(NotificationReceiver.NEXT);
-	    
-	    PendingIntent piPlay = PendingIntent.getBroadcast(App.mApp, 0, playIntent, 0);
-	    PendingIntent piNext = PendingIntent.getBroadcast(App.mApp, 0, nextIntent, 0);
-	    
-	    if (ongoing) {
-		    mNotifyBuilder.addAction(R.drawable.ic_media_pause_resume, App.mApp.getString(R.string.notification_action_playpause), piPlay);
-		    mNotifyBuilder.addAction(R.drawable.ic_media_next_not, App.mApp.getString(R.string.notification_action_next), piNext);
-		    
-		    mNotifyBuilder.setPriority(1);
-	    }
-	}
-	
-	/**
-	 * Create a notification that shows, that we got a keep alive timeout
-	 */
-	private void showKeepAliveDisconnectNotification() {
-		mNotifyBuilder.setContentTitle(App.mApp.getString(R.string.app_name));
-		mNotifyBuilder.setContentText(App.mApp.getString(R.string.notification_disconnect_keep_alive));
-		mNotificationManager.notify(App.NOTIFY_ID, mNotifyBuilder.build());
-	}
-	
-	private OnConnectionClosedListener occl = new OnConnectionClosedListener() {
-		
-		@Override
-		public void onConnectionClosed(ClementineMessage clementineMessage) {
-			Intent mServiceIntent = new Intent(ClementineService.this, ClementineService.class);
-	    	mServiceIntent.putExtra(App.SERVICE_ID, App.SERVICE_DISCONNECTED);
-	    	mServiceIntent.putExtra(App.SERVICE_DISCONNECT_DATA, clementineMessage.getErrorMessage().ordinal());
-	    	startService(mServiceIntent);
-		}
-	};
+    private Thread mPlayerThread;
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(TAG, "onStartCommand");
+        if (intent != null) {
+            handleServiceAction(intent);
+        }
+
+        return START_STICKY;
+    }
+
+    /**
+     * Handle the requests to the service
+     *
+     * @param intent The action to perform
+     */
+    private void handleServiceAction(Intent intent) {
+        Log.d(TAG, "handleServiceAction - start");
+        mNotificationManager = (NotificationManager) App.mApp
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+
+        int action = intent.getIntExtra(App.SERVICE_ID, 0);
+        Log.d(TAG, "handleServiceAction - action: " + action);
+        switch (action) {
+            case App.SERVICE_START:
+                // Create a new instance
+                if (App.mClementineConnection == null) {
+                    App.mClementineConnection = new ClementinePlayerConnection();
+
+                    setupNotification(true);
+                    App.mClementineConnection.setNotificationBuilder(mNotifyBuilder);
+                    App.mClementineConnection.setOnConnectionClosedListener(occl);
+
+                    mPlayerThread = new Thread(App.mClementineConnection);
+                    mPlayerThread.start();
+                }
+                break;
+            case App.SERVICE_CONNECTED:
+                startForeground(App.NOTIFY_ID, mNotifyBuilder.build());
+                break;
+            case App.SERVICE_DISCONNECTED:
+                stopForeground(true);
+                intteruptThread();
+                App.mClementineConnection = null;
+
+                // Check if we lost connection due a keep alive
+                if (intent.hasExtra(App.SERVICE_DISCONNECT_DATA)) {
+                    int reason = intent.getIntExtra(App.SERVICE_DISCONNECT_DATA, 0);
+                    if (reason == ErrorMessage.KEEP_ALIVE_TIMEOUT.ordinal()) {
+                        setupNotification(false);
+                        showKeepAliveDisconnectNotification();
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+        Log.d(TAG, "handleServiceAction - end");
+    }
+
+    @Override
+    public void onDestroy() {
+        stopForeground(true);
+        if (App.mClementineConnection != null
+                && App.mClementineConnection.isConnected()) {
+            // Create a new request
+
+            // Move the request to the message
+            Message msg = Message.obtain();
+            msg.obj = ClementineMessage.getMessage(MsgType.DISCONNECT);
+
+            // Send the request to the thread
+            App.mClementineConnection.mHandler.sendMessage(msg);
+        }
+        intteruptThread();
+        App.mClementineConnection = null;
+    }
+
+    private void intteruptThread() {
+        if (mPlayerThread != null) {
+            mPlayerThread.interrupt();
+        }
+
+        if (App.mClementineConnection != null
+                && mPlayerThread.isAlive()) {
+            App.mClementineConnection.mHandler.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    Looper.myLooper().quit();
+                }
+
+            });
+        }
+    }
+
+    /**
+     * Setup the Notification
+     */
+    private void setupNotification(boolean ongoing) {
+        mNotifyBuilder = new NotificationCompat.Builder(App.mApp);
+        mNotifyBuilder.setSmallIcon(R.drawable.notification);
+        mNotifyBuilder.setOngoing(ongoing);
+
+        // If we don't have an ongoing notification, it shall be closed after clicked.
+        if (!ongoing) {
+            mNotifyBuilder.setAutoCancel(true);
+        }
+
+        // Set the result intent
+        Intent resultIntent = new Intent(App.mApp, MainActivity.class);
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        resultIntent.putExtra(App.NOTIFICATION_ID, -1);
+
+        // Create a TaskStack, so the app navigates correctly backwards
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(App.mApp);
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingintent = stackBuilder
+                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        mNotifyBuilder.setContentIntent(resultPendingintent);
+
+        // Create intents for buttons
+        Intent playIntent = new Intent(NotificationReceiver.PLAYPAUSE);
+        Intent nextIntent = new Intent(NotificationReceiver.NEXT);
+
+        PendingIntent piPlay = PendingIntent.getBroadcast(App.mApp, 0, playIntent, 0);
+        PendingIntent piNext = PendingIntent.getBroadcast(App.mApp, 0, nextIntent, 0);
+
+        if (ongoing) {
+            mNotifyBuilder.addAction(R.drawable.ic_media_pause_resume,
+                    App.mApp.getString(R.string.notification_action_playpause), piPlay);
+            mNotifyBuilder.addAction(R.drawable.ic_media_next_not,
+                    App.mApp.getString(R.string.notification_action_next), piNext);
+
+            mNotifyBuilder.setPriority(1);
+        }
+    }
+
+    /**
+     * Create a notification that shows, that we got a keep alive timeout
+     */
+    private void showKeepAliveDisconnectNotification() {
+        mNotifyBuilder.setContentTitle(App.mApp.getString(R.string.app_name));
+        mNotifyBuilder
+                .setContentText(App.mApp.getString(R.string.notification_disconnect_keep_alive));
+        mNotificationManager.notify(App.NOTIFY_ID, mNotifyBuilder.build());
+    }
+
+    private OnConnectionClosedListener occl = new OnConnectionClosedListener() {
+
+        @Override
+        public void onConnectionClosed(ClementineMessage clementineMessage) {
+            Intent mServiceIntent = new Intent(ClementineService.this, ClementineService.class);
+            mServiceIntent.putExtra(App.SERVICE_ID, App.SERVICE_DISCONNECTED);
+            mServiceIntent.putExtra(App.SERVICE_DISCONNECT_DATA,
+                    clementineMessage.getErrorMessage().ordinal());
+            startService(mServiceIntent);
+        }
+    };
 }

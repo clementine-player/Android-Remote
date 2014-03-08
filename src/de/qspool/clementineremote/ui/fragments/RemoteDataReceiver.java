@@ -20,5 +20,6 @@ package de.qspool.clementineremote.ui.fragments;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 
 public interface RemoteDataReceiver {
-	public void MessageFromClementine(ClementineMessage clementineMessage);
+
+    public void MessageFromClementine(ClementineMessage clementineMessage);
 }

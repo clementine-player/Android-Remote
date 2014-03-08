@@ -18,5 +18,6 @@
 package de.qspool.clementineremote.backend.exceptions;
 
 public class ErrorMessageException extends Exception {
-	private static final long serialVersionUID = -71325530820975818L;
+
+    private static final long serialVersionUID = -71325530820975818L;
 }

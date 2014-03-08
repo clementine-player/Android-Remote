@@ -7,8 +7,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Environment;
 import android.util.Log;
-import de.qspool.clementineremote.R;
-import de.qspool.clementineremote.ui.ListenerList.FireHandler;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -17,28 +15,48 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.ui.ListenerList.FireHandler;
+
 public class FileDialog {
+
     private static final String PARENT_DIR = "..";
+
     private final String TAG = getClass().getName();
+
     private String[] fileList;
+
     private File currentPath;
+
     public interface FileSelectedListener {
+
         void fileSelected(File file);
     }
+
     public interface DirectorySelectedListener {
+
         void directorySelected(File directory);
     }
-    private ListenerList<FileSelectedListener> fileListenerList = new ListenerList<FileDialog.FileSelectedListener>();
-    private ListenerList<DirectorySelectedListener> dirListenerList = new ListenerList<FileDialog.DirectorySelectedListener>();
+
+    private ListenerList<FileSelectedListener> fileListenerList
+            = new ListenerList<FileDialog.FileSelectedListener>();
+
+    private ListenerList<DirectorySelectedListener> dirListenerList
+            = new ListenerList<FileDialog.DirectorySelectedListener>();
+
     private final Activity activity;
+
     private boolean selectDirectoryOption;
-    private String fileEndsWith;    
+
+    private String fileEndsWith;
 
     public FileDialog(Activity activity, File path) {
         this.activity = activity;
-        if (!path.exists()) path = Environment.getExternalStorageDirectory();
+        if (!path.exists()) {
+            path = Environment.getExternalStorageDirectory();
+        }
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-        	loadFileList(path);
+            loadFileList(path);
         }
     }
 
@@ -51,17 +69,19 @@ public class FileDialog {
 
         builder.setTitle(currentPath.getPath());
         if (selectDirectoryOption) {
-            builder.setPositiveButton(activity.getString(R.string.file_dialog_set_dir), new OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    Log.d(TAG, currentPath.getPath());
-                    fireDirectorySelectedEvent(currentPath);
-                }
-            });
-            builder.setNegativeButton(activity.getString(R.string.dialog_close), new OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-				}
-			});
+            builder.setPositiveButton(activity.getString(R.string.file_dialog_set_dir),
+                    new OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.d(TAG, currentPath.getPath());
+                            fireDirectorySelectedEvent(currentPath);
+                        }
+                    });
+            builder.setNegativeButton(activity.getString(R.string.dialog_close),
+                    new OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
         }
 
         builder.setItems(fileList, new DialogInterface.OnClickListener() {
@@ -73,18 +93,20 @@ public class FileDialog {
                     dialog.cancel();
                     dialog.dismiss();
                     showDialog();
-                } else fireFileSelectedEvent(chosenFile);
+                } else {
+                    fireFileSelectedEvent(chosenFile);
+                }
             }
         });
 
         dialog = builder.show();
-        
+
         if (currentPath.canWrite()) {
-        	dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
         } else {
-        	dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
         }
-        
+
         return dialog;
     }
 
@@ -136,61 +158,74 @@ public class FileDialog {
         this.currentPath = path;
         List<String> r = new ArrayList<String>();
         if (path.exists()) {
-            if (path.getParentFile() != null) r.add(PARENT_DIR);
+            if (path.getParentFile() != null) {
+                r.add(PARENT_DIR);
+            }
             FilenameFilter filter = new FilenameFilter() {
                 public boolean accept(File dir, String filename) {
                     File sel = new File(dir, filename);
-                    if (!sel.canRead()) return false;
-                    if (selectDirectoryOption) return sel.isDirectory();
-                    else {
-                        boolean endsWith = fileEndsWith != null ? filename.toLowerCase(Locale.getDefault()).endsWith(fileEndsWith) : true;
+                    if (!sel.canRead()) {
+                        return false;
+                    }
+                    if (selectDirectoryOption) {
+                        return sel.isDirectory();
+                    } else {
+                        boolean endsWith = fileEndsWith != null ? filename
+                                .toLowerCase(Locale.getDefault()).endsWith(fileEndsWith) : true;
                         return endsWith || sel.isDirectory();
                     }
                 }
             };
             String[] fileList1 = path.list(filter);
-            if (fileList1 != null)
-            	for (String file : fileList1) {
-            		r.add(file);
-            	}
+            if (fileList1 != null) {
+                for (String file : fileList1) {
+                    r.add(file);
+                }
+            }
         }
         Collections.sort(r);
         fileList = (String[]) r.toArray(new String[]{});
     }
 
     private File getChosenFile(String fileChosen) {
-        if (fileChosen.equals(PARENT_DIR)) return currentPath.getParentFile();
-        else return new File(currentPath, fileChosen);
+        if (fileChosen.equals(PARENT_DIR)) {
+            return currentPath.getParentFile();
+        } else {
+            return new File(currentPath, fileChosen);
+        }
     }
 
     public void setFileEndsWith(String fileEndsWith) {
-        this.fileEndsWith = fileEndsWith != null ? fileEndsWith.toLowerCase(Locale.getDefault()) : fileEndsWith;
+        this.fileEndsWith = fileEndsWith != null ? fileEndsWith.toLowerCase(Locale.getDefault())
+                : fileEndsWith;
     }
- }
+}
 
 class ListenerList<L> {
-	private List<L> listenerList = new ArrayList<L>();
-	
-	public interface FireHandler<L> {
-	    void fireEvent(L listener);
-	}
-	
-	public void add(L listener) {
-	    listenerList.add(listener);
-	}
-	
-	public void fireEvent(FireHandler<L> fireHandler) {
-	    List<L> copy = new ArrayList<L>(listenerList);
-	    for (L l : copy) {
-	        fireHandler.fireEvent(l);
-	    }
-	}
-	
-	public void remove(L listener) {
-	    listenerList.remove(listener);
-	}
-	
-	public List<L> getListenerList() {
-	    return listenerList;
-	}
+
+    private List<L> listenerList = new ArrayList<L>();
+
+    public interface FireHandler<L> {
+
+        void fireEvent(L listener);
+    }
+
+    public void add(L listener) {
+        listenerList.add(listener);
+    }
+
+    public void fireEvent(FireHandler<L> fireHandler) {
+        List<L> copy = new ArrayList<L>(listenerList);
+        for (L l : copy) {
+            fireHandler.fireEvent(l);
+        }
+    }
+
+    public void remove(L listener) {
+        listenerList.remove(listener);
+    }
+
+    public List<L> getListenerList() {
+        return listenerList;
+    }
 }

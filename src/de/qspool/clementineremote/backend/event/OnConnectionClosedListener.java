@@ -20,5 +20,6 @@ package de.qspool.clementineremote.backend.event;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 
 public interface OnConnectionClosedListener {
-	void onConnectionClosed(ClementineMessage clementineMessage);
+
+    void onConnectionClosed(ClementineMessage clementineMessage);
 }

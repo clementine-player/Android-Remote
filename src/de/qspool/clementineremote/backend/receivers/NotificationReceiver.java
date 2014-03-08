@@ -21,28 +21,32 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Message;
+
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 
 public class NotificationReceiver extends BroadcastReceiver {
-	public static final String PLAYPAUSE = "de.qspool.clementineremote.playpause";
-	public static final String NEXT = "de.qspool.clementineremote.next";
-	
-	@Override
-	public void onReceive(Context context, Intent intent) {
-			Message msg = Message.obtain();
-			
-			// Check which key was pressed
-			if (intent.getAction().equals(PLAYPAUSE))
-				msg.obj = ClementineMessage.getMessage(MsgType.PLAYPAUSE);
-			else if (intent.getAction().equals(NEXT))
-				msg.obj = ClementineMessage.getMessage(MsgType.NEXT);
-			
-			// Now send the message
-			if (msg != null
-			 && App.mClementineConnection != null) {
-				App.mClementineConnection.mHandler.sendMessage(msg);
-			}
-	}
+
+    public static final String PLAYPAUSE = "de.qspool.clementineremote.playpause";
+
+    public static final String NEXT = "de.qspool.clementineremote.next";
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        Message msg = Message.obtain();
+
+        // Check which key was pressed
+        if (intent.getAction().equals(PLAYPAUSE)) {
+            msg.obj = ClementineMessage.getMessage(MsgType.PLAYPAUSE);
+        } else if (intent.getAction().equals(NEXT)) {
+            msg.obj = ClementineMessage.getMessage(MsgType.NEXT);
+        }
+
+        // Now send the message
+        if (msg != null
+                && App.mClementineConnection != null) {
+            App.mClementineConnection.mHandler.sendMessage(msg);
+        }
+    }
 }

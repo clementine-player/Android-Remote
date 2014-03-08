@@ -20,7 +20,10 @@ package de.qspool.clementineremote.backend.event;
 import de.qspool.clementineremote.backend.elements.DownloaderResult;
 
 public interface OnLibraryDownloadListener {
-	void OnProgressUpdate(int progress);
-	void OnOptimizeLibrary();
-	void OnLibraryDownloadFinished(DownloaderResult result);
+
+    void OnProgressUpdate(int progress);
+
+    void OnOptimizeLibrary();
+
+    void OnLibraryDownloadFinished(DownloaderResult result);
 }

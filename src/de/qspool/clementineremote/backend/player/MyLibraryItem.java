@@ -21,46 +21,59 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 public class MyLibraryItem {
-	private int mLevel;
-		
-	private String mArtist = new String();
-	private String mAlbum = new String();
-	private String mTitle = new String();
-	private String mUrl = new String();
 
-	public String getUrl() {
-		return mUrl;
-	}
-	public void setUrl(String mUrl) {
+    private int mLevel;
+
+    private String mArtist = new String();
+
+    private String mAlbum = new String();
+
+    private String mTitle = new String();
+
+    private String mUrl = new String();
+
+    public String getUrl() {
+        return mUrl;
+    }
+
+    public void setUrl(String mUrl) {
         try {
             this.mUrl = URLDecoder.decode(mUrl, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             this.mUrl = mUrl;
         }
     }
-	public int getLevel() {
-		return mLevel;
-	}
-	public void setLevel(int mLevel) {
-		this.mLevel = mLevel;
-	}
-	public String getArtist() {
-		return mArtist;
-	}
-	public void setArtist(String mArtist) {
-		this.mArtist = mArtist;
-	}
-	public String getAlbum() {
-		return mAlbum;
-	}
-	public void setAlbum(String mAlbum) {
-		this.mAlbum = mAlbum;
-	}
-	public String getTitle() {
-		return mTitle;
-	}
-	public void setTitle(String mTitle) {
-		this.mTitle = mTitle;
-	}
-	
+
+    public int getLevel() {
+        return mLevel;
+    }
+
+    public void setLevel(int mLevel) {
+        this.mLevel = mLevel;
+    }
+
+    public String getArtist() {
+        return mArtist;
+    }
+
+    public void setArtist(String mArtist) {
+        this.mArtist = mArtist;
+    }
+
+    public String getAlbum() {
+        return mAlbum;
+    }
+
+    public void setAlbum(String mAlbum) {
+        this.mAlbum = mAlbum;
+    }
+
+    public String getTitle() {
+        return mTitle;
+    }
+
+    public void setTitle(String mTitle) {
+        this.mTitle = mTitle;
+    }
+
 }

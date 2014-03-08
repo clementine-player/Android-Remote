@@ -19,44 +19,46 @@ package de.qspool.clementineremote.backend;
 
 import android.os.Handler;
 import android.os.Message;
-import de.qspool.clementineremote.backend.pb.ClementineMessage;
 
 import java.lang.ref.WeakReference;
+
+import de.qspool.clementineremote.backend.pb.ClementineMessage;
 
 /**
  * This class receives the handler messages from the ui thread
  */
 public class ClementineConnectionHandler extends Handler {
-	WeakReference<ClementinePlayerConnection> mClementineConnection;
-	
-	public ClementineConnectionHandler(ClementinePlayerConnection c) {
-		mClementineConnection = new WeakReference<ClementinePlayerConnection>(c);
-	}
 
-	@Override
-	public void handleMessage(Message msg) {
-		ClementinePlayerConnection myClementineConnection = mClementineConnection.get();
-		
-		if (msg.arg1 == ClementinePlayerConnection.CHECK_FOR_DATA_ARG) {
-			myClementineConnection.checkForData();
-		} else {
-	        // Act on the message
-			ClementineMessage message = (ClementineMessage) msg.obj;
-			if (message.isErrorMessage()) {
-				myClementineConnection.disconnect(message);
-			} else {
-				switch (message.getMessageType()) {
-				case CONNECT:
-					myClementineConnection.createConnection(message);
-					break;
-				case DISCONNECT:
-					myClementineConnection.disconnect(message);
-					break;
-				default:
-					myClementineConnection.sendRequest(message);
-					break;
-				}
-			}
-		}
+    WeakReference<ClementinePlayerConnection> mClementineConnection;
+
+    public ClementineConnectionHandler(ClementinePlayerConnection c) {
+        mClementineConnection = new WeakReference<ClementinePlayerConnection>(c);
+    }
+
+    @Override
+    public void handleMessage(Message msg) {
+        ClementinePlayerConnection myClementineConnection = mClementineConnection.get();
+
+        if (msg.arg1 == ClementinePlayerConnection.CHECK_FOR_DATA_ARG) {
+            myClementineConnection.checkForData();
+        } else {
+            // Act on the message
+            ClementineMessage message = (ClementineMessage) msg.obj;
+            if (message.isErrorMessage()) {
+                myClementineConnection.disconnect(message);
+            } else {
+                switch (message.getMessageType()) {
+                    case CONNECT:
+                        myClementineConnection.createConnection(message);
+                        break;
+                    case DISCONNECT:
+                        myClementineConnection.disconnect(message);
+                        break;
+                    default:
+                        myClementineConnection.sendRequest(message);
+                        break;
+                }
+            }
+        }
     }
 }
