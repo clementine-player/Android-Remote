@@ -16,7 +16,7 @@ his file is part of the Android Clementine Remote.
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package de.qspool.clementineremote.ui.fragments;
+package de.qspool.clementineremote.ui.fragments.playerpages;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -34,27 +34,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.RatingBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.player.MySong;
+import de.qspool.clementineremote.ui.fragments.AbstractDrawerFragment;
 import de.qspool.clementineremote.utils.Utilities;
 
-public class SongInfoFragment extends AbstractDrawerFragment {
+public class SongDetailFragment extends AbstractDrawerFragment {
 	private FrameLayout mContainer;
 	private ImageButton iv_art;
 	private ImageView iv_large_art;
@@ -72,6 +66,7 @@ public class SongInfoFragment extends AbstractDrawerFragment {
 	private TextView tv_filename;
 	
 	private RatingBar rb_rating;
+    private SeekBar mSbVolume;
 	
 	// Hold a reference to the current animator,
     // so that it can be canceled mid-way.
@@ -101,7 +96,7 @@ public class SongInfoFragment extends AbstractDrawerFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 		      Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.songinfo_fragment,
+		View view = inflater.inflate(R.layout.player_songdetail_page,
 				container, false);
 		
 		mActionBar = getSherlockActivity().getSupportActionBar();

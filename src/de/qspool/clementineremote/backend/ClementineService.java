@@ -17,7 +17,7 @@
 
 package de.qspool.clementineremote.backend;
 
-import de.qspool.clementineremote.App; 
+import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.event.OnConnectionClosedListener;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;

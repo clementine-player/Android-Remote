@@ -50,13 +50,7 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.ui.adapter.SeparatedListAdapter;
-import de.qspool.clementineremote.ui.fragments.AbstractDrawerFragment;
-import de.qspool.clementineremote.ui.fragments.DonateFragment;
-import de.qspool.clementineremote.ui.fragments.DownloadsFragment;
-import de.qspool.clementineremote.ui.fragments.LibraryFragment;
-import de.qspool.clementineremote.ui.fragments.PlayerFragment;
-import de.qspool.clementineremote.ui.fragments.PlaylistFragment;
-import de.qspool.clementineremote.ui.fragments.SongInfoFragment;
+import de.qspool.clementineremote.ui.fragments.*;
 import de.qspool.clementineremote.utils.Utilities;
 
 public class MainActivity extends SherlockFragmentActivity {
@@ -69,7 +63,7 @@ public class MainActivity extends SherlockFragmentActivity {
 	private Toast mToast;
 	
 	private int mCurrentFragment;
-	private LinkedList<AbstractDrawerFragment> mFragments = new LinkedList<AbstractDrawerFragment>();
+	private LinkedList<AbstractDrawerFragment> mFragments = new LinkedList<>();
 	private AbstractDrawerFragment mPlayerFragment;
 	
     private ListView mDrawerList;
@@ -98,7 +92,6 @@ public class MainActivity extends SherlockFragmentActivity {
 	     * Define here the available fragments in the mail layout
 	     */
         mFragments.add(new PlayerFragment());
-        mFragments.add(new SongInfoFragment());
         mFragments.add(new PlaylistFragment());
         mFragments.add(new LibraryFragment());
         mFragments.add(new DownloadsFragment());
@@ -113,11 +106,11 @@ public class MainActivity extends SherlockFragmentActivity {
 	    }
 
         // Create the adapters for the sections
-        ArrayAdapter<String> remoteAdapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> remoteAdapter = new ArrayAdapter<>(this,
                 R.layout.drawer_list_item, getResources().getStringArray(R.array.navigation_array_remote));
-        ArrayAdapter<String> settingsAdapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> settingsAdapter = new ArrayAdapter<>(this,
                 R.layout.drawer_list_item, getResources().getStringArray(R.array.navigation_array_settings));
-        ArrayAdapter<String> disconnectAdapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> disconnectAdapter = new ArrayAdapter<>(this,
                 R.layout.drawer_list_item, getResources().getStringArray(R.array.navigation_array_disconnect));
         
         // Create the header adapter
@@ -388,7 +381,7 @@ public class MainActivity extends SherlockFragmentActivity {
     
     /**
      * Show text in a toast. Cancels previous toast
-     * @param tetx The text to show
+     * @param text The text to show
      * @param length length
      */
     private void makeToast(String text, int length) {
@@ -435,44 +428,39 @@ public class MainActivity extends SherlockFragmentActivity {
 		        	mCurrentFragment = 0;
 		        	mLastPosition = position;
 		        	break;
-		    	case 2: // Songinfo
+		    	case 2: // Playlist
 		        	ft.replace(R.id.content_frame, mFragments.get(1)).commit();
 		        	mCurrentFragment = 1;
 		        	mLastPosition = position;
 		        	break;
-		    	case 3: // Playlist
-		        	ft.replace(R.id.content_frame, mFragments.get(2)).commit();
+		    	case 3: // Library
+		    		ft.replace(R.id.content_frame, mFragments.get(2)).commit();
 		        	mCurrentFragment = 2;
 		        	mLastPosition = position;
-		        	break;
-		    	case 4: // Library
-		    		ft.replace(R.id.content_frame, mFragments.get(3)).commit();
-		        	mCurrentFragment = 3;
-		        	mLastPosition = position;
 		    		break;
-		    	case 5: // Downloads
+		    	case 4: // Downloads
+		    		ft.replace(R.id.content_frame, mFragments.get(3)).commit();
+		    		mCurrentFragment = 3;
+		            mLastPosition = position;
+		    		break;
+		    	case 5: // Header Settings
+		    		break;
+		    	case 6: // Settings
+		    		Intent settingsIntent = new Intent(MainActivity.this, ClementineSettings.class);
+		            startActivity(settingsIntent);
+		            break;
+		    	case 7: // Donate
 		    		ft.replace(R.id.content_frame, mFragments.get(4)).commit();
 		    		mCurrentFragment = 4;
 		            mLastPosition = position;
 		    		break;
-		    	case 6: // Header Settings
+		    	case 8: // Header Disconnect
 		    		break;
-		    	case 7: // Settings
-		    		Intent settingsIntent = new Intent(MainActivity.this, ClementineSettings.class);
-		            startActivity(settingsIntent);
-		            break;
-		    	case 8: // Donate
-		    		ft.replace(R.id.content_frame, mFragments.get(5)).commit();
-		    		mCurrentFragment = 5;
-		            mLastPosition = position;
-		    		break;
-		    	case 9: // Header Disconnect
-		    		break;
-		    	case 10: // Disonnect
+		    	case 9: // Disonnect
 		    		mOpenConnectDialog = true;
 		    		requestDisconnect();
 		    		break;
-		    	case 11: // Quit
+		    	case 10: // Quit
 		    		mOpenConnectDialog = false;
 		    		requestDisconnect();
 		    	default:
