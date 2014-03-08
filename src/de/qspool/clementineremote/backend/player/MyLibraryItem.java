@@ -17,6 +17,9 @@
 
 package de.qspool.clementineremote.backend.player;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 public class MyLibraryItem {
 	private int mLevel;
 		
@@ -29,8 +32,12 @@ public class MyLibraryItem {
 		return mUrl;
 	}
 	public void setUrl(String mUrl) {
-		this.mUrl = mUrl;
-	}
+        try {
+            this.mUrl = URLDecoder.decode(mUrl, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            this.mUrl = mUrl;
+        }
+    }
 	public int getLevel() {
 		return mLevel;
 	}
