@@ -47,7 +47,8 @@
                     android:layout_alignParentLeft="true"
                     android:layout_below="@id/si_artist"
                     android:layout_toLeftOf="@id/si_art"
-                    android:singleLine="true"
+                    android:lines="2"
+                    android:maxLines="2"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@android:color/black" />
 
