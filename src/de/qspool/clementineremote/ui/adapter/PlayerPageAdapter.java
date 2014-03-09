@@ -3,6 +3,8 @@ package de.qspool.clementineremote.ui.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
@@ -20,8 +22,18 @@ public class PlayerPageAdapter extends FragmentPagerAdapter {
     }
 
     @Override
-    public Fragment getItem(int i) {
+    public AbstractDrawerFragment getItem(int i) {
         return fragments.get(i);
+    }
+
+    @Override
+    public void destroyItem(ViewGroup viewPager, int position, Object object) {
+        if (position >= getCount()) {
+            FragmentManager manager = ((Fragment) object).getFragmentManager();
+            FragmentTransaction trans = manager.beginTransaction();
+            trans.remove((Fragment) object);
+            trans.commit();
+        }
     }
 
     @Override

@@ -18,9 +18,13 @@
 package de.qspool.clementineremote.ui.fragments;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +34,8 @@ import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import java.lang.reflect.Field;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
@@ -52,9 +58,11 @@ public class PlayerFragment extends AbstractDrawerFragment {
 
     private ActionBar mActionBar;
 
-    private PlayerPageFragment playerPageFragment = new PlayerPageFragment();
+    private PlayerPageFragment playerPageFragment;
 
-    private SongDetailFragment songDetailFragment = new SongDetailFragment();
+    private SongDetailFragment songDetailFragment;
+
+    private PlayerPageAdapter adapter;
 
     private ViewPager myPager;
 
@@ -76,8 +84,11 @@ public class PlayerFragment extends AbstractDrawerFragment {
         View view = inflater.inflate(R.layout.player_fragment,
                 container, false);
 
-        PlayerPageAdapter adapter = new PlayerPageAdapter(
-                getSherlockActivity().getSupportFragmentManager());
+        playerPageFragment = new PlayerPageFragment();
+
+        songDetailFragment = new SongDetailFragment();
+
+        adapter = new PlayerPageAdapter(getChildFragmentManager());
         adapter.addFragment(playerPageFragment);
         adapter.addFragment(songDetailFragment);
         myPager = (ViewPager) view.findViewById(R.id.player_pager);
@@ -105,6 +116,29 @@ public class PlayerFragment extends AbstractDrawerFragment {
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
+        myPager.setCurrentItem(0);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        try {
+            Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
+            childFragmentManager.setAccessible(true);
+            childFragmentManager.set(this, null);
+
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        adapter.getItem(myPager.getCurrentItem()).onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
