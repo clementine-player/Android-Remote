@@ -271,19 +271,6 @@ public class SongDetailFragment extends AbstractDrawerFragment {
         }
 
         mCurrentSong = currentSong;
-
-        setActionBarTitle();
-    }
-
-    private void setActionBarTitle() {
-        MySong currentSong = App.mClementine.getCurrentSong();
-        if (currentSong == null) {
-            mActionBar.setTitle(getString(R.string.player_nosong));
-            mActionBar.setSubtitle("");
-        } else {
-            mActionBar.setTitle(currentSong.getArtist());
-            mActionBar.setSubtitle(currentSong.getTitle());
-        }
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)

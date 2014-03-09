@@ -18,7 +18,6 @@
 package de.qspool.clementineremote.ui.fragments;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 
@@ -108,6 +107,7 @@ public class PlayerFragment extends AbstractDrawerFragment {
 
         // Initialize interface
         stateChanged();
+        metadataChanged();
 
         return view;
     }
@@ -149,6 +149,8 @@ public class PlayerFragment extends AbstractDrawerFragment {
             case STOP:
                 stateChanged();
                 break;
+            case CURRENT_METAINFO:
+                metadataChanged();
             default:
                 break;
         }
@@ -158,6 +160,14 @@ public class PlayerFragment extends AbstractDrawerFragment {
         }
         if (songDetailFragment.isAdded()) {
             songDetailFragment.MessageFromClementine(clementineMessage);
+        }
+    }
+
+    private void metadataChanged() {
+        // ActionBar shows the current playlist
+        if (App.mClementine.getPlaylistManager().getActivePlaylist() != null) {
+            mActionBar.setSubtitle(
+                    App.mClementine.getPlaylistManager().getActivePlaylist().getName());
         }
     }
 
