@@ -61,8 +61,6 @@ import de.qspool.clementineremote.ui.adapter.PlaylistSongAdapter;
 
 public class PlaylistFragment extends AbstractDrawerFragment {
 
-    public final static String PLAYLIST_ID = "playlist_id";
-
     private PlaylistSongAdapter mAdapter;
 
     private ProgressDialog mProgressDialog;
@@ -85,7 +83,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 
     private OnPlaylistReceivedListener mPlaylistListener;
 
-    private LinkedList<MyPlaylist> mPlaylists = new LinkedList<MyPlaylist>();
+    private LinkedList<MyPlaylist> mPlaylists = new LinkedList<>();
 
     private String mFilterText;
 
@@ -166,6 +164,8 @@ public class PlaylistFragment extends AbstractDrawerFragment {
         mPlaylistManager.addOnPlaylistReceivedListener(mPlaylistListener);
         mPlaylists = mPlaylistManager.getAllPlaylists();
 
+        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+
         // Get the position of the current track if we have one
         if (App.mClementine.getCurrentSong() != null) {
             updateViewPosition();
@@ -215,7 +215,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
                 mSelectedItemDrawable = mSelectedItem.getBackground();
                 mSelectedItem.setBackgroundColor(getResources().getColor(R.color.orange_light));
 
-                mSelectedSong = (MySong) getSelectedPlaylistSongs().get(position);
+                mSelectedSong = getSelectedPlaylistSongs().get(position);
 
                 // Start the CAB using the ActionMode.Callback defined above
                 mActionMode = getSherlockActivity().startActionMode(mActionModeCallback);
@@ -352,7 +352,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
     private OnItemClickListener oiclSong = new OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-            MySong song = (MySong) getSelectedPlaylistSongs().get(position);
+            MySong song = getSelectedPlaylistSongs().get(position);
 
             playSong(song);
         }
