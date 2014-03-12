@@ -64,11 +64,7 @@ public class CrashReportDialog {
         }
 
         AlertDialog.Builder builder;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-            builder = new AlertDialog.Builder(mContext, AlertDialog.THEME_HOLO_LIGHT);
-        } else {
-            builder = new AlertDialog.Builder(mContext);
-        }
+        builder = new AlertDialog.Builder(mContext);
 
         DialogInterface.OnClickListener dialogOnClickListener
                 = new DialogInterface.OnClickListener() {

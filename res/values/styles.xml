@@ -31,7 +31,7 @@
         <item name="android:homeAsUpIndicator">@drawable/abs__ic_ab_back_holo_dark</item>
     </style>
 
-    <style name="PlayerTheme" parent="@style/Theme.Sherlock">
+    <style name="PlayerTheme" parent="@style/Theme.Sherlock.Light">
         <item name="actionBarStyle">@style/ActionBarStyle</item>
         <item name="android:actionBarStyle">@style/ActionBarStyle</item>
         <item name="actionButtonStyle">@style/ActionButtonStyle</item>
@@ -42,13 +42,23 @@
         <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_example</item>
         <item name="android:activatedBackgroundIndicator">@drawable/selector_white_orange_selected</item>
         <item name="activatedBackgroundIndicator">@drawable/selector_white_orange_selected</item>
+        <item name="android:actionOverflowButtonStyle">
+            @style/Widget.Sherlock.ActionButton.Overflow
+        </item>
+        <item name="actionOverflowButtonStyle">@style/Widget.Sherlock.ActionButton.Overflow</item>
     </style>
 
     <style name="ActionBarStyle" parent="Widget.Sherlock.ActionBar">
         <item name="background">@drawable/actionbar_bg</item>
         <item name="android:background">@drawable/actionbar_bg</item>
         <item name="titleTextStyle">@style/ActionBarTextAppearance</item>
-        <item name="@android:titleTextStyle">@style/ActionBarTextAppearance</item>
+        <item name="android:titleTextStyle">@style/ActionBarTextAppearance</item>
+        <item name="subtitleTextStyle">
+            @style/TextAppearance.Sherlock.Widget.ActionBar.Subtitle.Inverse
+        </item>
+        <item name="android:subtitleTextStyle">
+            @style/TextAppearance.Sherlock.Widget.ActionBar.Subtitle.Inverse
+        </item>
     </style>
 
     <style name="ActionBarTextAppearance" parent="@android:style/TextAppearance">

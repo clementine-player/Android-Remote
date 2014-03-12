@@ -423,12 +423,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
         int requests = mPlaylistManager.requestAllPlaylistSongs();
         if (requests > 0) {
             // Start a Progressbar
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-                mProgressDialog = new ProgressDialog(getActivity(),
-                        ProgressDialog.THEME_HOLO_LIGHT);
-            } else {
-                mProgressDialog = new ProgressDialog(getActivity());
-            }
+            mProgressDialog = new ProgressDialog(getActivity());
             mProgressDialog.setMax(requests);
             mProgressDialog.setCancelable(true);
             mProgressDialog.setTitle(R.string.player_download_playlists);

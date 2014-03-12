@@ -34,7 +34,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
-import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
@@ -150,11 +149,7 @@ public class ConnectDialog extends SherlockActivity {
         }
 
         // Create a progress dialog
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-            mPdConnect = new ProgressDialog(this, ProgressDialog.THEME_HOLO_LIGHT);
-        } else {
-            mPdConnect = new ProgressDialog(this);
-        }
+        mPdConnect = new ProgressDialog(this);
         mPdConnect.setCancelable(true);
         mPdConnect.setOnCancelListener(oclProgressDialog);
 
