@@ -20,6 +20,7 @@ package de.qspool.clementineremote.ui.fragments;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 
 import android.os.Bundle;
 import android.os.Message;
@@ -139,6 +140,12 @@ public class PlayerFragment extends AbstractDrawerFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         adapter.getItem(myPager.getCurrentItem()).onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        return adapter.getItem(myPager.getCurrentItem()).onOptionsItemSelected(item);
     }
 
     @Override
