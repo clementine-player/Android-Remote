@@ -3,10 +3,10 @@
   <string name="app_name">Control remoto de Clementine</string>
   <string name="app_not_available">La aplicación no está disponible</string>
   <string name="connectdialog_connect">Conectar</string>
-  <string name="connectdialog_autoconnect">Autoconectar</string>
+  <string name="connectdialog_autoconnect">Conectar automáticamente</string>
   <string name="connectdialog_connecting">Conectando con Clementine</string>
   <string name="connectdialog_download_data">Descargando datos</string>
-  <string name="connectdialog_error">No se pudo alcanzar el host</string>
+  <string name="connectdialog_error">No se pudo conectar con el equipo</string>
   <string name="connectdialog_ip_hint">Escriba la dirección IP</string>
   <string name="connectdialog_mdns_found">Se encontraron instancias de Clementine. Toque el icono para elegir una.</string>
   <string name="connectdialog_services">Instancias de Clementine</string>
@@ -163,7 +163,7 @@
   <string-array name="navigation_array_remote">
     <item>Reproductor</item>
     <item>Listas de reproducción</item>
-    <item>Librería</item>
+    <item>Colección</item>
     <item>Descargas</item>
   </string-array>
   <string-array name="navigation_array_settings">
