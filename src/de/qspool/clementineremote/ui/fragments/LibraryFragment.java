@@ -77,6 +77,8 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 
     private View mEmptyLibrary;
 
+    private TextView mLibraryEmptyText;
+
     private TextView mLibraryPath;
 
     private ProgressDialog mProgressDialog;
@@ -133,6 +135,8 @@ public class LibraryFragment extends AbstractDrawerFragment implements
         mLibraryPath = (TextView) view.findViewById(R.id.library_path);
         mList = (ListView) view.findViewById(R.id.library);
         mEmptyLibrary = view.findViewById(R.id.library_empty);
+
+        mLibraryEmptyText = (TextView) mEmptyLibrary.findViewById(R.id.library_empty_txt);
 
         mList.setOnItemClickListener(oiclLibraryClick);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -337,6 +341,8 @@ public class LibraryFragment extends AbstractDrawerFragment implements
                 if (!mAdapters.isEmpty()) {
                     mAdapters.getLast().getFilter().filter(newText);
                     mLastFilter = newText;
+
+                    mLibraryEmptyText.setText(R.string.library_no_search_results);
                 }
                 return true;
             }
@@ -401,6 +407,8 @@ public class LibraryFragment extends AbstractDrawerFragment implements
         mList.setTextFilterEnabled(true);
         mList.setSelector(android.R.color.transparent);
         mList.setOnItemClickListener(oiclLibraryClick);
+
+        mList.setEmptyView(mEmptyLibrary);
     }
 
     @Override

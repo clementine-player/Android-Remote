@@ -10,7 +10,8 @@
         android:background="@drawable/actionbar_2nd_bg">
 
         <TextView
-            android:id="@+id/library_path"
+                style="@style/TextAppearance.Sherlock.Widget.ActionBar.Subtitle.Inverse"
+                android:id="@+id/library_path"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
