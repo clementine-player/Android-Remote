@@ -139,6 +139,14 @@ public class ConnectionFragment extends AbstractDrawerFragment {
     }
 
     private void updateData() {
+        long diff = new Date().getTime() - App.mClementineConnection.getStartTime();
+        String dateFormat = String.format("%02d:%02d:%02d",
+                TimeUnit.MILLISECONDS.toHours(diff),
+                TimeUnit.MILLISECONDS.toMinutes(diff) % 60,
+                TimeUnit.MILLISECONDS.toSeconds(diff) % 60
+        );
+        tv_time.setText(dateFormat);
+
         int uid = getActivity().getApplicationInfo().uid;
 
         if (TrafficStats.getUidRxBytes(uid) == TrafficStats.UNSUPPORTED) {
@@ -149,16 +157,22 @@ public class ConnectionFragment extends AbstractDrawerFragment {
             String rx = Utilities.humanReadableBytes(
                     TrafficStats.getUidRxBytes(uid) - App.mClementineConnection.getStartRx(), true);
 
-            tv_traffic.setText(tx + " / " + rx);
+            long total = TrafficStats.getUidTxBytes(uid) - App.mClementineConnection.getStartTx() +
+                    TrafficStats.getUidRxBytes(uid) - App.mClementineConnection.getStartRx();
+            long a = total / TimeUnit.MILLISECONDS.toSeconds(diff);
+            String perSecond = Utilities.humanReadableBytes(a, true);
+
+            StringBuilder sb = new StringBuilder();
+            sb.append(tx);
+            sb.append(" / ");
+            sb.append(rx);
+            sb.append(" (");
+            sb.append(perSecond);
+            sb.append("/s)");
+            tv_traffic.setText(sb.toString());
         }
 
-        long diff = new Date().getTime() - App.mClementineConnection.getStartTime();
-        String dateFormat = String.format("%02d:%02d:%02d",
-                TimeUnit.MILLISECONDS.toHours(diff),
-                TimeUnit.MILLISECONDS.toMinutes(diff) % 60,
-                TimeUnit.MILLISECONDS.toSeconds(diff) % 60
-        );
-        tv_time.setText(dateFormat);
+
     }
 
     @Override

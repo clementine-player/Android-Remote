@@ -184,7 +184,10 @@ public class Utilities {
         }
 
         // What prefix do we have to use?
-        String prefix = (iec ? " KMGTPE" : " kMGTPE").charAt(exp) + (iec ? "i" : "");
+        String prefix = "";
+        if (exp > 0) {
+            prefix = (iec ? " KMGTPE" : " kMGTPE").charAt(exp) + ((iec) ? "i" : "");
+        }
 
         // Return a human readable String
         return String.format("%.2f %sB", newBytes, prefix);
