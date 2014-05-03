@@ -43,7 +43,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -87,8 +86,6 @@ public class SongDetailFragment extends AbstractDrawerFragment {
     private TextView tv_filename;
 
     private RatingBar rb_rating;
-
-    private SeekBar mSbVolume;
 
     // Hold a reference to the current animator,
     // so that it can be canceled mid-way.
