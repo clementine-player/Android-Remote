@@ -221,6 +221,7 @@ public class ConnectDialog extends SherlockActivity {
 
     @Override
     public void onPause() {
+        super.onPause();
         if (mClementineMDns != null) {
             mClementineMDns.stopServiceDiscovery();
         }
