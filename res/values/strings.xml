@@ -204,6 +204,14 @@
     <string name="cm_connect_mdns_content">If the icon pulsates, click on it to see a list of
         available computers running Clementine.
     </string>
+    <string name="cm_player_home_title">Clementine Remote menu</string>
+    <string name="cm_player_home_content">Click the home button to open the menu.</string>
+    <string name="cm_player_hold_pause_title">Hold pause</string>
+    <string name="cm_player_hold_pause_content">It toogles the stop after track feature.</string>
+    <string name="cm_player_lyrics_title">Click on the album cover</string>
+    <string name="cm_player_lyrics_content">A dialog with the lyrics will open</string>
+    <string name="cm_player_swipe_title">Swipe to the right</string>
+    <string name="cm_player_swipe_content">to see track details and rate the song.</string>
 
 
     <string-array name="navigation_headers">

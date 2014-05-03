@@ -453,6 +453,10 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
                 false);
     }
 
+    public ImageView getImageArt() {
+        return mImgArt;
+    }
+
     /**
      * Get the best lyrics provider for this song (currently the one with the most characters
      *
