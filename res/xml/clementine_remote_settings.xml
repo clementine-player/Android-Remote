@@ -101,6 +101,9 @@
             android:title="@string/pref_license_title"
             android:summary="@string/pref_license_summary" />
         <Preference
+                android:key="pref_key_opensource"
+                android:title="@string/pref_opensource_title"/>
+        <Preference
             android:key="pref_key_about"
             android:title="@string/pref_about_title"
             android:summary="@string/pref_about_summary" />

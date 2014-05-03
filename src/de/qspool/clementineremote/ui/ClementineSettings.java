@@ -41,11 +41,16 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
@@ -59,6 +64,8 @@ public class ClementineSettings extends SherlockPreferenceActivity
         implements OnSharedPreferenceChangeListener {
 
     private Preference mLicenseDialogPreference;
+
+    private Preference mOpenSourceDialogPreference;
 
     private Preference mAboutDialogPreference;
 
@@ -92,6 +99,8 @@ public class ClementineSettings extends SherlockPreferenceActivity
         // Get the dialog preferences
         mLicenseDialogPreference = (Preference) getPreferenceScreen()
                 .findPreference("pref_key_license");
+        mOpenSourceDialogPreference = (Preference) getPreferenceScreen()
+                .findPreference("pref_key_opensource");
         mAboutDialogPreference = (Preference) getPreferenceScreen()
                 .findPreference("pref_key_about");
         mVersion = (Preference) getPreferenceScreen().findPreference("pref_version");
@@ -135,6 +144,7 @@ public class ClementineSettings extends SherlockPreferenceActivity
 
         // Set the onclicklistener for the dialogs
         mLicenseDialogPreference.setOnPreferenceClickListener(opclLicense);
+        mOpenSourceDialogPreference.setOnPreferenceClickListener(opclOpenSource);
         mAboutDialogPreference.setOnPreferenceClickListener(opclAbout);
         mDownloadDir.setOnPreferenceClickListener(opclDownloadDir);
 
@@ -244,6 +254,45 @@ public class ClementineSettings extends SherlockPreferenceActivity
         }
     };
 
+    private OnPreferenceClickListener opclOpenSource = new OnPreferenceClickListener() {
+
+        @Override
+        public boolean onPreferenceClick(Preference preference) {
+            mCustomDialog = new Dialog(ClementineSettings.this);
+            mCustomDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            mCustomDialog.setContentView(R.layout.dialog_opensource);
+            mCustomDialog.setCancelable(true);
+            mCustomDialog.getWindow().getAttributes().width = LayoutParams.MATCH_PARENT;
+
+            Button button = (Button) mCustomDialog.findViewById(R.id.btnCloseLicense);
+            WebView text = (WebView) mCustomDialog.findViewById(R.id.opensource_licenses);
+
+            InputStream is = getResources().openRawResource(R.raw.opensource);
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            StringBuilder sb = new StringBuilder();
+            String s;
+
+            try {
+                while ((s = br.readLine()) != null) {
+                    sb.append(s);
+                    sb.append("\n");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            text.loadDataWithBaseURL(null, sb.toString(), "text/html", "utf-8", null);
+            button.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mCustomDialog.dismiss();
+                }
+            });
+            mCustomDialog.show();
+            return true;
+        }
+    };
+
     /**
      * Create a new about dialog
      */
@@ -267,17 +316,12 @@ public class ClementineSettings extends SherlockPreferenceActivity
 
             // Supporters
             tvSupporters.setText("David Sansome (Clementine-Dev)\n" +
-                    "John Maguire (Clementine-Dev)\n");
+                    "John Maguire (Clementine-Dev)\n" +
+                    "Arnaud Bienner (Clementine-Dev)");
 
             // Others
             tvOthers.setText(Html.fromHtml(
-                    "<a href=\"http://actionbarsherlock.com/\">ActionBarSherlock</a> (<a href=\"http://www.apache.org/licenses/LICENSE-2.0.html\">License</a>)<br>"
-                            +
-                            "<a href=\"http://jmdns.sourceforge.net/\">JmDNS</a> (<a href=\"http://jmdns.sourceforge.net/license.html\">License</a>)<br>"
-                            +
-                            "<a href=\"http://jgilfelt.github.io/android-actionbarstylegenerator\">Android Action Bar Style Generator</a><br>"
-                            +
-                            "and all the <a href=\"https://www.transifex.com/projects/p/clementine-remote/\">translators</a>!"));
+                    "Thanks to all the <a href=\"https://www.transifex.com/projects/p/clementine-remote/\">translators</a>!"));
             tvOthers.setMovementMethod(LinkMovementMethod.getInstance());
 
             // Create the buttons and the listener

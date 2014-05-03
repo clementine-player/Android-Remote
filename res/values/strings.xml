@@ -131,6 +131,7 @@
     <string name="pref_version_title">Version</string>
     <string name="pref_license_title">License</string>
     <string name="pref_license_summary">GNU GPLv3</string>
+    <string name="pref_opensource_title">Open Source</string>
     <string name="pref_about_title">About</string>
     <string name="pref_about_summary">People working on this project</string>
     <string name="pref_clementine_title">Clementine</string>
