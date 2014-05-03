@@ -106,7 +106,7 @@ public class LibraryAdapter extends CursorAdapter implements Filterable {
             return mLibrary.buildSelectSql(mLevel);
         } else {
             return mLibrary.buildSelectSql(mLevel,
-                    mLibrary.getMatchesSubQuery(mLevel, constraint.toString()));
+                    mLibrary.getMatchesSubQuery(constraint.toString()));
         }
     }
 

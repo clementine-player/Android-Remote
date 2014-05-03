@@ -277,7 +277,7 @@ public class MyLibrary extends
         return result;
     }
 
-    public String getMatchesSubQuery(int level, String match) {
+    public String getMatchesSubQuery(String match) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("(SELECT * FROM ");
@@ -285,23 +285,8 @@ public class MyLibrary extends
         sb.append(" WHERE ");
         sb.append(SONGS_FTS);
         sb.append(" MATCH \"");
-
-        switch (level) {
-            case LVL_ARTIST:
-                sb.append("artist:");
-                sb.append(match);
-                sb.append("* OR ");
-            case LVL_ALBUM:
-                sb.append("album:");
-                sb.append(match);
-                sb.append("* OR ");
-            case LVL_TITLE:
-                sb.append("title:");
-                sb.append(match);
-                sb.append("* ");
-            default:
-                break;
-        }
+        sb.append(match);
+        sb.append("*");
 
         sb.append("\" ) ");
 
