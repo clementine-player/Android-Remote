@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="app_name">Clementine à distance</string>
+<resources>
+<string name="app_name">Clementine à distance</string>
   <string name="app_not_available">L\'application n\'est pas disponible.</string>
   <string name="connectdialog_connect">Se connecter</string>
   <string name="connectdialog_autoconnect">Connexion automatique</string>
@@ -8,7 +8,6 @@
   <string name="connectdialog_download_data">Téléchargement des données</string>
   <string name="connectdialog_error">Impossible de se connecter</string>
   <string name="connectdialog_ip_hint">Saisissez votre adresse IP</string>
-  <string name="connectdialog_mdns_found">Plusieurs Clementines trouvées. Touchez l\'écran pour un choisir une.</string>
   <string name="connectdialog_services">Clementines</string>
   <string name="player_nosong">Aucun morceau joué actuellement</string>
   <string name="player_disconnected">Déconnecté</string>

@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="app_name">Clementine Remote</string>
+<resources>
+<string name="app_name">Clementine Remote</string>
   <string name="app_not_available">App niet beschikbaar!</string>
   <string name="connectdialog_connect">Verbinden</string>
   <string name="connectdialog_autoconnect">Auto-verbinden</string>
@@ -8,7 +8,6 @@
   <string name="connectdialog_download_data">Data downloaden</string>
   <string name="connectdialog_error">Kan host niet vinden</string>
   <string name="connectdialog_ip_hint">Geef IP adres</string>
-  <string name="connectdialog_mdns_found">Meerdere Clementine\'s gevonden. Klik het icoon om 1 te kiezen.</string>
   <string name="connectdialog_services">Clementines</string>
   <string name="player_nosong">Geen nummer aan het afspelen</string>
   <string name="player_disconnected">Verbinding verbroken</string>

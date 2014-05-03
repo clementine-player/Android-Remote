@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="app_name">Clementine Remote</string>
+<resources>
+<string name="app_name">Clementine Remote</string>
   <string name="app_not_available">Приложение не доступно!</string>
   <string name="connectdialog_connect">Подключиться</string>
   <string name="connectdialog_autoconnect">Авто-подлючение</string>
@@ -8,7 +8,6 @@
   <string name="connectdialog_download_data">Загрузка данных</string>
   <string name="connectdialog_error">Не могу подключиться</string>
   <string name="connectdialog_ip_hint">Введите IP адрес</string>
-  <string name="connectdialog_mdns_found">Найдено несколько запущеных Clementine. Коснитесь иконки чтобы выбрать одну из них.</string>
   <string name="connectdialog_services">Clementines</string>
   <string name="player_nosong">Сейчас не проигрывается ничего</string>
   <string name="player_disconnected">Отключено</string>

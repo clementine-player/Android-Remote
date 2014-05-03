@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="app_name">Clementine 리모콘</string>
+<resources>
+<string name="app_name">Clementine 리모콘</string>
   <string name="app_not_available">어플리케이션을 사용할 수 없음!</string>
   <string name="connectdialog_connect">연결</string>
   <string name="connectdialog_autoconnect">자동 연결</string>
@@ -8,7 +8,6 @@
   <string name="connectdialog_download_data">데이터 다운로드 중</string>
   <string name="connectdialog_error">호스트에 연결 할 수 없습니다</string>
   <string name="connectdialog_ip_hint">IP 주소를 입력</string>
-  <string name="connectdialog_mdns_found">Clementine을 찾았습니다. 하나의 아이콘을 선택하여 터치합니다</string>
   <string name="connectdialog_services">Clemntine</string>
   <string name="player_nosong">지금 재생되는 곡이 없습니다.</string>
   <string name="player_disconnected">연결 끊김</string>

@@ -1,162 +1,190 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="app_name">Clementine Remote</string>
-  <string name="app_not_available">Aplikace je nedostupná!</string>
-  <string name="connectdialog_connect">Připojit</string>
-  <string name="connectdialog_autoconnect">Automaticky připojit</string>
-  <string name="connectdialog_connecting">Připojuje se s Clementine</string>
-  <string name="connectdialog_download_data">Stahují se data</string>
-  <string name="connectdialog_error">Nepodařilo se dostat se k hostiteli</string>
-  <string name="connectdialog_ip_hint">Zadat adresu IP</string>
-  <string name="connectdialog_mdns_found">Nalezeno více Clementin. Dotknutím se ikony s vámi vybranou jednu zvolte.</string>
-  <string name="connectdialog_services">Clementiny</string>
-  <string name="player_nosong">Nyní se nepřehrávají žádné písně</string>
-  <string name="player_disconnected">Odpojeno</string>
-  <string name="player_playlist">Seznam skladeb:</string>
-  <string name="player_download_playlists">Stahují se seznamy skladeb</string>
-  <string name="playler_volume">Hlasitost</string>
-  <string name="player_stop_after_current">Přepnout zastavení po dokončení skladby.</string>
-  <string name="player_download_lyrics">Stahuje se text písně</string>
-  <string name="player_no_lyrics">Žádný text písně nebyl nalezen.</string>
-  <string name="player_download_started">Stahování spuštěno</string>
-  <string name="player_song_is_stream">Nelze stáhnout proudy!</string>
-  <string name="player_stream">[S]</string>
-  <string name="playlist_search_hint">Hledat skladbu</string>
-  <string name="playlist_empty">Seznam skladeb je prázdný!</string>
-  <string name="playlist_context_play">Přehrát položku</string>
-  <string name="playlist_context_remove">Odstranit ze seznamu skladeb</string>
-  <string name="downloads_empty">Žádné stažené!</string>
-  <string name="download_error">Nepodařilo se otevřít píseň!</string>
-  <string name="download_freespace">Volné místo</string>
-  <string name="download_noti_title">Spouští se stahování</string>
-  <string name="download_noti_title_song">[Nynější píseň]</string>
-  <string name="download_noti_title_album">[Album]</string>
-  <string name="download_noti_title_playlist">[Seznam skladeb]</string>
-  <string name="download_noti_complete">Stahování dokončeno</string>
-  <string name="download_noti_canceled">Stahování zrušeno</string>
-  <string name="download_noti_insufficient_space">Nedostatek místa. Stahování zrušeno.</string>
-  <string name="download_noti_forbidden">Stahování zakázáno. Zapněte je v nastavení Clementine.</string>
-  <string name="download_noti_not_mounted">Nenalezeno žádné ukládací zařízení!</string>
-  <string name="download_noti_only_wifi">Stahování povoleno jen na Wifi.</string>
-  <string name="library_download">Stahuje se sbírka</string>
-  <string name="library_optimize">Optimalizuje se databáze</string>
-  <string name="library_please_wait">Počkejte, prosím</string>
-  <string name="library_refresh">Obnovit</string>
-  <string name="library_empty">Sbírka je prázdná. Stiskněte Obnovit pro stažení sbírky!</string>
-  <string name="library_no_albums">%d alb</string>
-  <string name="library_no_tracks">%d skladeb</string>
-  <string name="library_songs_added">%d písní přidáno do nynějšího seznamu skladeb</string>
-  <string name="library_context_add">Přidat položku do nynějšího seznamu skladeb</string>
-  <string name="song_info_album">Album</string>
-  <string name="song_info_genre">Žánr</string>
-  <string name="song_info_year">Rok</string>
-  <string name="song_info_track">Skladba</string>
-  <string name="song_info_disc">Disk</string>
-  <string name="song_info_playcount">Počet přehrání</string>
-  <string name="song_info_length">Délka</string>
-  <string name="song_info_size">Velikost</string>
-  <string name="song_info_filename">Název souboru</string>
-  <string name="song_info_rating">Hodnocení</string>
-  <string name="song_info_rated">Píseň hodnocena $stars$ hvězdičkami</string>
-  <string name="menu_shuffle">Zamíchat</string>
-  <string name="menu_repeat">Opakovat</string>
-  <string name="menu_settings">Nastavení</string>
-  <string name="menu_search">Hledat</string>
-  <string name="menu_love">Oblíbit</string>
-  <string name="menu_ban">Zakázat</string>
-  <string name="menu_download_song">Stáhnout píseň</string>
-  <string name="menu_download_album">Stáhnout album</string>
-  <string name="menu_download_playlist">Stáhnout seznam skladeb</string>
-  <string name="donate_header">Dary</string>
-  <string name="donate_text">Děkuji vám za to, že používáte mou aplikaci. Věřím, že vám bude užitečná!\n\nPokud máte díky mé práci skutečně dobrou náladu, malý dar od vás by byl velice oceněn.</string>
-  <string name="donate_i_want">Chci darovat:</string>
-  <string name="donate_one">Koblihy (1.00 €)</string>
-  <string name="donate_two">Káva (2.00 €)</string>
-  <string name="donate_five">Pizza (5.00 €)</string>
-  <string name="donate_thanks">Děkujeme vám za vaši podporu! :-)</string>
-  <string name="donate_complete">Dar uskutečněn, děkujeme! :-)</string>
-  <string name="donate_try_again">Zpracovává se poslední dar. Zkuste to ještě jednou</string>
-  <string name="donate_not_available">Google Play je nedostupná</string>
-  <string name="donate_not_available_text">Prověřte, prosím, zda máte nainstalovánu nejnovější verzi Google Play Store a zkuste to znovu!</string>
-  <string name="pref_cat_behavior">Chování</string>
-  <string name="pref_cat_player">Přehrávač</string>
-  <string name="pref_cat_downloads">Stahování</string>
-  <string name="pref_cat_connection">Připojení</string>
-  <string name="pref_cat_info">Informace</string>
-  <string name="pref_volume_title">Použít klávesy pro ovládání hlasitosti</string>
-  <string name="pref_volume_summary">Použít klávesy pro ovládání hlasitosti Clementine.</string>
-  <string name="pref_pebble_title">Použít Pebble</string>
-  <string name="pref_pebble_summary">Poslat popisná data k nynější skladbě hudební aplikaci Pebble.</string>
-  <string name="pref_trackno_title">Ukázat číslo skladby</string>
-  <string name="pref_trackno_summary">Ukázat nebo skrýt číslo skladby v seznamech skladeb.</string>
-  <string name="pref_port_title">Přípojka (port)</string>
-  <string name="pref_port_summary">Nynější přípojka</string>
-  <string name="pref_port_default">5500</string>
-  <string name="pref_port_error">Neplatná přípojka (port)</string>
-  <string name="pref_lastfm_title">Last.fm</string>
-  <string name="pref_lastfm_summary">Zapnout Oblíbit/Zakázat skladby. (vyžaduje opětovné spuštění)</string>
-  <string name="pref_lower_volume_title">Snížit hlasitost</string>
-  <string name="pref_lower_volume_summary">Snížit hlasitost při příchozím/odchozím hovoru.</string>
-  <string name="pref_call_volume_title">Úroveň hlasitosti volání</string>
-  <string name="pref_call_volume_summary">Nynější úroveň hlasitosti volání: %s</string>
-  <string name="pref_version_summary">Klepněte pro návštěvu stránek projektu</string>
-  <string name="pref_version_title">Verze</string>
-  <string name="pref_license_title">Licence</string>
-  <string name="pref_license_summary">GNU GPLv3</string>
-  <string name="pref_about_title">O</string>
-  <string name="pref_about_summary">Lidé pracující na tomto projektu</string>
-  <string name="pref_clementine_title">Clementine</string>
-  <string name="pref_clementine_summary">Navštívit stránky Clementine</string>
-  <string name="pref_dl_wifi_only_title">Pouze WiFi</string>
-  <string name="pref_dl_wifi_only_summary">Stahovat písně jen při připojení k síti Wifi.</string>
-  <string name="pref_dl_dir">Nastavit složku pro stahování</string>
-  <string name="pref_dl_override">Přepsat stávající soubory</string>
-  <string name="pref_dl_cat_playlist">Stahování seznamů skladeb</string>
-  <string name="pref_dl_pl_save_own_dir_title">Ukládat skladby ve složce se seznamy skladeb</string>
-  <string name="pref_dl_pl_save_own_dir_summary">Vytvoří složku pojmenovanou po seznamu skladeb a skladby uloží tam.</string>
-  <string name="pref_dl_pl_artist_dir_title">Vytvořit podsložku pro umělce/album</string>
-  <string name="pref_dl_pl_artist_dir_summary">Vytvořit podsložku pro umělce/album pro každou jednotlivou skladbu.</string>
-  <string name="file_dialog_set_dir">Vybrat adresář</string>
-  <string name="dialog_about_header">O</string>
-  <string name="dialog_about_authors">Autoři</string>
-  <string name="dialog_about_supporters">Podporovatelé</string>
-  <string name="dialog_about_others">Jiné</string>
-  <string name="dialog_license_top">Tento program je šířen s nadějí, že bude užitečný, ale BEZ JAKÉKOLI ZÁRUKY</string>
-  <string name="dialog_close">Zavřít</string>
-  <string name="error_versions">Nekompatibilní verze</string>
-  <string name="old_proto">Aktualizujte Clementine!</string>
-  <string name="no_private_ip">Zařízení Android má adresu IP, která není místní. Zkuste v nastavení Clementine zakázat Použít pouze místní adresu IP.</string>
-  <string name="wifi_disabled">Wifi je vypnuta. Pokud se chcete spojit s Clementine přes internet, ujistěte se, že jste přípojky (port) odeslali správně a že jste zakázali Použít pouze místní adresu IP.</string>
-  <string name="input_auth_code">Ověřovací kód</string>
-  <string name="invalid_code">Neplatný kód</string>
-  <string name="repeat_off">Neopakovat</string>
-  <string name="repeat_track">Opakovat skladbu</string>
-  <string name="repeat_album">Opakovat album</string>
-  <string name="repeat_playlist">Opakovat seznam skladeb</string>
-  <string name="shuffle_off">Nemíchat</string>
-  <string name="shuffle_all">Zamíchat vše</string>
-  <string name="shuffle_inside_album">Zamíchat skladby v tomto albu</string>
-  <string name="shuffle_albums">Zamíchat alba</string>
-  <string name="first_time_title">Vítejte</string>
-  <string name="track_loved">Skladba je oblíbená &lt;3</string>
-  <string name="track_banned">Skladba je zakázaná :-(</string>
-  <string name="notification_disconnect_keep_alive">Spojení ztraceno. Ťukněte pro opětovné připojení.</string>
-  <string name="notification_action_next">Další</string>
-  <string name="notification_action_playpause">Přehrát/Pozastavit</string>
-  <string name="crash_report_title">Jejda, něco není v pořádku!</string>
-  <string name="crash_report_message">Naposledy Clementine Remote spadl! To by se nemělo stát! Pomozte, prosím, se zlepšením aplikace a odešlete soubor se zápisem o činnosti programu. Děkujeme!</string>
-  <string name="crash_report_send">Poslat!</string>
-  <string-array name="navigation_headers">
-    <item>Vzdálené</item>
-    <item>Nastavení</item>
-    <item>Odpojit</item>
-  </string-array>
-  <string-array name="navigation_array_settings">
-    <item>Nastavení</item>
-    <item>Darovat</item>
-  </string-array>
-  <string-array name="navigation_array_disconnect">
-    <item>Odpojit</item>
-    <item>Ukončit</item>
-  </string-array>
+<resources>
+    <string name="app_name">Clementine Remote</string>
+    <string name="app_not_available">Aplikace je nedostupná!</string>
+    <string name="connectdialog_connect">Připojit</string>
+    <string name="connectdialog_autoconnect">Automaticky připojit</string>
+    <string name="connectdialog_connecting">Připojuje se s Clementine</string>
+    <string name="connectdialog_download_data">Stahují se data</string>
+    <string name="connectdialog_error">Nepodařilo se dostat se k hostiteli</string>
+    <string name="connectdialog_ip_hint">Zadat adresu IP</string>
+    <string name="connectdialog_services">Clementiny</string>
+    <string name="player_nosong">Nyní se nepřehrávají žádné písně</string>
+    <string name="player_disconnected">Odpojeno</string>
+    <string name="player_playlist">Seznam skladeb:</string>
+    <string name="player_download_playlists">Stahují se seznamy skladeb</string>
+    <string name="playler_volume">Hlasitost</string>
+    <string name="player_stop_after_current">Přepnout zastavení po dokončení skladby.</string>
+    <string name="player_download_lyrics">Stahuje se text písně</string>
+    <string name="player_no_lyrics">Žádný text písně nebyl nalezen.</string>
+    <string name="player_download_started">Stahování spuštěno</string>
+    <string name="player_song_is_stream">Nelze stáhnout proudy!</string>
+    <string name="player_stream">[S]</string>
+    <string name="playlist_search_hint">Hledat skladbu</string>
+    <string name="playlist_empty">Seznam skladeb je prázdný!</string>
+    <string name="playlist_context_play">Přehrát položku</string>
+    <string name="playlist_context_remove">Odstranit ze seznamu skladeb</string>
+    <string name="downloads_empty">Žádné stažené!</string>
+    <string name="download_error">Nepodařilo se otevřít píseň!</string>
+    <string name="download_freespace">Volné místo</string>
+    <string name="download_noti_title">Spouští se stahování</string>
+    <string name="download_noti_title_song">[Nynější píseň]</string>
+    <string name="download_noti_title_album">[Album]</string>
+    <string name="download_noti_title_playlist">[Seznam skladeb]</string>
+    <string name="download_noti_complete">Stahování dokončeno</string>
+    <string name="download_noti_canceled">Stahování zrušeno</string>
+    <string name="download_noti_insufficient_space">Nedostatek místa. Stahování zrušeno.</string>
+    <string name="download_noti_forbidden">Stahování zakázáno. Zapněte je v nastavení Clementine.
+    </string>
+    <string name="download_noti_not_mounted">Nenalezeno žádné ukládací zařízení!</string>
+    <string name="download_noti_only_wifi">Stahování povoleno jen na Wifi.</string>
+    <string name="library_download">Stahuje se sbírka</string>
+    <string name="library_optimize">Optimalizuje se databáze</string>
+    <string name="library_please_wait">Počkejte, prosím</string>
+    <string name="library_refresh">Obnovit</string>
+    <string name="library_empty">Sbírka je prázdná. Stiskněte Obnovit pro stažení sbírky!</string>
+    <string name="library_no_albums">%d alb</string>
+    <string name="library_no_tracks">%d skladeb</string>
+    <string name="library_songs_added">%d písní přidáno do nynějšího seznamu skladeb</string>
+    <string name="library_context_add">Přidat položku do nynějšího seznamu skladeb</string>
+    <string name="song_info_album">Album</string>
+    <string name="song_info_genre">Žánr</string>
+    <string name="song_info_year">Rok</string>
+    <string name="song_info_track">Skladba</string>
+    <string name="song_info_disc">Disk</string>
+    <string name="song_info_playcount">Počet přehrání</string>
+    <string name="song_info_length">Délka</string>
+    <string name="song_info_size">Velikost</string>
+    <string name="song_info_filename">Název souboru</string>
+    <string name="song_info_rating">Hodnocení</string>
+    <string name="song_info_rated">Píseň hodnocena $stars$ hvězdičkami</string>
+    <string name="menu_shuffle">Zamíchat</string>
+    <string name="menu_repeat">Opakovat</string>
+    <string name="menu_settings">Nastavení</string>
+    <string name="menu_search">Hledat</string>
+    <string name="menu_love">Oblíbit</string>
+    <string name="menu_ban">Zakázat</string>
+    <string name="menu_download_song">Stáhnout píseň</string>
+    <string name="menu_download_album">Stáhnout album</string>
+    <string name="menu_download_playlist">Stáhnout seznam skladeb</string>
+    <string name="donate_header">Dary</string>
+    <string name="donate_text">Děkuji vám za to, že používáte mou aplikaci. Věřím, že vám bude
+        užitečná!\n\nPokud máte díky mé práci skutečně dobrou náladu, malý dar od vás by byl velice
+        oceněn.
+    </string>
+    <string name="donate_i_want">Chci darovat:</string>
+    <string name="donate_one">Koblihy (1.00 €)</string>
+    <string name="donate_two">Káva (2.00 €)</string>
+    <string name="donate_five">Pizza (5.00 €)</string>
+    <string name="donate_thanks">Děkujeme vám za vaši podporu! :-)</string>
+    <string name="donate_complete">Dar uskutečněn, děkujeme! :-)</string>
+    <string name="donate_try_again">Zpracovává se poslední dar. Zkuste to ještě jednou</string>
+    <string name="donate_not_available">Google Play je nedostupná</string>
+    <string name="donate_not_available_text">Prověřte, prosím, zda máte nainstalovánu nejnovější
+        verzi Google Play Store a zkuste to znovu!
+    </string>
+    <string name="pref_cat_behavior">Chování</string>
+    <string name="pref_cat_player">Přehrávač</string>
+    <string name="pref_cat_downloads">Stahování</string>
+    <string name="pref_cat_connection">Připojení</string>
+    <string name="pref_cat_info">Informace</string>
+    <string name="pref_volume_title">Použít klávesy pro ovládání hlasitosti</string>
+    <string name="pref_volume_summary">Použít klávesy pro ovládání hlasitosti Clementine.</string>
+    <string name="pref_pebble_title">Použít Pebble</string>
+    <string name="pref_pebble_summary">Poslat popisná data k nynější skladbě hudební aplikaci
+        Pebble.
+    </string>
+    <string name="pref_trackno_title">Ukázat číslo skladby</string>
+    <string name="pref_trackno_summary">Ukázat nebo skrýt číslo skladby v seznamech skladeb.
+    </string>
+    <string name="pref_port_title">Přípojka (port)</string>
+    <string name="pref_port_summary">Nynější přípojka</string>
+    <string name="pref_port_default">5500</string>
+    <string name="pref_port_error">Neplatná přípojka (port)</string>
+    <string name="pref_lastfm_title">Last.fm</string>
+    <string name="pref_lastfm_summary">Zapnout Oblíbit/Zakázat skladby. (vyžaduje opětovné
+        spuštění)
+    </string>
+    <string name="pref_lower_volume_title">Snížit hlasitost</string>
+    <string name="pref_lower_volume_summary">Snížit hlasitost při příchozím/odchozím hovoru.
+    </string>
+    <string name="pref_call_volume_title">Úroveň hlasitosti volání</string>
+    <string name="pref_call_volume_summary">Nynější úroveň hlasitosti volání: %s</string>
+    <string name="pref_version_summary">Klepněte pro návštěvu stránek projektu</string>
+    <string name="pref_version_title">Verze</string>
+    <string name="pref_license_title">Licence</string>
+    <string name="pref_license_summary">GNU GPLv3</string>
+    <string name="pref_about_title">O</string>
+    <string name="pref_about_summary">Lidé pracující na tomto projektu</string>
+    <string name="pref_clementine_title">Clementine</string>
+    <string name="pref_clementine_summary">Navštívit stránky Clementine</string>
+    <string name="pref_dl_wifi_only_title">Pouze WiFi</string>
+    <string name="pref_dl_wifi_only_summary">Stahovat písně jen při připojení k síti Wifi.</string>
+    <string name="pref_dl_dir">Nastavit složku pro stahování</string>
+    <string name="pref_dl_override">Přepsat stávající soubory</string>
+    <string name="pref_dl_cat_playlist">Stahování seznamů skladeb</string>
+    <string name="pref_dl_pl_save_own_dir_title">Ukládat skladby ve složce se seznamy skladeb
+    </string>
+    <string name="pref_dl_pl_save_own_dir_summary">Vytvoří složku pojmenovanou po seznamu skladeb a
+        skladby uloží tam.
+    </string>
+    <string name="pref_dl_pl_artist_dir_title">Vytvořit podsložku pro umělce/album</string>
+    <string name="pref_dl_pl_artist_dir_summary">Vytvořit podsložku pro umělce/album pro každou
+        jednotlivou skladbu.
+    </string>
+    <string name="file_dialog_set_dir">Vybrat adresář</string>
+    <string name="dialog_about_header">O</string>
+    <string name="dialog_about_authors">Autoři</string>
+    <string name="dialog_about_supporters">Podporovatelé</string>
+    <string name="dialog_about_others">Jiné</string>
+    <string name="dialog_license_top">Tento program je šířen s nadějí, že bude užitečný, ale BEZ
+        JAKÉKOLI ZÁRUKY
+    </string>
+    <string name="dialog_close">Zavřít</string>
+    <string name="error_versions">Nekompatibilní verze</string>
+    <string name="old_proto">Aktualizujte Clementine!</string>
+    <string name="no_private_ip">Zařízení Android má adresu IP, která není místní. Zkuste v
+        nastavení Clementine zakázat Použít pouze místní adresu IP.
+    </string>
+    <string name="wifi_disabled">Wifi je vypnuta. Pokud se chcete spojit s Clementine přes internet,
+        ujistěte se, že jste přípojky (port) odeslali správně a že jste zakázali Použít pouze místní
+        adresu IP.
+    </string>
+    <string name="input_auth_code">Ověřovací kód</string>
+    <string name="invalid_code">Neplatný kód</string>
+    <string name="repeat_off">Neopakovat</string>
+    <string name="repeat_track">Opakovat skladbu</string>
+    <string name="repeat_album">Opakovat album</string>
+    <string name="repeat_playlist">Opakovat seznam skladeb</string>
+    <string name="shuffle_off">Nemíchat</string>
+    <string name="shuffle_all">Zamíchat vše</string>
+    <string name="shuffle_inside_album">Zamíchat skladby v tomto albu</string>
+    <string name="shuffle_albums">Zamíchat alba</string>
+    <string name="first_time_title">Vítejte</string>
+    <string name="track_loved">Skladba je oblíbená &lt;3</string>
+    <string name="track_banned">Skladba je zakázaná :-(</string>
+    <string name="notification_disconnect_keep_alive">Spojení ztraceno. Ťukněte pro opětovné
+        připojení.
+    </string>
+    <string name="notification_action_next">Další</string>
+    <string name="notification_action_playpause">Přehrát/Pozastavit</string>
+    <string name="crash_report_title">Jejda, něco není v pořádku!</string>
+    <string name="crash_report_message">Naposledy Clementine Remote spadl! To by se nemělo stát!
+        Pomozte, prosím, se zlepšením aplikace a odešlete soubor se zápisem o činnosti programu.
+        Děkujeme!
+    </string>
+    <string name="crash_report_send">Poslat!</string>
+    <string-array name="navigation_headers">
+        <item>Vzdálené</item>
+        <item>Nastavení</item>
+        <item>Odpojit</item>
+    </string-array>
+    <string-array name="navigation_array_settings">
+        <item>Nastavení</item>
+        <item>Darovat</item>
+    </string-array>
+    <string-array name="navigation_array_disconnect">
+        <item>Odpojit</item>
+        <item>Ukončit</item>
+    </string-array>
 </resources>

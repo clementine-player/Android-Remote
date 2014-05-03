@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="app_name">Controlo remoto do Clementine</string>
+<resources>
+<string name="app_name">Controlo remoto do Clementine</string>
   <string name="app_not_available">Aplicação não disponível!</string>
   <string name="connectdialog_connect">Ligar</string>
   <string name="connectdialog_autoconnect">Ligar automaticamente</string>
@@ -8,7 +8,6 @@
   <string name="connectdialog_download_data">A transferir dados</string>
   <string name="connectdialog_error">Endereço não encontrado</string>
   <string name="connectdialog_ip_hint">Introduza o endereço IP</string>
-  <string name="connectdialog_mdns_found">Clementine encontrado. Clique no ícone para escolher um.</string>
   <string name="connectdialog_services">Clementines</string>
   <string name="player_nosong">Nenhuma faixa em reprodução</string>
   <string name="player_disconnected">Desligado</string>
