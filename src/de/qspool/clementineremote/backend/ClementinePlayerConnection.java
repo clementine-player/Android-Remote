@@ -42,6 +42,7 @@ import android.support.v4.app.NotificationCompat;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
@@ -112,6 +113,8 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
     private long mStartTx;
 
     private long mStartRx;
+
+    private long mStartTime;
 
     /**
      * Add a new listener for closed connections
@@ -211,6 +214,8 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
             int uid = App.mApp.getApplicationInfo().uid;
             mStartTx = TrafficStats.getUidTxBytes(uid);
             mStartRx = TrafficStats.getUidRxBytes(uid);
+
+            mStartTime = new Date().getTime();
         } else {
             sendUiMessage(new ClementineMessage(ErrorMessage.NO_CONNECTION));
         }
@@ -340,6 +345,10 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 
     public long getStartRx() {
         return mStartRx;
+    }
+
+    public long getStartTime() {
+        return mStartTime;
     }
 
     /**

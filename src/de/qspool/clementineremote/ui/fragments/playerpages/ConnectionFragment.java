@@ -29,8 +29,10 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
@@ -44,6 +46,8 @@ public class ConnectionFragment extends AbstractDrawerFragment {
     private TextView tv_ip;
 
     private TextView tv_version;
+
+    private TextView tv_time;
 
     private TextView tv_traffic;
 
@@ -70,10 +74,11 @@ public class ConnectionFragment extends AbstractDrawerFragment {
                 container, false);
 
         tv_ip = (TextView) view.findViewById(R.id.cn_ip);
+        tv_time = (TextView) view.findViewById(R.id.cn_time);
         tv_version = (TextView) view.findViewById(R.id.cn_version);
         tv_traffic = (TextView) view.findViewById(R.id.cn_traffic);
 
-        updateTraffic();
+        updateData();
 
         tv_ip.setText(mSharedPref.getString(App.SP_KEY_IP, "") + ":" + mSharedPref
                 .getString(App.SP_KEY_PORT, ""));
@@ -117,12 +122,12 @@ public class ConnectionFragment extends AbstractDrawerFragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            updateTraffic();
+                            updateData();
                         }
                     });
                 }
             }
-        }, 250, 250);
+        }, 500, 500);
     }
 
     @Override
@@ -133,7 +138,7 @@ public class ConnectionFragment extends AbstractDrawerFragment {
         }
     }
 
-    private void updateTraffic() {
+    private void updateData() {
         int uid = getActivity().getApplicationInfo().uid;
 
         if (TrafficStats.getUidRxBytes(uid) == TrafficStats.UNSUPPORTED) {
@@ -146,6 +151,14 @@ public class ConnectionFragment extends AbstractDrawerFragment {
 
             tv_traffic.setText(tx + " / " + rx);
         }
+
+        long diff = new Date().getTime() - App.mClementineConnection.getStartTime();
+        String dateFormat = String.format("%02d:%02d:%02d",
+                TimeUnit.MILLISECONDS.toHours(diff),
+                TimeUnit.MILLISECONDS.toMinutes(diff) % 60,
+                TimeUnit.MILLISECONDS.toSeconds(diff) % 60
+        );
+        tv_time.setText(dateFormat);
     }
 
     @Override

@@ -39,9 +39,17 @@
                 android:layout_alignParentLeft="true"
                 android:layout_below="@id/cn_connected_to"
                 android:layout_toLeftOf="@id/cn_icon"
-                android:lines="2"
-                android:maxLines="2"
                 android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/black"/>
+
+        <TextView
+                android:id="@+id/cn_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/cn_ip"
+                android:layout_toLeftOf="@id/cn_icon"
+                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@android:color/black"/>
 
     </RelativeLayout>
