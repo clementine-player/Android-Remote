@@ -48,6 +48,7 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.ui.ShowcaseStore;
 import de.qspool.clementineremote.ui.adapter.PlayerPageAdapter;
+import de.qspool.clementineremote.ui.fragments.playerpages.ConnectionFragment;
 import de.qspool.clementineremote.ui.fragments.playerpages.PlayerPageFragment;
 import de.qspool.clementineremote.ui.fragments.playerpages.SongDetailFragment;
 
@@ -63,11 +64,13 @@ public class PlayerFragment extends AbstractDrawerFragment {
 
     private ActionBar mActionBar;
 
-    private PlayerPageFragment playerPageFragment;
+    private PlayerPageFragment mPlayerPageFragment;
 
-    private SongDetailFragment songDetailFragment;
+    private SongDetailFragment mSongDetailFragment;
 
-    private PlayerPageAdapter adapter;
+    private ConnectionFragment mConnectionFragment;
+
+    private PlayerPageAdapter mPlayerPageAdapter;
 
     private ViewPager myPager;
 
@@ -95,15 +98,18 @@ public class PlayerFragment extends AbstractDrawerFragment {
 
         mShowcaseStore = new ShowcaseStore(getActivity());
 
-        playerPageFragment = new PlayerPageFragment();
+        mPlayerPageFragment = new PlayerPageFragment();
 
-        songDetailFragment = new SongDetailFragment();
+        mSongDetailFragment = new SongDetailFragment();
 
-        adapter = new PlayerPageAdapter(getChildFragmentManager());
-        adapter.addFragment(playerPageFragment);
-        adapter.addFragment(songDetailFragment);
+        mConnectionFragment = new ConnectionFragment();
+
+        mPlayerPageAdapter = new PlayerPageAdapter(getChildFragmentManager());
+        mPlayerPageAdapter.addFragment(mPlayerPageFragment);
+        mPlayerPageAdapter.addFragment(mSongDetailFragment);
+        mPlayerPageAdapter.addFragment(mConnectionFragment);
         myPager = (ViewPager) view.findViewById(R.id.player_pager);
-        myPager.setAdapter(adapter);
+        myPager.setAdapter(mPlayerPageAdapter);
         myPager.setCurrentItem(0);
 
         // Get the Views
@@ -155,13 +161,13 @@ public class PlayerFragment extends AbstractDrawerFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        adapter.getItem(myPager.getCurrentItem()).onCreateOptionsMenu(menu, inflater);
+        mPlayerPageAdapter.getItem(myPager.getCurrentItem()).onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
-        return adapter.getItem(myPager.getCurrentItem()).onOptionsItemSelected(item);
+        return mPlayerPageAdapter.getItem(myPager.getCurrentItem()).onOptionsItemSelected(item);
     }
 
     @Override
@@ -178,11 +184,14 @@ public class PlayerFragment extends AbstractDrawerFragment {
                 break;
         }
 
-        if (playerPageFragment.isAdded()) {
-            playerPageFragment.MessageFromClementine(clementineMessage);
+        if (mPlayerPageFragment.isAdded()) {
+            mPlayerPageFragment.MessageFromClementine(clementineMessage);
         }
-        if (songDetailFragment.isAdded()) {
-            songDetailFragment.MessageFromClementine(clementineMessage);
+        if (mSongDetailFragment.isAdded()) {
+            mSongDetailFragment.MessageFromClementine(clementineMessage);
+        }
+        if (mConnectionFragment.isAdded()) {
+            mConnectionFragment.MessageFromClementine(clementineMessage);
         }
     }
 
@@ -279,7 +288,7 @@ public class PlayerFragment extends AbstractDrawerFragment {
                                                break;
                                            case 1:
                                                sv.setShowcase(new ViewTarget(
-                                                       playerPageFragment.getImageArt()), true);
+                                                       mPlayerPageFragment.getImageArt()), true);
                                                sv.setContentTitle(
                                                        getString(R.string.cm_player_lyrics_title));
                                                sv.setContentText(

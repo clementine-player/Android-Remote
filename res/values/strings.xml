@@ -76,6 +76,13 @@
     <string name="song_info_volume">Volume</string>
 
 
+    <string name="connection_connected_to">Connected to:</string>
+    <string name="connection_volume">Volume</string>
+    <string name="connection_version">Clementine version</string>
+    <string name="connection_traffic">Traffic Up / Down</string>
+    <string name="connection_traffic_unsupported">Stats not available on this device</string>
+
+
     <string name="menu_shuffle">Shuffle</string>
     <string name="menu_repeat">Repeat</string>
     <string name="menu_settings">Settings</string>

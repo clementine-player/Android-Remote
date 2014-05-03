@@ -168,7 +168,7 @@ public class Utilities {
      * Convert bytes in a human readable format.
      *
      * @param bytes The byte count
-     * @param iec   true for KB, false for KiB
+     * @param iec   false for KB, false for KiB
      * @return The human readable file size
      */
     public static String humanReadableBytes(long bytes, boolean iec) {

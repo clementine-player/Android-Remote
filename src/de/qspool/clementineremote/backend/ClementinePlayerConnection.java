@@ -32,6 +32,7 @@ import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaMetadataRetriever;
 import android.media.RemoteControlClient;
 import android.media.RemoteControlClient.MetadataEditor;
+import android.net.TrafficStats;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -107,6 +108,10 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
     private PowerManager.WakeLock mWakeLock;
 
     private Pebble mPebble;
+
+    private long mStartTx;
+
+    private long mStartRx;
 
     /**
      * Add a new listener for closed connections
@@ -201,6 +206,11 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
                             message.getMessage().getRequestConnect().getAuthCode(),
                             false,
                             message.getMessage().getRequestConnect().getDownloader());
+
+            // Save started transmitted bytes
+            int uid = App.mApp.getApplicationInfo().uid;
+            mStartTx = TrafficStats.getUidTxBytes(uid);
+            mStartRx = TrafficStats.getUidRxBytes(uid);
         } else {
             sendUiMessage(new ClementineMessage(ErrorMessage.NO_CONNECTION));
         }
@@ -235,7 +245,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
     /**
      * Process the received protocol buffer
      *
-     * @param bs The binary representation of the protocol buffer
+     * @param clementineMessage The Message received from Clementine
      */
     private void processProtocolBuffer(ClementineMessage clementineMessage) {
         // Close the connection if we have an old proto verion
@@ -279,7 +289,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
     /**
      * Send a request to clementine
      *
-     * @param r The request as a RequestToThread object
+     * @param message The request as a RequestToThread object
      * @return true if data was sent, false if not
      */
     @Override
@@ -309,7 +319,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
     /**
      * Disconnect from Clementine
      *
-     * @param r The RequestDisconnect Object
+     * @param message The RequestDisconnect Object
      */
     @Override
     public void disconnect(ClementineMessage message) {
@@ -322,6 +332,14 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
             // and close the connection
             closeConnection(message);
         }
+    }
+
+    public long getStartTx() {
+        return mStartTx;
+    }
+
+    public long getStartRx() {
+        return mStartRx;
     }
 
     /**
@@ -352,7 +370,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
     /**
      * Fire the event to all listeners
      *
-     * @param r The Disconnect event.
+     * @param clementineMessage The Disconnect message.
      */
     private void fireOnConnectionClosed(ClementineMessage clementineMessage) {
         for (OnConnectionClosedListener listener : mListeners) {
