@@ -83,9 +83,11 @@ public class ConnectionFragment extends AbstractDrawerFragment {
         sb_volume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                Message msg = Message.obtain();
-                msg.obj = ClementineMessageFactory.buildVolumeMessage(progress);
-                App.mClementineConnection.mHandler.sendMessage(msg);
+                if (fromUser) {
+                    Message msg = Message.obtain();
+                    msg.obj = ClementineMessageFactory.buildVolumeMessage(progress);
+                    App.mClementineConnection.mHandler.sendMessage(msg);
+                }
             }
 
             @Override
@@ -98,6 +100,8 @@ public class ConnectionFragment extends AbstractDrawerFragment {
 
             }
         });
+
+        sb_volume.setProgress(App.mClementine.getVolume());
 
         return view;
     }
@@ -146,6 +150,13 @@ public class ConnectionFragment extends AbstractDrawerFragment {
 
     @Override
     public void MessageFromClementine(ClementineMessage clementineMessage) {
+        switch (clementineMessage.getMessageType()) {
+            case SET_VOLUME:
+                sb_volume.setProgress(App.mClementine.getVolume());
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
