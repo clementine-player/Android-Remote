@@ -21,6 +21,8 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -32,7 +34,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -46,6 +47,7 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.AlphaAnimation;
@@ -59,6 +61,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -130,6 +133,10 @@ public class ConnectDialog extends SherlockActivity {
 
     private Set<String> mKnownIps;
 
+    private ShowcaseStore mShowcaseStore;
+
+    private int mShowcaseCounter;
+
     @SuppressLint("NewApi")
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -147,6 +154,8 @@ public class ConnectDialog extends SherlockActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             mKnownIps = mSharedPref.getStringSet(App.SP_KNOWN_IP, new LinkedHashSet<String>());
         }
+
+        mShowcaseStore = new ShowcaseStore(this);
 
         // Create a progress dialog
         mPdConnect = new ProgressDialog(this);
@@ -208,6 +217,13 @@ public class ConnectDialog extends SherlockActivity {
         NotificationManager mNotificationManager = (NotificationManager) App.mApp
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.cancel(App.NOTIFY_ID);
+    }
+
+    @Override
+    public void onPause() {
+        if (mClementineMDns != null) {
+            mClementineMDns.stopServiceDiscovery();
+        }
     }
 
     @Override
@@ -285,14 +301,14 @@ public class ConnectDialog extends SherlockActivity {
         mAuthCode = mSharedPref.getInt(App.SP_LAST_AUTH_CODE, 0);
 
         // First time called? Show an info screen
-        if (!mSharedPref.getBoolean(App.SP_FIRST_TIME, false)) {
-            // Save for next calls
-            Editor edit = mSharedPref.edit();
-            edit.putBoolean(App.SP_FIRST_TIME, true);
-            edit.commit();
+        if (mShowcaseStore.showShowcase(ShowcaseStore.SC_CONNECTDIALOG)) {
 
             // Show the info screen
             showFirstTimeScreen();
+
+            showShowcase();
+
+            mShowcaseStore.setShowcaseShown(ShowcaseStore.SC_CONNECTDIALOG);
         }
     }
 
@@ -564,12 +580,6 @@ public class ConnectDialog extends SherlockActivity {
             // Start the animation
             mBtnClementine.startAnimation(mAlphaDown);
         }
-
-        // On the first call show a toast that we found a host
-        if (mFirstCall) {
-            mFirstCall = false;
-            Toast.makeText(this, R.string.connectdialog_mdns_found, Toast.LENGTH_LONG).show();
-        }
     }
 
     private AnimationListener mAnimationListener = new AnimationListener() {
@@ -595,4 +605,44 @@ public class ConnectDialog extends SherlockActivity {
         }
 
     };
+
+    public void showShowcase() {
+        final ShowcaseView sv = new ShowcaseView.Builder(this)
+                .setStyle(R.style.ShowcaseTheme)
+                .setTarget(new ViewTarget(this.mBtnConnect))
+                .setContentTitle(R.string.cm_connect_ip_title)
+                .setContentText(R.string.cm_connect_ip_content)
+                .build();
+        sv.setButtonText(getString(R.string.cm_next));
+
+        sv.overrideButtonClick(new OnClickListener() {
+                                   @Override
+                                   public void onClick(View v) {
+                                       switch (mShowcaseCounter) {
+                                           case 0:
+                                               sv.setButtonText(getString(R.string.cm_close));
+                                               sv.setShowcase(new ViewTarget(mBtnClementine), true);
+                                               sv.setContentTitle(
+                                                       getString(R.string.cm_connect_mdns_title));
+                                               sv.setContentText(
+                                                       getString(R.string.cm_connect_mdns_content));
+                                               break;
+                                           case 1:
+                                               sv.hide();
+                                               break;
+                                       }
+                                       mShowcaseCounter++;
+                                   }
+                               }
+        );
+
+        RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lps.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        int margin = ((Number) (getResources().getDisplayMetrics().density * 12)).intValue();
+        lps.setMargins(margin, margin * 3, margin, margin);
+
+        sv.setButtonPosition(lps);
+    }
 }

@@ -10,7 +10,6 @@
     <string name="connectdialog_download_data">Downloading data</string>
     <string name="connectdialog_error">Could not reach host</string>
     <string name="connectdialog_ip_hint">Enter IP address</string>
-    <string name="connectdialog_mdns_found">Found Clementines. Touch the icon to choose one.</string>
     <string name="connectdialog_services">Clementines</string>
 
 
@@ -192,6 +191,18 @@
     <string name="crash_report_title">Oops, something went wrong!</string>
     <string name="crash_report_message">Last time Clementine Remote crashed! This should not have happened! Please help me to improve the app and send me the logfile. Thanks!</string>
     <string name="crash_report_send">Send!</string>
+
+
+    <string name="cm_next">Next</string>
+    <string name="cm_close">Close</string>
+    <string name="cm_connect_ip_title">Connect to Clementine</string>
+    <string name="cm_connect_ip_content">Enter the IP address of your computer running Clementine
+        and click "Connect"
+    </string>
+    <string name="cm_connect_mdns_title">Automatic peering</string>
+    <string name="cm_connect_mdns_content">If the icon pulsates, click on it to see a list of
+        available computers running Clementine.
+    </string>
 
 
     <string-array name="navigation_headers">
