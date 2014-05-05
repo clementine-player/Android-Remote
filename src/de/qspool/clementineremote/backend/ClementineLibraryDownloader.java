@@ -17,11 +17,9 @@
 
 package de.qspool.clementineremote.backend;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -78,14 +76,8 @@ public class ClementineLibraryDownloader extends
         listeners.remove(l);
     }
 
-    @SuppressLint({"InlinedApi", "NewApi"})
     public void startDownload(ClementineMessage message) {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            this.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
-        } else {
-            this.execute(message);
-        }
+        this.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
     }
 
     @Override

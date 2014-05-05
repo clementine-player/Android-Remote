@@ -25,7 +25,6 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -513,7 +512,6 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 
         // Called when the user exits the action mode
         @SuppressWarnings("deprecation")
-        @SuppressLint("NewApi")
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             mActionMode = null;

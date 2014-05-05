@@ -17,7 +17,6 @@
 
 package de.qspool.clementineremote.backend;
 
-import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -26,7 +25,6 @@ import android.content.SharedPreferences;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
@@ -126,15 +124,10 @@ public class ClementineSongDownloader extends
         mTitle = mContext.getString(R.string.download_noti_title);
     }
 
-    @SuppressLint({"InlinedApi", "NewApi"})
     public void startDownload(ClementineMessage message) {
         mItem = message.getMessage().getRequestDownloadSongs().getDownloadItem();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            this.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
-        } else {
-            this.execute(message);
-        }
+        this.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
     }
 
     @Override

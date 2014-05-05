@@ -27,11 +27,9 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.annotation.TargetApi;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
@@ -270,12 +268,7 @@ public class SongDetailFragment extends AbstractDrawerFragment {
         mCurrentSong = currentSong;
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void zoomImageFromThumb(final View thumbView) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-            return;
-        }
-
         // If there's an animation in progress, cancel it
         // immediately and proceed with this one.
         if (mCurrentAnimator != null) {

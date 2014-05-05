@@ -24,7 +24,6 @@ import com.actionbarsherlock.view.MenuItem;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.NotificationManager;
@@ -39,7 +38,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
@@ -137,7 +135,6 @@ public class ConnectDialog extends SherlockActivity {
 
     private int mShowcaseCounter;
 
-    @SuppressLint("NewApi")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -151,9 +148,7 @@ public class ConnectDialog extends SherlockActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            mKnownIps = mSharedPref.getStringSet(App.SP_KNOWN_IP, new LinkedHashSet<String>());
-        }
+        mKnownIps = mSharedPref.getStringSet(App.SP_KNOWN_IP, new LinkedHashSet<String>());
 
         mShowcaseStore = new ShowcaseStore(this);
 
@@ -392,7 +387,6 @@ public class ConnectDialog extends SherlockActivity {
     /**
      * Connect to clementine
      */
-    @SuppressLint("NewApi")
     private void connect() {
         // Do not connect if the activity has finished!
         if (this.isFinishing()) {
@@ -407,10 +401,7 @@ public class ConnectDialog extends SherlockActivity {
         SharedPreferences.Editor editor = mSharedPref.edit();
         editor.putString(App.SP_KEY_IP, mEtIp.getText().toString());
         editor.putInt(App.SP_LAST_AUTH_CODE, mAuthCode);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            editor.putStringSet(App.SP_KNOWN_IP, mKnownIps);
-        }
+        editor.putStringSet(App.SP_KNOWN_IP, mKnownIps);
 
         editor.commit();
 

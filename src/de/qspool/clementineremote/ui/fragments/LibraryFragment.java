@@ -25,20 +25,16 @@ import com.actionbarsherlock.widget.SearchView;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -139,57 +135,53 @@ public class LibraryFragment extends AbstractDrawerFragment implements
         mLibraryEmptyText = (TextView) mEmptyLibrary.findViewById(R.id.library_empty_txt);
 
         mList.setOnItemClickListener(oiclLibraryClick);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            mList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-            mList.setMultiChoiceModeListener(new MultiChoiceModeListener() {
-                @Override
-                public boolean onActionItemClicked(ActionMode mode,
-                        android.view.MenuItem item) {
-                    SparseBooleanArray checkedPositions = mList.getCheckedItemPositions();
+        mList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        mList.setMultiChoiceModeListener(new MultiChoiceModeListener() {
+            @Override
+            public boolean onActionItemClicked(ActionMode mode,
+                    android.view.MenuItem item) {
+                SparseBooleanArray checkedPositions = mList.getCheckedItemPositions();
 
-                    switch (item.getItemId()) {
-                        case R.id.library_context_add:
-                            for (int i = 0; i < checkedPositions.size(); ++i) {
-                                int position = checkedPositions.keyAt(i);
-                                if (checkedPositions.valueAt(i)) {
-                                    MyLibraryItem libraryItem = mAdapters.getLast()
-                                            .getItem(position);
-                                    addSongsToPlaylist(libraryItem);
-                                }
+                switch (item.getItemId()) {
+                    case R.id.library_context_add:
+                        for (int i = 0; i < checkedPositions.size(); ++i) {
+                            int position = checkedPositions.keyAt(i);
+                            if (checkedPositions.valueAt(i)) {
+                                MyLibraryItem libraryItem = mAdapters.getLast()
+                                        .getItem(position);
+                                addSongsToPlaylist(libraryItem);
                             }
-                            mode.finish();
-                            return true;
-                        default:
-                            return false;
-                    }
+                        }
+                        mode.finish();
+                        return true;
+                    default:
+                        return false;
                 }
+            }
 
-                @Override
-                public boolean onCreateActionMode(ActionMode mode,
-                        android.view.Menu menu) {
-                    android.view.MenuInflater inflater = mode.getMenuInflater();
-                    inflater.inflate(R.menu.library_context_menu, menu);
-                    return true;
-                }
+            @Override
+            public boolean onCreateActionMode(ActionMode mode,
+                    android.view.Menu menu) {
+                android.view.MenuInflater inflater = mode.getMenuInflater();
+                inflater.inflate(R.menu.library_context_menu, menu);
+                return true;
+            }
 
-                @Override
-                public boolean onPrepareActionMode(ActionMode mode,
-                        android.view.Menu menu) {
-                    return false;
-                }
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode,
+                    android.view.Menu menu) {
+                return false;
+            }
 
-                @Override
-                public void onDestroyActionMode(ActionMode mode) {
-                }
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+            }
 
-                @Override
-                public void onItemCheckedStateChanged(ActionMode mode,
-                        int position, long id, boolean checked) {
-                }
-            });
-        } else {
-            registerForContextMenu(mList);
-        }
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode,
+                    int position, long id, boolean checked) {
+            }
+        });
 
         // Create the adapter
         mLibrary = new MyLibrary(getActivity());
@@ -297,30 +289,9 @@ public class LibraryFragment extends AbstractDrawerFragment implements
     }
 
     @Override
-    public boolean onContextItemSelected(android.view.MenuItem item) {
-        AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-        switch (item.getItemId()) {
-            case R.id.library_context_add:
-                MyLibraryItem libraryItem = mAdapters.getLast().getItem(info.position);
-                return addSongsToPlaylist(libraryItem);
-
-            default:
-                return super.onContextItemSelected(item);
-        }
-    }
-
-    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.library_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-            ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        android.view.MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.library_context_menu, menu);
     }
 
     @Override

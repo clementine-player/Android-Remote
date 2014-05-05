@@ -17,7 +17,6 @@
 
 package de.qspool.clementineremote.backend;
 
-import android.annotation.TargetApi;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -33,7 +32,6 @@ import android.media.MediaMetadataRetriever;
 import android.media.RemoteControlClient;
 import android.media.RemoteControlClient.MetadataEditor;
 import android.net.TrafficStats;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -457,7 +455,6 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
     /**
      * Register the RemoteControlClient
      */
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void registerRemoteControlClient() {
         // Request AudioFocus, so the widget is shown on the lock-screen
         mAudioManager.requestAudioFocus(mOnAudioFocusChangeListener,
@@ -465,11 +462,6 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
                 AudioManager.AUDIOFOCUS_GAIN);
 
         mAudioManager.registerMediaButtonEventReceiver(mClementineMediaButtonEventReceiver);
-
-        // The rest is only available in API Level 14
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            return;
-        }
 
         // Create the intent
         Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
@@ -496,14 +488,9 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
     /**
      * Unregister the RemoteControlClient
      */
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void unregisterRemoteControlClient() {
         // Disconnect EventReceiver and RemoteControlClient
         mAudioManager.unregisterMediaButtonEventReceiver(mClementineMediaButtonEventReceiver);
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            return;
-        }
 
         if (mRcClient != null) {
             mAudioManager.unregisterRemoteControlClient(mRcClient);
@@ -514,12 +501,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
     /**
      * Update the RemoteControlClient
      */
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void updateRemoteControlClient() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            return;
-        }
-
         // Update playstate
         if (App.mClementine.getState() == Clementine.State.PLAY) {
             mRcClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
