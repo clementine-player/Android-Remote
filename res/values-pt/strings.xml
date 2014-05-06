@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
-<string name="app_name">Controlo remoto do Clementine</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="app_name">Controlo remoto do Clementine</string>
   <string name="app_not_available">Aplicação não disponível!</string>
   <string name="connectdialog_connect">Ligar</string>
   <string name="connectdialog_autoconnect">Ligar automaticamente</string>
@@ -43,6 +43,7 @@
   <string name="library_please_wait">Por favor aguarde</string>
   <string name="library_refresh">Atualizar</string>
   <string name="library_empty">Coleção vazia. Clique Atualizar para transferir a coleção!</string>
+  <string name="library_no_search_results">Não existem faixas coincidentes com os critérios.</string>
   <string name="library_no_albums">%d álbuns</string>
   <string name="library_no_tracks">%d faixas</string>
   <string name="library_songs_added">%d faixas adicionadas à lista de reprodução atual</string>
@@ -60,6 +61,11 @@
   <string name="song_info_rating">Avaliação</string>
   <string name="song_info_rated">Faixa avaliada em $stars$ estrelas</string>
   <string name="song_info_volume">Volume</string>
+  <string name="connection_connected_to">Ligado a:</string>
+  <string name="connection_volume">Volume</string>
+  <string name="connection_version">Versão do Clementine</string>
+  <string name="connection_traffic">Enviado/Recebido (média/seg.)</string>
+  <string name="connection_traffic_unsupported">Estatísticas não disponíveis</string>
   <string name="menu_shuffle">Aleatório</string>
   <string name="menu_repeat">Repetir</string>
   <string name="menu_settings">Definições</string>
@@ -109,6 +115,7 @@
   <string name="pref_version_title">Versão</string>
   <string name="pref_license_title">Licença</string>
   <string name="pref_license_summary">GNU GPLv3</string>
+  <string name="pref_opensource_title">Código livre</string>
   <string name="pref_about_title">Sobre</string>
   <string name="pref_about_summary">Colaboradores deste projeto</string>
   <string name="pref_clementine_title">Clementine</string>
@@ -154,6 +161,10 @@
   <string name="crash_report_title">Algo errado se passou!</string>
   <string name="crash_report_message">O Clementine Remote terminou abruptamente! Isto não devia ter acontecido! Ajude-me a corrigir o problema enviando o ficheiro de registo. Obrigado!</string>
   <string name="crash_report_send">Enviar!</string>
+  <string name="cm_next">Seguinte</string>
+  <string name="cm_close">Fechar</string>
+  <string name="cm_connect_ip_title">Ligar ao Clementine</string>
+  <string name="cm_connect_ip_content">Introduza o endereço IP do computador a executar o Clementine\ne clique \"Conectar\"</string>
   <string-array name="navigation_headers">
     <item>Remoto</item>
     <item>Definições</item>

@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
-<string name="app_name">Clementine 리모콘</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="app_name">Clementine 리모콘</string>
   <string name="app_not_available">어플리케이션을 사용할 수 없음!</string>
   <string name="connectdialog_connect">연결</string>
   <string name="connectdialog_autoconnect">자동 연결</string>

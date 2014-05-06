@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
-<string name="app_name">ကလီမန်တိုင်းအဝေးထိန်း</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="app_name">ကလီမန်တိုင်းအဝေးထိန်း</string>
   <string name="connectdialog_connect">ချိတ်ဆက်</string>
   <string name="connectdialog_autoconnect">အလိုအလျောက်ချိတ်ဆက်</string>
   <string name="connectdialog_connecting">ကလီမန်တိုင်းသို့ချိတ်ဆက်</string>

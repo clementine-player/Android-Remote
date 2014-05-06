@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
-<string name="app_name">Clementine Remote</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="app_name">Clementine Remote</string>
   <string name="app_not_available">აპლიკაცია მიუწვდომელია!</string>
   <string name="connectdialog_connect">დაკავშირება</string>
   <string name="connectdialog_autoconnect">ავტოკავშირი</string>

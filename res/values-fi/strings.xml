@@ -94,6 +94,10 @@
   <string name="pref_dl_wifi_only_summary">Lataa kappaleet vain wifi-yhteydellä.</string>
   <string name="pref_dl_dir">Aseta latauskansio</string>
   <string name="pref_dl_override">Korvaa olemassa olevat tiedostot</string>
+  <string name="pref_dl_cat_playlist">Soittolistan lataus</string>
+  <string name="pref_dl_pl_save_own_dir_title">Tallenna kappaleet soittolistan kansioon</string>
+  <string name="pref_dl_pl_save_own_dir_summary">Luo soittolistan nimisen kansion ja tallentaa kappaleet sinne.</string>
+  <string name="pref_dl_pl_artist_dir_title">Luo artisti/albumi-alikansio</string>
   <string name="file_dialog_set_dir">Valitse kansio</string>
   <string name="dialog_about_header">Tietoja</string>
   <string name="dialog_about_authors">Tekijät</string>
@@ -103,6 +107,7 @@
   <string name="dialog_close">Sulje</string>
   <string name="error_versions">Yhteensopimaton versio</string>
   <string name="old_proto">Päivitä Clementine!</string>
+  <string name="no_private_ip">Android-laitteesi IP-osoite ei ole paikallinen. Kokeile poistaa käytöstä \"Salli yhteydet vain paikallisverkosta\" Clementinen asetuksista.</string>
   <string name="input_auth_code">Tunnistuskoodi</string>
   <string name="invalid_code">Virheellinen koodi</string>
   <string name="repeat_off">Älä kertaa</string>

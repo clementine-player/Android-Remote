@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
-<string name="app_name">Clementine Remote</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="app_name">Clementine Remote</string>
   <string name="app_not_available">Приложение не доступно!</string>
   <string name="connectdialog_connect">Подключиться</string>
   <string name="connectdialog_autoconnect">Авто-подлючение</string>
@@ -43,6 +43,7 @@
   <string name="library_please_wait">Пожалуйста, подождите</string>
   <string name="library_refresh">Обновить</string>
   <string name="library_empty">Фонотека пуста. Нажмите \"Обновить\" для закачки фонотеки.</string>
+  <string name="library_no_search_results">По данному запросу песен не найдено!</string>
   <string name="library_no_albums">%d альбомы</string>
   <string name="library_no_tracks">%d композиции</string>
   <string name="library_songs_added">%d песен добавлено в текущий плейлист</string>
@@ -60,6 +61,11 @@
   <string name="song_info_rating">Рейтинг</string>
   <string name="song_info_rated">Песня оценена $stars$ stars</string>
   <string name="song_info_volume">Громкость</string>
+  <string name="connection_connected_to">Подключено к:</string>
+  <string name="connection_volume">Громкость</string>
+  <string name="connection_version">Версия Clementine</string>
+  <string name="connection_traffic">Траффик Исх / Вх (сред / c)</string>
+  <string name="connection_traffic_unsupported">Статистика не доступна на данном устройстве</string>
   <string name="menu_shuffle">Перемешать</string>
   <string name="menu_repeat">Повторять</string>
   <string name="menu_settings">Настройки</string>
@@ -109,6 +115,7 @@
   <string name="pref_version_title">Версия</string>
   <string name="pref_license_title">Лицензия</string>
   <string name="pref_license_summary">GNU GPLv3</string>
+  <string name="pref_opensource_title">Открытый исходный код</string>
   <string name="pref_about_title">Авторы</string>
   <string name="pref_about_summary">Люди, работающие над проектом</string>
   <string name="pref_clementine_title">Clementine</string>
@@ -154,6 +161,20 @@
   <string name="crash_report_title">Кажется, что то пошло не так!</string>
   <string name="crash_report_message">В последний раз Clementine Remote завершилась с ошибкой! Этого не должно было случиться! Пожалуйста, помогите мне улучшить приложение и вышлите мне лог-файл. Спасибо!</string>
   <string name="crash_report_send">Послать!</string>
+  <string name="cm_next">Следующий</string>
+  <string name="cm_close">Закрыть</string>
+  <string name="cm_connect_ip_title">Подключиться к Clementine</string>
+  <string name="cm_connect_ip_content">Введить IP адрес компьютера с включенным Clementine\nи нажмите \"Подключить\"</string>
+  <string name="cm_connect_mdns_title">Автоматический обмен траффиком</string>
+  <string name="cm_connect_mdns_content">Если иконка пульсирует, нажмите на неё, чтобы увидеть\nсписок компьютеров с включенным Clementine.</string>
+  <string name="cm_player_home_title">Удалённое меню Clementine</string>
+  <string name="cm_player_home_content">Нажмите кнопку Домой, чтобы открыть меню</string>
+  <string name="cm_player_hold_pause_title">Держать паузу</string>
+  <string name="cm_player_hold_pause_content">Это включит функцию остановки после трека.</string>
+  <string name="cm_player_lyrics_title">Нажмите на обложку альбома</string>
+  <string name="cm_player_lyrics_content">Откроется диалог с текстом песни</string>
+  <string name="cm_player_swipe_title">Проведите вправо</string>
+  <string name="cm_player_swipe_content">чтобы увидеть сведения о треке и оценить песню.</string>
   <string-array name="navigation_headers">
     <item>Работа удаленно</item>
     <item>Настройки</item>

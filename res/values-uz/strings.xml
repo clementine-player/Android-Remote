@@ -1,152 +1,127 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
-    <string name="app_name">Clementine Remote</string>
-    <string name="app_not_available">Dastur mavjud emas!</string>
-    <string name="connectdialog_connect">Ulanish</string>
-    <string name="connectdialog_autoconnect">Avto-ulanish</string>
-    <string name="connectdialog_connecting">Clementine\'ga ulanmoqda</string>
-    <string name="connectdialog_download_data">Ma\'lumot yuklab olinmoqda</string>
-    <string name="connectdialog_error">Xostga ulanib bo\'lmadi</string>
-    <string name="connectdialog_ip_hint">IP manzilni kiriting</string>
-    <string name="connectdialog_services">Clementinelar</string>
-    <string name="player_nosong">Hozir ijro etadigan qo\'shiq yo\'q</string>
-    <string name="player_disconnected">Ajratilgan</string>
-    <string name="player_playlist">Ijro ro\'yxati:</string>
-    <string name="player_download_playlists">Ijro ro\'yxati yuklab olinmoqda</string>
-    <string name="playler_volume">Ovoz balandligi</string>
-    <string name="player_download_lyrics">Qo\'shiq matni yuklab olinmoqda</string>
-    <string name="player_no_lyrics">Qo\'shiq matni topilmadi.</string>
-    <string name="player_song_is_stream">Oqimlarni yuklab olib bo\'lmadi!</string>
-    <string name="player_stream">[S]</string>
-    <string name="playlist_search_hint">Yo\'lakchani qidirish</string>
-    <string name="playlist_empty">Ijro ro\'yxati bo\'sh!</string>
-    <string name="playlist_context_remove">Ijro ro\'yxatidan o\'chirish</string>
-    <string name="downloads_empty">Yuklanishlar yo\'q!</string>
-    <string name="download_error">Qo\'shiqni ochib bo\'lmadi!</string>
-    <string name="download_freespace">Bo\'sh joy</string>
-    <string name="download_noti_title">Yuklab olish boshlanmoqda</string>
-    <string name="download_noti_title_song">[Joriy qo\'shiq]</string>
-    <string name="download_noti_title_album">[Albom]</string>
-    <string name="download_noti_title_playlist">[Ijro ro\'yxati]</string>
-    <string name="download_noti_complete">Yuklab olish tugadi</string>
-    <string name="download_noti_canceled">Yuklab olish bekor qilindi</string>
-    <string name="download_noti_insufficient_space">Joy yetarli emas, yuklab olish
-        to\'xtatilmoqda.
-    </string>
-    <string name="download_noti_forbidden">Yuklab olish taqiqlangan. Clementine sozlamalarida
-        faollashtiring.
-    </string>
-    <string name="download_noti_only_wifi">Faqat wifi ro\'xsat etilganda yuklab olish.</string>
-    <string name="library_songs_added">Joriy ijro ro\'yxatiga %d qo\'shiq qo\'shildi</string>
-    <string name="library_context_add">Joriy ijro ro\'yxatiga element qo\'shish</string>
-    <string name="song_info_album">Albom</string>
-    <string name="song_info_genre">Janr</string>
-    <string name="song_info_year">Yil</string>
-    <string name="song_info_track">Yo\'lakcha</string>
-    <string name="song_info_disc">Disk</string>
-    <string name="song_info_playcount">Ijrolarni hisoblash</string>
-    <string name="song_info_length">Uzunligi</string>
-    <string name="song_info_size">Hajmi</string>
-    <string name="song_info_filename">Fayl nomi</string>
-    <string name="song_info_rating">Baholash</string>
-    <string name="song_info_rated">Qo\'shiq $stars$ yuklduzcha bilan baholandi</string>
-    <string name="menu_shuffle">Tasodifiy tartibda</string>
-    <string name="menu_repeat">Takrorlash</string>
-    <string name="menu_settings">Sozlamalar</string>
-    <string name="menu_search">Qidirish</string>
-    <string name="menu_love">Sevgi</string>
-    <string name="menu_ban">Taqiq</string>
-    <string name="menu_download_song">Qo\'shiqni yuklab olish</string>
-    <string name="menu_download_album">Albomni yuklab olish</string>
-    <string name="menu_download_playlist">Ijro ro\'yxatini yuklab olish</string>
-    <string name="pref_cat_behavior">Xulq-atvor</string>
-    <string name="pref_cat_player">Pleyer</string>
-    <string name="pref_cat_downloads">Yuklanishlar</string>
-    <string name="pref_cat_connection">Ulanish</string>
-    <string name="pref_cat_info">Ma\'lumot</string>
-    <string name="pref_volume_title">Ovoz tugmalaridan foydalaning</string>
-    <string name="pref_volume_summary">Clementine ovozini boshqarish uchun ovoz tugmalaridan
-        foydalaning.
-    </string>
-    <string name="pref_pebble_title">Pebble\'dan foydalanish</string>
-    <string name="pref_pebble_summary">Joriy yo\'lakcha metama\'lumotlarini Pebble musiqa dasturiga
-        yuborish.
-    </string>
-    <string name="pref_trackno_title">Yo\'lakcha raqamini ko\'rsatish</string>
-    <string name="pref_trackno_summary">Ijro ro\'yxatlarda yo\'lakcha raqamlarini ko\'rsatish yoki
-        yashirish.
-    </string>
-    <string name="pref_port_title">Port</string>
-    <string name="pref_port_summary">Joriy port:</string>
-    <string name="pref_port_default">5500</string>
-    <string name="pref_port_error">Noto\'g\'ri port!</string>
-    <string name="pref_lastfm_title">Last.fm</string>
-    <string name="pref_lastfm_summary">Yo\'lakchalarni sevish/taqiqlash uchun faollashtiring. (qayta
-        yuklashni talab qiladi)
-    </string>
-    <string name="pref_lower_volume_title">Ovozni pasaytirish</string>
-    <string name="pref_lower_volume_summary">Kiruvchi/chiquvchi qo\'ng\'iroqlarda ovozni
-        pasaytirish.
-    </string>
-    <string name="pref_call_volume_title">Qo\'ng\'iroq ovoz darajasi</string>
-    <string name="pref_call_volume_summary">Joriy qo\'ng\'iroq ovoz darajasi: %s</string>
-    <string name="pref_version_summary">Loyiha veb-sahifasiga o\'tish uchun bosing</string>
-    <string name="pref_version_title">Versiya</string>
-    <string name="pref_license_title">Litsenziya</string>
-    <string name="pref_license_summary">GNU GPLv3</string>
-    <string name="pref_about_title">Dastur haqida</string>
-    <string name="pref_about_summary">Loyiha o\'stida ishlayotgan odamlar</string>
-    <string name="pref_clementine_title">Clementine</string>
-    <string name="pref_clementine_summary">Clementine veb-sahifasiga o\'tish</string>
-    <string name="pref_dl_wifi_only_title">Faqat WiFi</string>
-    <string name="pref_dl_wifi_only_summary">Faqat wifi tarmog\'iga ulanganda qo\'shiqlarni yuklab
-        olish.
-    </string>
-    <string name="pref_dl_dir">Yuklab olish jildini o\'rnatish</string>
-    <string name="pref_dl_override">Mavjud fayllarni almashtirish</string>
-    <string name="pref_dl_pl_save_own_dir_title">Yo\'lakchalarni ijro ro\'yxati jildida saqlash
-    </string>
-    <string name="pref_dl_pl_save_own_dir_summary">Ijro ro\'yxati nomi bilan jildni yaratadi va
-        yo\'lakchalarni usha joyda saqlaydi.
-    </string>
-    <string name="pref_dl_pl_artist_dir_title">Ijrochi/albom tagjildini yaratish</string>
-    <string name="pref_dl_pl_artist_dir_summary">Har bir yo\'lakcha uchun ijrochi/albom tagjildini
-        yaratish
-    </string>
-    <string name="file_dialog_set_dir">Katalogni tanlash</string>
-    <string name="dialog_about_header">Dastur haqida</string>
-    <string name="dialog_about_authors">Mualliflar</string>
-    <string name="dialog_about_supporters">Qo\'llab-quvvatlovchilar</string>
-    <string name="dialog_about_others">Boshqalar</string>
-    <string name="dialog_close">Yopish</string>
-    <string name="error_versions">Mos kelmaydigan versiya</string>
-    <string name="old_proto">Clementine yangilang!</string>
-    <string name="no_private_ip">Android moslamangiz mahalliy bo\'lmagan IP manzilga ega. Clementine
-        sozlamalarida \"Faqat mahalliy IP manzillardan foydalaning\" o\'chirishga urinib ko\'ring.
-    </string>
-    <string name="input_auth_code">Haqiqiyligini tekshirish kodi</string>
-    <string name="invalid_code">Kod haqiqiy emas</string>
-    <string name="repeat_off">Takrorlamaslik</string>
-    <string name="repeat_track">Yo‘lakchani takrorlash</string>
-    <string name="repeat_album">Albomni takrorlash</string>
-    <string name="repeat_playlist">Ijro ro\'yxatini takrorlash</string>
-    <string name="shuffle_off">Tasodifiy tartibni o\'chirish</string>
-    <string name="shuffle_all">Hammasini aralashtirish</string>
-    <string name="shuffle_inside_album">Ushbu albomda yo\'lakchalarni aralashtirish</string>
-    <string name="shuffle_albums">Albomlarni aralashtirish</string>
-    <string name="first_time_title">Xush kelibsiz</string>
-    <string name="track_loved">Sevimli yo\'lakcha &lt;3</string>
-    <string name="track_banned">Taqiqlangan yo\'lakcha :-(</string>
-    <string name="notification_disconnect_keep_alive">Aloqa yo\'qolgan. Qayta ulanish uchun
-        tegining.
-    </string>
-    <string name="notification_action_next">Keyingi</string>
-    <string name="notification_action_playpause">Ijro ettirish / to\'xtatib turish</string>
-    <string name="crash_report_title">Iye, nimadir noto\'g\'ri bo\'ldi!</string>
-    <string name="crash_report_send">Yuborish!</string>
-    <string-array name="navigation_headers">
-        <item>Masofaviy</item>
-        <item>Sozlamalar</item>
-        <item>Ajratish</item>
-    </string-array>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="app_name">Clementine Remote</string>
+  <string name="app_not_available">Dastur mavjud emas!</string>
+  <string name="connectdialog_connect">Ulanish</string>
+  <string name="connectdialog_autoconnect">Avto-ulanish</string>
+  <string name="connectdialog_connecting">Clementine\'ga ulanmoqda</string>
+  <string name="connectdialog_download_data">Ma\'lumot yuklab olinmoqda</string>
+  <string name="connectdialog_error">Xostga ulanib bo\'lmadi</string>
+  <string name="connectdialog_ip_hint">IP manzilni kiriting</string>
+  <string name="connectdialog_services">Clementinelar</string>
+  <string name="player_nosong">Hozir ijro etadigan qo\'shiq yo\'q</string>
+  <string name="player_disconnected">Ajratilgan</string>
+  <string name="player_playlist">Ijro ro\'yxati:</string>
+  <string name="player_download_playlists">Ijro ro\'yxati yuklab olinmoqda</string>
+  <string name="playler_volume">Ovoz balandligi</string>
+  <string name="player_download_lyrics">Qo\'shiq matni yuklab olinmoqda</string>
+  <string name="player_no_lyrics">Qo\'shiq matni topilmadi.</string>
+  <string name="player_song_is_stream">Oqimlarni yuklab olib bo\'lmadi!</string>
+  <string name="player_stream">[S]</string>
+  <string name="playlist_search_hint">Yo\'lakchani qidirish</string>
+  <string name="playlist_empty">Ijro ro\'yxati bo\'sh!</string>
+  <string name="playlist_context_remove">Ijro ro\'yxatidan o\'chirish</string>
+  <string name="downloads_empty">Yuklanishlar yo\'q!</string>
+  <string name="download_error">Qo\'shiqni ochib bo\'lmadi!</string>
+  <string name="download_freespace">Bo\'sh joy</string>
+  <string name="download_noti_title">Yuklab olish boshlanmoqda</string>
+  <string name="download_noti_title_song">[Joriy qo\'shiq]</string>
+  <string name="download_noti_title_album">[Albom]</string>
+  <string name="download_noti_title_playlist">[Ijro ro\'yxati]</string>
+  <string name="download_noti_complete">Yuklab olish tugadi</string>
+  <string name="download_noti_canceled">Yuklab olish bekor qilindi</string>
+  <string name="download_noti_insufficient_space">Joy yetarli emas, yuklab olish to\'xtatilmoqda.</string>
+  <string name="download_noti_forbidden">Yuklab olish taqiqlangan. Clementine sozlamalarida faollashtiring.</string>
+  <string name="download_noti_only_wifi">Faqat wifi ro\'xsat etilganda yuklab olish.</string>
+  <string name="library_songs_added">Joriy ijro ro\'yxatiga %d qo\'shiq qo\'shildi</string>
+  <string name="library_context_add">Joriy ijro ro\'yxatiga element qo\'shish</string>
+  <string name="song_info_album">Albom</string>
+  <string name="song_info_genre">Janr</string>
+  <string name="song_info_year">Yil</string>
+  <string name="song_info_track">Yo\'lakcha</string>
+  <string name="song_info_disc">Disk</string>
+  <string name="song_info_playcount">Ijrolarni hisoblash</string>
+  <string name="song_info_length">Uzunligi</string>
+  <string name="song_info_size">Hajmi</string>
+  <string name="song_info_filename">Fayl nomi</string>
+  <string name="song_info_rating">Baholash</string>
+  <string name="song_info_rated">Qo\'shiq $stars$ yuklduzcha bilan baholandi</string>
+  <string name="menu_shuffle">Tasodifiy tartibda</string>
+  <string name="menu_repeat">Takrorlash</string>
+  <string name="menu_settings">Sozlamalar</string>
+  <string name="menu_search">Qidirish</string>
+  <string name="menu_love">Sevgi</string>
+  <string name="menu_ban">Taqiq</string>
+  <string name="menu_download_song">Qo\'shiqni yuklab olish</string>
+  <string name="menu_download_album">Albomni yuklab olish</string>
+  <string name="menu_download_playlist">Ijro ro\'yxatini yuklab olish</string>
+  <string name="pref_cat_behavior">Xulq-atvor</string>
+  <string name="pref_cat_player">Pleyer</string>
+  <string name="pref_cat_downloads">Yuklanishlar</string>
+  <string name="pref_cat_connection">Ulanish</string>
+  <string name="pref_cat_info">Ma\'lumot</string>
+  <string name="pref_volume_title">Ovoz tugmalaridan foydalaning</string>
+  <string name="pref_volume_summary">Clementine ovozini boshqarish uchun ovoz tugmalaridan foydalaning.</string>
+  <string name="pref_pebble_title">Pebble\'dan foydalanish</string>
+  <string name="pref_pebble_summary">Joriy yo\'lakcha metama\'lumotlarini Pebble musiqa dasturiga yuborish.</string>
+  <string name="pref_trackno_title">Yo\'lakcha raqamini ko\'rsatish</string>
+  <string name="pref_trackno_summary">Ijro ro\'yxatlarda yo\'lakcha raqamlarini ko\'rsatish yoki yashirish.</string>
+  <string name="pref_port_title">Port</string>
+  <string name="pref_port_summary">Joriy port:</string>
+  <string name="pref_port_default">5500</string>
+  <string name="pref_port_error">Noto\'g\'ri port!</string>
+  <string name="pref_lastfm_title">Last.fm</string>
+  <string name="pref_lastfm_summary">Yo\'lakchalarni sevish/taqiqlash uchun faollashtiring. (qayta yuklashni talab qiladi)</string>
+  <string name="pref_lower_volume_title">Ovozni pasaytirish</string>
+  <string name="pref_lower_volume_summary">Kiruvchi/chiquvchi qo\'ng\'iroqlarda ovozni pasaytirish.</string>
+  <string name="pref_call_volume_title">Qo\'ng\'iroq ovoz darajasi</string>
+  <string name="pref_call_volume_summary">Joriy qo\'ng\'iroq ovoz darajasi: %s</string>
+  <string name="pref_version_summary">Loyiha veb-sahifasiga o\'tish uchun bosing</string>
+  <string name="pref_version_title">Versiya</string>
+  <string name="pref_license_title">Litsenziya</string>
+  <string name="pref_license_summary">GNU GPLv3</string>
+  <string name="pref_about_title">Dastur haqida</string>
+  <string name="pref_about_summary">Loyiha o\'stida ishlayotgan odamlar</string>
+  <string name="pref_clementine_title">Clementine</string>
+  <string name="pref_clementine_summary">Clementine veb-sahifasiga o\'tish</string>
+  <string name="pref_dl_wifi_only_title">Faqat WiFi</string>
+  <string name="pref_dl_wifi_only_summary">Faqat wifi tarmog\'iga ulanganda qo\'shiqlarni yuklab olish.</string>
+  <string name="pref_dl_dir">Yuklab olish jildini o\'rnatish</string>
+  <string name="pref_dl_override">Mavjud fayllarni almashtirish</string>
+  <string name="pref_dl_pl_save_own_dir_title">Yo\'lakchalarni ijro ro\'yxati jildida saqlash</string>
+  <string name="pref_dl_pl_save_own_dir_summary">Ijro ro\'yxati nomi bilan jildni yaratadi va yo\'lakchalarni usha joyda saqlaydi.</string>
+  <string name="pref_dl_pl_artist_dir_title">Ijrochi/albom tagjildini yaratish</string>
+  <string name="pref_dl_pl_artist_dir_summary">Har bir yo\'lakcha uchun ijrochi/albom tagjildini yaratish</string>
+  <string name="file_dialog_set_dir">Katalogni tanlash</string>
+  <string name="dialog_about_header">Dastur haqida</string>
+  <string name="dialog_about_authors">Mualliflar</string>
+  <string name="dialog_about_supporters">Qo\'llab-quvvatlovchilar</string>
+  <string name="dialog_about_others">Boshqalar</string>
+  <string name="dialog_close">Yopish</string>
+  <string name="error_versions">Mos kelmaydigan versiya</string>
+  <string name="old_proto">Clementine yangilang!</string>
+  <string name="no_private_ip">Android moslamangiz mahalliy bo\'lmagan IP manzilga ega. Clementine sozlamalarida \"Faqat mahalliy IP manzillardan foydalaning\" o\'chirishga urinib ko\'ring.</string>
+  <string name="input_auth_code">Haqiqiyligini tekshirish kodi</string>
+  <string name="invalid_code">Kod haqiqiy emas</string>
+  <string name="repeat_off">Takrorlamaslik</string>
+  <string name="repeat_track">Yo‘lakchani takrorlash</string>
+  <string name="repeat_album">Albomni takrorlash</string>
+  <string name="repeat_playlist">Ijro ro\'yxatini takrorlash</string>
+  <string name="shuffle_off">Tasodifiy tartibni o\'chirish</string>
+  <string name="shuffle_all">Hammasini aralashtirish</string>
+  <string name="shuffle_inside_album">Ushbu albomda yo\'lakchalarni aralashtirish</string>
+  <string name="shuffle_albums">Albomlarni aralashtirish</string>
+  <string name="first_time_title">Xush kelibsiz</string>
+  <string name="track_loved">Sevimli yo\'lakcha &lt;3</string>
+  <string name="track_banned">Taqiqlangan yo\'lakcha :-(</string>
+  <string name="notification_disconnect_keep_alive">Aloqa yo\'qolgan. Qayta ulanish uchun tegining.</string>
+  <string name="notification_action_next">Keyingi</string>
+  <string name="notification_action_playpause">Ijro ettirish / to\'xtatib turish</string>
+  <string name="crash_report_title">Iye, nimadir noto\'g\'ri bo\'ldi!</string>
+  <string name="crash_report_send">Yuborish!</string>
+  <string-array name="navigation_headers">
+    <item>Masofaviy</item>
+    <item>Sozlamalar</item>
+    <item>Ajratish</item>
+  </string-array>
 </resources>
