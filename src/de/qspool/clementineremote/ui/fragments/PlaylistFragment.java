@@ -363,9 +363,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
     private OnItemClickListener oiclSong = new OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-            MySong song = getSelectedPlaylistSongs().get(position);
-
-            playSong(song);
+            playSong(mAdapter.getItem(position));
         }
     };
 
