@@ -86,7 +86,6 @@ public class PlayerFragment extends AbstractDrawerFragment {
         // Get the actionbar
         mActionBar = getSherlockActivity().getSupportActionBar();
         mActionBar.setTitle(R.string.player_playlist);
-        setHasOptionsMenu(true);
     }
 
     @Override
@@ -131,6 +130,8 @@ public class PlayerFragment extends AbstractDrawerFragment {
             showShowcase();
             mShowcaseStore.setShowcaseShown(ShowcaseStore.SC_PLAYER);
         }
+
+        setHasOptionsMenu(true);
 
         return view;
     }
