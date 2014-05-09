@@ -152,7 +152,7 @@
     <string name="pref_dl_pl_save_own_dir_title">Save tracks in playlist folder</string>
     <string name="pref_dl_pl_save_own_dir_summary">Creates a playlist-named folder and saves tracks in there.</string>
     <string name="pref_dl_pl_artist_dir_title">Create artist/album subfolder</string>
-    <string name="pref_dl_pl_artist_dir_summary">Create a artist/album subfolder for each indiviual track.</string>
+    <string name="pref_dl_pl_artist_dir_summary">Create a artist/album subfolder for each individual track.</string>
 
     <string name="file_dialog_set_dir">Select directory</string>
 
@@ -214,7 +214,7 @@
     <string name="cm_player_home_title">Clementine Remote menu</string>
     <string name="cm_player_home_content">Click the home button to open the menu.</string>
     <string name="cm_player_hold_pause_title">Hold pause</string>
-    <string name="cm_player_hold_pause_content">It toogles the stop after track feature.</string>
+    <string name="cm_player_hold_pause_content">It toggles the stop after track feature.</string>
     <string name="cm_player_lyrics_title">Click on the album cover</string>
     <string name="cm_player_lyrics_content">A dialog with the lyrics will open</string>
     <string name="cm_player_swipe_title">Swipe to the right</string>
