@@ -259,8 +259,9 @@ public class LibraryFragment extends AbstractDrawerFragment implements
         }
 
         @Override
-        public void OnProgressUpdate(int progress) {
-            mProgressDialog.setProgress(progress);
+        public void OnProgressUpdate(long progress, int total) {
+            mProgressDialog.setProgress((int) progress);
+            mProgressDialog.setMax(total);
         }
 
         @Override
@@ -280,7 +281,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
         mProgressDialog = new ProgressDialog(getActivity());
         mProgressDialog.setTitle(R.string.library_please_wait);
         mProgressDialog.setMessage(getText(R.string.library_download));
-        mProgressDialog.setMax(100);
+        mProgressDialog.setMax(0);
         mProgressDialog.setProgress(0);
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         mProgressDialog.setCancelable(false);

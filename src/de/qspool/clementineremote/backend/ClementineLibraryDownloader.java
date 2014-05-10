@@ -40,7 +40,7 @@ import de.qspool.clementineremote.backend.player.MyLibrary;
 import de.qspool.clementineremote.utils.Utilities;
 
 public class ClementineLibraryDownloader extends
-        AsyncTask<ClementineMessage, Integer, DownloaderResult> {
+        AsyncTask<ClementineMessage, Long, DownloaderResult> {
 
     private final String TAG = "ClementineLibraryDownloader";
 
@@ -53,7 +53,9 @@ public class ClementineLibraryDownloader extends
     private MyLibrary mLibrary;
 
     private LinkedList<OnLibraryDownloadListener> listeners
-            = new LinkedList<OnLibraryDownloadListener>();
+            = new LinkedList<>();
+
+    private int mTotalSize;
 
     public ClementineLibraryDownloader(Context context) {
         mContext = context;
@@ -99,11 +101,10 @@ public class ClementineLibraryDownloader extends
     }
 
     @Override
-    protected void onProgressUpdate(Integer... progress) {
+    protected void onProgressUpdate(Long... progress) {
         fireOnProgressUpdateListener(progress[0]);
 
-        // Progress = 100, then we are optimizing the table
-        if (progress[0] == 100) {
+        if (progress[0] == mTotalSize) {
             fireOnOptimizeLibraryListener();
         }
     }
@@ -150,8 +151,6 @@ public class ClementineLibraryDownloader extends
                 DownloadResult.SUCCESSFUL);
         File f = null;
         FileOutputStream fo = null;
-
-        publishProgress(0);
 
         // Now request the songs
         mClient.sendRequest(clementineMessage);
@@ -217,10 +216,14 @@ public class ClementineLibraryDownloader extends
 
                     f.createNewFile();
                     fo = new FileOutputStream(f);
+
+                    mTotalSize = chunk.getSize();
                 }
 
                 // Write chunk to sdcard
                 fo.write(chunk.getData().toByteArray());
+
+                publishProgress(f.length());
 
                 // Have we downloaded all chunks?
                 if (chunk.getChunkCount() == chunk.getChunkNumber()) {
@@ -230,8 +233,6 @@ public class ClementineLibraryDownloader extends
                     downloadFinished = true;
                 }
 
-                // Update notification
-                updateProgress(chunk);
             } catch (IOException e) {
                 result = new DownloaderResult(
                         DownloaderResult.DownloadResult.NOT_MOUNTED);
@@ -250,19 +251,6 @@ public class ClementineLibraryDownloader extends
         return result;
     }
 
-    /**
-     * Updates the current notification
-     *
-     * @param chunk The current downloaded chunk
-     */
-    private void updateProgress(ResponseLibraryChunk chunk) {
-        // Update notification
-        double progress = ((double) chunk.getChunkNumber() / (double) chunk
-                .getChunkCount()) * 100;
-
-        publishProgress((int) progress);
-    }
-
     /*
      * Fire the listeners
      */
@@ -278,9 +266,9 @@ public class ClementineLibraryDownloader extends
         }
     }
 
-    private void fireOnProgressUpdateListener(int progress) {
+    private void fireOnProgressUpdateListener(long progress) {
         for (OnLibraryDownloadListener l : listeners) {
-            l.OnProgressUpdate(progress);
+            l.OnProgressUpdate(progress, mTotalSize);
         }
     }
 

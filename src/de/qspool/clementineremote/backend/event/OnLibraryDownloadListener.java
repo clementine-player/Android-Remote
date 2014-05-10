@@ -21,7 +21,7 @@ import de.qspool.clementineremote.backend.elements.DownloaderResult;
 
 public interface OnLibraryDownloadListener {
 
-    void OnProgressUpdate(int progress);
+    void OnProgressUpdate(long progress, int total);
 
     void OnOptimizeLibrary();
 
