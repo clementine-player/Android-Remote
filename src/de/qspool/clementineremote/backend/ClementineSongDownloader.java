@@ -47,6 +47,8 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgT
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongFileChunk;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.ui.MainActivity;
+import de.qspool.clementineremote.utils.DownloadSpeedCalculator;
+import de.qspool.clementineremote.utils.IDownloadCalculatorSource;
 import de.qspool.clementineremote.utils.Utilities;
 
 public class ClementineSongDownloader extends
@@ -89,6 +91,12 @@ public class ClementineSongDownloader extends
     private String mSubtitle;
 
     private Uri mFileUri;
+
+    private int mTotalFileSize;
+
+    private int mTotalDownloaded;
+
+    private DownloadSpeedCalculator mDownloadSpeed;
 
     public ClementineSongDownloader(Context context) {
         mContext = context;
@@ -140,6 +148,13 @@ public class ClementineSongDownloader extends
         if (!connect()) {
             return new DownloaderResult(DownloaderResult.DownloadResult.CONNECTION_ERROR);
         }
+
+        mDownloadSpeed = new DownloadSpeedCalculator(new IDownloadCalculatorSource() {
+            @Override
+            public int getBytesTotalDownloaded() {
+                return getTotalDownloaded();
+            }
+        });
 
         // Start the download
         return startDownloading(params[0]);
@@ -324,6 +339,11 @@ public class ClementineSongDownloader extends
                 break;
             }
 
+            // Total file size
+            if (message.getMessageType() == MsgType.DOWNLOAD_TOTAL_SIZE) {
+                mTotalFileSize = message.getMessage().getResponseDownloadTotalSize().getTotalSize();
+            }
+
             // Ignore other elements!
             if (message.getMessageType() != MsgType.SONG_FILE_CHUNK) {
                 continue;
@@ -371,6 +391,8 @@ public class ClementineSongDownloader extends
 
                 // Write chunk to sdcard
                 fo.write(chunk.getData().toByteArray());
+
+                mTotalDownloaded += chunk.getData().size();
 
                 // Have we downloaded all chunks?
                 if (chunk.getChunkCount() == chunk.getChunkNumber()) {
@@ -504,6 +526,18 @@ public class ClementineSongDownloader extends
 
     public int getCurrentProgress() {
         return mCurrentProgress;
+    }
+
+    public int getTotalFileSize() {
+        return mTotalFileSize;
+    }
+
+    public int getTotalDownloaded() {
+        return mTotalDownloaded;
+    }
+
+    public int getDownloadSpeedPerSecond() {
+        return mDownloadSpeed.getDownloadSpeed();
     }
 
     public String getTitle() {
