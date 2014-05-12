@@ -43,6 +43,7 @@
   <string name="library_please_wait">Espere</string>
   <string name="library_refresh">Actualizar</string>
   <string name="library_empty">La colección está vacía. Pulse Actualizar para descargarla.</string>
+  <string name="library_no_search_results">Ninguna canción coincide con los criterios de búsqueda.</string>
   <string name="library_no_albums">%d álbumes</string>
   <string name="library_no_tracks">%d pistas</string>
   <string name="library_songs_added">Se añadieron %d canciones a la lista de reprod. actual</string>
@@ -60,6 +61,10 @@
   <string name="song_info_rating">Valoración</string>
   <string name="song_info_rated">Canciones con $stars$ estrellas</string>
   <string name="song_info_volume">Volumen</string>
+  <string name="connection_connected_to">Conectado con:</string>
+  <string name="connection_volume">Volumen</string>
+  <string name="connection_version">Versión de Clementine</string>
+  <string name="connection_traffic_unsupported">Las estadísticas no están disponibles en este dispositivo</string>
   <string name="menu_shuffle">Aleatorio</string>
   <string name="menu_repeat">Repetir</string>
   <string name="menu_settings">Configuración</string>
@@ -109,6 +114,7 @@
   <string name="pref_version_title">Versión</string>
   <string name="pref_license_title">Licencia</string>
   <string name="pref_license_summary">GNU GPLv3</string>
+  <string name="pref_opensource_title">Código abierto</string>
   <string name="pref_about_title">Acerca de</string>
   <string name="pref_about_summary">Personas que trabajan en este proyecto</string>
   <string name="pref_clementine_title">Clementine</string>
@@ -121,7 +127,6 @@
   <string name="pref_dl_pl_save_own_dir_title">Guardar pistas en la carpeta de la lista de reproducción</string>
   <string name="pref_dl_pl_save_own_dir_summary">Crea una carpeta con el nombre de la lista de reproducción y guarda las pistas ahí.</string>
   <string name="pref_dl_pl_artist_dir_title">Crear subcarpeta de artista/álbum</string>
-  <string name="pref_dl_pl_artist_dir_summary">Crear subcarpeta artista/álbum para cada pista</string>
   <string name="file_dialog_set_dir">Seleccione la carpeta</string>
   <string name="dialog_about_header">Acerca de</string>
   <string name="dialog_about_authors">Autores</string>
@@ -154,6 +159,17 @@
   <string name="crash_report_title">Vaya, algo ha fallado.</string>
   <string name="crash_report_message">La última vez Clementine Remote se cerró inesperadamente. Para ayudar a que este error no se produzca de nuevo, envíe el archivo de registro al desarrollador. ¡Gracias!</string>
   <string name="crash_report_send">Enviar</string>
+  <string name="cm_next">Siguiente</string>
+  <string name="cm_close">Cerrar</string>
+  <string name="cm_connect_ip_title">Conectar con Clementine</string>
+  <string name="cm_connect_ip_content">Escriba la dirección IP del equipo con Clementine\ny pulse en «Conectar»\n</string>
+  <string name="cm_connect_mdns_title">Emparejamiento automático</string>
+  <string name="cm_player_home_title">Menú del control remoto de Clementine</string>
+  <string name="cm_player_home_content">Pulse en el botón Inicio para abrir el menú.</string>
+  <string name="cm_player_lyrics_title">Pulsar en la carátula del álbum</string>
+  <string name="cm_player_lyrics_content">Se abrirá un cuadro con la letra</string>
+  <string name="cm_player_swipe_title">Deslice hacia la derecha</string>
+  <string name="cm_player_swipe_content">para ver detalles de la pista y puntuar la canción.</string>
   <string-array name="navigation_headers">
     <item>Remoto</item>
     <item>Configuración</item>

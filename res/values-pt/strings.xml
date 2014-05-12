@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="app_name">Controlo remoto do Clementine</string>
+  <string name="app_name">Clementine Remote</string>
   <string name="app_not_available">Aplicação não disponível!</string>
   <string name="connectdialog_connect">Ligar</string>
   <string name="connectdialog_autoconnect">Ligar automaticamente</string>
@@ -38,7 +38,7 @@
   <string name="download_noti_forbidden">Transferência proibida. Ative-a nas definições do Clementine.</string>
   <string name="download_noti_not_mounted">Cartão de armazenamento não encontrado!</string>
   <string name="download_noti_only_wifi">Apenas transferir através de Wifi.</string>
-  <string name="library_download">Transferência de coleção</string>
+  <string name="library_download">Transferência da coleção</string>
   <string name="library_optimize">Otimização da base de dados</string>
   <string name="library_please_wait">Por favor aguarde</string>
   <string name="library_refresh">Atualizar</string>
@@ -100,7 +100,7 @@
   <string name="pref_port_title">Porta</string>
   <string name="pref_port_summary">Porta atual:</string>
   <string name="pref_port_default">5500</string>
-  <string name="pref_port_error">Porta inválida</string>
+  <string name="pref_port_error">Porta inválida!</string>
   <string name="pref_lastfm_title">Last.fm</string>
   <string name="pref_lastfm_summary">Ativar gosto/banir (tem que reiniciar).</string>
   <string name="pref_keep_screen_on_title">Manter ecrã ligado</string>
@@ -122,19 +122,19 @@
   <string name="pref_clementine_summary">Aceda ao sítio web do Clementine</string>
   <string name="pref_dl_wifi_only_title">Apenas Wifi</string>
   <string name="pref_dl_wifi_only_summary">Apenas transferir faixas se ligado a uma rede Wifi.</string>
-  <string name="pref_dl_dir">Escolha a pasta de transferências.</string>
+  <string name="pref_dl_dir">Definir pasta de transferências</string>
   <string name="pref_dl_override">Substituir ficheiros existentes</string>
   <string name="pref_dl_cat_playlist">Transferência de lista de reprodução</string>
   <string name="pref_dl_pl_save_own_dir_title">Gravar faixas na pasta de listas de reprodução</string>
   <string name="pref_dl_pl_save_own_dir_summary">Cria uma pasta com o nome da lista e grava as faixas nessa pasta.</string>
   <string name="pref_dl_pl_artist_dir_title">Criar subpasta artista/álbum</string>
-  <string name="pref_dl_pl_artist_dir_summary">Criar subpasta artista/álbum para cada faixa.</string>
+  <string name="pref_dl_pl_artist_dir_summary">Criar uma subpasta artista/álbum para cada uma das faixas.</string>
   <string name="file_dialog_set_dir">Escolha a pasta</string>
   <string name="dialog_about_header">Sobre</string>
   <string name="dialog_about_authors">Autores</string>
-  <string name="dialog_about_supporters">Apoios</string>
+  <string name="dialog_about_supporters">Apoiantes</string>
   <string name="dialog_about_others">Outros</string>
-  <string name="dialog_license_top">Este programa é distribuído na esperança que seja útil, mas SEM QUALQUER GARANTIA.</string>
+  <string name="dialog_license_top">Este programa é distribuído na esperança que seja útil, mas SEM QUALQUER GARANTIA</string>
   <string name="dialog_close">Fechar</string>
   <string name="error_versions">Versão não compatível</string>
   <string name="old_proto">Atualize o Clementine</string>
@@ -152,7 +152,7 @@
   <string name="shuffle_inside_album">Baralhar faixas deste álbum</string>
   <string name="shuffle_albums">Baralhar álbuns</string>
   <string name="first_time_title">Bem-vindo</string>
-  <string name="first_time_text">Obrigado por utilizar o Clementine Remote!\nEspero que esta aplicação seja útil.&lt;br&gt;&lt;br&gt;Para poder utilizar, esta aplicação tem que transferir e instalar a versão 1.2.1 ou superior do Clementine, disponível em &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;.</string>
+  <string name="first_time_text">Obrigado por utilizar o Clementine Remote!\nEspero que esta aplicação seja útil.&lt;br&gt;&lt;br&gt;Para poder utilizar esta aplicação tem que transferir e instalar a versão 1.2.1 ou superior do Clementine, disponível em &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;aqui&lt;/a&gt;.</string>
   <string name="track_loved">Gosto da faixa &lt;3</string>
   <string name="track_banned">Faixa banida :-(</string>
   <string name="notification_disconnect_keep_alive">Ligação abortada. Clique para ligar novamente.</string>
@@ -164,7 +164,17 @@
   <string name="cm_next">Seguinte</string>
   <string name="cm_close">Fechar</string>
   <string name="cm_connect_ip_title">Ligar ao Clementine</string>
-  <string name="cm_connect_ip_content">Introduza o endereço IP do computador a executar o Clementine\ne clique \"Conectar\"</string>
+  <string name="cm_connect_ip_content">Introduza o endereço IP do computador a executar o Clementine\ne clique \"Ligar\"</string>
+  <string name="cm_connect_mdns_title">Peer automático</string>
+  <string name="cm_connect_mdns_content">Se o ícone estiver a pulsar, clique-lhe para ver\na lista de computadores com o Clementine.</string>
+  <string name="cm_player_home_title">Menu do Clementine Remote</string>
+  <string name="cm_player_home_content">Clique no botão Home para abrir o menu</string>
+  <string name="cm_player_hold_pause_title">Prima o botão de pausa</string>
+  <string name="cm_player_hold_pause_content">Alterna a função Parar após esta faixa.</string>
+  <string name="cm_player_lyrics_title">Clique na capa do álbum</string>
+  <string name="cm_player_lyrics_content">Surgirá uma diálogo com a letra da faixa</string>
+  <string name="cm_player_swipe_title">Deslize para a direita</string>
+  <string name="cm_player_swipe_content">para ver os detalhes da faixa e avaliar.</string>
   <string-array name="navigation_headers">
     <item>Remoto</item>
     <item>Definições</item>

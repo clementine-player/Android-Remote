@@ -15,8 +15,8 @@
   <string name="player_download_playlists">Загрузка плейлистов</string>
   <string name="playler_volume">Громкость</string>
   <string name="player_stop_after_current">Остановить после этой композиции.</string>
-  <string name="player_download_lyrics">Загрузка текста композиции</string>
-  <string name="player_no_lyrics">Текст композиции не найден.</string>
+  <string name="player_download_lyrics">Загрузка текста песни</string>
+  <string name="player_no_lyrics">Текст песни не найден.</string>
   <string name="player_download_started">Загрузка началась!</string>
   <string name="player_song_is_stream">Не могу загрузить потоки!</string>
   <string name="player_stream">[S]</string>
@@ -70,7 +70,7 @@
   <string name="menu_repeat">Повторять</string>
   <string name="menu_settings">Настройки</string>
   <string name="menu_search">Поиск</string>
-  <string name="menu_love">Любимое</string>
+  <string name="menu_love">В любимые</string>
   <string name="menu_ban">Запретить</string>
   <string name="menu_download_song">Загрузить композицию</string>
   <string name="menu_download_album">Загрузить альбом</string>
@@ -84,8 +84,8 @@
   <string name="donate_thanks">Спасибо за вашу поддержку! :-)</string>
   <string name="donate_complete">Пожертвование совершено, спасибо! :-)</string>
   <string name="donate_try_again">Обработка предыдущего пожертвования, попробуйте снова</string>
-  <string name="donate_not_available">Google Play не доступно</string>
-  <string name="donate_not_available_text">Пожалуйста, удостоверьтесь, что вы установили последнюю версию из магазина Google Play, и попробуйте снова!</string>
+  <string name="donate_not_available">Google Play не доступен</string>
+  <string name="donate_not_available_text">Пожалуйста, убедитесь, что вы установили последнюю версию из магазина Google Play, и попробуйте снова!</string>
   <string name="pref_cat_behavior">Поведение</string>
   <string name="pref_cat_player">Плеер</string>
   <string name="pref_cat_downloads">Загрузки</string>
@@ -104,7 +104,7 @@
   <string name="pref_lastfm_title">Last.fm</string>
   <string name="pref_lastfm_summary">Включить возможность добавлять в любимые / запрещать треки. (требуется перезагрузка)</string>
   <string name="pref_keep_screen_on_title">Держать экран включённым</string>
-  <string name="pref_keep_screen_on_summary">Предотвращает затухание экрана пока Clementine Remote подключено к Clementine.</string>
+  <string name="pref_keep_screen_on_summary">Предотвращает затухание экрана пока Clementine Remote подключен к Clementine.</string>
   <string name="pref_lower_volume_title">Снизить громкость</string>
   <string name="pref_lower_volume_summary">Снижать громкость при исходящих / входящих звонках.</string>
   <string name="pref_call_volume_title">Громкость при звонке</string>
@@ -116,7 +116,7 @@
   <string name="pref_license_title">Лицензия</string>
   <string name="pref_license_summary">GNU GPLv3</string>
   <string name="pref_opensource_title">Открытый исходный код</string>
-  <string name="pref_about_title">Авторы</string>
+  <string name="pref_about_title">О программе</string>
   <string name="pref_about_summary">Люди, работающие над проектом</string>
   <string name="pref_clementine_title">Clementine</string>
   <string name="pref_clementine_summary">Посетить страницу Clementine</string>
@@ -158,7 +158,7 @@
   <string name="notification_disconnect_keep_alive">Соединение потеряно. Коснитесь для переподключения.</string>
   <string name="notification_action_next">Следующий</string>
   <string name="notification_action_playpause">Играть / Пауза</string>
-  <string name="crash_report_title">Кажется, что то пошло не так!</string>
+  <string name="crash_report_title">Кажется, что-то пошло не так!</string>
   <string name="crash_report_message">В последний раз Clementine Remote завершилась с ошибкой! Этого не должно было случиться! Пожалуйста, помогите мне улучшить приложение и вышлите мне лог-файл. Спасибо!</string>
   <string name="crash_report_send">Послать!</string>
   <string name="cm_next">Следующий</string>
@@ -174,7 +174,7 @@
   <string name="cm_player_lyrics_title">Нажмите на обложку альбома</string>
   <string name="cm_player_lyrics_content">Откроется диалог с текстом песни</string>
   <string name="cm_player_swipe_title">Проведите вправо</string>
-  <string name="cm_player_swipe_content">чтобы увидеть сведения о треке и оценить песню.</string>
+  <string name="cm_player_swipe_content">, чтобы увидеть сведения о треке и оценить песню.</string>
   <string-array name="navigation_headers">
     <item>Работа удаленно</item>
     <item>Настройки</item>

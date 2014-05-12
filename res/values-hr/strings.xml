@@ -43,6 +43,7 @@
   <string name="library_please_wait">Molim pričekajte</string>
   <string name="library_refresh">Osvježi</string>
   <string name="library_empty">Fonoteka je prazna. Pokrenite osvježavanje za preuzimanje fonoteke!</string>
+  <string name="library_no_search_results">Nema pronađenih pjesama koje se podudaraju s vašim kriterijima pretraživanja</string>
   <string name="library_no_albums">%d albuma</string>
   <string name="library_no_tracks">%d pjesama</string>
   <string name="library_songs_added">%d pjesama dodano na trenutni popis izvođenja</string>
@@ -60,6 +61,11 @@
   <string name="song_info_rating">Ocjena</string>
   <string name="song_info_rated">Ocjena pjesme $stars$ zvjejzdica</string>
   <string name="song_info_volume">Glasnoća zvuka</string>
+  <string name="connection_connected_to">Povezano s:</string>
+  <string name="connection_volume">Glasnoća zvuka</string>
+  <string name="connection_version">Clementine inačica</string>
+  <string name="connection_traffic">Promet Poslano / Preuzeto (pros / sek)</string>
+  <string name="connection_traffic_unsupported">Status nije dostupan na ovom uređaju</string>
   <string name="menu_shuffle">Naizmjenično</string>
   <string name="menu_repeat">Ponovi</string>
   <string name="menu_settings">Postavke</string>
@@ -109,6 +115,7 @@
   <string name="pref_version_title">Inačica</string>
   <string name="pref_license_title">Licenca</string>
   <string name="pref_license_summary">GNU GPLv3</string>
+  <string name="pref_opensource_title">Otvoreni kôd</string>
   <string name="pref_about_title">O programu</string>
   <string name="pref_about_summary">Ljudi koji rade na ovom projektu</string>
   <string name="pref_clementine_title">Clementine</string>
@@ -121,7 +128,6 @@
   <string name="pref_dl_pl_save_own_dir_title">Spremi pjesme u mapu popisa izvođenja</string>
   <string name="pref_dl_pl_save_own_dir_summary">Stvori mapu nazvanu po popisu izvođenja i spremi pjesme u mapu.</string>
   <string name="pref_dl_pl_artist_dir_title">Stvori podmapu izvođača/albuma</string>
-  <string name="pref_dl_pl_artist_dir_summary">Stvori podmapu izvođača/albuma za svaku pjesmu posebno.</string>
   <string name="file_dialog_set_dir">Odaberi direktorij</string>
   <string name="dialog_about_header">O programu</string>
   <string name="dialog_about_authors">Autori</string>
@@ -154,6 +160,19 @@
   <string name="crash_report_title">Ups, nešto je pošlo po krivu!</string>
   <string name="crash_report_message">Prošli puta Clementine daljinski upravljač se srušio! To se nebi trebalo događati! Molim vas da mi pomognete poboljšati aplikaciju i pošaljite mi datoteku zapisa. Hvala vam!</string>
   <string name="crash_report_send">Pošalji!</string>
+  <string name="cm_next">Sljedeće</string>
+  <string name="cm_close">Zatvori</string>
+  <string name="cm_connect_ip_title">Povezivanje s Clementine</string>
+  <string name="cm_connect_ip_content">Upišite IP adresu vašeg računala na kojemu je Clementine\n        i kliknite \"Povezivanje\"\n    </string>
+  <string name="cm_connect_mdns_title">Automatsko uparivanje</string>
+  <string name="cm_connect_mdns_content">Ako ikona pulsira, kliknite na nju da bi vidjeli popis\n        dostupnih računala na kojima je pokrenut Clementine.\n    </string>
+  <string name="cm_player_home_title">Izbornik Clementine daljinskog upravljanja</string>
+  <string name="cm_player_home_content">Klikni tipku naslovnice za otvaranje izbornika.</string>
+  <string name="cm_player_hold_pause_title">Zadrži pauzu</string>
+  <string name="cm_player_lyrics_title">Klikni na omot albuma</string>
+  <string name="cm_player_lyrics_content">Dijalog teksta pjesme će se otvoriti</string>
+  <string name="cm_player_swipe_title">Povucite prstom udesno</string>
+  <string name="cm_player_swipe_content">da bi vidjeli pojedinosti pjesme i ocijenili pjesmu.</string>
   <string-array name="navigation_headers">
     <item>Daljinski upravljač</item>
     <item>Postavke</item>

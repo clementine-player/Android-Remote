@@ -5,19 +5,26 @@
   <string name="connectdialog_connect">Yhdistä</string>
   <string name="connectdialog_autoconnect">Yhdistä automaattisesti</string>
   <string name="connectdialog_connecting">Yhdistetään Clementineen</string>
+  <string name="connectdialog_download_data">Ladataan dataa</string>
   <string name="connectdialog_error">Ei yhteyttä isäntään</string>
   <string name="connectdialog_ip_hint">Anna IP-osoite</string>
+  <string name="connectdialog_services">Clementinet</string>
   <string name="player_nosong">Ei toistettavaa kappaletta</string>
   <string name="player_disconnected">Yhteys katkaistu</string>
   <string name="player_playlist">Soittolista:</string>
   <string name="player_download_playlists">Ladataan soittolistoja</string>
   <string name="playler_volume">Äänenvoimakkuus</string>
+  <string name="player_stop_after_current">Muuta pysäytyksen tilaa kappaleen loputtua.</string>
   <string name="player_download_lyrics">Ladataan sanoituksia</string>
   <string name="player_no_lyrics">Sanoituksia ei löytynyt.</string>
   <string name="player_download_started">Lataus aloitettu!</string>
+  <string name="player_song_is_stream">Suoratoiston tallentaminen ei ole mahdollista!</string>
+  <string name="player_stream">[S]</string>
+  <string name="playlist_search_hint">Etsi kappale</string>
   <string name="playlist_empty">Soittolista on tyhjä!</string>
   <string name="playlist_context_play">Toista kohde</string>
   <string name="playlist_context_remove">Poista soittolistasta</string>
+  <string name="playlist_loading">Ladataan</string>
   <string name="downloads_empty">Ei latauksia!</string>
   <string name="download_error">Kappaleen avaus epäonnistui!</string>
   <string name="download_freespace">Vapaa tila</string>
@@ -36,30 +43,47 @@
   <string name="library_please_wait">Odota hetki</string>
   <string name="library_refresh">Päivitä</string>
   <string name="library_empty">Kirjasto on tyhjä. Napauta Päivitä-painiketta ladataksesi kirjaston!</string>
+  <string name="library_no_search_results">Ei hakuehtoihisi osuvia kappaleita!</string>
+  <string name="library_no_albums">%d levyä</string>
+  <string name="library_no_tracks">%d kappaletta</string>
   <string name="library_songs_added">%d kappaletta lisätty nykyiseen soittolistaan</string>
   <string name="library_context_add">Lisää kohde nykyiseen soittolistaan</string>
+  <string name="library_download_error">Kirjaston lataaminen ei onnistunut</string>
   <string name="song_info_album">Levy</string>
   <string name="song_info_genre">Tyylilaji</string>
   <string name="song_info_year">Vuosi</string>
   <string name="song_info_track">Kappale</string>
+  <string name="song_info_disc">Levy</string>
   <string name="song_info_playcount">Soittokerrat</string>
   <string name="song_info_length">Kesto</string>
   <string name="song_info_size">Koko</string>
   <string name="song_info_filename">Tiedostonimi</string>
   <string name="song_info_rating">Arvostelu</string>
+  <string name="song_info_rated">Kappaleelle annettu $stars$ tähteä</string>
+  <string name="song_info_volume">Äänenvoimakkuus</string>
+  <string name="connection_connected_to">Yhdistetty:</string>
+  <string name="connection_volume">Äänenvoimakkuus</string>
+  <string name="connection_version">Clementinen versio</string>
+  <string name="connection_traffic">Liikenne ulos / sisään (ka. / s)</string>
+  <string name="connection_traffic_unsupported">Tilastot eivät ole käytettävissä tällä laitteella</string>
   <string name="menu_shuffle">Sekoita</string>
   <string name="menu_repeat">Kertaa</string>
   <string name="menu_settings">Asetukset</string>
   <string name="menu_search">Etsi</string>
+  <string name="menu_love">Tykkää</string>
+  <string name="menu_ban">En tykkää</string>
   <string name="menu_download_song">Lataa kappale</string>
+  <string name="menu_download_album">Lataa albumi</string>
   <string name="menu_download_playlist">Lataa soittolista</string>
   <string name="donate_header">Lahjoitukset</string>
+  <string name="donate_text">Kiitos sovellukseni käytöstä, toivottavasti se on hyödyllinen!\n\nJos olet todella tyytyväinen työpanokseeni, pieni lahjoitus olisi kiva.</string>
   <string name="donate_i_want">Haluan lahjoittaa:</string>
   <string name="donate_one">Donitseja (1.00 €)</string>
   <string name="donate_two">Kahvin (2.00 €)</string>
   <string name="donate_five">Pizzan (5.00 €)</string>
   <string name="donate_thanks">Kiitos tuestasi! :-)</string>
   <string name="donate_complete">Lahjoitus valmis, kiitos! :-)</string>
+  <string name="donate_try_again">Käsitellään viimeistä lahjoitusta, yritä uudestaan</string>
   <string name="donate_not_available">Google Play ei ole käytettävissä</string>
   <string name="donate_not_available_text">Varmista, että laitteellesi on asennettu Googlen Play-kaupan uusin versio ja yritä uudelleen!</string>
   <string name="pref_cat_behavior">Toiminta</string>
@@ -78,14 +102,20 @@
   <string name="pref_port_default">5500</string>
   <string name="pref_port_error">Virheellinen portti!</string>
   <string name="pref_lastfm_title">Last.fm</string>
+  <string name="pref_lastfm_summary">Näytä \"tykkää\" / \"en tykkää\" -painikkeet. (vaatii uudelleenkäynnistyksen)</string>
+  <string name="pref_keep_screen_on_title">Pidä näyttö päällä</string>
+  <string name="pref_keep_screen_on_summary">Estä näytön sammuminen, kun Clementine-kaukosäädin on yhteydessä Clementineen.</string>
   <string name="pref_lower_volume_title">Laske äänenvoimakkuutta</string>
   <string name="pref_lower_volume_summary">Laske äänenvoimakkuutta puheluiden aikana.</string>
   <string name="pref_call_volume_title">Puheluiden äänitaso</string>
   <string name="pref_call_volume_summary">Puheluiden nykyinen äänitaso: %s</string>
+  <string name="pref_volume_inc_title">Äänenvoimakkuuden muutostaso</string>
+  <string name="pref_volume_inc_summary">Nykyinen äänen muutostaso: %s</string>
   <string name="pref_version_summary">Napauta käydäksesi projektin verkkosivustolla</string>
   <string name="pref_version_title">Versio</string>
   <string name="pref_license_title">Lisenssi</string>
   <string name="pref_license_summary">GNU GPLv3</string>
+  <string name="pref_opensource_title">Avoin lähdekoodi</string>
   <string name="pref_about_title">Tietoja</string>
   <string name="pref_about_summary">Projektin parissa työskentelevät henkilöt</string>
   <string name="pref_clementine_title">Clementine</string>
@@ -98,6 +128,7 @@
   <string name="pref_dl_pl_save_own_dir_title">Tallenna kappaleet soittolistan kansioon</string>
   <string name="pref_dl_pl_save_own_dir_summary">Luo soittolistan nimisen kansion ja tallentaa kappaleet sinne.</string>
   <string name="pref_dl_pl_artist_dir_title">Luo artisti/albumi-alikansio</string>
+  <string name="pref_dl_pl_artist_dir_summary">Luo artisti/albumi-alikansio jokaiselle kappaleelle.</string>
   <string name="file_dialog_set_dir">Valitse kansio</string>
   <string name="dialog_about_header">Tietoja</string>
   <string name="dialog_about_authors">Tekijät</string>
@@ -108,6 +139,8 @@
   <string name="error_versions">Yhteensopimaton versio</string>
   <string name="old_proto">Päivitä Clementine!</string>
   <string name="no_private_ip">Android-laitteesi IP-osoite ei ole paikallinen. Kokeile poistaa käytöstä \"Salli yhteydet vain paikallisverkosta\" Clementinen asetuksista.</string>
+  <string name="check_ip">1) Onko Clementine käynnissä?\n2) Onko käytössä Clemetine 1.2.1 tai uudempi?\n3) Otitko käyttöön kaukosäädintoiminnot Clementinen asetuksista?\n4) Varmista, että kirjoitit oikean IP-osoitteen.\n</string>
+  <string name="wifi_disabled">Wifi ei ole päällä. Jos haluat yhdistää Clementineen internetin kautta, varmista että olet ohjannut portit oikein ja olet poistanut käytöstä \"Salli yhteydet vain paikallisverkosta\".</string>
   <string name="input_auth_code">Tunnistuskoodi</string>
   <string name="invalid_code">Virheellinen koodi</string>
   <string name="repeat_off">Älä kertaa</string>
@@ -119,12 +152,40 @@
   <string name="shuffle_inside_album">Sekoita levyn kappaleet</string>
   <string name="shuffle_albums">Sekoita levyt</string>
   <string name="first_time_title">Tervetuloa</string>
+  <string name="first_time_text">Kiitos Clementine-kaukosäätimen käyttämisestä!\nToivottavasti sovelluksesta on hyötyä sinulle.&lt;br&gt;&lt;br&gt;Sovelluksen käyttö vaatii Clementine 1.2.1:n tai uudemman asennuksen, &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;lataa tästä&lt;/a&gt;.</string>
+  <string name="track_loved">Pidin kappaleesta &lt;3</string>
+  <string name="track_banned">En pitänyt kappaleesta :-(</string>
   <string name="notification_disconnect_keep_alive">Yhteys katkesi. Kosketa yhdistääksesi uudelleen.</string>
   <string name="notification_action_next">Seuraava</string>
   <string name="notification_action_playpause">Toista / keskeytä</string>
   <string name="crash_report_title">Hups, jokin meni pieleen!</string>
   <string name="crash_report_message">Clementine-kaukosäädin kaatui viime käyttökerralla! Niin ei olisi pitänyt tapahtua. Auta parantamaan sovellusta lähettämällä lokitiedosto, kiitos!</string>
   <string name="crash_report_send">Lähetä!</string>
+  <string name="cm_next">Seuraava</string>
+  <string name="cm_close">Sulje</string>
+  <string name="cm_connect_ip_title">Yhdistä Clementineen</string>
+  <string name="cm_connect_ip_content">Kirjoita sen tietokoneen IP-osoite, jossa Clementine on käynnissä,\n        ja napauta \"Yhdistä\"\n    </string>
+  <string name="cm_connect_mdns_title">Automaattinen tähyily</string>
+  <string name="cm_connect_mdns_content">Klikkaa kuvaketta sen sykkiessä, jotta näet listan\nkoneista, joissa Clementine on käynnissä.</string>
+  <string name="cm_player_home_title">Clementine-kaukosäätimen valikko</string>
+  <string name="cm_player_home_content">Napauta kotipainiketta avataksesi valikon.</string>
+  <string name="cm_player_hold_pause_title">Paina pitkään taukoa</string>
+  <string name="cm_player_hold_pause_content">Se vaihtaa pysäytä kappaleen jälkeen -tilaa.</string>
+  <string name="cm_player_lyrics_title">Klikkaa levyn kansikuvaa</string>
+  <string name="cm_player_lyrics_content">Sanoitukset aukeavat uuteen ikkunaan.</string>
+  <string name="cm_player_swipe_title">Pyyhkäise oikealle</string>
+  <string name="cm_player_swipe_content">nähdäksesi kappaleen tiedot ja arvostellaksesi laulun.</string>
+  <string-array name="navigation_headers">
+    <item>Kaukosäädin</item>
+    <item>Asetukset</item>
+    <item>Katkaise yhteys</item>
+  </string-array>
+  <string-array name="navigation_array_remote">
+    <item>Soitin</item>
+    <item>Soittolistat</item>
+    <item>Kirjasto</item>
+    <item>Lataukset</item>
+  </string-array>
   <string-array name="navigation_array_settings">
     <item>Asetukset</item>
     <item>Lahjoita</item>

@@ -43,6 +43,7 @@
   <string name="library_please_wait">Merci de patienter</string>
   <string name="library_refresh">Rafraichir</string>
   <string name="library_empty">Bibliothèque vide. Touchez rafraichir pour télécharger la bibliothèque.</string>
+  <string name="library_no_search_results">Aucune Musique ne correspond à vos critères de recherche!</string>
   <string name="library_no_albums">%d albums</string>
   <string name="library_no_tracks">%d pistes</string>
   <string name="library_songs_added">%d chansons ajoutées à la liste de lecture courante</string>
@@ -60,6 +61,11 @@
   <string name="song_info_rating">Note</string>
   <string name="song_info_rated">Morceau noté $stars$ étoiles</string>
   <string name="song_info_volume">Volume</string>
+  <string name="connection_connected_to">Connecter à:</string>
+  <string name="connection_volume">Volume</string>
+  <string name="connection_version">Version de Clementine</string>
+  <string name="connection_traffic">Trafic Montant / Descendant (moy / sec)</string>
+  <string name="connection_traffic_unsupported">Les statistiques ne sont pas disponible sur cet appareil</string>
   <string name="menu_shuffle">Aléatoire</string>
   <string name="menu_repeat">Répétition</string>
   <string name="menu_settings">Préférences</string>
@@ -79,7 +85,7 @@
   <string name="donate_complete">Donation complétée, merci ! :-)</string>
   <string name="donate_try_again">Traitement de la dernière donation, essayez encore</string>
   <string name="donate_not_available">Google Play indisponible</string>
-  <string name="donate_not_available_text">Merci de vérifier si vous avez installé la dernière version de Google Play Store, et essayez encore !</string>
+  <string name="donate_not_available_text">Merci de vérifier que vous avez bien installé la dernière version de Clementine sur le Google Play Store, et essayez encore !</string>
   <string name="pref_cat_behavior">Comportement</string>
   <string name="pref_cat_player">Lecteur</string>
   <string name="pref_cat_downloads">Téléchargements</string>
@@ -98,7 +104,7 @@
   <string name="pref_lastfm_title">Last.fm</string>
   <string name="pref_lastfm_summary">Activer la possibilité d\'aimer/détester des pistes (nécessite un redémarrage).</string>
   <string name="pref_keep_screen_on_title">Garder l\'écran allumé</string>
-  <string name="pref_keep_screen_on_summary">Empêche l\'écran de s\'éteindre lorsque Clementine Remote est connecté à Clémentine</string>
+  <string name="pref_keep_screen_on_summary">Empêche l\'écran de s\'éteindre lorsque Clementine à Distance est connecté à Clementine</string>
   <string name="pref_lower_volume_title">Baisser le volume</string>
   <string name="pref_lower_volume_summary">Baisser le volume lors des appels.</string>
   <string name="pref_call_volume_title">Volume d\'appel</string>
@@ -109,6 +115,7 @@
   <string name="pref_version_title">Version</string>
   <string name="pref_license_title">Licence</string>
   <string name="pref_license_summary">GNU GPLv3</string>
+  <string name="pref_opensource_title">Open Source</string>
   <string name="pref_about_title">À propos</string>
   <string name="pref_about_summary">Personnes travaillant sur ce projet</string>
   <string name="pref_clementine_title">Clementine</string>
@@ -121,7 +128,6 @@
   <string name="pref_dl_pl_save_own_dir_title">Enregistrer les morceaux dans le dossier de la liste de lecture</string>
   <string name="pref_dl_pl_save_own_dir_summary">Crée un dossier nommé comme la liste de lecture, et enregistre les morceaux dedans.</string>
   <string name="pref_dl_pl_artist_dir_title">Créer un sous-dossier pour les artistes/albums</string>
-  <string name="pref_dl_pl_artist_dir_summary">Créer un sous-dossier pour les artistes/albums, pour chacun des morceaux.</string>
   <string name="file_dialog_set_dir">Sélectionner le dossier</string>
   <string name="dialog_about_header">À propos</string>
   <string name="dialog_about_authors">Auteurs</string>
@@ -145,7 +151,7 @@
   <string name="shuffle_inside_album">Aléatoire : pistes de cet album</string>
   <string name="shuffle_albums">Aléatoire : albums</string>
   <string name="first_time_title">Bienvenue</string>
-  <string name="first_time_text">Merci d\'utiliser Clementine Remote!\nJ\'éspère que cette application vous sera utile.&lt;br&gt;&lt;br&gt;Avant de pouvoir utiliser cette application vous devez télécharger et installer Clementine 1.2.1 ou une version plus récente depuis &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;.</string>
+  <string name="first_time_text">Merci d\'utiliser Clementine à Distance!\nJ\'éspère que cette application vous sera utile.&lt;br&gt;&lt;br&gt;Avant de pouvoir utiliser cette application vous devez télécharger et installer Clementine 1.2.1 ou une version plus récente depuis &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;Ici&lt;/a&gt;.</string>
   <string name="track_loved">Piste aimée &lt;3</string>
   <string name="track_banned">Piste détestée :-(</string>
   <string name="notification_disconnect_keep_alive">Connexion perdue. Touchez pour vous reconnecter.</string>
@@ -154,6 +160,19 @@
   <string name="crash_report_title">Oups, une erreur s\'est produite !</string>
   <string name="crash_report_message">« Clementine à distance » a planté lors de la dernière utilisation : ceci ne devrait pas arriver. Aidez moi à l\'améliorer en m\'envoyant le rapport d\'erreur. Merci !</string>
   <string name="crash_report_send">Envoyé !</string>
+  <string name="cm_next">Suivant</string>
+  <string name="cm_close">Fermer</string>
+  <string name="cm_connect_ip_title">Connecter à Clemtentine</string>
+  <string name="cm_connect_ip_content">Entrez l\'adresse IP de l\'ordinateur sur lequel tourne Clementine\net cliquez sur \"Connecter\"\n\n    </string>
+  <string name="cm_connect_mdns_title">Association Automatique</string>
+  <string name="cm_connect_mdns_content">Si l\'icône s\'anime, cliquez dessus pour voir la liste\ndes ordinateurs sur lesquels tourne Clementine</string>
+  <string name="cm_player_home_title">Menu de Clementine à distance</string>
+  <string name="cm_player_home_content">Cliquez sur le bouton dans le coin supérieur gauche pour ouvrir le Menu</string>
+  <string name="cm_player_hold_pause_title">Maintenir Pause</string>
+  <string name="cm_player_lyrics_title">Cliquez sur la couverture de l\'Album</string>
+  <string name="cm_player_lyrics_content">Une fenêtre avec les paroles va s\'ouvrir</string>
+  <string name="cm_player_swipe_title">Glissez vers la droite</string>
+  <string name="cm_player_swipe_content">Pour voir les détails de la piste et noter la musique</string>
   <string-array name="navigation_headers">
     <item>À distance</item>
     <item>Paramètres</item>

@@ -91,7 +91,6 @@
   <string name="pref_dl_pl_save_own_dir_title">Yo\'lakchalarni ijro ro\'yxati jildida saqlash</string>
   <string name="pref_dl_pl_save_own_dir_summary">Ijro ro\'yxati nomi bilan jildni yaratadi va yo\'lakchalarni usha joyda saqlaydi.</string>
   <string name="pref_dl_pl_artist_dir_title">Ijrochi/albom tagjildini yaratish</string>
-  <string name="pref_dl_pl_artist_dir_summary">Har bir yo\'lakcha uchun ijrochi/albom tagjildini yaratish</string>
   <string name="file_dialog_set_dir">Katalogni tanlash</string>
   <string name="dialog_about_header">Dastur haqida</string>
   <string name="dialog_about_authors">Mualliflar</string>

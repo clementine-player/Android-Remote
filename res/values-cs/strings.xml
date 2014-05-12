@@ -4,7 +4,7 @@
   <string name="app_not_available">Aplikace je nedostupná!</string>
   <string name="connectdialog_connect">Připojit</string>
   <string name="connectdialog_autoconnect">Automaticky připojit</string>
-  <string name="connectdialog_connecting">Připojuje se s Clementine</string>
+  <string name="connectdialog_connecting">Připojuje se ke Clementine</string>
   <string name="connectdialog_download_data">Stahují se data</string>
   <string name="connectdialog_error">Nepodařilo se dostat se k hostiteli</string>
   <string name="connectdialog_ip_hint">Zadat adresu IP</string>
@@ -24,6 +24,7 @@
   <string name="playlist_empty">Seznam skladeb je prázdný!</string>
   <string name="playlist_context_play">Přehrát položku</string>
   <string name="playlist_context_remove">Odstranit ze seznamu skladeb</string>
+  <string name="playlist_loading">Nahrává se</string>
   <string name="downloads_empty">Žádné stažené!</string>
   <string name="download_error">Nepodařilo se otevřít píseň!</string>
   <string name="download_freespace">Volné místo</string>
@@ -42,10 +43,12 @@
   <string name="library_please_wait">Počkejte, prosím</string>
   <string name="library_refresh">Obnovit</string>
   <string name="library_empty">Sbírka je prázdná. Stiskněte Obnovit pro stažení sbírky!</string>
+  <string name="library_no_search_results">Žádné písně neodpovídají vašim hlediskům hledání!</string>
   <string name="library_no_albums">%d alb</string>
   <string name="library_no_tracks">%d skladeb</string>
   <string name="library_songs_added">%d písní přidáno do nynějšího seznamu skladeb</string>
   <string name="library_context_add">Přidat položku do nynějšího seznamu skladeb</string>
+  <string name="library_download_error">Nepopdařilo se stáhnout sbírku</string>
   <string name="song_info_album">Album</string>
   <string name="song_info_genre">Žánr</string>
   <string name="song_info_year">Rok</string>
@@ -57,6 +60,12 @@
   <string name="song_info_filename">Název souboru</string>
   <string name="song_info_rating">Hodnocení</string>
   <string name="song_info_rated">Píseň hodnocena $stars$ hvězdičkami</string>
+  <string name="song_info_volume">Hlasitost</string>
+  <string name="connection_connected_to">Připojeno k:</string>
+  <string name="connection_volume">Hlasitost</string>
+  <string name="connection_version">Verze Clementine</string>
+  <string name="connection_traffic">Přenos nahoru/dolů (prům/s)</string>
+  <string name="connection_traffic_unsupported">Statistiky na tomto zařízení nejsou dostupné</string>
   <string name="menu_shuffle">Zamíchat</string>
   <string name="menu_repeat">Opakovat</string>
   <string name="menu_settings">Nastavení</string>
@@ -94,14 +103,19 @@
   <string name="pref_port_error">Neplatná přípojka (port)</string>
   <string name="pref_lastfm_title">Last.fm</string>
   <string name="pref_lastfm_summary">Zapnout Oblíbit/Zakázat skladby. (vyžaduje opětovné spuštění)</string>
+  <string name="pref_keep_screen_on_title">Nechat obrazovku zapnutou</string>
+  <string name="pref_keep_screen_on_summary">Zabránit vypnutí obrazovky, zatímco je Clementine Remote připojena ke Clementine.</string>
   <string name="pref_lower_volume_title">Snížit hlasitost</string>
   <string name="pref_lower_volume_summary">Snížit hlasitost při příchozím/odchozím hovoru.</string>
   <string name="pref_call_volume_title">Úroveň hlasitosti volání</string>
   <string name="pref_call_volume_summary">Nynější úroveň hlasitosti volání: %s</string>
+  <string name="pref_volume_inc_title">Úroveň změny hlasitosti</string>
+  <string name="pref_volume_inc_summary">Nynější úroveň změny hlasitosti: %s</string>
   <string name="pref_version_summary">Klepněte pro návštěvu stránek projektu</string>
   <string name="pref_version_title">Verze</string>
   <string name="pref_license_title">Licence</string>
   <string name="pref_license_summary">GNU GPLv3</string>
+  <string name="pref_opensource_title">Otevřený zdrojový kód</string>
   <string name="pref_about_title">O</string>
   <string name="pref_about_summary">Lidé pracující na tomto projektu</string>
   <string name="pref_clementine_title">Clementine</string>
@@ -114,7 +128,6 @@
   <string name="pref_dl_pl_save_own_dir_title">Ukládat skladby ve složce se seznamy skladeb</string>
   <string name="pref_dl_pl_save_own_dir_summary">Vytvoří složku pojmenovanou po seznamu skladeb a skladby uloží tam.</string>
   <string name="pref_dl_pl_artist_dir_title">Vytvořit podsložku pro umělce/album</string>
-  <string name="pref_dl_pl_artist_dir_summary">Vytvořit podsložku pro umělce/album pro každou jednotlivou skladbu.</string>
   <string name="file_dialog_set_dir">Vybrat adresář</string>
   <string name="dialog_about_header">O</string>
   <string name="dialog_about_authors">Autoři</string>
@@ -125,6 +138,7 @@
   <string name="error_versions">Nekompatibilní verze</string>
   <string name="old_proto">Aktualizujte Clementine!</string>
   <string name="no_private_ip">Zařízení Android má adresu IP, která není místní. Zkuste v nastavení Clementine zakázat Použít pouze místní adresu IP.</string>
+  <string name="check_ip">1) Clementine běží?\n2) Používáte Clementine 1.2.1 či vyšší?\n3) Povolili jste vzdálené síťové připojení v nastavení Clementine?\n4) Ověřte, že jste zadali správnou adresu IP.\n</string>
   <string name="wifi_disabled">Wifi je vypnuta. Pokud se chcete spojit s Clementine přes internet, ujistěte se, že jste přípojky (port) odeslali správně a že jste zakázali Použít pouze místní adresu IP.</string>
   <string name="input_auth_code">Ověřovací kód</string>
   <string name="invalid_code">Neplatný kód</string>
@@ -137,6 +151,7 @@
   <string name="shuffle_inside_album">Zamíchat skladby v tomto albu</string>
   <string name="shuffle_albums">Zamíchat alba</string>
   <string name="first_time_title">Vítejte</string>
+  <string name="first_time_text">Děkujeme vám, že používáte Clementine Remote!\nDoufáme, že pro vás tato aplikace bude užitečná.&lt;br&gt;&lt;br&gt;Abyste tento program mohli využívat, musíte stáhnout a nainstalovat Clementine 1.2.1 nebo vyšší z &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;.</string>
   <string name="track_loved">Skladba je oblíbená &lt;3</string>
   <string name="track_banned">Skladba je zakázaná :-(</string>
   <string name="notification_disconnect_keep_alive">Spojení ztraceno. Ťukněte pro opětovné připojení.</string>
@@ -145,10 +160,28 @@
   <string name="crash_report_title">Jejda, něco není v pořádku!</string>
   <string name="crash_report_message">Naposledy Clementine Remote spadl! To by se nemělo stát! Pomozte, prosím, se zlepšením aplikace a odešlete soubor se zápisem o činnosti programu. Děkujeme!</string>
   <string name="crash_report_send">Poslat!</string>
+  <string name="cm_next">Další</string>
+  <string name="cm_close">Zavřít</string>
+  <string name="cm_connect_ip_title">Připojit se ke Clementine</string>
+  <string name="cm_connect_mdns_title">Automatické spojení</string>
+  <string name="cm_connect_mdns_content">Pokud ikona pulzuje, klepněte na ni, abyste viděli seznam\n        dostupných počítačů, na nichž běží Clementine.\n    </string>
+  <string name="cm_player_home_title">Nabídka pro Clementine Remote</string>
+  <string name="cm_player_home_content">Klepněte na tlačítko Domů pro otevření nabídky</string>
+  <string name="cm_player_hold_pause_title">Podržet Pozastavit</string>
+  <string name="cm_player_lyrics_title">Klepněte na obal alba</string>
+  <string name="cm_player_lyrics_content">Otevře se dialog s textem písně</string>
+  <string name="cm_player_swipe_title">Postrčte doprava,</string>
+  <string name="cm_player_swipe_content">abyste uviděli podrobnosti skladby a píseň ohodnotili.</string>
   <string-array name="navigation_headers">
     <item>Vzdálené</item>
     <item>Nastavení</item>
     <item>Odpojit</item>
+  </string-array>
+  <string-array name="navigation_array_remote">
+    <item>Přehrávač</item>
+    <item>Seznamy skladeb</item>
+    <item>Sbírka</item>
+    <item>Stahování</item>
   </string-array>
   <string-array name="navigation_array_settings">
     <item>Nastavení</item>

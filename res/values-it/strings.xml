@@ -60,6 +60,9 @@
   <string name="song_info_rating">Punteggio</string>
   <string name="song_info_rated">Canzoni votate $stars$ stars</string>
   <string name="song_info_volume">Volume</string>
+  <string name="connection_connected_to">Connesso a:</string>
+  <string name="connection_volume">Volume</string>
+  <string name="connection_version">Versione di Clementine</string>
   <string name="menu_shuffle">Casuale</string>
   <string name="menu_repeat">Ripeti</string>
   <string name="menu_settings">Impostazioni</string>
@@ -121,7 +124,6 @@
   <string name="pref_dl_pl_save_own_dir_title">Salva tracce nella cartella playlist</string>
   <string name="pref_dl_pl_save_own_dir_summary">Crea una cartella con il nome della playlist e salva dentro le tracce.</string>
   <string name="pref_dl_pl_artist_dir_title">Crea sotto cartella artista/album</string>
-  <string name="pref_dl_pl_artist_dir_summary">Crea sotto cartella artista/album per ogni singola canzone.</string>
   <string name="file_dialog_set_dir">Seleziona cartella</string>
   <string name="dialog_about_header">Info su</string>
   <string name="dialog_about_authors">Autori</string>
@@ -154,6 +156,11 @@
   <string name="crash_report_title">Ops, qualcosa non va!</string>
   <string name="crash_report_message">L\'ultima volta Clementine Remote è andato in crash! Questo non doveva accadere! Aiutami a migliorare l\'app e inviami il file di log. Grazie!</string>
   <string name="crash_report_send">Inviato!</string>
+  <string name="cm_next">Prossima</string>
+  <string name="cm_close">Chiudi</string>
+  <string name="cm_connect_ip_title">Connetti a Clementine</string>
+  <string name="cm_player_home_title">Menu Clementine Remote</string>
+  <string name="cm_player_home_content">Fai click sul pulsante home per aprire il menu.</string>
   <string-array name="navigation_headers">
     <item>Remoto</item>
     <item>Impostazioni</item>

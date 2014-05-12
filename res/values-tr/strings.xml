@@ -117,7 +117,6 @@
   <string name="pref_dl_pl_save_own_dir_title">Parçaları oynatma listesi klasörüne kaydet</string>
   <string name="pref_dl_pl_save_own_dir_summary">Oynatma listesi adında klasör oluşturur ve parçaları oraya kaydeder.</string>
   <string name="pref_dl_pl_artist_dir_title">Sanatçı/Albüm alt klasörünü oluştur</string>
-  <string name="pref_dl_pl_artist_dir_summary">Her bağımsız parça için bir sanatçı/albüm alt klasörü oluştur.</string>
   <string name="file_dialog_set_dir">Dizin seç</string>
   <string name="dialog_about_header">Hakkında</string>
   <string name="dialog_about_authors">Yazarlar</string>

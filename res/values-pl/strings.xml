@@ -24,6 +24,7 @@
   <string name="playlist_empty">Lista odtwarzania jest pusta!</string>
   <string name="playlist_context_play">Zagraj utwór</string>
   <string name="playlist_context_remove">Usuń z listy odtwarzania</string>
+  <string name="playlist_loading">Wczytywanie</string>
   <string name="downloads_empty">Brak pobranych!</string>
   <string name="download_error">Nie można odtworzyć utworu!</string>
   <string name="download_freespace">Wolna przestrzeń</string>
@@ -42,6 +43,7 @@
   <string name="library_please_wait">Proszę czekać</string>
   <string name="library_refresh">Odśwież</string>
   <string name="library_empty">Biblioteka jest pusta. Wciśnij odśwież by pobrać bibliotekę!</string>
+  <string name="library_no_search_results">Brak utworów spełniających Twoje warunki wyszukiwania</string>
   <string name="library_no_albums">%d albumy</string>
   <string name="library_no_tracks">%d utwory</string>
   <string name="library_songs_added">%d utworów dodanych do aktualnej listy odtwarzania</string>
@@ -58,6 +60,12 @@
   <string name="song_info_filename">Nazwa pliku</string>
   <string name="song_info_rating">Ocena</string>
   <string name="song_info_rated">Utwór oceniony na $stars$ gwiazdek</string>
+  <string name="song_info_volume">Poziom głośności</string>
+  <string name="connection_connected_to">Połączony z:</string>
+  <string name="connection_volume">Poziom głośności</string>
+  <string name="connection_version">Wersja Clementine</string>
+  <string name="connection_traffic">Ruch w górę / w dół (śr. / sek.)</string>
+  <string name="connection_traffic_unsupported">Statystyki nie są dostępne dla tego urządzenia</string>
   <string name="menu_shuffle">Losuj</string>
   <string name="menu_repeat">Powtarzanie</string>
   <string name="menu_settings">Ustawienia</string>
@@ -101,10 +109,13 @@
   <string name="pref_lower_volume_summary">Ścisz w trakcie połączenia telefonicznego.</string>
   <string name="pref_call_volume_title">Poziom głośności w trakcie połączenia</string>
   <string name="pref_call_volume_summary">Aktualny poziom głośności w trakcie połączenia: %s</string>
+  <string name="pref_volume_inc_title">Poziom skoku zmiany głośności</string>
+  <string name="pref_volume_inc_summary">Obecny skok głośności: %s</string>
   <string name="pref_version_summary">Kliknij by odwiedzić naszą stronę</string>
   <string name="pref_version_title">Wersja</string>
   <string name="pref_license_title">Licencja</string>
   <string name="pref_license_summary">GNU GPLv3</string>
+  <string name="pref_opensource_title">Wolne Oprogramowanie</string>
   <string name="pref_about_title">Informacje o</string>
   <string name="pref_about_summary">ludziach pracujących nad tym projektem</string>
   <string name="pref_clementine_title">Clementine</string>
@@ -117,7 +128,6 @@
   <string name="pref_dl_pl_save_own_dir_title">Zapisz utwory w katalogu listy odtwarzania</string>
   <string name="pref_dl_pl_save_own_dir_summary">Tworzy katalog o nazwie listy odtwarzania i zapisuje w nim utwory.</string>
   <string name="pref_dl_pl_artist_dir_title">Tworzy podkatalog dla artysty/albumu</string>
-  <string name="pref_dl_pl_artist_dir_summary">Tworzy podkatalog artysty/albumu dla każdej ścieżki osobno.</string>
   <string name="file_dialog_set_dir">Wybierz katalog</string>
   <string name="dialog_about_header">Informacje o</string>
   <string name="dialog_about_authors">Autorzy</string>
@@ -150,10 +160,27 @@
   <string name="crash_report_title">Ups, coś poszło nie tak!</string>
   <string name="crash_report_message">Poprzednim razem Clementine Remote uległo awarii! To nie powinno się zdażyć! Proszę pomóż mi w ulepszeniu aplikacji i wyślij mi plik z logami. Dzięki!</string>
   <string name="crash_report_send">Wyślij!</string>
+  <string name="cm_next">Następne</string>
+  <string name="cm_close">Zamknij</string>
+  <string name="cm_connect_ip_title">Łączenie z Clementine</string>
+  <string name="cm_connect_ip_content">Wpisz adres IP komputera z uruchomionym odtwarzaczem Clementine\ni kliknij \"Połącz\"\n</string>
+  <string name="cm_connect_mdns_content">Jeśli ikonka pulsuje, kliknij ją aby zobaczyć listę\ndostępnych komputerów z uruchomionym\nodtwarzaczem Clementine</string>
+  <string name="cm_player_home_title">Menu Clementine Remote</string>
+  <string name="cm_player_hold_pause_title">Wstrzymaj pausę</string>
+  <string name="cm_player_lyrics_title">Kliknij na okładkę albumu</string>
+  <string name="cm_player_lyrics_content">Okienko z tekstem zostanie otwarte</string>
+  <string name="cm_player_swipe_title">Przesuń palcem w prawo</string>
+  <string name="cm_player_swipe_content">aby zobaczyć informacje o ścieżce i ocenach utworu.</string>
   <string-array name="navigation_headers">
     <item>Sterowanie</item>
     <item>Ustawienia</item>
     <item>Rozłącz</item>
+  </string-array>
+  <string-array name="navigation_array_remote">
+    <item>Odtwarzacz</item>
+    <item>Listy odtwarzania</item>
+    <item>Biblioteka</item>
+    <item>Pobrane</item>
   </string-array>
   <string-array name="navigation_array_settings">
     <item>Ustawienia</item>
