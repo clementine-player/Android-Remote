@@ -1,3 +1,26 @@
+Version 9 (Only for Android 4.0+)
+  Features:
+    - Showcases to introduce app features
+  Improvements:
+    - Flat orange ActionBar
+    - Tablet layout
+    - Minor layout improvements overall
+    - Song detail page moved from navigation to player view (swipe to right)
+    - New view "Connection details" in player view (swipe to right twice)
+    - Reworked playlist handling, should be more stable now
+    - The search function in the library performs a full search now, not only artist, album and title
+    - Show transferred bytes when downloading the library
+    - Preference to keep the screen on while connected
+    - Volume increase / decrease level can now be changed
+    - Playlist and Library have holo context menus now
+    - Clementine Remote saves recent connected ip addresses
+  Bugfixes:
+    - IP address can hold more than 20 characters now
+    - Fix NumberFormatException in settings when entering invalid port
+    - Fix crash when downloading songs
+    - Fix adding songs to playlist from library that had special characters in it
+    - Fix fast scrolling: It was disabled when selecting another the playlist
+
 Version 8.5
   Improvements:
     - Library: Search applies for artist, album and title now
