@@ -128,6 +128,7 @@
   <string name="pref_dl_pl_save_own_dir_title">Enregistrer les morceaux dans le dossier de la liste de lecture</string>
   <string name="pref_dl_pl_save_own_dir_summary">Crée un dossier nommé comme la liste de lecture, et enregistre les morceaux dedans.</string>
   <string name="pref_dl_pl_artist_dir_title">Créer un sous-dossier pour les artistes/albums</string>
+  <string name="pref_dl_pl_artist_dir_summary">Créer un sous-dossier pour les artistes/albums, pour chacun des morceaux.</string>
   <string name="file_dialog_set_dir">Sélectionner le dossier</string>
   <string name="dialog_about_header">À propos</string>
   <string name="dialog_about_authors">Auteurs</string>
@@ -169,6 +170,7 @@
   <string name="cm_player_home_title">Menu de Clementine à distance</string>
   <string name="cm_player_home_content">Cliquez sur le bouton dans le coin supérieur gauche pour ouvrir le Menu</string>
   <string name="cm_player_hold_pause_title">Maintenir Pause</string>
+  <string name="cm_player_hold_pause_content">Cela déclenche l\'arrêt après les caractéristiques des pistes.</string>
   <string name="cm_player_lyrics_title">Cliquez sur la couverture de l\'Album</string>
   <string name="cm_player_lyrics_content">Une fenêtre avec les paroles va s\'ouvrir</string>
   <string name="cm_player_swipe_title">Glissez vers la droite</string>

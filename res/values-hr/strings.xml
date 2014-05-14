@@ -128,6 +128,7 @@
   <string name="pref_dl_pl_save_own_dir_title">Spremi pjesme u mapu popisa izvođenja</string>
   <string name="pref_dl_pl_save_own_dir_summary">Stvori mapu nazvanu po popisu izvođenja i spremi pjesme u mapu.</string>
   <string name="pref_dl_pl_artist_dir_title">Stvori podmapu izvođača/albuma</string>
+  <string name="pref_dl_pl_artist_dir_summary">Stvori podmapu izvođača/albuma za svaku pjesmu posebno.</string>
   <string name="file_dialog_set_dir">Odaberi direktorij</string>
   <string name="dialog_about_header">O programu</string>
   <string name="dialog_about_authors">Autori</string>
@@ -169,6 +170,7 @@
   <string name="cm_player_home_title">Izbornik Clementine daljinskog upravljanja</string>
   <string name="cm_player_home_content">Klikni tipku naslovnice za otvaranje izbornika.</string>
   <string name="cm_player_hold_pause_title">Zadrži pauzu</string>
+  <string name="cm_player_hold_pause_content">Uključi/Isključi zaustavljanje nakon završetka pjesme.</string>
   <string name="cm_player_lyrics_title">Klikni na omot albuma</string>
   <string name="cm_player_lyrics_content">Dijalog teksta pjesme će se otvoriti</string>
   <string name="cm_player_swipe_title">Povucite prstom udesno</string>
