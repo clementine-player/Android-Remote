@@ -141,7 +141,7 @@
   <string name="no_private_ip">Votre téléphone Android a une adresse IP non-locale. Essayez de désactiver « Utiliser seulement les adresses IP locales » dans les préférences de Clementine.</string>
   <string name="check_ip">1) Clementine est lancé?\n2) Utilisez vous Clementine 1.2.1 ou plus?\n3) Avez vous activé Clementine à distance dans les paramètres de Clementine?\n4) Vérifiez que vous avez entré le bonne adresse IP.\n</string>
   <string name="wifi_disabled">Le Wifi est désactivé. Si vous voulez vous connecter à Clementine via Internet, vérifiez que vous avez redirigé les ports et désactivé « Utiliser seulement les adresses IP locales ».</string>
-  <string name="input_auth_code">Code d\'authentication</string>
+  <string name="input_auth_code">Code d\'authentification</string>
   <string name="invalid_code">Code invalide</string>
   <string name="repeat_off">Ne pas répéter</string>
   <string name="repeat_track">Répéter la piste</string>
