@@ -204,13 +204,9 @@
     <string name="cm_next">Next</string>
     <string name="cm_close">Close</string>
     <string name="cm_connect_ip_title">Connect to Clementine</string>
-    <string name="cm_connect_ip_content">Enter the IP address of your computer running Clementine
-        and click "Connect"
-    </string>
+    <string name="cm_connect_ip_content">Enter the IP address of your computer running Clementine and click "Connect"</string>
     <string name="cm_connect_mdns_title">Automatic peering</string>
-    <string name="cm_connect_mdns_content">If the icon pulsates, click on it to see a list of
-        available computers running Clementine.
-    </string>
+    <string name="cm_connect_mdns_content">If the icon pulsates, click on it to see a list of available computers running Clementine.</string>
     <string name="cm_player_home_title">Clementine Remote menu</string>
     <string name="cm_player_home_content">Click the home button to open the menu.</string>
     <string name="cm_player_hold_pause_title">Hold pause</string>
