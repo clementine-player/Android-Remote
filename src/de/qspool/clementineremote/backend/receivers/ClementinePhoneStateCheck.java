@@ -31,7 +31,7 @@ import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 
 public class ClementinePhoneStateCheck extends BroadcastReceiver {
 
-    static int mLastVolume = -1;
+    private final static String KEY_LAST_VOLUME = "last_volume";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -52,17 +52,17 @@ public class ClementinePhoneStateCheck extends BroadcastReceiver {
 
             Message msg = Message.obtain();
 
-            if (state.equals(TelephonyManager.EXTRA_STATE_IDLE) && mLastVolume != -1) {
-                msg.obj = ClementineMessageFactory.buildVolumeMessage(mLastVolume);
-                mLastVolume = -1;
-            } else if (!state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
-                mLastVolume = App.mClementine.getVolume();
+            if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)
+                    || state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
+                saveLastVolume(prefs);
                 String volumeString = prefs
                         .getString(App.SP_CALL_VOLUME, Clementine.DefaultCallVolume);
                 msg.obj = ClementineMessageFactory
                         .buildVolumeMessage(Integer.parseInt(volumeString));
-            } else {
-                msg = null;
+            }
+
+            if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
+                msg.obj = ClementineMessageFactory.buildVolumeMessage(getLastVolume(prefs));
             }
 
             // Now send the message
@@ -72,6 +72,18 @@ public class ClementinePhoneStateCheck extends BroadcastReceiver {
             }
 
         }
+    }
+
+    private int getLastVolume(SharedPreferences prefs) {
+        return prefs.getInt(KEY_LAST_VOLUME, App.mClementine.getVolume());
+    }
+
+    private void saveLastVolume(SharedPreferences prefs) {
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.putInt(KEY_LAST_VOLUME, App.mClementine.getVolume());
+
+        editor.commit();
     }
 
 }
