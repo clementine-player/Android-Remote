@@ -118,7 +118,7 @@ public class MainActivity extends SherlockFragmentActivity {
             mPlayerFragment = new PlayerFragment();
             getSupportFragmentManager().beginTransaction().add(R.id.player_frame, mPlayerFragment)
                     .commit();
-            mLastPosition = 3;
+            mLastPosition = 2;
         }
 
         // Create the adapters for the sections
