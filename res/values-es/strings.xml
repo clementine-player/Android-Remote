@@ -127,6 +127,7 @@
   <string name="pref_dl_pl_save_own_dir_title">Guardar pistas en la carpeta de la lista de reproducción</string>
   <string name="pref_dl_pl_save_own_dir_summary">Crea una carpeta con el nombre de la lista de reproducción y guarda las pistas ahí.</string>
   <string name="pref_dl_pl_artist_dir_title">Crear subcarpeta de artista/álbum</string>
+  <string name="pref_dl_pl_artist_dir_summary">Crear subcarpeta «artista/álbum» para cada pista</string>
   <string name="file_dialog_set_dir">Seleccione la carpeta</string>
   <string name="dialog_about_header">Acerca de</string>
   <string name="dialog_about_authors">Autores</string>
@@ -164,8 +165,10 @@
   <string name="cm_connect_ip_title">Conectar con Clementine</string>
   <string name="cm_connect_ip_content">Escriba la dirección IP del equipo con Clementine\ny pulse en «Conectar»\n</string>
   <string name="cm_connect_mdns_title">Emparejamiento automático</string>
+  <string name="cm_connect_mdns_content">Si el icono parpadea, pulse en él para ver una\nlista de PC disponibles con Clementine en ejecución.</string>
   <string name="cm_player_home_title">Menú del control remoto de Clementine</string>
   <string name="cm_player_home_content">Pulse en el botón Inicio para abrir el menú.</string>
+  <string name="cm_player_hold_pause_content">Activa o desactiva la detención tras finalizar la pista.</string>
   <string name="cm_player_lyrics_title">Pulsar en la carátula del álbum</string>
   <string name="cm_player_lyrics_content">Se abrirá un cuadro con la letra</string>
   <string name="cm_player_swipe_title">Deslice hacia la derecha</string>

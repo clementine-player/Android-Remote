@@ -41,9 +41,9 @@
   <string name="library_download">Téléchargement de la bibliothèque</string>
   <string name="library_optimize">Optimisation de la base de donnée</string>
   <string name="library_please_wait">Merci de patienter</string>
-  <string name="library_refresh">Rafraichir</string>
+  <string name="library_refresh">Rafraîchir</string>
   <string name="library_empty">Bibliothèque vide. Touchez rafraichir pour télécharger la bibliothèque.</string>
-  <string name="library_no_search_results">Aucune Musique ne correspond à vos critères de recherche!</string>
+  <string name="library_no_search_results">Aucun morceau ne correspond à vos critères de recherche !</string>
   <string name="library_no_albums">%d albums</string>
   <string name="library_no_tracks">%d pistes</string>
   <string name="library_songs_added">%d chansons ajoutées à la liste de lecture courante</string>
@@ -61,7 +61,7 @@
   <string name="song_info_rating">Note</string>
   <string name="song_info_rated">Morceau noté $stars$ étoiles</string>
   <string name="song_info_volume">Volume</string>
-  <string name="connection_connected_to">Connecter à:</string>
+  <string name="connection_connected_to">Connecter à :</string>
   <string name="connection_volume">Volume</string>
   <string name="connection_version">Version de Clementine</string>
   <string name="connection_traffic">Trafic Montant / Descendant (moy / sec)</string>
@@ -141,7 +141,7 @@
   <string name="no_private_ip">Votre téléphone Android a une adresse IP non-locale. Essayez de désactiver « Utiliser seulement les adresses IP locales » dans les préférences de Clementine.</string>
   <string name="check_ip">1) Clementine est lancé?\n2) Utilisez vous Clementine 1.2.1 ou plus?\n3) Avez vous activé Clementine à distance dans les paramètres de Clementine?\n4) Vérifiez que vous avez entré le bonne adresse IP.\n</string>
   <string name="wifi_disabled">Le Wifi est désactivé. Si vous voulez vous connecter à Clementine via Internet, vérifiez que vous avez redirigé les ports et désactivé « Utiliser seulement les adresses IP locales ».</string>
-  <string name="input_auth_code">Code d\'authentication</string>
+  <string name="input_auth_code">Code d\'authentification</string>
   <string name="invalid_code">Code invalide</string>
   <string name="repeat_off">Ne pas répéter</string>
   <string name="repeat_track">Répéter la piste</string>
@@ -164,13 +164,13 @@
   <string name="cm_next">Suivant</string>
   <string name="cm_close">Fermer</string>
   <string name="cm_connect_ip_title">Connecter à Clemtentine</string>
-  <string name="cm_connect_ip_content">Entrez l\'adresse IP de l\'ordinateur sur lequel tourne Clementine\net cliquez sur \"Connecter\"\n\n    </string>
+  <string name="cm_connect_ip_content">Entrez l\'adresse IP de l\'ordinateur sur lequel tourne Clementine\net cliquez sur « Connecter »\n\n    </string>
   <string name="cm_connect_mdns_title">Association Automatique</string>
   <string name="cm_connect_mdns_content">Si l\'icône s\'anime, cliquez dessus pour voir la liste\ndes ordinateurs sur lesquels tourne Clementine</string>
   <string name="cm_player_home_title">Menu de Clementine à distance</string>
   <string name="cm_player_home_content">Cliquez sur le bouton dans le coin supérieur gauche pour ouvrir le Menu</string>
   <string name="cm_player_hold_pause_title">Maintenir Pause</string>
-  <string name="cm_player_hold_pause_content">Cela déclenche l\'arrêt après les caractéristiques des pistes.</string>
+  <string name="cm_player_hold_pause_content">La lecture s\'arrêtera à la fin du morceau en cours.</string>
   <string name="cm_player_lyrics_title">Cliquez sur la couverture de l\'Album</string>
   <string name="cm_player_lyrics_content">Une fenêtre avec les paroles va s\'ouvrir</string>
   <string name="cm_player_swipe_title">Glissez vers la droite</string>

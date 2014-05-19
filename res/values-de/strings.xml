@@ -128,7 +128,7 @@
   <string name="pref_dl_pl_save_own_dir_title">Im Wiedergabelistenordner speichern</string>
   <string name="pref_dl_pl_save_own_dir_summary">Erstellt einen nach der Wiedergabeliste benannten Ordner und speichert die Lieder dort.</string>
   <string name="pref_dl_pl_artist_dir_title">Künstler/Album Unterordner erstellen</string>
-  <string name="pref_dl_pl_artist_dir_summary">Erstelle einen Künster/Album Unterordner für jeden Titel.</string>
+  <string name="pref_dl_pl_artist_dir_summary">Einen Künstler/Album-Unterordner für jeden Titel erstellen.</string>
   <string name="file_dialog_set_dir">Ordner auswählen</string>
   <string name="dialog_about_header">Über</string>
   <string name="dialog_about_authors">Autoren</string>
@@ -170,7 +170,7 @@
   <string name="cm_player_home_title">Clementine-Fernbedienungsmenü</string>
   <string name="cm_player_home_content">Auf den Startknopf klicken, um das Menü zu öffnen.</string>
   <string name="cm_player_hold_pause_title">Pause gedrückt halten</string>
-  <string name="cm_player_hold_pause_content">Es schaltet die nach aktuellem Lied stoppen Funktion ein / aus.</string>
+  <string name="cm_player_hold_pause_content">Es schaltet die »Nach Titel anhalten«-Funktion ein/aus.</string>
   <string name="cm_player_lyrics_title">Auf das Albumbild klicken</string>
   <string name="cm_player_lyrics_content">Ein Dialog mit dem Liedtext wird angezeigt</string>
   <string name="cm_player_swipe_title">Nach rechts wischen</string>
