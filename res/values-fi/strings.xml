@@ -164,9 +164,7 @@
   <string name="cm_next">Seuraava</string>
   <string name="cm_close">Sulje</string>
   <string name="cm_connect_ip_title">Yhdistä Clementineen</string>
-  <string name="cm_connect_ip_content">Kirjoita sen tietokoneen IP-osoite, jossa Clementine on käynnissä,\n        ja napauta \"Yhdistä\"\n    </string>
   <string name="cm_connect_mdns_title">Automaattinen tähyily</string>
-  <string name="cm_connect_mdns_content">Klikkaa kuvaketta sen sykkiessä, jotta näet listan\nkoneista, joissa Clementine on käynnissä.</string>
   <string name="cm_player_home_title">Clementine-kaukosäätimen valikko</string>
   <string name="cm_player_home_content">Napauta kotipainiketta avataksesi valikon.</string>
   <string name="cm_player_hold_pause_title">Paina pitkään taukoa</string>

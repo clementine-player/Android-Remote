@@ -164,9 +164,9 @@
   <string name="cm_next">Далі</string>
   <string name="cm_close">Закрити</string>
   <string name="cm_connect_ip_title">З’єднатися з Clementine</string>
-  <string name="cm_connect_ip_content">Вкажіть IP-адресу вашого комп’ютера, на якому запущено Clementine, і натисніть кнопку «З’єднати»\n    </string>
+  <string name="cm_connect_ip_content">Вкажіть IP-адресу вашого комп’ютера, на якому запущено Clementine, і натисніть кнопку «З’єднати»</string>
   <string name="cm_connect_mdns_title">Автоматичне встановлення вузлів</string>
-  <string name="cm_connect_mdns_content">Якщо піктограма блимає, натисніть її, щоб\n        переглянути список доступних комп’ютерів із запущеною Clementine.\n    </string>
+  <string name="cm_connect_mdns_content">Якщо піктограма блимає, натисніть її, щоб переглянути список доступних комп’ютерів із запущеною Clementine.  </string>
   <string name="cm_player_home_title">Меню Clementine Remote</string>
   <string name="cm_player_home_content">Натисніть кнопку домівки, щоб відкрити меню.</string>
   <string name="cm_player_hold_pause_title">Утримуйте кнопку паузи</string>

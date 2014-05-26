@@ -164,7 +164,6 @@
   <string name="cm_close">Zavřít</string>
   <string name="cm_connect_ip_title">Připojit se ke Clementine</string>
   <string name="cm_connect_mdns_title">Automatické spojení</string>
-  <string name="cm_connect_mdns_content">Pokud ikona pulzuje, klepněte na ni, abyste viděli seznam\n        dostupných počítačů, na nichž běží Clementine.\n    </string>
   <string name="cm_player_home_title">Nabídka pro Clementine Remote</string>
   <string name="cm_player_home_content">Klepněte na tlačítko Domů pro otevření nabídky</string>
   <string name="cm_player_hold_pause_title">Podržet Pozastavit</string>

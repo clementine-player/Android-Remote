@@ -163,8 +163,6 @@
   <string name="cm_next">Następne</string>
   <string name="cm_close">Zamknij</string>
   <string name="cm_connect_ip_title">Łączenie z Clementine</string>
-  <string name="cm_connect_ip_content">Wpisz adres IP komputera z uruchomionym odtwarzaczem Clementine\ni kliknij \"Połącz\"\n</string>
-  <string name="cm_connect_mdns_content">Jeśli ikonka pulsuje, kliknij ją aby zobaczyć listę\ndostępnych komputerów z uruchomionym\nodtwarzaczem Clementine</string>
   <string name="cm_player_home_title">Menu Clementine Remote</string>
   <string name="cm_player_hold_pause_title">Wstrzymaj pausę</string>
   <string name="cm_player_lyrics_title">Kliknij na okładkę albumu</string>

@@ -147,7 +147,6 @@
   <string name="cm_next">Volgende</string>
   <string name="cm_close">Sluiten</string>
   <string name="cm_connect_ip_title">Verbind met Clementine</string>
-  <string name="cm_connect_ip_content">Voer het IP-adres in van de computer waar Clementine op draait en klik op \"Verbinden\"</string>
   <string name="cm_connect_mdns_title">Automatisch koppelen</string>
   <string name="cm_player_home_title">Clementine Remote menu</string>
   <string name="cm_player_lyrics_title">Klik op de albumhoes</string>

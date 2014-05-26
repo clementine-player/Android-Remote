@@ -164,9 +164,9 @@
   <string name="cm_next">Weiter</string>
   <string name="cm_close">Schließen</string>
   <string name="cm_connect_ip_title">Mit Clementine verbinden</string>
-  <string name="cm_connect_ip_content">Die IP-Adresse Ihres Rechners eingeben, auf dem Clementine läuft und auf »Verbinden« klicken</string>
+  <string name="cm_connect_ip_content">Die IP-Adresse Ihres Rechners, auf dem Clementine läuft, eingeben und auf »Verbinden« klicken</string>
   <string name="cm_connect_mdns_title">Automatisches Verbinden</string>
-  <string name="cm_connect_mdns_content">Wenn die Clementine pulsiert können Sie darauf klicken, um eine Liste von verfügbaren Rechnern zu sehen, auf denen Clementine läuft.</string>
+  <string name="cm_connect_mdns_content">Wenn die Clementine pulsiert, darauf klicken, um eine Liste von verfügbaren Rechnern zu sehen, auf denen Clementine läuft.</string>
   <string name="cm_player_home_title">Clementine-Fernbedienungsmenü</string>
   <string name="cm_player_home_content">Auf den Startknopf klicken, um das Menü zu öffnen.</string>
   <string name="cm_player_hold_pause_title">Pause gedrückt halten</string>

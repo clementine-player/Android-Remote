@@ -163,9 +163,7 @@
   <string name="cm_next">Siguiente</string>
   <string name="cm_close">Cerrar</string>
   <string name="cm_connect_ip_title">Conectar con Clementine</string>
-  <string name="cm_connect_ip_content">Escriba la dirección IP del equipo con Clementine\ny pulse en «Conectar»\n</string>
   <string name="cm_connect_mdns_title">Emparejamiento automático</string>
-  <string name="cm_connect_mdns_content">Si el icono parpadea, pulse en él para ver una\nlista de PC disponibles con Clementine en ejecución.</string>
   <string name="cm_player_home_title">Menú del control remoto de Clementine</string>
   <string name="cm_player_home_content">Pulse en el botón Inicio para abrir el menú.</string>
   <string name="cm_player_hold_pause_content">Activa o desactiva la detención tras finalizar la pista.</string>

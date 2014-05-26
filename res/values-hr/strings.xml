@@ -164,9 +164,7 @@
   <string name="cm_next">Sljedeće</string>
   <string name="cm_close">Zatvori</string>
   <string name="cm_connect_ip_title">Povezivanje s Clementine</string>
-  <string name="cm_connect_ip_content">Upišite IP adresu vašeg računala na kojemu je Clementine\n        i kliknite \"Povezivanje\"\n    </string>
   <string name="cm_connect_mdns_title">Automatsko uparivanje</string>
-  <string name="cm_connect_mdns_content">Ako ikona pulsira, kliknite na nju da bi vidjeli popis\n        dostupnih računala na kojima je pokrenut Clementine.\n    </string>
   <string name="cm_player_home_title">Izbornik Clementine daljinskog upravljanja</string>
   <string name="cm_player_home_content">Klikni tipku naslovnice za otvaranje izbornika.</string>
   <string name="cm_player_hold_pause_title">Zadrži pauzu</string>

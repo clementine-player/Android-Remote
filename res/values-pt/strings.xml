@@ -166,7 +166,7 @@
   <string name="cm_connect_ip_title">Ligar ao Clementine</string>
   <string name="cm_connect_ip_content">Introduza o endereço IP do computador a executar o Clementine\ne clique \"Ligar\"</string>
   <string name="cm_connect_mdns_title">Peer automático</string>
-  <string name="cm_connect_mdns_content">Se o ícone estiver a pulsar, clique-lhe para ver\na lista de computadores com o Clementine.</string>
+  <string name="cm_connect_mdns_content">Se o ícone estiver a pulsar, clique-lhe para ver a lista de computadores com o Clementine.</string>
   <string name="cm_player_home_title">Menu do Clementine Remote</string>
   <string name="cm_player_home_content">Clique no botão Home para abrir o menu</string>
   <string name="cm_player_hold_pause_title">Prima o botão de pausa</string>
