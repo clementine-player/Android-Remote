@@ -164,7 +164,9 @@
   <string name="cm_next">Suivant</string>
   <string name="cm_close">Fermer</string>
   <string name="cm_connect_ip_title">Connecter à Clemtentine</string>
+  <string name="cm_connect_ip_content">Saisissez l\'adresse IP de l\'ordinateur avec Clementine et cliquez sur \" Se connecter\"</string>
   <string name="cm_connect_mdns_title">Association Automatique</string>
+  <string name="cm_connect_mdns_content">Si l\'icône s\'anime, cliquez dessus pour voir la liste\ndes ordinateurs sur lesquels Clementine est disponible.</string>
   <string name="cm_player_home_title">Menu de Clementine à distance</string>
   <string name="cm_player_home_content">Cliquez sur le bouton dans le coin supérieur gauche pour ouvrir le Menu</string>
   <string name="cm_player_hold_pause_title">Maintenir Pause</string>
