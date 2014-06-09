@@ -251,8 +251,8 @@ public class SongDetailFragment extends AbstractDrawerFragment {
             tv_album.setText(currentSong.getAlbum());
             tv_genre.setText(currentSong.getGenre());
             tv_year.setText(currentSong.getYear());
-            tv_track.setText(String.valueOf(currentSong.getTrack()));
-            tv_disc.setText(String.valueOf(currentSong.getDisc()));
+            tv_track.setText(currentSong.getTrack() != -1 ? String.valueOf(currentSong.getTrack()) : "");
+            tv_disc.setText(currentSong.getDisc() != -1 ? String.valueOf(currentSong.getDisc()) : "");
             tv_playcount.setText(String.valueOf(currentSong.getPlaycount()));
             tv_length.setText(currentSong.getPrettyLength());
             tv_size.setText(Utilities.humanReadableBytes(currentSong.getSize(), true));
