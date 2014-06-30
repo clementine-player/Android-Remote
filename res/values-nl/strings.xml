@@ -125,6 +125,7 @@
   <string name="error_versions">Versie niet compatibel</string>
   <string name="old_proto">Voer een update van Clementine uit!</string>
   <string name="no_private_ip">Uw Android apparaat heeft een niet-lokaal IP adres. Schakel de optie \"Alleen niet-publieke apparaten gebruiken\" in de instellingen van Clementine uit.</string>
+  <string name="check_ip">1) Is Clementine gestart? \n2) Gebruik je versie 1.2.1 of hoger? \n3) Heb je Netwerk Remote aangezet in Clementine voorkeuren? \n4) Controleer of je het juiste ip adres gebruikt. \n</string>
   <string name="wifi_disabled">Wifi is uitgeschakeld. Als u met Clementine wilt verbinden via internet zorg dan de poorten juist doorgestuurd worden en dat de optie \"Alleen niet-publieke apparaten accepteren\" uitgeschakeld is.</string>
   <string name="input_auth_code">Autorisatiecode</string>
   <string name="invalid_code">Code incorrect</string>
