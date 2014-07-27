@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:19.0.+'
+    compile 'com.android.support:support-v4:20.0.+'
     compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
     compile 'com.google.protobuf:protobuf-java:2.4.1'
     compile 'javax.jmdns:jmdns:3.4.0'
@@ -44,12 +44,12 @@ def getVersionCode = { ->
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "19.0.3"
+    compileSdkVersion 20
+    buildToolsVersion "20.0.0"
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 19
+        targetSdkVersion 20
         versionCode getVersionCode()
         versionName getVersionName()
     }
