@@ -76,7 +76,6 @@
   <string name="menu_download_album">Preuzmi album</string>
   <string name="menu_download_playlist">Preuzmi popis izvođenja</string>
   <string name="donate_header">Donacije</string>
-  <string name="donate_text">Hvala vam što koristite moju aplikaciju, nadam se da će vam biti korisna!\n\nAko vas uistinu veseli moj rad, mala donacija bi bila dobrodošla.</string>
   <string name="donate_i_want">Želim donirati:</string>
   <string name="donate_one">Za krafnu (1.00 €)</string>
   <string name="donate_two">Za kavu (2.00 €)</string>
@@ -139,7 +138,6 @@
   <string name="error_versions">Nekompatibilna inačica</string>
   <string name="old_proto">Molim, ažurirajte Clementine!</string>
   <string name="no_private_ip">Vaš Android uređaj nema lokalnu IP adresu. Pokušajte onemogućiti \"Koristi samo lokalnu IP adresu\" u Clementine postavkama.</string>
-  <string name="check_ip">1) Je li Clementine pokrenut?\n2) Koristite li Clementine 1.2.1 ili noviju inačicu?\n3) Jeste li omogućili mrežno upravljanje u Clementineu?\n4) Provjerite jeste li upisli ispravnu IP adresu.\n</string>
   <string name="wifi_disabled">WI-FI je onemogućen. Ako se želite povezati s Clementinom putem Interneta pobrinite se da ste otvorili ispravno ulaze i onemogućili \"Koristi samo lokalnu IP adresu\".</string>
   <string name="input_auth_code">Kôd autentifikacije</string>
   <string name="invalid_code">Pogrešan kôd</string>
@@ -152,7 +150,6 @@
   <string name="shuffle_inside_album">Sviraj naizmjenično pjesme u ovom albumu</string>
   <string name="shuffle_albums">Sviraj naizmjenično albume</string>
   <string name="first_time_title">Dobrodošli</string>
-  <string name="first_time_text">Hvala vam što koristite Clementine daljinski upravljač!\nNadam se da će vam ova aplikacija biti korisna.&lt;br&gt;&lt;br&gt;Da bi mogli koristiti ovu aplikaciju daljinskog upravljanja morate preuzeti i instalirati Clementine 1.2.1 ili noviju inačicu sa &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;.</string>
   <string name="track_loved">Sviđa mi se pjesma &lt;3</string>
   <string name="track_banned">Pjesma zabranjena :-(</string>
   <string name="notification_disconnect_keep_alive">Izgubljena veza. Dotaknite za ponovno povezivanje.</string>

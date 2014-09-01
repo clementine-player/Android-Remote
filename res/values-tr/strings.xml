@@ -68,7 +68,6 @@
   <string name="menu_download_album">Albüm indir</string>
   <string name="menu_download_playlist">Oynatma listesi indir</string>
   <string name="donate_header">Bağışlar</string>
-  <string name="donate_text">Uygulamamı kullandığınız için teşekkürler, umarım size faydalı olur!\n\nEğer gerçekten yaptığım şey ile mutluysanız, küçük bir bağışınız beni minnettar edecektir.</string>
   <string name="donate_i_want">Bağış yapmak istediğim:</string>
   <string name="donate_one">Donut Tatlısı (1.00 €)</string>
   <string name="donate_two">Kahve (2.00 €)</string>
@@ -127,7 +126,6 @@
   <string name="error_versions">Uyumsuz sürüm</string>
   <string name="old_proto">Lütfen Clementine\'i güncelleyin!</string>
   <string name="no_private_ip">Android cihazınızın yerel olmayan IP adresi var. Clementine ayarlarından \"Sadece yerel IP adreslerini kullan\" seçeneğini devre dışı bırakmayı deneyin.</string>
-  <string name="check_ip">1) Clementine çalışıyor mu?\n2) Clementine 1.2.1 veya üstünü mü kullanıyorsunuz?\n3) Clementine ayarlarında ağ denetimini etkinleştirdiniz mi?\n4) Geçerli IP adresi girdiğinizi denetleyin.\n\n</string>
   <string name="wifi_disabled">Kablosuz devre dışı. Eğer Clementine\'e İnternet ile bağlanmak isterseniz bağlantı noktalarının doğru bir şekilde yönlendirilmiş olduğundan ve \"Sadece yerel IP adreslerini kullan\" seçeneğinin devre dışı olduğundan emin olun.</string>
   <string name="input_auth_code">Doğrulama Kodu</string>
   <string name="invalid_code">Geçersiz Kod</string>
@@ -140,7 +138,6 @@
   <string name="shuffle_inside_album">Bu albümdeki parçaları karıştır</string>
   <string name="shuffle_albums">Albümleri karıştır</string>
   <string name="first_time_title">Hoş Geldiniz</string>
-  <string name="first_time_text">Clementine Kumanda\'yı kullandığınız için teşekkürler!\nUmarım bu uygulama size faydalı olur.&lt;br&gt;&lt;br&gt;Bu kumanda uygulamasını kullanabilmek için &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;buradan&lt;/a&gt; Clementine 1.2.1 veya daha üst sürümünü indirip kurmalınız.</string>
   <string name="track_loved">Parça beğenildi &lt;3</string>
   <string name="track_banned">Parça engellendi :-(</string>
   <string name="notification_disconnect_keep_alive">Bağlantı kaybedildi. Bağlanmak için dokunun.</string>

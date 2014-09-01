@@ -76,7 +76,7 @@
   <string name="menu_download_album">Transdferir álbum</string>
   <string name="menu_download_playlist">Transferir lista de reprodução</string>
   <string name="donate_header">Donativos</string>
-  <string name="donate_text">Obrigado por utilizar esta aplicação. Espero que lhe seja útil!\n\nSe estiver satisfeito com o meu trabalho, um pequeno donativo seria agradável.</string>
+  <string name="donate_text">Obrigado por utilizar esta aplicação. Espero que lhe seja útil!\n\nSe você está satisfeito com o meu trabalho, pode efetuar um pequeno donativo.</string>
   <string name="donate_i_want">Quero doar:</string>
   <string name="donate_one">Donuts (1.00 €)</string>
   <string name="donate_two">Café (2.00 €)</string>
@@ -139,7 +139,8 @@
   <string name="error_versions">Versão não compatível</string>
   <string name="old_proto">Atualize o Clementine</string>
   <string name="no_private_ip">O seu dispositivo Android não tem um IP local. Desative \"Utilizar IP de endereços local\" nas definições do Clementine.</string>
-  <string name="check_ip">1) O Clementine está em execução?\n2) Tem a versão 1.2.1 ou superior do Clementine?\n3) Ativou a rede remota nas definições do Clementine?\n4) Verifique se o endereço IP está correto.\n</string>
+  <string name="check_ip">1) O Clementine está em execução?\n2) Tem a versão 1.2.1 ou superior do Clementine?\n3) Ativou a rede remota nas definições do Clementine?\n4) Verifique se o endereço IP está correto.
+</string>
   <string name="wifi_disabled">A rede sem fios está inativa. Se quiser ligar ao Clementine através da Internet, certifique-se se reencaminha as portas corretamente e que desativa a opção \"Utilizar IP de endereços local\"</string>
   <string name="input_auth_code">Código de autenticação</string>
   <string name="invalid_code">Código inválido</string>
@@ -152,7 +153,7 @@
   <string name="shuffle_inside_album">Baralhar faixas deste álbum</string>
   <string name="shuffle_albums">Baralhar álbuns</string>
   <string name="first_time_title">Bem-vindo</string>
-  <string name="first_time_text">Obrigado por utilizar o Clementine Remote!\nEspero que esta aplicação seja útil.&lt;br&gt;&lt;br&gt;Para poder utilizar esta aplicação tem que transferir e instalar a versão 1.2.1 ou superior do Clementine, disponível em &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;aqui&lt;/a&gt;.</string>
+  <string name="first_time_text">Obrigado por utilizar o Clementine Remote!\nEspero que lhe seja útil.&lt;br&gt;&lt;br&gt;Para poder utilizar, esta aplicação tem que transferir e instalar a versão 1.2.1 ou superior do Clementine, disponível &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;aqui&lt;/a&gt;.</string>
   <string name="track_loved">Gosto da faixa &lt;3</string>
   <string name="track_banned">Faixa banida :-(</string>
   <string name="notification_disconnect_keep_alive">Ligação abortada. Clique para ligar novamente.</string>
@@ -164,7 +165,8 @@
   <string name="cm_next">Seguinte</string>
   <string name="cm_close">Fechar</string>
   <string name="cm_connect_ip_title">Ligar ao Clementine</string>
-  <string name="cm_connect_ip_content">Introduza o endereço IP do computador a executar o Clementine\ne clique \"Ligar\"</string>
+  <string name="cm_connect_ip_content">Introduza o endereço IP do computador a executar o Clementine
+e clique \"Ligar\"</string>
   <string name="cm_connect_mdns_title">Peer automático</string>
   <string name="cm_connect_mdns_content">Se o ícone estiver a pulsar, clique-lhe para ver a lista de computadores com o Clementine.</string>
   <string name="cm_player_home_title">Menu do Clementine Remote</string>

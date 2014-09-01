@@ -76,7 +76,7 @@
   <string name="menu_download_album">Отримати альбом</string>
   <string name="menu_download_playlist">Отримати список відтворення</string>
   <string name="donate_header">Пожертви</string>
-  <string name="donate_text">Дякую за те, що скористалися моєю програмою. Сподіваюся, вона є корисною для вас!\n\nЯкщо програма вам сподобалася, буду радий, якщо ви зможете надати невеличку фінансову підтримку для її подальшого розвитку.</string>
+  <string name="donate_text">Дякую за те, що скористалися моєю програмою. Сподіваюся, вона є корисною для вас! Якщо програма вам сподобалася, буду радий, якщо ви зможете надати невеличку фінансову підтримку для її подальшого розвитку.</string>
   <string name="donate_i_want">Сума пожертви:</string>
   <string name="donate_one">Пластівець (1.00 €)</string>
   <string name="donate_two">Чашка кави (2.00 €)</string>
@@ -152,7 +152,7 @@
   <string name="shuffle_inside_album">Перемішувати композиції у альбомі</string>
   <string name="shuffle_albums">Перемішувати альбоми</string>
   <string name="first_time_title">Вітаємо</string>
-  <string name="first_time_text">Дякуємо за те, що скористалися Clementine Remote!\nСподіваюся, ця програма виявилася для вас корисною.&lt;br&gt;&lt;br&gt;Щоб скористатися цією програмою для віддаленого керування, вам слід отримати і встановити пакунок Clementine 1.2.1 або новішої версії з &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;цієї сторінки&lt;/a&gt;.</string>
+  <string name="first_time_text">Дякуємо за те, що скористалися Clementine Remote! Сподіваюся, ця програма виявилася для вас корисною.&lt;br&gt;&lt;br&gt;Щоб скористатися цією програмою для віддаленого керування, вам слід отримати і встановити пакунок Clementine 1.2.1 або новішої версії з &amp;lt;a href="http://www.clementine-player.org/downloads"&amp;gt;цієї сторінки&amp;lt;/a&amp;gt;.</string>
   <string name="track_loved">Композицію уподобано &lt;3</string>
   <string name="track_banned">Композицію заблоковано :-(</string>
   <string name="notification_disconnect_keep_alive">З’єднання розірвано. Натисніть, щоб відновити з’єднання.</string>

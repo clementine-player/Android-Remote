@@ -68,7 +68,6 @@
   <string name="menu_download_album">ალბომის ჩამოტვირთვა</string>
   <string name="menu_download_playlist">რეპერტუარის ჩამოტვირთვა</string>
   <string name="donate_header">დონაციები</string>
-  <string name="donate_text">გმადლობთ ჩემი აპლიკაციის გამოყენებისთვის, იმედი გვაქვს გამოგადგათ!\n\nთუ თქვენ ძალიან მოგწონთ ჩემი ნამუშევარი - პატარა დონაცია ძალიან გამახარებს.</string>
   <string name="donate_i_want">დონაცია:</string>
   <string name="donate_one">დონატი (1.00 €)</string>
   <string name="donate_two">ყავა (2.00 €)</string>

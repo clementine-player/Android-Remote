@@ -76,7 +76,6 @@
   <string name="menu_download_album">Lataa albumi</string>
   <string name="menu_download_playlist">Lataa soittolista</string>
   <string name="donate_header">Lahjoitukset</string>
-  <string name="donate_text">Kiitos sovellukseni käytöstä, toivottavasti se on hyödyllinen!\n\nJos olet todella tyytyväinen työpanokseeni, pieni lahjoitus olisi kiva.</string>
   <string name="donate_i_want">Haluan lahjoittaa:</string>
   <string name="donate_one">Donitseja (1.00 €)</string>
   <string name="donate_two">Kahvin (2.00 €)</string>
@@ -139,7 +138,6 @@
   <string name="error_versions">Yhteensopimaton versio</string>
   <string name="old_proto">Päivitä Clementine!</string>
   <string name="no_private_ip">Android-laitteesi IP-osoite ei ole paikallinen. Kokeile poistaa käytöstä \"Salli yhteydet vain paikallisverkosta\" Clementinen asetuksista.</string>
-  <string name="check_ip">1) Onko Clementine käynnissä?\n2) Onko käytössä Clemetine 1.2.1 tai uudempi?\n3) Otitko käyttöön kaukosäädintoiminnot Clementinen asetuksista?\n4) Varmista, että kirjoitit oikean IP-osoitteen.\n</string>
   <string name="wifi_disabled">Wifi ei ole päällä. Jos haluat yhdistää Clementineen internetin kautta, varmista että olet ohjannut portit oikein ja olet poistanut käytöstä \"Salli yhteydet vain paikallisverkosta\".</string>
   <string name="input_auth_code">Tunnistuskoodi</string>
   <string name="invalid_code">Virheellinen koodi</string>
@@ -152,7 +150,6 @@
   <string name="shuffle_inside_album">Sekoita levyn kappaleet</string>
   <string name="shuffle_albums">Sekoita levyt</string>
   <string name="first_time_title">Tervetuloa</string>
-  <string name="first_time_text">Kiitos Clementine-kaukosäätimen käyttämisestä!\nToivottavasti sovelluksesta on hyötyä sinulle.&lt;br&gt;&lt;br&gt;Sovelluksen käyttö vaatii Clementine 1.2.1:n tai uudemman asennuksen, &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;lataa tästä&lt;/a&gt;.</string>
   <string name="track_loved">Pidin kappaleesta &lt;3</string>
   <string name="track_banned">En pitänyt kappaleesta :-(</string>
   <string name="notification_disconnect_keep_alive">Yhteys katkesi. Kosketa yhdistääksesi uudelleen.</string>

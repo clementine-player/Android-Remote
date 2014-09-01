@@ -76,7 +76,6 @@
   <string name="menu_download_album">Album herunterladen</string>
   <string name="menu_download_playlist">Wiedergabeliste herunterladen</string>
   <string name="donate_header">Spenden</string>
-  <string name="donate_text">Vielen Dank, dass Sie meine Anwendung benutzen! Ich hoffe, dass Sie sie nützlich finden!\n\nWenn Sie mit meiner Arbeit zufrieden sind, würde ich mich über eine kleine Spende sehr freuen.</string>
   <string name="donate_i_want">Ich möchte folgendes spenden:</string>
   <string name="donate_one">Kuchen (1,00 €)</string>
   <string name="donate_two">Kaffee (2,00 €)</string>
@@ -139,7 +138,6 @@
   <string name="error_versions">Inkompatible Version</string>
   <string name="old_proto">Bitte Clementine aktualisieren!</string>
   <string name="no_private_ip">Ihr Android-Gerät hat eine nicht lokale IP-Adresse. »Nur Verbindungen aus dem lokalen Netzwerk« in den Clementine-Einstellungen deaktivieren.</string>
-  <string name="check_ip">1) Läuft Clementine?\n2) Nutzten Sie Clementine 1.2.1 oder höher?\n3) Ist die Netzwerkfernsteuerung in den Clementine-Einstellungen aktiviert?\n4) Haben Sie die IP-Adresse korrekt eingegeben?\n</string>
   <string name="wifi_disabled">WLAN ist deaktiviert. Wenn Sie über das Internet Clementine fern steuern möchten, dann stellen Sie sicher, dass Sie die Ports korrekt weitergeleitet haben und »Nur Verbindungen aus dem lokalen Netzwerk« deaktiviert ist.</string>
   <string name="input_auth_code">Authentifizierungscode</string>
   <string name="invalid_code">Ungültiger Code</string>
@@ -152,7 +150,6 @@
   <string name="shuffle_inside_album">Zufallswiedergabe der Titel dieses Albums</string>
   <string name="shuffle_albums">Zufällige Albenwiedergabe</string>
   <string name="first_time_title">Willkommen</string>
-  <string name="first_time_text">Danke, dass Sie die Clementine-Fernbedienung benutzen!\nIch hoffe, dass Ihnen die App gefällt. Um diese Fernsteuerung zu benutzen müssen Sie mindestens Clementine 1.2.1 installiert haben. &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;Hier&lt;/a&gt; herunterladen</string>
   <string name="track_loved">Titel geliebt &lt;3</string>
   <string name="track_banned">Titel gesperrt :-(</string>
   <string name="notification_disconnect_keep_alive">Verbindung verloren. Tippen, zum wieder Verbinden.</string>

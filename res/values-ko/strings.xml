@@ -67,7 +67,6 @@
   <string name="menu_download_album">앨범 다운로드</string>
   <string name="menu_download_playlist">재생목록 다운로드</string>
   <string name="donate_header">기부</string>
-  <string name="donate_text">저희 앱을 사용해주셔서 감사합니다. 부디 유용함을 찾으셨길 바래요!\n\n저의 작업으로 기쁘셨다면, 작은 기부를 하신다면 어떨까요?</string>
   <string name="donate_i_want">기부를 원해요:</string>
   <string name="donate_one">도너츠 (1.00 €)</string>
   <string name="donate_two">커피 (3000원)</string>
@@ -126,7 +125,6 @@
   <string name="error_versions">호환되지 않는 버전</string>
   <string name="old_proto">Clementine을 업데이트 하세요!</string>
   <string name="no_private_ip">당신의 Android 장치가 로컬 ip 주소가 아닙니다. Clementine 설정에서 \"로컬 ip 주소만 사용\"을 해제합니다.</string>
-  <string name="check_ip">1) Clementine 이 실행 되었나요?\n2) Clementine 1.2.1 보다 높은 버전을 사용하시나요?\n3) Clementine 설정에서 네트워크 리모콘이 활성화 되었나요?\n4) 정확한 ip 주소가 입력되었는지 확인하세요.\n</string>
   <string name="wifi_disabled">Wifi가 비활성화 상태입니다. 인터넷을 통하여 Clementine에 연결하기 원한다면 정확하게 포트를 통해 전달되는지 확인하시고 \"로컬 ip 주소만 사용\"을 해제합니다.</string>
   <string name="input_auth_code">인증 코드</string>
   <string name="invalid_code">잘못된 코드</string>
@@ -139,7 +137,6 @@
   <string name="shuffle_inside_album">이 앨범의 트랙 셔플</string>
   <string name="shuffle_albums">앨범 셔플</string>
   <string name="first_time_title">환영합니다</string>
-  <string name="first_time_text">Clementine Remote을 이용해주셔서 감사드립니다!\nI hope this app will be useful for you.&lt;br&gt;&lt;br&gt;In order to use this remote app you have to download and install Clementine 1.2.1 or higher from &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;.</string>
   <string name="track_loved">트랙을 좋아합니다 &lt;3</string>
   <string name="track_banned">트랙을 싫어합니다 :-(</string>
   <string name="notification_disconnect_keep_alive">연결을 잃었습니다. 재연결을 터치하세요.</string>

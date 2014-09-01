@@ -76,7 +76,6 @@
   <string name="menu_download_album">Télécharger l\'album</string>
   <string name="menu_download_playlist">Télécharger la liste de lecture</string>
   <string name="donate_header">Dons</string>
-  <string name="donate_text">Merci d\'utiliser mon application, j\'éspère que vous la trouvez utile !\nSi vous êtes vraiment content de mon travail, un petit don serait apprécié.</string>
   <string name="donate_i_want">Je veux donner : </string>
   <string name="donate_one">Donuts (1.00 €)</string>
   <string name="donate_two">Un café (2.00 €)</string>
@@ -139,7 +138,6 @@
   <string name="error_versions">Version incompatible</string>
   <string name="old_proto">Merci de mettre à jour Clementine</string>
   <string name="no_private_ip">Votre téléphone Android a une adresse IP non-locale. Essayez de désactiver « Utiliser seulement les adresses IP locales » dans les préférences de Clementine.</string>
-  <string name="check_ip">1) Clementine est lancé?\n2) Utilisez vous Clementine 1.2.1 ou plus?\n3) Avez vous activé Clementine à distance dans les paramètres de Clementine?\n4) Vérifiez que vous avez entré le bonne adresse IP.\n</string>
   <string name="wifi_disabled">Le Wifi est désactivé. Si vous voulez vous connecter à Clementine via Internet, vérifiez que vous avez redirigé les ports et désactivé « Utiliser seulement les adresses IP locales ».</string>
   <string name="input_auth_code">Code d\'authentification</string>
   <string name="invalid_code">Code invalide</string>
@@ -152,7 +150,6 @@
   <string name="shuffle_inside_album">Aléatoire : pistes de cet album</string>
   <string name="shuffle_albums">Aléatoire : albums</string>
   <string name="first_time_title">Bienvenue</string>
-  <string name="first_time_text">Merci d\'utiliser Clementine à Distance!\nJ\'éspère que cette application vous sera utile.&lt;br&gt;&lt;br&gt;Avant de pouvoir utiliser cette application vous devez télécharger et installer Clementine 1.2.1 ou une version plus récente depuis &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;Ici&lt;/a&gt;.</string>
   <string name="track_loved">Piste aimée &lt;3</string>
   <string name="track_banned">Piste détestée :-(</string>
   <string name="notification_disconnect_keep_alive">Connexion perdue. Touchez pour vous reconnecter.</string>
@@ -166,7 +163,8 @@
   <string name="cm_connect_ip_title">Connecter à Clemtentine</string>
   <string name="cm_connect_ip_content">Saisissez l\'adresse IP de l\'ordinateur avec Clementine et cliquez sur \" Se connecter\"</string>
   <string name="cm_connect_mdns_title">Association Automatique</string>
-  <string name="cm_connect_mdns_content">Si l\'icône s\'anime, cliquez dessus pour voir la liste\ndes ordinateurs sur lesquels Clementine est disponible.</string>
+  <string name="cm_connect_mdns_content">Si l\'icône s\'anime, cliquez dessus pour voir la liste
+des ordinateurs sur lesquels Clementine est disponible.</string>
   <string name="cm_player_home_title">Menu de Clementine à distance</string>
   <string name="cm_player_home_content">Cliquez sur le bouton dans le coin supérieur gauche pour ouvrir le Menu</string>
   <string name="cm_player_hold_pause_title">Maintenir Pause</string>

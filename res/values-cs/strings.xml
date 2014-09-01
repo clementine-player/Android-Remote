@@ -76,7 +76,6 @@
   <string name="menu_download_album">Stáhnout album</string>
   <string name="menu_download_playlist">Stáhnout seznam skladeb</string>
   <string name="donate_header">Dary</string>
-  <string name="donate_text">Děkuji vám za to, že používáte mou aplikaci. Věřím, že vám bude užitečná!\n\nPokud máte díky mé práci skutečně dobrou náladu, malý dar od vás by byl velice oceněn.</string>
   <string name="donate_i_want">Chci darovat:</string>
   <string name="donate_one">Koblihy (1.00 €)</string>
   <string name="donate_two">Káva (2.00 €)</string>
@@ -138,7 +137,6 @@
   <string name="error_versions">Nekompatibilní verze</string>
   <string name="old_proto">Aktualizujte Clementine!</string>
   <string name="no_private_ip">Zařízení Android má adresu IP, která není místní. Zkuste v nastavení Clementine zakázat Použít pouze místní adresu IP.</string>
-  <string name="check_ip">1) Clementine běží?\n2) Používáte Clementine 1.2.1 či vyšší?\n3) Povolili jste vzdálené síťové připojení v nastavení Clementine?\n4) Ověřte, že jste zadali správnou adresu IP.\n</string>
   <string name="wifi_disabled">Wifi je vypnuta. Pokud se chcete spojit s Clementine přes internet, ujistěte se, že jste přípojky (port) odeslali správně a že jste zakázali Použít pouze místní adresu IP.</string>
   <string name="input_auth_code">Ověřovací kód</string>
   <string name="invalid_code">Neplatný kód</string>
@@ -151,7 +149,6 @@
   <string name="shuffle_inside_album">Zamíchat skladby v tomto albu</string>
   <string name="shuffle_albums">Zamíchat alba</string>
   <string name="first_time_title">Vítejte</string>
-  <string name="first_time_text">Děkujeme vám, že používáte Clementine Remote!\nDoufáme, že pro vás tato aplikace bude užitečná.&lt;br&gt;&lt;br&gt;Abyste tento program mohli využívat, musíte stáhnout a nainstalovat Clementine 1.2.1 nebo vyšší z &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;.</string>
   <string name="track_loved">Skladba je oblíbená &lt;3</string>
   <string name="track_banned">Skladba je zakázaná :-(</string>
   <string name="notification_disconnect_keep_alive">Spojení ztraceno. Ťukněte pro opětovné připojení.</string>

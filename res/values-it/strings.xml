@@ -73,7 +73,6 @@
   <string name="menu_download_album">Scarica album</string>
   <string name="menu_download_playlist">Scarica playlist</string>
   <string name="donate_header">Donazioni</string>
-  <string name="donate_text">Grazie per aver utilizzato la mia app, spero sia utile!\n\nSe sei felice del mio lavoro, una piccola donazione è molto apprezzata.</string>
   <string name="donate_i_want">Voglio donare:</string>
   <string name="donate_one">Noccioline (1.00 €)</string>
   <string name="donate_two">Caffe (2.00 €)</string>
@@ -134,7 +133,6 @@
   <string name="error_versions">Versione non compatibile</string>
   <string name="old_proto">Aggiorna Clementine!</string>
   <string name="no_private_ip">Il tuo device Android ha un indirizzo ip non locale. Prova a disabilitare \"Usa solo indirizzo ip locale\" nelle impostazioni di Clementine.</string>
-  <string name="check_ip">1) IClementine è avviato?\n2) Stai usando Clementine 1.2.1 o superiore?\n3) Hai abilitato il network remoto nelle impostazioni di Clementine?\n4) Controlla se hai inserito l\'indirizzo ip corretto.\n</string>
   <string name="wifi_disabled">Wifi disabilitato. Se vuoi connetterti a Clementine via internet assicurati di aver impostato le porte correttamente e di aver disabilitato \" Usa solo indirizzi ip locali\". </string>
   <string name="input_auth_code">Codice di autenticazione</string>
   <string name="invalid_code">Codice non valido</string>
@@ -147,7 +145,6 @@
   <string name="shuffle_inside_album">Ripeti casualmente tracce in questo album</string>
   <string name="shuffle_albums">Ripeti casualmente album</string>
   <string name="first_time_title">Benvenuto</string>
-  <string name="first_time_text">Grazie di aver utilizzato Clementine Remote!\nSpero sia utile.&lt;br&gt;&lt;br&gt;Per poter utilizzare quest\'app,scarica è installa Clementine 1.2.1 o superiore da &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;.</string>
   <string name="track_loved">Tracce amate &lt;3</string>
   <string name="track_banned">Tracce bannatte :-(</string>
   <string name="notification_disconnect_keep_alive">Connessione persa. Tocca per riconnettere</string>

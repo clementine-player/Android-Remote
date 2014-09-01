@@ -76,7 +76,6 @@
   <string name="menu_download_album">Pobierz album</string>
   <string name="menu_download_playlist">Pobierz listę odtwarzania</string>
   <string name="donate_header">Darowizny</string>
-  <string name="donate_text">Dziękujemy za używanie naszej aplikacji. Mamy nadzieję, że okazała się przydatna!\n\nJeśli nasza praca naprawdę Cię uszczęśliwia, mała darowizna byłaby mile widziana.</string>
   <string name="donate_i_want">Chcę podarować:</string>
   <string name="donate_one">Pączka (1.00 €)</string>
   <string name="donate_two">Kawę (2.00 €)</string>
@@ -138,7 +137,6 @@
   <string name="error_versions">Niekompatybilna wersja</string>
   <string name="old_proto">Proszę zaaktualizować Clementine!</string>
   <string name="no_private_ip">Twoje urządzenie z Androidem nie ma lokalnego adresu ip. Spróbuj wyłączyć \"Używaj tylko lokalnych adresów ip\" w opcjach Clementine.</string>
-  <string name="check_ip">1) Czy Clementine jest uruchomiony?\n2) Czy używasz Clementine w wersji 1.2.1 lub wyższej?\n3) Czy włączyłeś zdalne sterowanie przez sieć w ustawieniach Clementine?\n4) Sprawdź czy podałeś poprawny adres IP.\n</string>
   <string name="wifi_disabled">Wifi jest wyłączone. Jeśli chcesz połączyć się z Clementine przez internet upewnij się że przekierowałeś porty poprawnie oraz wyłączyłeś opcję \"Używaj tylko lokalnych adresów ip\".</string>
   <string name="input_auth_code">Kod uwierzytelniający</string>
   <string name="invalid_code">Nieprawidłowy kod</string>
@@ -151,7 +149,6 @@
   <string name="shuffle_inside_album">Losuj ścieżki w tym albumie</string>
   <string name="shuffle_albums">Losuj albumy</string>
   <string name="first_time_title">Witamy</string>
-  <string name="first_time_text">Dziękujemy za korzystanie z Clementine Remote!\nMam nadzieję, że ta aplikacja jest dla ciebie przydatna.&lt;br&gt;&lt;br&gt;Aby używać tej aplikacji musisz ściągnąć i zainstalować odtwarzacz Clementine w wersji 1.2.1 lub wyższej &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;stąd&lt;/a&gt;.</string>
   <string name="track_loved">Utwór dodany do ulubionych &lt;3</string>
   <string name="track_banned">Utwór zignorowany :-(</string>
   <string name="notification_disconnect_keep_alive">Utracono połączenie. Dotknij by połączyć ponownie.</string>
