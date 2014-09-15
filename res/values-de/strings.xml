@@ -99,7 +99,7 @@
   <string name="pref_port_title">Port</string>
   <string name="pref_port_summary">Aktueller Port:</string>
   <string name="pref_port_default">5500</string>
-  <string name="pref_port_error">Ungültiger Port</string>
+  <string name="pref_port_error">Unzulässiger Port!</string>
   <string name="pref_lastfm_title">Last.fm</string>
   <string name="pref_lastfm_summary">Aktivieren, um Titel zu lieben oder zu sperren. (benötigt Neustart)</string>
   <string name="pref_keep_screen_on_title">Bildschirm aktiv lassen</string>
