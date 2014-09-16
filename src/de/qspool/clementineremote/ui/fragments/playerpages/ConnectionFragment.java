@@ -171,8 +171,6 @@ public class ConnectionFragment extends AbstractDrawerFragment {
             sb.append("/s)");
             tv_traffic.setText(sb.toString());
         }
-
-
     }
 
     @Override

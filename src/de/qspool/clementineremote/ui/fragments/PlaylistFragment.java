@@ -26,6 +26,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 
 import android.app.ProgressDialog;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -114,6 +115,8 @@ public class PlaylistFragment extends AbstractDrawerFragment {
                             mProgressDialog.setProgress(mProgressDialog.getProgress() + 1);
                             mProgressDialog.setMessage(p.getName());
                         }
+
+                        updateSongList();
                     }
                 });
             }
@@ -243,7 +246,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
         super.onActivityCreated(savedInstanceState);
         mList.setFastScrollEnabled(true);
         mList.setTextFilterEnabled(true);
-        mList.setSelector(android.R.color.transparent);
+        mList.setSelector(new ColorDrawable(android.R.color.transparent));
         mList.setDivider(null);
         mList.setDividerHeight(0);
     }
@@ -258,6 +261,15 @@ public class PlaylistFragment extends AbstractDrawerFragment {
                 // Get the playlist id and download the playlist
                 downloaderAlbum.startDownload(ClementineMessageFactory
                         .buildDownloadSongsMessage(getPlaylistId(), DownloadItem.APlaylist));
+                return true;
+            case R.id.clear_playlist:
+                mPlaylistManager.clearPlaylist(getPlaylistId());
+                updateSongList();
+                return true;
+            case R.id.close_playlist:
+                Message msg = Message.obtain();
+                msg.obj = ClementineMessageFactory.buildClosePlaylist(getPlaylistId());
+                App.mClementineConnection.mHandler.sendMessage(msg);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

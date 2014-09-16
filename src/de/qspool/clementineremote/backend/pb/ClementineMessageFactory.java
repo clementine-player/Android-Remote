@@ -49,8 +49,6 @@ public class ClementineMessageFactory {
     /**
      * Create a song offer response
      *
-     * @param msg The message itself
-     * @param r   A SongOfferResponse
      * @return ResponseSongOffer Builder for protocol buffer message
      */
     public static ClementineMessage buildSongOfferResponse(boolean accepted) {
@@ -63,8 +61,6 @@ public class ClementineMessageFactory {
     /**
      * Create a download song message
      *
-     * @param msg The message itself
-     * @param r   The download request
      * @return The built request
      */
     public static ClementineMessage buildDownloadSongsMessage(int playlistId,
@@ -81,8 +77,6 @@ public class ClementineMessageFactory {
     /**
      * Create the volume specific message
      *
-     * @param msg The Message itself
-     * @param r   The Request
      * @return the Volume message part
      */
     public static ClementineMessage buildVolumeMessage(int volume) {
@@ -97,8 +91,6 @@ public class ClementineMessageFactory {
     /**
      * Create the connect specific message
      *
-     * @param msg The Message itself
-     * @param r   The Request
      * @return the connect message part
      */
     public static ClementineMessage buildConnectMessage(String ip, int port, int authCode,
@@ -121,7 +113,6 @@ public class ClementineMessageFactory {
     /**
      * Build shuffle Message
      *
-     * @param msg The root message
      * @return The created element
      */
     public static ClementineMessage buildShuffle() {
@@ -149,7 +140,6 @@ public class ClementineMessageFactory {
     /**
      * Build Repeat Message
      *
-     * @param msg The root message
      * @return The created element
      */
     public static ClementineMessage buildRepeat() {
@@ -177,8 +167,6 @@ public class ClementineMessageFactory {
     /**
      * Request all Songs in current playlist
      *
-     * @param msg The root message
-     * @param r   The Request Object
      * @return The Builder for the Message
      */
     public static ClementineMessage buildRequestPlaylistSongs(int playlistId) {
@@ -194,8 +182,6 @@ public class ClementineMessageFactory {
     /**
      * Request all Songs in current playlist
      *
-     * @param msg The root message
-     * @param r   The Request Object
      * @return The Builder for the Message
      */
     public static ClementineMessage buildRequestChangeSong(int songIndex, int playlistId) {
@@ -212,7 +198,6 @@ public class ClementineMessageFactory {
     /**
      * Request to set the track position
      *
-     * @param msg The root message
      * @return The Clementine message
      */
     public static ClementineMessage buildTrackPosition(int position) {
@@ -243,7 +228,7 @@ public class ClementineMessageFactory {
      * Inserts a song into given playlist
      *
      * @param playistId The id of the playlist
-     * @param url       The url to the item
+     * @param urls      The urls to the items
      * @return the Clementine Message
      */
     public static ClementineMessage buildInsertUrl(int playistId, LinkedList<String> urls) {
@@ -264,6 +249,30 @@ public class ClementineMessageFactory {
         RequestRemoveSongs.Builder removeItems = msg.getRequestRemoveSongsBuilder();
         removeItems.setPlaylistId(playlistId);
         removeItems.addSongs(song.getIndex());
+
+        return new ClementineMessage(msg);
+    }
+
+    public static ClementineMessage buildRemoveMultipleSongsFromPlaylist(int playlistId,
+            LinkedList<MySong> songs) {
+        Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.REMOVE_SONGS);
+
+        RequestRemoveSongs.Builder removeItems = msg.getRequestRemoveSongsBuilder();
+        removeItems.setPlaylistId(playlistId);
+
+        for (MySong s : songs) {
+            removeItems.addSongs(s.getIndex());
+        }
+
+        return new ClementineMessage(msg);
+    }
+
+    public static ClementineMessage buildClosePlaylist(int playlistId) {
+        Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.CLOSE_PLAYLIST);
+
+        ClementineRemoteProtocolBuffer.RequestClosePlaylist.Builder requestClosePlaylist = msg
+                .getRequestClosePlaylistBuilder();
+        requestClosePlaylist.setPlaylistId(playlistId);
 
         return new ClementineMessage(msg);
     }

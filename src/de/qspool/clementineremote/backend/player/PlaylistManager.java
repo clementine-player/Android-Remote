@@ -137,6 +137,15 @@ public class PlaylistManager {
         App.mClementineConnection.mHandler.sendMessage(msg);
     }
 
+    public void clearPlaylist(int id) {
+        Message msg = Message.obtain();
+        msg.obj = ClementineMessageFactory.buildRemoveMultipleSongsFromPlaylist(id,
+                mPlaylists.get(id).getPlaylistSongs());
+        App.mClementineConnection.mHandler.sendMessage(msg);
+
+        mPlaylists.get(id).getPlaylistSongs().clear();
+    }
+
     public void addOnPlaylistReceivedListener(OnPlaylistReceivedListener l) {
         listeners.add(l);
     }
