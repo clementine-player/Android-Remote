@@ -26,4 +26,6 @@ public interface OnPlaylistReceivedListener {
     void onPlaylistSongsReceived(final MyPlaylist p);
 
     void onPlaylistReceived(final MyPlaylist p);
+
+    void onAllPlaylistsReceived();
 }

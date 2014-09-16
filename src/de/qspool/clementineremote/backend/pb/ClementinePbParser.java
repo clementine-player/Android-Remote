@@ -265,6 +265,8 @@ public class ClementinePbParser {
 
             mPlaylistManager.addPlaylist(myPlaylist);
         }
+
+        mPlaylistManager.allPlaylistsReceived();
     }
 
     /**

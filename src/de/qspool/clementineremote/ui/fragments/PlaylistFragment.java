@@ -120,12 +120,6 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 
             @Override
             public void onPlaylistReceived(final MyPlaylist p) {
-                getSherlockActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        updatePlaylistSpinner();
-                    }
-                });
             }
 
             @Override
@@ -142,6 +136,18 @@ public class PlaylistFragment extends AbstractDrawerFragment {
                             mActionBar.setSelectedNavigationItem(
                                     mPlaylists.indexOf(mPlaylistManager.getActivePlaylist()));
                         }
+                    }
+                });
+            }
+
+            @Override
+            public void onAllPlaylistsReceived() {
+                getSherlockActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mPlaylists = mPlaylistManager.getAllPlaylists();
+                        updatePlaylistSpinner();
+                        RequestPlaylistSongs();
                     }
                 });
             }

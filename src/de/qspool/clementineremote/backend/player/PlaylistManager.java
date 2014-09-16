@@ -87,6 +87,10 @@ public class PlaylistManager {
         return p != null;
     }
 
+    public void allPlaylistsReceived() {
+        fireAllPlaylistsReceived();
+    }
+
     public MyPlaylist getPlaylist(int id) {
         return mPlaylists.get(id);
     }
@@ -156,6 +160,12 @@ public class PlaylistManager {
     private void fireOnPlaylistReceived(MyPlaylist p) {
         for (OnPlaylistReceivedListener l : listeners) {
             l.onPlaylistReceived(p);
+        }
+    }
+
+    private void fireAllPlaylistsReceived() {
+        for (OnPlaylistReceivedListener l : listeners) {
+            l.onAllPlaylistsReceived();
         }
     }
 }
