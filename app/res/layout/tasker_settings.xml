@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:orientation="vertical">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  style="@style/WhiteBackground"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:layout_gravity="top"
+                  android:layout_marginBottom="13dp"
+                  android:layout_marginLeft="13dp"
+                  android:layout_marginRight="13dp"
+                  android:layout_marginTop="13dp"
+                  android:orientation="vertical">
+
+        <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:gravity="center_horizontal"
+                android:text="@string/tasker_intro"
+                android:textColor="@android:color/black"
+                android:layout_gravity="center_horizontal"/>
+
+        <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            <RadioButton
+                    android:id="@+id/radio_connect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tasker_connect"
+                    android:textSize="20sp"
+                    android:onClick="onRadioButtonClicked"
+                    android:textColor="@android:color/black" android:checked="true"/>
+
+            <RadioButton
+                    android:id="@+id/radio_disconnect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tasker_disconnect"
+                    android:textSize="20sp"
+                    android:onClick="onRadioButtonClicked"
+                    android:textColor="@android:color/black"/>
+
+            <RadioButton
+                    android:id="@+id/radio_play"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tasker_play"
+                    android:textSize="20sp"
+                    android:onClick="onRadioButtonClicked"
+                    android:textColor="@android:color/black"/>
+
+            <RadioButton
+                    android:id="@+id/radio_pause"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tasker_pause"
+                    android:textSize="20sp"
+                    android:onClick="onRadioButtonClicked"
+                    android:textColor="@android:color/black"/>
+
+            <RadioButton
+                    android:id="@+id/radio_playpause"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tasker_playpause"
+                    android:textSize="20sp"
+                    android:onClick="onRadioButtonClicked"
+                    android:textColor="@android:color/black"/>
+
+            <RadioButton
+                    android:id="@+id/radio_next"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tasker_next"
+                    android:textSize="20sp"
+                    android:onClick="onRadioButtonClicked"
+                    android:textColor="@android:color/black"/>
+        </RadioGroup>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/tasker_ip_help"
+                android:id="@+id/textView3" android:layout_gravity="center_horizontal"
+                android:textColor="@color/black" android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"/>
+        <TextView
+                android:id="@+id/tasker_ip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginBottom="6dp"
+                android:background="@drawable/edittext_bg"
+                android:textCursorDrawable="@null"
+                android:ems="10"
+                android:gravity="center_vertical|center_horizontal"
+                android:hint="@string/connectdialog_ip_hint"
+                android:singleLine="true"
+                android:textColor="@android:color/black" />
+        <TextView
+                android:id="@+id/tasker_port"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginBottom="6dp"
+                android:background="@drawable/edittext_bg"
+                android:textCursorDrawable="@null"
+                android:inputType="number"
+                android:ems="10"
+                android:gravity="center_vertical|center_horizontal"
+                android:hint="@string/tasker_port_hint"
+                android:singleLine="true"
+                android:textColor="@android:color/black" />
+        <TextView
+                android:id="@+id/tasker_auth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginBottom="6dp"
+                android:background="@drawable/edittext_bg"
+                android:inputType="number"
+                android:textCursorDrawable="@null"
+                android:ems="10"
+                android:gravity="center_vertical|center_horizontal"
+                android:hint="@string/tasker_auth_hint"
+                android:singleLine="true"
+                android:textColor="@android:color/black" />
+
+    </LinearLayout>
+</LinearLayout>

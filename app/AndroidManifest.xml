@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="de.qspool.clementineremote" >
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.android.vending.BILLING" />
+
+    <application
+        android:name="de.qspool.clementineremote.App"
+        android:icon="@drawable/ic_launcher"
+        android:allowBackup="true"
+        android:largeHeap="true"
+        android:hardwareAccelerated="true"
+        android:label="@string/app_name" >
+
+        <activity android:name=".ui.ConnectDialog"
+                  android:configChanges="orientation|keyboardHidden|screenSize"
+                  android:launchMode="singleTop"
+                  android:theme="@style/PlayerTheme"
+                  android:windowSoftInputMode="stateHidden|adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.MainActivity"
+                  android:theme="@style/PlayerTheme"
+                  android:exported="true"
+                  android:launchMode="singleTop" />
+        <activity android:name="de.qspool.clementineremote.ui.ClementineSettings"
+                  android:theme="@style/PreferencesTheme"/>
+        <activity android:name=".ui.TaskerSettings"
+                  android:theme="@style/PreferencesTheme">
+            <intent-filter>
+                <action android:name="com.twofortyfouram.locale.intent.action.EDIT_SETTING" />
+            </intent-filter>
+        </activity>
+        <service android:name=".backend.ClementineService"></service>
+        <receiver android:name=".backend.receivers.ClementineMediaButtonEventReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".backend.receivers.ClementinePhoneStateCheck">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".backend.receivers.NotificationReceiver">
+            <intent-filter>
+                <action android:name="de.qspool.clementineremote.playpause" />
+                <action android:name="de.qspool.clementineremote.next" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".backend.receivers.TaskerFireReceiver">
+            <intent-filter>
+                <action android:name="com.twofortyfouram.locale.intent.action.FIRE_SETTING" />
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>
