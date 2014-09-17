@@ -29,9 +29,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
@@ -62,11 +61,11 @@ public class TaskerSettings extends SherlockActivity {
 
     private int mSelectedAction = ACTION_CONNECT;
 
-    private TextView mIp;
+    private EditText mIp;
 
-    private TextView mPort;
+    private EditText mPort;
 
-    private TextView mAuth;
+    private EditText mAuth;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,9 +78,9 @@ public class TaskerSettings extends SherlockActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        mIp = (TextView) findViewById(R.id.tasker_ip);
-        mPort = (TextView) findViewById(R.id.tasker_port);
-        mAuth = (TextView) findViewById(R.id.tasker_auth);
+        mIp = (EditText) findViewById(R.id.tasker_ip);
+        mPort = (EditText) findViewById(R.id.tasker_port);
+        mAuth = (EditText) findViewById(R.id.tasker_auth);
         mIp.setText(mSharedPref.getString(App.SP_KEY_IP, ""));
         mPort.setText(mSharedPref.getString(App.SP_KEY_PORT, String.valueOf(Clementine.DefaultPort)));
         mAuth.setText(String.valueOf(mSharedPref.getInt(App.SP_LAST_AUTH_CODE, 0)));
