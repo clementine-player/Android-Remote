@@ -105,7 +105,7 @@ public class App extends Application {
     public App() {
         mApp = this;
     }
-    
+
     @Override
     public void onCreate() {
         super.onCreate();
