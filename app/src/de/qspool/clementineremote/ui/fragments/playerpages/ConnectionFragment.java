@@ -23,6 +23,7 @@ import android.net.TrafficStats;
 import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,8 @@ import de.qspool.clementineremote.utils.Utilities;
 
 public class ConnectionFragment extends AbstractDrawerFragment {
 
+    private final String TAG = getClass().getSimpleName();
+
     private TextView tv_ip;
 
     private TextView tv_version;
@@ -56,6 +59,8 @@ public class ConnectionFragment extends AbstractDrawerFragment {
     private SharedPreferences mSharedPref;
 
     private Timer mUpdateTimer;
+
+    private boolean mUserChangesVolume;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,12 +102,12 @@ public class ConnectionFragment extends AbstractDrawerFragment {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
+                mUserChangesVolume = true;
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                mUserChangesVolume = false;
             }
         });
 
@@ -177,7 +182,9 @@ public class ConnectionFragment extends AbstractDrawerFragment {
     public void MessageFromClementine(ClementineMessage clementineMessage) {
         switch (clementineMessage.getMessageType()) {
             case SET_VOLUME:
-                sb_volume.setProgress(App.mClementine.getVolume());
+                if (!mUserChangesVolume) {
+                    sb_volume.setProgress(App.mClementine.getVolume());
+                }
                 break;
             default:
                 break;

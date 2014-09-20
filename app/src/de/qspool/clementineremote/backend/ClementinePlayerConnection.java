@@ -65,7 +65,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 
     public ClementineConnectionHandler mHandler;
 
-    private final int DELAY_MILLIS = 250;
+    private final int DELAY_MILLIS = 10;
 
     private final long KEEP_ALIVE_TIMEOUT = 25000; // 25 Second timeout
 
