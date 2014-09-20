@@ -17,9 +17,6 @@
 
 package de.qspool.clementineremote.ui;
 
-import com.actionbarsherlock.app.SherlockPreferenceActivity;
-import com.actionbarsherlock.view.MenuItem;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,10 +29,12 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -60,7 +59,7 @@ import de.qspool.clementineremote.utils.Utilities;
 /**
  * The settings screen of Clementine Remote
  */
-public class ClementineSettings extends SherlockPreferenceActivity
+public class ClementineSettings extends PreferenceActivity
         implements OnSharedPreferenceChangeListener {
 
     private Preference mLicenseDialogPreference;
@@ -85,27 +84,24 @@ public class ClementineSettings extends SherlockPreferenceActivity
 
     private Preference mClementine;
 
-    //suppress warnings about deprecation as we intend to support
-    //Android API 8 which requires the deprecated methods.
-    @SuppressWarnings("deprecation")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         addPreferencesFromResource(R.xml.clementine_remote_settings);
 
         // Get the dialog preferences
-        mLicenseDialogPreference = (Preference) getPreferenceScreen()
+        mLicenseDialogPreference = getPreferenceScreen()
                 .findPreference("pref_key_license");
-        mOpenSourceDialogPreference = (Preference) getPreferenceScreen()
+        mOpenSourceDialogPreference = getPreferenceScreen()
                 .findPreference("pref_key_opensource");
-        mAboutDialogPreference = (Preference) getPreferenceScreen()
+        mAboutDialogPreference = getPreferenceScreen()
                 .findPreference("pref_key_about");
-        mVersion = (Preference) getPreferenceScreen().findPreference("pref_version");
-        mDownloadDir = (Preference) getPreferenceScreen().findPreference(App.SP_DOWNLOAD_DIR);
-        mClementine = (Preference) getPreferenceScreen().findPreference("pref_clementine_website");
+        mVersion = getPreferenceScreen().findPreference("pref_version");
+        mDownloadDir = getPreferenceScreen().findPreference(App.SP_DOWNLOAD_DIR);
+        mClementine = getPreferenceScreen().findPreference("pref_clementine_website");
 
         // Get the Version
         try {

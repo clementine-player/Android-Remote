@@ -17,11 +17,11 @@
 
 package de.qspool.clementineremote.ui.fragments;
 
-import com.actionbarsherlock.app.SherlockFragment;
+import android.support.v4.app.Fragment;
 
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 
-public abstract class AbstractDrawerFragment extends SherlockFragment implements
+public abstract class AbstractDrawerFragment extends Fragment implements
         RemoteDataReceiver {
 
     abstract public void MessageFromClementine(ClementineMessage clementineMessage);

@@ -6,7 +6,7 @@ repositories {
 
 dependencies {
     compile 'com.android.support:support-v4:20.0.+'
-    compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
+    compile 'com.android.support:support-v13:20.0.+'
     compile 'com.google.protobuf:protobuf-java:2.4.1'
     compile 'javax.jmdns:jmdns:3.4.0'
     compile 'com.github.amlcurran.showcaseview:library:5.0.0'

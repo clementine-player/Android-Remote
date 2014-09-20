@@ -17,17 +17,16 @@
 
 package de.qspool.clementineremote.ui;
 
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
-
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -41,7 +40,7 @@ import de.qspool.clementineremote.utils.bundle.PluginBundleManager;
 /**
  * Tasker settings page
  */
-public class TaskerSettings extends SherlockActivity {
+public class TaskerSettings extends Activity {
 
     public final static int ACTION_CONNECT = 0;
 
@@ -75,7 +74,7 @@ public class TaskerSettings extends SherlockActivity {
 
         setContentView(R.layout.tasker_settings);
 
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getActionBar().setDisplayShowHomeEnabled(true);
 
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         mIp = (EditText) findViewById(R.id.tasker_ip);
@@ -187,7 +186,7 @@ public class TaskerSettings extends SherlockActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inf = getSupportMenuInflater();
+        MenuInflater inf = getMenuInflater();
         inf.inflate(R.menu.tasker_menu, menu);
 
         return true;

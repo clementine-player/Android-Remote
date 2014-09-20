@@ -17,18 +17,17 @@
 
 package de.qspool.clementineremote.ui.fragments.playerpages;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
-
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -104,7 +103,7 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
         Log.d(TAG, "onCreate");
 
         // Get the actionbar
-        mActionBar = getSherlockActivity().getSupportActionBar();
+        mActionBar = getActivity().getActionBar();
         mActionBar.setTitle(R.string.player_playlist);
         setHasOptionsMenu(true);
     }

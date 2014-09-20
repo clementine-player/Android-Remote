@@ -17,20 +17,20 @@
 
 package de.qspool.clementineremote.ui.fragments;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -84,7 +84,7 @@ public class PlayerFragment extends AbstractDrawerFragment {
         Log.d(TAG, "onCreate");
 
         // Get the actionbar
-        mActionBar = getSherlockActivity().getSupportActionBar();
+        mActionBar = getActivity().getActionBar();
         mActionBar.setTitle(R.string.player_playlist);
     }
 
@@ -157,18 +157,6 @@ public class PlayerFragment extends AbstractDrawerFragment {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        mPlayerPageAdapter.getItem(myPager.getCurrentItem()).onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
-        return mPlayerPageAdapter.getItem(myPager.getCurrentItem()).onOptionsItemSelected(item);
     }
 
     @Override

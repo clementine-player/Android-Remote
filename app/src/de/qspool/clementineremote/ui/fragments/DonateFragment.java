@@ -17,8 +17,7 @@
 
 package de.qspool.clementineremote.ui.fragments;
 
-import com.actionbarsherlock.app.ActionBar;
-
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -103,7 +102,7 @@ public class DonateFragment extends AbstractDrawerFragment {
         mDonateTwo.setOnClickListener(oclDonate);
         mDonateFive.setOnClickListener(oclDonate);
 
-        mActionBar = getSherlockActivity().getSupportActionBar();
+        mActionBar = getActivity().getActionBar();
         mActionBar.setTitle("");
         mActionBar.setSubtitle("");
 

@@ -17,10 +17,6 @@
 
 package de.qspool.clementineremote.ui;
 
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
@@ -43,6 +39,9 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -74,7 +73,6 @@ import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementineService;
 import de.qspool.clementineremote.backend.mdns.ClementineMDnsDiscovery;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
-import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ReasonDisconnect;
 import de.qspool.clementineremote.ui.adapter.CustomClementinesAdapter;
@@ -83,23 +81,19 @@ import de.qspool.clementineremote.utils.Utilities;
 /**
  * The connect dialog
  */
-public class ConnectDialog extends SherlockActivity {
+public class ConnectDialog extends Activity {
 
-    private final static String TAG = "ConnectDialog";
+    private final String TAG = getClass().getSimpleName();
 
-    private final static int ANIMATION_DURATION = 2000;
+    private final int ANIMATION_DURATION = 2000;
 
     private final int ID_PLAYER_DIALOG = 1;
 
     private final int ID_SETTINGS = 2;
 
-    public final static int RESULT_CONNECT = 1;
+    public final static int RESULT_DISCONNECT = 1;
 
-    public final static int RESULT_DISCONNECT = 2;
-
-    public final static int RESULT_RESTART = 3;
-
-    public final static int RESULT_QUIT = 4;
+    public final static int RESULT_QUIT = 2;
 
     private Button mBtnConnect;
 
@@ -123,8 +117,6 @@ public class ConnectDialog extends SherlockActivity {
 
     private boolean mAnimationCancel;
 
-    private boolean mFirstCall;
-
     private Intent mServiceIntent;
 
     private boolean doAutoConnect = true;
@@ -143,7 +135,7 @@ public class ConnectDialog extends SherlockActivity {
 
         setContentView(R.layout.connectdialog);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getActionBar().setDisplayHomeAsUpEnabled(false);
 
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         mKnownIps = mSharedPref.getStringSet(App.SP_KNOWN_IP, new LinkedHashSet<String>());
@@ -183,8 +175,6 @@ public class ConnectDialog extends SherlockActivity {
 
         // Start the background service
         startBackgroundService();
-
-        mFirstCall = doAutoConnect;
 
         // mDNS Discovery
         mClementineMDns = new ClementineMDnsDiscovery(mHandler);
@@ -241,7 +231,7 @@ public class ConnectDialog extends SherlockActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inf = getSupportMenuInflater();
+        MenuInflater inf = getMenuInflater();
         inf.inflate(R.menu.connectdialog_menu, menu);
 
         return true;

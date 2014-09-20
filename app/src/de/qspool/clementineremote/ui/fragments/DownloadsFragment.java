@@ -17,16 +17,16 @@
 
 package de.qspool.clementineremote.ui.fragments;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
-
+import android.app.ActionBar;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -64,7 +64,7 @@ public class DownloadsFragment extends AbstractDrawerFragment {
         super.onCreate(savedInstanceState);
 
         // Get the actionbar
-        mActionBar = getSherlockActivity().getSupportActionBar();
+        mActionBar = getActivity().getActionBar();
         setHasOptionsMenu(true);
     }
 
@@ -146,7 +146,7 @@ public class DownloadsFragment extends AbstractDrawerFragment {
         super.onActivityCreated(savedInstanceState);
         mList.setFastScrollEnabled(true);
         mList.setTextFilterEnabled(true);
-        mList.setSelector(android.R.color.transparent);
+        mList.setSelector(new ColorDrawable(android.R.color.transparent));
         mList.setOnItemClickListener(oiclDownload);
     }
 
@@ -185,8 +185,6 @@ public class DownloadsFragment extends AbstractDrawerFragment {
                                 .show();
                     }
                 }
-            } else {
-                // Just do nothing
             }
         }
     };

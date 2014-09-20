@@ -23,41 +23,26 @@
         <item name="android:background">@drawable/img_cover_grey_bg</item>
     </style>
 
-    <style name="PreferencesTheme" parent="@style/Theme.Sherlock.Light">
-        <item name="actionBarStyle">@style/ActionBarStyle</item>
+    <style name="PreferencesTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/ActionBarStyle</item>
-        <item name="actionButtonStyle">@style/ActionButtonStyle</item>
-        <item name="@android:actionButtonStyle">@style/ActionButtonStyle</item>
-        <item name="android:homeAsUpIndicator">@drawable/abs__ic_ab_back_holo_dark</item>
+        <!-- item name="android:actionButtonStyle">@style/ActionButtonStyle</item -->
     </style>
 
-    <style name="PlayerTheme" parent="@style/Theme.Sherlock.Light">
-        <item name="actionBarStyle">@style/ActionBarStyle</item>
+    <style name="PlayerTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/ActionBarStyle</item>
-        <item name="actionButtonStyle">@style/ActionButtonStyle</item>
-        <item name="@android:actionButtonStyle">@style/ActionButtonStyle</item>
-        <item name="actionModeBackground">@drawable/cab_background_top_example</item>
-        <item name="actionModeSplitBackground">@drawable/cab_background_bottom_example</item>
+        <item name="android:actionButtonStyle">@style/ActionButtonStyle</item>
         <item name="android:actionModeBackground">@drawable/cab_background_top_example</item>
         <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_example</item>
         <item name="android:activatedBackgroundIndicator">@drawable/selector_white_orange_selected</item>
-        <item name="activatedBackgroundIndicator">@drawable/selector_white_orange_selected</item>
-        <item name="android:actionOverflowButtonStyle">
-            @style/Widget.Sherlock.ActionButton.Overflow
-        </item>
-        <item name="actionOverflowButtonStyle">@style/Widget.Sherlock.ActionButton.Overflow</item>
+        <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
+        <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItem</item>
     </style>
 
-    <style name="ActionBarStyle" parent="Widget.Sherlock.ActionBar">
-        <item name="background">@drawable/actionbar_bg</item>
+    <style name="ActionBarStyle" parent="@android:style/Widget.ActionBar">
         <item name="android:background">@drawable/actionbar_bg</item>
-        <item name="titleTextStyle">@style/ActionBarTextAppearance</item>
         <item name="android:titleTextStyle">@style/ActionBarTextAppearance</item>
-        <item name="subtitleTextStyle">
-            @style/TextAppearance.Sherlock.Widget.ActionBar.Subtitle.Inverse
-        </item>
         <item name="android:subtitleTextStyle">
-            @style/TextAppearance.Sherlock.Widget.ActionBar.Subtitle.Inverse
+            @android:style/TextAppearance.Holo.Widget.ActionBar.Subtitle.Inverse
         </item>
     </style>
 
@@ -65,11 +50,19 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="ActionButtonStyle" parent="Widget.Sherlock.ActionButton">
+    <style name="ActionButtonStyle" parent="@android:style/Widget.Holo.ActionButton">
         <item name="android:minWidth">0dip</item>
         <item name="android:paddingLeft">10dip</item>
         <item name="android:paddingRight">10dip</item>
     </style>
+
+    <style name="SpinnerItem" parent="@android:style/Widget.Holo.TextView.SpinnerItem">
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="SpinnerDropDownItem" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
+        <item name="android:background">@drawable/spinner_selector</item>
+    </style>
+
 
     <style name="ShowcaseTheme" parent="ShowcaseView.Light">
         <item name="sv_backgroundColor">#80000000</item>

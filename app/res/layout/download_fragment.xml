@@ -10,7 +10,7 @@
         android:background="@drawable/actionbar_2nd_bg">
 
         <TextView
-                style="@style/TextAppearance.Sherlock.Widget.ActionBar.Subtitle.Inverse"
+                style="@android:style/TextAppearance.Holo.Widget.ActionBar.Subtitle.Inverse"
             android:id="@+id/downloads_freespace"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

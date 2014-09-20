@@ -18,15 +18,11 @@ his file is part of the Android Clementine Remote.
 
 package de.qspool.clementineremote.ui.fragments.playerpages;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.ActionBar;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -34,6 +30,9 @@ import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
@@ -116,7 +115,7 @@ public class SongDetailFragment extends AbstractDrawerFragment {
         View view = inflater.inflate(R.layout.player_songdetail_page,
                 container, false);
 
-        mActionBar = getSherlockActivity().getSupportActionBar();
+        mActionBar = getActivity().getActionBar();
 
         mContainer = (FrameLayout) view.findViewById(R.id.si_container);
 

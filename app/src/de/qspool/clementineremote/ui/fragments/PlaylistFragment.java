@@ -17,23 +17,20 @@
 
 package de.qspool.clementineremote.ui.fragments;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
-import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.widget.SearchView;
-
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
+import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -41,6 +38,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -101,14 +99,14 @@ public class PlaylistFragment extends AbstractDrawerFragment {
         super.onCreate(savedInstanceState);
 
         // Get the actionbar
-        mActionBar = getSherlockActivity().getSupportActionBar();
+        mActionBar = getActivity().getActionBar();
         setHasOptionsMenu(true);
 
         mPlaylistManager = App.mClementine.getPlaylistManager();
         mPlaylistListener = new OnPlaylistReceivedListener() {
             @Override
             public void onPlaylistSongsReceived(final MyPlaylist p) {
-                getSherlockActivity().runOnUiThread(new Runnable() {
+                getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         if (mProgressDialog != null) {
@@ -127,14 +125,14 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 
             @Override
             public void onAllRequestedPlaylistSongsReceived() {
-                getSherlockActivity().runOnUiThread(new Runnable() {
+                getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         if (mProgressDialog != null && mProgressDialog.isShowing()) {
                             mPlaylists = mPlaylistManager.getAllPlaylists();
 
                             mProgressDialog.dismiss();
-                            getSherlockActivity().supportInvalidateOptionsMenu();
+                            getActivity().invalidateOptionsMenu();
 
                             mActionBar.setSelectedNavigationItem(
                                     mPlaylists.indexOf(mPlaylistManager.getActivePlaylist()));
@@ -145,7 +143,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 
             @Override
             public void onAllPlaylistsReceived() {
-                getSherlockActivity().runOnUiThread(new Runnable() {
+                getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         mPlaylists = mPlaylistManager.getAllPlaylists();
@@ -226,7 +224,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
                 mSelectedSong = getSelectedPlaylistSongs().get(position);
 
                 // Start the CAB using the ActionMode.Callback defined above
-                mActionMode = getSherlockActivity().startActionMode(mActionModeCallback);
+                mActionMode = getActivity().startActionMode(mActionModeCallback);
                 view.setSelected(true);
                 return true;
             }
@@ -464,7 +462,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        mActionBar.setListNavigationCallbacks(adapter, new OnNavigationListener() {
+        mActionBar.setListNavigationCallbacks(adapter, new ActionBar.OnNavigationListener() {
 
             @Override
             public boolean onNavigationItemSelected(int itemPosition, long itemId) {

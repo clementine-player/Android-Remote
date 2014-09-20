@@ -56,14 +56,14 @@ public class PlaylistSongAdapter extends ArrayAdapter<MySong> implements Filtera
         super(context, resource, data);
         mContext = context;
         mData = data;
-        mOrigData = new LinkedList<MySong>(data);
+        mOrigData = new LinkedList<>(data);
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         mShowTrackNo = sharedPref.getBoolean(App.SP_SHOW_TRACKNO, true);
     }
 
     public void updateSongs(List<MySong> data) {
-        mOrigData = new LinkedList<MySong>(data);
+        mOrigData = new LinkedList<>(data);
         notifyDataSetChanged();
     }
 
