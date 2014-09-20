@@ -99,11 +99,13 @@ public class App extends Application {
     public final static String SP_LIBRARY_IP = "library_ip";
 
     public final static String SP_KNOWN_IP = "known_ips";
+    
+    public final static String SP_USER_DEFINED_TEXT_FOR_MISSING_TRACK_NR = "pref_missing_track_number";
 
     public App() {
         mApp = this;
     }
-
+    
     @Override
     public void onCreate() {
         super.onCreate();

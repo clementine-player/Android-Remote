@@ -78,6 +78,8 @@ public class ClementineSettings extends PreferenceActivity
 
     private ListPreference mVolumeInc;
 
+    private EditTextPreference mMissingTrackNr;
+
     private FileDialog mFileDialog;
 
     private Preference mDownloadDir;
@@ -138,6 +140,8 @@ public class ClementineSettings extends PreferenceActivity
         mVolumeInc.setSummary(
                 getString(R.string.pref_volume_inc_summary).replace("%s", currentVolumeInc));
 
+        mMissingTrackNr = setUpMissingTrackTextPref(sharedPreferences);
+
         // Set the onclicklistener for the dialogs
         mLicenseDialogPreference.setOnPreferenceClickListener(opclLicense);
         mOpenSourceDialogPreference.setOnPreferenceClickListener(opclOpenSource);
@@ -169,6 +173,22 @@ public class ClementineSettings extends PreferenceActivity
                 && Utilities.isRemoteConnected()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
+    }
+
+    private EditTextPreference setUpMissingTrackTextPref(SharedPreferences sharedPreferences) {
+        EditTextPreference missingTrackNrPref = (EditTextPreference) getPreferenceScreen()
+                .findPreference(App.SP_USER_DEFINED_TEXT_FOR_MISSING_TRACK_NR);
+        missingTrackNrPref.setSummary(createMissingTrackTextPrefSummary(sharedPreferences));
+        return missingTrackNrPref;
+    }
+
+    private String createMissingTrackTextPrefSummary(SharedPreferences sharedPreferences) {
+        String currentMissingTrackNrText = sharedPreferences.getString(
+                App.SP_USER_DEFINED_TEXT_FOR_MISSING_TRACK_NR,
+                getString(R.string.pref_missing_track_number_text_default));
+
+        return getString(R.string.pref_missing_track_number_text_summary)
+                .replace("%s", currentMissingTrackNrText);
     }
 
     @SuppressWarnings("deprecation")
@@ -222,6 +242,8 @@ public class ClementineSettings extends PreferenceActivity
                     .getString(App.SP_VOLUME_INC, Clementine.DefaultVolumeInc);
             mVolumeInc.setSummary(
                     getString(R.string.pref_volume_inc_summary).replace("%s", currentVolumeInc));
+        } else if (key.equals(App.SP_USER_DEFINED_TEXT_FOR_MISSING_TRACK_NR)){
+            mMissingTrackNr.setSummary(createMissingTrackTextPrefSummary(sharedPreferences));
         }
     }
 

@@ -41,6 +41,8 @@ import de.qspool.clementineremote.backend.player.MySong;
  */
 public class PlaylistSongAdapter extends ArrayAdapter<MySong> implements Filterable {
 
+    public static final int UNKNWON_TRACK_NUMBER = -1;
+
     private Context mContext;
 
     private List<MySong> mData;
@@ -51,6 +53,8 @@ public class PlaylistSongAdapter extends ArrayAdapter<MySong> implements Filtera
 
     private boolean mShowTrackNo = true;
 
+    private String mUserTextForMissingTrackNr;
+
     public PlaylistSongAdapter(Context context, int resource,
             List<MySong> data) {
         super(context, resource, data);
@@ -60,6 +64,8 @@ public class PlaylistSongAdapter extends ArrayAdapter<MySong> implements Filtera
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         mShowTrackNo = sharedPref.getBoolean(App.SP_SHOW_TRACKNO, true);
+        mUserTextForMissingTrackNr = sharedPref.getString(App.SP_USER_DEFINED_TEXT_FOR_MISSING_TRACK_NR,
+                String.valueOf(UNKNWON_TRACK_NUMBER));
     }
 
     public void updateSongs(List<MySong> data) {
@@ -108,9 +114,10 @@ public class PlaylistSongAdapter extends ArrayAdapter<MySong> implements Filtera
             params.width = 0;
             params.height = 0;
             playlistViewHolder.trackNo.setLayoutParams(params);
+        } else {
+            playlistViewHolder.trackNo.setText(beautifyMissingTrackNr(mData.get(position).getTrack()));
         }
 
-        playlistViewHolder.trackNo.setText(String.valueOf(mData.get(position).getTrack()) + ".");
         playlistViewHolder.artist.setText(mData.get(position).getArtist());
         playlistViewHolder.title.setText(mData.get(position).getTitle() +
                 " / " +
@@ -118,6 +125,11 @@ public class PlaylistSongAdapter extends ArrayAdapter<MySong> implements Filtera
         playlistViewHolder.length.setText(mData.get(position).getPrettyLength());
 
         return convertView;
+    }
+
+    private String beautifyMissingTrackNr(int trackNr) {
+        return trackNr == UNKNWON_TRACK_NUMBER ? mUserTextForMissingTrackNr
+                : String.valueOf(trackNr) + ".";
     }
 
     @Override
