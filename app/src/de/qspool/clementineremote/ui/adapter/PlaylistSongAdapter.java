@@ -41,7 +41,7 @@ import de.qspool.clementineremote.backend.player.MySong;
  */
 public class PlaylistSongAdapter extends ArrayAdapter<MySong> implements Filterable {
 
-    public static final int UNKNWON_TRACK_NUMBER = -1;
+    private static final int UNKNWON_TRACK_NUMBER = -1;
 
     private Context mContext;
 
