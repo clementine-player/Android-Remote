@@ -123,8 +123,6 @@
   <string name="pref_dl_pl_save_own_dir_title">Salva tracce nella cartella playlist</string>
   <string name="pref_dl_pl_save_own_dir_summary">Crea una cartella con il nome della playlist e salva dentro le tracce.</string>
   <string name="pref_dl_pl_artist_dir_title">Crea sotto cartella artista/album</string>
-  <string name="pref_missing_track_number_text_title">Testo a mostrare se il numero di traccia non è disponibile</string>
-  <string name="pref_missing_track_number_text_summary">Testo corrente: \'%s\'</string>
   <string name="file_dialog_set_dir">Seleziona cartella</string>
   <string name="dialog_about_header">Info su</string>
   <string name="dialog_about_authors">Autori</string>

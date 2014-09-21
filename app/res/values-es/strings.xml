@@ -127,8 +127,6 @@
   <string name="pref_dl_pl_save_own_dir_summary">Crea una carpeta con el nombre de la lista de reproducción y guarda las pistas ahí.</string>
   <string name="pref_dl_pl_artist_dir_title">Crear subcarpeta de artista/álbum</string>
   <string name="pref_dl_pl_artist_dir_summary">Crear subcarpeta «artista/álbum» para cada pista</string>
-  <string name="pref_missing_track_number_text_title">Texto a mostrar si el número de pista no está disponible</string>
-  <string name="pref_missing_track_number_text_summary">Texto actual: \'%s\'</string>
   <string name="file_dialog_set_dir">Seleccione la carpeta</string>
   <string name="dialog_about_header">Acerca de</string>
   <string name="dialog_about_authors">Autores</string>
