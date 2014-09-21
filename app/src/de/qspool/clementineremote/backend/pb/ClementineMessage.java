@@ -35,7 +35,7 @@ public class ClementineMessage {
 
     ;
 
-    public enum ErrorMessage {NO, INVALID_DATA, OLD_PROTO, KEEP_ALIVE_TIMEOUT, NO_CONNECTION}
+    public enum ErrorMessage {NO, INVALID_DATA, OLD_PROTO, KEEP_ALIVE_TIMEOUT, NO_CONNECTION, IO_EXCEPTION, TIMEOUT}
 
     ;
 

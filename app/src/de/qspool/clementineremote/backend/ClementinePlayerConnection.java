@@ -37,6 +37,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -65,13 +66,13 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 
     public ClementineConnectionHandler mHandler;
 
-    private final int DELAY_MILLIS = 10;
+    private final String TAG = getClass().getSimpleName();
 
     private final long KEEP_ALIVE_TIMEOUT = 25000; // 25 Second timeout
 
     private final int MAX_RECONNECTS = 5;
 
-    public final static int CHECK_FOR_DATA_ARG = 12387194;
+    public final static int PROCESS_PROTOC = 874456;
 
     private Handler mUiHandler;
 
@@ -113,6 +114,8 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
     private long mStartRx;
 
     private long mStartTime;
+
+    private Thread mIncomingThread;
 
     /**
      * Add a new listener for closed connections
@@ -174,11 +177,6 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
         // Check if Clementine dropped the connection.
         // Is possible when we connect from a public ip and clementine rejects it
         if (connected && !mSocket.isClosed()) {
-            // Enter the main loop in the thread
-            Message msg = Message.obtain();
-            msg.arg1 = CHECK_FOR_DATA_ARG;
-            mHandler.sendMessage(msg);
-
             // Now we are connected
             mLastSong = null;
             mLastState = App.mClementine.getState();
@@ -216,6 +214,29 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
             mStartRx = TrafficStats.getUidRxBytes(uid);
 
             mStartTime = new Date().getTime();
+
+            // Create a new thread for reading data from Clementine.
+            // This is done blocking, so we receive the data directly instead of
+            // waiting for the handler and still be able to send commands directly.
+            mIncomingThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (isConnected()) {
+                        checkKeepAlive();
+
+                        ClementineMessage m = getProtoc();
+                        if (!m.isErrorMessage() || m.getErrorMessage() != ErrorMessage.TIMEOUT) {
+                            Message msg = Message.obtain();
+                            msg.obj = m;
+                            msg.arg1 = PROCESS_PROTOC;
+                            mHandler.sendMessage(msg);
+                        }
+                    }
+                    Log.d(TAG, "reading thread exit");
+                }
+            });
+            mIncomingThread.start();
+
         } else {
             sendUiMessage(new ClementineMessage(ErrorMessage.NO_CONNECTION));
         }
@@ -224,35 +245,11 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
     }
 
     /**
-     * Check if we have data to process
-     */
-    void checkForData() {
-        try {
-            // If there is no data, then check the keep alive timeout
-            if (mIn.available() == 0) {
-                checkKeepAlive();
-            } else {
-                // Otherwise read the data and parse it
-                processProtocolBuffer(getProtoc());
-            }
-        } catch (IOException e) {
-            sendUiMessage(new ClementineMessage(ErrorMessage.INVALID_DATA));
-        }
-
-        // Let the looper send the message again
-        if (isConnected()) {
-            Message msg = Message.obtain();
-            msg.arg1 = CHECK_FOR_DATA_ARG;
-            mHandler.sendMessageDelayed(msg, DELAY_MILLIS);
-        }
-    }
-
-    /**
      * Process the received protocol buffer
      *
      * @param clementineMessage The Message received from Clementine
      */
-    private void processProtocolBuffer(ClementineMessage clementineMessage) {
+    protected void processProtocolBuffer(ClementineMessage clementineMessage) {
         // Close the connection if we have an old proto verion
         if (clementineMessage.isErrorMessage()) {
             closeConnection(clementineMessage);
@@ -331,7 +328,6 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
         if (isConnected()) {
             // Set the Connected flag to false, so the loop in
             // checkForData() is interrupted
-
             super.disconnect(message);
 
             // and close the connection
@@ -408,8 +404,6 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
     /**
      * Check the keep alive timeout.
      * If we reached the timeout, we can assume, that we lost the connection
-     *
-     * @returns Is the connection still active?
      */
     private void checkKeepAlive() {
         if (mLastKeepAlive > 0
@@ -427,7 +421,10 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 
             // We tried, but the server isn't there anymore
             if (mLeftReconnects == 0) {
-                closeConnection(new ClementineMessage(ErrorMessage.KEEP_ALIVE_TIMEOUT));
+                Message msg = Message.obtain();
+                msg.obj = new ClementineMessage(ErrorMessage.KEEP_ALIVE_TIMEOUT);
+                msg.arg1 = PROCESS_PROTOC;
+                mHandler.sendMessage(msg);
             }
         }
     }

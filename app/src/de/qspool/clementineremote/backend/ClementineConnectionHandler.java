@@ -39,8 +39,8 @@ public class ClementineConnectionHandler extends Handler {
     public void handleMessage(Message msg) {
         ClementinePlayerConnection myClementineConnection = mClementineConnection.get();
 
-        if (msg.arg1 == ClementinePlayerConnection.CHECK_FOR_DATA_ARG) {
-            myClementineConnection.checkForData();
+        if ( msg.arg1 == ClementinePlayerConnection.PROCESS_PROTOC) {
+            myClementineConnection.processProtocolBuffer((ClementineMessage) msg.obj);
         } else {
             // Act on the message
             ClementineMessage message = (ClementineMessage) msg.obj;

@@ -22,15 +22,19 @@ import android.util.Log;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.net.SocketTimeoutException;
 
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessage.ErrorMessage;
 import de.qspool.clementineremote.backend.pb.ClementinePbParser;
 
 public class ClementineSimpleConnection {
+
+    private final String TAG = getClass().getSimpleName();
 
     // Socket, input and output streams
     protected Socket mSocket;
@@ -95,13 +99,17 @@ public class ClementineSimpleConnection {
         ClementineMessage message = null;
         try {
             // Read the data and return it
+            mSocket.setSoTimeout(3000);
             int len = mIn.readInt();
             byte[] data = new byte[len];
             mIn.readFully(data, 0, len);
             message = mClementinePbParser.parse(data);
+        } catch (SocketTimeoutException e) {
+            Log.d(TAG, "Timeout");
+            message = new ClementineMessage(ErrorMessage.TIMEOUT);
         } catch (IOException e) {
-            Log.d("getProtoc", "IOException");
-            message = new ClementineMessage(ErrorMessage.INVALID_DATA);
+            Log.d(TAG, "IOException");
+            message = new ClementineMessage(ErrorMessage.IO_EXCEPTION);
         }
 
         return message;
@@ -114,7 +122,7 @@ public class ClementineSimpleConnection {
      */
     public boolean isConnected() {
         if (mSocket == null
-                || !mSocket.isConnected()) {
+                || mSocket.isClosed()) {
             return false;
         } else {
             return true;
@@ -149,6 +157,7 @@ public class ClementineSimpleConnection {
     protected void closeSocket() {
         try {
             mOut.close();
+            mSocket.close();
         } catch (IOException e) {
         }
 
