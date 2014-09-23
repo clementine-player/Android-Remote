@@ -25,17 +25,16 @@
 
     <style name="PreferencesTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/ActionBarStyle</item>
-        <!-- item name="android:actionButtonStyle">@style/ActionButtonStyle</item -->
     </style>
 
-    <style name="PlayerTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
+    <style name="PlayerTheme" parent="@android:style/Theme.Holo.Light">
         <item name="android:actionBarStyle">@style/ActionBarStyle</item>
         <item name="android:actionButtonStyle">@style/ActionButtonStyle</item>
         <item name="android:actionModeBackground">@drawable/cab_background_top_example</item>
         <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_example</item>
         <item name="android:activatedBackgroundIndicator">@drawable/selector_white_orange_selected</item>
         <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
-        <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItem</item>
+        <item name="android:actionOverflowButtonStyle">@android:style/Widget.Holo.ActionButton.Overflow</item>
     </style>
 
     <style name="ActionBarStyle" parent="@android:style/Widget.ActionBar">
@@ -59,10 +58,6 @@
     <style name="SpinnerItem" parent="@android:style/Widget.Holo.TextView.SpinnerItem">
         <item name="android:textColor">@color/white</item>
     </style>
-    <style name="SpinnerDropDownItem" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
-        <item name="android:background">@drawable/spinner_selector</item>
-    </style>
-
 
     <style name="ShowcaseTheme" parent="ShowcaseView.Light">
         <item name="sv_backgroundColor">#80000000</item>
