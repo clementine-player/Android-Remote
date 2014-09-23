@@ -166,7 +166,7 @@ public class MainActivity extends FragmentActivity {
             if (id == -1) {
                 mLastPosition = 1;
             } else {
-                mLastPosition = 5;
+                mLastPosition = 4;
             }
         }
         selectItem(mLastPosition, 0);

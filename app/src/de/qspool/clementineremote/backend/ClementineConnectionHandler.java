@@ -39,7 +39,7 @@ public class ClementineConnectionHandler extends Handler {
     public void handleMessage(Message msg) {
         ClementinePlayerConnection myClementineConnection = mClementineConnection.get();
 
-        if ( msg.arg1 == ClementinePlayerConnection.PROCESS_PROTOC) {
+        if (msg.arg1 == ClementinePlayerConnection.PROCESS_PROTOC) {
             myClementineConnection.processProtocolBuffer((ClementineMessage) msg.obj);
         } else {
             // Act on the message
