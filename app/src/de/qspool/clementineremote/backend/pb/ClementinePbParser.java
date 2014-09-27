@@ -189,7 +189,7 @@ public class ClementinePbParser {
      */
     private void parseActivePlaylistChanged(
             ResponseActiveChanged responseActiveChanged) {
-
+        mPlaylistManager.setActivePlaylist(responseActiveChanged.getId());
     }
 
     /**
