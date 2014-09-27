@@ -17,6 +17,14 @@
                 android:title="@string/pref_trackno_title"
                 android:summary="@string/pref_trackno_summary"
                 android:defaultValue="true" />
+            <EditTextPreference
+                android:key="pref_missing_track_number"
+                android:title="@string/pref_missing_track_number_text_title"
+                android:summary="@string/pref_missing_track_number_text_summary"
+                android:dialogTitle="@string/pref_missing_track_number_text_title"
+                android:inputType="text"
+                android:dependency="pref_show_trackno"
+                android:defaultValue="@string/pref_missing_track_number_text_default" />
             <CheckBoxPreference
                 android:key="pref_show_lastfm"
                 android:title="@string/pref_lastfm_title"
