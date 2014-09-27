@@ -35,6 +35,12 @@
         <item name="android:activatedBackgroundIndicator">@drawable/selector_white_orange_selected</item>
         <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
         <item name="android:actionOverflowButtonStyle">@android:style/Widget.Holo.ActionButton.Overflow</item>
+        <item name="android:actionModeCloseDrawable">@drawable/ic_action_done</item>
+        <item name="android:actionDropDownStyle">@style/SpinnerDropDownActionBar</item>
+    </style>
+
+    <style name="SpinnerDropDownActionBar" parent="@android:style/Widget.Holo.Light.Spinner">
+        <item name="android:background">@drawable/spinner_ab_holo_dark_am</item>
     </style>
 
     <style name="ActionBarStyle" parent="@android:style/Widget.ActionBar">

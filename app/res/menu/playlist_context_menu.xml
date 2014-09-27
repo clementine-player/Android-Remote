@@ -8,6 +8,6 @@
     <item
         android:id="@+id/playlist_context_remove"
         android:title="@string/playlist_context_remove"
-        android:icon="@drawable/ab_menu_delete"
+        android:icon="@drawable/ab_delete"
         android:showAsAction="ifRoom"></item>
 </menu>
