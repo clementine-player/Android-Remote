@@ -59,7 +59,9 @@ public class ClementineExceptionHandler implements UncaughtExceptionHandler {
             // Write the stacktrace to the file
             PrintWriter printer = new PrintWriter(f);
             // Print Debug info
-            printer.write("== Device Info ==\n");
+            printer.write("== User Information ==\n");
+            printer.write("If you have any further information what you did to cause the crash or how to reproduce it, please write it here.\n\n\n");
+            printer.write("== Device Information ==\n");
             printer.write("\nOS Version: " + android.os.Build.VERSION.RELEASE + " (" + System
                     .getProperty("os.version") + ")");
             printer.write("\nOS API Level: " + android.os.Build.VERSION.SDK_INT);
