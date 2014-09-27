@@ -39,7 +39,6 @@ import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -101,7 +100,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
     private BroadcastReceiver mMediaButtonBroadcastReceiver;
 
     private ArrayList<OnConnectionListener> mListeners
-            = new ArrayList<OnConnectionListener>();
+            = new ArrayList<>();
 
     private ClementineMessage mRequestConnect;
 
@@ -167,12 +166,11 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
      */
     @Override
     public boolean createConnection(ClementineMessage message) {
-        boolean connected = false;
         // Reset the connected flag
         mLastKeepAlive = 0;
 
         // Now try to connect and set the input and output streams
-        connected = super.createConnection(message);
+        boolean connected = super.createConnection(message);
 
         // Check if Clementine dropped the connection.
         // Is possible when we connect from a public ip and clementine rejects it
@@ -221,7 +219,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
             mIncomingThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    while (isConnected()) {
+                    while (isConnected() && !mIncomingThread.isInterrupted()) {
                         checkKeepAlive();
 
                         ClementineMessage m = getProtoc();
@@ -367,6 +365,13 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 
         // Close thread
         Looper.myLooper().quit();
+
+        try {
+            mIncomingThread.join();
+            Log.d(TAG, "joined!");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         // Fire the listener
         fireOnConnectionClosed(clementineMessage);
