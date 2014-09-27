@@ -17,7 +17,6 @@
 
 package de.qspool.clementineremote.backend.pb;
 
-import de.qspool.clementineremote.backend.exceptions.ErrorMessageException;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 
@@ -111,7 +110,6 @@ public class ClementineMessage {
      * Set a group of types
      *
      * @param typeGroup A type of group
-     * @throws ErrorMessageException when this is a error message
      */
     public void setTypeGroup(MessageGroup typeGroup) {
         if (mErrorMessage != ErrorMessage.NO) {
