@@ -62,6 +62,7 @@ public class ClementineSimpleConnection {
             // Send the connect request to clementine
             sendRequest(message);
         } catch (IOException e) {
+            mSocket = null;
             return false;
         }
 
@@ -123,6 +124,7 @@ public class ClementineSimpleConnection {
     public boolean isConnected() {
         if (mSocket == null
                 || mOut == null
+                || !mSocket.isConnected()
                 || mSocket.isClosed()) {
             return false;
         } else {
