@@ -122,6 +122,7 @@ public class ClementineSimpleConnection {
      */
     public boolean isConnected() {
         if (mSocket == null
+                || mOut == null
                 || mSocket.isClosed()) {
             return false;
         } else {
