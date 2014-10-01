@@ -39,6 +39,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
@@ -331,6 +332,12 @@ public class PlaylistFragment extends AbstractDrawerFragment {
         // Create a listener for search change
         SearchView searchView = (SearchView) menu.findItem(R.id.playlist_menu_search)
                 .getActionView();
+
+        int searchPlateId = searchView.getContext().getResources().getIdentifier("android:id/search_plate", null, null);
+        // Getting the 'search_plate' LinearLayout.
+        View searchPlate = searchView.findViewById(searchPlateId);
+        // Setting background of 'search_plate' to earlier defined drawable.
+        searchPlate.setBackgroundResource(R.drawable.texfield_searchview_holo);
 
         final SearchView.OnQueryTextListener queryTextListener
                 = new SearchView.OnQueryTextListener() {

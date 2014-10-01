@@ -301,6 +301,12 @@ public class LibraryFragment extends AbstractDrawerFragment implements
         SearchView searchView = (SearchView) menu.findItem(
                 R.id.library_menu_search).getActionView();
 
+        int searchPlateId = searchView.getContext().getResources().getIdentifier("android:id/search_plate", null, null);
+        // Getting the 'search_plate' LinearLayout.
+        View searchPlate = searchView.findViewById(searchPlateId);
+        // Setting background of 'search_plate' to earlier defined drawable.
+        searchPlate.setBackgroundResource(R.drawable.texfield_searchview_holo);
+
         final SearchView.OnQueryTextListener queryTextListener
                 = new SearchView.OnQueryTextListener() {
             @Override

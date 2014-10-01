@@ -14,7 +14,7 @@
     <item
             android:id="@+id/close_playlist"
             android:title="@string/playlist_close"
-            android:icon="@drawable/ab_menu_delete"
+            android:icon="@drawable/ab_delete"
             android:showAsAction="ifRoom"></item>
     <item
             android:id="@+id/clear_playlist"
