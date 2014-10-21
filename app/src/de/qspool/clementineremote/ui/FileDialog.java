@@ -7,26 +7,30 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Environment;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 import de.qspool.clementineremote.R;
-import de.qspool.clementineremote.ui.ListenerList.FireHandler;
 
 public class FileDialog {
 
     private static final String PARENT_DIR = "..";
 
-    private final String TAG = getClass().getName();
+    private final String TAG = getClass().getSimpleName();
 
     private String[] fileList;
 
     private File currentPath;
+
+    private boolean checkIfWritable = false;
 
     public interface FileSelectedListener {
 
@@ -39,10 +43,10 @@ public class FileDialog {
     }
 
     private ListenerList<FileSelectedListener> fileListenerList
-            = new ListenerList<FileDialog.FileSelectedListener>();
+            = new ListenerList<>();
 
     private ListenerList<DirectorySelectedListener> dirListenerList
-            = new ListenerList<FileDialog.DirectorySelectedListener>();
+            = new ListenerList<>();
 
     private final Activity activity;
 
@@ -64,18 +68,15 @@ public class FileDialog {
      * @return file dialog
      */
     public Dialog createFileDialog() {
-        AlertDialog dialog = null;
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
         builder.setTitle(currentPath.getPath());
         if (selectDirectoryOption) {
             builder.setPositiveButton(activity.getString(R.string.file_dialog_set_dir),
                     new OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            Log.d(TAG, currentPath.getPath());
-                            fireDirectorySelectedEvent(currentPath);
-                        }
+                        public void onClick(DialogInterface dialog, int which) { }
                     });
+
             builder.setNegativeButton(activity.getString(R.string.dialog_close),
                     new OnClickListener() {
                         @Override
@@ -99,13 +100,30 @@ public class FileDialog {
             }
         });
 
-        dialog = builder.show();
+        final AlertDialog dialog = builder.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (isCheckIfWritable()) {
+                            // Check the external store state
+                            File checkFile = new File(currentPath.getAbsolutePath() + "/ClementineTestFile.CheckIfWritable");
+                            try {
+                                if (checkFile.createNewFile()) checkFile.delete();
 
-        if (currentPath.canWrite()) {
-            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
-        } else {
-            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-        }
+                                Log.d(TAG, checkFile.getAbsolutePath() + " is writable");
+                                dialog.dismiss();
+                                fireDirectorySelectedEvent(currentPath);
+                            } catch (IOException e) {
+                                Toast.makeText(activity, R.string.file_dialog_not_writable, Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            fireDirectorySelectedEvent(currentPath);
+                            dialog.dismiss();
+                        }
+
+                    }
+                });
 
         return dialog;
     }
@@ -156,7 +174,7 @@ public class FileDialog {
 
     private void loadFileList(File path) {
         this.currentPath = path;
-        List<String> r = new ArrayList<String>();
+        List<String> r = new ArrayList<>();
         if (path.exists()) {
             if (path.getParentFile() != null) {
                 r.add(PARENT_DIR);
@@ -170,21 +188,19 @@ public class FileDialog {
                     if (selectDirectoryOption) {
                         return sel.isDirectory();
                     } else {
-                        boolean endsWith = fileEndsWith != null ? filename
-                                .toLowerCase(Locale.getDefault()).endsWith(fileEndsWith) : true;
+                        boolean endsWith = fileEndsWith == null || filename
+                                .toLowerCase(Locale.getDefault()).endsWith(fileEndsWith);
                         return endsWith || sel.isDirectory();
                     }
                 }
             };
             String[] fileList1 = path.list(filter);
             if (fileList1 != null) {
-                for (String file : fileList1) {
-                    r.add(file);
-                }
+                Collections.addAll(r, fileList1);
             }
         }
         Collections.sort(r);
-        fileList = (String[]) r.toArray(new String[]{});
+        fileList = r.toArray(new String[]{});
     }
 
     private File getChosenFile(String fileChosen) {
@@ -199,33 +215,41 @@ public class FileDialog {
         this.fileEndsWith = fileEndsWith != null ? fileEndsWith.toLowerCase(Locale.getDefault())
                 : fileEndsWith;
     }
-}
 
-class ListenerList<L> {
+    public boolean isCheckIfWritable() {
+        return checkIfWritable;
+    }
 
-    private List<L> listenerList = new ArrayList<L>();
+    public void setCheckIfWritable(boolean checkIfWritable) {
+        this.checkIfWritable = checkIfWritable;
+    }
 
     public interface FireHandler<L> {
-
         void fireEvent(L listener);
     }
 
-    public void add(L listener) {
-        listenerList.add(listener);
-    }
+    class ListenerList<L> {
 
-    public void fireEvent(FireHandler<L> fireHandler) {
-        List<L> copy = new ArrayList<L>(listenerList);
-        for (L l : copy) {
-            fireHandler.fireEvent(l);
+        private List<L> listenerList = new ArrayList<>();
+
+        public void add(L listener) {
+            listenerList.add(listener);
+        }
+
+        public void fireEvent(FireHandler<L> fireHandler) {
+            List<L> copy = new ArrayList<>(listenerList);
+            for (L l : copy) {
+                fireHandler.fireEvent(l);
+            }
+        }
+
+        public void remove(L listener) {
+            listenerList.remove(listener);
+        }
+
+        public List<L> getListenerList() {
+            return listenerList;
         }
     }
-
-    public void remove(L listener) {
-        listenerList.remove(listener);
-    }
-
-    public List<L> getListenerList() {
-        return listenerList;
-    }
 }
+

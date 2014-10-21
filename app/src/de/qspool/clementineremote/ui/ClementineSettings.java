@@ -204,6 +204,7 @@ public class ClementineSettings extends PreferenceActivity {
             String path = sharedPreferences.getString(App.SP_DOWNLOAD_DIR, defaultPath);
             File mPath = new File(path);
             mFileDialog = new FileDialog(getActivity(), mPath);
+            mFileDialog.setCheckIfWritable(true);
             mFileDialog.addDirectoryListener(new FileDialog.DirectorySelectedListener() {
                 public void directorySelected(File directory) {
                     SharedPreferences.Editor editor = getPreferenceScreen().getSharedPreferences()

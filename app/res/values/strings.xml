@@ -157,6 +157,7 @@
     <string name="pref_dl_pl_artist_dir_summary">Create a artist/album subfolder for each individual track.</string>
 
     <string name="file_dialog_set_dir">Select directory</string>
+    <string name="file_dialog_not_writable">Directory not writable</string>
 
 
     <string name="dialog_about_header">About</string>
