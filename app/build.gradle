@@ -90,7 +90,7 @@ android {
                     if (output.outputFile != null && output.outputFile.name.endsWith('.apk')) {
                         def file = output.outputFile
                         if (variant.name == "release")
-                            variant.outputFile = new File(file.parent,
+                            output.outputFile = new File(file.parent,
                                     "ClementineRemote-release-" + defaultConfig.versionName +
                                             ".apk")
                     }
