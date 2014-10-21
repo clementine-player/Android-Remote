@@ -481,6 +481,8 @@ public class MainActivity extends FragmentActivity {
                     case 6: // Settings
                         Intent settingsIntent = new Intent(MainActivity.this,
                                 ClementineSettings.class);
+                        settingsIntent.putExtra( ClementineSettings.EXTRA_SHOW_FRAGMENT, ClementineSettings.ClementineSettingsFragment.class.getName() );
+                        settingsIntent.putExtra( ClementineSettings.EXTRA_NO_HEADERS, true );
                         startActivity(settingsIntent);
                         break;
                     case 7: // Donate

@@ -221,6 +221,8 @@ public class ConnectDialog extends Activity {
         switch (item.getItemId()) {
             case R.id.settings:
                 Intent settingsIntent = new Intent(this, ClementineSettings.class);
+                settingsIntent.putExtra( ClementineSettings.EXTRA_SHOW_FRAGMENT, ClementineSettings.ClementineSettingsFragment.class.getName() );
+                settingsIntent.putExtra( ClementineSettings.EXTRA_NO_HEADERS, true );
                 startActivity(settingsIntent);
                 doAutoConnect = false;
                 return true;
