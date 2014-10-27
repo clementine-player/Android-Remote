@@ -25,6 +25,8 @@
   <string name="playlist_context_play">Toista kohde</string>
   <string name="playlist_context_remove">Poista soittolistasta</string>
   <string name="playlist_loading">Ladataan</string>
+  <string name="playlist_close">Sulje soittolista</string>
+  <string name="playlist_clear">Tyhjennä soittolista</string>
   <string name="downloads_empty">Ei latauksia!</string>
   <string name="download_error">Kappaleen avaus epäonnistui!</string>
   <string name="download_freespace">Vapaa tila</string>

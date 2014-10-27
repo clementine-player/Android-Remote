@@ -25,6 +25,8 @@
   <string name="playlist_context_play">Reproduzir item</string>
   <string name="playlist_context_remove">Remover da lista de reprodução</string>
   <string name="playlist_loading">A carregar</string>
+  <string name="playlist_close">Fechar lista de reprodução</string>
+  <string name="playlist_clear">Limpar lista de reprodução</string>
   <string name="downloads_empty">Nenhuma transferÊncia!</string>
   <string name="download_error">Não foi possível carregar a faixa!</string>
   <string name="download_freespace">Espaço livre</string>

@@ -25,6 +25,8 @@
   <string name="playlist_context_play">Відтворити запис</string>
   <string name="playlist_context_remove">Вилучити зі списку відтворення</string>
   <string name="playlist_loading">Завантаження</string>
+  <string name="playlist_close">Закрити список відтворення</string>
+  <string name="playlist_clear">Спорожнити список відтворення</string>
   <string name="downloads_empty">Немає отриманих даних!</string>
   <string name="download_error">Не вдалося відкрити файл композиції!</string>
   <string name="download_freespace">Вільне місце</string>

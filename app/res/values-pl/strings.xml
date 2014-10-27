@@ -25,6 +25,8 @@
   <string name="playlist_context_play">Zagraj utwór</string>
   <string name="playlist_context_remove">Usuń z listy odtwarzania</string>
   <string name="playlist_loading">Wczytywanie</string>
+  <string name="playlist_close">Zamknij listę odtwarzania</string>
+  <string name="playlist_clear">Wyczyść listę odtwarzania</string>
   <string name="downloads_empty">Brak pobranych!</string>
   <string name="download_error">Nie można odtworzyć utworu!</string>
   <string name="download_freespace">Wolna przestrzeń</string>
@@ -76,6 +78,7 @@
   <string name="menu_download_album">Pobierz album</string>
   <string name="menu_download_playlist">Pobierz listę odtwarzania</string>
   <string name="donate_header">Darowizny</string>
+  <string name="donate_text">Dziękujemy za używanie naszej aplikacji, mamy nadzieję, że jest przydatna!\n\nJeśli nasza praca naprawdę Cię uszczęśliwia, mała darowizna byłaby mile widziana.</string>
   <string name="donate_i_want">Chcę podarować:</string>
   <string name="donate_one">Pączka (1.00 €)</string>
   <string name="donate_two">Kawę (2.00 €)</string>
@@ -127,6 +130,7 @@
   <string name="pref_dl_pl_save_own_dir_title">Zapisz utwory w katalogu listy odtwarzania</string>
   <string name="pref_dl_pl_save_own_dir_summary">Tworzy katalog o nazwie listy odtwarzania i zapisuje w nim utwory.</string>
   <string name="pref_dl_pl_artist_dir_title">Tworzy podkatalog dla artysty/albumu</string>
+  <string name="pref_dl_pl_artist_dir_summary">Tworzy podkatalog artysty/albumu dla każdej ścieżki osobno.</string>
   <string name="file_dialog_set_dir">Wybierz katalog</string>
   <string name="dialog_about_header">Informacje o</string>
   <string name="dialog_about_authors">Autorzy</string>
@@ -137,6 +141,8 @@
   <string name="error_versions">Niekompatybilna wersja</string>
   <string name="old_proto">Proszę zaaktualizować Clementine!</string>
   <string name="no_private_ip">Twoje urządzenie z Androidem nie ma lokalnego adresu ip. Spróbuj wyłączyć \"Używaj tylko lokalnych adresów ip\" w opcjach Clementine.</string>
+  <string name="check_ip">1) Czy Clementine jest uruchomiony?\n2) Czy używasz Clementine w wersji 1.2.1 lub wyższej?\n3) Czy włączyłeś zdalne sterowanie przez sieć w ustawieniach Clementine?\n4) Sprawdź czy podałeś poprawny adres IP.
+</string>
   <string name="wifi_disabled">Wifi jest wyłączone. Jeśli chcesz połączyć się z Clementine przez internet upewnij się że przekierowałeś porty poprawnie oraz wyłączyłeś opcję \"Używaj tylko lokalnych adresów ip\".</string>
   <string name="input_auth_code">Kod uwierzytelniający</string>
   <string name="invalid_code">Nieprawidłowy kod</string>
@@ -149,6 +155,7 @@
   <string name="shuffle_inside_album">Losuj ścieżki w tym albumie</string>
   <string name="shuffle_albums">Losuj albumy</string>
   <string name="first_time_title">Witamy</string>
+  <string name="first_time_text">Dziękujemy za korzystanie z Clementine Remote!\nMam nadzieję, że ta aplikacja jest dla ciebie przydatna.&lt;br&gt;&lt;br&gt;Aby używać tej aplikacji musisz ściągnąć i zainstalować odtwarzacz Clementine w wersji 1.2.1 lub wyższej &lt;a href="http://www.clementine-player.org/downloads"&gt;stąd&lt;/a&gt;.</string>
   <string name="track_loved">Utwór dodany do ulubionych &lt;3</string>
   <string name="track_banned">Utwór zignorowany :-(</string>
   <string name="notification_disconnect_keep_alive">Utracono połączenie. Dotknij by połączyć ponownie.</string>
@@ -160,8 +167,16 @@
   <string name="cm_next">Następne</string>
   <string name="cm_close">Zamknij</string>
   <string name="cm_connect_ip_title">Łączenie z Clementine</string>
+  <string name="cm_connect_ip_content">Wpisz adres IP komputera z uruchomionym odtwarzaczem Clementine
+i kliknij \"Połącz\"</string>
+  <string name="cm_connect_mdns_title">Automatyczne wykrywanie</string>
+  <string name="cm_connect_mdns_content">Jeśli ikonka pulsuje, kliknij ją aby zobaczyć listę
+dostępnych komputerów z uruchomionym
+odtwarzaczem Clementine.</string>
   <string name="cm_player_home_title">Menu Clementine Remote</string>
+  <string name="cm_player_home_content">Kliknij przycisk Home aby otworzyć menu.</string>
   <string name="cm_player_hold_pause_title">Wstrzymaj pausę</string>
+  <string name="cm_player_hold_pause_content">Włącza zatrzymywanie po zakończeniu utworu.</string>
   <string name="cm_player_lyrics_title">Kliknij na okładkę albumu</string>
   <string name="cm_player_lyrics_content">Okienko z tekstem zostanie otwarte</string>
   <string name="cm_player_swipe_title">Przesuń palcem w prawo</string>

@@ -25,6 +25,8 @@
   <string name="playlist_context_play">Проиграть пункт</string>
   <string name="playlist_context_remove">Удалить из плейлиста</string>
   <string name="playlist_loading">Загрузка</string>
+  <string name="playlist_close">Закрыть плейлист</string>
+  <string name="playlist_clear">Очистить плейлист</string>
   <string name="downloads_empty">Нет загрузок!</string>
   <string name="download_error">Не могу открыть песню!</string>
   <string name="download_freespace">Свободное место</string>
