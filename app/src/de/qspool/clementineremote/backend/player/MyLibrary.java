@@ -29,7 +29,7 @@ import java.io.File;
 import java.util.LinkedList;
 
 import de.qspool.clementineremote.App;
-import de.qspool.clementineremote.backend.event.OnLibrarySelectFinishedListener;
+import de.qspool.clementineremote.backend.listener.OnLibrarySelectFinishedListener;
 
 public class MyLibrary extends
         AsyncTask<Integer, Void, LinkedList<MyLibraryItem>> {

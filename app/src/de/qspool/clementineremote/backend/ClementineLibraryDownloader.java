@@ -31,7 +31,7 @@ import java.util.LinkedList;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.elements.DownloaderResult;
 import de.qspool.clementineremote.backend.elements.DownloaderResult.DownloadResult;
-import de.qspool.clementineremote.backend.event.OnLibraryDownloadListener;
+import de.qspool.clementineremote.backend.listener.OnLibraryDownloadListener;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;

@@ -15,17 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package de.qspool.clementineremote.backend.event;
+package de.qspool.clementineremote.backend.listener;
 
-import de.qspool.clementineremote.backend.player.MyPlaylist;
+import de.qspool.clementineremote.backend.elements.DownloaderResult;
 
-public interface OnPlaylistReceivedListener {
+public interface OnLibraryDownloadListener {
 
-    void onAllRequestedPlaylistSongsReceived();
+    void OnProgressUpdate(long progress, int total);
 
-    void onPlaylistSongsReceived(final MyPlaylist p);
+    void OnOptimizeLibrary();
 
-    void onPlaylistReceived(final MyPlaylist p);
-
-    void onAllPlaylistsReceived();
+    void OnLibraryDownloadFinished(DownloaderResult result);
 }

@@ -49,9 +49,7 @@ public class App extends Application {
 
     public final static int SERVICE_START = 1;
 
-    public final static int SERVICE_CONNECTED = 2;
-
-    public final static int SERVICE_DISCONNECTED = 3;
+    public final static int SERVICE_DISCONNECTED = 2;
 
     public final static String NOTIFICATION_ID = "NotificationID";
 

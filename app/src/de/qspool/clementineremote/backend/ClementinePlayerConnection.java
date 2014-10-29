@@ -17,45 +17,26 @@
 
 package de.qspool.clementineremote.backend;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.media.AudioManager;
-import android.media.AudioManager.OnAudioFocusChangeListener;
-import android.media.MediaMetadataRetriever;
-import android.media.RemoteControlClient;
-import android.media.RemoteControlClient.MetadataEditor;
 import android.net.TrafficStats;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 import de.qspool.clementineremote.App;
-import de.qspool.clementineremote.R;
-import de.qspool.clementineremote.backend.event.OnConnectionListener;
+import de.qspool.clementineremote.backend.listener.PlayerConnectionListener;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessage.ErrorMessage;
-import de.qspool.clementineremote.backend.pb.ClementineMessage.MessageGroup;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message.Builder;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ReasonDisconnect;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseDisconnect;
-import de.qspool.clementineremote.backend.pebble.Pebble;
-import de.qspool.clementineremote.backend.player.MySong;
-import de.qspool.clementineremote.backend.receivers.ClementineMediaButtonEventReceiver;
 
 /**
  * This Thread-Class is used to communicate with Clementine
@@ -63,9 +44,9 @@ import de.qspool.clementineremote.backend.receivers.ClementineMediaButtonEventRe
 public class ClementinePlayerConnection extends ClementineSimpleConnection
         implements Runnable {
 
-    public ClementineConnectionHandler mHandler;
-
     private final String TAG = getClass().getSimpleName();
+
+    public ClementineConnectionHandler mHandler;
 
     private final long KEEP_ALIVE_TIMEOUT = 25000; // 25 Second timeout
 
@@ -79,34 +60,12 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 
     private long mLastKeepAlive;
 
-    private NotificationCompat.Builder mNotifyBuilder;
-
-    private NotificationManager mNotificationManager;
-
-    private int mNotificationWidth;
-
-    private int mNotificationHeight;
-
-    private MySong mLastSong = null;
-
-    private Clementine.State mLastState;
-
-    private AudioManager mAudioManager;
-
-    private ComponentName mClementineMediaButtonEventReceiver;
-
-    private RemoteControlClient mRcClient;
-
-    private BroadcastReceiver mMediaButtonBroadcastReceiver;
-
-    private ArrayList<OnConnectionListener> mListeners
+    private ArrayList<PlayerConnectionListener> mListeners
             = new ArrayList<>();
 
     private ClementineMessage mRequestConnect;
 
     private PowerManager.WakeLock mWakeLock;
-
-    private Pebble mPebble;
 
     private long mStartTx;
 
@@ -121,42 +80,22 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
      *
      * @param listener The listener object
      */
-    public void setOnConnectionListener(OnConnectionListener listener) {
+    public void addPlayerConnectionListener(PlayerConnectionListener listener) {
         mListeners.add(listener);
     }
 
     public void run() {
         // Start the thread
-        mNotificationManager = (NotificationManager) App.mApp
-                .getSystemService(Context.NOTIFICATION_SERVICE);
-
         Looper.prepare();
         mHandler = new ClementineConnectionHandler(this);
-
-        mPebble = new Pebble();
 
         // Get a Wakelock Object
         PowerManager pm = (PowerManager) App.mApp.getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Clementine");
 
-        Resources res = App.mApp.getResources();
-        mNotificationHeight = (int) res
-                .getDimension(android.R.dimen.notification_large_icon_height);
-        mNotificationWidth = (int) res.getDimension(android.R.dimen.notification_large_icon_width);
-
-        mAudioManager = (AudioManager) App.mApp.getSystemService(Context.AUDIO_SERVICE);
-        mClementineMediaButtonEventReceiver = new ComponentName(App.mApp.getPackageName(),
-                ClementineMediaButtonEventReceiver.class.getName());
-
-        mMediaButtonBroadcastReceiver = new ClementineMediaButtonEventReceiver();
-
         fireOnConnectionReady();
 
         Looper.loop();
-    }
-
-    public void setNotificationBuilder(NotificationCompat.Builder builder) {
-        mNotifyBuilder = builder;
     }
 
     /**
@@ -176,17 +115,6 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
         // Is possible when we connect from a public ip and clementine rejects it
         if (connected && !mSocket.isClosed()) {
             // Now we are connected
-            mLastSong = null;
-            mLastState = App.mClementine.getState();
-
-            // Setup the MediaButtonReceiver and the RemoteControlClient
-            registerRemoteControlClient();
-
-            // Register MediaButtonReceiver
-            IntentFilter filter = new IntentFilter(Intent.ACTION_MEDIA_BUTTON);
-            App.mApp.registerReceiver(mMediaButtonBroadcastReceiver, filter);
-
-            updateNotification();
 
             // The device shall be awake
             mWakeLock.acquire();
@@ -235,6 +163,8 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
             });
             mIncomingThread.start();
 
+            fireOnConnected();
+
         } else {
             sendUiMessage(new ClementineMessage(ErrorMessage.NO_CONNECTION));
         }
@@ -248,23 +178,11 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
      * @param clementineMessage The Message received from Clementine
      */
     protected void processProtocolBuffer(ClementineMessage clementineMessage) {
+        fireOnClementineMessageReceived(clementineMessage);
+
         // Close the connection if we have an old proto verion
         if (clementineMessage.isErrorMessage()) {
             closeConnection(clementineMessage);
-        } else if (clementineMessage.getTypeGroup() == MessageGroup.GUI_RELOAD) {
-            sendUiMessage(clementineMessage);
-
-            // Now update the notification and the remote control client
-            if (App.mClementine.getCurrentSong() != mLastSong) {
-                mLastSong = App.mClementine.getCurrentSong();
-                updateNotification();
-                updateRemoteControlClient();
-                mPebble.sendMusicUpdateToPebble();
-            }
-            if (App.mClementine.getState() != mLastState) {
-                mLastState = App.mClementine.getState();
-                updateRemoteControlClient();
-            }
         } else if (clementineMessage.getMessageType() == MsgType.DISCONNECT) {
             closeConnection(clementineMessage);
         } else {
@@ -352,13 +270,6 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
         // Disconnect socket
         closeSocket();
 
-        // Cancel Notification
-        mNotificationManager.cancel(App.NOTIFY_ID);
-
-        unregisterRemoteControlClient();
-
-        App.mApp.unregisterReceiver(mMediaButtonBroadcastReceiver);
-
         mWakeLock.release();
 
         sendUiMessage(clementineMessage);
@@ -368,7 +279,6 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 
         try {
             mIncomingThread.join();
-            Log.d(TAG, "joined!");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -383,7 +293,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
      * @param clementineMessage The Disconnect message.
      */
     private void fireOnConnectionClosed(ClementineMessage clementineMessage) {
-        for (OnConnectionListener listener : mListeners) {
+        for (PlayerConnectionListener listener : mListeners) {
             listener.onConnectionClosed(clementineMessage);
         }
     }
@@ -392,8 +302,26 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
      * Fire the event to all listeners
      */
     private void fireOnConnectionReady() {
-        for (OnConnectionListener listener : mListeners) {
-            listener.onConnectionReady();
+        for (PlayerConnectionListener listener : mListeners) {
+            listener.onThreadStarted();
+        }
+    }
+
+    /**
+     * Fire the event to all listeners
+     */
+    private void fireOnConnected() {
+        for (PlayerConnectionListener listener : mListeners) {
+            listener.onConnected();
+        }
+    }
+
+    /**
+     * Fire the event to all listeners
+     */
+    private void fireOnClementineMessageReceived(ClementineMessage msg) {
+        for (PlayerConnectionListener listener : mListeners) {
+            listener.onClementineMessageReceived(msg);
         }
     }
 
@@ -442,109 +370,4 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
     public void setLastKeepAlive(long lastKeepAlive) {
         this.mLastKeepAlive = lastKeepAlive;
     }
-
-    /**
-     * Update the notification with the new track info
-     */
-    private void updateNotification() {
-        if (mLastSong != null) {
-            Bitmap scaledArt = Bitmap.createScaledBitmap(mLastSong.getArt(),
-                    mNotificationWidth,
-                    mNotificationHeight,
-                    false);
-            mNotifyBuilder.setLargeIcon(scaledArt);
-            mNotifyBuilder.setContentTitle(mLastSong.getArtist());
-            mNotifyBuilder.setContentText(mLastSong.getTitle() +
-                    " / " +
-                    mLastSong.getAlbum());
-        } else {
-            mNotifyBuilder.setContentTitle(App.mApp.getString(R.string.app_name));
-            mNotifyBuilder.setContentText(App.mApp.getString(R.string.player_nosong));
-        }
-
-        mNotificationManager.notify(App.NOTIFY_ID, mNotifyBuilder.build());
-    }
-
-    /**
-     * Register the RemoteControlClient
-     */
-    private void registerRemoteControlClient() {
-        // Request AudioFocus, so the widget is shown on the lock-screen
-        mAudioManager.requestAudioFocus(mOnAudioFocusChangeListener,
-                AudioManager.STREAM_MUSIC,
-                AudioManager.AUDIOFOCUS_GAIN);
-
-        mAudioManager.registerMediaButtonEventReceiver(mClementineMediaButtonEventReceiver);
-
-        // Create the intent
-        Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
-        mediaButtonIntent.setComponent(mClementineMediaButtonEventReceiver);
-        PendingIntent mediaPendingIntent = PendingIntent
-                .getBroadcast(App.mApp.getApplicationContext(),
-                        0,
-                        mediaButtonIntent,
-                        0);
-        // Create the client
-        mRcClient = new RemoteControlClient(mediaPendingIntent);
-        if (App.mClementine.getState() == Clementine.State.PLAY) {
-            mRcClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
-        } else {
-            mRcClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
-        }
-        mRcClient.setTransportControlFlags(RemoteControlClient.FLAG_KEY_MEDIA_NEXT |
-                RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS |
-                RemoteControlClient.FLAG_KEY_MEDIA_PLAY |
-                RemoteControlClient.FLAG_KEY_MEDIA_PAUSE);
-        mAudioManager.registerRemoteControlClient(mRcClient);
-    }
-
-    /**
-     * Unregister the RemoteControlClient
-     */
-    private void unregisterRemoteControlClient() {
-        // Disconnect EventReceiver and RemoteControlClient
-        mAudioManager.unregisterMediaButtonEventReceiver(mClementineMediaButtonEventReceiver);
-
-        if (mRcClient != null) {
-            mAudioManager.unregisterRemoteControlClient(mRcClient);
-            mAudioManager.abandonAudioFocus(mOnAudioFocusChangeListener);
-        }
-    }
-
-    /**
-     * Update the RemoteControlClient
-     */
-    private void updateRemoteControlClient() {
-        // Update playstate
-        if (App.mClementine.getState() == Clementine.State.PLAY) {
-            mRcClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
-        } else {
-            mRcClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
-        }
-
-        // Get the metadata editor
-        if (mLastSong != null
-                && mLastSong.getArt() != null) {
-            RemoteControlClient.MetadataEditor editor = mRcClient.editMetadata(false);
-            editor.putBitmap(MetadataEditor.BITMAP_KEY_ARTWORK, mLastSong.getArt());
-
-            // The RemoteControlClients displays the following info:
-            // METADATA_KEY_TITLE (white) - METADATA_KEY_ALBUMARTIST (grey) - METADATA_KEY_ALBUM (grey)
-            //
-            // So i put the metadata not in the "correct" fields to display artist, track and album
-            // TODO: Fix it when changed in newer android versions
-            editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUM, mLastSong.getAlbum());
-            editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, mLastSong.getArtist());
-            editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, mLastSong.getTitle());
-            editor.apply();
-        }
-    }
-
-    private OnAudioFocusChangeListener mOnAudioFocusChangeListener
-            = new OnAudioFocusChangeListener() {
-        @Override
-        public void onAudioFocusChange(int focusChange) {
-
-        }
-    };
 }

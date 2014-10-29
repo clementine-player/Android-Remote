@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 import de.qspool.clementineremote.App;
-import de.qspool.clementineremote.backend.event.OnPlaylistReceivedListener;
+import de.qspool.clementineremote.backend.listener.OnPlaylistReceivedListener;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 
 public class PlaylistManager {

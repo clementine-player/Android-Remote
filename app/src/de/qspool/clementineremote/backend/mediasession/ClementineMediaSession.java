@@ -1,5 +1,5 @@
 /* This file is part of the Android Clementine Remote.
- * Copyright (C) 2013, Andreas Muttscheller <asfa194@gmail.com>
+ * Copyright (C) 2014, Andreas Muttscheller <asfa194@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,15 +15,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package de.qspool.clementineremote.backend.event;
+package de.qspool.clementineremote.backend.mediasession;
 
-import de.qspool.clementineremote.backend.elements.DownloaderResult;
+import android.content.Context;
+import android.media.session.MediaSession;
 
-public interface OnLibraryDownloadListener {
+public abstract class ClementineMediaSession {
 
-    void OnProgressUpdate(long progress, int total);
+    protected Context mContext;
 
-    void OnOptimizeLibrary();
+    public ClementineMediaSession(Context context) {
+        mContext = context;
+    }
 
-    void OnLibraryDownloadFinished(DownloaderResult result);
+    public abstract void registerSession();
+
+    public abstract void unregisterSession();
+
+    public abstract void updateSession();
+
+    public MediaSession getMediaSession() {
+        return null;
+    }
 }

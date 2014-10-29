@@ -15,13 +15,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package de.qspool.clementineremote.backend.event;
+package de.qspool.clementineremote.backend.listener;
 
-import java.util.LinkedList;
+import de.qspool.clementineremote.backend.pb.ClementineMessage;
 
-import de.qspool.clementineremote.backend.player.MyLibraryItem;
+public interface PlayerConnectionListener {
 
-public interface OnLibrarySelectFinishedListener {
+    void onThreadStarted();
 
-    void OnLibrarySelectFinished(LinkedList<MyLibraryItem> l);
+    void onConnected();
+
+    void onConnectionClosed(ClementineMessage clementineMessage);
+
+    void onClementineMessageReceived(ClementineMessage clementineMessage);
 }
