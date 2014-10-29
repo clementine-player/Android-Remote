@@ -6,3 +6,18 @@ buildscript {
         classpath 'com.android.tools.build:gradle:0.13.+'
     }
 }
+
+ext {
+    compileSdkVersion = 21
+    minSdkVersion = 15
+    targetSdkVersion = 21
+    buildToolsVersion = "21.0.2"
+}
+
+allprojects {
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
+    }
+}
