@@ -24,11 +24,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -39,8 +39,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import java.util.LinkedList;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
@@ -56,6 +54,8 @@ import de.qspool.clementineremote.ui.fragments.LibraryFragment;
 import de.qspool.clementineremote.ui.fragments.PlayerFragment;
 import de.qspool.clementineremote.ui.fragments.PlaylistFragment;
 import de.qspool.clementineremote.utils.Utilities;
+
+import java.util.LinkedList;
 
 public class MainActivity extends FragmentActivity {
 
@@ -102,9 +102,9 @@ public class MainActivity extends FragmentActivity {
 
         setContentView(R.layout.main_activity);
 
-	    /* 
-             * Define here the available fragments in the mail layout
-	     */
+        /*
+         * Define here the available fragments in the main layout
+         */
         mFragments.add(new PlayerFragment());
         mFragments.add(new PlaylistFragment());
         mFragments.add(new LibraryFragment());
@@ -146,7 +146,6 @@ public class MainActivity extends FragmentActivity {
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
                 mDrawerLayout,         /* DrawerLayout object */
-                R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
                 R.string.connectdialog_connect,  /* "open drawer" description */
                 R.string.dialog_close  /* "close drawer" description */
         ) {
