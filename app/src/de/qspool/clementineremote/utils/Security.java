@@ -16,6 +16,7 @@
 package de.qspool.clementineremote.utils;
 
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 
 import java.security.InvalidKeyException;
@@ -75,7 +76,7 @@ public class Security {
      */
     public static PublicKey generatePublicKey(String encodedPublicKey) {
         try {
-            byte[] decodedKey = Base64.decode(encodedPublicKey);
+            byte[] decodedKey = Base64.decode(encodedPublicKey, Base64.DEFAULT);
             KeyFactory keyFactory = KeyFactory.getInstance(KEY_FACTORY_ALGORITHM);
             return keyFactory.generatePublic(new X509EncodedKeySpec(decodedKey));
         } catch (NoSuchAlgorithmException e) {
@@ -83,7 +84,7 @@ public class Security {
         } catch (InvalidKeySpecException e) {
             Log.e(TAG, "Invalid key specification.");
             throw new IllegalArgumentException(e);
-        } catch (Base64DecoderException e) {
+        } catch (IllegalArgumentException e) {
             Log.e(TAG, "Base64 decoding failed.");
             throw new IllegalArgumentException(e);
         }
@@ -104,7 +105,7 @@ public class Security {
             sig = Signature.getInstance(SIGNATURE_ALGORITHM);
             sig.initVerify(publicKey);
             sig.update(signedData.getBytes());
-            if (!sig.verify(Base64.decode(signature))) {
+            if (!sig.verify(Base64.decode(signature, Base64.DEFAULT))) {
                 Log.e(TAG, "Signature verification failed.");
                 return false;
             }
@@ -115,7 +116,7 @@ public class Security {
             Log.e(TAG, "Invalid key specification.");
         } catch (SignatureException e) {
             Log.e(TAG, "Signature exception.");
-        } catch (Base64DecoderException e) {
+        } catch (IllegalArgumentException e) {
             Log.e(TAG, "Base64 decoding failed.");
         }
         return false;
