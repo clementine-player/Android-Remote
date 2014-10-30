@@ -59,9 +59,10 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
                 .getDimension(android.R.dimen.notification_large_icon_height);
         mNotificationWidth = (int) res.getDimension(android.R.dimen.notification_large_icon_width);
 
-        mNotificationBuilder = new Notification.Builder(App.mApp);
-        mNotificationBuilder.setSmallIcon(R.drawable.notification);
-        mNotificationBuilder.setOngoing(true);
+        mNotificationBuilder = new Notification.Builder(App.mApp)
+            .setSmallIcon(R.drawable.notification)
+            .setOngoing(true)
+            .setVisibility(Notification.VISIBILITY_PUBLIC);
 
         // Set the result intent
         Intent resultIntent = new Intent(App.mApp, MainActivity.class);

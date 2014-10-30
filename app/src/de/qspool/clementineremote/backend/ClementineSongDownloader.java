@@ -17,6 +17,7 @@
 
 package de.qspool.clementineremote.backend;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -32,10 +33,6 @@ import android.support.v4.app.NotificationCompat.Builder;
 import android.support.v4.app.TaskStackBuilder;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.elements.DownloaderResult;
@@ -48,6 +45,10 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Resp
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.ui.MainActivity;
 import de.qspool.clementineremote.utils.Utilities;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class ClementineSongDownloader extends
         AsyncTask<ClementineMessage, Integer, DownloaderResult> {
@@ -108,10 +109,11 @@ public class ClementineSongDownloader extends
 
         mNotifyManager =
                 (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        mBuilder = new NotificationCompat.Builder(mContext);
-        mBuilder.setContentTitle(mContext.getString(R.string.download_noti_title))
-                .setSmallIcon(R.drawable.ic_launcher)
-                .setOngoing(true);
+        mBuilder = new NotificationCompat.Builder(mContext)
+            .setContentTitle(mContext.getString(R.string.download_noti_title))
+            .setSmallIcon(R.drawable.ic_launcher)
+            .setOngoing(true)
+            .setVisibility(Notification.VISIBILITY_PUBLIC);
 
         // Set the result intent
         mBuilder.setContentIntent(buildNotificationIntent());
