@@ -212,38 +212,31 @@ public class TaskerSettings extends Activity {
     public void onRadioButtonClicked(View view) {
         // Is the button now checked?
         boolean checked = ((RadioButton) view).isChecked();
+        if (!checked) {
+          return;
+        }
 
         // Check which radio button was clicked
         switch (view.getId()) {
             case R.id.radio_connect:
-                if (checked) {
-                    mSelectedAction = ACTION_CONNECT;
-                }
+                mSelectedAction = ACTION_CONNECT;
                 break;
             case R.id.radio_disconnect:
-                if (checked) {
-                    mSelectedAction = ACTION_DISCONNECT;
-                }
+                mSelectedAction = ACTION_DISCONNECT;
                 break;
             case R.id.radio_play:
-                if (checked) {
-                    mSelectedAction = ACTION_PLAY;
-                }
+                mSelectedAction = ACTION_PLAY;
                 break;
             case R.id.radio_pause:
-                if (checked) {
-                    mSelectedAction = ACTION_PAUSE;
-                }
+                mSelectedAction = ACTION_PAUSE;
                 break;
             case R.id.radio_playpause:
-                if (checked) {
-                    mSelectedAction = ACTION_PLAYPAUSE;
-                }
+                mSelectedAction = ACTION_PLAYPAUSE;
                 break;
             case R.id.radio_next:
-                if (checked) {
-                    mSelectedAction = ACTION_NEXT;
-                }
+                mSelectedAction = ACTION_NEXT;
+                break;
+            default:
                 break;
         }
     }
