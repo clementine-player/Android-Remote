@@ -40,6 +40,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.LinkedList;
+
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.Clementine;
@@ -54,8 +56,6 @@ import de.qspool.clementineremote.ui.fragments.LibraryFragment;
 import de.qspool.clementineremote.ui.fragments.PlayerFragment;
 import de.qspool.clementineremote.ui.fragments.PlaylistFragment;
 import de.qspool.clementineremote.utils.Utilities;
-
-import java.util.LinkedList;
 
 public class MainActivity extends FragmentActivity {
 
@@ -100,7 +100,7 @@ public class MainActivity extends FragmentActivity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
 
-        setContentView(R.layout.main_activity);
+        setContentView(R.layout.activity_main);
 
         /*
          * Define here the available fragments in the main layout

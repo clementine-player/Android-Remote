@@ -92,14 +92,14 @@ public class DownloadsFragment extends AbstractDrawerFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.download_fragment,
+        View view = inflater.inflate(R.layout.fragment_downloads,
                 container, false);
 
         mList = (ListView) view.findViewById(R.id.downloads);
         mEmptyDownloads = view.findViewById(R.id.downloads_empty);
 
         // Create the adapter
-        mAdapter = new DownloadAdapter(getActivity(), R.layout.download_row, App.downloaders);
+        mAdapter = new DownloadAdapter(getActivity(), R.layout.item_download, App.downloaders);
 
         mList.setOnItemClickListener(oiclDownload);
         mList.setAdapter(mAdapter);

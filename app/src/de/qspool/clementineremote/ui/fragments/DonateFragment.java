@@ -91,7 +91,7 @@ public class DonateFragment extends AbstractDrawerFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.donate_fragment,
+        View view = inflater.inflate(R.layout.fragment_donation,
                 container, false);
 
         mDonateOne = (Button) view.findViewById(R.id.donate_one);

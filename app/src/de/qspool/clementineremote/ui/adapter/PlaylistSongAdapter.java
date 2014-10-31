@@ -83,7 +83,7 @@ public class PlaylistSongAdapter extends ArrayAdapter<MySong> implements Filtera
 
         if (convertView == null) {
             convertView = ((Activity) mContext).getLayoutInflater()
-                    .inflate(R.layout.playlist_row, parent, false);
+                    .inflate(R.layout.item_playlist, parent, false);
 
             playlistViewHolder = new PlaylistViewHolder();
 

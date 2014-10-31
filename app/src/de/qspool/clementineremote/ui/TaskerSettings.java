@@ -72,7 +72,7 @@ public class TaskerSettings extends Activity {
 
         Log.d(TAG, "onCreate");
 
-        setContentView(R.layout.tasker_settings);
+        setContentView(R.layout.activity_taskersettings);
 
         getActionBar().setDisplayShowHomeEnabled(true);
 

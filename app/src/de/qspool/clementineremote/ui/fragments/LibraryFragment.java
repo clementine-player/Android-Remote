@@ -121,7 +121,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.library_fragment, container,
+        View view = inflater.inflate(R.layout.fragment_library, container,
                 false);
 
         Log.d(TAG, "onCreateView");

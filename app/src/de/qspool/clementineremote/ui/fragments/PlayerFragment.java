@@ -28,9 +28,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -92,7 +89,7 @@ public class PlayerFragment extends AbstractDrawerFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
-        View view = inflater.inflate(R.layout.player_fragment,
+        View view = inflater.inflate(R.layout.fragment_player,
                 container, false);
 
         mShowcaseStore = new ShowcaseStore(getActivity());

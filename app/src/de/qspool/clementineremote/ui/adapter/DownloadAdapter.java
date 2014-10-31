@@ -56,7 +56,7 @@ public class DownloadAdapter extends ArrayAdapter<ClementineSongDownloader> impl
 
         if (convertView == null) {
             convertView = ((Activity) mContext).getLayoutInflater()
-                    .inflate(R.layout.download_row, parent, false);
+                    .inflate(R.layout.item_download, parent, false);
 
             downloadViewHolder = new DownloadViewHolder();
 

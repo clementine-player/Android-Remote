@@ -23,7 +23,6 @@ import android.net.TrafficStats;
 import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,7 +74,7 @@ public class ConnectionFragment extends AbstractDrawerFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.player_connection_page,
+        View view = inflater.inflate(R.layout.fragment_player_connection,
                 container, false);
 
         tv_ip = (TextView) view.findViewById(R.id.cn_ip);

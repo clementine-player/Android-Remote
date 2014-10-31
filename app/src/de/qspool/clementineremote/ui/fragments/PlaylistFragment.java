@@ -180,7 +180,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.playlist_fragment,
+        View view = inflater.inflate(R.layout.fragment_playlist,
                 container, false);
 
         mPlaylists = mPlaylistManager.getAllPlaylists();
@@ -193,7 +193,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
         updatePlaylistSpinner();
 
         // Create the adapter
-        mAdapter = new PlaylistSongAdapter(getActivity(), R.layout.playlist_row,
+        mAdapter = new PlaylistSongAdapter(getActivity(), R.layout.item_playlist,
                 getSelectedPlaylistSongs());
 
         mList.setOnItemClickListener(oiclSong);
@@ -373,7 +373,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
      */
     public void updateSongList() {
         // Check if we should update the current view position
-        mAdapter = new PlaylistSongAdapter(getActivity(), R.layout.playlist_row,
+        mAdapter = new PlaylistSongAdapter(getActivity(), R.layout.item_playlist,
                 getSelectedPlaylistSongs());
         mList.setAdapter(mAdapter);
 

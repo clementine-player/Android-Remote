@@ -51,7 +51,7 @@ public class LibraryAdapter extends CursorAdapter implements Filterable {
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         View convertView = ((Activity) mContext).getLayoutInflater()
-                .inflate(R.layout.library_row, parent, false);
+                .inflate(R.layout.item_library, parent, false);
 
         convertView.setBackgroundResource(R.drawable.selector_white_orange_selected);
 

@@ -133,7 +133,7 @@ public class ConnectDialog extends Activity {
 
         Log.d(TAG, "onCreate");
 
-        setContentView(R.layout.connectdialog);
+        setContentView(R.layout.activity_connectdialog);
 
         getActionBar().setDisplayHomeAsUpEnabled(false);
 
@@ -211,7 +211,7 @@ public class ConnectDialog extends Activity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        setContentView(R.layout.connectdialog);
+        setContentView(R.layout.activity_connectdialog);
 
         initializeUi();
     }

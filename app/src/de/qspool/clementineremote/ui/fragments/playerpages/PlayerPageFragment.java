@@ -112,7 +112,7 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
-        View view = inflater.inflate(R.layout.player_control_page,
+        View view = inflater.inflate(R.layout.fragment_player_control,
                 container, false);
 
         // Get the Views

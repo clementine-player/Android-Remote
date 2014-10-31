@@ -19,10 +19,6 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
-    <style name="ImgCoverGreyBorder">
-        <item name="android:background">@drawable/img_cover_grey_bg</item>
-    </style>
-
     <style name="PreferencesTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/ActionBarStyle</item>
     </style>
@@ -52,7 +48,7 @@
     </style>
 
     <style name="ActionBarStyle" parent="@android:style/Widget.ActionBar">
-        <item name="android:background">@drawable/actionbar_bg</item>
+        <item name="android:background">@drawable/actionbar_background</item>
         <item name="android:titleTextStyle">@style/ActionBarTextAppearance</item>
         <item name="android:subtitleTextStyle">
             @android:style/TextAppearance.Holo.Widget.ActionBar.Subtitle.Inverse
