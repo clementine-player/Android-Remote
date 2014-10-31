@@ -4,24 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/actionbar_2nd_bg">
-
-        <TextView
-                style="@android:style/TextAppearance.Holo.Widget.ActionBar.Subtitle.Inverse"
-                android:id="@+id/library_path"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="5dp" />
-
-    </RelativeLayout>
-
     <ListView
         android:id="@+id/library"
-        android:layout_margin="13dp"
         android:background="@drawable/white_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

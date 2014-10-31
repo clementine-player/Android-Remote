@@ -75,8 +75,6 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 
     private TextView mLibraryEmptyText;
 
-    private TextView mLibraryPath;
-
     private ProgressDialog mProgressDialog;
 
     private String mLastFilter = "";
@@ -128,7 +126,6 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 
         Log.d(TAG, "onCreateView");
 
-        mLibraryPath = (TextView) view.findViewById(R.id.library_path);
         mList = (ListView) view.findViewById(R.id.library);
         mEmptyLibrary = view.findViewById(R.id.library_empty);
 
@@ -196,7 +193,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
         showList();
 
         mActionBar.setTitle("");
-        mActionBar.setSubtitle("");
+        mActionBar.setSubtitle("/");
 
         setHasOptionsMenu(true);
 
@@ -371,10 +368,8 @@ public class LibraryFragment extends AbstractDrawerFragment implements
         MySong currentSong = App.mClementine.getCurrentSong();
         if (currentSong == null) {
             mActionBar.setTitle(getString(R.string.player_nosong));
-            mActionBar.setSubtitle("");
         } else {
-            mActionBar.setTitle(currentSong.getArtist());
-            mActionBar.setSubtitle(currentSong.getTitle());
+            mActionBar.setTitle(currentSong.getArtist() + " / " + currentSong.getTitle());
         }
     }
 
@@ -453,7 +448,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
             sb.append(album);
         }
 
-        mLibraryPath.setText(sb.toString());
+        mActionBar.setSubtitle(sb.toString());
     }
 
     private void addSongsToPlaylist(LinkedList<MyLibraryItem> l) {

@@ -32,7 +32,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Timer;
@@ -54,8 +53,6 @@ public class DownloadsFragment extends AbstractDrawerFragment {
     private DownloadAdapter mAdapter;
 
     private Timer mUpdateTimer;
-
-    private TextView mFreeSpace;
 
     private View mEmptyDownloads;
 
@@ -100,7 +97,6 @@ public class DownloadsFragment extends AbstractDrawerFragment {
 
         mList = (ListView) view.findViewById(R.id.downloads);
         mEmptyDownloads = view.findViewById(R.id.downloads_empty);
-        mFreeSpace = (TextView) view.findViewById(R.id.downloads_freespace);
 
         // Create the adapter
         mAdapter = new DownloadAdapter(getActivity(), R.layout.download_row, App.downloaders);
@@ -134,10 +130,8 @@ public class DownloadsFragment extends AbstractDrawerFragment {
         MySong currentSong = App.mClementine.getCurrentSong();
         if (currentSong == null) {
             mActionBar.setTitle(getString(R.string.player_nosong));
-            mActionBar.setSubtitle("");
         } else {
-            mActionBar.setTitle(currentSong.getArtist());
-            mActionBar.setSubtitle(currentSong.getTitle());
+            mActionBar.setTitle(currentSong.getArtist() + " / " + currentSong.getTitle());
         }
     }
 
@@ -219,7 +213,7 @@ public class DownloadsFragment extends AbstractDrawerFragment {
                             sb.append(Utilities
                                     .humanReadableBytes((long) Utilities.getFreeSpaceExternal(),
                                             true));
-                            mFreeSpace.setText(sb.toString());
+                            mActionBar.setSubtitle(sb.toString());
                         }
 
                     });
