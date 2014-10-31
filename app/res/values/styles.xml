@@ -19,6 +19,10 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="AlbumArtFrame">
+        <item name="android:background">@drawable/album_art_frame</item>
+    </style>
+
     <style name="PreferencesTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/ActionBarStyle</item>
     </style>
@@ -27,17 +31,22 @@
         <item name="android:actionBarStyle">@style/ActionBarStyle</item>
         <item name="android:actionButtonStyle">@style/ActionButtonStyle</item>
         <item name="android:actionModeBackground">@drawable/cab_background_top_example</item>
-        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_example</item>
-        <item name="android:activatedBackgroundIndicator">@drawable/selector_white_orange_selected</item>
+        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_example
+        </item>
+        <item name="android:activatedBackgroundIndicator">@drawable/selector_white_orange_selected
+        </item>
         <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
-        <item name="android:actionOverflowButtonStyle">@android:style/Widget.Holo.ActionButton.Overflow</item>
+        <item name="android:actionOverflowButtonStyle">
+            @android:style/Widget.Holo.ActionButton.Overflow
+        </item>
         <item name="android:actionModeCloseDrawable">@drawable/ic_action_done</item>
         <item name="android:actionDropDownStyle">@style/SpinnerDropDownActionBar</item>
         <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextView</item>
         <item name="android:homeAsUpIndicator">@drawable/ic_ab_back_holo_dark_am</item>
     </style>
 
-    <style name="AutoCompleteTextView" parent="@android:style/Widget.Holo.Light.AutoCompleteTextView">
+    <style name="AutoCompleteTextView"
+           parent="@android:style/Widget.Holo.Light.AutoCompleteTextView">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textColorHint">@android:color/white</item>
         <item name="android:textCursorDrawable">@null</item>

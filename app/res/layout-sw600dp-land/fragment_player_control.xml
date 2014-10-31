@@ -6,7 +6,7 @@
               android:layout_height="match_parent">
 
     <FrameLayout
-            style="@style/ImgCoverGreyBorder"
+            style="@style/AlbumArtFrame"
             android:layout_width="fill_parent"
             android:layout_height="0dip"
             android:layout_marginBottom="8dp"
