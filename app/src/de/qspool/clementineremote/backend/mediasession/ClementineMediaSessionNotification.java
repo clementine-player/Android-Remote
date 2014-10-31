@@ -61,8 +61,11 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
 
         mNotificationBuilder = new Notification.Builder(App.mApp)
             .setSmallIcon(R.drawable.notification)
-            .setOngoing(true)
-            .setVisibility(Notification.VISIBILITY_PUBLIC);
+                .setOngoing(true);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mNotificationBuilder.setVisibility(Notification.VISIBILITY_PUBLIC);
+        }
 
         // Set the result intent
         Intent resultIntent = new Intent(App.mApp, MainActivity.class);
