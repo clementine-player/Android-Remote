@@ -61,7 +61,9 @@ public class MediaSessionController {
             mClementineMediaSession = new ClementineMediaSessionV21(mContext);
         }
         mMediaSessionNotification = new ClementineMediaSessionNotification(mContext);
+    }
 
+    public void registerMediaSession() {
         mClementinePlayerConnection.addPlayerConnectionListener(new PlayerConnectionListener() {
             @Override
             public void onThreadStarted() {
@@ -107,6 +109,7 @@ public class MediaSessionController {
                         break;
                     case PLAY:
                     case PAUSE:
+                    case STOP:
                         mClementineMediaSession.updateSession();
                         mMediaSessionNotification.updateSession();
                         break;

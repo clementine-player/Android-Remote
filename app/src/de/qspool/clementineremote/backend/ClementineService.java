@@ -28,7 +28,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
@@ -48,7 +47,7 @@ public class ClementineService extends Service {
 
     public final static String EXTRA_INT_AUTH = "EXTRA_AUTH";
 
-    private final static String TAG = "ClementineService";
+    private final String TAG = getClass().getSimpleName();
 
     private NotificationManager mNotificationManager;
 
@@ -63,7 +62,6 @@ public class ClementineService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "onStartCommand");
         if (intent != null) {
             handleServiceAction(intent);
         }
@@ -87,6 +85,7 @@ public class ClementineService extends Service {
                     App.mClementineConnection = new ClementinePlayerConnection();
                     mMediaSessionController = new MediaSessionController(this,
                             App.mClementineConnection);
+                    mMediaSessionController.registerMediaSession();
 
                     App.mClementineConnection.addPlayerConnectionListener(
                             new PlayerConnectionListener() {
