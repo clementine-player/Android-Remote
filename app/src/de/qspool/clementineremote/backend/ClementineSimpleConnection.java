@@ -22,7 +22,6 @@ import android.util.Log;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InterruptedIOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
@@ -62,7 +61,6 @@ public class ClementineSimpleConnection {
             // Send the connect request to clementine
             sendRequest(message);
         } catch (IOException e) {
-            mSocket = null;
             return false;
         }
 

@@ -274,9 +274,6 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 
         sendUiMessage(clementineMessage);
 
-        // Close thread
-        Looper.myLooper().quit();
-
         try {
             mIncomingThread.join();
         } catch (InterruptedException e) {
@@ -285,6 +282,9 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 
         // Fire the listener
         fireOnConnectionClosed(clementineMessage);
+
+        // Close thread
+        Looper.myLooper().quit();
     }
 
     /**

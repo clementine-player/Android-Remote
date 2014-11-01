@@ -19,6 +19,7 @@ package de.qspool.clementineremote.backend;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +27,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 import de.qspool.clementineremote.App;
@@ -36,6 +38,7 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessage.ErrorMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
+import de.qspool.clementineremote.ui.MainActivity;
 
 public class ClementineService extends Service {
 
@@ -127,7 +130,8 @@ public class ClementineService extends Service {
                 // Check if we lost connection due a keep alive
                 if (intent.hasExtra(App.SERVICE_DISCONNECT_DATA)) {
                     int reason = intent.getIntExtra(App.SERVICE_DISCONNECT_DATA, 0);
-                    if (reason == ErrorMessage.KEEP_ALIVE_TIMEOUT.ordinal()) {
+                    if (reason == ErrorMessage.KEEP_ALIVE_TIMEOUT.ordinal()
+                            || reason == ErrorMessage.IO_EXCEPTION.ordinal()) {
                         showKeepAliveDisconnectNotification();
                     }
                 }
@@ -176,12 +180,25 @@ public class ClementineService extends Service {
      * Create a notification that shows, that we got a keep alive timeout
      */
     private void showKeepAliveDisconnectNotification() {
+        // Set the result intent
+        Intent resultIntent = new Intent(App.mApp, MainActivity.class);
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        resultIntent.putExtra(App.NOTIFICATION_ID, -1);
+
+        // Create a TaskStack, so the app navigates correctly backwards
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(App.mApp);
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingintent = stackBuilder
+                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
         Notification notification = new NotificationCompat.Builder(App.mApp)
             .setSmallIcon(R.drawable.notification)
             .setContentTitle(App.mApp.getString(R.string.app_name))
             .setContentText(App.mApp.getString(R.string.notification_disconnect_keep_alive))
             .setAutoCancel(true)
             .setVisibility(Notification.VISIBILITY_PUBLIC)
+                .setContentIntent(resultPendingintent)
             .build();
         mNotificationManager.notify(App.NOTIFY_ID, notification);
     }
