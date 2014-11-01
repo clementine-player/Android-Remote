@@ -26,7 +26,6 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -50,8 +49,6 @@ import de.qspool.clementineremote.ui.fragments.playerpages.PlayerPageFragment;
 import de.qspool.clementineremote.ui.fragments.playerpages.SongDetailFragment;
 
 public class PlayerFragment extends AbstractDrawerFragment {
-
-    private final String TAG = "PlayerFragment";
 
     private ImageButton mBtnNext;
 
@@ -78,7 +75,6 @@ public class PlayerFragment extends AbstractDrawerFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d(TAG, "onCreate");
 
         // Get the actionbar
         mActionBar = getActivity().getActionBar();
@@ -88,7 +84,6 @@ public class PlayerFragment extends AbstractDrawerFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_player,
                 container, false);
 
@@ -136,7 +131,6 @@ public class PlayerFragment extends AbstractDrawerFragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume");
         myPager.setCurrentItem(0);
     }
 

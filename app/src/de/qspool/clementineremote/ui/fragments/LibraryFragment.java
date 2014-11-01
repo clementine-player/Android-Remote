@@ -23,7 +23,6 @@ import android.app.ProgressDialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Message;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -82,7 +81,6 @@ public class LibraryFragment extends AbstractDrawerFragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate");
 
         // Get the actionbar
         mActionBar = getActivity().getActionBar();
@@ -92,7 +90,6 @@ public class LibraryFragment extends AbstractDrawerFragment implements
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume");
         // Check if we are still connected
         if (App.mClementineConnection == null || App.mClementine == null
                 || !App.mClementineConnection.isConnected()) {
@@ -109,7 +106,6 @@ public class LibraryFragment extends AbstractDrawerFragment implements
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(TAG, "onPause");
 
         if (App.libraryDownloader != null) {
             App.libraryDownloader.removeOnLibraryDownloadListener(mOnLibraryDownloadListener);
@@ -123,8 +119,6 @@ public class LibraryFragment extends AbstractDrawerFragment implements
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_library, container,
                 false);
-
-        Log.d(TAG, "onCreateView");
 
         mList = (ListView) view.findViewById(R.id.library);
         mEmptyLibrary = view.findViewById(R.id.library_empty);
@@ -263,7 +257,6 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 
         @Override
         public void OnOptimizeLibrary() {
-            Log.d(TAG, "OnOptimizeLibrary");
             mProgressDialog.dismiss();
 
             mProgressDialog = new ProgressDialog(getActivity());

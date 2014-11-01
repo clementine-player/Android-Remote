@@ -23,7 +23,6 @@ import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -100,7 +99,6 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d(TAG, "onCreate");
 
         // Get the actionbar
         mActionBar = getActivity().getActionBar();
@@ -111,7 +109,6 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_player_control,
                 container, false);
 
@@ -157,7 +154,6 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        Log.d(TAG, "onCreateOptionsMenu");
         inflater.inflate(R.menu.player_menu, menu);
 
         mMenuRepeat = menu.findItem(R.id.repeat);
@@ -172,7 +168,6 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume");
 
         mCurrentSong = new MySong();
         mFirstCall = true;

@@ -23,7 +23,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,8 +42,6 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Resp
  */
 public class ClementinePlayerConnection extends ClementineSimpleConnection
         implements Runnable {
-
-    private final String TAG = getClass().getSimpleName();
 
     public ClementineConnectionHandler mHandler;
 
@@ -158,7 +155,6 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
                             mHandler.sendMessage(msg);
                         }
                     }
-                    Log.d(TAG, "reading thread exit");
                 }
             });
             mIncomingThread.start();

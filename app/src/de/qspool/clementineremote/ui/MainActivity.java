@@ -59,9 +59,9 @@ import de.qspool.clementineremote.utils.Utilities;
 
 public class MainActivity extends FragmentActivity {
 
-    private final static String TAG = "MainActivity";
-
     private final static String MENU_POSITION = "last_menu_position";
+
+    private final String TAG = ((Object) this).getClass().getSimpleName();
 
     private SharedPreferences mSharedPref;
 
@@ -90,8 +90,6 @@ public class MainActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Log.d(TAG, "onCreate");
 
         // Keep screen on if user has requested this in preferences
         if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
@@ -180,8 +178,6 @@ public class MainActivity extends FragmentActivity {
         if (savedInstanceState != null && savedInstanceState.containsKey(MENU_POSITION)) {
             mLastPosition = savedInstanceState.getInt(MENU_POSITION);
         }
-
-        Log.d(TAG, "onPostCreate");
     }
 
     @Override
@@ -201,7 +197,6 @@ public class MainActivity extends FragmentActivity {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume");
 
         // Check if the user has changed the preferences to keep the screen on
         if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
@@ -239,8 +234,6 @@ public class MainActivity extends FragmentActivity {
     public void onPause() {
         super.onPause();
 
-        Log.d(TAG, "onPause");
-
         mHandler = null;
         if (App.mClementineConnection != null) {
             App.mClementineConnection.setUiHandler(null);
@@ -250,8 +243,6 @@ public class MainActivity extends FragmentActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-        Log.d(TAG, "onDestroy");
 
         // If we disconnected, open connectdialog
         if (App.mClementineConnection == null

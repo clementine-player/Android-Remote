@@ -38,7 +38,6 @@ import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -82,8 +81,6 @@ import de.qspool.clementineremote.utils.Utilities;
  * The connect dialog
  */
 public class ConnectDialog extends Activity {
-
-    private final String TAG = getClass().getSimpleName();
 
     private final int ANIMATION_DURATION = 2000;
 
@@ -131,8 +128,6 @@ public class ConnectDialog extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.d(TAG, "onCreate");
-
         setContentView(R.layout.activity_connectdialog);
 
         getActionBar().setDisplayHomeAsUpEnabled(false);
@@ -162,14 +157,11 @@ public class ConnectDialog extends Activity {
     public void onResume() {
         super.onResume();
 
-        Log.d(TAG, "onResume");
-
         // Check if we are currently connected, then open the player dialog
         if (!mPdConnect.isShowing()
                 && App.mClementineConnection != null
                 && App.mClementineConnection.isConnected()) {
             showPlayerDialog();
-            Log.d(TAG, "onResume - showPlayer");
             return;
         }
 

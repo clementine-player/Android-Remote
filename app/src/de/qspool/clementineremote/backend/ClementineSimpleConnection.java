@@ -17,8 +17,6 @@
 
 package de.qspool.clementineremote.backend;
 
-import android.util.Log;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -32,8 +30,6 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage.ErrorMessage;
 import de.qspool.clementineremote.backend.pb.ClementinePbParser;
 
 public class ClementineSimpleConnection {
-
-    private final String TAG = getClass().getSimpleName();
 
     // Socket, input and output streams
     protected Socket mSocket;
@@ -104,10 +100,8 @@ public class ClementineSimpleConnection {
             mIn.readFully(data, 0, len);
             message = mClementinePbParser.parse(data);
         } catch (SocketTimeoutException e) {
-            Log.d(TAG, "Timeout");
             message = new ClementineMessage(ErrorMessage.TIMEOUT);
         } catch (IOException e) {
-            Log.d(TAG, "IOException");
             message = new ClementineMessage(ErrorMessage.IO_EXCEPTION);
         }
 

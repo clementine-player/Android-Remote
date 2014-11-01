@@ -43,8 +43,6 @@ import de.qspool.clementineremote.utils.Utilities;
 
 public class ConnectionFragment extends AbstractDrawerFragment {
 
-    private final String TAG = getClass().getSimpleName();
-
     private TextView tv_ip;
 
     private TextView tv_version;

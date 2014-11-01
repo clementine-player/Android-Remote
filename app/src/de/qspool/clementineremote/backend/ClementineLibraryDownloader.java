@@ -21,7 +21,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -169,7 +168,6 @@ public class ClementineLibraryDownloader extends
                     }
                 } catch (IOException e) {
                 }
-                Log.d(TAG, "isCancelled");
                 break;
             }
 
