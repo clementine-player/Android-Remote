@@ -60,8 +60,6 @@ import de.qspool.clementineremote.utils.Utilities;
 public class LibraryFragment extends AbstractDrawerFragment implements
         OnLibrarySelectFinishedListener {
 
-    private final String TAG = "LibraryFragment";
-
     private ActionBar mActionBar;
 
     private ListView mList;
@@ -78,6 +76,8 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 
     private String mLastFilter = "";
 
+    private String mUnknownItem;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +85,8 @@ public class LibraryFragment extends AbstractDrawerFragment implements
         // Get the actionbar
         mActionBar = getActivity().getActionBar();
         setHasOptionsMenu(true);
+
+        mUnknownItem = getString(R.string.library_unknown_item);
     }
 
     @Override
@@ -435,10 +437,10 @@ public class LibraryFragment extends AbstractDrawerFragment implements
         StringBuilder sb = new StringBuilder();
 
         sb.append("/ ");
-        sb.append(artist);
-        if (album.length() > 0) {
+        sb.append(artist.isEmpty() ? mUnknownItem : artist);
+        if (!album.isEmpty()) {
             sb.append(" / ");
-            sb.append(album);
+            sb.append(album.isEmpty() ? mUnknownItem : album);
         }
 
         mActionBar.setSubtitle(sb.toString());

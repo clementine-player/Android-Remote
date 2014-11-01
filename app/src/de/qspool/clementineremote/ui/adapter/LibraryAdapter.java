@@ -41,11 +41,14 @@ public class LibraryAdapter extends CursorAdapter implements Filterable {
 
     private int mLevel;
 
+    private String mUnknownItem;
+
     public LibraryAdapter(Context context, Cursor c, MyLibrary library, int level) {
         super(context, c, false);
         mContext = context;
         mLibrary = library;
         mLevel = level;
+        mUnknownItem = mContext.getString(R.string.library_unknown_item);
     }
 
     @Override
@@ -70,23 +73,38 @@ public class LibraryAdapter extends CursorAdapter implements Filterable {
 
         switch (mLevel) {
             case MyLibrary.LVL_ARTIST:
-                libraryViewHolder.title.setText(cursor.getString(MyLibrary.IDX_ARTIST));
+                if (cursor.getString(MyLibrary.IDX_ARTIST).isEmpty()) {
+                    libraryViewHolder.title.setText(mUnknownItem);
+                } else {
+                    libraryViewHolder.title.setText(cursor.getString(MyLibrary.IDX_ARTIST));
+                }
                 libraryViewHolder.subtitle.setText(String.format(
                         mContext.getString(R.string.library_no_albums),
                         mLibrary.getAlbumCountForArtist(cursor.getString(MyLibrary.IDX_ARTIST))));
                 break;
             case MyLibrary.LVL_ALBUM:
-                libraryViewHolder.title.setText(cursor.getString(MyLibrary.IDX_ALBUM));
+                if (cursor.getString(MyLibrary.IDX_ALBUM).isEmpty()) {
+                    libraryViewHolder.title.setText(mUnknownItem);
+                } else {
+                    libraryViewHolder.title.setText(cursor.getString(MyLibrary.IDX_ALBUM));
+                }
                 libraryViewHolder.subtitle.setText(String.format(
                         mContext.getString(R.string.library_no_tracks),
                         mLibrary.getTitleCountForAlbum(cursor.getString(MyLibrary.IDX_ARTIST),
                                 cursor.getString(MyLibrary.IDX_ALBUM))));
                 break;
             case MyLibrary.LVL_TITLE:
-                libraryViewHolder.title.setText(cursor.getString(MyLibrary.IDX_TITLE));
-                libraryViewHolder.subtitle.setText(
-                        cursor.getString(MyLibrary.IDX_ALBUM) + " / " + cursor
-                                .getString(MyLibrary.IDX_ARTIST));
+                if (cursor.getString(MyLibrary.IDX_TITLE).isEmpty()) {
+                    String url = cursor.getString(MyLibrary.IDX_URL);
+                    String filename = url.substring(url.lastIndexOf("/") + 1);
+                    libraryViewHolder.title.setText(filename);
+                } else {
+                    libraryViewHolder.title.setText(cursor.getString(MyLibrary.IDX_TITLE));
+                }
+                String artist = cursor.getString(MyLibrary.IDX_ARTIST);
+                String album = cursor.getString(MyLibrary.IDX_ALBUM);
+                libraryViewHolder.subtitle.setText((artist.isEmpty() ? mUnknownItem : artist)
+                        + " / " + (album.isEmpty() ? mUnknownItem : album));
                 break;
             default:
                 break;

@@ -62,6 +62,7 @@
     <string name="library_songs_added">%d songs added to current playlist</string>
     <string name="library_context_add">Add item to current playlist</string>
     <string name="library_download_error">Could not download library</string>
+    <string name="library_unknown_item">Unknown</string>
 
 
     <string name="song_info_album">Album</string>

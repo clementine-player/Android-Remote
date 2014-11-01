@@ -304,7 +304,7 @@ public class MyLibrary extends
         try {
             switch (level) {
                 case LVL_ARTIST:
-                    query += "WHERE artist <> '' group by artist order by artist";
+                    query += "group by artist order by artist";
                     c1 = db.rawQuery(query, null);
                     break;
                 case LVL_ALBUM:
