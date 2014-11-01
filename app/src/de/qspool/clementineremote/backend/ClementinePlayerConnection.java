@@ -275,6 +275,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
         sendUiMessage(clementineMessage);
 
         try {
+            mIncomingThread.interrupt();
             mIncomingThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
