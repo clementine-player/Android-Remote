@@ -56,6 +56,7 @@ import de.qspool.clementineremote.ui.fragments.DownloadsFragment;
 import de.qspool.clementineremote.ui.fragments.LibraryFragment;
 import de.qspool.clementineremote.ui.fragments.PlayerFragment;
 import de.qspool.clementineremote.ui.fragments.PlaylistFragment;
+import de.qspool.clementineremote.ui.settings.ClementineSettings;
 import de.qspool.clementineremote.utils.Utilities;
 
 public class MainActivity extends FragmentActivity {
@@ -473,8 +474,6 @@ public class MainActivity extends FragmentActivity {
                     case 6: // Settings
                         Intent settingsIntent = new Intent(MainActivity.this,
                                 ClementineSettings.class);
-                        settingsIntent.putExtra( ClementineSettings.EXTRA_SHOW_FRAGMENT, ClementineSettings.ClementineSettingsFragment.class.getName() );
-                        settingsIntent.putExtra( ClementineSettings.EXTRA_NO_HEADERS, true );
                         startActivity(settingsIntent);
                         break;
                     case 7: // Donate

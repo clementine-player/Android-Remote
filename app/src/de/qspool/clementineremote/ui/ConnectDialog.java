@@ -76,6 +76,7 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ReasonDisconnect;
 import de.qspool.clementineremote.ui.adapter.CustomClementinesAdapter;
+import de.qspool.clementineremote.ui.settings.ClementineSettings;
 import de.qspool.clementineremote.utils.Utilities;
 
 /**
@@ -215,8 +216,6 @@ public class ConnectDialog extends Activity {
         switch (item.getItemId()) {
             case R.id.settings:
                 Intent settingsIntent = new Intent(this, ClementineSettings.class);
-                settingsIntent.putExtra( ClementineSettings.EXTRA_SHOW_FRAGMENT, ClementineSettings.ClementineSettingsFragment.class.getName() );
-                settingsIntent.putExtra( ClementineSettings.EXTRA_NO_HEADERS, true );
                 startActivity(settingsIntent);
                 doAutoConnect = false;
                 return true;

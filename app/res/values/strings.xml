@@ -113,8 +113,11 @@
     <string name="pref_cat_behavior">Behavior</string>
     <string name="pref_cat_player">Player</string>
     <string name="pref_cat_downloads">Downloads</string>
+    <string name="pref_cat_network">Network</string>
     <string name="pref_cat_connection">Connection</string>
     <string name="pref_cat_info">Information</string>
+    <string name="pref_cat_about">About</string>
+    <string name="pref_cat_license">Licenses</string>
 
     <string name="pref_volume_title">Use Volume Keys</string>
     <string name="pref_volume_summary">Use volume keys to control the volume of Clementine.</string>
@@ -142,6 +145,7 @@
     <string name="pref_license_title">License</string>
     <string name="pref_license_summary">GNU GPLv3</string>
     <string name="pref_opensource_title">Open Source</string>
+    <string name="pref_opensource_summary">Show Open Source Software licenses</string>
     <string name="pref_about_title">About</string>
     <string name="pref_about_summary">People working on this project</string>
     <string name="pref_clementine_title">Clementine</string>

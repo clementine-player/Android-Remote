@@ -34,7 +34,7 @@
                   android:theme="@style/PlayerTheme"
                   android:exported="true"
                   android:launchMode="singleTop" />
-        <activity android:name=".ui.ClementineSettings"
+        <activity android:name=".ui.settings.ClementineSettings"
                   android:theme="@style/PreferencesTheme"/>
         <activity android:name=".ui.TaskerSettings"
                   android:theme="@style/PreferencesTheme">

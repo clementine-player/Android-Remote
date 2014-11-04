@@ -1,0 +1,11 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:title="@string/pref_cat_license">
+    <Preference
+            android:key="pref_key_license"
+            android:title="@string/pref_license_title"
+            android:summary="@string/pref_license_summary"/>
+    <Preference
+            android:key="pref_key_opensource"
+            android:title="@string/pref_opensource_title"
+            android:summary="@string/pref_opensource_summary"/>
+</PreferenceScreen>
