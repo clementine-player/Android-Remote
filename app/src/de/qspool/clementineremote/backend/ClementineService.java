@@ -41,6 +41,14 @@ import de.qspool.clementineremote.ui.MainActivity;
 
 public class ClementineService extends Service {
 
+    public final static String SERVICE_ID = "ServiceIntentId";
+
+    public final static String SERVICE_DISCONNECT_DATA = "ServiceIntentData";
+
+    public final static int SERVICE_START = 1;
+
+    public final static int SERVICE_DISCONNECTED = 2;
+
     public final static String EXTRA_STRING_IP = "EXTRA_IP";
 
     public final static String EXTRA_INT_PORT = "EXTRA_PORT";
@@ -77,9 +85,9 @@ public class ClementineService extends Service {
     private void handleServiceAction(final Intent intent) {
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        int action = intent.getIntExtra(App.SERVICE_ID, 0);
+        int action = intent.getIntExtra(SERVICE_ID, 0);
         switch (action) {
-            case App.SERVICE_START:
+            case SERVICE_START:
                 // Create a new instance
                 if (App.mClementineConnection == null) {
                     App.mClementineConnection = new ClementinePlayerConnection();
@@ -104,8 +112,8 @@ public class ClementineService extends Service {
                                     Intent mServiceIntent = new Intent(ClementineService.this,
                                             ClementineService.class);
                                     mServiceIntent
-                                            .putExtra(App.SERVICE_ID, App.SERVICE_DISCONNECTED);
-                                    mServiceIntent.putExtra(App.SERVICE_DISCONNECT_DATA,
+                                            .putExtra(SERVICE_ID, SERVICE_DISCONNECTED);
+                                    mServiceIntent.putExtra(SERVICE_DISCONNECT_DATA,
                                             clementineMessage.getErrorMessage().ordinal());
                                     startService(mServiceIntent);
                                 }
@@ -122,13 +130,13 @@ public class ClementineService extends Service {
                     sendConnectMessageIfPossible(intent);
                 }
                 break;
-            case App.SERVICE_DISCONNECTED:
+            case SERVICE_DISCONNECTED:
                 intteruptThread();
                 App.mClementineConnection = null;
 
                 // Check if we lost connection due a keep alive
-                if (intent.hasExtra(App.SERVICE_DISCONNECT_DATA)) {
-                    int reason = intent.getIntExtra(App.SERVICE_DISCONNECT_DATA, 0);
+                if (intent.hasExtra(SERVICE_DISCONNECT_DATA)) {
+                    int reason = intent.getIntExtra(SERVICE_DISCONNECT_DATA, 0);
                     if (reason == ErrorMessage.KEEP_ALIVE_TIMEOUT.ordinal()
                             || reason == ErrorMessage.IO_EXCEPTION.ordinal()) {
                         showKeepAliveDisconnectNotification();
@@ -180,21 +188,21 @@ public class ClementineService extends Service {
      */
     private void showKeepAliveDisconnectNotification() {
         // Set the result intent
-        Intent resultIntent = new Intent(App.mApp, MainActivity.class);
+        Intent resultIntent = new Intent(this, MainActivity.class);
         resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         resultIntent.putExtra(App.NOTIFICATION_ID, -1);
 
         // Create a TaskStack, so the app navigates correctly backwards
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(App.mApp);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(resultIntent);
         PendingIntent resultPendingintent = stackBuilder
                 .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Notification notification = new NotificationCompat.Builder(App.mApp)
+        Notification notification = new NotificationCompat.Builder(this)
             .setSmallIcon(R.drawable.notification)
-            .setContentTitle(App.mApp.getString(R.string.app_name))
-            .setContentText(App.mApp.getString(R.string.notification_disconnect_keep_alive))
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(getString(R.string.notification_disconnect_keep_alive))
             .setAutoCancel(true)
             .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .setContentIntent(resultPendingintent)

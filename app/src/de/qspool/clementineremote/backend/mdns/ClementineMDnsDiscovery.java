@@ -67,7 +67,7 @@ public class ClementineMDnsDiscovery {
             @Override
             public void run() {
                 WifiManager wifi = (WifiManager)
-                        App.mApp.getSystemService(android.content.Context.WIFI_SERVICE);
+                        App.getApp().getSystemService(android.content.Context.WIFI_SERVICE);
                 mMulticastLock = wifi.createMulticastLock("Clementine Lock");
                 mMulticastLock.setReferenceCounted(true);
                 mMulticastLock.acquire();

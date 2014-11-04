@@ -78,6 +78,8 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 
     private String mUnknownItem;
 
+    private ClementineLibraryDownloader mClementineLibraryDownloader;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,9 +101,9 @@ public class LibraryFragment extends AbstractDrawerFragment implements
         }
 
         setActionBarTitle();
-        if (App.libraryDownloader != null) {
+        if (mClementineLibraryDownloader != null) {
             createDownloadProgressDialog();
-            App.libraryDownloader.addOnLibraryDownloadListener(mOnLibraryDownloadListener);
+            mClementineLibraryDownloader.addOnLibraryDownloadListener(mOnLibraryDownloadListener);
         }
     }
 
@@ -109,8 +111,9 @@ public class LibraryFragment extends AbstractDrawerFragment implements
     public void onPause() {
         super.onPause();
 
-        if (App.libraryDownloader != null) {
-            App.libraryDownloader.removeOnLibraryDownloadListener(mOnLibraryDownloadListener);
+        if (mClementineLibraryDownloader != null) {
+            mClementineLibraryDownloader
+                    .removeOnLibraryDownloadListener(mOnLibraryDownloadListener);
             mProgressDialog.dismiss();
         }
     }
@@ -179,7 +182,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
         // Create the adapter
         mLibrary = new MyLibrary(getActivity());
         mLibrary.removeDatabaseIfFromOtherClementine();
-        if (App.libraryDownloader == null && mLibrary.databaseExists()) {
+        if (mClementineLibraryDownloader == null && mLibrary.databaseExists()) {
             mLibrary.openDatabase();
             LibraryAdapter a = new LibraryAdapter(getActivity(), mLibrary.getArtists(), mLibrary,
                     MyLibrary.LVL_ARTIST);
@@ -213,10 +216,10 @@ public class LibraryFragment extends AbstractDrawerFragment implements
                 mAdapters.clear();
                 showList();
 
-                App.libraryDownloader = new ClementineLibraryDownloader(getActivity());
-                App.libraryDownloader
-                        .addOnLibraryDownloadListener(mOnLibraryDownloadListener);
-                App.libraryDownloader.startDownload(ClementineMessage
+                mClementineLibraryDownloader = new ClementineLibraryDownloader(getActivity());
+                mClementineLibraryDownloader.addOnLibraryDownloadListener(
+                        mOnLibraryDownloadListener);
+                mClementineLibraryDownloader.startDownload(ClementineMessage
                         .getMessage(MsgType.GET_LIBRARY));
 
                 createDownloadProgressDialog();
@@ -233,7 +236,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
         @Override
         public void OnLibraryDownloadFinished(DownloaderResult result) {
             mProgressDialog.dismiss();
-            App.libraryDownloader = null;
+            mClementineLibraryDownloader = null;
 
             if (result.getResult() == DownloadResult.SUCCESSFUL) {
                 if (mLibrary != null) {

@@ -34,6 +34,7 @@ import java.util.List;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.player.MySong;
 
 /**
@@ -61,7 +62,7 @@ public class PlaylistSongAdapter extends ArrayAdapter<MySong> implements Filtera
         mOrigData = new LinkedList<>(data);
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        mShowTrackNo = sharedPref.getBoolean(App.SP_SHOW_TRACKNO, true);
+        mShowTrackNo = sharedPref.getBoolean(SharedPreferencesKeys.SP_SHOW_TRACKNO, true);
     }
 
     public void updateSongs(List<MySong> data) {

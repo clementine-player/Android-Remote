@@ -241,7 +241,7 @@ public class MySong {
 
     public Bitmap getArt() {
         if (art == null) {
-            return BitmapFactory.decodeResource(App.mApp.getResources(), R.drawable.nocover);
+            return BitmapFactory.decodeResource(App.getApp().getResources(), R.drawable.nocover);
         } else {
             return BitmapFactory.decodeByteArray(art, 0, art.length);
         }

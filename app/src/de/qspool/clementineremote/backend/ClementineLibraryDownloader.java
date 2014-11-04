@@ -27,7 +27,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.LinkedList;
 
-import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.elements.DownloaderResult;
 import de.qspool.clementineremote.backend.elements.DownloaderResult.DownloadResult;
 import de.qspool.clementineremote.backend.listener.OnLibraryDownloadListener;
@@ -83,7 +83,7 @@ public class ClementineLibraryDownloader extends
 
     @Override
     protected DownloaderResult doInBackground(ClementineMessage... params) {
-        if (mSharedPref.getBoolean(App.SP_WIFI_ONLY, false)
+        if (mSharedPref.getBoolean(SharedPreferencesKeys.SP_WIFI_ONLY, false)
                 && !Utilities.onWifi(mContext)) {
             return new DownloaderResult(
                     DownloaderResult.DownloadResult.ONLY_WIFI);
@@ -126,15 +126,15 @@ public class ClementineLibraryDownloader extends
      * @return true if the connection was established, false if not
      */
     private boolean connect() {
-        String ip = mSharedPref.getString(App.SP_KEY_IP, "");
+        String ip = mSharedPref.getString(SharedPreferencesKeys.SP_KEY_IP, "");
         int port;
         try {
-            port = Integer.valueOf(mSharedPref.getString(App.SP_KEY_PORT,
+            port = Integer.valueOf(mSharedPref.getString(SharedPreferencesKeys.SP_KEY_PORT,
                     String.valueOf(Clementine.DefaultPort)));
         } catch (NumberFormatException e) {
             port = Clementine.DefaultPort;
         }
-        int authCode = mSharedPref.getInt(App.SP_LAST_AUTH_CODE, 0);
+        int authCode = mSharedPref.getInt(SharedPreferencesKeys.SP_LAST_AUTH_CODE, 0);
 
         return mClient.createConnection(ClementineMessageFactory
                 .buildConnectMessage(ip, port, authCode, false, true));

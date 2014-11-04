@@ -143,7 +143,7 @@ public class Utilities {
      */
     @SuppressWarnings("deprecation")
     public static double getFreeSpaceInternal() {
-        StatFs stat = new StatFs(App.mApp.getFilesDir().getPath());
+        StatFs stat = new StatFs(App.getApp().getFilesDir().getPath());
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
             return (double) stat.getAvailableBlocks() * (double) stat.getBlockSize();
         } else {

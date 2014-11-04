@@ -45,6 +45,7 @@ import android.widget.Toast;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
@@ -179,7 +180,7 @@ public class SongDetailFragment extends AbstractDrawerFragment {
         inflater.inflate(R.menu.song_info_menu, menu);
 
         // Shall we show the lastfm buttons?
-        boolean showLastFm = mSharedPref.getBoolean(App.SP_LASTFM, true);
+        boolean showLastFm = mSharedPref.getBoolean(SharedPreferencesKeys.SP_LASTFM, true);
         menu.findItem(R.id.love).setVisible(showLastFm);
         menu.findItem(R.id.ban).setVisible(showLastFm);
 

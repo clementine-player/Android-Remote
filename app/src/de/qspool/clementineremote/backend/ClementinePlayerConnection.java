@@ -87,7 +87,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
         mHandler = new ClementineConnectionHandler(this);
 
         // Get a Wakelock Object
-        PowerManager pm = (PowerManager) App.mApp.getSystemService(Context.POWER_SERVICE);
+        PowerManager pm = (PowerManager) App.getApp().getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Clementine");
 
         fireOnConnectionReady();
@@ -132,7 +132,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
                             message.getMessage().getRequestConnect().getDownloader());
 
             // Save started transmitted bytes
-            int uid = App.mApp.getApplicationInfo().uid;
+            int uid = App.getApp().getApplicationInfo().uid;
             mStartTx = TrafficStats.getUidTxBytes(uid);
             mStartRx = TrafficStats.getUidRxBytes(uid);
 

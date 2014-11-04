@@ -68,6 +68,7 @@ import javax.jmdns.ServiceInfo;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementineService;
 import de.qspool.clementineremote.backend.mdns.ClementineMDnsDiscovery;
@@ -133,7 +134,8 @@ public class ConnectDialog extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(false);
 
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        mKnownIps = mSharedPref.getStringSet(App.SP_KNOWN_IP, new LinkedHashSet<String>());
+        mKnownIps = mSharedPref
+                .getStringSet(SharedPreferencesKeys.SP_KNOWN_IP, new LinkedHashSet<String>());
 
         mShowcaseStore = new ShowcaseStore(this);
 
@@ -172,7 +174,7 @@ public class ConnectDialog extends Activity {
         mClementineMDns = new ClementineMDnsDiscovery(mHandler);
 
         // Check if Autoconnect is enabled
-        if (mSharedPref.getBoolean(App.SP_KEY_AC, false) && doAutoConnect) {
+        if (mSharedPref.getBoolean(SharedPreferencesKeys.SP_KEY_AC, false) && doAutoConnect) {
             // Post delayed, so the service has time to start
             mHandler.postDelayed(new Runnable() {
                 @Override
@@ -187,8 +189,8 @@ public class ConnectDialog extends Activity {
         doAutoConnect = true;
 
         // Remove still active notifications
-        NotificationManager mNotificationManager = (NotificationManager) App.mApp
-                .getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager mNotificationManager = (NotificationManager)
+                getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.cancel(App.NOTIFY_ID);
     }
 
@@ -237,7 +239,7 @@ public class ConnectDialog extends Activity {
     private void startBackgroundService() {
         // Start the background service
         mServiceIntent = new Intent(this, ClementineService.class);
-        mServiceIntent.putExtra(App.SERVICE_ID, App.SERVICE_START);
+        mServiceIntent.putExtra(ClementineService.SERVICE_ID, ClementineService.SERVICE_START);
         startService(mServiceIntent);
     }
 
@@ -270,11 +272,11 @@ public class ConnectDialog extends Activity {
         mEtIp.setAdapter(adapter);
 
         // Get old ip and auto-connect from shared prefences
-        mEtIp.setText(mSharedPref.getString(App.SP_KEY_IP, ""));
+        mEtIp.setText(mSharedPref.getString(SharedPreferencesKeys.SP_KEY_IP, ""));
         mEtIp.setSelection(mEtIp.length());
 
         // Get the last auth code
-        mAuthCode = mSharedPref.getInt(App.SP_LAST_AUTH_CODE, 0);
+        mAuthCode = mSharedPref.getInt(SharedPreferencesKeys.SP_LAST_AUTH_CODE, 0);
 
         // First time called? Show an info screen
         if (mShowcaseStore.showShowcase(ShowcaseStore.SC_CONNECTDIALOG)) {
@@ -339,7 +341,7 @@ public class ConnectDialog extends Activity {
 
                         // Update the port
                         SharedPreferences.Editor editor = mSharedPref.edit();
-                        editor.putString(App.SP_KEY_PORT,
+                        editor.putString(SharedPreferencesKeys.SP_KEY_PORT,
                                 String.valueOf(service.getPort()));
                         editor.commit();
                         connect();
@@ -381,9 +383,9 @@ public class ConnectDialog extends Activity {
 
         // Save the data
         SharedPreferences.Editor editor = mSharedPref.edit();
-        editor.putString(App.SP_KEY_IP, ip);
-        editor.putInt(App.SP_LAST_AUTH_CODE, mAuthCode);
-        editor.putStringSet(App.SP_KNOWN_IP, mKnownIps);
+        editor.putString(SharedPreferencesKeys.SP_KEY_IP, ip);
+        editor.putInt(SharedPreferencesKeys.SP_LAST_AUTH_CODE, mAuthCode);
+        editor.putStringSet(SharedPreferencesKeys.SP_KNOWN_IP, mKnownIps);
 
         editor.commit();
 
@@ -396,13 +398,14 @@ public class ConnectDialog extends Activity {
         int port;
         try {
             port = Integer.valueOf(
-                    mSharedPref.getString(App.SP_KEY_PORT, String.valueOf(Clementine.DefaultPort)));
+                    mSharedPref.getString(SharedPreferencesKeys.SP_KEY_PORT,
+                            String.valueOf(Clementine.DefaultPort)));
         } catch (NumberFormatException e) {
             port = Clementine.DefaultPort;
         }
 
         Intent serviceIntent = new Intent(this, ClementineService.class);
-        serviceIntent.putExtra(App.SERVICE_ID, App.SERVICE_START);
+        serviceIntent.putExtra(ClementineService.SERVICE_ID, ClementineService.SERVICE_START);
         serviceIntent.putExtra(ClementineService.EXTRA_STRING_IP, ip);
         serviceIntent.putExtra(ClementineService.EXTRA_INT_PORT, port);
         serviceIntent.putExtra(ClementineService.EXTRA_INT_AUTH, mAuthCode);
@@ -505,7 +508,7 @@ public class ConnectDialog extends Activity {
     void disconnected(ClementineMessage clementineMessage) {
         // Restart the background service
         mServiceIntent = new Intent(this, ClementineService.class);
-        mServiceIntent.putExtra(App.SERVICE_ID, App.SERVICE_START);
+        mServiceIntent.putExtra(ClementineService.SERVICE_ID, ClementineService.SERVICE_START);
         startService(mServiceIntent);
 
         if (!clementineMessage.isErrorMessage()) {

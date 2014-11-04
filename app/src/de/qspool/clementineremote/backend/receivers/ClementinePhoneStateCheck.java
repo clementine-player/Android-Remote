@@ -26,6 +26,7 @@ import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 
 import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 
@@ -35,7 +36,7 @@ public class ClementinePhoneStateCheck extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (App.mApp == null
+        if (App.getApp() == null
                 || App.mClementineConnection == null
                 || App.mClementine == null
                 || !App.mClementineConnection.isConnected()) {
@@ -43,10 +44,10 @@ public class ClementinePhoneStateCheck extends BroadcastReceiver {
         }
 
         // Check if we need to change the volume
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(App.mApp);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(App.getApp());
 
         // Get the pebble settings
-        if (prefs.getBoolean(App.SP_LOWER_VOLUME, true)) {
+        if (prefs.getBoolean(SharedPreferencesKeys.SP_LOWER_VOLUME, true)) {
             // Get the current state of the telephone
             String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
 
@@ -56,7 +57,8 @@ public class ClementinePhoneStateCheck extends BroadcastReceiver {
                     || state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
                 saveLastVolume(prefs);
                 String volumeString = prefs
-                        .getString(App.SP_CALL_VOLUME, Clementine.DefaultCallVolume);
+                        .getString(SharedPreferencesKeys.SP_CALL_VOLUME,
+                                Clementine.DefaultCallVolume);
                 msg.obj = ClementineMessageFactory
                         .buildVolumeMessage(Integer.parseInt(volumeString));
             }

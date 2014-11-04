@@ -59,7 +59,7 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
                 .getDimension(android.R.dimen.notification_large_icon_height);
         mNotificationWidth = (int) res.getDimension(android.R.dimen.notification_large_icon_width);
 
-        mNotificationBuilder = new Notification.Builder(App.mApp)
+        mNotificationBuilder = new Notification.Builder(mContext)
             .setSmallIcon(R.drawable.notification)
                 .setOngoing(true);
 
@@ -68,12 +68,12 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
         }
 
         // Set the result intent
-        Intent resultIntent = new Intent(App.mApp, MainActivity.class);
+        Intent resultIntent = new Intent(mContext, MainActivity.class);
         resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         resultIntent.putExtra(App.NOTIFICATION_ID, -1);
 
         // Create a TaskStack, so the app navigates correctly backwards
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(App.mApp);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext);
         stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(resultIntent);
         PendingIntent resultPendingintent = stackBuilder
@@ -84,14 +84,14 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
         Intent playIntent = new Intent(NotificationReceiver.PLAYPAUSE);
         Intent nextIntent = new Intent(NotificationReceiver.NEXT);
 
-        PendingIntent piPlay = PendingIntent.getBroadcast(App.mApp, 0, playIntent, 0);
-        PendingIntent piNext = PendingIntent.getBroadcast(App.mApp, 0, nextIntent, 0);
+        PendingIntent piPlay = PendingIntent.getBroadcast(mContext, 0, playIntent, 0);
+        PendingIntent piNext = PendingIntent.getBroadcast(mContext, 0, nextIntent, 0);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             mNotificationBuilder.addAction(R.drawable.ic_media_pause_resume,
-                    App.mApp.getString(R.string.notification_action_playpause), piPlay);
+                    mContext.getString(R.string.notification_action_playpause), piPlay);
             mNotificationBuilder.addAction(R.drawable.ic_media_next_not,
-                    App.mApp.getString(R.string.notification_action_next), piNext);
+                    mContext.getString(R.string.notification_action_next), piNext);
 
             mNotificationBuilder.setPriority(1);
         }
@@ -116,8 +116,8 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
                     " / " +
                     song.getAlbum());
         } else {
-            mNotificationBuilder.setContentTitle(App.mApp.getString(R.string.app_name));
-            mNotificationBuilder.setContentText(App.mApp.getString(R.string.player_nosong));
+            mNotificationBuilder.setContentTitle(mContext.getString(R.string.app_name));
+            mNotificationBuilder.setContentText(mContext.getString(R.string.player_nosong));
         }
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {

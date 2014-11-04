@@ -36,6 +36,7 @@ import java.util.concurrent.TimeUnit;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.ui.fragments.AbstractDrawerFragment;
@@ -82,8 +83,8 @@ public class ConnectionFragment extends AbstractDrawerFragment {
 
         updateData();
 
-        tv_ip.setText(mSharedPref.getString(App.SP_KEY_IP, "") + ":" + mSharedPref
-                .getString(App.SP_KEY_PORT, ""));
+        tv_ip.setText(mSharedPref.getString(SharedPreferencesKeys.SP_KEY_IP, "") + ":" + mSharedPref
+                .getString(SharedPreferencesKeys.SP_KEY_PORT, ""));
         tv_version.setText(App.mClementine.getVersion());
 
         sb_volume = (SeekBar) view.findViewById(R.id.cn_volume);

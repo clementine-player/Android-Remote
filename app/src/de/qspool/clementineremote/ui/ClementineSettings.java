@@ -50,8 +50,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.utils.Utilities;
 
@@ -152,7 +152,8 @@ public class ClementineSettings extends PreferenceActivity {
             mAboutDialogPreference = getPreferenceScreen()
                     .findPreference("pref_key_about");
             mVersion = getPreferenceScreen().findPreference("pref_version");
-            mDownloadDir = getPreferenceScreen().findPreference(App.SP_DOWNLOAD_DIR);
+            mDownloadDir = getPreferenceScreen()
+                    .findPreference(SharedPreferencesKeys.SP_DOWNLOAD_DIR);
             mClementine = getPreferenceScreen().findPreference("pref_clementine_website");
 
             // Get the Version
@@ -170,23 +171,27 @@ public class ClementineSettings extends PreferenceActivity {
 
             // Read the port and fill in the summary
             mPortPreference = (EditTextPreference) getPreferenceScreen()
-                    .findPreference(App.SP_KEY_PORT);
+                    .findPreference(SharedPreferencesKeys.SP_KEY_PORT);
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
             String port = sharedPreferences
-                    .getString(App.SP_KEY_PORT, String.valueOf(Clementine.DefaultPort));
+                    .getString(SharedPreferencesKeys.SP_KEY_PORT,
+                            String.valueOf(Clementine.DefaultPort));
             mPortPreference.setSummary(getString(R.string.pref_port_summary) + " " + port);
 
             mPortPreference.setOnPreferenceClickListener(etListener);
 
-            mCallVolume = (ListPreference) getPreferenceScreen().findPreference(App.SP_CALL_VOLUME);
-            String currentCallVolume = sharedPreferences.getString(App.SP_CALL_VOLUME, "20");
+            mCallVolume = (ListPreference) getPreferenceScreen()
+                    .findPreference(SharedPreferencesKeys.SP_CALL_VOLUME);
+            String currentCallVolume = sharedPreferences
+                    .getString(SharedPreferencesKeys.SP_CALL_VOLUME, "20");
             mCallVolume.setSummary(
                     getString(R.string.pref_call_volume_summary).replace("%s", currentCallVolume));
 
-            mVolumeInc = (ListPreference) getPreferenceScreen().findPreference(App.SP_VOLUME_INC);
+            mVolumeInc = (ListPreference) getPreferenceScreen()
+                    .findPreference(SharedPreferencesKeys.SP_VOLUME_INC);
             String currentVolumeInc = sharedPreferences
-                    .getString(App.SP_VOLUME_INC, Clementine.DefaultVolumeInc);
+                    .getString(SharedPreferencesKeys.SP_VOLUME_INC, Clementine.DefaultVolumeInc);
             mVolumeInc.setSummary(
                     getString(R.string.pref_volume_inc_summary).replace("%s", currentVolumeInc));
 
@@ -201,7 +206,8 @@ public class ClementineSettings extends PreferenceActivity {
 
             // Create dialog
             String defaultPath = Environment.getExternalStorageDirectory() + "/ClementineMusic";
-            String path = sharedPreferences.getString(App.SP_DOWNLOAD_DIR, defaultPath);
+            String path = sharedPreferences
+                    .getString(SharedPreferencesKeys.SP_DOWNLOAD_DIR, defaultPath);
             File mPath = new File(path);
             mFileDialog = new FileDialog(getActivity(), mPath);
             mFileDialog.setCheckIfWritable(true);
@@ -209,7 +215,8 @@ public class ClementineSettings extends PreferenceActivity {
                 public void directorySelected(File directory) {
                     SharedPreferences.Editor editor = getPreferenceScreen().getSharedPreferences()
                             .edit();
-                    editor.putString(App.SP_DOWNLOAD_DIR, directory.getAbsolutePath());
+                    editor.putString(SharedPreferencesKeys.SP_DOWNLOAD_DIR,
+                            directory.getAbsolutePath());
                     editor.commit();
                     mDownloadDir.setSummary(directory.getAbsolutePath());
                 }
@@ -218,7 +225,7 @@ public class ClementineSettings extends PreferenceActivity {
             mDownloadDir.setSummary(path);
 
             // Keep screen on if user has requested this in preferences
-            if (sharedPreferences.getBoolean(App.SP_KEEP_SCREEN_ON, true)
+            if (sharedPreferences.getBoolean(SharedPreferencesKeys.SP_KEEP_SCREEN_ON, true)
                     && Utilities.isRemoteConnected()) {
                 getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             }
@@ -227,9 +234,10 @@ public class ClementineSettings extends PreferenceActivity {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
                 String key) {
-            if (key.equals(App.SP_KEY_PORT)) {
+            if (key.equals(SharedPreferencesKeys.SP_KEY_PORT)) {
                 String port = sharedPreferences
-                        .getString(App.SP_KEY_PORT, String.valueOf(Clementine.DefaultPort));
+                        .getString(SharedPreferencesKeys.SP_KEY_PORT,
+                                String.valueOf(Clementine.DefaultPort));
                 int intPort = 0;
                 try {
                     intPort = Integer.parseInt(port);
@@ -239,7 +247,7 @@ public class ClementineSettings extends PreferenceActivity {
                 if (intPort < 1024 || intPort > 65535) {
                     port = String.valueOf(Clementine.DefaultPort);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(App.SP_KEY_PORT, port);
+                    editor.putString(SharedPreferencesKeys.SP_KEY_PORT, port);
                     editor.commit();
 
                     // Tell the user that he specified an illegal port
@@ -248,13 +256,15 @@ public class ClementineSettings extends PreferenceActivity {
                 // Set the summary
                 mPortPreference.setSummary(getString(R.string.pref_port_summary) + " " + port);
                 mPortPreference.setText(port);
-            } else if (key.equals(App.SP_CALL_VOLUME)) {
-                String currentCallVolume = sharedPreferences.getString(App.SP_CALL_VOLUME, "20");
+            } else if (key.equals(SharedPreferencesKeys.SP_CALL_VOLUME)) {
+                String currentCallVolume = sharedPreferences
+                        .getString(SharedPreferencesKeys.SP_CALL_VOLUME, "20");
                 mCallVolume.setSummary(
                         getString(R.string.pref_call_volume_summary).replace("%s", currentCallVolume));
-            } else if (key.equals(App.SP_VOLUME_INC)) {
+            } else if (key.equals(SharedPreferencesKeys.SP_VOLUME_INC)) {
                 String currentVolumeInc = sharedPreferences
-                        .getString(App.SP_VOLUME_INC, Clementine.DefaultVolumeInc);
+                        .getString(SharedPreferencesKeys.SP_VOLUME_INC,
+                                Clementine.DefaultVolumeInc);
                 mVolumeInc.setSummary(
                         getString(R.string.pref_volume_inc_summary).replace("%s", currentVolumeInc));
             }

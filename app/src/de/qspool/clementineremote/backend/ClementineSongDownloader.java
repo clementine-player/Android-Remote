@@ -33,8 +33,13 @@ import android.support.v4.app.NotificationCompat.Builder;
 import android.support.v4.app.TaskStackBuilder;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.elements.DownloaderResult;
 import de.qspool.clementineremote.backend.elements.DownloaderResult.DownloadResult;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
@@ -45,10 +50,6 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Resp
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.ui.MainActivity;
 import de.qspool.clementineremote.utils.Utilities;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 public class ClementineSongDownloader extends
         AsyncTask<ClementineMessage, Integer, DownloaderResult> {
@@ -96,10 +97,12 @@ public class ClementineSongDownloader extends
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
 
         // Get preferences
-        mCreatePlaylistDir = mSharedPref.getBoolean(App.SP_DOWNLOAD_SAVE_OWN_DIR, false);
+        mCreatePlaylistDir = mSharedPref
+                .getBoolean(SharedPreferencesKeys.SP_DOWNLOAD_SAVE_OWN_DIR, false);
         mCreatePlaylistArtistDir = mSharedPref
-                .getBoolean(App.SP_DOWNLOAD_PLAYLIST_CRT_ARTIST_DIR, true);
-        mOverrideExistingFiles = mSharedPref.getBoolean(App.SP_DOWNLOAD_OVERRIDE, false);
+                .getBoolean(SharedPreferencesKeys.SP_DOWNLOAD_PLAYLIST_CRT_ARTIST_DIR, true);
+        mOverrideExistingFiles = mSharedPref
+                .getBoolean(SharedPreferencesKeys.SP_DOWNLOAD_OVERRIDE, false);
 
         // Get a new id
         mId = App.downloaders.size() + 1;
@@ -134,7 +137,8 @@ public class ClementineSongDownloader extends
 
     @Override
     protected DownloaderResult doInBackground(ClementineMessage... params) {
-        if (mSharedPref.getBoolean(App.SP_WIFI_ONLY, false) && !Utilities.onWifi(mContext)) {
+        if (mSharedPref.getBoolean(SharedPreferencesKeys.SP_WIFI_ONLY, false) && !Utilities
+                .onWifi(mContext)) {
             return new DownloaderResult(DownloaderResult.DownloadResult.ONLY_WIFI);
         }
 
@@ -234,13 +238,13 @@ public class ClementineSongDownloader extends
     }
 
     private PendingIntent buildNotificationIntent() {
-        Intent intent = new Intent(App.mApp, MainActivity.class);
+        Intent intent = new Intent(mContext, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         intent.putExtra(App.NOTIFICATION_ID, mId);
         intent.setData(Uri.parse("ClemetineDownload" + mId));
 
         // Create a TaskStack, so the app navigates correctly backwards
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(App.mApp);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext);
         stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(intent);
         return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -252,15 +256,16 @@ public class ClementineSongDownloader extends
      * @return true if the connection was established, false if not
      */
     private boolean connect() {
-        String ip = mSharedPref.getString(App.SP_KEY_IP, "");
+        String ip = mSharedPref.getString(SharedPreferencesKeys.SP_KEY_IP, "");
         int port;
         try {
             port = Integer.valueOf(
-                    mSharedPref.getString(App.SP_KEY_PORT, String.valueOf(Clementine.DefaultPort)));
+                    mSharedPref.getString(SharedPreferencesKeys.SP_KEY_PORT,
+                            String.valueOf(Clementine.DefaultPort)));
         } catch (NumberFormatException e) {
             port = Clementine.DefaultPort;
         }
-        int authCode = mSharedPref.getInt(App.SP_LAST_AUTH_CODE, 0);
+        int authCode = mSharedPref.getInt(SharedPreferencesKeys.SP_LAST_AUTH_CODE, 0);
 
         return mClient.createConnection(
                 ClementineMessageFactory.buildConnectMessage(ip, port, authCode, false, true));
@@ -454,7 +459,7 @@ public class ClementineSongDownloader extends
      */
     private String BuildDirPath(ResponseSongFileChunk chunk) {
         String defaultPath = Environment.getExternalStorageDirectory() + "/ClementineMusic";
-        String path = mSharedPref.getString(App.SP_DOWNLOAD_DIR, defaultPath);
+        String path = mSharedPref.getString(SharedPreferencesKeys.SP_DOWNLOAD_DIR, defaultPath);
 
         StringBuilder sb = new StringBuilder();
         sb.append(path);

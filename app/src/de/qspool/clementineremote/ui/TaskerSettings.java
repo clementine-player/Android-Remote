@@ -31,8 +31,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 
-import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.utils.bundle.BundleScrubber;
 import de.qspool.clementineremote.utils.bundle.PluginBundleManager;
@@ -80,9 +80,11 @@ public class TaskerSettings extends Activity {
         mIp = (EditText) findViewById(R.id.tasker_ip);
         mPort = (EditText) findViewById(R.id.tasker_port);
         mAuth = (EditText) findViewById(R.id.tasker_auth);
-        mIp.setText(mSharedPref.getString(App.SP_KEY_IP, ""));
-        mPort.setText(mSharedPref.getString(App.SP_KEY_PORT, String.valueOf(Clementine.DefaultPort)));
-        mAuth.setText(String.valueOf(mSharedPref.getInt(App.SP_LAST_AUTH_CODE, 0)));
+        mIp.setText(mSharedPref.getString(SharedPreferencesKeys.SP_KEY_IP, ""));
+        mPort.setText(mSharedPref.getString(SharedPreferencesKeys.SP_KEY_PORT,
+                String.valueOf(Clementine.DefaultPort)));
+        mAuth.setText(
+                String.valueOf(mSharedPref.getInt(SharedPreferencesKeys.SP_LAST_AUTH_CODE, 0)));
 
         BundleScrubber.scrub(getIntent());
         final Bundle localeBundle = getIntent()

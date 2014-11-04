@@ -92,7 +92,7 @@ public class ClementineExceptionHandler implements UncaughtExceptionHandler {
 
         // Save the new filename
         SharedPreferences.Editor edit = mSharedPref.edit();
-        edit.putString(App.SP_LAST_STACKTRACE, filename);
+        edit.putString(SharedPreferencesKeys.SP_LAST_STACKTRACE, filename);
         edit.commit();
 
         // Call the default uncaught Exception handler to tell the
@@ -110,7 +110,7 @@ public class ClementineExceptionHandler implements UncaughtExceptionHandler {
         SimpleDateFormat ft =
                 new SimpleDateFormat("yyyy.MM.dd-hh:mm:ss");
         StringBuilder sb = new StringBuilder();
-        sb.append(App.mApp.getApplicationInfo().dataDir);
+        sb.append(App.getApp().getApplicationInfo().dataDir);
         sb.append("/stacktrace-");
         sb.append(ft.format(new Date()));
         sb.append(".txt");
@@ -118,7 +118,7 @@ public class ClementineExceptionHandler implements UncaughtExceptionHandler {
     }
 
     public String getLastStracktraceFile() {
-        return mSharedPref.getString(App.SP_LAST_STACKTRACE, "");
+        return mSharedPref.getString(SharedPreferencesKeys.SP_LAST_STACKTRACE, "");
     }
 
     public boolean removeLastTraceFile() {

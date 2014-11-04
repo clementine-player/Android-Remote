@@ -44,6 +44,7 @@ import java.util.LinkedList;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
@@ -93,7 +94,7 @@ public class MainActivity extends FragmentActivity {
 
         // Keep screen on if user has requested this in preferences
         if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-                .getBoolean(App.SP_KEEP_SCREEN_ON, true)
+                .getBoolean(SharedPreferencesKeys.SP_KEEP_SCREEN_ON, true)
                 && Utilities.isRemoteConnected()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
@@ -200,7 +201,7 @@ public class MainActivity extends FragmentActivity {
 
         // Check if the user has changed the preferences to keep the screen on
         if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-                .getBoolean(App.SP_KEEP_SCREEN_ON, true)
+                .getBoolean(SharedPreferencesKeys.SP_KEEP_SCREEN_ON, true)
                 && Utilities.isRemoteConnected()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         } else {
@@ -269,9 +270,10 @@ public class MainActivity extends FragmentActivity {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             int currentVolume = App.mClementine.getVolume();
             // Control the volume of clementine if enabled in the options
-            if (mSharedPref.getBoolean(App.SP_KEY_USE_VOLUMEKEYS, true)) {
+            if (mSharedPref.getBoolean(SharedPreferencesKeys.SP_KEY_USE_VOLUMEKEYS, true)) {
                 int volumeInc = Integer.parseInt(
-                        mSharedPref.getString(App.SP_VOLUME_INC, Clementine.DefaultVolumeInc));
+                        mSharedPref.getString(SharedPreferencesKeys.SP_VOLUME_INC,
+                                Clementine.DefaultVolumeInc));
                 switch (keyCode) {
                     case KeyEvent.KEYCODE_VOLUME_DOWN:
                         Message msgDown = Message.obtain();
@@ -309,7 +311,7 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent keyEvent) {
-        if (mSharedPref.getBoolean(App.SP_KEY_USE_VOLUMEKEYS, true)) {
+        if (mSharedPref.getBoolean(SharedPreferencesKeys.SP_KEY_USE_VOLUMEKEYS, true)) {
             if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
                 return true;
             }

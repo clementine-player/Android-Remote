@@ -20,8 +20,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.Clementine;
 
 public class ClementineSettingsFragment extends PreferenceFragment
@@ -62,12 +62,13 @@ public class ClementineSettingsFragment extends PreferenceFragment
 
         // Read the port and fill in the summary
         mPortPreference = (EditTextPreference) getPreferenceScreen()
-                .findPreference(App.SP_KEY_PORT);
+                .findPreference(SharedPreferencesKeys.SP_KEY_PORT);
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(getActivity());
 
         String port = sharedPreferences
-                .getString(App.SP_KEY_PORT, String.valueOf(Clementine.DefaultPort));
+                .getString(SharedPreferencesKeys.SP_KEY_PORT,
+                        String.valueOf(Clementine.DefaultPort));
         mPortPreference.setSummary(getString(R.string.pref_port_summary) + " " + port);
 
         mPortPreference.setOnPreferenceClickListener(etListener);
@@ -83,14 +84,15 @@ public class ClementineSettingsFragment extends PreferenceFragment
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
             String key) {
-        if (key.equals(App.SP_KEY_PORT)) {
+        if (key.equals(SharedPreferencesKeys.SP_KEY_PORT)) {
             String port = sharedPreferences
-                    .getString(App.SP_KEY_PORT, String.valueOf(Clementine.DefaultPort));
+                    .getString(SharedPreferencesKeys.SP_KEY_PORT,
+                            String.valueOf(Clementine.DefaultPort));
             // Check if the port is in a valid range
             if (Integer.parseInt(port) < 1024 || Integer.parseInt(port) > 65535) {
                 port = String.valueOf(Clementine.DefaultPort);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(App.SP_KEY_PORT, port);
+                editor.putString(SharedPreferencesKeys.SP_KEY_PORT, port);
                 editor.commit();
 
                 // Tell the user that he specified an illegal port

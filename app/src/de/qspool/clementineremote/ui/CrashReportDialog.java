@@ -29,8 +29,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.ClementineExceptionHandler;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.SharedPreferencesKeys;
 
 public class CrashReportDialog {
 
@@ -42,11 +43,16 @@ public class CrashReportDialog {
 
     private SharedPreferences mSharedPref;
 
+    private ClementineExceptionHandler mClementineExceptionHandler;
+
     public CrashReportDialog(Context context) {
         mContext = context;
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        mLastTraceFileName = App.mClementineExceptionHandler.getLastStracktraceFile();
-        mLastSentTraceFileName = mSharedPref.getString(App.SP_LAST_SEND_STACKTRACE, "");
+        mClementineExceptionHandler = new ClementineExceptionHandler(context);
+
+        mLastTraceFileName = mClementineExceptionHandler.getLastStracktraceFile();
+        mLastSentTraceFileName = mSharedPref
+                .getString(SharedPreferencesKeys.SP_LAST_SEND_STACKTRACE, "");
     }
 
     /**
@@ -90,7 +96,7 @@ public class CrashReportDialog {
 
         // Save the latest send file (even if it was not send)
         SharedPreferences.Editor edit = mSharedPref.edit();
-        edit.putString(App.SP_LAST_SEND_STACKTRACE, mLastTraceFileName);
+        edit.putString(SharedPreferencesKeys.SP_LAST_SEND_STACKTRACE, mLastTraceFileName);
         edit.commit();
     }
 

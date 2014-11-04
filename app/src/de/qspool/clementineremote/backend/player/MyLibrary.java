@@ -29,6 +29,7 @@ import java.io.File;
 import java.util.LinkedList;
 
 import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.listener.OnLibrarySelectFinishedListener;
 
 public class MyLibrary extends
@@ -119,15 +120,15 @@ public class MyLibrary extends
      */
     public boolean removeDatabaseIfFromOtherClementine() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-        String libraryClementine = prefs.getString(App.SP_LIBRARY_IP, "");
-        String currentClementine = prefs.getString(App.SP_KEY_IP, "");
+        String libraryClementine = prefs.getString(SharedPreferencesKeys.SP_LIBRARY_IP, "");
+        String currentClementine = prefs.getString(SharedPreferencesKeys.SP_KEY_IP, "");
 
         if (libraryClementine.equals(currentClementine)) {
             return false;
         } else {
             // Save the current library ip
             SharedPreferences.Editor edit = prefs.edit();
-            edit.putString(App.SP_LIBRARY_IP, currentClementine);
+            edit.putString(SharedPreferencesKeys.SP_LIBRARY_IP, currentClementine);
             edit.commit();
             // Delete the file if exists
             return getLibraryDb().delete();
@@ -141,7 +142,7 @@ public class MyLibrary extends
      * @return The path incl. filename to the database file
      */
     public File getLibraryDb() {
-        return new File(App.mApp.getExternalFilesDir(null),
+        return new File(App.getApp().getExternalFilesDir(null),
                 LIBRARY_DB_FILE_NAME);
     }
 

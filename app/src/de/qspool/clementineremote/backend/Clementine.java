@@ -28,15 +28,9 @@ public class Clementine {
 
     public static enum State {PLAY, PAUSE, STOP}
 
-    ;
-
     public static enum RepeatMode {OFF, TRACK, ALBUM, PLAYLIST}
 
-    ;
-
     public static enum ShuffleMode {OFF, ALL, INSIDE_ALBUM, ALBUMS}
-
-    ;
 
     public final static int DefaultPort = 5500; // Change also strings.xml!
 

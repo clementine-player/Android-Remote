@@ -22,13 +22,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
-import android.widget.Toast;
 
 import de.qspool.clementineremote.App;
-import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementineService;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
-import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.ui.TaskerSettings;
 import de.qspool.clementineremote.utils.bundle.PluginBundleManager;
@@ -51,7 +48,8 @@ public class TaskerFireReceiver extends BroadcastReceiver {
 
                     // Start the background service
                     Intent serviceIntent = new Intent(context, ClementineService.class);
-                    serviceIntent.putExtra(App.SERVICE_ID, App.SERVICE_START);
+                    serviceIntent.putExtra(ClementineService.SERVICE_ID,
+                            ClementineService.SERVICE_START);
                     serviceIntent.putExtra(ClementineService.EXTRA_STRING_IP, ip);
                     serviceIntent.putExtra(ClementineService.EXTRA_INT_PORT, port);
                     serviceIntent.putExtra(ClementineService.EXTRA_INT_AUTH, auth);
