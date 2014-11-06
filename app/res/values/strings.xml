@@ -113,6 +113,7 @@
     <string name="pref_cat_behavior">Behavior</string>
     <string name="pref_cat_player">Player</string>
     <string name="pref_cat_downloads">Downloads</string>
+    <string name="pref_cat_advanced">Advanced</string>
     <string name="pref_cat_network">Network</string>
     <string name="pref_cat_connection">Connection</string>
     <string name="pref_cat_info">Information</string>
@@ -131,14 +132,22 @@
     <string name="pref_port_error">Illegal Port!</string>
     <string name="pref_lastfm_title">Last.fm</string>
     <string name="pref_lastfm_summary">Activate to love / ban tracks.</string>
-    <string name="pref_keep_screen_on_title">Keep Screen On</string>
-    <string name="pref_keep_screen_on_summary">Prevent the screen from turning off whilst Clementine Remote is connected to Clementine.</string>
+
     <string name="pref_lower_volume_title">Lower volume</string>
     <string name="pref_lower_volume_summary">Lower volume on incoming / outgoing call.</string>
     <string name="pref_call_volume_title">Call volume level</string>
     <string name="pref_call_volume_summary">Current call volume level: %s</string>
     <string name="pref_volume_inc_title">Volume change level</string>
     <string name="pref_volume_inc_summary">Current volume change level : %s</string>
+
+    <string name="pref_wake_lock_title">Keep CPU alive</string>
+    <string name="pref_wake_lock_summary">Enable if the App disconnects randomly when in background.
+        May drain battery faster.
+    </string>
+    <string name="pref_keep_screen_on_title">Keep Screen On</string>
+    <string name="pref_keep_screen_on_summary">Prevent the screen from turning off whilst Clementine
+        Remote is connected to Clementine.
+    </string>
 
     <string name="pref_version_summary">Click to visit project website</string>
     <string name="pref_version_title">Version</string>

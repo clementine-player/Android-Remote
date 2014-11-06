@@ -22,6 +22,8 @@ public class SharedPreferencesKeys {
 
     public final static String SP_KEEP_SCREEN_ON = "pref_keep_screen_on";
 
+    public final static String SP_WAKE_LOCK = "pref_wake_lock";
+
     public final static String SP_LOWER_VOLUME = "pref_lower_volume";
 
     public final static String SP_CALL_VOLUME = "pref_call_volume";

@@ -23,14 +23,18 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.os.PowerManager;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.listener.PlayerConnectionListener;
 import de.qspool.clementineremote.backend.mediasession.MediaSessionController;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
@@ -62,6 +66,23 @@ public class ClementineService extends Service {
     private MediaSessionController mMediaSessionController;
 
     private Thread mPlayerThread;
+
+    private boolean mUseWakeLock = false;
+
+    private PowerManager.WakeLock mWakeLock;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        // Get a Wakelock Object
+        PowerManager pm = (PowerManager) getSystemService(
+                Context.POWER_SERVICE);
+        mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Clementine");
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        mUseWakeLock = prefs.getBoolean(SharedPreferencesKeys.SP_WAKE_LOCK, false);
+    }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -104,6 +125,9 @@ public class ClementineService extends Service {
 
                                 @Override
                                 public void onConnected() {
+                                    if (mUseWakeLock) {
+                                        mWakeLock.acquire();
+                                    }
                                 }
 
                                 @Override
@@ -116,6 +140,10 @@ public class ClementineService extends Service {
                                     mServiceIntent.putExtra(SERVICE_DISCONNECT_DATA,
                                             clementineMessage.getErrorMessage().ordinal());
                                     startService(mServiceIntent);
+
+                                    if (mUseWakeLock) {
+                                        mWakeLock.release();
+                                    }
                                 }
 
                                 @Override
@@ -200,13 +228,13 @@ public class ClementineService extends Service {
                 .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification notification = new NotificationCompat.Builder(this)
-            .setSmallIcon(R.drawable.notification)
+                .setSmallIcon(R.drawable.notification)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(getString(R.string.notification_disconnect_keep_alive))
-            .setAutoCancel(true)
-            .setVisibility(Notification.VISIBILITY_PUBLIC)
+                .setAutoCancel(true)
+                .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .setContentIntent(resultPendingintent)
-            .build();
+                .build();
         mNotificationManager.notify(App.NOTIFY_ID, notification);
     }
 
@@ -222,5 +250,4 @@ public class ClementineService extends Service {
             App.mClementineConnection.mHandler.sendMessage(msg);
         }
     }
-
 }

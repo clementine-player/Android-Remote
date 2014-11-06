@@ -17,12 +17,10 @@
 
 package de.qspool.clementineremote.backend;
 
-import android.content.Context;
 import android.net.TrafficStats;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.os.PowerManager;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -62,8 +60,6 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 
     private ClementineMessage mRequestConnect;
 
-    private PowerManager.WakeLock mWakeLock;
-
     private long mStartTx;
 
     private long mStartRx;
@@ -85,10 +81,6 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
         // Start the thread
         Looper.prepare();
         mHandler = new ClementineConnectionHandler(this);
-
-        // Get a Wakelock Object
-        PowerManager pm = (PowerManager) App.getApp().getSystemService(Context.POWER_SERVICE);
-        mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Clementine");
 
         fireOnConnectionReady();
 
@@ -112,9 +104,6 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
         // Is possible when we connect from a public ip and clementine rejects it
         if (connected && !mSocket.isClosed()) {
             // Now we are connected
-
-            // The device shall be awake
-            mWakeLock.acquire();
 
             // We can now reconnect MAX_RECONNECTS times when
             // we get a keep alive timeout
@@ -247,26 +236,12 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
         }
     }
 
-    public long getStartTx() {
-        return mStartTx;
-    }
-
-    public long getStartRx() {
-        return mStartRx;
-    }
-
-    public long getStartTime() {
-        return mStartTime;
-    }
-
     /**
      * Close the socket and the streams
      */
     private void closeConnection(ClementineMessage clementineMessage) {
         // Disconnect socket
         closeSocket();
-
-        mWakeLock.release();
 
         sendUiMessage(clementineMessage);
 
@@ -282,6 +257,34 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 
         // Close thread
         Looper.myLooper().quit();
+    }
+
+    /**
+     * Check the keep alive timeout.
+     * If we reached the timeout, we can assume, that we lost the connection
+     */
+    private void checkKeepAlive() {
+        if (mLastKeepAlive > 0
+                && (System.currentTimeMillis() - mLastKeepAlive) > KEEP_ALIVE_TIMEOUT) {
+            // Check if we shall reconnect
+            while (mLeftReconnects > 0) {
+                closeSocket();
+                if (super.createConnection(mRequestConnect)) {
+                    mLeftReconnects = MAX_RECONNECTS;
+                    break;
+                }
+
+                mLeftReconnects--;
+            }
+
+            // We tried, but the server isn't there anymore
+            if (mLeftReconnects == 0) {
+                Message msg = Message.obtain();
+                msg.obj = new ClementineMessage(ErrorMessage.KEEP_ALIVE_TIMEOUT);
+                msg.arg1 = PROCESS_PROTOC;
+                mHandler.sendMessage(msg);
+            }
+        }
     }
 
     /**
@@ -332,39 +335,23 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
     }
 
     /**
-     * Check the keep alive timeout.
-     * If we reached the timeout, we can assume, that we lost the connection
-     */
-    private void checkKeepAlive() {
-        if (mLastKeepAlive > 0
-                && (System.currentTimeMillis() - mLastKeepAlive) > KEEP_ALIVE_TIMEOUT) {
-            // Check if we shall reconnect
-            while (mLeftReconnects > 0) {
-                closeSocket();
-                if (super.createConnection(mRequestConnect)) {
-                    mLeftReconnects = MAX_RECONNECTS;
-                    break;
-                }
-
-                mLeftReconnects--;
-            }
-
-            // We tried, but the server isn't there anymore
-            if (mLeftReconnects == 0) {
-                Message msg = Message.obtain();
-                msg.obj = new ClementineMessage(ErrorMessage.KEEP_ALIVE_TIMEOUT);
-                msg.arg1 = PROCESS_PROTOC;
-                mHandler.sendMessage(msg);
-            }
-        }
-    }
-
-    /**
      * Set the last keep alive timestamp
      *
      * @param lastKeepAlive The time
      */
     public void setLastKeepAlive(long lastKeepAlive) {
         this.mLastKeepAlive = lastKeepAlive;
+    }
+
+    public long getStartTx() {
+        return mStartTx;
+    }
+
+    public long getStartRx() {
+        return mStartRx;
+    }
+
+    public long getStartTime() {
+        return mStartTime;
     }
 }

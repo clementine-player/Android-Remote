@@ -7,6 +7,8 @@
             android:title="@string/pref_cat_player"/>
     <header android:fragment="de.qspool.clementineremote.ui.settings.PreferencesBehaviorDownloads"
             android:title="@string/pref_cat_downloads"/>
+    <header android:fragment="de.qspool.clementineremote.ui.settings.PreferencesBehaviorAdvanced"
+            android:title="@string/pref_cat_advanced"/>
 
     <header android:id="@+id/cat_network"
             android:title="@string/pref_cat_network"/>
