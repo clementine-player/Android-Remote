@@ -2,7 +2,8 @@
                   android:title="@string/pref_cat_connection">
     <CheckBoxPreference
             android:key="pref_autoconnect"
-            android:title="@string/connectdialog_autoconnect"
+            android:title="@string/pref_autoconnect_title"
+            android:summary="@string/pref_autoconnect_summary"
             android:defaultValue="false"/>
     <EditTextPreference
             android:key="pref_port"

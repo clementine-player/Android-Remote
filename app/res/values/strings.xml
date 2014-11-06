@@ -5,7 +5,6 @@
 
 
     <string name="connectdialog_connect">Connect</string>
-    <string name="connectdialog_autoconnect">Auto-Connect</string>
     <string name="connectdialog_connecting">Connecting to Clementine</string>
     <string name="connectdialog_download_data">Downloading data</string>
     <string name="connectdialog_error">Could not reach host</string>
@@ -122,23 +121,25 @@
 
     <string name="pref_volume_title">Use Volume Keys</string>
     <string name="pref_volume_summary">Use volume keys to control the volume of Clementine.</string>
-    <string name="pref_pebble_title">Use Pebble</string>
-    <string name="pref_pebble_summary">Send the current track metadata to the Pebble music app.</string>
     <string name="pref_trackno_title">Show tracknumber</string>
     <string name="pref_trackno_summary">Show or hide the tracknumber in the playlists.</string>
-    <string name="pref_port_title">Port</string>
-    <string name="pref_port_summary">Current Port:</string>
-    <string name="pref_port_default">5500</string>
-    <string name="pref_port_error">Illegal Port!</string>
     <string name="pref_lastfm_title">Last.fm</string>
     <string name="pref_lastfm_summary">Activate to love / ban tracks.</string>
-
     <string name="pref_lower_volume_title">Lower volume</string>
     <string name="pref_lower_volume_summary">Lower volume on incoming / outgoing call.</string>
     <string name="pref_call_volume_title">Call volume level</string>
     <string name="pref_call_volume_summary">Current call volume level: %s</string>
     <string name="pref_volume_inc_title">Volume change level</string>
     <string name="pref_volume_inc_summary">Current volume change level : %s</string>
+
+    <string name="pref_autoconnect_title">Auto-Connect</string>
+    <string name="pref_autoconnect_summary">Automatically connect to Clementine when starting the
+        remote.
+    </string>
+    <string name="pref_port_title">Port</string>
+    <string name="pref_port_summary">Current Port:</string>
+    <string name="pref_port_default">5500</string>
+    <string name="pref_port_error">Illegal Port!</string>
 
     <string name="pref_wake_lock_title">Keep CPU alive</string>
     <string name="pref_wake_lock_summary">Enable if the App disconnects randomly when in background.
