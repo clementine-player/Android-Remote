@@ -17,7 +17,9 @@
 
 package de.qspool.clementineremote.backend.mediasession;
 
+import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -31,6 +33,7 @@ import de.qspool.clementineremote.backend.listener.PlayerConnectionListener;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.backend.receivers.ClementineMediaButtonEventReceiver;
+import de.qspool.clementineremote.widget.ClementineWidgetProvider;
 
 public class MediaSessionController {
 
@@ -88,6 +91,8 @@ public class MediaSessionController {
                 mMediaSessionNotification.registerSession();
                 mMediaSessionNotification.setMediaSessionCompat(
                         mClementineMediaSession.getMediaSession());
+
+                sendWidgetUpdateIntent();
             }
 
             @Override
@@ -97,6 +102,8 @@ public class MediaSessionController {
 
                 mClementineMediaSession.unregisterSession();
                 mMediaSessionNotification.unregisterSession();
+
+                sendWidgetUpdateIntent();
             }
 
             @Override
@@ -110,6 +117,7 @@ public class MediaSessionController {
                         mClementineMediaSession.updateSession();
                         mMediaSessionNotification.updateSession();
                         sendMetachangedIntent(META_CHANGED);
+                        sendWidgetUpdateIntent();
                         break;
                     case PLAY:
                     case PAUSE:
@@ -117,6 +125,10 @@ public class MediaSessionController {
                         mClementineMediaSession.updateSession();
                         mMediaSessionNotification.updateSession();
                         sendMetachangedIntent(PLAYSTATE_CHANGED);
+                        sendWidgetUpdateIntent();
+                        break;
+                    case FIRST_DATA_SENT_COMPLETE:
+                        sendWidgetUpdateIntent();
                         break;
                     default:
                         break;
@@ -137,6 +149,21 @@ public class MediaSessionController {
         }
 
         mContext.sendBroadcast(i);
+    }
+
+    private void sendWidgetUpdateIntent() {
+        // Get widget ids
+        ComponentName widgetComponent = new ComponentName(mContext.getPackageName(),
+                ClementineWidgetProvider.class.getName());
+        int[] widgetIds = AppWidgetManager.getInstance(mContext).getAppWidgetIds(widgetComponent);
+
+        if (widgetIds.length > 0) {
+            Intent intent = new Intent(mContext, ClementineWidgetProvider.class);
+            intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetIds);
+
+            mContext.sendBroadcast(intent);
+        }
     }
 
     private AudioManager.OnAudioFocusChangeListener mOnAudioFocusChangeListener

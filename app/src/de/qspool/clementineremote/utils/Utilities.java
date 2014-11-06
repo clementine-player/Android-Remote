@@ -2,12 +2,15 @@ package de.qspool.clementineremote.utils;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
+import android.support.v4.app.TaskStackBuilder;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
@@ -21,6 +24,7 @@ import java.net.UnknownHostException;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.ui.MainActivity;
 
 public class Utilities {
 
@@ -212,5 +216,18 @@ public class Utilities {
     public static String removeInvalidFileCharacters(String str) {
         String illegal = "[\\\\~#%&*{}/:<>?|\\\"-]";
         return str.replaceAll(illegal, "");
+    }
+
+    public static PendingIntent getClementineRemotePendingIntent(Context context) {
+        // Set the result intent
+        Intent resultIntent = new Intent(context, MainActivity.class);
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        resultIntent.putExtra(App.NOTIFICATION_ID, -1);
+
+        // Create a TaskStack, so the app navigates correctly backwards
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }

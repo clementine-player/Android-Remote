@@ -66,7 +66,7 @@ public class ClementineMediaButtonEventReceiver extends BroadcastReceiver {
                 }
 
                 // Now send the message
-                if (msg != null
+                if (msg != null && msg.obj != null
                         && App.mClementineConnection != null) {
                     App.mClementineConnection.mHandler.sendMessage(msg);
                 }

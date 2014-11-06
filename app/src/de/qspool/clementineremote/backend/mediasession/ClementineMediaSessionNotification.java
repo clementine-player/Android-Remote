@@ -27,13 +27,12 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.media.session.MediaSession;
 import android.os.Build;
-import android.support.v4.app.TaskStackBuilder;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.player.MySong;
-import de.qspool.clementineremote.backend.receivers.NotificationReceiver;
-import de.qspool.clementineremote.ui.MainActivity;
+import de.qspool.clementineremote.backend.receivers.ClementineBroadcastReceiver;
+import de.qspool.clementineremote.utils.Utilities;
 
 public class ClementineMediaSessionNotification extends ClementineMediaSession {
 
@@ -67,22 +66,11 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
             mNotificationBuilder.setVisibility(Notification.VISIBILITY_PUBLIC);
         }
 
-        // Set the result intent
-        Intent resultIntent = new Intent(mContext, MainActivity.class);
-        resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        resultIntent.putExtra(App.NOTIFICATION_ID, -1);
-
-        // Create a TaskStack, so the app navigates correctly backwards
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext);
-        stackBuilder.addParentStack(MainActivity.class);
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingintent = stackBuilder
-                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-        mNotificationBuilder.setContentIntent(resultPendingintent);
+        mNotificationBuilder.setContentIntent(Utilities.getClementineRemotePendingIntent(mContext));
 
         // Create intents for buttons
-        Intent playIntent = new Intent(NotificationReceiver.PLAYPAUSE);
-        Intent nextIntent = new Intent(NotificationReceiver.NEXT);
+        Intent playIntent = new Intent(ClementineBroadcastReceiver.PLAYPAUSE);
+        Intent nextIntent = new Intent(ClementineBroadcastReceiver.NEXT);
 
         PendingIntent piPlay = PendingIntent.getBroadcast(mContext, 0, playIntent, 0);
         PendingIntent piNext = PendingIntent.getBroadcast(mContext, 0, nextIntent, 0);

@@ -14,7 +14,8 @@
     </item>
     <item>
         <shape>
-            <gradient android:startColor="@color/white" android:endColor="@color/white" android:angle="270" />
+            <gradient android:startColor="@android:color/transparent"
+                      android:endColor="@android:color/transparent" android:angle="270"/>
             <padding android:left="10dp" android:top="10dp" android:right="10dp" android:bottom="10dp" />
         </shape>
     </item>

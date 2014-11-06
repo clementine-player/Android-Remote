@@ -42,7 +42,7 @@
                 <action android:name="com.twofortyfouram.locale.intent.action.EDIT_SETTING" />
             </intent-filter>
         </activity>
-        <service android:name=".backend.ClementineService"></service>
+        <service android:name=".backend.ClementineService"/>
         <receiver android:name=".backend.receivers.ClementineMediaButtonEventReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
@@ -53,7 +53,7 @@
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".backend.receivers.NotificationReceiver">
+        <receiver android:name=".backend.receivers.ClementineBroadcastReceiver">
             <intent-filter>
                 <action android:name="de.qspool.clementineremote.playpause" />
                 <action android:name="de.qspool.clementineremote.next" />
@@ -63,6 +63,14 @@
             <intent-filter>
                 <action android:name="com.twofortyfouram.locale.intent.action.FIRE_SETTING" />
             </intent-filter>
+        </receiver>
+
+        <receiver android:name="de.qspool.clementineremote.widget.ClementineWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                       android:resource="@xml/clementine_widget_provider"/>
         </receiver>
     </application>
 

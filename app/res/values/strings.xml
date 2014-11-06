@@ -193,6 +193,10 @@
     <string name="tasker_port_hint">Enter port</string>
     <string name="tasker_auth_hint">Enter auth code</string>
 
+    <string name="widget_connect_to">Touch to connect</string>
+    <string name="widget_not_connected">Not connected</string>
+    <string name="widget_no_ip">Touch to start Clementine Remote</string>
+
     <string name="dialog_close">Close</string>
 
     <string name="error_versions">Incompatible version</string>

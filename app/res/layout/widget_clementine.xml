@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:id="@+id/widget_layout"
+              android:background="#DDdb6835"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:padding="8dp">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="144dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical" android:layout_weight="0.9">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/widget_not_connected"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/widget_title" android:singleLine="true"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/widget_no_ip"
+                android:id="@+id/widget_artist" android:singleLine="true"/>
+    </LinearLayout>
+
+    <ImageButton
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/selector_white_orange_selected"
+            android:id="@+id/widget_btn_play_pause" android:src="@drawable/ic_media_play"
+            android:layout_weight="0.05"/>
+
+    <ImageButton
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/selector_white_orange_selected"
+            android:id="@+id/widget_btn_next" android:src="@drawable/ic_media_next"
+            android:layout_weight="0.05"/>
+</LinearLayout>
