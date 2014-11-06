@@ -6,11 +6,6 @@
             android:summary="@string/pref_volume_summary"
             android:defaultValue="true"/>
     <CheckBoxPreference
-            android:key="pref_use_pebble"
-            android:title="@string/pref_pebble_title"
-            android:summary="@string/pref_pebble_summary"
-            android:defaultValue="true"/>
-    <CheckBoxPreference
             android:key="pref_show_trackno"
             android:title="@string/pref_trackno_title"
             android:summary="@string/pref_trackno_summary"

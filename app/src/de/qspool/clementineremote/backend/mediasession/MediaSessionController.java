@@ -24,13 +24,19 @@ import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.os.Build;
 
+import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementinePlayerConnection;
 import de.qspool.clementineremote.backend.listener.PlayerConnectionListener;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
-import de.qspool.clementineremote.backend.pebble.Pebble;
+import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.backend.receivers.ClementineMediaButtonEventReceiver;
 
 public class MediaSessionController {
+
+    private final String PLAYSTATE_CHANGED = "com.android.music.playstatechanged";
+
+    private final String META_CHANGED = "com.android.music.metachanged";
 
     private Context mContext;
 
@@ -39,8 +45,6 @@ public class MediaSessionController {
     private ClementineMediaSession mClementineMediaSession;
 
     private ClementineMediaSessionNotification mMediaSessionNotification;
-
-    private Pebble mPebble = new Pebble();
 
     private AudioManager mAudioManager;
 
@@ -103,15 +107,16 @@ public class MediaSessionController {
 
                 switch (clementineMessage.getMessageType()) {
                     case CURRENT_METAINFO:
-                        mPebble.sendMusicUpdateToPebble();
                         mClementineMediaSession.updateSession();
                         mMediaSessionNotification.updateSession();
+                        sendMetachangedIntent(META_CHANGED);
                         break;
                     case PLAY:
                     case PAUSE:
                     case STOP:
                         mClementineMediaSession.updateSession();
                         mMediaSessionNotification.updateSession();
+                        sendMetachangedIntent(PLAYSTATE_CHANGED);
                         break;
                     default:
                         break;
@@ -120,11 +125,24 @@ public class MediaSessionController {
         });
     }
 
+    private void sendMetachangedIntent(String what) {
+        MySong currentSong = App.mClementine.getCurrentSong();
+        Intent i = new Intent(what);
+        i.putExtra("playing", App.mClementine.getState() == Clementine.State.PLAY);
+        if (null != currentSong) {
+            i.putExtra("id", Long.valueOf(currentSong.getId()));
+            i.putExtra("artist", currentSong.getArtist());
+            i.putExtra("album", currentSong.getAlbum());
+            i.putExtra("track", currentSong.getTitle());
+        }
+
+        mContext.sendBroadcast(i);
+    }
+
     private AudioManager.OnAudioFocusChangeListener mOnAudioFocusChangeListener
             = new AudioManager.OnAudioFocusChangeListener() {
         @Override
         public void onAudioFocusChange(int focusChange) {
-
         }
     };
 }
