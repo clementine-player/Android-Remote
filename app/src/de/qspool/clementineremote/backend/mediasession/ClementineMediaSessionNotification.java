@@ -99,8 +99,8 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
                     mNotificationHeight,
                     false);
             mNotificationBuilder.setLargeIcon(scaledArt);
-            mNotificationBuilder.setContentTitle(song.getArtist());
-            mNotificationBuilder.setContentText(song.getTitle() +
+            mNotificationBuilder.setContentTitle(song.getTitle());
+            mNotificationBuilder.setContentText(song.getArtist() +
                     " / " +
                     song.getAlbum());
         } else {
