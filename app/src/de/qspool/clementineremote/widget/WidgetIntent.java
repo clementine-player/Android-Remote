@@ -1,5 +1,5 @@
 /* This file is part of the Android Clementine Remote.
- * Copyright (C) 2013, Andreas Muttscheller <asfa194@gmail.com>
+ * Copyright (C) 2014, Andreas Muttscheller <asfa194@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,14 +15,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package de.qspool.clementineremote.backend.listener;
+package de.qspool.clementineremote.widget;
 
-import de.qspool.clementineremote.backend.ClementinePlayerConnection;
-import de.qspool.clementineremote.backend.pb.ClementineMessage;
+import android.appwidget.AppWidgetManager;
 
-public interface PlayerConnectionListener {
+public class WidgetIntent {
 
-    void onConnectionStatusChanged(ClementinePlayerConnection.ConnectionStatus status);
+    public static String ACTION_APPWIDGET_UPDATE = AppWidgetManager.ACTION_APPWIDGET_UPDATE;
 
-    void onClementineMessageReceived(ClementineMessage clementineMessage);
+    public static String EXTRA_APPWIDGET_IDS = AppWidgetManager.EXTRA_APPWIDGET_IDS;
+
+    public static String EXTRA_CLEMENTINE_ACTION = "de.qspool.clementineremote.widget.extra.action";
+
+    public static String EXTRA_CLEMENTINE_CONNECTION_STATE
+            = "de.qspool.clementineremote.widget.extra.connnect.state";
+
+    public enum ClementineAction {DEFAULT, CONNECTION_STATUS, STATE_CHANGE}
+
 }

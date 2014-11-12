@@ -43,11 +43,13 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 
     public ClementineConnectionHandler mHandler;
 
+    public final static int PROCESS_PROTOC = 874456;
+
+    public enum ConnectionStatus {IDLE, CONNECTING, NO_CONNECTION, CONNECTED, LOST_CONNECTION, DISCONNECTED}
+
     private final long KEEP_ALIVE_TIMEOUT = 25000; // 25 Second timeout
 
     private final int MAX_RECONNECTS = 5;
-
-    public final static int PROCESS_PROTOC = 874456;
 
     private Handler mUiHandler;
 
@@ -82,7 +84,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
         Looper.prepare();
         mHandler = new ClementineConnectionHandler(this);
 
-        fireOnConnectionReady();
+        fireOnConnectionStatusChanged(ConnectionStatus.IDLE);
 
         Looper.loop();
     }
@@ -94,6 +96,8 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
      */
     @Override
     public boolean createConnection(ClementineMessage message) {
+        fireOnConnectionStatusChanged(ConnectionStatus.CONNECTING);
+
         // Reset the connected flag
         mLastKeepAlive = 0;
 
@@ -148,10 +152,11 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
             });
             mIncomingThread.start();
 
-            fireOnConnected();
+            fireOnConnectionStatusChanged(ConnectionStatus.CONNECTED);
 
         } else {
             sendUiMessage(new ClementineMessage(ErrorMessage.NO_CONNECTION));
+            fireOnConnectionStatusChanged(ConnectionStatus.NO_CONNECTION);
         }
 
         return connected;
@@ -253,7 +258,13 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
         }
 
         // Fire the listener
-        fireOnConnectionClosed(clementineMessage);
+        if (clementineMessage.isErrorMessage() &&
+                (clementineMessage.getErrorMessage() == ErrorMessage.IO_EXCEPTION ||
+                        clementineMessage.getErrorMessage() == ErrorMessage.KEEP_ALIVE_TIMEOUT)) {
+            fireOnConnectionStatusChanged(ConnectionStatus.LOST_CONNECTION);
+        }
+
+        fireOnConnectionStatusChanged(ConnectionStatus.DISCONNECTED);
 
         // Close thread
         Looper.myLooper().quit();
@@ -290,29 +301,11 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
     /**
      * Fire the event to all listeners
      *
-     * @param clementineMessage The Disconnect message.
+     * @param status The current connection status
      */
-    private void fireOnConnectionClosed(ClementineMessage clementineMessage) {
+    private void fireOnConnectionStatusChanged(ConnectionStatus status) {
         for (PlayerConnectionListener listener : mListeners) {
-            listener.onConnectionClosed(clementineMessage);
-        }
-    }
-
-    /**
-     * Fire the event to all listeners
-     */
-    private void fireOnConnectionReady() {
-        for (PlayerConnectionListener listener : mListeners) {
-            listener.onThreadStarted();
-        }
-    }
-
-    /**
-     * Fire the event to all listeners
-     */
-    private void fireOnConnected() {
-        for (PlayerConnectionListener listener : mListeners) {
-            listener.onConnected();
+            listener.onConnectionStatusChanged(status);
         }
     }
 

@@ -22,25 +22,9 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgT
 
 public class ClementineMessage {
 
-    /**
-     * Various message types can be assigned to a group.
-     * E.g. state changes (play, pause, ...) are assigned to RELOAD,
-     * so other classes know the shall reload. This reduces the complexity of
-     * the if / switch statements.
-     */
-    public enum MessageGroup {
-        NONE, GUI_RELOAD
-    }
-
-    ;
-
-    public enum ErrorMessage {NO, INVALID_DATA, OLD_PROTO, KEEP_ALIVE_TIMEOUT, NO_CONNECTION, IO_EXCEPTION, TIMEOUT}
-
-    ;
+    public enum ErrorMessage {NONE, INVALID_DATA, OLD_PROTO, KEEP_ALIVE_TIMEOUT, NO_CONNECTION, IO_EXCEPTION, TIMEOUT}
 
     private Message mMessage;
-
-    private MessageGroup mTypeGroup;
 
     private ErrorMessage mErrorMessage;
 
@@ -56,8 +40,7 @@ public class ClementineMessage {
      */
     public ClementineMessage(Message msg) {
         mMessage = msg;
-        mTypeGroup = MessageGroup.NONE;
-        mErrorMessage = ErrorMessage.NO;
+        mErrorMessage = ErrorMessage.NONE;
     }
 
     /**
@@ -69,8 +52,7 @@ public class ClementineMessage {
      */
     public ClementineMessage(Message.Builder builder) {
         mMessage = builder.build();
-        mTypeGroup = MessageGroup.NONE;
-        mErrorMessage = ErrorMessage.NO;
+        mErrorMessage = ErrorMessage.NONE;
     }
 
     /**
@@ -106,29 +88,8 @@ public class ClementineMessage {
         return builder;
     }
 
-    /**
-     * Set a group of types
-     *
-     * @param typeGroup A type of group
-     */
-    public void setTypeGroup(MessageGroup typeGroup) {
-        if (mErrorMessage != ErrorMessage.NO) {
-            throw new Error(
-                    "This is an error message. This should be handled! Error: " + mErrorMessage);
-        }
-        mTypeGroup = typeGroup;
-    }
-
-    public MessageGroup getTypeGroup() {
-        if (mErrorMessage != ErrorMessage.NO) {
-            throw new Error(
-                    "This is an error message. This should be handled! Error: " + mErrorMessage);
-        }
-        return mTypeGroup;
-    }
-
     public Message getMessage() {
-        if (mErrorMessage != ErrorMessage.NO) {
+        if (mErrorMessage != ErrorMessage.NONE) {
             throw new Error(
                     "This is an error message. This should be handled! Error: " + mErrorMessage);
         }
@@ -136,7 +97,7 @@ public class ClementineMessage {
     }
 
     public MsgType getMessageType() {
-        if (mErrorMessage != ErrorMessage.NO) {
+        if (mErrorMessage != ErrorMessage.NONE) {
             throw new Error(
                     "This is an error message. This should be handled! Error: " + mErrorMessage);
         }
@@ -148,7 +109,7 @@ public class ClementineMessage {
     }
 
     public boolean isErrorMessage() {
-        return (mErrorMessage != ErrorMessage.NO);
+        return (mErrorMessage != ErrorMessage.NONE);
     }
 
     public String getIp() {

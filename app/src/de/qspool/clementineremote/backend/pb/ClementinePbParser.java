@@ -29,7 +29,6 @@ import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.Clementine.RepeatMode;
 import de.qspool.clementineremote.backend.Clementine.ShuffleMode;
 import de.qspool.clementineremote.backend.pb.ClementineMessage.ErrorMessage;
-import de.qspool.clementineremote.backend.pb.ClementineMessage.MessageGroup;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.EngineState;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Lyric;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message;
@@ -64,11 +63,10 @@ public class ClementinePbParser {
      * @return The parsed Element
      */
     public ClementineMessage parse(byte[] bs) {
-        Message msg = null;
         ClementineMessage parsedElement = null;
 
         try {
-            msg = Message.parseFrom(bs);
+            Message msg = Message.parseFrom(bs);
 
             // First check the proto version
             if (!msg.hasVersion()
@@ -78,7 +76,6 @@ public class ClementinePbParser {
                 parsedElement = parseMsg(msg);
             }
         } catch (InvalidProtocolBufferException e) {
-            msg = null;
             Log.d("Parser", "InvalidProtocolBufferException");
             parsedElement = new ClementineMessage(ErrorMessage.INVALID_DATA);
         }
@@ -103,11 +100,9 @@ public class ClementinePbParser {
                 MySong s = parseSong(msg.getResponseCurrentMetadata());
                 App.mClementine.setCurrentSong(s);
                 App.mClementine.setSongPosition(0);
-                clementineMessage.setTypeGroup(MessageGroup.GUI_RELOAD);
                 break;
             case UPDATE_TRACK_POSITION:
                 parseUpdateTrackPosition(msg.getResponseUpdateTrackPosition());
-                clementineMessage.setTypeGroup(MessageGroup.GUI_RELOAD);
                 break;
             case KEEP_ALIVE:
                 App.mClementineConnection.setLastKeepAlive(System.currentTimeMillis());
@@ -117,29 +112,23 @@ public class ClementinePbParser {
                 break;
             case PLAY:
                 App.mClementine.setState(Clementine.State.PLAY);
-                clementineMessage.setTypeGroup(MessageGroup.GUI_RELOAD);
                 break;
             case PAUSE:
                 App.mClementine.setState(Clementine.State.PAUSE);
-                clementineMessage.setTypeGroup(MessageGroup.GUI_RELOAD);
                 break;
             case STOP:
                 App.mClementine.setState(Clementine.State.STOP);
-                clementineMessage.setTypeGroup(MessageGroup.GUI_RELOAD);
                 break;
             case DISCONNECT:
                 break;
             case PLAYLISTS:
                 parsePlaylists(msg.getResponsePlaylists());
-                clementineMessage.setTypeGroup(MessageGroup.GUI_RELOAD);
                 break;
             case PLAYLIST_SONGS:
                 parsePlaylistSongs(msg.getResponsePlaylistSongs());
-                clementineMessage.setTypeGroup(MessageGroup.GUI_RELOAD);
                 break;
             case ACTIVE_PLAYLIST_CHANGED:
                 parseActivePlaylistChanged(msg.getResponseActiveChanged());
-                clementineMessage.setTypeGroup(MessageGroup.GUI_RELOAD);
                 break;
             case REPEAT:
                 parseRepeat(msg.getRepeat());
@@ -149,7 +138,6 @@ public class ClementinePbParser {
                 break;
             case LYRICS:
                 parseLyrics(msg.getResponseLyrics());
-                clementineMessage.setTypeGroup(MessageGroup.GUI_RELOAD);
                 break;
             case SONG_FILE_CHUNK:
                 break;

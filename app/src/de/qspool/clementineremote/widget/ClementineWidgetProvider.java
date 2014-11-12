@@ -23,6 +23,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 
@@ -30,79 +31,84 @@ import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.Clementine;
+import de.qspool.clementineremote.backend.ClementinePlayerConnection;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.backend.receivers.ClementineBroadcastReceiver;
 import de.qspool.clementineremote.utils.Utilities;
 
 public class ClementineWidgetProvider extends AppWidgetProvider {
 
-    private boolean mClementineConnected = false;
+    private WidgetIntent.ClementineAction mCurrentClementineAction;
 
-    private MySong mCurrentSong;
+    private ClementinePlayerConnection.ConnectionStatus mCurrentConnectionStatus;
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        mCurrentClementineAction = WidgetIntent.ClementineAction.DEFAULT;
+        mCurrentConnectionStatus = ClementinePlayerConnection.ConnectionStatus.IDLE;
+
+        String action = intent.getAction();
+        if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(action)) {
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+                int idAction = extras.getInt(WidgetIntent.EXTRA_CLEMENTINE_ACTION);
+                int idState = extras.getInt(WidgetIntent.EXTRA_CLEMENTINE_CONNECTION_STATE);
+
+                mCurrentClementineAction = WidgetIntent.ClementineAction.values()[idAction];
+                mCurrentConnectionStatus = ClementinePlayerConnection.ConnectionStatus
+                        .values()[idState];
+            }
+        }
+
+        // Call this last. In AppWidgetProvider it calls onUpdate and other methods for the Widget
+        super.onReceive(context, intent);
+    }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         final int N = appWidgetIds.length;
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean canConnect = prefs.contains(SharedPreferencesKeys.SP_KEY_IP);
-
-        getClementineStatus();
-
         // Perform this loop procedure for each App Widget that belongs to this provider
         for (int i = 0; i < N; i++) {
             int appWidgetId = appWidgetIds[i];
+            appWidgetManager.getAppWidgetInfo(appWidgetId);
 
             // Get the layout for the App Widget and update fields
             RemoteViews views = new RemoteViews(context.getPackageName(),
                     R.layout.widget_clementine);
 
-            if (mClementineConnected) {
-                // Textviews
-                if (mCurrentSong == null) {
-                    views.setTextViewText(R.id.widget_artist, "");
-                    views.setTextViewText(R.id.widget_title,
-                            context.getString(R.string.player_nosong));
-                } else {
-                    views.setTextViewText(R.id.widget_artist, mCurrentSong.getArtist());
-                    views.setTextViewText(R.id.widget_title, mCurrentSong.getTitle());
-                }
+            switch (mCurrentClementineAction) {
+                case DEFAULT:
+                case CONNECTION_STATUS:
+                    updateViewsOnConnectionStatusChange(context, views);
+                    break;
+                case STATE_CHANGE:
+                    updateViewsOnStateChange(context, views);
+                    break;
+            }
 
-                // Play or pause?
-                Intent intentPlayPause = new Intent(context, ClementineBroadcastReceiver.class);
+            // Tell the AppWidgetManager to perform an update on the current app widget
+            appWidgetManager.updateAppWidget(appWidgetId, views);
+        }
+    }
 
-                if (App.mClementine.getState() == Clementine.State.PLAY) {
-                    views.setImageViewResource(R.id.widget_btn_play_pause,
-                            R.drawable.ic_media_pause);
-                    intentPlayPause.setAction(ClementineBroadcastReceiver.PAUSE);
-                } else {
-                    views.setImageViewResource(R.id.widget_btn_play_pause,
-                            R.drawable.ic_media_play);
-                    intentPlayPause.setAction(ClementineBroadcastReceiver.PLAY);
-                }
-                views.setOnClickPendingIntent(R.id.widget_btn_play_pause,
-                        PendingIntent
-                                .getBroadcast(context, 0, intentPlayPause,
-                                        PendingIntent.FLAG_ONE_SHOT));
+    private void updateViewsOnConnectionStatusChange(Context context, RemoteViews views) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean canConnect = prefs.contains(SharedPreferencesKeys.SP_KEY_IP);
 
-                // Next track
-                Intent intentNext = new Intent(context, ClementineBroadcastReceiver.class);
-                intentNext.setAction(ClementineBroadcastReceiver.NEXT);
+        views.setBoolean(R.id.widget_btn_play_pause, "setEnabled", false);
+        views.setBoolean(R.id.widget_btn_next, "setEnabled", false);
 
-                views.setOnClickPendingIntent(R.id.widget_btn_next,
-                        PendingIntent
-                                .getBroadcast(context, 0, intentNext, PendingIntent.FLAG_ONE_SHOT));
-
-                // When connected, user can start the app by touching anywhere
-                views.setOnClickPendingIntent(R.id.widget_layout,
-                        Utilities.getClementineRemotePendingIntent(context));
-            } else {
+        switch (mCurrentConnectionStatus) {
+            case IDLE:
+            case DISCONNECTED:
                 // Reset play button
-                views.setImageViewResource(R.id.widget_btn_play_pause, R.drawable.ic_media_play);
+                views.setImageViewResource(R.id.widget_btn_play_pause,
+                        R.drawable.ic_media_play_light);
 
                 if (canConnect) {
                     // Textviews
-                    views.setTextViewText(R.id.widget_artist, prefs.getString(
+                    views.setTextViewText(R.id.widget_subtitle, prefs.getString(
                             SharedPreferencesKeys.SP_KEY_IP, ""));
                     views.setTextViewText(R.id.widget_title,
                             context.getString(R.string.widget_connect_to));
@@ -114,8 +120,8 @@ public class ClementineWidgetProvider extends AppWidgetProvider {
                             .getBroadcast(context, 0, intentConnect, PendingIntent.FLAG_ONE_SHOT));
                 } else {
                     // Textviews
-                    views.setTextViewText(R.id.widget_artist,
-                            context.getString(R.string.widget_no_ip));
+                    views.setTextViewText(R.id.widget_subtitle,
+                            context.getString(R.string.widget_open_clementine));
                     views.setTextViewText(R.id.widget_title,
                             context.getString(R.string.widget_not_connected));
 
@@ -123,16 +129,69 @@ public class ClementineWidgetProvider extends AppWidgetProvider {
                     views.setOnClickPendingIntent(R.id.widget_layout,
                             Utilities.getClementineRemotePendingIntent(context));
                 }
-            }
-
-            // Tell the AppWidgetManager to perform an update on the current app widget
-            appWidgetManager.updateAppWidget(appWidgetId, views);
+                break;
+            case CONNECTING:
+                views.setTextViewText(R.id.widget_subtitle, "");
+                views.setTextViewText(R.id.widget_title,
+                        context.getString(R.string.connectdialog_connecting));
+                break;
+            case NO_CONNECTION:
+                views.setTextViewText(R.id.widget_subtitle,
+                        context.getString(R.string.widget_open_clementine));
+                views.setTextViewText(R.id.widget_title,
+                        context.getString(R.string.widget_couldnt_connect));
+                // Start Clementine Remote
+                views.setOnClickPendingIntent(R.id.widget_layout,
+                        Utilities.getClementineRemotePendingIntent(context));
+                break;
+            case CONNECTED:
+                views.setBoolean(R.id.widget_btn_play_pause, "setEnabled", true);
+                views.setBoolean(R.id.widget_btn_next, "setEnabled", true);
+                break;
         }
     }
 
-    private void getClementineStatus() {
-        mCurrentSong = App.mClementine.getCurrentSong();
-        mClementineConnected = (App.mClementineConnection != null
-                && App.mClementineConnection.isConnected());
+    private void updateViewsOnStateChange(Context context, RemoteViews views) {
+        MySong currentSong = App.mClementine.getCurrentSong();
+
+        // Textviews
+        if (currentSong == null) {
+            views.setTextViewText(R.id.widget_subtitle, "");
+            views.setTextViewText(R.id.widget_title,
+                    context.getString(R.string.player_nosong));
+        } else {
+            views.setTextViewText(R.id.widget_title, currentSong.getTitle());
+            views.setTextViewText(R.id.widget_subtitle,
+                    currentSong.getArtist() + " / " + currentSong.getAlbum());
+        }
+
+        // Play or pause?
+        Intent intentPlayPause = new Intent(context, ClementineBroadcastReceiver.class);
+
+        if (App.mClementine.getState() == Clementine.State.PLAY) {
+            views.setImageViewResource(R.id.widget_btn_play_pause,
+                    R.drawable.ic_media_pause_light);
+            intentPlayPause.setAction(ClementineBroadcastReceiver.PAUSE);
+        } else {
+            views.setImageViewResource(R.id.widget_btn_play_pause,
+                    R.drawable.ic_media_play_light);
+            intentPlayPause.setAction(ClementineBroadcastReceiver.PLAY);
+        }
+        views.setOnClickPendingIntent(R.id.widget_btn_play_pause,
+                PendingIntent
+                        .getBroadcast(context, 0, intentPlayPause,
+                                PendingIntent.FLAG_ONE_SHOT));
+
+        // Next track
+        Intent intentNext = new Intent(context, ClementineBroadcastReceiver.class);
+        intentNext.setAction(ClementineBroadcastReceiver.NEXT);
+
+        views.setOnClickPendingIntent(R.id.widget_btn_next,
+                PendingIntent
+                        .getBroadcast(context, 0, intentNext, PendingIntent.FLAG_ONE_SHOT));
+
+        // When connected, user can start the app by touching anywhere
+        views.setOnClickPendingIntent(R.id.widget_layout,
+                Utilities.getClementineRemotePendingIntent(context));
     }
 }

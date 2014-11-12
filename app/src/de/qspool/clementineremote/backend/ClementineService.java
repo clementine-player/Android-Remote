@@ -36,16 +36,13 @@ import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.listener.PlayerConnectionListener;
 import de.qspool.clementineremote.backend.mediasession.MediaSessionController;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
-import de.qspool.clementineremote.backend.pb.ClementineMessage.ErrorMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.utils.Utilities;
 
 public class ClementineService extends Service {
 
-    public final static String SERVICE_ID = "ServiceIntentId";
-
-    public final static String SERVICE_DISCONNECT_DATA = "ServiceIntentData";
+    public final static String SERVICE_ID = "de.qspool.clementineremote.service.id";
 
     public final static int SERVICE_START = 1;
 
@@ -60,8 +57,6 @@ public class ClementineService extends Service {
     private final String TAG = getClass().getSimpleName();
 
     private NotificationManager mNotificationManager;
-
-    private MediaSessionController mMediaSessionController;
 
     private Thread mPlayerThread;
 
@@ -110,37 +105,43 @@ public class ClementineService extends Service {
                 // Create a new instance
                 if (App.mClementineConnection == null) {
                     App.mClementineConnection = new ClementinePlayerConnection();
-                    mMediaSessionController = new MediaSessionController(this,
+                    MediaSessionController mediaSessionController = new MediaSessionController(this,
                             App.mClementineConnection);
-                    mMediaSessionController.registerMediaSession();
+                    mediaSessionController.registerMediaSession();
 
                     App.mClementineConnection.addPlayerConnectionListener(
                             new PlayerConnectionListener() {
                                 @Override
-                                public void onThreadStarted() {
-                                    sendConnectMessageIfPossible(intent);
-                                }
+                                public void onConnectionStatusChanged(
+                                        ClementinePlayerConnection.ConnectionStatus status) {
+                                    switch (status) {
+                                        case IDLE:
+                                            sendConnectMessageIfPossible(intent);
+                                            break;
+                                        case CONNECTING:
+                                            break;
+                                        case NO_CONNECTION:
+                                            break;
+                                        case CONNECTED:
+                                            if (mUseWakeLock) {
+                                                mWakeLock.acquire();
+                                            }
+                                            break;
+                                        case LOST_CONNECTION:
+                                            showKeepAliveDisconnectNotification();
+                                            break;
+                                        case DISCONNECTED:
+                                            Intent mServiceIntent = new Intent(
+                                                    ClementineService.this,
+                                                    ClementineService.class);
+                                            mServiceIntent
+                                                    .putExtra(SERVICE_ID, SERVICE_DISCONNECTED);
+                                            startService(mServiceIntent);
 
-                                @Override
-                                public void onConnected() {
-                                    if (mUseWakeLock) {
-                                        mWakeLock.acquire();
-                                    }
-                                }
-
-                                @Override
-                                public void onConnectionClosed(
-                                        ClementineMessage clementineMessage) {
-                                    Intent mServiceIntent = new Intent(ClementineService.this,
-                                            ClementineService.class);
-                                    mServiceIntent
-                                            .putExtra(SERVICE_ID, SERVICE_DISCONNECTED);
-                                    mServiceIntent.putExtra(SERVICE_DISCONNECT_DATA,
-                                            clementineMessage.getErrorMessage().ordinal());
-                                    startService(mServiceIntent);
-
-                                    if (mUseWakeLock) {
-                                        mWakeLock.release();
+                                            if (mUseWakeLock) {
+                                                mWakeLock.release();
+                                            }
+                                            break;
                                     }
                                 }
 
@@ -159,15 +160,6 @@ public class ClementineService extends Service {
             case SERVICE_DISCONNECTED:
                 intteruptThread();
                 App.mClementineConnection = null;
-
-                // Check if we lost connection due a keep alive
-                if (intent.hasExtra(SERVICE_DISCONNECT_DATA)) {
-                    int reason = intent.getIntExtra(SERVICE_DISCONNECT_DATA, 0);
-                    if (reason == ErrorMessage.KEEP_ALIVE_TIMEOUT.ordinal()
-                            || reason == ErrorMessage.IO_EXCEPTION.ordinal()) {
-                        showKeepAliveDisconnectNotification();
-                    }
-                }
                 break;
             default:
                 break;

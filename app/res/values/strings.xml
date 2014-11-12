@@ -195,7 +195,8 @@
 
     <string name="widget_connect_to">Touch to connect</string>
     <string name="widget_not_connected">Not connected</string>
-    <string name="widget_no_ip">Touch to start Clementine Remote</string>
+    <string name="widget_open_clementine">Touch to start Clementine Remote</string>
+    <string name="widget_couldnt_connect">Could not connect</string>
 
     <string name="dialog_close">Close</string>
 

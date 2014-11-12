@@ -34,6 +34,7 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.backend.receivers.ClementineMediaButtonEventReceiver;
 import de.qspool.clementineremote.widget.ClementineWidgetProvider;
+import de.qspool.clementineremote.widget.WidgetIntent;
 
 public class MediaSessionController {
 
@@ -73,37 +74,39 @@ public class MediaSessionController {
     public void registerMediaSession() {
         mClementinePlayerConnection.addPlayerConnectionListener(new PlayerConnectionListener() {
             @Override
-            public void onThreadStarted() {
-            }
+            public void onConnectionStatusChanged(
+                    ClementinePlayerConnection.ConnectionStatus status) {
+                switch (status) {
+                    case IDLE:
+                        break;
+                    case CONNECTING:
+                        break;
+                    case NO_CONNECTION:
+                        break;
+                    case CONNECTED:
+                        // Request AudioFocus, so the widget is shown on the lock-screen
+                        mAudioManager.requestAudioFocus(mOnAudioFocusChangeListener,
+                                AudioManager.STREAM_MUSIC,
+                                AudioManager.AUDIOFOCUS_GAIN);
 
-            @Override
-            public void onConnected() {
-                // Request AudioFocus, so the widget is shown on the lock-screen
-                mAudioManager.requestAudioFocus(mOnAudioFocusChangeListener,
-                        AudioManager.STREAM_MUSIC,
-                        AudioManager.AUDIOFOCUS_GAIN);
+                        // Register MediaButtonReceiver
+                        IntentFilter filter = new IntentFilter(Intent.ACTION_MEDIA_BUTTON);
+                        mContext.registerReceiver(mMediaButtonBroadcastReceiver, filter);
 
-                // Register MediaButtonReceiver
-                IntentFilter filter = new IntentFilter(Intent.ACTION_MEDIA_BUTTON);
-                mContext.registerReceiver(mMediaButtonBroadcastReceiver, filter);
+                        mClementineMediaSession.registerSession();
+                        mMediaSessionNotification.registerSession();
+                        mMediaSessionNotification.setMediaSessionCompat(
+                                mClementineMediaSession.getMediaSession());
+                        break;
+                    case DISCONNECTED:
+                        mAudioManager.abandonAudioFocus(mOnAudioFocusChangeListener);
+                        mContext.unregisterReceiver(mMediaButtonBroadcastReceiver);
 
-                mClementineMediaSession.registerSession();
-                mMediaSessionNotification.registerSession();
-                mMediaSessionNotification.setMediaSessionCompat(
-                        mClementineMediaSession.getMediaSession());
-
-                sendWidgetUpdateIntent();
-            }
-
-            @Override
-            public void onConnectionClosed(ClementineMessage clementineMessage) {
-                mAudioManager.abandonAudioFocus(mOnAudioFocusChangeListener);
-                mContext.unregisterReceiver(mMediaButtonBroadcastReceiver);
-
-                mClementineMediaSession.unregisterSession();
-                mMediaSessionNotification.unregisterSession();
-
-                sendWidgetUpdateIntent();
+                        mClementineMediaSession.unregisterSession();
+                        mMediaSessionNotification.unregisterSession();
+                        break;
+                }
+                sendWidgetUpdateIntent(WidgetIntent.ClementineAction.CONNECTION_STATUS, status);
             }
 
             @Override
@@ -117,7 +120,8 @@ public class MediaSessionController {
                         mClementineMediaSession.updateSession();
                         mMediaSessionNotification.updateSession();
                         sendMetachangedIntent(META_CHANGED);
-                        sendWidgetUpdateIntent();
+                        sendWidgetUpdateIntent(WidgetIntent.ClementineAction.STATE_CHANGE,
+                                ClementinePlayerConnection.ConnectionStatus.CONNECTED);
                         break;
                     case PLAY:
                     case PAUSE:
@@ -125,10 +129,12 @@ public class MediaSessionController {
                         mClementineMediaSession.updateSession();
                         mMediaSessionNotification.updateSession();
                         sendMetachangedIntent(PLAYSTATE_CHANGED);
-                        sendWidgetUpdateIntent();
+                        sendWidgetUpdateIntent(WidgetIntent.ClementineAction.STATE_CHANGE,
+                                ClementinePlayerConnection.ConnectionStatus.CONNECTED);
                         break;
                     case FIRST_DATA_SENT_COMPLETE:
-                        sendWidgetUpdateIntent();
+                        sendWidgetUpdateIntent(WidgetIntent.ClementineAction.STATE_CHANGE,
+                                ClementinePlayerConnection.ConnectionStatus.CONNECTED);
                         break;
                     default:
                         break;
@@ -151,7 +157,8 @@ public class MediaSessionController {
         mContext.sendBroadcast(i);
     }
 
-    private void sendWidgetUpdateIntent() {
+    private void sendWidgetUpdateIntent(WidgetIntent.ClementineAction action,
+            ClementinePlayerConnection.ConnectionStatus connectionStatus) {
         // Get widget ids
         ComponentName widgetComponent = new ComponentName(mContext.getPackageName(),
                 ClementineWidgetProvider.class.getName());
@@ -159,8 +166,11 @@ public class MediaSessionController {
 
         if (widgetIds.length > 0) {
             Intent intent = new Intent(mContext, ClementineWidgetProvider.class);
-            intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetIds);
+            intent.setAction(WidgetIntent.ACTION_APPWIDGET_UPDATE);
+            intent.putExtra(WidgetIntent.EXTRA_APPWIDGET_IDS, widgetIds);
+            intent.putExtra(WidgetIntent.EXTRA_CLEMENTINE_ACTION, action.ordinal());
+            intent.putExtra(WidgetIntent.EXTRA_CLEMENTINE_CONNECTION_STATE,
+                    connectionStatus.ordinal());
 
             mContext.sendBroadcast(intent);
         }
