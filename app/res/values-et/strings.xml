@@ -3,7 +3,6 @@
   <string name="app_name">Clementine Remote</string>
   <string name="app_not_available">App ei ole saadaval!</string>
   <string name="connectdialog_connect">Ühenda</string>
-  <string name="connectdialog_autoconnect">Ühendu automaatselt</string>
   <string name="connectdialog_connecting">Clementine\'iga ühendamine</string>
   <string name="connectdialog_download_data">Andmete allalaadimine</string>
   <string name="connectdialog_error">Ei leidnud hosti</string>
@@ -43,11 +42,11 @@
   <string name="pref_cat_info">Info</string>
   <string name="pref_volume_title">Kasuta helitugevuse nuppe</string>
   <string name="pref_trackno_summary">Näita või peida loo numbrid esituloendis.</string>
+  <string name="pref_lastfm_title">Last.fm</string>
   <string name="pref_port_title">Port</string>
   <string name="pref_port_summary">Kasutatav port:</string>
   <string name="pref_port_default">5500</string>
   <string name="pref_port_error">Lubamatu port!</string>
-  <string name="pref_lastfm_title">Last.fm</string>
   <string name="pref_version_summary">Külasta projekti veebilehte</string>
   <string name="pref_version_title">Versioon</string>
   <string name="pref_license_title">Litsents</string>
