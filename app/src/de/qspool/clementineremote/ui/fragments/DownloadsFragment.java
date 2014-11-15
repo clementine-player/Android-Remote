@@ -39,6 +39,7 @@ import java.util.TimerTask;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.backend.downloader.ClementineSongDownloader;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.ui.adapter.DownloadAdapter;
@@ -69,9 +70,9 @@ public class DownloadsFragment extends AbstractDrawerFragment {
     public void onResume() {
         super.onResume();
         // Check if we are still connected
-        if (App.mClementineConnection == null
-                || App.mClementine == null
-                || !App.mClementineConnection.isConnected()) {
+        if (App.ClementineConnection == null
+                || App.Clementine == null
+                || !App.ClementineConnection.isConnected()) {
         } else {
             //RequestPlaylistSongs();
             setActionBarTitle();
@@ -99,7 +100,8 @@ public class DownloadsFragment extends AbstractDrawerFragment {
         mEmptyDownloads = view.findViewById(R.id.downloads_empty);
 
         // Create the adapter
-        mAdapter = new DownloadAdapter(getActivity(), R.layout.item_download, App.downloaders);
+        mAdapter = new DownloadAdapter(getActivity(), R.layout.item_download,
+                App.DownloadManager.getAllDownloaders());
 
         mList.setOnItemClickListener(oiclDownload);
         mList.setAdapter(mAdapter);
@@ -127,7 +129,7 @@ public class DownloadsFragment extends AbstractDrawerFragment {
     }
 
     private void setActionBarTitle() {
-        MySong currentSong = App.mClementine.getCurrentSong();
+        MySong currentSong = App.Clementine.getCurrentSong();
         if (currentSong == null) {
             mActionBar.setTitle(getString(R.string.player_nosong));
         } else {
@@ -160,8 +162,10 @@ public class DownloadsFragment extends AbstractDrawerFragment {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
                 long id) {
-            if (App.downloaders.get(position).getStatus() == AsyncTask.Status.FINISHED) {
-                Uri lastFile = App.downloaders.get(position).getLastFileUri();
+            ClementineSongDownloader downloader = (ClementineSongDownloader) mList.getAdapter()
+                    .getItem(position);
+            if (downloader.getStatus() == AsyncTask.Status.FINISHED) {
+                Uri lastFile = downloader.getLastFileUri();
                 if (lastFile == null) {
                     Toast.makeText(getActivity(), R.string.download_error, Toast.LENGTH_LONG)
                             .show();
@@ -203,7 +207,7 @@ public class DownloadsFragment extends AbstractDrawerFragment {
                             }
 
                             mAdapter.notifyDataSetChanged();
-                            if (App.downloaders.isEmpty()) {
+                            if (App.DownloadManager.getAllDownloaders().isEmpty()) {
                                 mList.setEmptyView(mEmptyDownloads);
                             }
 

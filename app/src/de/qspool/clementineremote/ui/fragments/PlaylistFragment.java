@@ -46,7 +46,6 @@ import java.util.List;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
-import de.qspool.clementineremote.backend.ClementineSongDownloader;
 import de.qspool.clementineremote.backend.listener.OnPlaylistReceivedListener;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
@@ -93,7 +92,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
         mActionBar = getActivity().getActionBar();
         setHasOptionsMenu(true);
 
-        mPlaylistManager = App.mClementine.getPlaylistManager();
+        mPlaylistManager = App.Clementine.getPlaylistManager();
         mPlaylistListener = new OnPlaylistReceivedListener() {
             @Override
             public void onPlaylistSongsReceived(final MyPlaylist p) {
@@ -150,9 +149,9 @@ public class PlaylistFragment extends AbstractDrawerFragment {
     public void onResume() {
         super.onResume();
         // Check if we are still connected
-        if (App.mClementineConnection == null
-                || App.mClementine == null
-                || !App.mClementineConnection.isConnected()) {
+        if (App.ClementineConnection == null
+                || App.Clementine == null
+                || !App.ClementineConnection.isConnected()) {
             return;
         }
 
@@ -164,7 +163,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
         mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
         // Get the position of the current track if we have one
-        if (App.mClementine.getCurrentSong() != null) {
+        if (App.Clementine.getCurrentSong() != null) {
             updateViewPosition();
         }
     }
@@ -231,7 +230,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
                         msg.obj = ClementineMessageFactory
                                 .buildRemoveMultipleSongsFromPlaylist(getPlaylistId(),
                                         songs);
-                        App.mClementineConnection.mHandler.sendMessage(msg);
+                        App.ClementineConnection.mHandler.sendMessage(msg);
                         mode.finish();
                         return true;
                     default:
@@ -286,11 +285,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.download_playlist:
-                ClementineSongDownloader downloaderAlbum = new ClementineSongDownloader(
-                        getActivity());
-
-                // Get the playlist id and download the playlist
-                downloaderAlbum.startDownload(ClementineMessageFactory
+                App.DownloadManager.addJob(ClementineMessageFactory
                         .buildDownloadSongsMessage(getPlaylistId(), DownloadItem.APlaylist));
                 return true;
             case R.id.clear_playlist:
@@ -300,7 +295,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
             case R.id.close_playlist:
                 Message msg = Message.obtain();
                 msg.obj = ClementineMessageFactory.buildClosePlaylist(getPlaylistId());
-                App.mClementineConnection.mHandler.sendMessage(msg);
+                App.ClementineConnection.mHandler.sendMessage(msg);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -425,7 +420,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
     private void playSong(MySong song) {
         Message msg = Message.obtain();
         msg.obj = ClementineMessageFactory.buildRequestChangeSong(song.getIndex(), getPlaylistId());
-        App.mClementineConnection.mHandler.sendMessage(msg);
+        App.ClementineConnection.mHandler.sendMessage(msg);
 
         mPlaylistManager.setActivePlaylist(getPlaylistId());
     }
@@ -435,9 +430,9 @@ public class PlaylistFragment extends AbstractDrawerFragment {
      * Set the selection to the currently played item
      */
     private void updateViewPosition() {
-        if (App.mClementine.getCurrentSong() != null
+        if (App.Clementine.getCurrentSong() != null
                 && mPlaylistManager.getActivePlaylistId() == getPlaylistId()) {
-            int pos = App.mClementine.getCurrentSong().getIndex();
+            int pos = App.Clementine.getCurrentSong().getIndex();
             mList.setSelection(pos - mSelectionOffset);
         }
     }

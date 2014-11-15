@@ -24,6 +24,7 @@ import java.net.UnknownHostException;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.backend.mediasession.ClementineMediaSessionNotification;
 import de.qspool.clementineremote.ui.MainActivity;
 
 public class Utilities {
@@ -160,8 +161,8 @@ public class Utilities {
      *
      * @return true if connected to a wifi network
      */
-    public static boolean onWifi(Context context) {
-        ConnectivityManager connManager = (ConnectivityManager) context
+    public static boolean onWifi() {
+        ConnectivityManager connManager = (ConnectivityManager) App.getApp()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
@@ -204,7 +205,7 @@ public class Utilities {
      * @return true if connected, false otherwise
      */
     public static boolean isRemoteConnected() {
-        return App.mClementineConnection != null && App.mClementineConnection.isConnected();
+        return App.ClementineConnection != null && App.ClementineConnection.isConnected();
     }
 
     /**
@@ -222,7 +223,7 @@ public class Utilities {
         // Set the result intent
         Intent resultIntent = new Intent(context, MainActivity.class);
         resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        resultIntent.putExtra(App.NOTIFICATION_ID, -1);
+        resultIntent.putExtra(ClementineMediaSessionNotification.EXTRA_NOTIFICATION_ID, -1);
 
         // Create a TaskStack, so the app navigates correctly backwards
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);

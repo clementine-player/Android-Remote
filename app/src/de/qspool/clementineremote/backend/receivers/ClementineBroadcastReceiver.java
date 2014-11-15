@@ -87,8 +87,8 @@ public class ClementineBroadcastReceiver extends BroadcastReceiver {
 
         // Now send the message
         if (msg != null && msg.obj != null
-                && App.mClementineConnection != null) {
-            App.mClementineConnection.mHandler.sendMessage(msg);
+                && App.ClementineConnection != null) {
+            App.ClementineConnection.mHandler.sendMessage(msg);
         }
     }
 }

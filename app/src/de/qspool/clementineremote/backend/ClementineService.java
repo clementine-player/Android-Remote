@@ -34,6 +34,7 @@ import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.listener.PlayerConnectionListener;
+import de.qspool.clementineremote.backend.mediasession.ClementineMediaSessionNotification;
 import de.qspool.clementineremote.backend.mediasession.MediaSessionController;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
@@ -103,13 +104,13 @@ public class ClementineService extends Service {
         switch (action) {
             case SERVICE_START:
                 // Create a new instance
-                if (App.mClementineConnection == null) {
-                    App.mClementineConnection = new ClementinePlayerConnection();
+                if (App.ClementineConnection == null) {
+                    App.ClementineConnection = new ClementinePlayerConnection();
                     MediaSessionController mediaSessionController = new MediaSessionController(this,
-                            App.mClementineConnection);
+                            App.ClementineConnection);
                     mediaSessionController.registerMediaSession();
 
-                    App.mClementineConnection.addPlayerConnectionListener(
+                    App.ClementineConnection.addPlayerConnectionListener(
                             new PlayerConnectionListener() {
                                 @Override
                                 public void onConnectionStatusChanged(
@@ -151,7 +152,7 @@ public class ClementineService extends Service {
                                 }
                             });
 
-                    mPlayerThread = new Thread(App.mClementineConnection);
+                    mPlayerThread = new Thread(App.ClementineConnection);
                     mPlayerThread.start();
                 } else {
                     sendConnectMessageIfPossible(intent);
@@ -159,7 +160,7 @@ public class ClementineService extends Service {
                 break;
             case SERVICE_DISCONNECTED:
                 intteruptThread();
-                App.mClementineConnection = null;
+                App.ClementineConnection = null;
                 break;
             default:
                 break;
@@ -168,8 +169,8 @@ public class ClementineService extends Service {
 
     @Override
     public void onDestroy() {
-        if (App.mClementineConnection != null
-                && App.mClementineConnection.isConnected()) {
+        if (App.ClementineConnection != null
+                && App.ClementineConnection.isConnected()) {
             // Create a new request
 
             // Move the request to the message
@@ -177,10 +178,10 @@ public class ClementineService extends Service {
             msg.obj = ClementineMessage.getMessage(MsgType.DISCONNECT);
 
             // Send the request to the thread
-            App.mClementineConnection.mHandler.sendMessage(msg);
+            App.ClementineConnection.mHandler.sendMessage(msg);
         }
         intteruptThread();
-        App.mClementineConnection = null;
+        App.ClementineConnection = null;
     }
 
     private void intteruptThread() {
@@ -188,9 +189,9 @@ public class ClementineService extends Service {
             mPlayerThread.interrupt();
         }
 
-        if (App.mClementineConnection != null
+        if (App.ClementineConnection != null
                 && mPlayerThread.isAlive()) {
-            App.mClementineConnection.mHandler.post(new Runnable() {
+            App.ClementineConnection.mHandler.post(new Runnable() {
 
                 @Override
                 public void run() {
@@ -199,6 +200,8 @@ public class ClementineService extends Service {
 
             });
         }
+
+        App.DownloadManager.shutdown();
     }
 
     /**
@@ -213,7 +216,8 @@ public class ClementineService extends Service {
                 .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .setContentIntent(Utilities.getClementineRemotePendingIntent(this))
                 .build();
-        mNotificationManager.notify(App.NOTIFY_ID, notification);
+        mNotificationManager
+                .notify(ClementineMediaSessionNotification.NOTIFIFCATION_ID, notification);
     }
 
     private void sendConnectMessageIfPossible(Intent intent) {
@@ -225,7 +229,7 @@ public class ClementineService extends Service {
             Message msg = Message.obtain();
             msg.obj = ClementineMessageFactory
                     .buildConnectMessage(ip, port, auth, true, false);
-            App.mClementineConnection.mHandler.sendMessage(msg);
+            App.ClementineConnection.mHandler.sendMessage(msg);
         }
     }
 }

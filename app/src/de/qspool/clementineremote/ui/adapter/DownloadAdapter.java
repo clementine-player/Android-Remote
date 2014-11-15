@@ -24,7 +24,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -34,12 +33,12 @@ import java.util.List;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
-import de.qspool.clementineremote.backend.ClementineSongDownloader;
+import de.qspool.clementineremote.backend.downloader.ClementineSongDownloader;
 
 /**
  * Class is used for displaying the song data
  */
-public class DownloadAdapter extends ArrayAdapter<ClementineSongDownloader> implements Filterable {
+public class DownloadAdapter extends ArrayAdapter<ClementineSongDownloader> {
 
     private Context mContext;
 
@@ -51,7 +50,7 @@ public class DownloadAdapter extends ArrayAdapter<ClementineSongDownloader> impl
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ClementineSongDownloader downloader = App.downloaders.get(position);
+        ClementineSongDownloader downloader = getItem(position);
         DownloadViewHolder downloadViewHolder;
 
         if (convertView == null) {
@@ -76,9 +75,9 @@ public class DownloadAdapter extends ArrayAdapter<ClementineSongDownloader> impl
         downloadViewHolder.cancel.setTag(downloader);
 
         downloadViewHolder.progress.setMax(100);
-        downloadViewHolder.progress.setProgress(downloader.getCurrentProgress());
-        downloadViewHolder.title.setText(downloader.getTitle());
-        downloadViewHolder.subtitle.setText(downloader.getSubtitle());
+        downloadViewHolder.progress.setProgress((int) downloader.getDownloadStatus().getProgress());
+        downloadViewHolder.title.setText(App.DownloadManager.getTitleForItem(downloader));
+        downloadViewHolder.subtitle.setText(App.DownloadManager.getSubtitleForItem(downloader));
 
         return convertView;
     }
@@ -90,11 +89,12 @@ public class DownloadAdapter extends ArrayAdapter<ClementineSongDownloader> impl
             ClementineSongDownloader downloader = (ClementineSongDownloader) v.getTag();
 
             if (downloader.getStatus() == AsyncTask.Status.RUNNING) {
-                downloader.cancel(true);
+                downloader.cancel(false);
                 Toast.makeText(mContext, R.string.download_noti_canceled, Toast.LENGTH_SHORT)
                         .show();
             } else {
-                App.downloaders.remove(downloader);
+                App.DownloadManager.removeDownloader(downloader.getId());
+                remove(downloader);
             }
 
             notifyDataSetChanged();

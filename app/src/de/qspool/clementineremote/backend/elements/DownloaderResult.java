@@ -23,16 +23,21 @@ public class DownloaderResult extends ClementineElement {
 
     public enum DownloadResult {SUCCESSFUL, INSUFFIANT_SPACE, NOT_MOUNTED, CONNECTION_ERROR, FOBIDDEN, ONLY_WIFI, CANCELLED}
 
-    ;
-
     private DownloadResult mResult;
 
-    public DownloaderResult(DownloadResult result) {
+    private int mId;
+
+    public DownloaderResult(int id, DownloadResult result) {
+        mId = id;
         mResult = result;
     }
 
     public DownloadResult getResult() {
         return mResult;
+    }
+
+    public int getId() {
+        return mId;
     }
 
     /**
@@ -41,7 +46,7 @@ public class DownloaderResult extends ClementineElement {
      *
      * @return The resource ID for the specific message
      */
-    public int getMessageId() {
+    public int getMessageStringId() {
         switch (mResult) {
             case CONNECTION_ERROR:
                 return R.string.download_noti_canceled;

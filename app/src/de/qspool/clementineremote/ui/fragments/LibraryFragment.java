@@ -95,8 +95,8 @@ public class LibraryFragment extends AbstractDrawerFragment implements
     public void onResume() {
         super.onResume();
         // Check if we are still connected
-        if (App.mClementineConnection == null || App.mClementine == null
-                || !App.mClementineConnection.isConnected()) {
+        if (App.ClementineConnection == null || App.Clementine == null
+                || !App.ClementineConnection.isConnected()) {
             return;
         }
 
@@ -250,7 +250,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
                 showList();
             } else {
                 Utilities.ShowMessageDialog(getActivity(), R.string.library_download_error,
-                        result.getMessageId());
+                        result.getMessageStringId());
             }
         }
 
@@ -354,8 +354,8 @@ public class LibraryFragment extends AbstractDrawerFragment implements
                 LinkedList<String> urls = new LinkedList<String>();
                 urls.add(libraryItem.getUrl());
                 msg.obj = ClementineMessageFactory.buildInsertUrl(
-                        App.mClementine.getPlaylistManager().getActivePlaylistId(), urls);
-                App.mClementineConnection.mHandler.sendMessage(msg);
+                        App.Clementine.getPlaylistManager().getActivePlaylistId(), urls);
+                App.ClementineConnection.mHandler.sendMessage(msg);
                 return false;
             default:
                 return false;
@@ -363,7 +363,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
     }
 
     private void setActionBarTitle() {
-        MySong currentSong = App.mClementine.getCurrentSong();
+        MySong currentSong = App.Clementine.getCurrentSong();
         if (currentSong == null) {
             mActionBar.setTitle(getString(R.string.player_nosong));
         } else {
@@ -457,9 +457,9 @@ public class LibraryFragment extends AbstractDrawerFragment implements
         }
 
         msg.obj = ClementineMessageFactory.buildInsertUrl(
-                App.mClementine.getPlaylistManager().getActivePlaylistId(), urls);
+                App.Clementine.getPlaylistManager().getActivePlaylistId(), urls);
 
-        App.mClementineConnection.mHandler.sendMessage(msg);
+        App.ClementineConnection.mHandler.sendMessage(msg);
 
         Toast.makeText(getActivity(),
                 String.format(getString(R.string.library_songs_added), urls.size()),
@@ -492,8 +492,8 @@ public class LibraryFragment extends AbstractDrawerFragment implements
                     LinkedList<String> urls = new LinkedList<String>();
                     urls.add(item.getUrl());
                     msg.obj = ClementineMessageFactory.buildInsertUrl(
-                            App.mClementine.getPlaylistManager().getActivePlaylistId(), urls);
-                    App.mClementineConnection.mHandler.sendMessage(msg);
+                            App.Clementine.getPlaylistManager().getActivePlaylistId(), urls);
+                    App.ClementineConnection.mHandler.sendMessage(msg);
 
                     Toast.makeText(getActivity(),
                             String.format(getString(R.string.library_songs_added), 1),

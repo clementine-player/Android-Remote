@@ -85,7 +85,7 @@ public class ConnectionFragment extends AbstractDrawerFragment {
 
         tv_ip.setText(mSharedPref.getString(SharedPreferencesKeys.SP_KEY_IP, "") + ":" + mSharedPref
                 .getString(SharedPreferencesKeys.SP_KEY_PORT, ""));
-        tv_version.setText(App.mClementine.getVersion());
+        tv_version.setText(App.Clementine.getVersion());
 
         sb_volume = (SeekBar) view.findViewById(R.id.cn_volume);
         sb_volume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -94,7 +94,7 @@ public class ConnectionFragment extends AbstractDrawerFragment {
                 if (fromUser) {
                     Message msg = Message.obtain();
                     msg.obj = ClementineMessageFactory.buildVolumeMessage(progress);
-                    App.mClementineConnection.mHandler.sendMessage(msg);
+                    App.ClementineConnection.mHandler.sendMessage(msg);
                 }
             }
 
@@ -109,7 +109,7 @@ public class ConnectionFragment extends AbstractDrawerFragment {
             }
         });
 
-        sb_volume.setProgress(App.mClementine.getVolume());
+        sb_volume.setProgress(App.Clementine.getVolume());
 
         return view;
     }
@@ -142,7 +142,7 @@ public class ConnectionFragment extends AbstractDrawerFragment {
     }
 
     private void updateData() {
-        long diff = new Date().getTime() - App.mClementineConnection.getStartTime();
+        long diff = new Date().getTime() - App.ClementineConnection.getStartTime();
         String dateFormat = String.format("%02d:%02d:%02d",
                 TimeUnit.MILLISECONDS.toHours(diff),
                 TimeUnit.MILLISECONDS.toMinutes(diff) % 60,
@@ -156,12 +156,12 @@ public class ConnectionFragment extends AbstractDrawerFragment {
             tv_traffic.setText(R.string.connection_traffic_unsupported);
         } else {
             String tx = Utilities.humanReadableBytes(
-                    TrafficStats.getUidTxBytes(uid) - App.mClementineConnection.getStartTx(), true);
+                    TrafficStats.getUidTxBytes(uid) - App.ClementineConnection.getStartTx(), true);
             String rx = Utilities.humanReadableBytes(
-                    TrafficStats.getUidRxBytes(uid) - App.mClementineConnection.getStartRx(), true);
+                    TrafficStats.getUidRxBytes(uid) - App.ClementineConnection.getStartRx(), true);
 
-            long total = TrafficStats.getUidTxBytes(uid) - App.mClementineConnection.getStartTx() +
-                    TrafficStats.getUidRxBytes(uid) - App.mClementineConnection.getStartRx();
+            long total = TrafficStats.getUidTxBytes(uid) - App.ClementineConnection.getStartTx() +
+                    TrafficStats.getUidRxBytes(uid) - App.ClementineConnection.getStartRx();
             long a = total / TimeUnit.MILLISECONDS.toSeconds(diff);
             String perSecond = Utilities.humanReadableBytes(a, true);
 
@@ -181,7 +181,7 @@ public class ConnectionFragment extends AbstractDrawerFragment {
         switch (clementineMessage.getMessageType()) {
             case SET_VOLUME:
                 if (!mUserChangesVolume) {
-                    sb_volume.setProgress(App.mClementine.getVolume());
+                    sb_volume.setProgress(App.Clementine.getVolume());
                 }
                 break;
             default:

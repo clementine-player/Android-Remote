@@ -177,15 +177,15 @@ public class PlayerFragment extends AbstractDrawerFragment {
 
     private void metadataChanged() {
         // ActionBar shows the current playlist
-        if (App.mClementine.getPlaylistManager().getActivePlaylist() != null) {
+        if (App.Clementine.getPlaylistManager().getActivePlaylist() != null) {
             mActionBar.setSubtitle(
-                    App.mClementine.getPlaylistManager().getActivePlaylist().getName());
+                    App.Clementine.getPlaylistManager().getActivePlaylist().getName());
         }
     }
 
     private void stateChanged() {
         // display play / pause image
-        if (App.mClementine.getState() == Clementine.State.PLAY) {
+        if (App.Clementine.getState() == Clementine.State.PLAY) {
             mBtnPlayPause.setImageDrawable(getResources().getDrawable(R.drawable.ic_media_pause));
         } else {
             mBtnPlayPause.setImageDrawable(getResources().getDrawable(R.drawable.ic_media_play));
@@ -213,7 +213,7 @@ public class PlayerFragment extends AbstractDrawerFragment {
             }
             // Send the request to the thread
             if (msg.obj != null) {
-                App.mClementineConnection.mHandler.sendMessage(msg);
+                App.ClementineConnection.mHandler.sendMessage(msg);
             }
         }
     };
@@ -236,7 +236,7 @@ public class PlayerFragment extends AbstractDrawerFragment {
                     break;
             }
 
-            App.mClementineConnection.mHandler.sendMessage(msg);
+            App.ClementineConnection.mHandler.sendMessage(msg);
             return ret;
         }
     };

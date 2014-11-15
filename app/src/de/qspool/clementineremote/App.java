@@ -19,24 +19,17 @@ package de.qspool.clementineremote;
 
 import android.app.Application;
 
-import java.util.LinkedList;
-
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementinePlayerConnection;
-import de.qspool.clementineremote.backend.ClementineSongDownloader;
+import de.qspool.clementineremote.backend.downloader.DownloadManager;
 
 public class App extends Application {
 
-    public static ClementinePlayerConnection mClementineConnection = null;
+    public static ClementinePlayerConnection ClementineConnection = null;
 
-    public static Clementine mClementine = new Clementine();
+    public static Clementine Clementine = new Clementine();
 
-    public static LinkedList<ClementineSongDownloader> downloaders
-            = new LinkedList<>();
-
-    public final static int NOTIFY_ID = 78923748;
-
-    public final static String NOTIFICATION_ID = "NotificationID";
+    public static DownloadManager DownloadManager;
 
     private static App mApp;
 
@@ -49,6 +42,8 @@ public class App extends Application {
         super.onCreate();
         // Register new default uncaught exception handler
         Thread.setDefaultUncaughtExceptionHandler(new ClementineExceptionHandler(this));
+
+        DownloadManager = new DownloadManager(this);
     }
 
     public static App getApp() {

@@ -98,8 +98,8 @@ public class PlaylistSongAdapter extends ArrayAdapter<MySong> implements Filtera
             playlistViewHolder = (PlaylistViewHolder) convertView.getTag();
         }
 
-        if (App.mClementine.getCurrentSong() != null
-                && App.mClementine.getCurrentSong().equals(mData.get(position))) {
+        if (App.Clementine.getCurrentSong() != null
+                && App.Clementine.getCurrentSong().equals(mData.get(position))) {
             convertView.setBackgroundResource(R.drawable.listitem_orange);
         } else {
             convertView.setBackgroundResource(R.drawable.selector_white_orange_selected);

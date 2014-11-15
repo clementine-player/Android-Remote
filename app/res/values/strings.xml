@@ -39,9 +39,12 @@
     <string name="download_freespace">Free space</string>
 
     <string name="download_noti_title">Starting download</string>
-    <string name="download_noti_title_song">[Current Song]</string>
+    <string name="download_noti_n_downloads">%d active downloads</string>
+    <string name="download_noti_n_progress">Total progress: %d %</string>
+    <string name="download_noti_title_song">[Song]</string>
     <string name="download_noti_title_album">[Album]</string>
     <string name="download_noti_title_playlist">[Playlist]</string>
+    <string name="download_noti_n_finished">%d downloads finished</string>
     <string name="download_noti_complete">Download complete</string>
     <string name="download_noti_canceled">Download canceled</string>
     <string name="download_noti_insufficient_space">Insufficient space, aborting download.</string>

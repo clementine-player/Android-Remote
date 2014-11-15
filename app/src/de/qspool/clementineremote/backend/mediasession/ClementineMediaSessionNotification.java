@@ -36,6 +36,10 @@ import de.qspool.clementineremote.utils.Utilities;
 
 public class ClementineMediaSessionNotification extends ClementineMediaSession {
 
+    public final static int NOTIFIFCATION_ID = 78923748;
+
+    public final static String EXTRA_NOTIFICATION_ID = "NotificationID";
+
     private NotificationManager mNotificationManager;
 
     private Notification.Builder mNotificationBuilder;
@@ -87,12 +91,12 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
 
     @Override
     public void unregisterSession() {
-        mNotificationManager.cancel(App.NOTIFY_ID);
+        mNotificationManager.cancel(NOTIFIFCATION_ID);
     }
 
     @Override
     public void updateSession() {
-        MySong song = App.mClementine.getCurrentSong();
+        MySong song = App.Clementine.getCurrentSong();
         if (song != null) {
             Bitmap scaledArt = Bitmap.createScaledBitmap(song.getArt(),
                     mNotificationWidth,
@@ -110,9 +114,9 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
             //noinspection deprecation
-            mNotificationManager.notify(App.NOTIFY_ID, mNotificationBuilder.getNotification());
+            mNotificationManager.notify(NOTIFIFCATION_ID, mNotificationBuilder.getNotification());
         } else {
-            mNotificationManager.notify(App.NOTIFY_ID, mNotificationBuilder.build());
+            mNotificationManager.notify(NOTIFIFCATION_ID, mNotificationBuilder.build());
         }
     }
 

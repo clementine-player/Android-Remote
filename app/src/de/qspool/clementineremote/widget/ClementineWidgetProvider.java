@@ -152,7 +152,7 @@ public class ClementineWidgetProvider extends AppWidgetProvider {
     }
 
     private void updateViewsOnStateChange(Context context, RemoteViews views) {
-        MySong currentSong = App.mClementine.getCurrentSong();
+        MySong currentSong = App.Clementine.getCurrentSong();
 
         // Textviews
         if (currentSong == null) {
@@ -168,7 +168,7 @@ public class ClementineWidgetProvider extends AppWidgetProvider {
         // Play or pause?
         Intent intentPlayPause = new Intent(context, ClementineBroadcastReceiver.class);
 
-        if (App.mClementine.getState() == Clementine.State.PLAY) {
+        if (App.Clementine.getState() == Clementine.State.PLAY) {
             views.setImageViewResource(R.id.widget_btn_play_pause,
                     R.drawable.ic_media_pause_light);
             intentPlayPause.setAction(ClementineBroadcastReceiver.PAUSE);

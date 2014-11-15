@@ -58,49 +58,49 @@ public class ClementineMediaSessionV21 extends ClementineMediaSession {
             public void onPlay() {
                 Message msg = Message.obtain();
                 msg.obj = ClementineMessage.getMessage(MsgType.PLAY);
-                App.mClementineConnection.mHandler.sendMessage(msg);
+                App.ClementineConnection.mHandler.sendMessage(msg);
             }
 
             @Override
             public void onPause() {
                 Message msg = Message.obtain();
                 msg.obj = ClementineMessage.getMessage(MsgType.PAUSE);
-                App.mClementineConnection.mHandler.sendMessage(msg);
+                App.ClementineConnection.mHandler.sendMessage(msg);
             }
 
             @Override
             public void onSkipToNext() {
                 Message msg = Message.obtain();
                 msg.obj = ClementineMessage.getMessage(MsgType.NEXT);
-                App.mClementineConnection.mHandler.sendMessage(msg);
+                App.ClementineConnection.mHandler.sendMessage(msg);
             }
 
             @Override
             public void onSkipToPrevious() {
                 Message msg = Message.obtain();
                 msg.obj = ClementineMessage.getMessage(MsgType.PREVIOUS);
-                App.mClementineConnection.mHandler.sendMessage(msg);
+                App.ClementineConnection.mHandler.sendMessage(msg);
             }
 
             @Override
             public void onStop() {
                 Message msg = Message.obtain();
                 msg.obj = ClementineMessage.getMessage(MsgType.STOP);
-                App.mClementineConnection.mHandler.sendMessage(msg);
+                App.ClementineConnection.mHandler.sendMessage(msg);
             }
 
             @Override
             public void onSeekTo(long pos) {
                 Message msg = Message.obtain();
                 msg.obj = ClementineMessageFactory.buildTrackPosition((int) pos);
-                App.mClementineConnection.mHandler.sendMessage(msg);
+                App.ClementineConnection.mHandler.sendMessage(msg);
             }
 
             @Override
             public void onSetRating(Rating rating) {
                 Message msg = Message.obtain();
                 msg.obj = ClementineMessageFactory.buildRateTrack(rating.getStarRating());
-                App.mClementineConnection.mHandler.sendMessage(msg);
+                App.ClementineConnection.mHandler.sendMessage(msg);
             }
         });
 
@@ -138,13 +138,13 @@ public class ClementineMediaSessionV21 extends ClementineMediaSession {
 
     private void updatePlayState() {
         PlaybackState.Builder builder = new PlaybackState.Builder();
-        switch (App.mClementine.getState()) {
+        switch (App.Clementine.getState()) {
             case PLAY:
-                builder.setState(PlaybackState.STATE_PLAYING, App.mClementine.getSongPosition(),
+                builder.setState(PlaybackState.STATE_PLAYING, App.Clementine.getSongPosition(),
                         1.0f);
                 break;
             case PAUSE:
-                builder.setState(PlaybackState.STATE_PAUSED, App.mClementine.getSongPosition(),
+                builder.setState(PlaybackState.STATE_PAUSED, App.Clementine.getSongPosition(),
                         1.0f);
                 break;
             case STOP:
@@ -158,7 +158,7 @@ public class ClementineMediaSessionV21 extends ClementineMediaSession {
     }
 
     private void updateMetaData() {
-        MySong song = App.mClementine.getCurrentSong();
+        MySong song = App.Clementine.getCurrentSong();
         if (song != null && song.getArt() != null) {
             MediaMetadata.Builder builder = new MediaMetadata.Builder();
             builder.putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, song.getArt());

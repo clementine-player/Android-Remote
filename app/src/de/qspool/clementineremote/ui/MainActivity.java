@@ -46,6 +46,7 @@ import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.Clementine;
+import de.qspool.clementineremote.backend.mediasession.ClementineMediaSessionNotification;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
@@ -160,8 +161,9 @@ public class MainActivity extends FragmentActivity {
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
         // When we have a download notifitication and it was clicked, show the download.
-        if (getIntent().hasExtra(App.NOTIFICATION_ID)) {
-            int id = getIntent().getIntExtra(App.NOTIFICATION_ID, 0);
+        if (getIntent().hasExtra(ClementineMediaSessionNotification.EXTRA_NOTIFICATION_ID)) {
+            int id = getIntent()
+                    .getIntExtra(ClementineMediaSessionNotification.EXTRA_NOTIFICATION_ID, 0);
             if (id == -1) {
                 mLastPosition = 1;
             } else {
@@ -213,9 +215,9 @@ public class MainActivity extends FragmentActivity {
         mInstanceSaved = false;
 
         // Check if we are still connected
-        if (App.mClementineConnection == null
-                || App.mClementine == null
-                || !App.mClementineConnection.isConnected()) {
+        if (App.ClementineConnection == null
+                || App.Clementine == null
+                || !App.ClementineConnection.isConnected()) {
             Log.d(TAG, "onResume - disconnect");
             setResult(ConnectDialog.RESULT_DISCONNECT);
             finish();
@@ -223,7 +225,7 @@ public class MainActivity extends FragmentActivity {
             Log.d(TAG, "onResume - start");
             // Set the handler
             mHandler = new MainActivityHandler(this);
-            App.mClementineConnection.setUiHandler(mHandler);
+            App.ClementineConnection.setUiHandler(mHandler);
 
             mDrawerList
                     .performItemClick(mDrawerList.getAdapter().getView(mLastPosition, null, null),
@@ -237,8 +239,8 @@ public class MainActivity extends FragmentActivity {
         super.onPause();
 
         mHandler = null;
-        if (App.mClementineConnection != null) {
-            App.mClementineConnection.setUiHandler(null);
+        if (App.ClementineConnection != null) {
+            App.ClementineConnection.setUiHandler(null);
         }
     }
 
@@ -247,9 +249,9 @@ public class MainActivity extends FragmentActivity {
         super.onDestroy();
 
         // If we disconnected, open connectdialog
-        if (App.mClementineConnection == null
-                || App.mClementine == null
-                || !App.mClementineConnection.isConnected()) {
+        if (App.ClementineConnection == null
+                || App.Clementine == null
+                || !App.ClementineConnection.isConnected()) {
             Log.d(TAG, "onDestroy - disconnect");
             if (mOpenConnectDialog) {
                 Intent connectDialog = new Intent(this, ConnectDialog.class);
@@ -269,7 +271,7 @@ public class MainActivity extends FragmentActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            int currentVolume = App.mClementine.getVolume();
+            int currentVolume = App.Clementine.getVolume();
             // Control the volume of clementine if enabled in the options
             if (mSharedPref.getBoolean(SharedPreferencesKeys.SP_KEY_USE_VOLUMEKEYS, true)) {
                 int volumeInc = Integer.parseInt(
@@ -279,8 +281,8 @@ public class MainActivity extends FragmentActivity {
                     case KeyEvent.KEYCODE_VOLUME_DOWN:
                         Message msgDown = Message.obtain();
                         msgDown.obj = ClementineMessageFactory
-                                .buildVolumeMessage(App.mClementine.getVolume() - volumeInc);
-                        App.mClementineConnection.mHandler.sendMessage(msgDown);
+                                .buildVolumeMessage(App.Clementine.getVolume() - volumeInc);
+                        App.ClementineConnection.mHandler.sendMessage(msgDown);
                         if (currentVolume >= volumeInc) {
                             currentVolume -= volumeInc;
                         } else {
@@ -292,8 +294,8 @@ public class MainActivity extends FragmentActivity {
                     case KeyEvent.KEYCODE_VOLUME_UP:
                         Message msgUp = Message.obtain();
                         msgUp.obj = ClementineMessageFactory
-                                .buildVolumeMessage(App.mClementine.getVolume() + volumeInc);
-                        App.mClementineConnection.mHandler.sendMessage(msgUp);
+                                .buildVolumeMessage(App.Clementine.getVolume() + volumeInc);
+                        App.ClementineConnection.mHandler.sendMessage(msgUp);
                         if ((currentVolume + volumeInc) >= 100) {
                             currentVolume = 100;
                         } else {
@@ -352,7 +354,7 @@ public class MainActivity extends FragmentActivity {
         msg.obj = ClementineMessage.getMessage(MsgType.DISCONNECT);
 
         // Send the request to the thread
-        App.mClementineConnection.mHandler.sendMessage(msg);
+        App.ClementineConnection.mHandler.sendMessage(msg);
     }
 
 

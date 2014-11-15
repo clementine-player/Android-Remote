@@ -37,9 +37,9 @@ public class ClementinePhoneStateCheck extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (App.getApp() == null
-                || App.mClementineConnection == null
-                || App.mClementine == null
-                || !App.mClementineConnection.isConnected()) {
+                || App.ClementineConnection == null
+                || App.Clementine == null
+                || !App.ClementineConnection.isConnected()) {
             return;
         }
 
@@ -69,21 +69,21 @@ public class ClementinePhoneStateCheck extends BroadcastReceiver {
 
             // Now send the message
             if (msg != null && msg.obj != null
-                    && App.mClementineConnection != null) {
-                App.mClementineConnection.mHandler.sendMessage(msg);
+                    && App.ClementineConnection != null) {
+                App.ClementineConnection.mHandler.sendMessage(msg);
             }
 
         }
     }
 
     private int getLastVolume(SharedPreferences prefs) {
-        return prefs.getInt(KEY_LAST_VOLUME, App.mClementine.getVolume());
+        return prefs.getInt(KEY_LAST_VOLUME, App.Clementine.getVolume());
     }
 
     private void saveLastVolume(SharedPreferences prefs) {
         SharedPreferences.Editor editor = prefs.edit();
 
-        editor.putInt(KEY_LAST_VOLUME, App.mClementine.getVolume());
+        editor.putInt(KEY_LAST_VOLUME, App.Clementine.getVolume());
 
         editor.commit();
     }

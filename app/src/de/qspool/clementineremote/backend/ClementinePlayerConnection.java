@@ -347,4 +347,8 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
     public long getStartTime() {
         return mStartTime;
     }
+
+    public ClementineMessage getRequestConnect() {
+        return mRequestConnect;
+    }
 }

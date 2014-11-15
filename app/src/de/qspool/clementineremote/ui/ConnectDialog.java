@@ -71,7 +71,9 @@ import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementineService;
+import de.qspool.clementineremote.backend.downloader.DownloadManager;
 import de.qspool.clementineremote.backend.mdns.ClementineMDnsDiscovery;
+import de.qspool.clementineremote.backend.mediasession.ClementineMediaSessionNotification;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ReasonDisconnect;
@@ -162,8 +164,8 @@ public class ConnectDialog extends Activity {
 
         // Check if we are currently connected, then open the player dialog
         if (!mPdConnect.isShowing()
-                && App.mClementineConnection != null
-                && App.mClementineConnection.isConnected()) {
+                && App.ClementineConnection != null
+                && App.ClementineConnection.isConnected()) {
             showPlayerDialog();
             return;
         }
@@ -192,7 +194,9 @@ public class ConnectDialog extends Activity {
         // Remove still active notifications
         NotificationManager mNotificationManager = (NotificationManager)
                 getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.cancel(App.NOTIFY_ID);
+        mNotificationManager.cancel(ClementineMediaSessionNotification.NOTIFIFCATION_ID);
+        mNotificationManager.cancel(DownloadManager.NOTIFICATION_ID_DOWNLOADS);
+        mNotificationManager.cancel(DownloadManager.NOTIFICATION_ID_DOWNLOADS_FINISHED);
     }
 
     @Override
@@ -360,7 +364,7 @@ public class ConnectDialog extends Activity {
             msg.obj = ClementineMessage.getMessage(MsgType.DISCONNECT);
 
             // Send the request to the thread
-            App.mClementineConnection.mHandler.sendMessage(msg);
+            App.ClementineConnection.mHandler.sendMessage(msg);
         }
 
     };
@@ -388,7 +392,7 @@ public class ConnectDialog extends Activity {
 
         editor.commit();
 
-        App.mClementineConnection.setUiHandler(mHandler);
+        App.ClementineConnection.setUiHandler(mHandler);
 
         mPdConnect.setMessage(getString(R.string.connectdialog_connecting));
         mPdConnect.show();

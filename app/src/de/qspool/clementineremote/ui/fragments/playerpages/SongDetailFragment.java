@@ -152,11 +152,11 @@ public class SongDetailFragment extends AbstractDrawerFragment {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating,
                     boolean fromUser) {
-                if (fromUser && App.mClementine.getCurrentSong() != null) {
+                if (fromUser && App.Clementine.getCurrentSong() != null) {
                     // Send the rat	ing message to Clementine
                     Message msg = Message.obtain();
                     msg.obj = ClementineMessageFactory.buildRateTrack(rating / 5);
-                    App.mClementineConnection.mHandler.sendMessage(msg);
+                    App.ClementineConnection.mHandler.sendMessage(msg);
 
                     // Show a toast
                     String toast = getString(R.string.song_info_rated);
@@ -191,13 +191,13 @@ public class SongDetailFragment extends AbstractDrawerFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.love:
-                if (App.mClementine.getCurrentSong() != null
-                        && !App.mClementine.getCurrentSong().isLoved()) {
+                if (App.Clementine.getCurrentSong() != null
+                        && !App.Clementine.getCurrentSong().isLoved()) {
                     // You can love only one
                     Message msg = Message.obtain();
                     msg.obj = ClementineMessage.getMessage(MsgType.LOVE);
-                    App.mClementineConnection.mHandler.sendMessage(msg);
-                    App.mClementine.getCurrentSong().setLoved(true);
+                    App.ClementineConnection.mHandler.sendMessage(msg);
+                    App.Clementine.getCurrentSong().setLoved(true);
                 }
                 Toast.makeText(getActivity(), R.string.track_loved, Toast.LENGTH_SHORT).show();
                 ;
@@ -205,7 +205,7 @@ public class SongDetailFragment extends AbstractDrawerFragment {
             case R.id.ban:
                 Message msg = Message.obtain();
                 msg.obj = ClementineMessage.getMessage(MsgType.BAN);
-                App.mClementineConnection.mHandler.sendMessage(msg);
+                App.ClementineConnection.mHandler.sendMessage(msg);
                 Toast.makeText(getActivity(), R.string.track_banned, Toast.LENGTH_SHORT).show();
                 break;
             default:
@@ -230,7 +230,7 @@ public class SongDetailFragment extends AbstractDrawerFragment {
      */
     public void updateTrackMetadata() {
         // Get the currently played song
-        MySong currentSong = App.mClementine.getCurrentSong();
+        MySong currentSong = App.Clementine.getCurrentSong();
         if (currentSong == null) {
             tv_artist.setText("");
             tv_title.setText(getString(R.string.player_nosong));

@@ -120,7 +120,7 @@ public class ClementineMessageFactory {
 
         Shuffle.Builder shuffle = msg.getShuffleBuilder();
 
-        switch (App.mClementine.getShuffleMode()) {
+        switch (App.Clementine.getShuffleMode()) {
             case OFF:
                 shuffle.setShuffleMode(ShuffleMode.Shuffle_Off);
                 break;
@@ -147,7 +147,7 @@ public class ClementineMessageFactory {
 
         Repeat.Builder repeat = msg.getRepeatBuilder();
 
-        switch (App.mClementine.getRepeatMode()) {
+        switch (App.Clementine.getRepeatMode()) {
             case OFF:
                 repeat.setRepeatMode(ClementineRemoteProtocolBuffer.RepeatMode.Repeat_Off);
                 break;

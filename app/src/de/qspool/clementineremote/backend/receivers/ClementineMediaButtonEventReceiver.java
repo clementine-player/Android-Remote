@@ -54,11 +54,11 @@ public class ClementineMediaButtonEventReceiver extends BroadcastReceiver {
                         break;
                     case KeyEvent.KEYCODE_VOLUME_DOWN:
                         msg.obj = ClementineMessageFactory
-                                .buildVolumeMessage(App.mClementine.getVolume() - 10);
+                                .buildVolumeMessage(App.Clementine.getVolume() - 10);
                         break;
                     case KeyEvent.KEYCODE_VOLUME_UP:
                         msg.obj = ClementineMessageFactory
-                                .buildVolumeMessage(App.mClementine.getVolume() + 10);
+                                .buildVolumeMessage(App.Clementine.getVolume() + 10);
                         break;
                     default:
                         msg = null;
@@ -67,8 +67,8 @@ public class ClementineMediaButtonEventReceiver extends BroadcastReceiver {
 
                 // Now send the message
                 if (msg != null && msg.obj != null
-                        && App.mClementineConnection != null) {
-                    App.mClementineConnection.mHandler.sendMessage(msg);
+                        && App.ClementineConnection != null) {
+                    App.ClementineConnection.mHandler.sendMessage(msg);
                 }
             }
         }

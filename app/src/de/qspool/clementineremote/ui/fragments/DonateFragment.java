@@ -147,7 +147,7 @@ public class DonateFragment extends AbstractDrawerFragment {
     }
 
     private void setActionBarTitle() {
-        MySong currentSong = App.mClementine.getCurrentSong();
+        MySong currentSong = App.Clementine.getCurrentSong();
         if (currentSong == null) {
             mActionBar.setTitle(getString(R.string.player_nosong));
             mActionBar.setSubtitle("");

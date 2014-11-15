@@ -44,7 +44,6 @@ import java.util.List;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
-import de.qspool.clementineremote.backend.ClementineSongDownloader;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
@@ -184,14 +183,12 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
                 doRepeat();
                 break;
             case R.id.download_song:
-                if (App.mClementine.getCurrentSong() == null) {
+                if (App.Clementine.getCurrentSong() == null) {
                     Toast.makeText(getActivity(), R.string.player_nosong, Toast.LENGTH_LONG).show();
                     break;
                 }
-                if (App.mClementine.getCurrentSong().isLocal()) {
-                    ClementineSongDownloader downloaderSong = new ClementineSongDownloader(
-                            getActivity());
-                    downloaderSong.startDownload(ClementineMessageFactory
+                if (App.Clementine.getCurrentSong().isLocal()) {
+                    App.DownloadManager.addJob(ClementineMessageFactory
                             .buildDownloadSongsMessage(-1, DownloadItem.CurrentItem));
                 } else {
                     Toast.makeText(getActivity(), R.string.player_song_is_stream, Toast.LENGTH_LONG)
@@ -199,14 +196,12 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
                 }
                 break;
             case R.id.download_album:
-                if (App.mClementine.getCurrentSong() == null) {
+                if (App.Clementine.getCurrentSong() == null) {
                     Toast.makeText(getActivity(), R.string.player_nosong, Toast.LENGTH_LONG).show();
                     break;
                 }
-                if (App.mClementine.getCurrentSong().isLocal()) {
-                    ClementineSongDownloader downloaderSong = new ClementineSongDownloader(
-                            getActivity());
-                    downloaderSong.startDownload(ClementineMessageFactory
+                if (App.Clementine.getCurrentSong().isLocal()) {
+                    App.DownloadManager.addJob(ClementineMessageFactory
                             .buildDownloadSongsMessage(-1, DownloadItem.ItemAlbum));
                 } else {
                     Toast.makeText(getActivity(), R.string.player_song_is_stream, Toast.LENGTH_LONG)
@@ -250,7 +245,7 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
         mTvLength.setText(buildTrackPosition());
         mSbPosition.setEnabled(true);
         mSbPosition.setMax(mCurrentSong.getLength());
-        mSbPosition.setProgress(App.mClementine.getSongPosition());
+        mSbPosition.setProgress(App.Clementine.getSongPosition());
     }
 
     /**
@@ -259,7 +254,7 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
     @SuppressLint("NewApi")
     public void updateTrackMetadata() {
         // Get the currently played song
-        MySong currentSong = App.mClementine.getCurrentSong();
+        MySong currentSong = App.Clementine.getCurrentSong();
         if (currentSong == null) {
             // If none is played right now, show a text and the clementine icon
             mTvArtist.setText(getString(R.string.player_nosong));
@@ -307,11 +302,11 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
      */
     private void doShuffle() {
         Message msg = Message.obtain();
-        App.mClementine.nextShuffleMode();
+        App.Clementine.nextShuffleMode();
         msg.obj = ClementineMessageFactory.buildShuffle();
-        App.mClementineConnection.mHandler.sendMessage(msg);
+        App.ClementineConnection.mHandler.sendMessage(msg);
 
-        switch (App.mClementine.getShuffleMode()) {
+        switch (App.Clementine.getShuffleMode()) {
             case OFF:
                 makeToast(R.string.shuffle_off, Toast.LENGTH_SHORT);
                 break;
@@ -333,7 +328,7 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
      * Update the shuffle icon in the actionbar
      */
     private void updateShuffleIcon() {
-        switch (App.mClementine.getShuffleMode()) {
+        switch (App.Clementine.getShuffleMode()) {
             case OFF:
                 mMenuShuffle.setIcon(R.drawable.ab_shuffle_off);
                 break;
@@ -355,11 +350,11 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
     public void doRepeat() {
         Message msg = Message.obtain();
 
-        App.mClementine.nextRepeatMode();
+        App.Clementine.nextRepeatMode();
         msg.obj = ClementineMessageFactory.buildRepeat();
-        App.mClementineConnection.mHandler.sendMessage(msg);
+        App.ClementineConnection.mHandler.sendMessage(msg);
 
-        switch (App.mClementine.getRepeatMode()) {
+        switch (App.Clementine.getRepeatMode()) {
             case OFF:
                 makeToast(R.string.repeat_off, Toast.LENGTH_SHORT);
                 break;
@@ -381,7 +376,7 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
      * Update the repeat icon in the actionbar
      */
     private void updateRepeatIcon() {
-        switch (App.mClementine.getRepeatMode()) {
+        switch (App.Clementine.getRepeatMode()) {
             case OFF:
                 mMenuRepeat.setIcon(R.drawable.ab_repeat_off);
                 break;
@@ -411,9 +406,9 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
         }
 
         if (mCurrentSong.getLength() == 0) {
-            sb.append(Utilities.PrettyTime(App.mClementine.getSongPosition()));
+            sb.append(Utilities.PrettyTime(App.Clementine.getSongPosition()));
         } else {
-            sb.append(Utilities.PrettyTime(App.mClementine.getSongPosition()));
+            sb.append(Utilities.PrettyTime(App.Clementine.getSongPosition()));
             sb.append("/");
             sb.append(Utilities.PrettyTime(mCurrentSong.getLength()));
         }
@@ -513,7 +508,7 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
             }
             // Send the request to the thread
             if (msg.obj != null) {
-                App.mClementineConnection.mHandler.sendMessage(msg);
+                App.ClementineConnection.mHandler.sendMessage(msg);
             }
         }
     };
@@ -535,9 +530,9 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
             if (fromUser) {
                 Message msg = Message.obtain();
                 msg.obj = ClementineMessageFactory.buildTrackPosition(progress);
-                App.mClementineConnection.mHandler.sendMessage(msg);
+                App.ClementineConnection.mHandler.sendMessage(msg);
 
-                App.mClementine.setSongPosition(progress);
+                App.Clementine.setSongPosition(progress);
             }
         }
     };
@@ -546,7 +541,7 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
         @Override
         public void onAnimationEnd(Animation animation) {
             if (!mCoverUpdated) {
-                mImgArt.setImageBitmap(App.mClementine.getCurrentSong().getArt());
+                mImgArt.setImageBitmap(App.Clementine.getCurrentSong().getArt());
                 mImgArt.startAnimation(mAlphaUp);
             }
             mCoverUpdated = !mCoverUpdated;

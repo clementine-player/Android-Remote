@@ -65,7 +65,7 @@ public class ClementineMediaSessionV20 extends ClementineMediaSession {
 
         // Create the client
         mRcClient = new RemoteControlClient(mediaPendingIntent);
-        if (App.mClementine.getState() == Clementine.State.PLAY) {
+        if (App.Clementine.getState() == Clementine.State.PLAY) {
             mRcClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
         } else {
             mRcClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
@@ -90,14 +90,14 @@ public class ClementineMediaSessionV20 extends ClementineMediaSession {
     @Override
     public void updateSession() {
         // Update playstate
-        if (App.mClementine.getState() == Clementine.State.PLAY) {
+        if (App.Clementine.getState() == Clementine.State.PLAY) {
             mRcClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
         } else {
             mRcClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
         }
 
         // Change the data
-        MySong song = App.mClementine.getCurrentSong();
+        MySong song = App.Clementine.getCurrentSong();
         if (song != null && song.getArt() != null) {
             RemoteControlClient.MetadataEditor editor = mRcClient.editMetadata(false);
             editor.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, song.getArt());

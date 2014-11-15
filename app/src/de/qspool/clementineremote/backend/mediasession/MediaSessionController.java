@@ -144,9 +144,9 @@ public class MediaSessionController {
     }
 
     private void sendMetachangedIntent(String what) {
-        MySong currentSong = App.mClementine.getCurrentSong();
+        MySong currentSong = App.Clementine.getCurrentSong();
         Intent i = new Intent(what);
-        i.putExtra("playing", App.mClementine.getState() == Clementine.State.PLAY);
+        i.putExtra("playing", App.Clementine.getState() == Clementine.State.PLAY);
         if (null != currentSong) {
             i.putExtra("id", Long.valueOf(currentSong.getId()));
             i.putExtra("artist", currentSong.getArtist());

@@ -53,7 +53,7 @@ public class ClementinePbParser {
     private PlaylistManager mPlaylistManager;
 
     public ClementinePbParser() {
-        mPlaylistManager = App.mClementine.getPlaylistManager();
+        mPlaylistManager = App.Clementine.getPlaylistManager();
     }
 
     /**
@@ -98,26 +98,26 @@ public class ClementinePbParser {
                 break;
             case CURRENT_METAINFO:
                 MySong s = parseSong(msg.getResponseCurrentMetadata());
-                App.mClementine.setCurrentSong(s);
-                App.mClementine.setSongPosition(0);
+                App.Clementine.setCurrentSong(s);
+                App.Clementine.setSongPosition(0);
                 break;
             case UPDATE_TRACK_POSITION:
                 parseUpdateTrackPosition(msg.getResponseUpdateTrackPosition());
                 break;
             case KEEP_ALIVE:
-                App.mClementineConnection.setLastKeepAlive(System.currentTimeMillis());
+                App.ClementineConnection.setLastKeepAlive(System.currentTimeMillis());
                 break;
             case SET_VOLUME:
-                App.mClementine.setVolume(msg.getRequestSetVolume().getVolume());
+                App.Clementine.setVolume(msg.getRequestSetVolume().getVolume());
                 break;
             case PLAY:
-                App.mClementine.setState(Clementine.State.PLAY);
+                App.Clementine.setState(Clementine.State.PLAY);
                 break;
             case PAUSE:
-                App.mClementine.setState(Clementine.State.PAUSE);
+                App.Clementine.setState(Clementine.State.PAUSE);
                 break;
             case STOP:
-                App.mClementine.setState(Clementine.State.STOP);
+                App.Clementine.setState(Clementine.State.STOP);
                 break;
             case DISCONNECT:
                 break;
@@ -165,7 +165,7 @@ public class ClementinePbParser {
             provider.setContent(lyric.getContent());
 
             // And save them into the song
-            App.mClementine.getCurrentSong().getLyricsProvider().add(provider);
+            App.Clementine.getCurrentSong().getLyricsProvider().add(provider);
         }
     }
 
@@ -207,19 +207,19 @@ public class ClementinePbParser {
      */
     private void parseInfos(ResponseClementineInfo responseClementineInfo) {
         // Get the version number of clementine
-        App.mClementine.setVersion(responseClementineInfo.getVersion());
+        App.Clementine.setVersion(responseClementineInfo.getVersion());
 
         // Get the current state of the player
         EngineState state = responseClementineInfo.getState();
         switch (state.getNumber()) {
             case EngineState.Playing_VALUE:
-                App.mClementine.setState(Clementine.State.PLAY);
+                App.Clementine.setState(Clementine.State.PLAY);
                 break;
             case EngineState.Paused_VALUE:
-                App.mClementine.setState(Clementine.State.PAUSE);
+                App.Clementine.setState(Clementine.State.PAUSE);
                 break;
             default:
-                App.mClementine.setState(Clementine.State.STOP);
+                App.Clementine.setState(Clementine.State.STOP);
         }
     }
 
@@ -229,7 +229,7 @@ public class ClementinePbParser {
      * @param responseUpdateTrackPosition The message
      */
     private void parseUpdateTrackPosition(ResponseUpdateTrackPosition responseUpdateTrackPosition) {
-        App.mClementine.setSongPosition(responseUpdateTrackPosition.getPosition());
+        App.Clementine.setSongPosition(responseUpdateTrackPosition.getPosition());
     }
 
     /**
@@ -283,16 +283,16 @@ public class ClementinePbParser {
     private void parseRepeat(Repeat repeat) {
         switch (repeat.getRepeatMode()) {
             case Repeat_Off:
-                App.mClementine.setRepeatMode(RepeatMode.OFF);
+                App.Clementine.setRepeatMode(RepeatMode.OFF);
                 break;
             case Repeat_Track:
-                App.mClementine.setRepeatMode(RepeatMode.TRACK);
+                App.Clementine.setRepeatMode(RepeatMode.TRACK);
                 break;
             case Repeat_Album:
-                App.mClementine.setRepeatMode(RepeatMode.ALBUM);
+                App.Clementine.setRepeatMode(RepeatMode.ALBUM);
                 break;
             case Repeat_Playlist:
-                App.mClementine.setRepeatMode(RepeatMode.PLAYLIST);
+                App.Clementine.setRepeatMode(RepeatMode.PLAYLIST);
                 break;
             default:
                 break;
@@ -307,16 +307,16 @@ public class ClementinePbParser {
     private void parseShuffle(Shuffle shuffle) {
         switch (shuffle.getShuffleMode()) {
             case Shuffle_Off:
-                App.mClementine.setShuffleMode(ShuffleMode.OFF);
+                App.Clementine.setShuffleMode(ShuffleMode.OFF);
                 break;
             case Shuffle_All:
-                App.mClementine.setShuffleMode(ShuffleMode.ALL);
+                App.Clementine.setShuffleMode(ShuffleMode.ALL);
                 break;
             case Shuffle_InsideAlbum:
-                App.mClementine.setShuffleMode(ShuffleMode.INSIDE_ALBUM);
+                App.Clementine.setShuffleMode(ShuffleMode.INSIDE_ALBUM);
                 break;
             case Shuffle_Albums:
-                App.mClementine.setShuffleMode(ShuffleMode.ALBUMS);
+                App.Clementine.setShuffleMode(ShuffleMode.ALBUMS);
                 break;
             default:
                 break;

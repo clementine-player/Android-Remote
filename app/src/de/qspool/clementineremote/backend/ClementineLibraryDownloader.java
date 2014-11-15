@@ -84,15 +84,13 @@ public class ClementineLibraryDownloader extends
     @Override
     protected DownloaderResult doInBackground(ClementineMessage... params) {
         if (mSharedPref.getBoolean(SharedPreferencesKeys.SP_WIFI_ONLY, false)
-                && !Utilities.onWifi(mContext)) {
-            return new DownloaderResult(
-                    DownloaderResult.DownloadResult.ONLY_WIFI);
+                && !Utilities.onWifi()) {
+            return new DownloaderResult(0, DownloaderResult.DownloadResult.ONLY_WIFI);
         }
 
         // First create a connection
         if (!connect()) {
-            return new DownloaderResult(
-                    DownloaderResult.DownloadResult.CONNECTION_ERROR);
+            return new DownloaderResult(0, DownloaderResult.DownloadResult.CONNECTION_ERROR);
         }
 
         // Start the download
@@ -110,7 +108,7 @@ public class ClementineLibraryDownloader extends
 
     @Override
     protected void onCancelled() {
-        fireOnLibraryDownloadFinishedListener(new DownloaderResult(
+        fireOnLibraryDownloadFinishedListener(new DownloaderResult(0,
                 DownloaderResult.DownloadResult.CANCELLED));
     }
 
@@ -146,7 +144,7 @@ public class ClementineLibraryDownloader extends
     private DownloaderResult startDownloading(
             ClementineMessage clementineMessage) {
         boolean downloadFinished = false;
-        DownloaderResult result = new DownloaderResult(
+        DownloaderResult result = new DownloaderResult(0,
                 DownloadResult.SUCCESSFUL);
         File f = null;
         FileOutputStream fo = null;
@@ -175,13 +173,13 @@ public class ClementineLibraryDownloader extends
             ClementineMessage message = mClient.getProtoc();
 
             if (message.isErrorMessage()) {
-                result = new DownloaderResult(DownloadResult.CONNECTION_ERROR);
+                result = new DownloaderResult(0, DownloadResult.CONNECTION_ERROR);
                 break;
             }
 
             // Is the download forbidden?
             if (message.getMessageType() == MsgType.DISCONNECT) {
-                result = new DownloaderResult(DownloadResult.FOBIDDEN);
+                result = new DownloaderResult(0, DownloadResult.FOBIDDEN);
                 break;
             }
 
@@ -200,7 +198,7 @@ public class ClementineLibraryDownloader extends
                     // size times 2, because we optimise the table later and
                     // need space for that too!
                     if ((chunk.getSize() * 2) > Utilities.getFreeSpaceExternal()) {
-                        result = new DownloaderResult(
+                        result = new DownloaderResult(0,
                                 DownloadResult.INSUFFIANT_SPACE);
                         break;
                     }
@@ -232,7 +230,7 @@ public class ClementineLibraryDownloader extends
                 }
 
             } catch (IOException e) {
-                result = new DownloaderResult(
+                result = new DownloaderResult(0,
                         DownloaderResult.DownloadResult.NOT_MOUNTED);
                 break;
             }
