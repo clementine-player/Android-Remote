@@ -176,6 +176,7 @@
 
     <string name="file_dialog_set_dir">Select directory</string>
     <string name="file_dialog_not_writable">Directory not writable</string>
+    <string name="file_dialog_custom_paths_available">Select other</string>
 
 
     <string name="dialog_about_header">About</string>

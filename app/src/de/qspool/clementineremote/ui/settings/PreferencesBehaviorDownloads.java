@@ -33,6 +33,8 @@ import de.qspool.clementineremote.ui.FileDialog;
 
 public class PreferencesBehaviorDownloads extends PreferenceFragment {
 
+    private DefaultDirChooser mDefaultDirChooser;
+
     private FileDialog mFileDialog;
 
     private Preference mDownloadDir;
@@ -50,12 +52,7 @@ public class PreferencesBehaviorDownloads extends PreferenceFragment {
         mDownloadDir.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                    mFileDialog.showDialog();
-                } else {
-                    Toast.makeText(getActivity(), R.string.download_noti_not_mounted,
-                            Toast.LENGTH_SHORT).show();
-                }
+                mDefaultDirChooser.showAvailableDirectories();
                 return true;
             }
         });
@@ -64,7 +61,8 @@ public class PreferencesBehaviorDownloads extends PreferenceFragment {
                 .getDefaultSharedPreferences(getActivity());
 
         // Create dialog
-        String defaultPath = Environment.getExternalStorageDirectory() + "/ClementineMusic";
+        String defaultPath = getActivity().getExternalFilesDir(Environment.DIRECTORY_MUSIC)
+                .getAbsolutePath();
         String path = sharedPreferences
                 .getString(SharedPreferencesKeys.SP_DOWNLOAD_DIR, defaultPath);
         File mPath = new File(path);
@@ -82,5 +80,26 @@ public class PreferencesBehaviorDownloads extends PreferenceFragment {
         });
         mFileDialog.setSelectDirectoryOption(true);
         mDownloadDir.setSummary(path);
+
+        mDefaultDirChooser = new DefaultDirChooser(getActivity());
+        mDefaultDirChooser.addDirectoryListener(new DefaultDirChooser.DirectorySelectedListener() {
+            @Override
+            public void directorySelected(String dir) {
+                if (dir.startsWith("/")) {
+                    SharedPreferences.Editor editor = getPreferenceScreen().getSharedPreferences()
+                            .edit();
+                    editor.putString(SharedPreferencesKeys.SP_DOWNLOAD_DIR, dir);
+                    editor.commit();
+                    mDownloadDir.setSummary(dir);
+                } else {
+                    if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                        mFileDialog.showDialog();
+                    } else {
+                        Toast.makeText(getActivity(), R.string.download_noti_not_mounted,
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
     }
 }

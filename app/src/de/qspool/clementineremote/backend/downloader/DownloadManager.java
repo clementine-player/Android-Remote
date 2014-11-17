@@ -160,7 +160,8 @@ public class DownloadManager {
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
 
         // Get preferences and set download settings
-        String defaultPath = Environment.getExternalStorageDirectory() + "/ClementineMusic";
+        String defaultPath = mContext.getExternalFilesDir(Environment.DIRECTORY_MUSIC)
+                .getAbsolutePath();
         songDownloader.setDownloadPath(
                 mSharedPref.getString(SharedPreferencesKeys.SP_DOWNLOAD_DIR, defaultPath));
         songDownloader.setDownloadOnWifiOnly(
