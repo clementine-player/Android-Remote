@@ -33,6 +33,7 @@ import android.support.v4.app.NotificationCompat;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.SharedPreferencesKeys;
+import de.qspool.clementineremote.backend.downloader.DownloadManager;
 import de.qspool.clementineremote.backend.listener.PlayerConnectionListener;
 import de.qspool.clementineremote.backend.mediasession.ClementineMediaSessionNotification;
 import de.qspool.clementineremote.backend.mediasession.MediaSessionController;
@@ -201,7 +202,7 @@ public class ClementineService extends Service {
             });
         }
 
-        App.DownloadManager.shutdown();
+        DownloadManager.getInstance().shutdown();
     }
 
     /**

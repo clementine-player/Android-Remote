@@ -46,6 +46,7 @@ import java.util.List;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.backend.downloader.DownloadManager;
 import de.qspool.clementineremote.backend.listener.OnPlaylistReceivedListener;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
@@ -285,7 +286,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.download_playlist:
-                App.DownloadManager.addJob(ClementineMessageFactory
+                DownloadManager.getInstance().addJob(ClementineMessageFactory
                         .buildDownloadSongsMessage(getPlaylistId(), DownloadItem.APlaylist));
                 return true;
             case R.id.clear_playlist:

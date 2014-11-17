@@ -60,7 +60,24 @@ public class DownloadManager {
 
     private SharedPreferences mSharedPref;
 
-    public DownloadManager(Context context) {
+    private static DownloadManager instance;
+
+    public static DownloadManager getInstance() {
+        if (instance == null) {
+            throw new IllegalStateException(
+                    "No DownloadManager instance found. Use getInstance(Context) to create one");
+        }
+        return DownloadManager.instance;
+    }
+
+    public static DownloadManager getInstance(Context context) {
+        if (instance == null) {
+            instance = new DownloadManager(context);
+        }
+        return instance;
+    }
+
+    private DownloadManager(Context context) {
         mContext = context;
         mNotifyManager =
                 (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);

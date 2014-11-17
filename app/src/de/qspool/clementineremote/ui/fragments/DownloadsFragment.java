@@ -40,6 +40,7 @@ import java.util.TimerTask;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.downloader.ClementineSongDownloader;
+import de.qspool.clementineremote.backend.downloader.DownloadManager;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.ui.adapter.DownloadAdapter;
@@ -101,7 +102,7 @@ public class DownloadsFragment extends AbstractDrawerFragment {
 
         // Create the adapter
         mAdapter = new DownloadAdapter(getActivity(), R.layout.item_download,
-                App.DownloadManager.getAllDownloaders());
+                DownloadManager.getInstance().getAllDownloaders());
 
         mList.setOnItemClickListener(oiclDownload);
         mList.setAdapter(mAdapter);
@@ -207,7 +208,7 @@ public class DownloadsFragment extends AbstractDrawerFragment {
                             }
 
                             mAdapter.notifyDataSetChanged();
-                            if (App.DownloadManager.getAllDownloaders().isEmpty()) {
+                            if (DownloadManager.getInstance().getAllDownloaders().isEmpty()) {
                                 mList.setEmptyView(mEmptyDownloads);
                             }
 

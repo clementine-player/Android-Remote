@@ -44,6 +44,7 @@ import java.util.List;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.backend.downloader.DownloadManager;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
@@ -188,7 +189,7 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
                     break;
                 }
                 if (App.Clementine.getCurrentSong().isLocal()) {
-                    App.DownloadManager.addJob(ClementineMessageFactory
+                    DownloadManager.getInstance().addJob(ClementineMessageFactory
                             .buildDownloadSongsMessage(-1, DownloadItem.CurrentItem));
                 } else {
                     Toast.makeText(getActivity(), R.string.player_song_is_stream, Toast.LENGTH_LONG)
@@ -201,7 +202,7 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
                     break;
                 }
                 if (App.Clementine.getCurrentSong().isLocal()) {
-                    App.DownloadManager.addJob(ClementineMessageFactory
+                    DownloadManager.getInstance().addJob(ClementineMessageFactory
                             .buildDownloadSongsMessage(-1, DownloadItem.ItemAlbum));
                 } else {
                     Toast.makeText(getActivity(), R.string.player_song_is_stream, Toast.LENGTH_LONG)

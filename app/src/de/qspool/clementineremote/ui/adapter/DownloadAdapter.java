@@ -31,9 +31,9 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.downloader.ClementineSongDownloader;
+import de.qspool.clementineremote.backend.downloader.DownloadManager;
 
 /**
  * Class is used for displaying the song data
@@ -42,10 +42,14 @@ public class DownloadAdapter extends ArrayAdapter<ClementineSongDownloader> {
 
     private Context mContext;
 
+    private DownloadManager mDownloadManager;
+
     public DownloadAdapter(Context context, int resource,
             List<ClementineSongDownloader> data) {
         super(context, resource, data);
         mContext = context;
+
+        mDownloadManager = DownloadManager.getInstance();
     }
 
     @Override
@@ -76,8 +80,9 @@ public class DownloadAdapter extends ArrayAdapter<ClementineSongDownloader> {
 
         downloadViewHolder.progress.setMax(100);
         downloadViewHolder.progress.setProgress((int) downloader.getDownloadStatus().getProgress());
-        downloadViewHolder.title.setText(App.DownloadManager.getTitleForItem(downloader));
-        downloadViewHolder.subtitle.setText(App.DownloadManager.getSubtitleForItem(downloader));
+        downloadViewHolder.title.setText(mDownloadManager.getTitleForItem(downloader));
+        downloadViewHolder.subtitle.setText(mDownloadManager.getSubtitleForItem(
+                downloader));
 
         return convertView;
     }
@@ -93,7 +98,7 @@ public class DownloadAdapter extends ArrayAdapter<ClementineSongDownloader> {
                 Toast.makeText(mContext, R.string.download_noti_canceled, Toast.LENGTH_SHORT)
                         .show();
             } else {
-                App.DownloadManager.removeDownloader(downloader.getId());
+                mDownloadManager.removeDownloader(downloader.getId());
                 remove(downloader);
             }
 

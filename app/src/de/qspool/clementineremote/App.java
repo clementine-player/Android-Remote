@@ -29,8 +29,6 @@ public class App extends Application {
 
     public static Clementine Clementine = new Clementine();
 
-    public static DownloadManager DownloadManager;
-
     private static App mApp;
 
     public App() {
@@ -43,7 +41,8 @@ public class App extends Application {
         // Register new default uncaught exception handler
         Thread.setDefaultUncaughtExceptionHandler(new ClementineExceptionHandler(this));
 
-        DownloadManager = new DownloadManager(this);
+        // Create a new downloadmanager instance
+        DownloadManager.getInstance(this);
     }
 
     public static App getApp() {
