@@ -30,7 +30,6 @@
   <string name="download_error">Lied konnte nicht geöffnet werden!</string>
   <string name="download_freespace">Freier Speicher</string>
   <string name="download_noti_title">Übertragung wird gestartet</string>
-  <string name="download_noti_title_song">[Aktuelles Lied]</string>
   <string name="download_noti_title_album">[Album]</string>
   <string name="download_noti_title_playlist">[Wiedergabeliste]</string>
   <string name="download_noti_complete">Übertragung komplett</string>

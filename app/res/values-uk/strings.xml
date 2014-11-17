@@ -30,7 +30,6 @@
   <string name="download_error">Не вдалося відкрити файл композиції!</string>
   <string name="download_freespace">Вільне місце</string>
   <string name="download_noti_title">Розпочинаємо отримання даних</string>
-  <string name="download_noti_title_song">[Поточна композиція]</string>
   <string name="download_noti_title_album">[Альбом]</string>
   <string name="download_noti_title_playlist">[Список відтворення]</string>
   <string name="download_noti_complete">Отримання даних завершено</string>

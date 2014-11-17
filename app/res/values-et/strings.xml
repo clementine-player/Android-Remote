@@ -23,7 +23,6 @@
   <string name="downloads_empty">Pole allalaadimisi!</string>
   <string name="download_error">Lugu ei saa avada!</string>
   <string name="download_noti_title">Allalaadimise alustamine</string>
-  <string name="download_noti_title_song">[Praegune lugu]</string>
   <string name="download_noti_title_album">[Album]</string>
   <string name="download_noti_title_playlist">[Esitusloend]</string>
   <string name="download_noti_complete">Allalaadimine lõpetatud</string>

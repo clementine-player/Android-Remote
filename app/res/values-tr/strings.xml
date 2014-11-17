@@ -27,7 +27,6 @@
   <string name="download_error">Şarkı açılamadı!</string>
   <string name="download_freespace">Boş alan</string>
   <string name="download_noti_title">İndirme başlatılıyor</string>
-  <string name="download_noti_title_song">[Geçerli Şarkı]</string>
   <string name="download_noti_title_album">[Albüm]</string>
   <string name="download_noti_title_playlist">[Oynatma Listesi]</string>
   <string name="download_noti_complete">İndirme tamamlandı</string>

@@ -28,7 +28,6 @@
   <string name="download_error">음악을 시작할 수 없습니다!</string>
   <string name="download_freespace">여유 공간</string>
   <string name="download_noti_title">다운로드 시작 중</string>
-  <string name="download_noti_title_song">[Current Song]</string>
   <string name="download_noti_title_album">[Album]</string>
   <string name="download_noti_title_playlist">[Playlist]</string>
   <string name="download_noti_complete">다운로드 완료</string>

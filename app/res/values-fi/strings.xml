@@ -30,7 +30,6 @@
   <string name="download_error">Kappaleen avaus epäonnistui!</string>
   <string name="download_freespace">Vapaa tila</string>
   <string name="download_noti_title">Aloitetaan latausta</string>
-  <string name="download_noti_title_song">[Nykyinen kappale]</string>
   <string name="download_noti_title_album">[Levy]</string>
   <string name="download_noti_title_playlist">[Soittolista]</string>
   <string name="download_noti_complete">Lataus valmistui</string>

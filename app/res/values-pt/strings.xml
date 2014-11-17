@@ -30,7 +30,6 @@
   <string name="download_error">Não foi possível carregar a faixa!</string>
   <string name="download_freespace">Espaço livre</string>
   <string name="download_noti_title">Iniciando transferência</string>
-  <string name="download_noti_title_song">[FAixa atual]</string>
   <string name="download_noti_title_album">[Álbum]</string>
   <string name="download_noti_title_playlist">[Listas de reprodução]</string>
   <string name="download_noti_complete">Transferência terminada</string>

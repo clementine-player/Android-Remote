@@ -30,7 +30,6 @@
   <string name="download_error">Nepodarilo sa otvoriť skladbu!</string>
   <string name="download_freespace">Voľné miesto</string>
   <string name="download_noti_title">Spúšťanie preberania</string>
-  <string name="download_noti_title_song">[Aktuálna skladba]</string>
   <string name="download_noti_title_album">[Album]</string>
   <string name="download_noti_title_playlist">[Zoznam skladieb]</string>
   <string name="download_noti_complete">Preberanie dokončené</string>

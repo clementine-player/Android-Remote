@@ -28,7 +28,6 @@
   <string name="download_error">No se pudo abrir la canción.</string>
   <string name="download_freespace">Espacio libre</string>
   <string name="download_noti_title">Iniciando la descarga</string>
-  <string name="download_noti_title_song">[Canción actual]</string>
   <string name="download_noti_title_album">[Álbum]</string>
   <string name="download_noti_title_playlist">[Lista de reproducción]</string>
   <string name="download_noti_complete">Descarga completa</string>
