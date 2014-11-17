@@ -30,7 +30,6 @@
   <string name="download_error">Tidak dapat buka lagu!</string>
   <string name="download_freespace">Ruang bebas</string>
   <string name="download_noti_title">Memulakan muat turun</string>
-  <string name="download_noti_title_song">[Lagu Semasa]</string>
   <string name="download_noti_title_album">[Album]</string>
   <string name="download_noti_title_playlist">[Senarai Main]</string>
   <string name="download_noti_complete">Muat turun selesai</string>

@@ -27,7 +27,6 @@
   <string name="download_error">სიმღერა ვერ გაიხსნა</string>
   <string name="download_freespace">თავისუფალი ადგილი</string>
   <string name="download_noti_title">ჩამოტვირთვის დაწყება</string>
-  <string name="download_noti_title_song">[მიმდინარე სიმღერა]</string>
   <string name="download_noti_title_album">[ალბომი]</string>
   <string name="download_noti_title_playlist">[რეპერტუარი]</string>
   <string name="download_noti_complete">ჩამოტვირთვა დასრულდა</string>

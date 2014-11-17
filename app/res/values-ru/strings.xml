@@ -30,7 +30,6 @@
   <string name="download_error">Не могу открыть песню!</string>
   <string name="download_freespace">Свободное место</string>
   <string name="download_noti_title">Загрузка начата</string>
-  <string name="download_noti_title_song">[Текущая композиция]</string>
   <string name="download_noti_title_album">[Альбом]</string>
   <string name="download_noti_title_playlist">[Плейлист]</string>
   <string name="download_noti_complete">Загрузка завершена</string>

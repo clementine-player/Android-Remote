@@ -30,7 +30,6 @@
   <string name="download_error">Nepodařilo se otevřít píseň!</string>
   <string name="download_freespace">Volné místo</string>
   <string name="download_noti_title">Spouští se stahování</string>
-  <string name="download_noti_title_song">[Nynější píseň]</string>
   <string name="download_noti_title_album">[Album]</string>
   <string name="download_noti_title_playlist">[Seznam skladeb]</string>
   <string name="download_noti_complete">Stahování dokončeno</string>

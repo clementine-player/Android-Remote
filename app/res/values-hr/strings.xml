@@ -28,7 +28,6 @@
   <string name="download_error">Nemoguće otvaranje pjesme!</string>
   <string name="download_freespace">Slobodan prostor</string>
   <string name="download_noti_title">Početak preuzimanja</string>
-  <string name="download_noti_title_song">[Trenutna pjesma]</string>
   <string name="download_noti_title_album">[Album]</string>
   <string name="download_noti_title_playlist">[Popis izvođenja]</string>
   <string name="download_noti_complete">Preuzimanje završeno</string>

@@ -24,7 +24,6 @@
   <string name="download_error">Qo\'shiqni ochib bo\'lmadi!</string>
   <string name="download_freespace">Bo\'sh joy</string>
   <string name="download_noti_title">Yuklab olish boshlanmoqda</string>
-  <string name="download_noti_title_song">[Joriy qo\'shiq]</string>
   <string name="download_noti_title_album">[Albom]</string>
   <string name="download_noti_title_playlist">[Ijro ro\'yxati]</string>
   <string name="download_noti_complete">Yuklab olish tugadi</string>
