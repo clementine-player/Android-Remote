@@ -29,7 +29,7 @@ public class DownloadStatus {
 
     private double mProgress;
 
-    private MySong mSong;
+    private MySong mSong = new MySong();
 
     private int mTotalFiles;
 
