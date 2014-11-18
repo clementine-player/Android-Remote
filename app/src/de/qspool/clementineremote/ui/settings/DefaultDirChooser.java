@@ -69,15 +69,22 @@ public class DefaultDirChooser {
             directories.add(mContext.getExternalFilesDir(Environment.DIRECTORY_MUSIC).toString());
         }
 
-        if (canWriteToExternalStorage()) {
+        String publicMusicDir = Environment
+                .getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString();
+        if (canWriteToExternalStorage(publicMusicDir)) {
+            directories.add(publicMusicDir);
+        }
+
+        if (canWriteToExternalStorage(
+                Environment.getExternalStorageDirectory().getAbsolutePath())) {
             directories.add(mContext.getString(R.string.file_dialog_custom_paths_available));
         }
         return directories;
     }
 
-    private boolean canWriteToExternalStorage() {
+    private boolean canWriteToExternalStorage(String path) {
         // Check the external store state
-        File checkFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+        File checkFile = new File(path
                 + "/ClementineTestFile.CheckIfWritable");
         try {
             if (checkFile.createNewFile()) {
