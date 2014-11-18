@@ -136,8 +136,7 @@
     <string name="pref_volume_inc_summary">Current volume change level : %s</string>
 
     <string name="pref_autoconnect_title">Auto-Connect</string>
-    <string name="pref_autoconnect_summary">Automatically connect to Clementine when starting the
-        remote.
+    <string name="pref_autoconnect_summary">Automatically connect to Clementine when starting the remote.
     </string>
     <string name="pref_port_title">Port</string>
     <string name="pref_port_summary">Current Port:</string>
@@ -145,12 +144,10 @@
     <string name="pref_port_error">Illegal Port!</string>
 
     <string name="pref_wake_lock_title">Keep CPU alive</string>
-    <string name="pref_wake_lock_summary">Enable if the App disconnects randomly when in background.
-        May drain battery faster.
+    <string name="pref_wake_lock_summary">Enable if the App disconnects randomly when in background. May drain battery faster.
     </string>
     <string name="pref_keep_screen_on_title">Keep Screen On</string>
-    <string name="pref_keep_screen_on_summary">Prevent the screen from turning off whilst Clementine
-        Remote is connected to Clementine.
+    <string name="pref_keep_screen_on_summary">Prevent the screen from turning off whilst Clementine Remote is connected to Clementine.
     </string>
 
     <string name="pref_version_summary">Click to visit project website</string>
