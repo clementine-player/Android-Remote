@@ -1,3 +1,26 @@
+Version 10
+  Features:
+    - Tasker & Locale support
+    - 4x1 Widget for homescreen
+    - Clear playlist
+    - Close playlist
+  Improvements:
+    - Huge performance increase especially when connecting and retrieving playlist songs
+    - Download notifications are now stacked when downloading multiple items
+    - Delete multiple items from playlist
+    - Improve phone and tablet layout
+    - Don't show -1 track / disc number in song details
+    - Last.fm doesn't require a restart
+  Bugfixes:
+    - Fix volume slider joggs
+    - Playlist updates correctly when it's changed (on Remote or Desktop)
+    - Android 4.4: Downloads are now saved in apps music dir since apps cannot write outside them in KITKAT.
+      Note: Those files are deleted when uninstalling Clementine Remote. You may have to reset the download path.
+  Other:
+    - App don't aquire wakelock by default anymore. Can still be activated in the settings if connection is unsable
+    - Compiled against Android 5.0 Lollipop + Lockscreen notifications
+    - Remove Pebble specific code and use metachanged intent for all bluetooth devices
+
 Version 9 (Only for Android 4.0+)
   Features:
     - Showcases to introduce app features
