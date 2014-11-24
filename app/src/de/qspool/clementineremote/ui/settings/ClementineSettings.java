@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.ListAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.qspool.clementineremote.R;
@@ -55,6 +56,9 @@ public class ClementineSettings extends PreferenceActivity {
 
     @Override
     public void setListAdapter(ListAdapter adapter) {
+        if (mHeaders == null) {
+            onBuildHeaders(new ArrayList<Header>());
+        }
         if (adapter == null) {
             super.setListAdapter(adapter);
         } else {
@@ -78,8 +82,8 @@ public class ClementineSettings extends PreferenceActivity {
      */
     @Override
     public void onBuildHeaders(List<Header> target) {
-        mHeaders = target;
         loadHeadersFromResource(R.xml.preference_headers, target);
+        mHeaders = target;
     }
 
     @Override
