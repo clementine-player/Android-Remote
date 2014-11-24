@@ -23,12 +23,18 @@
   <string name="playlist_context_play">Item afspelen</string>
   <string name="playlist_context_remove">Verwijder van afspeellijst</string>
   <string name="playlist_loading">Bezig met laden</string>
+  <string name="playlist_close">Afspeellijst sluiten</string>
+  <string name="playlist_clear">Afspeellijst legen</string>
   <string name="downloads_empty">Geen downloads!</string>
   <string name="download_error">Kon nummer niet openen!</string>
   <string name="download_freespace">Vrije ruimte</string>
   <string name="download_noti_title">Download start</string>
+  <string name="download_noti_n_downloads">%d downloads actief</string>
+  <string name="download_noti_n_progress">Totale voortgang: %d %</string>
+  <string name="download_noti_title_song">[Song]</string>
   <string name="download_noti_title_album">[Album]</string>
   <string name="download_noti_title_playlist">[Playlist]</string>
+  <string name="download_noti_n_finished">%d downloads klaar</string>
   <string name="download_noti_complete">Download voltooid</string>
   <string name="download_noti_canceled">Download geannuleerd</string>
   <string name="download_noti_insufficient_space">Onvoldoende ruimte, download wordt afgebroken</string>
@@ -45,6 +51,7 @@
   <string name="library_songs_added">%d nummers aan huidige afspeellijst toegevoegd</string>
   <string name="library_context_add">Voeg item aan huidige afspeellijst toe</string>
   <string name="library_download_error">Kon bibliotheek niet downloaden</string>
+  <string name="library_unknown_item">Onbekend</string>
   <string name="song_info_album">Album</string>
   <string name="song_info_genre">Genre</string>
   <string name="song_info_year">Jaar</string>

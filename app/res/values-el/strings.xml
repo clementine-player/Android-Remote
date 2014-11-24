@@ -1,2 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools"/>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="app_name">Clementine Remote</string>
+  <string name="app_not_available">Η εφαρμογή δεν είναι διαθέσιμη!</string>
+  <string name="connectdialog_connect">Σύνδεση</string>
+  <string name="connectdialog_connecting">Σύνδεση στο Clementine</string>
+  <string name="connectdialog_download_data">Λήψη δεδομένων</string>
+  <string name="connectdialog_error">Αδυναμία επικοινωνίας με το host</string>
+  <string name="connectdialog_ip_hint">Εισάγετε διεύθυνση IP</string>
+  <string name="connectdialog_services">Clementines</string>
+  <string name="player_stream">[S]</string>
+  <string name="donate_i_want">Θέλω να δωρίσω:</string>
+  <string name="donate_one">Ντόνατς (1,00 €)</string>
+  <string name="donate_two">Καφέ (2,00 €)</string>
+  <string name="donate_five">Πίτσα (5,00 €)</string>
+  <string name="notification_action_next">Επόμενο</string>
+  <string name="notification_action_playpause">Αναπαραγωγή/Παύση</string>
+  <string name="cm_next">Επόμενο</string>
+  <string name="cm_close">Κλείσιμο</string>
+</resources>
