@@ -91,7 +91,7 @@ public class ClementineSimpleConnection {
      * @returns The parsed protocol buffer
      */
     public ClementineMessage getProtoc() {
-        ClementineMessage message = null;
+        ClementineMessage message;
         try {
             // Read the data and return it
             mSocket.setSoTimeout(3000);

@@ -176,7 +176,7 @@ public class ClementineSongDownloader extends
             }
 
             // Check if an error occured
-            if (message == null || message.isErrorMessage()) {
+            if (message.isErrorMessage()) {
                 result = new DownloaderResult(mId, DownloadResult.CONNECTION_ERROR);
                 break;
             }
