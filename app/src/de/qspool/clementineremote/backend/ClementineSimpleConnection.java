@@ -96,7 +96,8 @@ public class ClementineSimpleConnection {
             // Read the data and return it
             mSocket.setSoTimeout(3000);
             int len = mIn.readInt();
-            if (len < 0) {
+            // Check length. If it is less zero or more than 50mb it's very likely we got invalid data
+            if (len < 0 || len > 52428800) {
                 throw new IOException("Invalid data length");
             }
             byte[] data = new byte[len];
