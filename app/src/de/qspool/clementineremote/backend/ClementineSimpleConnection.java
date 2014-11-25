@@ -97,7 +97,7 @@ public class ClementineSimpleConnection {
             mSocket.setSoTimeout(3000);
             int len = mIn.readInt();
             if (len < 0) {
-                throw new IOException("Invaid data length");
+                throw new IOException("Invalid data length");
             }
             byte[] data = new byte[len];
             mIn.readFully(data, 0, len);
