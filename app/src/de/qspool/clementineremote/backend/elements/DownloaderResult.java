@@ -21,7 +21,7 @@ import de.qspool.clementineremote.R;
 
 public class DownloaderResult extends ClementineElement {
 
-    public enum DownloadResult {SUCCESSFUL, INSUFFIANT_SPACE, NOT_MOUNTED, CONNECTION_ERROR, FOBIDDEN, ONLY_WIFI, CANCELLED}
+    public enum DownloadResult {SUCCESSFUL, INSUFFIANT_SPACE, NOT_MOUNTED, CONNECTION_ERROR, FOBIDDEN, ONLY_WIFI, CANCELLED, ERROR}
 
     private DownloadResult mResult;
 

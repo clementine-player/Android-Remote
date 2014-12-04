@@ -19,6 +19,7 @@ package de.qspool.clementineremote.backend;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
@@ -241,7 +242,13 @@ public class ClementineLibraryDownloader extends
 
         // Optimize library table
         if (mLibrary.getLibraryDb().exists()) {
-            mLibrary.optimizeTable();
+            try {
+                mLibrary.optimizeTable();
+            } catch (SQLiteException e) {
+                // Database is damaged, delete it
+                mLibrary.getLibraryDb().delete();
+                result = new DownloaderResult(0, DownloadResult.ERROR);
+            }
         }
 
         return result;
