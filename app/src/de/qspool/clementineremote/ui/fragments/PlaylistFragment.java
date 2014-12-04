@@ -160,6 +160,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 
         mPlaylistManager.addOnPlaylistReceivedListener(mPlaylistListener);
         mPlaylists = mPlaylistManager.getAllPlaylists();
+        updatePlaylistSpinner();
 
         mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
@@ -509,14 +510,19 @@ public class PlaylistFragment extends AbstractDrawerFragment {
     }
 
     private int getPlaylistId() {
-        return mPlaylists.get(mActionBar.getSelectedNavigationIndex()).getId();
+        return mPlaylists.get(getSelectedPlaylistPosition()).getId();
     }
 
     private LinkedList<MySong> getSelectedPlaylistSongs() {
+        return mPlaylists.get(getSelectedPlaylistPosition()).getPlaylistSongs();
+    }
+
+    private int getSelectedPlaylistPosition() {
         int pos = mActionBar.getSelectedNavigationIndex();
-        if (pos == Spinner.INVALID_POSITION) {
-            pos = 0; // We have always at least one playlist!
+        if (pos == Spinner.INVALID_POSITION || pos >= mPlaylists.size()) {
+            pos = mPlaylists.indexOf(mPlaylistManager.getActivePlaylist());
+            mActionBar.setSelectedNavigationItem(pos);
         }
-        return mPlaylists.get(pos).getPlaylistSongs();
+        return pos;
     }
 }
