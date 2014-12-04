@@ -122,7 +122,11 @@ Pokud máte díky mé práci skutečně dobrou náladu, malý dar od vás by byl
   <string name="pref_port_default">5500</string>
   <string name="pref_port_error">Neplatná přípojka (port)</string>
   <string name="pref_wake_lock_title">Ponechat procesor naživu</string>
+  <string name="pref_wake_lock_summary">Povolit, pokud se program odpojí náhodně, když je na pozadí. Může vést k rychlejšímu vyčerpání baterie.
+</string>
   <string name="pref_keep_screen_on_title">Nechat obrazovku zapnutou</string>
+  <string name="pref_keep_screen_on_summary">Zabránit vypnutí obrazovky, zatímco je Clementine Remote připojena ke Clementine.
+</string>
   <string name="pref_version_summary">Klepněte pro návštěvu stránek projektu</string>
   <string name="pref_version_title">Verze</string>
   <string name="pref_license_title">Licence</string>
@@ -151,6 +155,7 @@ Pokud máte díky mé práci skutečně dobrou náladu, malý dar od vás by byl
   <string name="dialog_about_others">Jiné</string>
   <string name="dialog_license_top">Tento program je šířen s nadějí, že bude užitečný, ale BEZ JAKÉKOLI ZÁRUKY</string>
   <string name="tasker_intro">Vyberte, prosím, činnost.</string>
+  <string name="tasker_ip_help">Zde zadejte podrobnosti připojení, pokud jste výše vybral činnost Připojit. Ověřovací kód je volitelný, jestliže je v Clementine vypnut.</string>
   <string name="tasker_action">Činnost</string>
   <string name="tasker_connect">Připojit</string>
   <string name="tasker_disconnect">Odpojit</string>
