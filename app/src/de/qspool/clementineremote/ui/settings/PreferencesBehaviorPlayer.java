@@ -57,9 +57,18 @@ public class PreferencesBehaviorPlayer extends PreferenceFragment implements
                 .getString(SharedPreferencesKeys.SP_VOLUME_INC, Clementine.DefaultVolumeInc);
         mVolumeInc.setSummary(
                 getString(R.string.pref_volume_inc_summary).replace("%s", currentVolumeInc));
+    }
 
-        // Register Listener
+    @Override
+    public void onResume() {
+        super.onResume();
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
