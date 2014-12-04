@@ -19,8 +19,12 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Enumeration;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
@@ -230,5 +234,27 @@ public class Utilities {
         stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(resultIntent);
         return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    public static Inet4Address getIp4Address() {
+        try {
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            while (interfaces.hasMoreElements()) {
+                NetworkInterface networkInterface = interfaces.nextElement();
+                Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
+
+                while (addresses.hasMoreElements()) {
+                    InetAddress address = addresses.nextElement();
+                    if (address instanceof Inet4Address
+                            && !address.isLoopbackAddress()) {
+                        return (Inet4Address) address;
+                    }
+                }
+            }
+        } catch (SocketException e) {
+            return null;
+        }
+
+        return null;
     }
 }

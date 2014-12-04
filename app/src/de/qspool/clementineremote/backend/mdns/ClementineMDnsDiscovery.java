@@ -35,6 +35,7 @@ import javax.jmdns.ServiceListener;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.elements.ServiceFound;
+import de.qspool.clementineremote.utils.Utilities;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class ClementineMDnsDiscovery {
@@ -56,7 +57,7 @@ public class ClementineMDnsDiscovery {
     public ClementineMDnsDiscovery(Handler handler) {
         mConnectActivityHandler = handler;
 
-        mServices = new LinkedList<ServiceInfo>();
+        mServices = new LinkedList<>();
     }
 
     /**
@@ -126,12 +127,17 @@ public class ClementineMDnsDiscovery {
 
     private void jmDnsListener() {
         try {
-            mJmDNS = JmDNS.create();
+            Inet4Address ip = Utilities.getIp4Address();
+            if (ip == null) {
+                return;
+            }
+
+            mJmDNS = JmDNS.create(ip);
             mJmDNS.addServiceListener(mDnsType, mListener = new ServiceListener() {
 
                 @Override
                 public void serviceAdded(ServiceEvent serviceEvent) {
-                    mJmDNS.requestServiceInfo(serviceEvent.getType(), serviceEvent.getName(), 1);
+                    mJmDNS.requestServiceInfo(serviceEvent.getType(), serviceEvent.getName(), 250);
                 }
 
                 @Override
