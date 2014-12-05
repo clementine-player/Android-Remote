@@ -363,12 +363,15 @@ public class ConnectDialog extends Activity {
     private OnCancelListener oclProgressDialog = new OnCancelListener() {
         @Override
         public void onCancel(DialogInterface dialog) {
-            // Move the request to the message
-            Message msg = Message.obtain();
-            msg.obj = ClementineMessage.getMessage(MsgType.DISCONNECT);
+            if (App.ClementineConnection != null &&
+                    App.ClementineConnection.mHandler != null) {
+                // Move the request to the message
+                Message msg = Message.obtain();
+                msg.obj = ClementineMessage.getMessage(MsgType.DISCONNECT);
 
-            // Send the request to the thread
-            App.ClementineConnection.mHandler.sendMessage(msg);
+                // Send the request to the thread
+                App.ClementineConnection.mHandler.sendMessage(msg);
+            }
         }
 
     };
