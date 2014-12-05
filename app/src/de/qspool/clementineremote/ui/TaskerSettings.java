@@ -129,8 +129,16 @@ public class TaskerSettings extends Activity {
         final Intent resultIntent = new Intent();
 
         String ip = mIp.getText().toString();
+        // Already validated
         int port = Integer.valueOf(mPort.getText().toString());
-        int auth = Integer.valueOf(mAuth.getText().toString());
+
+        // If invalid, just assume 0
+        int auth;
+        try {
+             auth = Integer.valueOf(mAuth.getText().toString());
+        } catch (NumberFormatException e) {
+            auth = 0;
+        }
 
         final Bundle resultBundle =
                 PluginBundleManager.generateBundle(getApplicationContext(), mSelectedAction,
@@ -179,7 +187,9 @@ public class TaskerSettings extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.done:
-                finish();
+                if (userInputValid()) {
+                    finish();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -191,6 +201,20 @@ public class TaskerSettings extends Activity {
         MenuInflater inf = getMenuInflater();
         inf.inflate(R.menu.tasker_menu, menu);
 
+        return true;
+    }
+
+    private boolean userInputValid() {
+        try {
+            int port = Integer.valueOf(mPort.getText().toString());
+
+            if (port < 1024 || port > 65535) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            mPort.setError(getString(R.string.pref_port_error));
+            return false;
+        }
         return true;
     }
 
