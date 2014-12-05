@@ -142,6 +142,9 @@ public class ConnectionFragment extends AbstractDrawerFragment {
     }
 
     private void updateData() {
+        if (App.ClementineConnection == null) {
+            return;
+        }
         long diff = new Date().getTime() - App.ClementineConnection.getStartTime();
         String dateFormat = String.format("%02d:%02d:%02d",
                 TimeUnit.MILLISECONDS.toHours(diff),
