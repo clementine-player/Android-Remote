@@ -68,6 +68,11 @@ public class ClementineSongDownloader extends
 
     private Uri mFileUri;
 
+    public ClementineSongDownloader() {
+        mDownloadStatus = new DownloadStatus(mId).setState(
+                DownloadStatus.DownloaderState.IDLE);
+    }
+
     public void startDownload(ClementineMessage message) {
         if (mSongDownloaderListener == null) {
             throw new IllegalStateException("No listener defined!");
