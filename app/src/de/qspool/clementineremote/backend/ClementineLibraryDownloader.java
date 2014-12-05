@@ -241,7 +241,8 @@ public class ClementineLibraryDownloader extends
         mClient.disconnect(ClementineMessage.getMessage(MsgType.DISCONNECT));
 
         // Optimize library table
-        if (mLibrary.getLibraryDb().exists()) {
+        if (result.getResult() == DownloadResult.SUCCESSFUL &&
+                mLibrary.getLibraryDb().exists()) {
             try {
                 mLibrary.optimizeTable();
             } catch (SQLiteException e) {
