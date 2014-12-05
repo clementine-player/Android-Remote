@@ -91,6 +91,7 @@ public class PlaylistFragment extends AbstractDrawerFragment {
 
         // Get the actionbar
         mActionBar = getActivity().getActionBar();
+        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         setHasOptionsMenu(true);
 
         mPlaylistManager = App.Clementine.getPlaylistManager();
