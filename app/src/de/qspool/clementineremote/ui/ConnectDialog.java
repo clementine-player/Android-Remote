@@ -236,6 +236,21 @@ public class ConnectDialog extends Activity {
         return true;
     }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+
+        // First time called? Show an info screen
+        if (mShowcaseStore.showShowcase(ShowcaseStore.SC_CONNECTDIALOG)) {
+            mShowcaseStore.setShowcaseShown(ShowcaseStore.SC_CONNECTDIALOG);
+
+            // Show the info screen
+            showFirstTimeScreen();
+
+            showShowcase();
+        }
+    }
+
     /**
      * Start the background service
      */
@@ -280,17 +295,6 @@ public class ConnectDialog extends Activity {
 
         // Get the last auth code
         mAuthCode = mSharedPref.getInt(SharedPreferencesKeys.SP_LAST_AUTH_CODE, 0);
-
-        // First time called? Show an info screen
-        if (mShowcaseStore.showShowcase(ShowcaseStore.SC_CONNECTDIALOG)) {
-
-            // Show the info screen
-            showFirstTimeScreen();
-
-            showShowcase();
-
-            mShowcaseStore.setShowcaseShown(ShowcaseStore.SC_CONNECTDIALOG);
-        }
     }
 
     private OnClickListener oclConnect = new OnClickListener() {
