@@ -63,6 +63,8 @@ import android.widget.Toast;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.jmdns.ServiceInfo;
 
@@ -127,6 +129,8 @@ public class ConnectDialog extends Activity {
     private ShowcaseStore mShowcaseStore;
 
     private int mShowcaseCounter;
+
+    private Timer mServiceCheckTimer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -197,6 +201,25 @@ public class ConnectDialog extends Activity {
         mNotificationManager.cancel(ClementineMediaSessionNotification.NOTIFIFCATION_ID);
         mNotificationManager.cancel(DownloadManager.NOTIFICATION_ID_DOWNLOADS);
         mNotificationManager.cancel(DownloadManager.NOTIFICATION_ID_DOWNLOADS_FINISHED);
+
+        mBtnConnect.setEnabled(false);
+        mServiceCheckTimer = new Timer();
+        mServiceCheckTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (App.ClementineConnection == null) {
+                            startBackgroundService();
+                            mBtnConnect.setEnabled(false);
+                        } else {
+                            mBtnConnect.setEnabled(true);
+                        }
+                    }
+                });
+            }
+        }, 100, 250);
     }
 
     @Override
@@ -204,6 +227,9 @@ public class ConnectDialog extends Activity {
         super.onPause();
         if (mClementineMDns != null) {
             mClementineMDns.stopServiceDiscovery();
+        }
+        if (mServiceCheckTimer != null) {
+            mServiceCheckTimer.cancel();
         }
     }
 
