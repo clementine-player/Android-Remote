@@ -88,8 +88,12 @@
   <string name="pref_cat_behavior">Gedrag</string>
   <string name="pref_cat_player">Speler</string>
   <string name="pref_cat_downloads">Downloads</string>
+  <string name="pref_cat_advanced">Geavanceerd</string>
+  <string name="pref_cat_network">Netwerk</string>
   <string name="pref_cat_connection">Verbinding</string>
   <string name="pref_cat_info">Informatie</string>
+  <string name="pref_cat_about">Over</string>
+  <string name="pref_cat_license">Licenties</string>
   <string name="pref_volume_title">Gebruik volume knopen</string>
   <string name="pref_volume_summary">Gebruik de volume knoppen voor het vlume van Clementine.</string>
   <string name="pref_trackno_title">Toon volgnummer</string>
@@ -99,6 +103,7 @@
   <string name="pref_lower_volume_summary">Volume verlagen bij in- en uitgaande gesprekken.</string>
   <string name="pref_call_volume_title">Gespreksvolume niveau</string>
   <string name="pref_call_volume_summary">Huidige gespreksvolume: %s</string>
+  <string name="pref_autoconnect_title">Auto-verbinden</string>
   <string name="pref_port_title">Poort</string>
   <string name="pref_port_summary">Huidige Poort:</string>
   <string name="pref_port_default">5500</string>
@@ -123,6 +128,15 @@
   <string name="dialog_about_supporters">Met dank aan</string>
   <string name="dialog_about_others">Overig</string>
   <string name="dialog_license_top">Dit progamma is beschikbaar gesteld in de hoop dat het nuttig zal zijn, maar ZONDER ENIGE GARANTIE</string>
+  <string name="tasker_action">Actie:</string>
+  <string name="tasker_connect">Verbinden</string>
+  <string name="tasker_disconnect">Verbinding verbreken</string>
+  <string name="tasker_play">Afspelen</string>
+  <string name="tasker_pause">Pauzeren</string>
+  <string name="tasker_playpause">Afspelen / Pauzeren</string>
+  <string name="tasker_next">Volgend nummer</string>
+  <string name="tasker_port_hint">Voor poort in</string>
+  <string name="widget_not_connected">Niet verbonden</string>
   <string name="dialog_close">Sluiten</string>
   <string name="error_versions">Versie niet compatibel</string>
   <string name="old_proto">Voer een update van Clementine uit!</string>
@@ -130,6 +144,7 @@
   <string name="wifi_disabled">Wifi is uitgeschakeld. Als u met Clementine wilt verbinden via internet zorg dan de poorten juist doorgestuurd worden en dat de optie \"Alleen niet-publieke apparaten accepteren\" uitgeschakeld is.</string>
   <string name="input_auth_code">Autorisatiecode</string>
   <string name="invalid_code">Code incorrect</string>
+  <string name="done">Klaar</string>
   <string name="repeat_off">Niet herhalen</string>
   <string name="repeat_track">Nummer herhalen</string>
   <string name="repeat_album">Album herhalen</string>
