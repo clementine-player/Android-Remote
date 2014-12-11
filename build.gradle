@@ -1,9 +1,9 @@
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.14.4'
+        classpath 'com.android.tools.build:gradle:1.0.0'
     }
 }
 
@@ -11,10 +11,14 @@ ext {
     compileSdkVersion = 21
     minSdkVersion = 15
     targetSdkVersion = 21
-    buildToolsVersion = "21.0.2"
+    buildToolsVersion = "21.1.2"
 }
 
 allprojects {
+    repositories {
+        jcenter()
+    }
+
     gradle.projectsEvaluated {
         tasks.withType(JavaCompile) {
             options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"

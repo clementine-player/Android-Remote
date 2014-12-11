@@ -1,9 +1,5 @@
 apply plugin: 'com.android.application'
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     compile 'com.android.support:support-v4:21.0.+'
     compile 'com.android.support:appcompat-v7:21.0.+'
