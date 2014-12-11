@@ -23,6 +23,8 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
@@ -66,6 +68,16 @@ public class ClementineService extends Service {
 
     private PowerManager.WakeLock mWakeLock;
 
+    private Handler mUiHandler;
+
+    private ClementineServiceBinder mClementineServiceBinder = new ClementineServiceBinder();
+
+    public class ClementineServiceBinder extends Binder {
+        public ClementineService getClementineService() {
+            return ClementineService.this;
+        }
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -81,12 +93,12 @@ public class ClementineService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return mClementineServiceBinder;
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null) {
+        if (intent != null && intent.hasExtra(SERVICE_ID)) {
             handleServiceAction(intent);
         }
 
@@ -98,7 +110,7 @@ public class ClementineService extends Service {
      *
      * @param intent The action to perform
      */
-    private void handleServiceAction(final Intent intent) {
+    public void handleServiceAction(final Intent intent) {
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         int action = intent.getIntExtra(SERVICE_ID, 0);
@@ -107,6 +119,7 @@ public class ClementineService extends Service {
                 // Create a new instance
                 if (App.ClementineConnection == null) {
                     App.ClementineConnection = new ClementinePlayerConnection();
+                    App.ClementineConnection.setUiHandler(mUiHandler);
                     MediaSessionController mediaSessionController = new MediaSessionController(this,
                             App.ClementineConnection);
                     mediaSessionController.registerMediaSession();
@@ -162,6 +175,7 @@ public class ClementineService extends Service {
             case SERVICE_DISCONNECTED:
                 intteruptThread();
                 App.ClementineConnection = null;
+                stopSelf();
                 break;
             default:
                 break;
@@ -183,6 +197,10 @@ public class ClementineService extends Service {
         }
         intteruptThread();
         App.ClementineConnection = null;
+    }
+
+    public void setUiHandler(Handler uiHandler) {
+        mUiHandler = uiHandler;
     }
 
     private void intteruptThread() {

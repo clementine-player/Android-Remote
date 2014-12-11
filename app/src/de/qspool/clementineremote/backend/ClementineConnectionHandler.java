@@ -49,7 +49,9 @@ public class ClementineConnectionHandler extends Handler {
             } else {
                 switch (message.getMessageType()) {
                     case CONNECT:
-                        myClementineConnection.createConnection(message);
+                        if (!myClementineConnection.isConnected()) {
+                            myClementineConnection.createConnection(message);
+                        }
                         break;
                     case DISCONNECT:
                         myClementineConnection.disconnect(message);

@@ -24,10 +24,12 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
@@ -35,6 +37,7 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.InputType;
@@ -63,8 +66,6 @@ import android.widget.Toast;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.jmdns.ServiceInfo;
 
@@ -130,8 +131,6 @@ public class ConnectDialog extends Activity {
 
     private int mShowcaseCounter;
 
-    private Timer mServiceCheckTimer;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -174,9 +173,6 @@ public class ConnectDialog extends Activity {
             return;
         }
 
-        // Start the background service
-        startBackgroundService();
-
         // mDNS Discovery
         mClementineMDns = new ClementineMDnsDiscovery(mHandler);
 
@@ -201,25 +197,6 @@ public class ConnectDialog extends Activity {
         mNotificationManager.cancel(ClementineMediaSessionNotification.NOTIFIFCATION_ID);
         mNotificationManager.cancel(DownloadManager.NOTIFICATION_ID_DOWNLOADS);
         mNotificationManager.cancel(DownloadManager.NOTIFICATION_ID_DOWNLOADS_FINISHED);
-
-        mBtnConnect.setEnabled(false);
-        mServiceCheckTimer = new Timer();
-        mServiceCheckTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (App.ClementineConnection == null) {
-                            startBackgroundService();
-                            mBtnConnect.setEnabled(false);
-                        } else {
-                            mBtnConnect.setEnabled(true);
-                        }
-                    }
-                });
-            }
-        }, 100, 250);
     }
 
     @Override
@@ -227,9 +204,6 @@ public class ConnectDialog extends Activity {
         super.onPause();
         if (mClementineMDns != null) {
             mClementineMDns.stopServiceDiscovery();
-        }
-        if (mServiceCheckTimer != null) {
-            mServiceCheckTimer.cancel();
         }
     }
 
@@ -275,16 +249,6 @@ public class ConnectDialog extends Activity {
 
             showShowcase();
         }
-    }
-
-    /**
-     * Start the background service
-     */
-    private void startBackgroundService() {
-        // Start the background service
-        mServiceIntent = new Intent(this, ClementineService.class);
-        mServiceIntent.putExtra(ClementineService.SERVICE_ID, ClementineService.SERVICE_START);
-        startService(mServiceIntent);
     }
 
     private void initializeUi() {
@@ -415,7 +379,7 @@ public class ConnectDialog extends Activity {
             mKnownIps.add(mEtIp.getText().toString());
         }
 
-        String ip = mEtIp.getText().toString();
+        final String ip = mEtIp.getText().toString();
 
         // Save the data
         SharedPreferences.Editor editor = mSharedPref.edit();
@@ -425,11 +389,40 @@ public class ConnectDialog extends Activity {
 
         editor.commit();
 
-        App.ClementineConnection.setUiHandler(mHandler);
-
         mPdConnect.setMessage(getString(R.string.connectdialog_connecting));
         mPdConnect.show();
 
+        // Start the service so it won't be stopped on unbindService
+        Intent serviceIntent = new Intent(this, ClementineService.class);
+        startService(serviceIntent);
+
+        bindService(serviceIntent, new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                ClementineService.ClementineServiceBinder clementineServiceBinder = (ClementineService.ClementineServiceBinder) service;
+
+                clementineServiceBinder.getClementineService().setUiHandler(mHandler);
+
+                Intent connectIntent = new Intent(ConnectDialog.this, ClementineService.class);
+                connectIntent.putExtra(ClementineService.SERVICE_ID,
+                        ClementineService.SERVICE_START);
+                connectIntent.putExtra(ClementineService.EXTRA_STRING_IP, ip);
+                connectIntent.putExtra(ClementineService.EXTRA_INT_PORT, getPort());
+                connectIntent.putExtra(ClementineService.EXTRA_INT_AUTH, mAuthCode);
+
+                clementineServiceBinder.getClementineService().handleServiceAction(connectIntent);
+
+                unbindService(this);
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+
+            }
+        }, Context.BIND_AUTO_CREATE);
+    }
+
+    private int getPort() {
         // Get the port to connect to
         int port;
         try {
@@ -440,12 +433,7 @@ public class ConnectDialog extends Activity {
             port = Clementine.DefaultPort;
         }
 
-        Intent serviceIntent = new Intent(this, ClementineService.class);
-        serviceIntent.putExtra(ClementineService.SERVICE_ID, ClementineService.SERVICE_START);
-        serviceIntent.putExtra(ClementineService.EXTRA_STRING_IP, ip);
-        serviceIntent.putExtra(ClementineService.EXTRA_INT_PORT, port);
-        serviceIntent.putExtra(ClementineService.EXTRA_INT_AUTH, mAuthCode);
-        startService(serviceIntent);
+        return port;
     }
 
     /**
