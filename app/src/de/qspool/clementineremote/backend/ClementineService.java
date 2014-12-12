@@ -136,6 +136,7 @@ public class ClementineService extends Service {
                                         case CONNECTING:
                                             break;
                                         case NO_CONNECTION:
+                                            sendDisconnectServiceMessage();
                                             break;
                                         case CONNECTED:
                                             if (mUseWakeLock) {
@@ -146,12 +147,7 @@ public class ClementineService extends Service {
                                             showKeepAliveDisconnectNotification();
                                             break;
                                         case DISCONNECTED:
-                                            Intent mServiceIntent = new Intent(
-                                                    ClementineService.this,
-                                                    ClementineService.class);
-                                            mServiceIntent
-                                                    .putExtra(SERVICE_ID, SERVICE_DISCONNECTED);
-                                            startService(mServiceIntent);
+                                            sendDisconnectServiceMessage();
 
                                             if (mUseWakeLock) {
                                                 mWakeLock.release();
@@ -186,8 +182,6 @@ public class ClementineService extends Service {
     public void onDestroy() {
         if (App.ClementineConnection != null
                 && App.ClementineConnection.isConnected()) {
-            // Create a new request
-
             // Move the request to the message
             Message msg = Message.obtain();
             msg.obj = ClementineMessage.getMessage(MsgType.DISCONNECT);
@@ -203,12 +197,22 @@ public class ClementineService extends Service {
         mUiHandler = uiHandler;
     }
 
+    private void sendDisconnectServiceMessage() {
+        Intent mServiceIntent = new Intent(
+                ClementineService.this,
+                ClementineService.class);
+        mServiceIntent
+                .putExtra(SERVICE_ID, SERVICE_DISCONNECTED);
+        startService(mServiceIntent);
+    }
+
     private void intteruptThread() {
         if (mPlayerThread != null) {
             mPlayerThread.interrupt();
         }
 
         if (App.ClementineConnection != null
+                && App.ClementineConnection.mHandler != null
                 && mPlayerThread.isAlive()) {
             App.ClementineConnection.mHandler.post(new Runnable() {
 
