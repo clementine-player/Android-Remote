@@ -64,12 +64,12 @@ android {
     signingConfigs {
         release {
             // Signing code for buildbot
-            //signProperties props = new Properties()
-            //signprops.load(new FileInputStream(file("PROPERTIES_FILE")))
-            //signstoreFile file(props['keystore'])
-            //signstorePassword props['keystore.password']
-            //signkeyAlias props['key.alias']
-            //signkeyPassword props['key.password']
+            Properties props = new Properties()
+            props.load(new FileInputStream(file("key.properties")))
+            storeFile file(props['keystore'])
+            storePassword props['keystore.password']
+            keyAlias props['key.alias']
+            keyPassword props['key.password']
 
             // Signing code for manual signing
             //storeFile file(System.console().readLine("\n\$ Enter keystore path: "))
