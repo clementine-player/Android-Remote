@@ -1,3 +1,16 @@
+Version 10.1
+  Bugfixes:
+    - Fix NullPointerException when trying to connect
+    - Fix NullPointerException in SongDownloader
+    - Fix SQLiteExceptions when library download was not successful
+    - Fix NumberFormatException in tasker settings when port or auth code was empty
+    - Fix IllegalStateException: setSelectedNavigationIndex in playlist view
+    - Fix NullPointerException when canceling connect dialog
+    - Fix IllegalStateException in settings
+    - Fix IndexOutOfBoundsException in playlist view
+    - Fix jmdns race condition (java.lang.IllegalStateException: Timer was canceled)
+    - Added workaround for crash in showcaseview
+
 Version 10
   Features:
     - Tasker & Locale support
