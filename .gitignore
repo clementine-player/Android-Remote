@@ -11,6 +11,7 @@
 # Generated files
 **/bin/
 **/gen/
+app/src/de/qspool/clementineremote/backend/pb/ClementineRemoteProtocolBuffer.java
 
 # Gradle files
 .gradle/
