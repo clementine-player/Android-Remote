@@ -44,6 +44,7 @@ import java.util.List;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.downloader.DownloadManager;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
@@ -224,6 +225,7 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
     public void MessageFromClementine(ClementineMessage clementineMessage) {
         switch (clementineMessage.getMessageType()) {
             case UPDATE_TRACK_POSITION:
+            case STOP:
                 updateTrackPosition();
                 break;
             case CURRENT_METAINFO:
@@ -248,10 +250,15 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
      * hand side.
      */
     private void updateTrackPosition() {
-        mTvLength.setText(buildTrackPosition());
         mSbPosition.setEnabled(true);
         mSbPosition.setMax(mCurrentSong.getLength());
-        mSbPosition.setProgress(App.Clementine.getSongPosition());
+        if (App.Clementine.getState() == Clementine.State.STOP) {
+            mSbPosition.setProgress(0);
+        } else {
+            mSbPosition.setProgress(App.Clementine.getSongPosition());
+        }
+
+        mTvLength.setText(buildTrackPosition());
     }
 
     /**
@@ -414,7 +421,11 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
         if (mCurrentSong.getLength() == 0) {
             sb.append(Utilities.PrettyTime(App.Clementine.getSongPosition()));
         } else {
-            sb.append(Utilities.PrettyTime(App.Clementine.getSongPosition()));
+            if (App.Clementine.getState() == Clementine.State.STOP) {
+                sb.append(Utilities.PrettyTime(0));
+            } else {
+                sb.append(Utilities.PrettyTime(App.Clementine.getSongPosition()));
+            }
             sb.append("/");
             sb.append(Utilities.PrettyTime(mCurrentSong.getLength()));
         }
