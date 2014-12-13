@@ -34,6 +34,7 @@ import java.util.List;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.downloader.ClementineSongDownloader;
 import de.qspool.clementineremote.backend.downloader.DownloadManager;
+import de.qspool.clementineremote.utils.Utilities;
 
 /**
  * Class is used for displaying the song data
@@ -67,6 +68,8 @@ public class DownloadAdapter extends ArrayAdapter<ClementineSongDownloader> {
             downloadViewHolder.subtitle = (TextView) convertView.findViewById(R.id.tvDlSubtitle);
             downloadViewHolder.progress = (ProgressBar) convertView.findViewById(R.id.pbDlProgress);
             downloadViewHolder.cancel = (ImageButton) convertView.findViewById(R.id.ibCancelDl);
+            downloadViewHolder.totalDownload = (TextView) convertView
+                    .findViewById(R.id.tvDownloadSize);
 
             convertView.setTag(downloadViewHolder);
         } else {
@@ -83,6 +86,18 @@ public class DownloadAdapter extends ArrayAdapter<ClementineSongDownloader> {
         downloadViewHolder.title.setText(mDownloadManager.getTitleForItem(downloader));
         downloadViewHolder.subtitle.setText(mDownloadManager.getSubtitleForItem(
                 downloader));
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(Utilities.humanReadableBytes(downloader.getTotalDownloaded(), true));
+        sb.append(" / ");
+        sb.append(Utilities.humanReadableBytes(downloader.getTotalFileSize(), true));
+        if (downloader.getStatus() == AsyncTask.Status.RUNNING) {
+            sb.append(" (");
+            sb.append(Utilities.humanReadableBytes(downloader.getDownloadSpeedPerSecond(), true));
+            sb.append("/s)");
+        }
+
+        downloadViewHolder.totalDownload.setText(sb.toString());
 
         return convertView;
     }
@@ -111,6 +126,8 @@ public class DownloadAdapter extends ArrayAdapter<ClementineSongDownloader> {
         TextView title;
 
         TextView subtitle;
+
+        TextView totalDownload;
 
         ProgressBar progress;
 

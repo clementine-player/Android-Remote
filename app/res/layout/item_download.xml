@@ -54,5 +54,14 @@
         android:paddingTop="6dp"
         android:progress="30"
         android:progressDrawable="@drawable/progress" />
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="12sp"
+            android:paddingRight="15dp"
+            android:id="@+id/tvDownloadSize"
+            android:layout_below="@+id/pbDlProgress" android:layout_alignRight="@+id/pbDlProgress"
+            android:layout_alignEnd="@+id/pbDlProgress"/>
 
 </RelativeLayout>
