@@ -101,3 +101,9 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
 }
+
+task generateProtocolBuffer {
+    exec {
+        commandLine './generateProtocolBuffer.sh'
+    }
+}
