@@ -79,6 +79,15 @@
                     android:textSize="20sp" />
 
                 <RadioButton
+                    android:id="@+id/radio_stop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onRadioButtonClicked"
+                    android:text="@string/tasker_stop"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp" />
+
+                <RadioButton
                     android:id="@+id/radio_next"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

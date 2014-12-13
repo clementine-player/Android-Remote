@@ -54,6 +54,8 @@ public class TaskerSettings extends Activity {
 
     public final static int ACTION_NEXT = 5;
 
+    public final static int ACTION_STOP = 6;
+
     private final static String TAG = "TaskerSettings";
 
     private SharedPreferences mSharedPref;
@@ -119,6 +121,9 @@ public class TaskerSettings extends Activity {
                     case ACTION_NEXT:
                         ((RadioButton) findViewById(R.id.radio_next)).setChecked(true);
                         break;
+                    case ACTION_STOP:
+                        ((RadioButton) findViewById(R.id.radio_stop)).setChecked(true);
+                        break;
                 }
             }
         }
@@ -172,6 +177,9 @@ public class TaskerSettings extends Activity {
                 break;
             case ACTION_NEXT:
                 sb.append(getString(R.string.tasker_next));
+                break;
+            case ACTION_STOP:
+                sb.append(getString(R.string.tasker_stop));
                 break;
         }
 
@@ -262,6 +270,8 @@ public class TaskerSettings extends Activity {
             case R.id.radio_next:
                 mSelectedAction = ACTION_NEXT;
                 break;
+            case R.id.radio_stop:
+                mSelectedAction = ACTION_STOP;
             default:
                 break;
         }

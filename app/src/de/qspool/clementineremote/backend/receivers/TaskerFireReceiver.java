@@ -70,6 +70,9 @@ public class TaskerFireReceiver extends BroadcastReceiver {
                 case TaskerSettings.ACTION_NEXT:
                     msg.obj = ClementineMessage.getMessage(MsgType.NEXT);
                     break;
+                case TaskerSettings.ACTION_STOP:
+                    msg.obj = ClementineMessage.getMessage(MsgType.STOP);
+                    break;
             }
 
             // Now send the message

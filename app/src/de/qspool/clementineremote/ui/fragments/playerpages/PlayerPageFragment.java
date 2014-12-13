@@ -209,6 +209,11 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
                             .show();
                 }
                 break;
+            case R.id.stop:
+                Message msg = Message.obtain();
+                msg.obj = ClementineMessage.getMessage(MsgType.STOP);
+                App.ClementineConnection.mHandler.sendMessage(msg);
+                break;
             default:
                 return false;
         }

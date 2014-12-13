@@ -20,4 +20,8 @@
         android:title="@string/menu_download_album"
         android:icon="@drawable/ab_download_album"
         android:showAsAction="ifRoom"></item>
+    <item
+        android:id="@+id/stop"
+        android:title="@string/tasker_stop"
+        android:showAsAction="never"></item>
 </menu>

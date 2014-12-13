@@ -190,6 +190,7 @@
     <string name="tasker_play">Play</string>
     <string name="tasker_pause">Pause</string>
     <string name="tasker_playpause">Play / Pause</string>
+    <string name="tasker_stop">Stop</string>
     <string name="tasker_next">Next song</string>
     <string name="tasker_port_hint">Enter port</string>
     <string name="tasker_auth_hint">Enter auth code</string>
