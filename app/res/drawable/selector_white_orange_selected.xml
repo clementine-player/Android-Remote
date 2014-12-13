@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_activated="true">
+        <shape>
+            <gradient android:startColor="@color/list_pressed_start" android:endColor="@color/list_pressed_end" android:angle="270" />
+            <padding android:left="10dp" android:top="10dp" android:right="10dp" android:bottom="10dp" />
+        </shape>
+    </item>
+    <item android:state_pressed="true">
+        <shape>
+            <gradient android:startColor="@color/list_pressed_start" android:endColor="@color/list_pressed_end" android:angle="270" />
+            <padding android:left="10dp" android:top="10dp" android:right="10dp" android:bottom="10dp" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <gradient android:startColor="@android:color/transparent"
+                      android:endColor="@android:color/transparent" android:angle="270"/>
+            <padding android:left="10dp" android:top="10dp" android:right="10dp" android:bottom="10dp" />
+        </shape>
+    </item>
+</selector>

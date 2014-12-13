@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/playlist_menu_search"
+        android:actionViewClass="android.widget.SearchView"
+        android:icon="@drawable/ab_search"
+        android:showAsAction="ifRoom|collapseActionView"
+        android:title="@string/menu_search"></item>
+    <item
+        android:id="@+id/download_playlist"
+        android:title="@string/menu_download_playlist"
+        android:icon="@drawable/ab_download_playlist"
+        android:showAsAction="ifRoom"></item>
+    <item
+            android:id="@+id/close_playlist"
+            android:title="@string/playlist_close"
+            android:icon="@drawable/ab_delete"
+            android:showAsAction="ifRoom"></item>
+    <item
+            android:id="@+id/clear_playlist"
+            android:title="@string/playlist_clear"
+            android:icon="@drawable/ab_ban"
+            android:showAsAction="ifRoom"></item>
+</menu>

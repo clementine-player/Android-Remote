@@ -1,0 +1,14 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:title="@string/pref_cat_about">
+    <Preference
+            android:key="pref_version"
+            android:summary="@string/pref_version_summary"></Preference>
+    <Preference
+            android:key="pref_clementine_website"
+            android:title="@string/pref_clementine_title"
+            android:summary="@string/pref_clementine_summary"></Preference>
+    <Preference
+            android:key="pref_key_about"
+            android:title="@string/pref_about_title"
+            android:summary="@string/pref_about_summary"/>
+</PreferenceScreen>

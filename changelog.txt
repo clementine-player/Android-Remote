@@ -1,3 +1,62 @@
+Version 10.1
+  Bugfixes:
+    - Fix NullPointerException when trying to connect
+    - Fix NullPointerException in SongDownloader
+    - Fix SQLiteExceptions when library download was not successful
+    - Fix NumberFormatException in tasker settings when port or auth code was empty
+    - Fix IllegalStateException: setSelectedNavigationIndex in playlist view
+    - Fix NullPointerException when canceling connect dialog
+    - Fix IllegalStateException in settings
+    - Fix IndexOutOfBoundsException in playlist view
+    - Fix jmdns race condition (java.lang.IllegalStateException: Timer was canceled)
+    - Added workaround for crash in showcaseview
+
+Version 10
+  Features:
+    - Tasker & Locale support
+    - 4x1 Widget for homescreen
+    - Clear playlist
+    - Close playlist
+  Improvements:
+    - Huge performance increase especially when connecting and retrieving playlist songs
+    - Download notifications are now stacked when downloading multiple items
+    - Delete multiple items from playlist
+    - Improve phone and tablet layout
+    - Don't show -1 track / disc number in song details
+    - Last.fm doesn't require a restart
+  Bugfixes:
+    - Fix volume slider joggs
+    - Playlist updates correctly when it's changed (on Remote or Desktop)
+    - Android 4.4: Downloads are now saved in apps music dir since apps cannot write outside them in KITKAT.
+      Note: Those files are deleted when uninstalling Clementine Remote. You may have to reset the download path.
+  Other:
+    - App don't aquire wakelock by default anymore. Can still be activated in the settings if connection is unsable
+    - Compiled against Android 5.0 Lollipop + Lockscreen notifications
+    - Remove Pebble specific code and use metachanged intent for all bluetooth devices
+
+Version 9 (Only for Android 4.0+)
+  Features:
+    - Showcases to introduce app features
+  Improvements:
+    - Flat orange ActionBar
+    - Tablet layout
+    - Minor layout improvements overall
+    - Song detail page moved from navigation to player view (swipe to right)
+    - New view "Connection details" in player view (swipe to right twice)
+    - Reworked playlist handling, should be more stable now
+    - The search function in the library performs a full search now, not only artist, album and title
+    - Show transferred bytes when downloading the library
+    - Preference to keep the screen on while connected
+    - Volume increase / decrease level can now be changed
+    - Playlist and Library have holo context menus now
+    - Clementine Remote saves recent connected ip addresses
+  Bugfixes:
+    - IP address can hold more than 20 characters now
+    - Fix NumberFormatException in settings when entering invalid port
+    - Fix crash when downloading songs
+    - Fix adding songs to playlist from library that had special characters in it
+    - Fix fast scrolling: It was disabled when selecting another the playlist
+
 Version 8.5
   Improvements:
     - Library: Search applies for artist, album and title now

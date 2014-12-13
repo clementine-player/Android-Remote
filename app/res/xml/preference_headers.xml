@@ -1,0 +1,27 @@
+<preference-headers
+        xmlns:android="http://schemas.android.com/apk/res/android">
+    <header android:id="@+id/cat_behavior"
+            android:title="@string/pref_cat_behavior"/>
+
+    <header android:fragment="de.qspool.clementineremote.ui.settings.PreferencesBehaviorPlayer"
+            android:title="@string/pref_cat_player"/>
+    <header android:fragment="de.qspool.clementineremote.ui.settings.PreferencesBehaviorDownloads"
+            android:title="@string/pref_cat_downloads"/>
+    <header android:fragment="de.qspool.clementineremote.ui.settings.PreferencesBehaviorAdvanced"
+            android:title="@string/pref_cat_advanced"/>
+
+    <header android:id="@+id/cat_network"
+            android:title="@string/pref_cat_network"/>
+
+    <header android:fragment="de.qspool.clementineremote.ui.settings.PreferencesConnection"
+            android:title="@string/pref_cat_connection"/>
+
+    <header android:id="@+id/cat_information"
+            android:title="@string/pref_cat_info"/>
+
+    <header android:fragment="de.qspool.clementineremote.ui.settings.PreferencesInformationAbout"
+            android:title="@string/pref_cat_about"/>
+    <header android:fragment="de.qspool.clementineremote.ui.settings.PreferencesInformationLicenses"
+            android:title="@string/pref_cat_license"/>
+
+</preference-headers>
