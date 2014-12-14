@@ -21,7 +21,7 @@ import de.qspool.clementineremote.backend.player.MySong;
 
 public class DownloadStatus {
 
-    public static enum DownloaderState {IDLE, DOWNLOADING, FINISHED}
+    public static enum DownloaderState {IDLE, TRANSCODING, DOWNLOADING, FINISHED}
 
     private int mId;
 
@@ -34,6 +34,10 @@ public class DownloadStatus {
     private int mTotalFiles;
 
     private int mCurrentFileIndex;
+
+    private int mTranscodingTotal;
+
+    private int mTranscodingFinished;
 
     public DownloadStatus(int id) {
         mId = id;
@@ -85,6 +89,24 @@ public class DownloadStatus {
 
     public DownloadStatus setCurrentFileIndex(int currentFileIndex) {
         mCurrentFileIndex = currentFileIndex;
+        return this;
+    }
+
+    public int getTranscodingTotal() {
+        return mTranscodingTotal;
+    }
+
+    public DownloadStatus setTranscodingTotal(int transcodingTotal) {
+        mTranscodingTotal = transcodingTotal;
+        return this;
+    }
+
+    public int getTranscodingFinished() {
+        return mTranscodingFinished;
+    }
+
+    public DownloadStatus setTranscodingFinished(int transcodingFinished) {
+        mTranscodingFinished = transcodingFinished;
         return this;
     }
 }

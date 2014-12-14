@@ -219,6 +219,9 @@ public class DownloadManager {
             case IDLE:
                 sb.append(mContext.getString(R.string.download_noti_title));
                 break;
+            case TRANSCODING:
+                sb.append(mContext.getString(R.string.download_noti_transcoding));
+                break;
             case DOWNLOADING:
             case FINISHED:
                 switch (downloader.getItem()) {
@@ -251,6 +254,14 @@ public class DownloadManager {
 
             case IDLE:
                 break;
+            case TRANSCODING:
+                sb.append("(");
+                sb.append(status.getTranscodingFinished());
+                sb.append("/");
+                sb.append(status.getTranscodingTotal());
+                sb.append(") ");
+                sb.append(mContext.getString(R.string.download_noti_transcoding_subtitle));
+                break;
             case DOWNLOADING:
                 sb.append("(");
                 sb.append(status.getCurrentFileIndex());
@@ -277,6 +288,7 @@ public class DownloadManager {
                 mActiveNofiticationBuilder.setContentText(
                         mContext.getString(R.string.connectdialog_connecting));
                 break;
+            case TRANSCODING:
             case DOWNLOADING:
                 if (mActiveDownloads.size() == 1) {
                     setNotificationSingleDownload(mActiveNofiticationBuilder, status);

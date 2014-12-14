@@ -31,6 +31,7 @@ import de.qspool.clementineremote.backend.elements.DownloaderResult;
 import de.qspool.clementineremote.backend.elements.DownloaderResult.DownloadResult;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongFileChunk;
@@ -215,6 +216,13 @@ public class ClementineSongDownloader extends
             // Total file size
             if (message.getMessageType() == MsgType.DOWNLOAD_TOTAL_SIZE) {
                 mTotalFileSize = message.getMessage().getResponseDownloadTotalSize().getTotalSize();
+                continue;
+            }
+
+            // Transcoding files?
+            if (message.getMessageType() == MsgType.TRANSCODING_FILES) {
+                parseTranscodingMessage(message);
+                continue;
             }
 
             // Ignore other elements!
@@ -286,6 +294,16 @@ public class ClementineSongDownloader extends
         mClient.disconnect(ClementineMessage.getMessage(MsgType.DISCONNECT));
 
         return result;
+    }
+
+    private void parseTranscodingMessage(ClementineMessage message) {
+        ClementineRemoteProtocolBuffer.ResponseTranscoderStatus status = message.getMessage()
+                .getResponseTranscoderStatus();
+
+        publishProgress(new DownloadStatus(mId)
+                .setState(DownloadStatus.DownloaderState.TRANSCODING)
+                .setTranscodingTotal(status.getTotal())
+                .setTranscodingFinished(status.getProcessed()));
     }
 
     private void checkIsPlaylist(ClementineMessage clementineMessage) {

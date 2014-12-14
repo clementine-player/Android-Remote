@@ -51,6 +51,8 @@
     <string name="download_noti_forbidden">Download forbidden. Activate in Clementine settings.</string>
     <string name="download_noti_not_mounted">No storage device found!</string>
     <string name="download_noti_only_wifi">Download only on wifi allowed.</string>
+    <string name="download_noti_transcoding">Transcoding files</string>
+    <string name="download_noti_transcoding_subtitle">Please wait</string>
 
 
     <string name="library_download">Downloading library</string>
