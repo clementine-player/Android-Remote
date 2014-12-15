@@ -158,6 +158,7 @@
   <string name="tasker_play">Пуск</string>
   <string name="tasker_pause">Пауза</string>
   <string name="tasker_playpause">Пуск / Пауза</string>
+  <string name="tasker_stop">Стоп</string>
   <string name="tasker_next">Наступна композиція</string>
   <string name="tasker_port_hint">Вкажіть порт</string>
   <string name="tasker_auth_hint">Вкажіть код розпізнавання</string>

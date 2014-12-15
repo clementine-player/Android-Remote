@@ -150,12 +150,14 @@
   <string name="dialog_about_others">Outros</string>
   <string name="dialog_license_top">Este programa é distribuído na esperança que seja útil, mas SEM QUALQUER GARANTIA</string>
   <string name="tasker_intro">Escolha uma ação.</string>
+  <string name="tasker_ip_help">Escreva os detalhes a utilizar ao estabelecer ligação. O código de autenticação é facultativo se a opção estiver inativa no Clementine.</string>
   <string name="tasker_action">Ação:</string>
   <string name="tasker_connect">Ligar</string>
   <string name="tasker_disconnect">Desligar</string>
   <string name="tasker_play">Reproduzir</string>
   <string name="tasker_pause">Pausa</string>
   <string name="tasker_playpause">Reproduzir/Pausa</string>
+  <string name="tasker_stop">Parar</string>
   <string name="tasker_next">Próxima faixa</string>
   <string name="tasker_port_hint">Escreva a porta</string>
   <string name="tasker_auth_hint">Escreva o código</string>

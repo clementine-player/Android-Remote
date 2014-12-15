@@ -157,6 +157,7 @@
   <string name="tasker_play">Wiedergabe</string>
   <string name="tasker_pause">Pause</string>
   <string name="tasker_playpause">Wiedergabe / Pause</string>
+  <string name="tasker_stop">Stopp</string>
   <string name="tasker_next">Weiter</string>
   <string name="tasker_port_hint">Port eingeben</string>
   <string name="tasker_auth_hint">Legitimierungscode eingeben</string>
