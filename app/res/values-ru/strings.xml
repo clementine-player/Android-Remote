@@ -160,6 +160,7 @@
   <string name="tasker_play">Играть</string>
   <string name="tasker_pause">Пауза</string>
   <string name="tasker_playpause">Играть / Пауза</string>
+  <string name="tasker_stop">Стоп</string>
   <string name="tasker_next">Следующая песня</string>
   <string name="tasker_port_hint">Введите порт</string>
   <string name="tasker_auth_hint">Введите код безопастности</string>
