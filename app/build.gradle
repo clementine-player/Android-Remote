@@ -104,6 +104,6 @@ android {
 
 task generateProtocolBuffer << {
     exec {
-        commandLine './generateProtocolBuffer.sh'
+        commandLine 'protoc', '-I./', '--java_out=./src', './src/de/qspool/clementineremote/backend/pb/remotecontrolmessages.proto'
     }
 }
