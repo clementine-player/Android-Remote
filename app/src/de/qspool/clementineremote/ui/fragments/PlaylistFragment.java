@@ -157,13 +157,13 @@ public class PlaylistFragment extends AbstractDrawerFragment {
             return;
         }
 
-        RequestPlaylistSongs();
+        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
         mPlaylistManager.addOnPlaylistReceivedListener(mPlaylistListener);
         mPlaylists = mPlaylistManager.getAllPlaylists();
         updatePlaylistSpinner();
 
-        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        RequestPlaylistSongs();
 
         // Get the position of the current track if we have one
         if (App.Clementine.getCurrentSong() != null) {
@@ -481,6 +481,9 @@ public class PlaylistFragment extends AbstractDrawerFragment {
             mProgressDialog.setMessage(getString(R.string.playlist_loading));
             mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             mProgressDialog.show();
+        } else {
+            mActionBar.setSelectedNavigationItem(
+                    mPlaylists.indexOf(mPlaylistManager.getActivePlaylist()));
         }
     }
 

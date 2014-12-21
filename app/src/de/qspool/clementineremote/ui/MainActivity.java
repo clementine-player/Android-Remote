@@ -449,7 +449,7 @@ public class MainActivity extends FragmentActivity {
                         break;
                     case 1: // Player
                         if (mPlayerFragment != null) {
-                            ft.replace(R.id.content_frame, mFragments.get(2)).commit();
+                            ft.replace(R.id.content_frame, mFragments.get(1)).commit();
                         } else {
                             ft.replace(R.id.content_frame, mFragments.get(0)).commit();
                         }
