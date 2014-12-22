@@ -42,6 +42,8 @@
   <string name="download_noti_forbidden">Preuzimanje zabranjeno. Aktivirajte ga u Clementine postavkama.</string>
   <string name="download_noti_not_mounted">Nema pronađenih uređaja pohrane!</string>
   <string name="download_noti_only_wifi">Preuzimanje je samo dopušteno putem WI-FI-a.</string>
+  <string name="download_noti_transcoding">Datoteke enkôdiranja</string>
+  <string name="download_noti_transcoding_subtitle">Molim pričekajte</string>
   <string name="library_download">Preuzimanje fonoteke</string>
   <string name="library_optimize">Optimiziranje baze podataka</string>
   <string name="library_please_wait">Molim pričekajte</string>
@@ -160,6 +162,7 @@
   <string name="tasker_play">Reprodukcija</string>
   <string name="tasker_pause">Pauza</string>
   <string name="tasker_playpause">Reprodukcija / Pauza</string>
+  <string name="tasker_stop">Zaustavi</string>
   <string name="tasker_next">Sljedeća pjesma</string>
   <string name="tasker_port_hint">Upiši ulaz</string>
   <string name="tasker_auth_hint">Upiši kôd autentifikacije</string>

@@ -42,6 +42,8 @@
   <string name="download_noti_forbidden">Muat turun dilarang. Aktifkan dalam tetapan Clementine.</string>
   <string name="download_noti_not_mounted">Tiada peranti storan ditemui!</string>
   <string name="download_noti_only_wifi">Hanya muat turun dengan wifi dibenarkan.</string>
+  <string name="download_noti_transcoding">Mentranskod fail</string>
+  <string name="download_noti_transcoding_subtitle">Tunggu sebentar</string>
   <string name="library_download">Memuat turun pustaka</string>
   <string name="library_optimize">Mengoptimumkan pangkalan data</string>
   <string name="library_please_wait">Tunggu sebentar</string>
@@ -157,6 +159,7 @@
   <string name="tasker_play">Main</string>
   <string name="tasker_pause">Jeda</string>
   <string name="tasker_playpause">Main / Jeda</string>
+  <string name="tasker_stop">Henti</string>
   <string name="tasker_next">Lagu berikutnya</string>
   <string name="tasker_port_hint">Masukkan port</string>
   <string name="tasker_auth_hint">Masukkan kod pengesahihan</string>

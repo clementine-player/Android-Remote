@@ -42,6 +42,8 @@
   <string name="download_noti_forbidden">Отримання даних заборонено. Увімкніть його у параметрах Clementine.</string>
   <string name="download_noti_not_mounted">Не знайдено пристрою для зберігання даних!</string>
   <string name="download_noti_only_wifi">Дані можна отримувати, лише якщо увімкнено Wi-Fi.</string>
+  <string name="download_noti_transcoding">Перекодовуємо файли</string>
+  <string name="download_noti_transcoding_subtitle">Зачекайте</string>
   <string name="library_download">Отримуємо бібліотеку даних</string>
   <string name="library_optimize">Оптимізуємо базу даних</string>
   <string name="library_please_wait">Зачекайте</string>

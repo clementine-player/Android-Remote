@@ -42,6 +42,8 @@
   <string name="download_noti_forbidden">Transferência proibida. Ative-a nas definições do Clementine.</string>
   <string name="download_noti_not_mounted">Cartão de armazenamento não encontrado!</string>
   <string name="download_noti_only_wifi">Apenas transferir através de Wifi.</string>
+  <string name="download_noti_transcoding">Conversão de ficheiros</string>
+  <string name="download_noti_transcoding_subtitle">Por favor aguarde</string>
   <string name="library_download">Transferência da coleção</string>
   <string name="library_optimize">Otimização da base de dados</string>
   <string name="library_please_wait">Por favor aguarde</string>

@@ -42,6 +42,8 @@
   <string name="download_noti_forbidden">Загрузка запрещена. Активируйте функцию в настройках Clementine.</string>
   <string name="download_noti_not_mounted">Устройство для хранения не найдено!</string>
   <string name="download_noti_only_wifi">Загрузка разрешена только через WiFi.</string>
+  <string name="download_noti_transcoding">Конвертация файлов</string>
+  <string name="download_noti_transcoding_subtitle">Пожалуйста, подождите</string>
   <string name="library_download">Загрузка фонотеки</string>
   <string name="library_optimize">Оптимизация базы данных</string>
   <string name="library_please_wait">Пожалуйста, подождите</string>

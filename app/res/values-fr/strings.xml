@@ -42,6 +42,8 @@
   <string name="download_noti_forbidden">Téléchargement interdit. Vous pouvez l\'activer dans les préférences de Clementine.</string>
   <string name="download_noti_not_mounted">Pas de périphérique de stockage trouvé !</string>
   <string name="download_noti_only_wifi">Téléchargement seulement autorisé en Wifi. </string>
+  <string name="download_noti_transcoding">Transcodage des fichiers</string>
+  <string name="download_noti_transcoding_subtitle">Veuillez patienter</string>
   <string name="library_download">Téléchargement de la bibliothèque</string>
   <string name="library_optimize">Optimisation de la base de données</string>
   <string name="library_please_wait">Merci de patienter</string>
@@ -157,6 +159,7 @@
   <string name="tasker_play">Lecture</string>
   <string name="tasker_pause">Pause</string>
   <string name="tasker_playpause">Lecture / Pause</string>
+  <string name="tasker_stop">Arrêt</string>
   <string name="tasker_next">Titre suivant</string>
   <string name="tasker_port_hint">Saisir le port</string>
   <string name="tasker_auth_hint">Saisir le code d\'authentification</string>
