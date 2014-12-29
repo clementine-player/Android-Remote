@@ -82,6 +82,7 @@
   <string name="menu_download_album">Descargar álbum</string>
   <string name="menu_download_playlist">Descargar lista</string>
   <string name="donate_header">Donaciones</string>
+  <string name="donate_text">Gracias por utilizar esta aplicación. Esperamos que le sea útil.\n\nSi le gusta nuestro trabajo, puede realizar una pequeña donación.</string>
   <string name="donate_i_want">Me gustaría donar:</string>
   <string name="donate_one">Rosquillas (1,00 €)</string>
   <string name="donate_two">Café (2,00 €)</string>
@@ -113,11 +114,18 @@
   <string name="pref_volume_inc_title">Cambiar nivel de volumen</string>
   <string name="pref_volume_inc_summary">Cambio de nivel de volumen actual: %s</string>
   <string name="pref_autoconnect_title">Conexión automática</string>
+  <string name="pref_autoconnect_summary">Conectar automáticamente con Clementine al iniciar el control remoto.
+</string>
   <string name="pref_port_title">Puerto</string>
   <string name="pref_port_summary">Puerto actual:</string>
   <string name="pref_port_default">5500</string>
   <string name="pref_port_error">Puerto no válido.</string>
+  <string name="pref_wake_lock_title">Mantener CPU activa</string>
+  <string name="pref_wake_lock_summary">Active esta opción si la aplicación se desconecta por momentos. Reduce la energía de la batería.
+</string>
   <string name="pref_keep_screen_on_title">Mantener pantalla encendida</string>
+  <string name="pref_keep_screen_on_summary">Evita que la pantalla se apague mientras el Control remoto de Clementine esté conectado con Clementine.
+    </string>
   <string name="pref_version_summary">Pulse para visitar el sitio web del proyecto</string>
   <string name="pref_version_title">Versión</string>
   <string name="pref_license_title">Licencia</string>
@@ -146,6 +154,7 @@
   <string name="dialog_about_others">Otros</string>
   <string name="dialog_license_top"> Este programa se distribuye con la esperanza de que será útil, pero SIN NINGUNA GARANTÍA</string>
   <string name="tasker_intro">Seleccione una acción.</string>
+  <string name="tasker_ip_help">Si seleccionó «Conectar», proporcione los detalles de conexión. El código de autenticación es opcional si se desactivó en Clementine.</string>
   <string name="tasker_action">Acción:</string>
   <string name="tasker_connect">Conectar</string>
   <string name="tasker_disconnect">Desconectar</string>
@@ -154,6 +163,12 @@
   <string name="tasker_playpause">Reproducir/pausar</string>
   <string name="tasker_stop">Detener</string>
   <string name="tasker_next">Próxima canción</string>
+  <string name="tasker_port_hint">Puerto</string>
+  <string name="tasker_auth_hint">Código de autenticación</string>
+  <string name="widget_connect_to">Toque para conectar</string>
+  <string name="widget_not_connected">No conectado</string>
+  <string name="widget_open_clementine">Toque para iniciar el Control remoto</string>
+  <string name="widget_couldnt_connect">No se pudo conectar</string>
   <string name="dialog_close">Cerrar</string>
   <string name="error_versions">Versión incompatible</string>
   <string name="old_proto">Actualice Clementine.</string>
@@ -177,7 +192,7 @@
   <string name="notification_action_next">Siguiente</string>
   <string name="notification_action_playpause">Reproducir/pausar</string>
   <string name="crash_report_title">Vaya, algo ha fallado.</string>
-  <string name="crash_report_message">La última vez Clementine Remote se cerró inesperadamente. Para ayudar a que este error no se produzca de nuevo, envíe el archivo de registro al desarrollador. ¡Gracias!</string>
+  <string name="crash_report_message">La última vez, el Control remoto de Clementine se cerró inesperadamente. Para ayudar a que este error no se produzca de nuevo, envíe el archivo de registro al desarrollador. ¡Gracias!</string>
   <string name="crash_report_send">Enviar</string>
   <string name="cm_next">Siguiente</string>
   <string name="cm_close">Cerrar</string>
