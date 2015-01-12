@@ -42,6 +42,8 @@
   <string name="download_noti_forbidden">Stahování zakázáno. Zapněte je v nastavení Clementine.</string>
   <string name="download_noti_not_mounted">Nenalezeno žádné ukládací zařízení!</string>
   <string name="download_noti_only_wifi">Stahování povoleno jen na Wifi.</string>
+  <string name="download_noti_transcoding">Probíhá překódování souborů</string>
+  <string name="download_noti_transcoding_subtitle">Počkejte, prosím</string>
   <string name="library_download">Stahuje se sbírka</string>
   <string name="library_optimize">Optimalizuje se databáze</string>
   <string name="library_please_wait">Počkejte, prosím</string>
@@ -162,6 +164,7 @@ Pokud máte díky mé práci skutečně dobrou náladu, malý dar od vás by byl
   <string name="tasker_play">Přehrát</string>
   <string name="tasker_pause">Pozastavit</string>
   <string name="tasker_playpause">Přehrát/Pozastavit</string>
+  <string name="tasker_stop">Zastavit</string>
   <string name="tasker_next">Další píseň</string>
   <string name="tasker_port_hint">Zadat přípojku</string>
   <string name="tasker_auth_hint">Zadat ověřovací kód</string>
