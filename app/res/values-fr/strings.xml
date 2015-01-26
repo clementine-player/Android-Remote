@@ -133,7 +133,7 @@
   <string name="pref_about_title">À propos</string>
   <string name="pref_about_summary">Personnes travaillant sur ce projet</string>
   <string name="pref_clementine_title">Clementine</string>
-  <string name="pref_clementine_summary">Visiter le site Web de Clementine</string>
+  <string name="pref_clementine_summary">Visiter le site web de Clementine</string>
   <string name="pref_dl_wifi_only_title">Wifi uniquement</string>
   <string name="pref_dl_wifi_only_summary">Télécharger les morceaux uniquement lorsque connecté à un réseau Wifi.</string>
   <string name="pref_dl_dir">Dossier pour les téléchargements</string>
