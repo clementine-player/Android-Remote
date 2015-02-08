@@ -6,7 +6,7 @@
 
     <ListView
         android:id="@+id/library"
-        android:background="@drawable/white_background"
+        style="@style/ContentListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
