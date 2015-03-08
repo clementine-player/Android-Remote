@@ -55,6 +55,7 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
 
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void registerSession() {
         Resources res = mContext.getResources();
@@ -94,6 +95,7 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
         mNotificationManager.cancel(NOTIFIFCATION_ID);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void updateSession() {
         MySong song = App.Clementine.getCurrentSong();

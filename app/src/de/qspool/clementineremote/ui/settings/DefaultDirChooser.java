@@ -17,6 +17,7 @@
 
 package de.qspool.clementineremote.ui.settings;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -57,6 +58,7 @@ public class DefaultDirChooser {
         dialog.show();
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     private LinkedList<String> getDirectories() {
         LinkedList<String> directories = new LinkedList<>();
 
