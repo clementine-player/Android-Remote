@@ -34,9 +34,9 @@ public class TaskerFireReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (com.twofortyfouram.locale.Intent.ACTION_FIRE_SETTING.equals(intent.getAction())) {
+        if (com.twofortyfouram.locale.api.Intent.ACTION_FIRE_SETTING.equals(intent.getAction())) {
             final Bundle bundle = intent.getBundleExtra(
-                    com.twofortyfouram.locale.Intent.EXTRA_BUNDLE);
+                    com.twofortyfouram.locale.api.Intent.EXTRA_BUNDLE);
 
             Message msg = Message.obtain();
 

@@ -6,7 +6,7 @@ dependencies {
     compile 'com.google.protobuf:protobuf-java:2.5.0'
     compile 'javax.jmdns:jmdns:3.4.1'
     compile 'com.github.amlcurran.showcaseview:library:5.0.0'
-    compile project(':libraries:locale-api')
+    compile 'com.twofortyfouram:android-plugin-api-for-locale:1.0.1'
 }
 
 /*

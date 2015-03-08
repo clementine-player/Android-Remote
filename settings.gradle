@@ -1,1 +1,1 @@
-include ':app', ':libraries:locale-api'
+include ':app'
