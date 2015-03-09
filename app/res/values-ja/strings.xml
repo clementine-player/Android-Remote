@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="app_name">Clementine リモート</string>
+  <string name="app_not_available">アプリが利用できません!</string>
+  <string name="connectdialog_connect">接続</string>
+  <string name="connectdialog_connecting">Clementine に接続中</string>
+  <string name="connectdialog_download_data">データのダウンロード中</string>
+  <string name="connectdialog_error">ホストに接続できませんでした</string>
+  <string name="connectdialog_ip_hint">IP アドレスを入力してください</string>
+  <string name="connectdialog_services">Clementine</string>
+  <string name="player_nosong">再生中の曲はありません</string>
+  <string name="player_disconnected">切断しました</string>
+  <string name="player_playlist">プレイリスト:</string>
+  <string name="player_download_playlists">プレイリストのダウンロード中</string>
+  <string name="playler_volume">音量</string>
+  <string name="player_stop_after_current">トラック終了後の停止を切り替え。</string>
+</resources>
