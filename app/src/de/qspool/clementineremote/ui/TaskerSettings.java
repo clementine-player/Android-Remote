@@ -90,7 +90,7 @@ public class TaskerSettings extends Activity {
 
         BundleScrubber.scrub(getIntent());
         final Bundle localeBundle = getIntent()
-                .getBundleExtra(com.twofortyfouram.locale.Intent.EXTRA_BUNDLE);
+                .getBundleExtra(com.twofortyfouram.locale.api.Intent.EXTRA_BUNDLE);
         BundleScrubber.scrub(localeBundle);
 
         if (null == savedInstanceState) {
@@ -149,7 +149,7 @@ public class TaskerSettings extends Activity {
                 PluginBundleManager.generateBundle(getApplicationContext(), mSelectedAction,
                         ip, port, auth);
 
-        resultIntent.putExtra(com.twofortyfouram.locale.Intent.EXTRA_BUNDLE, resultBundle);
+        resultIntent.putExtra(com.twofortyfouram.locale.api.Intent.EXTRA_BUNDLE, resultBundle);
 
         StringBuilder sb = new StringBuilder();
         sb.append(getString(R.string.tasker_action));
@@ -183,7 +183,7 @@ public class TaskerSettings extends Activity {
                 break;
         }
 
-        resultIntent.putExtra(com.twofortyfouram.locale.Intent.EXTRA_STRING_BLURB,
+        resultIntent.putExtra(com.twofortyfouram.locale.api.Intent.EXTRA_STRING_BLURB,
                 generateBlurb(getApplicationContext(), sb.toString()));
 
         setResult(RESULT_OK, resultIntent);

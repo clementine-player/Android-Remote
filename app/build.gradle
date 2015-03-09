@@ -6,7 +6,7 @@ dependencies {
     compile 'com.google.protobuf:protobuf-java:2.5.0'
     compile 'javax.jmdns:jmdns:3.4.1'
     compile 'com.github.amlcurran.showcaseview:library:5.0.0'
-    compile project(':libraries:locale-api')
+    compile 'com.twofortyfouram:android-plugin-api-for-locale:1.0.1'
 }
 
 /*
@@ -64,12 +64,15 @@ android {
     signingConfigs {
         release {
             // Signing code for buildbot
-            Properties props = new Properties()
-            props.load(new FileInputStream(file("key.properties")))
-            storeFile file(props['keystore'])
-            storePassword props['keystore.password']
-            keyAlias props['key.alias']
-            keyPassword props['key.password']
+            def keyProperties = file("key.properties")
+            if (keyProperties.exists()) {
+                Properties props = new Properties()
+                props.load(new FileInputStream(keyProperties))
+                storeFile file(props['keystore'])
+                storePassword props['keystore.password']
+                keyAlias props['key.alias']
+                keyPassword props['key.password']
+            }
 
             // Signing code for manual signing
             //storeFile file(System.console().readLine("\n\$ Enter keystore path: "))
@@ -81,7 +84,9 @@ android {
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            if (signingConfigs.release.keyAlias != null) {
+                signingConfig signingConfigs.release
+            }
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
                     if (output.outputFile != null && output.outputFile.name.endsWith('.apk')) {

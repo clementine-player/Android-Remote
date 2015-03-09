@@ -1,6 +1,7 @@
 package de.qspool.clementineremote.utils;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -136,6 +137,7 @@ public class Utilities {
      * @return The free space in byte
      */
     @SuppressWarnings("deprecation")
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     public static double getFreeSpaceExternal() {
         StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -151,6 +153,7 @@ public class Utilities {
      * @return The free space in byte
      */
     @SuppressWarnings("deprecation")
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     public static double getFreeSpaceInternal() {
         StatFs stat = new StatFs(App.getApp().getFilesDir().getPath());
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
