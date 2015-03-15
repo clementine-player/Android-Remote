@@ -91,6 +91,9 @@ public class ClementineSettings extends PreferenceActivity {
         if (PreferencesBehaviorPlayer.class.getName().equals(fragmentName)) {
             return true;
         }
+        if (PreferencesBehaviorLibrary.class.getName().equals(fragmentName)) {
+            return true;
+        }
         if (PreferencesBehaviorDownloads.class.getName().equals(fragmentName)) {
             return true;
         }

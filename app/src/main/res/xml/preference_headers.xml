@@ -5,6 +5,8 @@
 
     <header android:fragment="de.qspool.clementineremote.ui.settings.PreferencesBehaviorPlayer"
             android:title="@string/pref_cat_player"/>
+    <header android:fragment="de.qspool.clementineremote.ui.settings.PreferencesBehaviorLibrary"
+        android:title="@string/pref_cat_library"/>
     <header android:fragment="de.qspool.clementineremote.ui.settings.PreferencesBehaviorDownloads"
             android:title="@string/pref_cat_downloads"/>
     <header android:fragment="de.qspool.clementineremote.ui.settings.PreferencesBehaviorAdvanced"

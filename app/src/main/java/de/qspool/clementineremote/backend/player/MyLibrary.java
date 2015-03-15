@@ -31,6 +31,7 @@ import java.util.LinkedList;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.listener.OnLibrarySelectFinishedListener;
+import de.qspool.clementineremote.ui.settings.LibraryAlbumOrder;
 
 public class MyLibrary extends
         AsyncTask<Integer, Void, LinkedList<MyLibraryItem>> {
@@ -59,7 +60,7 @@ public class MyLibrary extends
 
     public final static int IDX_URL = 5;
 
-    public final static int IDX_COUNT = 6;
+    public final static int IDX_YEAR = 6;
 
     // Levels
     public final static int LVL_ARTIST = 0;
@@ -72,6 +73,8 @@ public class MyLibrary extends
     private String mSelArtist = "";
 
     private String mSelAlbum = "";
+
+    private LibraryAlbumOrder mLibraryAlbumOrder = LibraryAlbumOrder.ALPHABET;
 
     private SQLiteDatabase db;
 
@@ -200,8 +203,13 @@ public class MyLibrary extends
     }
 
     public void getAllTitlesFromArtistAsync(String artist) {
+        getAllTitlesFromArtistAsync(artist, LibraryAlbumOrder.ALPHABET);
+    }
+
+    public void getAllTitlesFromArtistAsync(String artist, LibraryAlbumOrder libraryAlbumOrder) {
         mSelArtist = artist;
         mSelAlbum = "";
+        mLibraryAlbumOrder = libraryAlbumOrder;
         this.execute(LVL_TITLE);
     }
 
@@ -210,7 +218,12 @@ public class MyLibrary extends
     }
 
     public Cursor getAlbums(String artist) {
+        return getAlbums(artist, LibraryAlbumOrder.ALPHABET);
+    }
+
+    public Cursor getAlbums(String artist, LibraryAlbumOrder libraryAlbumOrder) {
         mSelArtist = artist;
+        mLibraryAlbumOrder = libraryAlbumOrder;
         return buildSelectSql(LVL_ALBUM);
     }
 
@@ -301,7 +314,7 @@ public class MyLibrary extends
     public Cursor buildSelectSql(int level, String fromTable) {
         Cursor c1 = null;
         String query = "SELECT ROWID as _id, " + level
-                + ", artist, album, title, cast(filename as TEXT) FROM " + fromTable + " ";
+                + ", artist, album, title, cast(filename as TEXT), year FROM " + fromTable + " ";
         try {
             switch (level) {
                 case LVL_ARTIST:
@@ -309,12 +322,16 @@ public class MyLibrary extends
                     c1 = db.rawQuery(query, null);
                     break;
                 case LVL_ALBUM:
-                    query += "WHERE artist = ? group by album order by album";
+                    query += "WHERE artist = ? group by album order by ";
+                    query += LibraryAlbumOrder.RELEASE.equals(mLibraryAlbumOrder) ? "year, " : "";
+                    query += "album";
                     c1 = db.rawQuery(query, new String[]{mSelArtist});
                     break;
                 case LVL_TITLE:
                     if (mSelAlbum.length() == 0) {
-                        query += "WHERE artist = ? order by album, disc, track";
+                        query += "WHERE artist = ? order by ";
+                        query +=  LibraryAlbumOrder.RELEASE.equals(mLibraryAlbumOrder) ? "year, " : "";
+                        query += "album, disc, track";
                         c1 = db.rawQuery(query, new String[]{mSelArtist});
                     } else {
                         query += "WHERE artist = ? and album = ? order by disc, track";

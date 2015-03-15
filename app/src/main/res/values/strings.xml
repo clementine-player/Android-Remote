@@ -116,6 +116,7 @@
 
     <string name="pref_cat_behavior">Behavior</string>
     <string name="pref_cat_player">Player</string>
+    <string name="pref_cat_library">Library</string>
     <string name="pref_cat_downloads">Downloads</string>
     <string name="pref_cat_advanced">Advanced</string>
     <string name="pref_cat_network">Network</string>
@@ -136,6 +137,13 @@
     <string name="pref_call_volume_summary">Current call volume level: %s</string>
     <string name="pref_volume_inc_title">Volume change level</string>
     <string name="pref_volume_inc_summary">Current volume change level : %s</string>
+
+    <string name="pref_library_album_order_title">Album sorting</string>
+    <string name="pref_library_album_order_summary">The albums in the library are currently sorted by %1$s.</string>
+    <string-array name="pref_library_album_order_display">
+        <item>Alphabet</item>
+        <item>Release</item>
+    </string-array>
 
     <string name="pref_autoconnect_title">Auto-Connect</string>
     <string name="pref_autoconnect_summary">Automatically connect to Clementine when starting the remote.

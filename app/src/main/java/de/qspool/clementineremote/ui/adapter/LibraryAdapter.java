@@ -29,6 +29,7 @@ import android.widget.TextView;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.player.MyLibrary;
 import de.qspool.clementineremote.backend.player.MyLibraryItem;
+import de.qspool.clementineremote.ui.settings.LibraryAlbumOrder;
 
 /**
  * Class is used for displaying the song data
@@ -41,13 +42,17 @@ public class LibraryAdapter extends CursorAdapter implements Filterable {
 
     private int mLevel;
 
+    private LibraryAlbumOrder mAlbumOrder;
+
     private String mUnknownItem;
 
-    public LibraryAdapter(Context context, Cursor c, MyLibrary library, int level) {
+
+    public LibraryAdapter(Context context, Cursor c, MyLibrary library, int level, LibraryAlbumOrder albumOrder) {
         super(context, c, false);
         mContext = context;
         mLibrary = library;
         mLevel = level;
+        mAlbumOrder = albumOrder;
         mUnknownItem = mContext.getString(R.string.library_unknown_item);
     }
 
@@ -86,7 +91,12 @@ public class LibraryAdapter extends CursorAdapter implements Filterable {
                 if (cursor.getString(MyLibrary.IDX_ALBUM).isEmpty()) {
                     libraryViewHolder.title.setText(mUnknownItem);
                 } else {
-                    libraryViewHolder.title.setText(cursor.getString(MyLibrary.IDX_ALBUM));
+                    if (LibraryAlbumOrder.RELEASE.equals(mAlbumOrder)) {
+                        String albumTitleWithYear = getAlbumTitleWithYearAsPrefix(cursor);
+                        libraryViewHolder.title.setText(albumTitleWithYear);
+                    } else {
+                        libraryViewHolder.title.setText(cursor.getString(MyLibrary.IDX_ALBUM));
+                    }
                 }
                 libraryViewHolder.subtitle.setText(String.format(
                         mContext.getString(R.string.library_no_tracks),
@@ -109,6 +119,21 @@ public class LibraryAdapter extends CursorAdapter implements Filterable {
             default:
                 break;
         }
+    }
+
+    /**
+     * Checks if a cursor holds a valid release year and puts it in front of the album title.
+     * If successful, it looks like: "2015 - My Album Title", otherwise: "My Album Title". This is
+     * the same behavior like in the desktop client.
+     * @return The formatted title
+     */
+    private String getAlbumTitleWithYearAsPrefix(Cursor cursor) {
+        String albumTitleWithYear = cursor.getString(MyLibrary.IDX_ALBUM);
+        int releaseYear = cursor.getInt(MyLibrary.IDX_YEAR);
+        if (releaseYear > 0) {
+            albumTitleWithYear = releaseYear + " - " + albumTitleWithYear;
+        }
+        return albumTitleWithYear;
     }
 
     @Override
