@@ -20,9 +20,12 @@ package de.qspool.clementineremote.ui.fragments;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -43,6 +46,7 @@ import java.util.LinkedList;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.ClementineLibraryDownloader;
 import de.qspool.clementineremote.backend.elements.DownloaderResult;
 import de.qspool.clementineremote.backend.elements.DownloaderResult.DownloadResult;
@@ -55,6 +59,7 @@ import de.qspool.clementineremote.backend.player.MyLibrary;
 import de.qspool.clementineremote.backend.player.MyLibraryItem;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.ui.adapter.LibraryAdapter;
+import de.qspool.clementineremote.ui.settings.LibraryAlbumOrder;
 import de.qspool.clementineremote.utils.Utilities;
 
 public class LibraryFragment extends AbstractDrawerFragment implements
@@ -80,6 +85,8 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 
     private ClementineLibraryDownloader mClementineLibraryDownloader;
 
+    private LibraryAlbumOrder mAlbumOrder;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,10 +108,21 @@ public class LibraryFragment extends AbstractDrawerFragment implements
         }
 
         setActionBarTitle();
+        loadSettings();
+
         if (mClementineLibraryDownloader != null) {
             createDownloadProgressDialog();
             mClementineLibraryDownloader.addOnLibraryDownloadListener(mOnLibraryDownloadListener);
         }
+    }
+
+    private void loadSettings() {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(getActivity());
+
+        mAlbumOrder = LibraryAlbumOrder.valueOf(
+                sharedPreferences.getString(SharedPreferencesKeys.SP_LIBRARY_ALBUM_ORDER,
+                        LibraryAlbumOrder.ALPHABET.toString()).toUpperCase());
     }
 
     @Override
@@ -185,7 +203,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
         if (mClementineLibraryDownloader == null && mLibrary.databaseExists()) {
             mLibrary.openDatabase();
             LibraryAdapter a = new LibraryAdapter(getActivity(), mLibrary.getArtists(), mLibrary,
-                    MyLibrary.LVL_ARTIST);
+                    MyLibrary.LVL_ARTIST, mAlbumOrder);
             mAdapters.add(a);
         }
 
@@ -245,7 +263,7 @@ public class LibraryFragment extends AbstractDrawerFragment implements
                 mLibrary = new MyLibrary(getActivity());
                 mLibrary.openDatabase();
                 LibraryAdapter a = new LibraryAdapter(getActivity(), mLibrary.getArtists(),
-                        mLibrary, MyLibrary.LVL_ARTIST);
+                        mLibrary, MyLibrary.LVL_ARTIST, mAlbumOrder);
                 mAdapters.add(a);
                 showList();
             } else {
@@ -342,7 +360,8 @@ public class LibraryFragment extends AbstractDrawerFragment implements
             case MyLibrary.LVL_ARTIST:
                 MyLibrary addArtist = new MyLibrary(getActivity());
                 addArtist.addOnLibrarySelectFinishedListener(LibraryFragment.this);
-                addArtist.getAllTitlesFromArtistAsync(libraryItem.getArtist());
+                addArtist.getAllTitlesFromArtistAsync(libraryItem.getArtist(), mAlbumOrder);
+
                 return true;
             case MyLibrary.LVL_ALBUM:
                 MyLibrary addAlbums = new MyLibrary(getActivity());
@@ -475,15 +494,16 @@ public class LibraryFragment extends AbstractDrawerFragment implements
 
             switch (item.getLevel()) {
                 case MyLibrary.LVL_ARTIST:
+                    Cursor albumCursor = mLibrary.getAlbums(item.getArtist(), mAlbumOrder);
                     LibraryAdapter album = new LibraryAdapter(getActivity(),
-                            mLibrary.getAlbums(item.getArtist()), mLibrary, MyLibrary.LVL_ALBUM);
+                            albumCursor, mLibrary, MyLibrary.LVL_ALBUM, mAlbumOrder);
                     mAdapters.add(album);
                     showList();
                     break;
                 case MyLibrary.LVL_ALBUM:
                     LibraryAdapter title = new LibraryAdapter(getActivity(),
                             mLibrary.getTitles(item.getArtist(), item.getAlbum()), mLibrary,
-                            MyLibrary.LVL_TITLE);
+                            MyLibrary.LVL_TITLE, mAlbumOrder);
                     mAdapters.add(title);
                     showList();
                     break;

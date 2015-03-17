@@ -43,6 +43,8 @@ public class SharedPreferencesKeys {
 
     public final static String SP_VOLUME_INC = "pref_volume_inc";
 
+    public final static String SP_LIBRARY_ALBUM_ORDER = "pref_library_album_order";
+
     public final static String SP_WIFI_ONLY = "pref_dl_wifi_only";
 
     public final static String SP_DOWNLOAD_DIR = "pref_dl_dir";

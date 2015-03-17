@@ -60,4 +60,11 @@
         <item>19</item>
         <item>20</item>
     </string-array>
+
+    <!-- These strings are used in preference_library.xml and the
+    Java class LibraryAlbumOrder -->
+    <string-array name="pref_library_album_order_values">
+        <item>alphabet</item>
+        <item>release</item>
+    </string-array>
 </resources>
