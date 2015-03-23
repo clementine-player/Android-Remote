@@ -95,6 +95,7 @@
   <string name="donate_not_available_text">Var god och kontrollera att du har senaste versionen av Google Play Store installerat och försök igen!</string>
   <string name="pref_cat_behavior">Uppförande</string>
   <string name="pref_cat_player">Spelare</string>
+  <string name="pref_cat_library">Bibliotek</string>
   <string name="pref_cat_downloads">Nedladdningar</string>
   <string name="pref_cat_advanced">Avancerad</string>
   <string name="pref_cat_network">Nätverk</string>
@@ -114,6 +115,12 @@
   <string name="pref_call_volume_summary">Nuvarande nivå på volymen: %s</string>
   <string name="pref_volume_inc_title">Ändringsnivå på volymen</string>
   <string name="pref_volume_inc_summary">Nuvarande ändringsnivå på volymen : %s</string>
+  <string name="pref_library_album_order_title">Ordna skivor</string>
+  <string name="pref_library_album_order_summary">Skivorna i biblioteket är för närvarande ordnade enligt %1$s.</string>
+  <string-array name="pref_library_album_order_display">
+    <item>Alfabetisk</item>
+    <item>Utgåva</item>
+  </string-array>
   <string name="pref_autoconnect_title">Anslut automatiskt</string>
   <string name="pref_autoconnect_summary">Anslut till Clementine automatiskt när du startar fjärrkontrollen.
     </string>

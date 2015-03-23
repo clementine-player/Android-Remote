@@ -71,6 +71,7 @@
   <string name="connection_connected_to">Conectado con:</string>
   <string name="connection_volume">Volumen</string>
   <string name="connection_version">Versión de Clementine</string>
+  <string name="connection_traffic">Carga/descarga de tráfico (prom./s)</string>
   <string name="connection_traffic_unsupported">Las estadísticas no están disponibles en este dispositivo</string>
   <string name="menu_shuffle">Aleatorio</string>
   <string name="menu_repeat">Repetir</string>
@@ -94,6 +95,7 @@
   <string name="donate_not_available_text">Compruebe que tiene la versión más reciente de Google Play e inténtelo de nuevo.</string>
   <string name="pref_cat_behavior">Comportamiento</string>
   <string name="pref_cat_player">Reproductor</string>
+  <string name="pref_cat_library">Colección</string>
   <string name="pref_cat_downloads">Descargas</string>
   <string name="pref_cat_advanced">Avanzadas</string>
   <string name="pref_cat_network">Red</string>
@@ -113,6 +115,12 @@
   <string name="pref_call_volume_summary">Nivel de volumen en llamadas actual: %s</string>
   <string name="pref_volume_inc_title">Cambiar nivel de volumen</string>
   <string name="pref_volume_inc_summary">Cambio de nivel de volumen actual: %s</string>
+  <string name="pref_library_album_order_title">Orden de álbumes</string>
+  <string name="pref_library_album_order_summary">Los álbumes de la colección están ordenados por %1$s.</string>
+  <string-array name="pref_library_album_order_display">
+    <item>Alfabeto</item>
+    <item>Publicación</item>
+  </string-array>
   <string name="pref_autoconnect_title">Conexión automática</string>
   <string name="pref_autoconnect_summary">Conectar automáticamente con Clementine al iniciar el control remoto.
 </string>

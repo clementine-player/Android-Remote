@@ -95,6 +95,7 @@
   <string name="donate_not_available_text">Merci de vérifier que vous avez bien installé la dernière version de Clementine sur le Google Play Store, et essayez encore !</string>
   <string name="pref_cat_behavior">Comportement</string>
   <string name="pref_cat_player">Lecteur</string>
+  <string name="pref_cat_library">Bibliothèque</string>
   <string name="pref_cat_downloads">Téléchargements</string>
   <string name="pref_cat_advanced">Avancés</string>
   <string name="pref_cat_network">Réseau</string>
@@ -114,6 +115,12 @@
   <string name="pref_call_volume_summary">Volume d\'appel actuel : %s</string>
   <string name="pref_volume_inc_title">Niveau du changement de volume</string>
   <string name="pref_volume_inc_summary">Niveau du changement de volume actuel : %s</string>
+  <string name="pref_library_album_order_title">Tri par album</string>
+  <string name="pref_library_album_order_summary">Les albums de la bibliothèque sont triés par  %1$s</string>
+  <string-array name="pref_library_album_order_display">
+    <item>Alphabétique</item>
+    <item>Date de sortie</item>
+  </string-array>
   <string name="pref_autoconnect_title">Connexion automatique</string>
   <string name="pref_autoconnect_summary">Connexion automatique à Clementine au démarrage de l\'application.</string>
   <string name="pref_port_title">Port</string>

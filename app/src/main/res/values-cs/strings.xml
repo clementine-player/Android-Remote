@@ -97,6 +97,7 @@ Pokud máte díky mé práci skutečně dobrou náladu, malý dar od vás by byl
   <string name="donate_not_available_text">Prověřte, prosím, zda máte nainstalovánu nejnovější verzi Google Play Store a zkuste to znovu!</string>
   <string name="pref_cat_behavior">Chování</string>
   <string name="pref_cat_player">Přehrávač</string>
+  <string name="pref_cat_library">Sbírka</string>
   <string name="pref_cat_downloads">Stahování</string>
   <string name="pref_cat_advanced">Pokročilé</string>
   <string name="pref_cat_network">Síť</string>
@@ -116,6 +117,12 @@ Pokud máte díky mé práci skutečně dobrou náladu, malý dar od vás by byl
   <string name="pref_call_volume_summary">Nynější úroveň hlasitosti volání: %s</string>
   <string name="pref_volume_inc_title">Úroveň změny hlasitosti</string>
   <string name="pref_volume_inc_summary">Nynější úroveň změny hlasitosti: %s</string>
+  <string name="pref_library_album_order_title">Třídění alb</string>
+  <string name="pref_library_album_order_summary">Alba ve sbírce jsou nyní tříděna podle %1$s.</string>
+  <string-array name="pref_library_album_order_display">
+    <item>Abeceda</item>
+    <item>Vydání</item>
+  </string-array>
   <string name="pref_autoconnect_title">Automaticky připojit</string>
   <string name="pref_autoconnect_summary">Automaticky se spojit s Clementine při spouštění vzdáleného.
     </string>

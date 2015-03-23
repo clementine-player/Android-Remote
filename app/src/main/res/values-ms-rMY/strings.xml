@@ -95,6 +95,7 @@
   <string name="donate_not_available_text">Sila semak jika anda sudah memasang versi Gedung Play Google terkini dan cuba lagi!</string>
   <string name="pref_cat_behavior">Kelakuan</string>
   <string name="pref_cat_player">Pemain</string>
+  <string name="pref_cat_library">Pustaka</string>
   <string name="pref_cat_downloads">Muat turun</string>
   <string name="pref_cat_advanced">Lanjutan</string>
   <string name="pref_cat_network">Rangkaian</string>
@@ -114,6 +115,12 @@
   <string name="pref_call_volume_summary">Aras volum panggilan semasa: %s</string>
   <string name="pref_volume_inc_title">Aras ubah volum</string>
   <string name="pref_volume_inc_summary">Aras ubah volum semasa : %s</string>
+  <string name="pref_library_album_order_title">Pengisihan album</string>
+  <string name="pref_library_album_order_summary">Album di dalam pustaka buat masa ini diisih mengikut %1$s.</string>
+  <string-array name="pref_library_album_order_display">
+    <item>Abjad</item>
+    <item>Keluaran</item>
+  </string-array>
   <string name="pref_autoconnect_title">Auto-Sambung</string>
   <string name="pref_autoconnect_summary">Sambung secara automatik ke Clementine bila memulakan jauh.</string>
   <string name="pref_port_title">Port</string>

@@ -95,6 +95,7 @@
   <string name="donate_not_available_text">Пожалуйста, убедитесь, что вы установили последнюю версию из магазина Google Play, и попробуйте снова!</string>
   <string name="pref_cat_behavior">Поведение</string>
   <string name="pref_cat_player">Плеер</string>
+  <string name="pref_cat_library">Фонотека</string>
   <string name="pref_cat_downloads">Загрузки</string>
   <string name="pref_cat_advanced">Дополнительно</string>
   <string name="pref_cat_network">Сеть</string>
@@ -114,6 +115,12 @@
   <string name="pref_call_volume_summary">Текущая громкость при звонке: %s</string>
   <string name="pref_volume_inc_title">Шаг изменения громкости</string>
   <string name="pref_volume_inc_summary">Текущий шаг изменения громкости: %s</string>
+  <string name="pref_library_album_order_title">Сортировка альбомов</string>
+  <string name="pref_library_album_order_summary">Альбомы фонотеки отсортированы по %1$s.</string>
+  <string-array name="pref_library_album_order_display">
+    <item>Алфавит</item>
+    <item>Релиз</item>
+  </string-array>
   <string name="pref_autoconnect_title">Авто-подлючение</string>
   <string name="pref_autoconnect_summary">Автоматически подключаться к Clementine при запуске удалённого управления.
     </string>

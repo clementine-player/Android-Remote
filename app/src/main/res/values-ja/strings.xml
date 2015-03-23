@@ -95,6 +95,7 @@
   <string name="donate_not_available_text">最新の Google Play ストアバージョンがインストールされているか確認して、もう一度実行してください!</string>
   <string name="pref_cat_behavior">動作</string>
   <string name="pref_cat_player">プレイヤー</string>
+  <string name="pref_cat_library">ライブラリー</string>
   <string name="pref_cat_downloads">ダウンロード</string>
   <string name="pref_cat_advanced">高度</string>
   <string name="pref_cat_network">ネットワーク</string>
@@ -114,6 +115,12 @@
   <string name="pref_call_volume_summary">現在の呼び出し時の音量: %s</string>
   <string name="pref_volume_inc_title">音量変更レベル</string>
   <string name="pref_volume_inc_summary">現在の音量変更レベル : %s</string>
+  <string name="pref_library_album_order_title">アルバムの並び替え</string>
+  <string name="pref_library_album_order_summary">ライブラリーのアルバムの並び替えは現在 %1$s 順です。</string>
+  <string-array name="pref_library_album_order_display">
+    <item>アルファベット</item>
+    <item>リリース</item>
+  </string-array>
   <string name="pref_autoconnect_title">自動接続</string>
   <string name="pref_autoconnect_summary">リモートの起動時に自動的に Clementine に接続します。</string>
   <string name="pref_port_title">ポート</string>
