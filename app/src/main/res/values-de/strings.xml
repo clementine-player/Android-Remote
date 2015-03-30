@@ -95,6 +95,7 @@
   <string name="donate_not_available_text">Bitte überprüfen Sie, ob Sie die neueste Google Play Store-Version installiert haben und versuchen Sie es erneut!</string>
   <string name="pref_cat_behavior">Verhalten</string>
   <string name="pref_cat_player">Musikwiedergabe</string>
+  <string name="pref_cat_library">Bibliothek</string>
   <string name="pref_cat_downloads">Übertragungen</string>
   <string name="pref_cat_advanced">Erweitert</string>
   <string name="pref_cat_network">Netzwerk</string>
@@ -114,6 +115,8 @@
   <string name="pref_call_volume_summary">Aktuelle Anruflautstärke: %s</string>
   <string name="pref_volume_inc_title">Lautstärkeänderungsstufe</string>
   <string name="pref_volume_inc_summary">Aktuelle Lautstärkeänderungsstufe: %s</string>
+  <string name="pref_library_album_order_title">Album sortieren</string>
+  <string name="pref_library_album_order_summary">Die Alben in der Bibliothek werden derzeit von %1$s sortiert.</string>
   <string name="pref_autoconnect_title">Direkt verbinden</string>
   <string name="pref_autoconnect_summary">Automatisch mit Clementine verbinden wenn die Anwendung gestartet wird.</string>
   <string name="pref_port_title">Port</string>
