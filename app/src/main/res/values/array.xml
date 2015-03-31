@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string-array name="pref_volume_display">
+        <item>Pause</item>
         <item>0%</item>
         <item>10%</item>
         <item>20%</item>
@@ -9,6 +10,7 @@
         <item>50%</item>
     </string-array>
     <string-array name="pref_volume_values">
+        <item>-1</item>
         <item>0</item>
         <item>10</item>
         <item>20</item>

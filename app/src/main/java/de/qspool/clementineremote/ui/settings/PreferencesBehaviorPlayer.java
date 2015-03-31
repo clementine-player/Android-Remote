@@ -48,8 +48,7 @@ public class PreferencesBehaviorPlayer extends PreferenceFragment implements
                 .findPreference(SharedPreferencesKeys.SP_CALL_VOLUME);
         String currentCallVolume = sharedPreferences
                 .getString(SharedPreferencesKeys.SP_CALL_VOLUME, "20");
-        mCallVolume.setSummary(
-                getString(R.string.pref_call_volume_summary).replace("%s", currentCallVolume));
+        updateCallVolumeSummary(currentCallVolume);
 
         mVolumeInc = (ListPreference) getPreferenceScreen()
                 .findPreference(SharedPreferencesKeys.SP_VOLUME_INC);
@@ -76,14 +75,25 @@ public class PreferencesBehaviorPlayer extends PreferenceFragment implements
         if (key.equals(SharedPreferencesKeys.SP_CALL_VOLUME)) {
             String currentCallVolume = sharedPreferences
                     .getString(SharedPreferencesKeys.SP_CALL_VOLUME, "20");
-            mCallVolume.setSummary(
-                    getString(R.string.pref_call_volume_summary).replace("%s", currentCallVolume));
+            updateCallVolumeSummary(currentCallVolume);
         } else if (key.equals(SharedPreferencesKeys.SP_VOLUME_INC)) {
             String currentVolumeInc = sharedPreferences
                     .getString(SharedPreferencesKeys.SP_VOLUME_INC,
                             Clementine.DefaultVolumeInc);
             mVolumeInc.setSummary(
                     getString(R.string.pref_volume_inc_summary).replace("%s", currentVolumeInc));
+        }
+    }
+
+    private void updateCallVolumeSummary(String currentCallVolume) {
+        if (currentCallVolume.equals("-1")) {
+            mCallVolume.setSummary(
+                    getString(R.string.pref_call_volume_summary)
+                            .replace("%s", getString(R.string.tasker_pause)));
+        } else {
+            mCallVolume.setSummary(
+                    getString(R.string.pref_call_volume_summary)
+                            .replace("%s", currentCallVolume));
         }
     }
 }

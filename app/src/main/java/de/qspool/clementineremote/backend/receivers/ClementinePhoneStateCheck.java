@@ -28,11 +28,13 @@ import android.telephony.TelephonyManager;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.Clementine;
+import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer;
 
 public class ClementinePhoneStateCheck extends BroadcastReceiver {
 
-    private final static String KEY_LAST_VOLUME = "last_volume";
+    public static String lastPhoneState = "";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -45,26 +47,47 @@ public class ClementinePhoneStateCheck extends BroadcastReceiver {
 
         // Check if we need to change the volume
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(App.getApp());
+        String volumeString = prefs
+                .getString(SharedPreferencesKeys.SP_CALL_VOLUME,
+                        Clementine.DefaultCallVolume);
+        int volume = Integer.parseInt(volumeString);
 
         // Get the pebble settings
         if (prefs.getBoolean(SharedPreferencesKeys.SP_LOWER_VOLUME, true)) {
             // Get the current state of the telephone
             String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
 
+            // On Lollipop, the state is broadcasted twice. Only process new states.
+            if (lastPhoneState.equals(state))
+                return;
+
             Message msg = Message.obtain();
+
+            LastClementineState lastClementineState = new LastClementineState();
+            lastClementineState.load();
 
             if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)
                     || state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
-                saveLastVolume(prefs);
-                String volumeString = prefs
-                        .getString(SharedPreferencesKeys.SP_CALL_VOLUME,
-                                Clementine.DefaultCallVolume);
-                msg.obj = ClementineMessageFactory
-                        .buildVolumeMessage(Integer.parseInt(volumeString));
-            }
+                lastClementineState.volume = App.Clementine.getVolume();
+                lastClementineState.state = App.Clementine.getState();
+                lastClementineState.save();
 
-            if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
-                msg.obj = ClementineMessageFactory.buildVolumeMessage(getLastVolume(prefs));
+                if (volume >= 0) {
+                    msg.obj = ClementineMessageFactory
+                            .buildVolumeMessage(Integer.parseInt(volumeString));
+                } else {
+                    msg.obj = ClementineMessage.getMessage(
+                            ClementineRemoteProtocolBuffer.MsgType.PAUSE);
+                }
+            } else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
+                if (volume >= 0) {
+                    msg.obj = ClementineMessageFactory.buildVolumeMessage(lastClementineState.volume);
+                } else {
+                    if (lastClementineState.state.equals(Clementine.State.PLAY)) {
+                        msg.obj = ClementineMessage.getMessage(
+                                ClementineRemoteProtocolBuffer.MsgType.PLAY);
+                    }
+                }
             }
 
             // Now send the message
@@ -73,19 +96,32 @@ public class ClementinePhoneStateCheck extends BroadcastReceiver {
                 App.ClementineConnection.mHandler.sendMessage(msg);
             }
 
+            lastPhoneState = state;
         }
     }
 
-    private int getLastVolume(SharedPreferences prefs) {
-        return prefs.getInt(KEY_LAST_VOLUME, App.Clementine.getVolume());
-    }
+    private class LastClementineState {
+        private final static String KEY_LAST_VOLUME = "phone_last_volume";
+        private final static String KEY_LAST_STATE  = "phone_last_state";
 
-    private void saveLastVolume(SharedPreferences prefs) {
-        SharedPreferences.Editor editor = prefs.edit();
+        public int volume;
+        public Clementine.State state;
 
-        editor.putInt(KEY_LAST_VOLUME, App.Clementine.getVolume());
+        public void load() {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(App.getApp());
+            volume = prefs.getInt(KEY_LAST_VOLUME, App.Clementine.getVolume());
+            state = Clementine.State.values()[prefs.getInt(KEY_LAST_STATE, App.Clementine.getState().ordinal())];
+        }
 
-        editor.commit();
+        public void save() {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(App.getApp());
+            SharedPreferences.Editor editor = prefs.edit();
+
+            editor.putInt(KEY_LAST_VOLUME, App.Clementine.getVolume());
+            editor.putInt(KEY_LAST_STATE, App.Clementine.getState().ordinal());
+
+            editor.commit();
+        }
     }
 
 }
