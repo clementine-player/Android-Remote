@@ -171,7 +171,7 @@ public class ClementineLibraryDownloader extends
             }
 
             // Get the raw protocol buffer
-            ClementineMessage message = mClient.getProtoc();
+            ClementineMessage message = mClient.getProtoc(0);
 
             if (message.isErrorMessage()) {
                 result = new DownloaderResult(0, DownloadResult.CONNECTION_ERROR);
