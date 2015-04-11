@@ -140,7 +140,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
                     while (isConnected() && !mIncomingThread.isInterrupted()) {
                         checkKeepAlive();
 
-                        ClementineMessage m = getProtoc();
+                        ClementineMessage m = getProtoc(3000);
                         if (!m.isErrorMessage() || m.getErrorMessage() != ErrorMessage.TIMEOUT) {
                             Message msg = Message.obtain();
                             msg.obj = m;

@@ -90,11 +90,11 @@ public class ClementineSimpleConnection {
      *
      * @returns The parsed protocol buffer
      */
-    public ClementineMessage getProtoc() {
+    public ClementineMessage getProtoc(int timeout) {
         ClementineMessage message;
         try {
             // Read the data and return it
-            mSocket.setSoTimeout(3000);
+            mSocket.setSoTimeout(timeout);
             int len = mIn.readInt();
             // Check length. If it is less zero or more than 50mb it's very likely we got invalid data
             if (len < 0 || len > 52428800) {
