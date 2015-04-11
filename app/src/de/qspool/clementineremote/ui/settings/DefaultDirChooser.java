@@ -63,7 +63,8 @@ public class DefaultDirChooser {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             File[] defaultDirs = mContext.getExternalFilesDirs(Environment.DIRECTORY_MUSIC);
             for (File f : defaultDirs) {
-                directories.add(f.toString());
+                if (f != null)
+                    directories.add(f.toString());
             }
         } else {
             directories.add(mContext.getExternalFilesDir(Environment.DIRECTORY_MUSIC).toString());
