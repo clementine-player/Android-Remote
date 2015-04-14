@@ -5,6 +5,7 @@ android:
     - build-tools-22.0.1
     - android-22
     - extra-android-support
+    - extra-android-m2repository
 script:
     - cp app/key.properties.sample app/key.properties
     - keytool -genkey -v -keystore app/debug.keystore -alias AndroidDebugKey -keyalg RSA -keysize 2048 -validity 1 -storepass android -keypass android -dname "cn=TEST, ou=TEST, o=TEST, c=TE"
