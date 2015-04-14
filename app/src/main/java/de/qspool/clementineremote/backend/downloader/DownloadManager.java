@@ -30,6 +30,7 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.SparseArray;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -111,7 +112,7 @@ public class DownloadManager {
         return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    public void addJob(ClementineMessage clementineMessage) {
+    public boolean addJob(ClementineMessage clementineMessage) {
         ClementineSongDownloader songDownloader = new ClementineSongDownloader();
         songDownloader.setId(mIds);
         songDownloader.setSongDownloaderListener(new SongDownloaderListener() {
@@ -160,8 +161,19 @@ public class DownloadManager {
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
 
         // Get preferences and set download settings
-        String defaultPath = mContext.getExternalFilesDir(Environment.DIRECTORY_MUSIC)
-                .getAbsolutePath();
+        String defaultPath;
+        if (mContext.getExternalFilesDir(Environment.DIRECTORY_MUSIC) == null &&
+                !mSharedPref.contains(SharedPreferencesKeys.SP_DOWNLOAD_DIR)) {
+            Toast.makeText(mContext, R.string.download_noti_not_mounted, Toast.LENGTH_LONG).show();
+            return false;
+        } else {
+            File defaultFile = mContext.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
+            if (defaultFile != null)
+                defaultPath = defaultFile.getAbsolutePath();
+            else
+                defaultPath = "";
+        }
+
         songDownloader.setDownloadPath(
                 mSharedPref.getString(SharedPreferencesKeys.SP_DOWNLOAD_DIR, defaultPath));
         songDownloader.setDownloadOnWifiOnly(
@@ -181,6 +193,8 @@ public class DownloadManager {
         mIds++;
 
         songDownloader.startDownload(clementineMessage);
+
+        return true;
     }
 
     public List<ClementineSongDownloader> getAllDownloaders() {
