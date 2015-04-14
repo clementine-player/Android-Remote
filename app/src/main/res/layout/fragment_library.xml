@@ -13,7 +13,6 @@
     <RelativeLayout
         android:id="@+id/library_empty"
         android:visibility="gone"
-        android:layout_margin="13dp"
         android:gravity="center_vertical|center_horizontal"
         android:background="@drawable/white_background"
         android:layout_width="fill_parent"
