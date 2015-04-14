@@ -341,6 +341,11 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
      * Update the shuffle icon in the actionbar
      */
     private void updateShuffleIcon() {
+        // Make sure the menu item is already there. Since this is called from the backend
+        // mMenuShuffle might be null. It will be set correctly once onCreateOptionsMenu is called
+        if (mMenuShuffle == null)
+            return;
+
         switch (App.Clementine.getShuffleMode()) {
             case OFF:
                 mMenuShuffle.setIcon(R.drawable.ab_shuffle_off);
@@ -389,6 +394,11 @@ public class PlayerPageFragment extends AbstractDrawerFragment {
      * Update the repeat icon in the actionbar
      */
     private void updateRepeatIcon() {
+        // Make sure the menu item is already there. Since this is called from the backend
+        // mMenuShuffle might be null. It will be set correctly once onCreateOptionsMenu is called
+        if (mMenuRepeat == null)
+            return;
+
         switch (App.Clementine.getRepeatMode()) {
             case OFF:
                 mMenuRepeat.setIcon(R.drawable.ab_repeat_off);
