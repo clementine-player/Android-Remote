@@ -15,11 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package de.qspool.clementineremote.ui.fragments;
+package de.qspool.clementineremote.ui.interfaces;
 
-import de.qspool.clementineremote.backend.pb.ClementineMessage;
+public interface BackPressHandleable {
 
-public interface RemoteDataReceiver {
-
-    public void MessageFromClementine(ClementineMessage clementineMessage);
+    public boolean onBackPressed();
 }

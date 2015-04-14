@@ -23,6 +23,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.ActionBar;
+import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -50,10 +51,12 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.player.MySong;
-import de.qspool.clementineremote.ui.fragments.AbstractDrawerFragment;
+import de.qspool.clementineremote.ui.interfaces.BackPressHandleable;
+import de.qspool.clementineremote.ui.interfaces.RemoteDataReceiver;
 import de.qspool.clementineremote.utils.Utilities;
 
-public class SongDetailFragment extends AbstractDrawerFragment {
+public class SongDetailFragment extends Fragment
+        implements BackPressHandleable, RemoteDataReceiver {
 
     private FrameLayout mContainer;
 

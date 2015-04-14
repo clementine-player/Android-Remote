@@ -17,6 +17,10 @@
 
 package de.qspool.clementineremote.ui;
 
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -24,9 +28,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
@@ -51,16 +52,17 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.ui.adapter.SeparatedListAdapter;
-import de.qspool.clementineremote.ui.fragments.AbstractDrawerFragment;
 import de.qspool.clementineremote.ui.fragments.DonateFragment;
 import de.qspool.clementineremote.ui.fragments.DownloadsFragment;
 import de.qspool.clementineremote.ui.fragments.LibraryFragment;
 import de.qspool.clementineremote.ui.fragments.PlayerFragment;
 import de.qspool.clementineremote.ui.fragments.PlaylistFragment;
+import de.qspool.clementineremote.ui.interfaces.BackPressHandleable;
+import de.qspool.clementineremote.ui.interfaces.RemoteDataReceiver;
 import de.qspool.clementineremote.ui.settings.ClementineSettings;
 import de.qspool.clementineremote.utils.Utilities;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends Activity {
 
     private final static String MENU_POSITION = "last_menu_position";
 
@@ -74,9 +76,9 @@ public class MainActivity extends FragmentActivity {
 
     private int mCurrentFragment;
 
-    private LinkedList<AbstractDrawerFragment> mFragments = new LinkedList<>();
+    private LinkedList<Fragment> mFragments = new LinkedList<>();
 
-    private AbstractDrawerFragment mPlayerFragment;
+    private Fragment mPlayerFragment;
 
     private ListView mDrawerList;
 
@@ -116,7 +118,7 @@ public class MainActivity extends FragmentActivity {
 
         if (findViewById(R.id.player_frame) != null) {
             mPlayerFragment = new PlayerFragment();
-            getSupportFragmentManager().beginTransaction().add(R.id.player_frame, mPlayerFragment)
+            getFragmentManager().beginTransaction().add(R.id.player_frame, mPlayerFragment)
                     .commit();
             mLastPosition = 2;
         }
@@ -339,9 +341,9 @@ public class MainActivity extends FragmentActivity {
     public void onBackPressed() {
         // Let the fragment handle the back button first
         if (mFragments.get(mCurrentFragment) == null ||
-                !mFragments.get(mCurrentFragment).isVisible() ||
-                !mFragments.get(mCurrentFragment).onBackPressed()) {
-            super.onBackPressed();
+                !mFragments.get(mCurrentFragment).isVisible()) {
+            if (!((BackPressHandleable) mFragments.get(mCurrentFragment)).onBackPressed())
+                super.onBackPressed();
         }
     }
 
@@ -384,11 +386,11 @@ public class MainActivity extends FragmentActivity {
         if (mFragments.get(mCurrentFragment) != null &&
                 mFragments.get(mCurrentFragment).isVisible() &&
                 mFragments.get(mCurrentFragment).isAdded()) {
-            mFragments.get(mCurrentFragment).MessageFromClementine(clementineMessage);
+            ((RemoteDataReceiver)mFragments.get(mCurrentFragment)).MessageFromClementine(clementineMessage);
         }
 
         if (mPlayerFragment != null) {
-            mPlayerFragment.MessageFromClementine(clementineMessage);
+            ((RemoteDataReceiver)mPlayerFragment).MessageFromClementine(clementineMessage);
         }
     }
 
@@ -439,10 +441,10 @@ public class MainActivity extends FragmentActivity {
                 if (mInstanceSaved) {
                     return;
                 }
-                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction ft = fragmentManager.beginTransaction();
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                ft.setCustomAnimations(R.drawable.anim_fade_in, R.drawable.anim_fade_out);
+                ft.setCustomAnimations(R.animator.anim_fade_in, R.animator.anim_fade_out);
 
                 switch (position) {
                     case 0: // Header Remote

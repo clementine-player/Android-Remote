@@ -18,6 +18,7 @@
 package de.qspool.clementineremote.ui.fragments;
 
 import android.app.ActionBar;
+import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -44,9 +45,11 @@ import de.qspool.clementineremote.backend.downloader.DownloadManager;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.ui.adapter.DownloadAdapter;
+import de.qspool.clementineremote.ui.interfaces.BackPressHandleable;
+import de.qspool.clementineremote.ui.interfaces.RemoteDataReceiver;
 import de.qspool.clementineremote.utils.Utilities;
 
-public class DownloadsFragment extends AbstractDrawerFragment {
+public class DownloadsFragment extends Fragment implements BackPressHandleable, RemoteDataReceiver {
 
     private ActionBar mActionBar;
 

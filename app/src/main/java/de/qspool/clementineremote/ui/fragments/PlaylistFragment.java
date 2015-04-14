@@ -18,6 +18,7 @@
 package de.qspool.clementineremote.ui.fragments;
 
 import android.app.ActionBar;
+import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -55,8 +56,10 @@ import de.qspool.clementineremote.backend.player.MyPlaylist;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.backend.player.PlaylistManager;
 import de.qspool.clementineremote.ui.adapter.PlaylistSongAdapter;
+import de.qspool.clementineremote.ui.interfaces.BackPressHandleable;
+import de.qspool.clementineremote.ui.interfaces.RemoteDataReceiver;
 
-public class PlaylistFragment extends AbstractDrawerFragment {
+public class PlaylistFragment extends Fragment implements BackPressHandleable, RemoteDataReceiver {
 
     private PlaylistSongAdapter mAdapter;
 

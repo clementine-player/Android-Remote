@@ -19,6 +19,7 @@ package de.qspool.clementineremote.ui.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
+import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -59,10 +60,12 @@ import de.qspool.clementineremote.backend.player.MyLibrary;
 import de.qspool.clementineremote.backend.player.MyLibraryItem;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.ui.adapter.LibraryAdapter;
+import de.qspool.clementineremote.ui.interfaces.BackPressHandleable;
+import de.qspool.clementineremote.ui.interfaces.RemoteDataReceiver;
 import de.qspool.clementineremote.ui.settings.LibraryAlbumOrder;
 import de.qspool.clementineremote.utils.Utilities;
 
-public class LibraryFragment extends AbstractDrawerFragment implements
+public class LibraryFragment extends Fragment implements BackPressHandleable, RemoteDataReceiver,
         OnLibrarySelectFinishedListener {
 
     private ActionBar mActionBar;

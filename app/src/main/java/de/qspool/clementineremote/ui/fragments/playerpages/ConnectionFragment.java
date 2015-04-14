@@ -18,6 +18,7 @@ his file is part of the Android Clementine Remote.
 
 package de.qspool.clementineremote.ui.fragments.playerpages;
 
+import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.net.TrafficStats;
 import android.os.Bundle;
@@ -39,10 +40,12 @@ import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
-import de.qspool.clementineremote.ui.fragments.AbstractDrawerFragment;
+import de.qspool.clementineremote.ui.interfaces.BackPressHandleable;
+import de.qspool.clementineremote.ui.interfaces.RemoteDataReceiver;
 import de.qspool.clementineremote.utils.Utilities;
 
-public class ConnectionFragment extends AbstractDrawerFragment {
+public class ConnectionFragment extends Fragment
+        implements BackPressHandleable, RemoteDataReceiver {
 
     private TextView tv_ip;
 

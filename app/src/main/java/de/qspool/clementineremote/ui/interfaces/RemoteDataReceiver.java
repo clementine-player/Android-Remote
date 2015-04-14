@@ -15,16 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package de.qspool.clementineremote.ui.fragments;
-
-import android.support.v4.app.Fragment;
+package de.qspool.clementineremote.ui.interfaces;
 
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 
-public abstract class AbstractDrawerFragment extends Fragment implements
-        RemoteDataReceiver {
+public interface RemoteDataReceiver {
 
-    abstract public void MessageFromClementine(ClementineMessage clementineMessage);
-
-    abstract public boolean onBackPressed();
+    public void MessageFromClementine(ClementineMessage clementineMessage);
 }

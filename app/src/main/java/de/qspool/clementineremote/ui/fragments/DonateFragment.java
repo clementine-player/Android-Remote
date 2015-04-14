@@ -18,6 +18,7 @@
 package de.qspool.clementineremote.ui.fragments;
 
 import android.app.ActionBar;
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,6 +34,8 @@ import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.VendingKey;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.player.MySong;
+import de.qspool.clementineremote.ui.interfaces.BackPressHandleable;
+import de.qspool.clementineremote.ui.interfaces.RemoteDataReceiver;
 import de.qspool.clementineremote.utils.IabHelper;
 import de.qspool.clementineremote.utils.IabHelper.OnConsumeFinishedListener;
 import de.qspool.clementineremote.utils.IabHelper.OnIabPurchaseFinishedListener;
@@ -42,7 +45,7 @@ import de.qspool.clementineremote.utils.Inventory;
 import de.qspool.clementineremote.utils.Purchase;
 import de.qspool.clementineremote.utils.Utilities;
 
-public class DonateFragment extends AbstractDrawerFragment {
+public class DonateFragment extends Fragment implements BackPressHandleable, RemoteDataReceiver {
 
     private final static String TAG = "DonateFragment";
 

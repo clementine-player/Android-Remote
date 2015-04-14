@@ -22,9 +22,9 @@ import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import android.app.ActionBar;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,8 +47,10 @@ import de.qspool.clementineremote.ui.adapter.PlayerPageAdapter;
 import de.qspool.clementineremote.ui.fragments.playerpages.ConnectionFragment;
 import de.qspool.clementineremote.ui.fragments.playerpages.PlayerPageFragment;
 import de.qspool.clementineremote.ui.fragments.playerpages.SongDetailFragment;
+import de.qspool.clementineremote.ui.interfaces.BackPressHandleable;
+import de.qspool.clementineremote.ui.interfaces.RemoteDataReceiver;
 
-public class PlayerFragment extends AbstractDrawerFragment {
+public class PlayerFragment extends Fragment implements BackPressHandleable, RemoteDataReceiver {
 
     private ImageButton mBtnNext;
 

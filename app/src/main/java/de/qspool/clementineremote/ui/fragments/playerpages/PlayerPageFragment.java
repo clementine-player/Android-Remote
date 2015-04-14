@@ -19,6 +19,7 @@ package de.qspool.clementineremote.ui.fragments.playerpages;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
+import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -52,10 +53,12 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Down
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.player.LyricsProvider;
 import de.qspool.clementineremote.backend.player.MySong;
-import de.qspool.clementineremote.ui.fragments.AbstractDrawerFragment;
+import de.qspool.clementineremote.ui.interfaces.BackPressHandleable;
+import de.qspool.clementineremote.ui.interfaces.RemoteDataReceiver;
 import de.qspool.clementineremote.utils.Utilities;
 
-public class PlayerPageFragment extends AbstractDrawerFragment {
+public class PlayerPageFragment extends Fragment
+        implements BackPressHandleable, RemoteDataReceiver {
 
     private final String TAG = "PlayerPageFragment";
 

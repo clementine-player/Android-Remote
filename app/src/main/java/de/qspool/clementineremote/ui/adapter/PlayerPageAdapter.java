@@ -1,28 +1,23 @@
 package de.qspool.clementineremote.ui.adapter;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.support.v13.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import de.qspool.clementineremote.ui.fragments.AbstractDrawerFragment;
-
-/**
- * Created by amu on 08.03.14.
- */
 public class PlayerPageAdapter extends FragmentPagerAdapter {
 
-    private ArrayList<AbstractDrawerFragment> fragments = new ArrayList<>();
+    private ArrayList<android.app.Fragment> fragments = new ArrayList<>();
 
     public PlayerPageAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
     }
 
     @Override
-    public AbstractDrawerFragment getItem(int i) {
+    public android.app.Fragment getItem(int i) {
         return fragments.get(i);
     }
 
@@ -41,7 +36,7 @@ public class PlayerPageAdapter extends FragmentPagerAdapter {
         return fragments.size();
     }
 
-    public void addFragment(AbstractDrawerFragment fragment) {
+    public void addFragment(Fragment fragment) {
         fragments.add(fragment);
     }
 }
