@@ -22,7 +22,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.graphics.Point;
@@ -101,8 +100,6 @@ public class SongDetailFragment extends Fragment
 
     private SharedPreferences mSharedPref;
 
-    private ActionBar mActionBar;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,8 +115,6 @@ public class SongDetailFragment extends Fragment
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_player_songdetail,
                 container, false);
-
-        mActionBar = getActivity().getActionBar();
 
         mContainer = (FrameLayout) view.findViewById(R.id.si_container);
 

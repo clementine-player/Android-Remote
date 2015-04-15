@@ -18,14 +18,15 @@
 package de.qspool.clementineremote.ui.fragments;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -79,7 +80,7 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
         super.onActivityCreated(savedInstanceState);
 
         // Get the actionbar
-        mActionBar = getActivity().getActionBar();
+        mActionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         mActionBar.setTitle(R.string.player_playlist);
     }
 
@@ -251,7 +252,7 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
     public void showShowcase() {
         final ShowcaseView sv = new ShowcaseView.Builder(getActivity())
                 .setStyle(R.style.ShowcaseTheme)
-                .setTarget(new ActionViewTarget(getActivity(), ActionViewTarget.Type.HOME))
+                .setTarget(new ViewTarget(((Toolbar) getActivity().findViewById(R.id.toolbar)).getChildAt(0)))
                 .setContentTitle(R.string.cm_player_home_title)
                 .setContentText(R.string.cm_player_home_content)
                 .build();

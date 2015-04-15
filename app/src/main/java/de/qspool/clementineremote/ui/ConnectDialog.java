@@ -40,6 +40,8 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -87,7 +89,7 @@ import de.qspool.clementineremote.utils.Utilities;
 /**
  * The connect dialog
  */
-public class ConnectDialog extends Activity {
+public class ConnectDialog extends ActionBarActivity {
 
     private final int ANIMATION_DURATION = 2000;
 
@@ -136,8 +138,6 @@ public class ConnectDialog extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_connectdialog);
-
-        getActionBar().setDisplayHomeAsUpEnabled(false);
 
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         mKnownIps = mSharedPref
@@ -252,6 +252,8 @@ public class ConnectDialog extends Activity {
     }
 
     private void initializeUi() {
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+
         // Get the Layoutelements
         mBtnConnect = (Button) findViewById(R.id.btnConnect);
         mBtnConnect.setOnClickListener(oclConnect);

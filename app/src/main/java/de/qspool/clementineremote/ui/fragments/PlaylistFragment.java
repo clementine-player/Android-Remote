@@ -17,12 +17,13 @@
 
 package de.qspool.clementineremote.ui.fragments;
 
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.ContextMenu;
@@ -93,7 +94,7 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
         super.onCreate(savedInstanceState);
 
         // Get the actionbar
-        mActionBar = getActivity().getActionBar();
+        mActionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         setHasOptionsMenu(true);
 
