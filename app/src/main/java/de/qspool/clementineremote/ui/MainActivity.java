@@ -17,7 +17,6 @@
 
 package de.qspool.clementineremote.ui;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -29,7 +28,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -62,7 +63,7 @@ import de.qspool.clementineremote.ui.interfaces.RemoteDataReceiver;
 import de.qspool.clementineremote.ui.settings.ClementineSettings;
 import de.qspool.clementineremote.utils.Utilities;
 
-public class MainActivity extends Activity {
+public class MainActivity extends ActionBarActivity {
 
     private final static String MENU_POSITION = "last_menu_position";
 
@@ -114,6 +115,8 @@ public class MainActivity extends Activity {
         mFragments.add(new DownloadsFragment());
         mFragments.add(new DonateFragment());
 
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
         if (findViewById(R.id.player_frame) != null) {
@@ -157,8 +160,8 @@ public class MainActivity extends Activity {
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 

@@ -97,6 +97,7 @@
         android:layout_marginTop="5dp"
         android:maxHeight="5dp"
         android:progressDrawable="@drawable/progress"
+        android:splitTrack="false"
         android:thumb="@drawable/scrubber_control" />
 
 </LinearLayout>

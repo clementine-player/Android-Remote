@@ -2,6 +2,7 @@
 <resources>
     <color name="actionbar_border">#edb49b</color>
     <color name="actionbar">#db6835</color>
+    <color name="actionbar_dark">#bb5325</color>
 
     <color name="clementine_right">#db6835</color>
     <color name="clementine_left">#af597d</color>

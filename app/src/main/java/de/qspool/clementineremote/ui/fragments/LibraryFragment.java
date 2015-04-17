@@ -18,7 +18,6 @@
 package de.qspool.clementineremote.ui.fragments;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
@@ -27,6 +26,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -95,7 +96,7 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
         super.onCreate(savedInstanceState);
 
         // Get the actionbar
-        mActionBar = getActivity().getActionBar();
+        mActionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         setHasOptionsMenu(true);
 
         mUnknownItem = getString(R.string.library_unknown_item);

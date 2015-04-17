@@ -6,6 +6,8 @@
     android:orientation="vertical"
     android:paddingBottom="30dp">
 
+    <include layout="@layout/toolbar" />
+
     <ImageButton
         android:id="@+id/btnClementineIcon"
         android:layout_width="wrap_content"

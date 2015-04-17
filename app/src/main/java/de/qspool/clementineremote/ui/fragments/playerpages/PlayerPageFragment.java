@@ -18,7 +18,6 @@
 package de.qspool.clementineremote.ui.fragments.playerpages;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
@@ -86,8 +85,6 @@ public class PlayerPageFragment extends Fragment
 
     private boolean mCoverUpdated = false;
 
-    private ActionBar mActionBar;
-
     MenuItem mMenuRepeat;
 
     MenuItem mMenuShuffle;
@@ -104,9 +101,6 @@ public class PlayerPageFragment extends Fragment
     public void onCreate(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        // Get the actionbar
-        mActionBar = getActivity().getActionBar();
-        mActionBar.setTitle(R.string.player_playlist);
         setHasOptionsMenu(true);
     }
 
