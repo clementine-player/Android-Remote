@@ -343,10 +343,12 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public void onBackPressed() {
         // Let the fragment handle the back button first
-        if (mFragments.get(mCurrentFragment) == null ||
-                !mFragments.get(mCurrentFragment).isVisible()) {
+        if (mFragments.get(mCurrentFragment) != null &&
+            mFragments.get(mCurrentFragment).isVisible()) {
             if (!((BackPressHandleable) mFragments.get(mCurrentFragment)).onBackPressed())
                 super.onBackPressed();
+        } else {
+            super.onBackPressed();
         }
     }
 
