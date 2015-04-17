@@ -441,12 +441,12 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
             adapter.getFilter().filter(mLastFilter);
             mList.setAdapter(adapter);
             if (adapter.isEmpty() || adapter.getCount() == 0) {
-                buildSubActionBar("", "");
+                buildSubActionBar(null, null);
             } else {
                 MyLibraryItem item = adapter.getItem(0);
                 switch (item.getLevel()) {
                     case MyLibrary.LVL_ARTIST:
-                        buildSubActionBar("", "");
+                        buildSubActionBar(null, null);
                         break;
                     case MyLibrary.LVL_ALBUM:
                         buildSubActionBar(item.getArtist(), "");
@@ -463,10 +463,12 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
         StringBuilder sb = new StringBuilder();
 
         sb.append("/ ");
-        sb.append(artist.isEmpty() ? mUnknownItem : artist);
-        if (!album.isEmpty()) {
-            sb.append(" / ");
-            sb.append(album.isEmpty() ? mUnknownItem : album);
+        if (artist != null) {
+            sb.append(artist.isEmpty() ? mUnknownItem : artist);
+            if (!album.isEmpty()) {
+                sb.append(" / ");
+                sb.append(album.isEmpty() ? mUnknownItem : album);
+            }
         }
 
         mActionBar.setSubtitle(sb.toString());
