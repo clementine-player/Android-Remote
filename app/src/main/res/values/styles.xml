@@ -40,9 +40,6 @@
         </item>
         <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
         <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItem</item>
-        <item name="android:actionOverflowButtonStyle">
-            @android:style/Widget.Holo.ActionButton.Overflow
-        </item>
         <item name="android:actionDropDownStyle">@style/SpinnerDropDownActionBar</item>
         <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextView</item>
         <item name="windowActionModeOverlay">true</item>
