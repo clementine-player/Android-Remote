@@ -38,7 +38,7 @@ public class MyLibraryItem {
 
     public void setUrl(String mUrl) {
         try {
-            this.mUrl = URLDecoder.decode(mUrl, "UTF-8");
+            this.mUrl = URLDecoder.decode(mUrl.replace("+", "%2B"), "UTF-8");
         } catch (UnsupportedEncodingException e) {
             this.mUrl = mUrl;
         }
