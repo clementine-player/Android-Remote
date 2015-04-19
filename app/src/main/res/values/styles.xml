@@ -43,9 +43,9 @@
         <item name="android:actionOverflowButtonStyle">
             @android:style/Widget.Holo.ActionButton.Overflow
         </item>
-        <item name="android:actionModeCloseDrawable">@drawable/ic_action_done</item>
         <item name="android:actionDropDownStyle">@style/SpinnerDropDownActionBar</item>
         <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextView</item>
+        <item name="windowActionModeOverlay">true</item>
     </style>
 
     <style name="AutoCompleteTextView" parent="@android:style/Widget.Holo.Light.AutoCompleteTextView">
