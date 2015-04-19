@@ -6,5 +6,6 @@
     android:paddingTop="2dip"
     android:paddingBottom="2dip"
     android:paddingLeft="5dip"
-    android:background="@color/white"
-    style="?android:attr/listSeparatorTextViewStyle" />
+    android:textColor="@color/orange"
+    android:text="Hallo Welt"
+    android:textStyle="bold" />
