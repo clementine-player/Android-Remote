@@ -35,9 +35,9 @@
                   android:exported="true"
                   android:launchMode="singleTop" />
         <activity android:name=".ui.settings.ClementineSettings"
-                  android:theme="@style/PreferencesTheme"/>
+                  android:theme="@style/PreferenceTheme"/>
         <activity android:name=".ui.TaskerSettings"
-                  android:theme="@style/PreferencesTheme">
+                  android:theme="@style/PreferenceTheme">
             <intent-filter>
                 <action android:name="com.twofortyfouram.locale.intent.action.EDIT_SETTING" />
             </intent-filter>

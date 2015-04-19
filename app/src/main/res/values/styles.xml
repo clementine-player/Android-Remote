@@ -23,13 +23,16 @@
         <item name="android:background">@drawable/album_art_frame</item>
     </style>
 
-    <style name="PreferencesTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
-        <item name="android:actionBarStyle">@style/ActionBarStyle</item>
+    <style name="PreferenceTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/actionbar</item>
+        <item name="colorPrimaryDark">@color/actionbar_dark</item>
+        <item name="colorAccent">@color/actionbar</item>
     </style>
 
     <style name="PlayerTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/actionbar</item>
         <item name="colorPrimaryDark">@color/actionbar_dark</item>
+        <item name="colorAccent">@color/actionbar</item>
         <item name="android:actionModeBackground">@drawable/cab_background_top_example</item>
         <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_example
         </item>
@@ -43,11 +46,9 @@
         <item name="android:actionModeCloseDrawable">@drawable/ic_action_done</item>
         <item name="android:actionDropDownStyle">@style/SpinnerDropDownActionBar</item>
         <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextView</item>
-        <item name="android:homeAsUpIndicator">@drawable/ic_ab_back_holo_dark_am</item>
     </style>
 
-    <style name="AutoCompleteTextView"
-           parent="@android:style/Widget.Holo.Light.AutoCompleteTextView">
+    <style name="AutoCompleteTextView" parent="@android:style/Widget.Holo.Light.AutoCompleteTextView">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textColorHint">@android:color/white</item>
         <item name="android:textCursorDrawable">@null</item>
@@ -55,24 +56,6 @@
 
     <style name="SpinnerDropDownActionBar" parent="@android:style/Widget.Holo.Light.Spinner">
         <item name="android:background">@drawable/spinner_ab_holo_dark_am</item>
-    </style>
-
-    <style name="ActionBarStyle" parent="@android:style/Widget.ActionBar">
-        <item name="android:background">@drawable/actionbar_background</item>
-        <item name="android:titleTextStyle">@style/ActionBarTextAppearance</item>
-        <item name="android:subtitleTextStyle">
-            @android:style/TextAppearance.Holo.Widget.ActionBar.Subtitle.Inverse
-        </item>
-    </style>
-
-    <style name="ActionBarTextAppearance" parent="@android:style/TextAppearance">
-        <item name="android:textColor">@android:color/white</item>
-    </style>
-
-    <style name="ActionButtonStyle" parent="@android:style/Widget.Holo.ActionButton">
-        <item name="android:minWidth">0dip</item>
-        <item name="android:paddingLeft">10dip</item>
-        <item name="android:paddingRight">10dip</item>
     </style>
 
     <style name="SpinnerItem" parent="@android:style/Widget.Holo.TextView.SpinnerItem">
@@ -91,6 +74,7 @@
         <item name="sv_detailTextAppearance">@style/ShowcaseView.Detail</item>
         <item name="sv_tintButtonColor">true</item>
     </style>
+
     <style name="ShowcaseView.Title" parent="android:style/TextAppearance.Large">
         <item name="android:textColor">@color/orange_light</item>
     </style>
