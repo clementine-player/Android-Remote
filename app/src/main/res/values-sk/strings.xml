@@ -42,6 +42,8 @@
   <string name="download_noti_forbidden">Preberanie je zakázané. Aktivujte ho v nastaveniach prehrávača Clementine.</string>
   <string name="download_noti_not_mounted">Nenašlo sa žiadne úložné zariadenie!</string>
   <string name="download_noti_only_wifi">Preberanie je povolené iba počas pripojenia cez wifi.</string>
+  <string name="download_noti_transcoding">Prekódovávajú sa súbory</string>
+  <string name="download_noti_transcoding_subtitle">Prosím, čakajte</string>
   <string name="library_download">Preberá sa zbierka</string>
   <string name="library_optimize">Optimalizuje sa databáza</string>
   <string name="library_please_wait">Prosím, čakajte</string>
@@ -93,6 +95,7 @@
   <string name="donate_not_available_text">Prosím, skontrolujte, či máte nainštalovanú najnovšiu verziu Obchodu Play a skúste to znovu!</string>
   <string name="pref_cat_behavior">Správanie</string>
   <string name="pref_cat_player">Prehrávač</string>
+  <string name="pref_cat_library">Knižnica</string>
   <string name="pref_cat_downloads">Preberania</string>
   <string name="pref_cat_advanced">Pokročilé</string>
   <string name="pref_cat_network">Sieť</string>
@@ -112,6 +115,12 @@
   <string name="pref_call_volume_summary">Aktuálna úroveň hlasitosti počas hovoru: %s</string>
   <string name="pref_volume_inc_title">Úroveň zmeny hlasitosti</string>
   <string name="pref_volume_inc_summary">Aktuálna úroveň zmeny hlasitosti: %s</string>
+  <string name="pref_library_album_order_title">Usporiadanie albumov</string>
+  <string name="pref_library_album_order_summary">Albumy v knižnici sú aktuálne usporiadané podľa %1$s.</string>
+  <string-array name="pref_library_album_order_display">
+    <item>Abecedne</item>
+    <item>Vydanie</item>
+  </string-array>
   <string name="pref_autoconnect_title">Pripojiť automaticky</string>
   <string name="pref_autoconnect_summary">Automaticky pripojiť k prehrávaču Clementine po spustení diaľkového ovládania.
 </string>
@@ -160,6 +169,7 @@
   <string name="tasker_play">Prehrať</string>
   <string name="tasker_pause">Pozastaviť</string>
   <string name="tasker_playpause">Prehrať / Pozastaviť</string>
+  <string name="tasker_stop">Zastaviť</string>
   <string name="tasker_next">Ďalšia skladba</string>
   <string name="tasker_port_hint">Zadajte port</string>
   <string name="tasker_auth_hint">Zadajte autorizačný kód</string>
