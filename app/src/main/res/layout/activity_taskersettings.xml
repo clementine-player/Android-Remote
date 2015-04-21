@@ -5,7 +5,8 @@
     android:background="@drawable/activity_background"
     android:orientation="vertical">
 
-    <ScrollView style="@style/WhiteBackground"
+    <ScrollView
+        android:background="@drawable/white_background"
         android:layout_margin="7dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

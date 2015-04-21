@@ -5,22 +5,9 @@
         <item name="android:background">@drawable/orange_button</item>
     </style>
 
-    <style name="WhiteBackground">
-        <item name="android:background">@drawable/white_background</item>
-    </style>
-
-    <style name="WhiteBackgroundBorder">
-        <item name="android:background">@drawable/listitem_white_border</item>
-        <item name="android:windowBackground">@null</item>
-    </style>
-
     <style name="Dialog_Transparent" parent="@android:style/Theme.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:background">@android:color/transparent</item>
-    </style>
-
-    <style name="AlbumArtFrame">
-        <item name="android:background">@drawable/album_art_frame</item>
     </style>
 
     <style name="AppTheme.PreferenceTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
