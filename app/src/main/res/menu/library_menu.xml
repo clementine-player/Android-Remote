@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/library_menu_search"
-        app:actionViewClass="android.widget.SearchView"
+        app:actionViewClass="android.support.v7.widget.SearchView"
         android:icon="@drawable/ab_search"
-        app:showAsAction="ifRoom|collapseActionView"
-        android:title="@string/menu_search"></item>
+        app:showAsAction="collapseActionView|always"
+        android:title="@string/menu_search" />
     <item
         android:id="@+id/library_menu_refresh"
         android:icon="@drawable/ab_refresh"
         android:title="@string/library_refresh"
-        app:showAsAction="always"></item>
+        app:showAsAction="always" />
 </menu>

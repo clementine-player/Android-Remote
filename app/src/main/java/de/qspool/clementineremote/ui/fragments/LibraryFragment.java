@@ -23,11 +23,13 @@ import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -40,7 +42,6 @@ import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -182,6 +183,10 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
                     android.view.Menu menu) {
                 android.view.MenuInflater inflater = mode.getMenuInflater();
                 inflater.inflate(R.menu.library_context_menu, menu);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.grey_cab_status));
+
                 return true;
             }
 
@@ -193,6 +198,8 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.actionbar_dark));
             }
 
             @Override
@@ -317,12 +324,6 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
         // Create a listener for search change
         SearchView searchView = (SearchView) menu.findItem(
                 R.id.library_menu_search).getActionView();
-
-        int searchPlateId = searchView.getContext().getResources().getIdentifier("android:id/search_plate", null, null);
-        // Getting the 'search_plate' LinearLayout.
-        View searchPlate = searchView.findViewById(searchPlateId);
-        // Setting background of 'search_plate' to earlier defined drawable.
-        searchPlate.setBackgroundResource(R.drawable.texfield_searchview_holo);
 
         final SearchView.OnQueryTextListener queryTextListener
                 = new SearchView.OnQueryTextListener() {

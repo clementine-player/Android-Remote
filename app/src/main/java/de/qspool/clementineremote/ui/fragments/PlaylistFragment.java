@@ -20,10 +20,14 @@ package de.qspool.clementineremote.ui.fragments;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.internal.widget.TintSpinner;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.ContextMenu;
@@ -39,7 +43,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -68,6 +71,8 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
 
     private ActionBar mActionBar;
 
+    private TintSpinner mPlaylistsSpinner;
+
     private ListView mList;
 
     private View mEmptyPlaylist;
@@ -95,7 +100,6 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
 
         // Get the actionbar
         mActionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
-        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         setHasOptionsMenu(true);
 
         mPlaylistManager = App.Clementine.getPlaylistManager();
@@ -130,7 +134,7 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
                             mProgressDialog.dismiss();
                             getActivity().invalidateOptionsMenu();
 
-                            mActionBar.setSelectedNavigationItem(
+                            mPlaylistsSpinner.setSelection(
                                     mPlaylists.indexOf(mPlaylistManager.getActivePlaylist()));
                         }
                     }
@@ -161,10 +165,12 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
             return;
         }
 
-        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-
         mPlaylistManager.addOnPlaylistReceivedListener(mPlaylistListener);
         mPlaylists = mPlaylistManager.getAllPlaylists();
+
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar.addView(mPlaylistsSpinner);
+
         updatePlaylistSpinner();
 
         RequestPlaylistSongs();
@@ -179,8 +185,10 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
     public void onPause() {
         super.onPause();
 
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar.removeView(mPlaylistsSpinner);
+
         mPlaylistManager.removeOnPlaylistReceivedListener(mPlaylistListener);
-        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
     }
 
     @Override
@@ -194,8 +202,21 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
         mList = (ListView) view.findViewById(R.id.songs);
         mEmptyPlaylist = view.findViewById(R.id.playlist_empty);
 
-        // update spinner
-        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        // Add Spinner to toolbar
+        mPlaylistsSpinner = new TintSpinner(getActivity());
+
+        mPlaylistsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                updateSongList();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         updatePlaylistSpinner();
 
         // Create the adapter
@@ -250,6 +271,10 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
                     android.view.Menu menu) {
                 android.view.MenuInflater inflater = mode.getMenuInflater();
                 inflater.inflate(R.menu.playlist_context_menu, menu);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.grey_cab_status));
+
                 return true;
             }
 
@@ -261,6 +286,8 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.actionbar_dark));
             }
 
             @Override
@@ -329,12 +356,6 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
         // Create a listener for search change
         SearchView searchView = (SearchView) menu.findItem(R.id.playlist_menu_search)
                 .getActionView();
-
-        int searchPlateId = searchView.getContext().getResources().getIdentifier("android:id/search_plate", null, null);
-        // Getting the 'search_plate' LinearLayout.
-        View searchPlate = searchView.findViewById(searchPlateId);
-        // Setting background of 'search_plate' to earlier defined drawable.
-        searchPlate.setBackgroundResource(R.drawable.texfield_searchview_holo);
 
         final SearchView.OnQueryTextListener queryTextListener
                 = new SearchView.OnQueryTextListener() {
@@ -486,7 +507,7 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
             mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             mProgressDialog.show();
         } else {
-            mActionBar.setSelectedNavigationItem(
+            mPlaylistsSpinner.setSelection(
                     mPlaylists.indexOf(mPlaylistManager.getActivePlaylist()));
         }
     }
@@ -506,15 +527,7 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
                 android.R.layout.simple_spinner_item, arrayList);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        mActionBar.setListNavigationCallbacks(adapter, new ActionBar.OnNavigationListener() {
-
-            @Override
-            public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-                updateSongList();
-                return true;
-            }
-        });
+        mPlaylistsSpinner.setAdapter(adapter);
     }
 
     private int getPlaylistId() {
@@ -526,10 +539,10 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
     }
 
     private int getSelectedPlaylistPosition() {
-        int pos = mActionBar.getSelectedNavigationIndex();
+        int pos = mPlaylistsSpinner.getSelectedItemPosition();
         if (pos == Spinner.INVALID_POSITION || pos >= mPlaylists.size()) {
             pos = mPlaylists.indexOf(mPlaylistManager.getActivePlaylist());
-            mActionBar.setSelectedNavigationItem(pos);
+            mPlaylistsSpinner.setSelection(pos);
         }
         return pos;
     }

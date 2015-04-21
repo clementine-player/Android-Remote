@@ -22,7 +22,7 @@
         <activity android:name=".ui.ConnectDialog"
                   android:configChanges="orientation|keyboardHidden|screenSize"
                   android:launchMode="singleTop"
-                  android:theme="@style/PlayerTheme"
+                  android:theme="@style/AppTheme.PlayerTheme"
                   android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,13 +31,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.MainActivity"
-                  android:theme="@style/PlayerTheme"
+                  android:theme="@style/AppTheme.PlayerTheme"
                   android:exported="true"
                   android:launchMode="singleTop" />
         <activity android:name=".ui.settings.ClementineSettings"
-                  android:theme="@style/PreferenceTheme"/>
+                  android:theme="@style/AppTheme.PreferenceTheme"/>
         <activity android:name=".ui.TaskerSettings"
-                  android:theme="@style/PreferenceTheme">
+                  android:theme="@style/AppTheme.PreferenceTheme">
             <intent-filter>
                 <action android:name="com.twofortyfouram.locale.intent.action.EDIT_SETTING" />
             </intent-filter>
