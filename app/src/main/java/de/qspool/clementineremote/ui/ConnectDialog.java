@@ -21,6 +21,7 @@ import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
@@ -54,16 +55,12 @@ import android.view.WindowManager.LayoutParams;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.LinkedHashSet;
@@ -305,35 +302,16 @@ public class ConnectDialog extends ActionBarActivity {
             // Only when we have Jelly Bean or higher
             if (!mClementineMDns.getServices().isEmpty()) {
                 mAnimationCancel = true;
-                final Dialog listDialog = new Dialog(ConnectDialog.this,
-                        R.style.Dialog_Transparent);
-                listDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                listDialog.setContentView(R.layout.dialog_list);
+                final AlertDialog.Builder builder = new AlertDialog.Builder(ConnectDialog.this);
 
-                // Set the title
-                TextView tvTitle = (TextView) listDialog.findViewById(R.id.tvListTitle);
-                tvTitle.setText(R.string.connectdialog_services);
-
-                // Set the close button
-                Button closeButton = (Button) listDialog.findViewById(R.id.btnListClose);
-                closeButton.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        listDialog.dismiss();
-                    }
-                });
-
-                // Set the list adapter
-                ListView listView = (ListView) listDialog.findViewById(R.id.lvDialogList);
+                builder.setTitle(R.string.connectdialog_services);
                 CustomClementinesAdapter adapter = new CustomClementinesAdapter(ConnectDialog.this,
-                        R.layout.dialog_list_item, mClementineMDns.getServices());
-                listView.setAdapter(adapter);
-                listView.setOnItemClickListener(new OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view,
-                            int position, long id) {
-                        listDialog.dismiss();
-                        ServiceInfo service = mClementineMDns.getServices().get(position);
+                        R.layout.item_clementine, mClementineMDns.getServices());
+                builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // The 'which' argument contains the index position
+                        // of the selected item
+                        ServiceInfo service = mClementineMDns.getServices().get(which);
                         // Insert the host
                         String ip = service.getInet4Addresses()[0].toString().split("/")[1];
                         mEtIp.setText(ip);
@@ -342,12 +320,16 @@ public class ConnectDialog extends ActionBarActivity {
                         SharedPreferences.Editor editor = mSharedPref.edit();
                         editor.putString(SharedPreferencesKeys.SP_KEY_PORT,
                                 String.valueOf(service.getPort()));
-                        editor.commit();
+                        editor.apply();
                         connect();
                     }
                 });
-
-                listDialog.show();
+                builder.setNegativeButton(R.string.dialog_close, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                builder.show();
             }
         }
     };

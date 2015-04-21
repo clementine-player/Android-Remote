@@ -52,7 +52,7 @@ public class CustomClementinesAdapter extends ArrayAdapter<ServiceInfo> {
 
         if (convertView == null) {
             convertView = ((Activity) mContext).getLayoutInflater()
-                    .inflate(R.layout.dialog_list_item, parent, false);
+                    .inflate(R.layout.item_clementine, parent, false);
 
             clementineViewHolder = new ClementineViewHolder();
             clementineViewHolder.textViewHost = (TextView) convertView
@@ -63,8 +63,6 @@ public class CustomClementinesAdapter extends ArrayAdapter<ServiceInfo> {
         } else {
             clementineViewHolder = (ClementineViewHolder) convertView.getTag();
         }
-
-        convertView.setBackgroundResource(R.drawable.selector_white_orange_selected);
 
         clementineViewHolder.textViewHost.setText(mData.get(position).getName());
         clementineViewHolder.textViewIp.setText(
