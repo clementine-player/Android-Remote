@@ -50,6 +50,7 @@ import de.qspool.clementineremote.ui.fragments.playerpages.PlayerPageFragment;
 import de.qspool.clementineremote.ui.fragments.playerpages.SongDetailFragment;
 import de.qspool.clementineremote.ui.interfaces.BackPressHandleable;
 import de.qspool.clementineremote.ui.interfaces.RemoteDataReceiver;
+import de.qspool.clementineremote.ui.widgets.SlidingTabLayout;
 
 public class PlayerFragment extends Fragment implements BackPressHandleable, RemoteDataReceiver {
 
@@ -60,6 +61,8 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
     private ImageButton mBtnPlayPause;
 
     private ActionBar mActionBar;
+
+    private SlidingTabLayout mTabs;
 
     private PlayerPageFragment mPlayerPageFragment;
 
@@ -98,7 +101,7 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
 
         mConnectionFragment = new ConnectionFragment();
 
-        mPlayerPageAdapter = new PlayerPageAdapter(getChildFragmentManager());
+        mPlayerPageAdapter = new PlayerPageAdapter(getActivity(), getChildFragmentManager());
         mPlayerPageAdapter.addFragment(mPlayerPageFragment);
         mPlayerPageAdapter.addFragment(mSongDetailFragment);
         mPlayerPageAdapter.addFragment(mConnectionFragment);
@@ -126,6 +129,8 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
             mShowcaseStore.setShowcaseShown(ShowcaseStore.SC_PLAYER);
         }
 
+        mTabs = (SlidingTabLayout) getActivity().findViewById(R.id.tabs);
+
         setHasOptionsMenu(true);
 
         return view;
@@ -135,6 +140,24 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
     public void onResume() {
         super.onResume();
         myPager.setCurrentItem(0);
+
+
+        mTabs.setDistributeEvenly(true);
+        mTabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+            @Override
+            public int getIndicatorColor(int position) {
+                return getResources().getColor(R.color.actionbar_dark);
+            }
+        });
+        mTabs.setTextViewColor(getResources().getColor(R.color.white));
+        mTabs.setViewPager(myPager);
+        mTabs.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mTabs.setVisibility(View.GONE);
     }
 
     @Override

@@ -51,11 +51,12 @@ import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.ui.interfaces.BackPressHandleable;
+import de.qspool.clementineremote.ui.interfaces.NameableTitle;
 import de.qspool.clementineremote.ui.interfaces.RemoteDataReceiver;
 import de.qspool.clementineremote.utils.Utilities;
 
 public class SongDetailFragment extends Fragment
-        implements BackPressHandleable, RemoteDataReceiver {
+        implements BackPressHandleable, RemoteDataReceiver, NameableTitle {
 
     private FrameLayout mContainer;
 
@@ -409,5 +410,10 @@ public class SongDetailFragment extends Fragment
     @Override
     public boolean onBackPressed() {
         return false;
+    }
+
+    @Override
+    public int getTitleId() {
+        return R.string.fragment_title_details;
     }
 }

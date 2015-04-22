@@ -53,11 +53,12 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgT
 import de.qspool.clementineremote.backend.player.LyricsProvider;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.ui.interfaces.BackPressHandleable;
+import de.qspool.clementineremote.ui.interfaces.NameableTitle;
 import de.qspool.clementineremote.ui.interfaces.RemoteDataReceiver;
 import de.qspool.clementineremote.utils.Utilities;
 
 public class PlayerPageFragment extends Fragment
-        implements BackPressHandleable, RemoteDataReceiver {
+        implements BackPressHandleable, RemoteDataReceiver, NameableTitle {
 
     private final String TAG = "PlayerPageFragment";
 
@@ -584,5 +585,10 @@ public class PlayerPageFragment extends Fragment
     @Override
     public boolean onBackPressed() {
         return false;
+    }
+
+    @Override
+    public int getTitleId() {
+        return R.string.fragment_title_player;
     }
 }

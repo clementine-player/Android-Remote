@@ -61,6 +61,7 @@ import de.qspool.clementineremote.ui.fragments.PlaylistFragment;
 import de.qspool.clementineremote.ui.interfaces.BackPressHandleable;
 import de.qspool.clementineremote.ui.interfaces.RemoteDataReceiver;
 import de.qspool.clementineremote.ui.settings.ClementineSettings;
+import de.qspool.clementineremote.ui.widgets.SlidingTabLayout;
 import de.qspool.clementineremote.utils.Utilities;
 
 public class MainActivity extends ActionBarActivity {
@@ -176,6 +177,10 @@ public class MainActivity extends ActionBarActivity {
             }
         }
         selectItem(mLastPosition, 0);
+
+        // Hide the tabs by default. It's the fragments responsibility to enable and disable them.
+        SlidingTabLayout tabs = (SlidingTabLayout) findViewById(R.id.tabs);
+        tabs.setVisibility(View.GONE);
     }
 
     @Override

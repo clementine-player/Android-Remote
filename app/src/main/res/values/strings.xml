@@ -264,6 +264,10 @@
     <string name="cm_player_swipe_title">Swipe to the right</string>
     <string name="cm_player_swipe_content">to see track details and rate the song.</string>
 
+    <string name="fragment_title_player">Player</string>
+    <string name="fragment_title_details">Song details</string>
+    <string name="fragment_title_connection">Connection</string>
+
 
     <string-array name="navigation_headers">
         <item>Remote</item>

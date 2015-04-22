@@ -41,11 +41,12 @@ import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.ui.interfaces.BackPressHandleable;
+import de.qspool.clementineremote.ui.interfaces.NameableTitle;
 import de.qspool.clementineremote.ui.interfaces.RemoteDataReceiver;
 import de.qspool.clementineremote.utils.Utilities;
 
 public class ConnectionFragment extends Fragment
-        implements BackPressHandleable, RemoteDataReceiver {
+        implements BackPressHandleable, RemoteDataReceiver, NameableTitle {
 
     private TextView tv_ip;
 
@@ -198,5 +199,10 @@ public class ConnectionFragment extends Fragment
     @Override
     public boolean onBackPressed() {
         return false;
+    }
+
+    @Override
+    public int getTitleId() {
+        return R.string.fragment_title_connection;
     }
 }
