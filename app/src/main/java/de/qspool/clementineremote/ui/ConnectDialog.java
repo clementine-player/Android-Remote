@@ -274,13 +274,14 @@ public class ConnectDialog extends ActionBarActivity {
         mEtIp = (AutoCompleteTextView) findViewById(R.id.etIp);
         mEtIp.setRawInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
         mEtIp.setThreshold(3);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.select_dialog_item, mKnownIps.toArray(new String[0]));
-        mEtIp.setAdapter(adapter);
 
         // Get old ip and auto-connect from shared prefences
         mEtIp.setText(mSharedPref.getString(SharedPreferencesKeys.SP_KEY_IP, ""));
         mEtIp.setSelection(mEtIp.length());
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.select_dialog_item, mKnownIps.toArray(new String[0]));
+        mEtIp.setAdapter(adapter);
 
         // Get the last auth code
         mAuthCode = mSharedPref.getInt(SharedPreferencesKeys.SP_LAST_AUTH_CODE, 0);
