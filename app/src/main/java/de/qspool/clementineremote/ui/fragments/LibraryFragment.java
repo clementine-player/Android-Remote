@@ -390,6 +390,8 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
         mList.setTextFilterEnabled(true);
         mList.setSelector(new ColorDrawable(android.R.color.transparent));
         mList.setOnItemClickListener(oiclLibraryClick);
+        mList.setDivider(null);
+        mList.setDividerHeight(0);
 
         mList.setEmptyView(mEmptyLibrary);
     }

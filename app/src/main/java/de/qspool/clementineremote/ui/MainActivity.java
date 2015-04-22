@@ -148,6 +148,8 @@ public class MainActivity extends ActionBarActivity {
 
         mDrawerList.setAdapter(separatedListAdapter);
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        mDrawerList.setDivider(null);
+        mDrawerList.setDividerHeight(0);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(

@@ -149,6 +149,8 @@ public class DownloadsFragment extends Fragment implements BackPressHandleable, 
         mList.setTextFilterEnabled(true);
         mList.setSelector(new ColorDrawable(android.R.color.transparent));
         mList.setOnItemClickListener(oiclDownload);
+        mList.setDivider(null);
+        mList.setDividerHeight(0);
     }
 
     @Override
