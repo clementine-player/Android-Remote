@@ -5,28 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
-        android:background="@drawable/album_art_frame"
+    <ImageView
+        android:id="@+id/imgArt"
         android:layout_width="fill_parent"
-        android:layout_height="0dip"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_weight="1">
-
-        <ImageView
-            android:id="@+id/imgArt"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/player_desc_img"
-            android:paddingBottom="5dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:paddingTop="5dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/icon_large" />
-    </FrameLayout>
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/player_desc_img"
+        android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="5dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/icon_large"
+        android:layout_weight="1" />
 
     <TextView
         android:id="@+id/tvArtist"
@@ -97,6 +87,7 @@
         android:layout_marginTop="5dp"
         android:maxHeight="5dp"
         android:progressDrawable="@drawable/progress"
+        android:splitTrack="false"
         android:thumb="@drawable/scrubber_control" />
 
 </LinearLayout>
