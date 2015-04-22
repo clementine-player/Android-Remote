@@ -27,6 +27,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
@@ -35,7 +36,6 @@ import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView.MultiChoiceModeListener;
@@ -68,17 +68,19 @@ import de.qspool.clementineremote.ui.settings.LibraryAlbumOrder;
 import de.qspool.clementineremote.utils.Utilities;
 
 public class LibraryFragment extends Fragment implements BackPressHandleable, RemoteDataReceiver,
-        OnLibrarySelectFinishedListener {
+        OnLibrarySelectFinishedListener, SwipeRefreshLayout.OnRefreshListener {
 
     private ActionBar mActionBar;
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    private SwipeRefreshLayout mEmptyLibrary;
 
     private ListView mList;
 
     private LinkedList<LibraryAdapter> mAdapters = new LinkedList<LibraryAdapter>();
 
     private MyLibrary mLibrary;
-
-    private View mEmptyLibrary;
 
     private TextView mLibraryEmptyText;
 
@@ -148,8 +150,14 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
         View view = inflater.inflate(R.layout.fragment_library, container,
                 false);
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.library_refresh_layout);
+        mEmptyLibrary = (SwipeRefreshLayout) view.findViewById(R.id.library_refresh_empty_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mEmptyLibrary.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.orange);
+        mEmptyLibrary.setColorSchemeResources(R.color.orange);
+
         mList = (ListView) view.findViewById(R.id.library);
-        mEmptyLibrary = view.findViewById(R.id.library_empty);
 
         mLibraryEmptyText = (TextView) mEmptyLibrary.findViewById(R.id.library_empty_txt);
 
@@ -238,34 +246,14 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.library_menu_refresh:
-                mAdapters.clear();
-                showList();
-
-                mClementineLibraryDownloader = new ClementineLibraryDownloader(getActivity());
-                mClementineLibraryDownloader.addOnLibraryDownloadListener(
-                        mOnLibraryDownloadListener);
-                mClementineLibraryDownloader.startDownload(ClementineMessage
-                        .getMessage(MsgType.GET_LIBRARY));
-
-                createDownloadProgressDialog();
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
-        return true;
-    }
-
     private OnLibraryDownloadListener mOnLibraryDownloadListener = new OnLibraryDownloadListener() {
 
         @Override
         public void OnLibraryDownloadFinished(DownloaderResult result) {
             mProgressDialog.dismiss();
             mClementineLibraryDownloader = null;
+            mSwipeRefreshLayout.setRefreshing(false);
+            mEmptyLibrary.setRefreshing(false);
 
             if (result.getResult() == DownloadResult.SUCCESSFUL) {
                 if (mLibrary != null) {
@@ -535,5 +523,19 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
     @Override
     public void OnLibrarySelectFinished(LinkedList<MyLibraryItem> l) {
         addSongsToPlaylist(l);
+    }
+
+    @Override
+    public void onRefresh() {
+        mAdapters.clear();
+        showList();
+
+        mClementineLibraryDownloader = new ClementineLibraryDownloader(getActivity());
+        mClementineLibraryDownloader.addOnLibraryDownloadListener(
+                mOnLibraryDownloadListener);
+        mClementineLibraryDownloader.startDownload(ClementineMessage
+                .getMessage(MsgType.GET_LIBRARY));
+
+        createDownloadProgressDialog();
     }
 }

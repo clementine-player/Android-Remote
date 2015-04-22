@@ -7,9 +7,4 @@
         android:icon="@drawable/ab_search"
         app:showAsAction="collapseActionView|always"
         android:title="@string/menu_search" />
-    <item
-        android:id="@+id/library_menu_refresh"
-        android:icon="@drawable/ab_refresh"
-        android:title="@string/library_refresh"
-        app:showAsAction="always" />
 </menu>
