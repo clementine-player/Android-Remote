@@ -1,47 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/imgArt"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:contentDescription="@string/player_desc_img"
         android:paddingBottom="5dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:paddingTop="5dp"
-        android:scaleType="fitCenter"
+        android:scaleType="centerCrop"
         android:src="@drawable/icon_large"
-        android:layout_weight="1" />
-
-    <TextView
-        android:id="@+id/tvArtist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@android:color/black" />
-
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:textColor="@android:color/black" />
-
-    <TextView
-        android:id="@+id/tvAlbum"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:textColor="@android:color/black" />
+        android:layout_weight="1"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/ll_metadata"
+        android:layout_centerInParent="true" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/ll_metadata"
+        android:layout_above="@+id/sbPosition"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:paddingTop="4dp">
 
         <TextView
             android:id="@+id/tvGenre"
@@ -87,6 +73,47 @@
         android:maxHeight="5dp"
         android:progressDrawable="@drawable/progress"
         android:splitTrack="false"
-        android:thumb="@drawable/scrubber_control" />
+        android:thumb="@drawable/scrubber_control"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentBottom="true" />
 
-</LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imgArt"
+        android:background="@drawable/album_cover_overlay"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="32dp">
+
+        <TextView
+            android:id="@+id/tvArtist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@android:color/black"
+            android:gravity="center_horizontal"
+            android:text="artist" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
+            android:gravity="center_horizontal" />
+
+        <TextView
+            android:id="@+id/tvAlbum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
+            android:gravity="center_horizontal" />
+
+    </LinearLayout>
+
+</RelativeLayout>
