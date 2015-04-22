@@ -21,10 +21,12 @@
 
         <FrameLayout
             android:id="@+id/content_frame"
+            android:background="@drawable/white_background"
             android:layout_below="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="7dp" />
+            android:layout_margin="7dp" />
+
     </RelativeLayout>
     <!-- The navigation drawer -->
     <ListView
