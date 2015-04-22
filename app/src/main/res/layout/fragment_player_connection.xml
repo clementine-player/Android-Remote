@@ -114,6 +114,7 @@
         android:thumb="@drawable/scrubber_control"
         android:max="100"
         android:progress="100"
+        android:splitTrack="false"
         android:id="@+id/cn_volume" />
 
 
