@@ -108,8 +108,8 @@
     <SeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="12dp"
         android:maxHeight="2dp"
         android:progressDrawable="@drawable/seek_bar_clementine"
         android:thumb="@drawable/scrubber_control"
