@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/notification">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/noti_icon"
+        android:src="@drawable/ic_launcher"
+        android:adjustViewBounds="true"
+        android:layout_weight="5"
+        android:scaleType="fitCenter"
+        android:layout_gravity="left"
+        android:layout_alignParentStart="true" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="4dp"
+        android:layout_toRightOf="@+id/noti_icon"
+        android:layout_toLeftOf="@+id/noti_play_pause"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/noti_title"
+            android:singleLine="true"
+            android:text="Medium" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/noti_subtitle"
+            android:singleLine="true"
+            android:text="Small" />
+    </LinearLayout>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/noti_play_pause"
+        android:src="@drawable/ab_media_play"
+        android:background="@android:color/transparent"
+        android:padding="4dp"
+        android:layout_toLeftOf="@+id/noti_next" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/noti_next"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ab_media_next"
+        android:background="@android:color/transparent"
+        android:padding="4dp"
+        android:layout_alignParentEnd="true" />
+
+</RelativeLayout>

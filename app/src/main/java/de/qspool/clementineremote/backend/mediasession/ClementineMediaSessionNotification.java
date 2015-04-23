@@ -27,9 +27,11 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.media.session.MediaSession;
 import android.os.Build;
+import android.widget.RemoteViews;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.backend.receivers.ClementineBroadcastReceiver;
 import de.qspool.clementineremote.utils.Utilities;
@@ -43,6 +45,8 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
     private NotificationManager mNotificationManager;
 
     private Notification.Builder mNotificationBuilder;
+
+    private RemoteViews mNotificationView;
 
     private int mNotificationWidth;
 
@@ -73,21 +77,8 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
 
         mNotificationBuilder.setContentIntent(Utilities.getClementineRemotePendingIntent(mContext));
 
-        // Create intents for buttons
-        Intent playIntent = new Intent(ClementineBroadcastReceiver.PLAYPAUSE);
-        Intent nextIntent = new Intent(ClementineBroadcastReceiver.NEXT);
-
-        PendingIntent piPlay = PendingIntent.getBroadcast(mContext, 0, playIntent, 0);
-        PendingIntent piNext = PendingIntent.getBroadcast(mContext, 0, nextIntent, 0);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            mNotificationBuilder.addAction(R.drawable.ab_media_play,
-                    mContext.getString(R.string.notification_action_playpause), piPlay);
-            mNotificationBuilder.addAction(R.drawable.ab_media_next,
-                    mContext.getString(R.string.notification_action_next), piNext);
-
-            mNotificationBuilder.setPriority(1);
-        }
+        mNotificationView = new RemoteViews(mContext.getPackageName(), R.layout.notification_small);
+        mNotificationBuilder.setContent(mNotificationView);
     }
 
     @Override
@@ -104,15 +95,39 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
                     mNotificationWidth,
                     mNotificationHeight,
                     false);
-            mNotificationBuilder.setLargeIcon(scaledArt);
-            mNotificationBuilder.setContentTitle(song.getTitle());
-            mNotificationBuilder.setContentText(song.getArtist() +
+
+            mNotificationView.setImageViewBitmap(R.id.noti_icon, scaledArt);
+            mNotificationView.setTextViewText(R.id.noti_title, song.getTitle());
+            mNotificationView.setTextViewText(R.id.noti_subtitle, song.getArtist() +
                     " / " +
                     song.getAlbum());
         } else {
-            mNotificationBuilder.setContentTitle(mContext.getString(R.string.app_name));
-            mNotificationBuilder.setContentText(mContext.getString(R.string.player_nosong));
+            mNotificationView.setTextViewText(R.id.noti_title, mContext.getString(R.string.app_name));
+            mNotificationView.setTextViewText(R.id.noti_subtitle, mContext.getString(R.string.player_nosong));
         }
+
+        // Play or pause?
+        Intent intentPlayPause = new Intent(mContext, ClementineBroadcastReceiver.class);
+        Intent intentNext = new Intent(mContext, ClementineBroadcastReceiver.class);
+        intentNext.setAction(ClementineBroadcastReceiver.NEXT);
+
+        if (App.Clementine.getState() == Clementine.State.PLAY) {
+            mNotificationView.setImageViewResource(R.id.noti_play_pause,
+                    R.drawable.ab_media_pause);
+            intentPlayPause.setAction(ClementineBroadcastReceiver.PAUSE);
+        } else {
+            mNotificationView.setImageViewResource(R.id.noti_play_pause,
+                    R.drawable.ab_media_play);
+            intentPlayPause.setAction(ClementineBroadcastReceiver.PLAY);
+        }
+        mNotificationView.setOnClickPendingIntent(R.id.noti_play_pause,
+                PendingIntent
+                        .getBroadcast(mContext, 0, intentPlayPause,
+                                PendingIntent.FLAG_ONE_SHOT));
+        mNotificationView.setOnClickPendingIntent(R.id.noti_next,
+                PendingIntent
+                        .getBroadcast(mContext, 0, intentNext,
+                                PendingIntent.FLAG_ONE_SHOT));
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
             //noinspection deprecation
@@ -128,7 +143,7 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
             return;
         }
 
-        mNotificationBuilder.setStyle(new Notification.MediaStyle()
-                .setMediaSession(mediaSession.getSessionToken()));
+        //mNotificationBuilder.setStyle(new Notification.MediaStyle()
+        //        .setMediaSession(mediaSession.getSessionToken()));
     }
 }
