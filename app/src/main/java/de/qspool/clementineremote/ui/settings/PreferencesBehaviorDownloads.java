@@ -29,7 +29,7 @@ import java.io.File;
 
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.SharedPreferencesKeys;
-import de.qspool.clementineremote.ui.FileDialog;
+import de.qspool.clementineremote.ui.dialogs.FileDialog;
 
 public class PreferencesBehaviorDownloads extends PreferenceFragment {
 

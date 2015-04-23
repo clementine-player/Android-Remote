@@ -320,7 +320,7 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
         switch (item.getItemId()) {
             case R.id.download_playlist:
                 DownloadManager.getInstance().addJob(ClementineMessageFactory
-                        .buildDownloadSongsMessage(getPlaylistId(), DownloadItem.APlaylist));
+                        .buildDownloadSongsMessage(DownloadItem.APlaylist, getPlaylistId()));
                 return true;
             case R.id.clear_playlist:
                 mPlaylistManager.clearPlaylist(getPlaylistId());

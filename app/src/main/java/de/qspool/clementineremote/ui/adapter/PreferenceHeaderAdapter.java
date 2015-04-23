@@ -17,15 +17,13 @@ public class PreferenceHeaderAdapter extends ArrayAdapter<PreferenceHeaderAdapte
 
     public static class PreferenceHeader {
         public String title;
-        public String summary;
         public int icon;
 
         public Fragment fragment;
         public boolean isHeader;
 
-        public PreferenceHeader(String title, String summary, int icon, Fragment fragment) {
+        public PreferenceHeader(String title, int icon, Fragment fragment) {
             this.title = title;
-            this.summary = summary;
             this.icon = icon;
             this.fragment = fragment;
             this.isHeader = (fragment == null);
@@ -55,11 +53,10 @@ public class PreferenceHeaderAdapter extends ArrayAdapter<PreferenceHeaderAdapte
             view = mLayoutInflater.inflate(android.R.layout.preference_category, parent, false);
             ((TextView) view.findViewById(android.R.id.title)).setText(header.title);
         } else {
-            view = mLayoutInflater.inflate(R.layout.preference_header_item, parent, false);
-            ((ImageView) view.findViewById(R.id.pref_header_icon)).setImageResource(header.icon);
-            ((TextView) view.findViewById(R.id.pref_header_title))
+            view = mLayoutInflater.inflate(R.layout.item_preference, parent, false);
+            ((ImageView) view.findViewById(R.id.preference_item_icon)).setImageResource(header.icon);
+            ((TextView) view.findViewById(R.id.preference_item_title))
                     .setText(header.title);
-            ((TextView) view.findViewById(R.id.pref_header_summary)).setText(header.summary);
         }
 
         return view;

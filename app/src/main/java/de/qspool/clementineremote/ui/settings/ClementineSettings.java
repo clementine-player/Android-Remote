@@ -95,22 +95,22 @@ public class ClementineSettings extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            View view = inflater.inflate(R.layout.preference_list,
+            View view = inflater.inflate(R.layout.fragment_preference_list,
                     container, false);
 
             final ArrayList<PreferenceHeader> items = new ArrayList<>();
             items.add(new PreferenceHeader(getString(R.string.pref_cat_behavior)));
-            items.add(new PreferenceHeader(getString(R.string.pref_cat_player), null, 0, new PreferencesBehaviorPlayer()));
-            items.add(new PreferenceHeader(getString(R.string.pref_cat_library), null, 0, new PreferencesBehaviorLibrary()));
-            items.add(new PreferenceHeader(getString(R.string.pref_cat_downloads), null, 0, new PreferencesBehaviorDownloads()));
-            items.add(new PreferenceHeader(getString(R.string.pref_cat_advanced), null, 0, new PreferencesBehaviorAdvanced()));
+            items.add(new PreferenceHeader(getString(R.string.pref_cat_player), R.drawable.nav_player, new PreferencesBehaviorPlayer()));
+            items.add(new PreferenceHeader(getString(R.string.pref_cat_library), R.drawable.nav_library, new PreferencesBehaviorLibrary()));
+            items.add(new PreferenceHeader(getString(R.string.pref_cat_downloads), R.drawable.nav_downloads, new PreferencesBehaviorDownloads()));
+            items.add(new PreferenceHeader(getString(R.string.pref_cat_advanced), R.drawable.nav_more_horiz, new PreferencesBehaviorAdvanced()));
 
             items.add(new PreferenceHeader(getString(R.string.pref_cat_network)));
-            items.add(new PreferenceHeader(getString(R.string.pref_cat_connection), null, 0, new PreferencesConnection()));
+            items.add(new PreferenceHeader(getString(R.string.pref_cat_connection), R.drawable.nav_antenna, new PreferencesConnection()));
 
             items.add(new PreferenceHeader(getString(R.string.pref_cat_info)));
-            items.add(new PreferenceHeader(getString(R.string.pref_cat_about), null, 0, new PreferencesInformationAbout()));
-            items.add(new PreferenceHeader(getString(R.string.pref_cat_license), null, 0, new PreferencesInformationLicenses()));
+            items.add(new PreferenceHeader(getString(R.string.pref_cat_about), R.drawable.nav_info, new PreferencesInformationAbout()));
+            items.add(new PreferenceHeader(getString(R.string.pref_cat_license), R.drawable.nav_license, new PreferencesInformationLicenses()));
 
             PreferenceHeaderAdapter adapter = new PreferenceHeaderAdapter(getActivity(), items);
 

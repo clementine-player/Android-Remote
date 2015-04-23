@@ -7,15 +7,15 @@
 
     <ImageButton
         android:id="@+id/ibCancelDl"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/tvDlTitle"
         android:background="@android:color/transparent"
         android:padding="5dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_menu_close_clear_cancel" android:layout_marginLeft="5dp"
+        android:src="@drawable/ic_delete_black" android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp" android:layout_marginRight="5dp"/>
 
     <TextView
@@ -53,7 +53,7 @@
         android:paddingRight="15dp"
         android:paddingTop="6dp"
         android:progress="30"
-        android:progressDrawable="@drawable/progress" />
+        android:progressDrawable="@drawable/seek_bar_clementine" />
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

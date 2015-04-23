@@ -2,14 +2,13 @@
 <resources>
     <array name="navigation_drawer_icons">
         <item>@drawable/nav_player</item>
-        <item />
-        <item />>
+        <item>@drawable/nav_playlist</item>
+        <item>@drawable/nav_library</item>
         <item>@drawable/nav_downloads</item>
         <item />
         <item>@drawable/nav_settings</item>
         <item>@drawable/nav_donate</item>
         <item />
-        <item />
-        <item />
+        <item>@drawable/nav_quit</item>
     </array>
 </resources>

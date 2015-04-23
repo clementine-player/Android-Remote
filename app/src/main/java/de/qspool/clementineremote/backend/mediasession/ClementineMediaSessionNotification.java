@@ -81,9 +81,9 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
         PendingIntent piNext = PendingIntent.getBroadcast(mContext, 0, nextIntent, 0);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            mNotificationBuilder.addAction(R.drawable.ic_media_pause_resume,
+            mNotificationBuilder.addAction(R.drawable.ab_media_play,
                     mContext.getString(R.string.notification_action_playpause), piPlay);
-            mNotificationBuilder.addAction(R.drawable.ic_media_next_not,
+            mNotificationBuilder.addAction(R.drawable.ab_media_next,
                     mContext.getString(R.string.notification_action_next), piNext);
 
             mNotificationBuilder.setPriority(1);

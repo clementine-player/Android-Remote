@@ -67,11 +67,11 @@
         android:layout_alignLeft="@+id/widget_btn_play_pause" />
 
     <ImageButton
-        android:layout_width="40dp"
+        android:layout_width="48dp"
         android:layout_height="match_parent"
         android:background="@drawable/selector_white_orange_selected"
         android:id="@+id/widget_btn_play_pause"
-        android:src="@drawable/ic_media_play_light"
+        android:src="@drawable/ab_media_play"
         android:layout_alignRight="@+id/widget_sep_right" />
 
     <TextView
@@ -84,11 +84,11 @@
         android:id="@+id/widget_sep_right" />
 
     <ImageButton
-        android:layout_width="40dp"
+        android:layout_width="48dp"
         android:layout_height="match_parent"
         android:background="@drawable/selector_white_orange_selected"
         android:id="@+id/widget_btn_next"
-        android:src="@drawable/ic_media_next_light"
+        android:src="@drawable/ab_media_next"
         android:layout_alignParentEnd="false"
         android:layout_alignParentRight="true" />
 </RelativeLayout>

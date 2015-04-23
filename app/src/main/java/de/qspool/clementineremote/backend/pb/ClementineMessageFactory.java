@@ -63,8 +63,7 @@ public class ClementineMessageFactory {
      *
      * @return The built request
      */
-    public static ClementineMessage buildDownloadSongsMessage(int playlistId,
-            DownloadItem downloadItem) {
+    public static ClementineMessage buildDownloadSongsMessage(DownloadItem downloadItem, int playlistId) {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.DOWNLOAD_SONGS);
         RequestDownloadSongs.Builder request = msg.getRequestDownloadSongsBuilder();
 

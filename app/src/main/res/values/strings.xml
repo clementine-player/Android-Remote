@@ -96,6 +96,7 @@
     <string name="menu_search">Search</string>
     <string name="menu_love">Love</string>
     <string name="menu_ban">Ban</string>
+    <string name="menu_download">Download</string>
     <string name="menu_download_song">Download song</string>
     <string name="menu_download_album">Download album</string>
     <string name="menu_download_playlist">Download playlist</string>
@@ -270,6 +271,13 @@
 
     <string name="navigation_drawer_clementine_on">Clementine on %s</string>
 
+    <string name="player_download_what">What to download?</string>
+    <string-array name="player_download_list">
+        <item>Song</item>
+        <item>Album</item>
+        <item>Playlist</item>
+    </string-array>
+
     <!-- When changing this array, you must also update values/ids.xml navigation_drawer_icons! -->
     <string-array name="navigation_drawer_items">
         <item>Player</item>
@@ -280,7 +288,6 @@
         <item>Settings</item>
         <item>Donate</item>
         <item />
-        <item>Disconnect</item>
         <item>Quit</item>
     </string-array>
 </resources>

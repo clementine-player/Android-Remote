@@ -104,7 +104,7 @@ public class ClementineWidgetProvider extends AppWidgetProvider {
             case DISCONNECTED:
                 // Reset play button
                 views.setImageViewResource(R.id.widget_btn_play_pause,
-                        R.drawable.ic_media_play_light);
+                        R.drawable.ab_media_play);
 
                 if (canConnect) {
                     // Textviews
@@ -170,11 +170,11 @@ public class ClementineWidgetProvider extends AppWidgetProvider {
 
         if (App.Clementine.getState() == Clementine.State.PLAY) {
             views.setImageViewResource(R.id.widget_btn_play_pause,
-                    R.drawable.ic_media_pause_light);
+                    R.drawable.ab_media_pause);
             intentPlayPause.setAction(ClementineBroadcastReceiver.PAUSE);
         } else {
             views.setImageViewResource(R.id.widget_btn_play_pause,
-                    R.drawable.ic_media_play_light);
+                    R.drawable.ab_media_play);
             intentPlayPause.setAction(ClementineBroadcastReceiver.PLAY);
         }
         views.setOnClickPendingIntent(R.id.widget_btn_play_pause,

@@ -92,8 +92,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:maxHeight="5dp"
-            android:progressDrawable="@drawable/progress"
+            android:maxHeight="2dp"
+            android:progressDrawable="@drawable/seek_bar_clementine"
             android:splitTrack="false"
             android:thumb="@drawable/scrubber_control" />
 

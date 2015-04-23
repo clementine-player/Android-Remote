@@ -52,6 +52,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Down
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.player.LyricsProvider;
 import de.qspool.clementineremote.backend.player.MySong;
+import de.qspool.clementineremote.ui.dialogs.DownloadChooserDialog;
 import de.qspool.clementineremote.ui.interfaces.BackPressHandleable;
 import de.qspool.clementineremote.ui.interfaces.NameableTitle;
 import de.qspool.clementineremote.ui.interfaces.RemoteDataReceiver;
@@ -182,27 +183,35 @@ public class PlayerPageFragment extends Fragment
             case R.id.repeat:
                 doRepeat();
                 break;
-            case R.id.download_song:
+            case R.id.download:
                 if (App.Clementine.getCurrentSong() == null) {
                     Toast.makeText(getActivity(), R.string.player_nosong, Toast.LENGTH_LONG).show();
                     break;
                 }
                 if (App.Clementine.getCurrentSong().isLocal()) {
-                    DownloadManager.getInstance().addJob(ClementineMessageFactory
-                            .buildDownloadSongsMessage(-1, DownloadItem.CurrentItem));
-                } else {
-                    Toast.makeText(getActivity(), R.string.player_song_is_stream, Toast.LENGTH_LONG)
-                            .show();
-                }
-                break;
-            case R.id.download_album:
-                if (App.Clementine.getCurrentSong() == null) {
-                    Toast.makeText(getActivity(), R.string.player_nosong, Toast.LENGTH_LONG).show();
-                    break;
-                }
-                if (App.Clementine.getCurrentSong().isLocal()) {
-                    DownloadManager.getInstance().addJob(ClementineMessageFactory
-                            .buildDownloadSongsMessage(-1, DownloadItem.ItemAlbum));
+                    DownloadChooserDialog downloadChooserDialog = new DownloadChooserDialog(getActivity());
+                    downloadChooserDialog.setCallback(new DownloadChooserDialog.Callback() {
+                        @Override
+                        public void onItemClick(DownloadChooserDialog.Type type) {
+                            switch (type) {
+                                case SONG:
+                                    DownloadManager.getInstance().addJob(ClementineMessageFactory
+                                            .buildDownloadSongsMessage(DownloadItem.CurrentItem, -1));
+                                    break;
+                                case ALBUM:
+                                    DownloadManager.getInstance().addJob(ClementineMessageFactory
+                                            .buildDownloadSongsMessage(DownloadItem.ItemAlbum, -1));
+                                    break;
+                                case PLAYLIST:
+                                    DownloadManager.getInstance().addJob(ClementineMessageFactory
+                                            .buildDownloadSongsMessage(DownloadItem.APlaylist,
+                                                    App.Clementine.getPlaylistManager().getActivePlaylistId()));
+                                    break;
+                            }
+                        }
+                    });
+                    downloadChooserDialog.showDialog();
+
                 } else {
                     Toast.makeText(getActivity(), R.string.player_song_is_stream, Toast.LENGTH_LONG)
                             .show();

@@ -250,7 +250,7 @@ public class MainActivity extends ActionBarActivity {
                 || App.Clementine == null
                 || !App.ClementineConnection.isConnected()) {
             Log.d(TAG, "onResume - disconnect");
-            setResult(ConnectDialog.RESULT_DISCONNECT);
+            setResult(ConnectActivity.RESULT_DISCONNECT);
             finish();
         } else {
             Log.d(TAG, "onResume - start");
@@ -285,7 +285,7 @@ public class MainActivity extends ActionBarActivity {
                 || !App.ClementineConnection.isConnected()) {
             Log.d(TAG, "onDestroy - disconnect");
             if (mOpenConnectDialog) {
-                Intent connectDialog = new Intent(this, ConnectDialog.class);
+                Intent connectDialog = new Intent(this, ConnectActivity.class);
                 connectDialog
                         .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(connectDialog);
@@ -397,9 +397,9 @@ public class MainActivity extends ActionBarActivity {
     void disconnect() {
         makeToast(R.string.player_disconnected, Toast.LENGTH_SHORT);
         if (mOpenConnectDialog) {
-            setResult(ConnectDialog.RESULT_DISCONNECT);
+            setResult(ConnectActivity.RESULT_DISCONNECT);
         } else {
-            setResult(ConnectDialog.RESULT_QUIT);
+            setResult(ConnectActivity.RESULT_QUIT);
         }
         mLastPosition = 0;
         finish();
@@ -516,11 +516,7 @@ public class MainActivity extends ActionBarActivity {
                         break;
                     case 7: // Header Disconnect
                         break;
-                    case 8: // Disonnect
-                        mOpenConnectDialog = true;
-                        requestDisconnect();
-                        break;
-                    case 9: // Quit
+                    case 8: // Quit
                         mOpenConnectDialog = false;
                         requestDisconnect();
                     default:

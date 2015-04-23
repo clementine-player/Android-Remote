@@ -4,6 +4,6 @@
     <item
         android:id="@+id/library_context_add"
         android:title="@string/library_context_add"
-        android:icon="@drawable/ab_menu_add"
+        android:icon="@drawable/ab_menu_add_to_playlist"
         app:showAsAction="ifRoom"></item>
 </menu>

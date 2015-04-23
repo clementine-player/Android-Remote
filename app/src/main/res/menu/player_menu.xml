@@ -5,24 +5,19 @@
         android:id="@+id/shuffle"
         android:title="@string/menu_shuffle"
         app:showAsAction="always"
-        android:icon="@drawable/ab_shuffle_off"></item>
+        android:icon="@drawable/ab_shuffle_off" />
     <item
         android:id="@+id/repeat"
         android:title="@string/menu_repeat"
         app:showAsAction="always"
-        android:icon="@drawable/ab_repeat_off"></item>
+        android:icon="@drawable/ab_repeat_off" />
     <item
-        android:id="@+id/download_song"
-        android:title="@string/menu_download_song"
-        android:icon="@drawable/ab_download_track"
-        app:showAsAction="ifRoom"></item>
-    <item
-        android:id="@+id/download_album"
-        android:title="@string/menu_download_album"
-        android:icon="@drawable/ab_download_album"
-        app:showAsAction="ifRoom"></item>
+        android:id="@+id/download"
+        android:title="@string/menu_download"
+        android:icon="@drawable/ab_download"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/stop"
         android:title="@string/tasker_stop"
-        app:showAsAction="never"></item>
+        app:showAsAction="never" />
 </menu>
