@@ -23,6 +23,9 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -38,8 +41,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.LinkedList;
@@ -52,7 +56,7 @@ import de.qspool.clementineremote.backend.mediasession.ClementineMediaSessionNot
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
-import de.qspool.clementineremote.ui.adapter.SeparatedListAdapter;
+import de.qspool.clementineremote.ui.adapter.NavigationDrawerListAdapter;
 import de.qspool.clementineremote.ui.fragments.DonateFragment;
 import de.qspool.clementineremote.ui.fragments.DownloadsFragment;
 import de.qspool.clementineremote.ui.fragments.LibraryFragment;
@@ -82,13 +86,15 @@ public class MainActivity extends ActionBarActivity {
 
     private Fragment mPlayerFragment;
 
+    private RelativeLayout mDrawerMenu;
+
     private ListView mDrawerList;
 
     private DrawerLayout mDrawerLayout;
 
     private ActionBarDrawerToggle mDrawerToggle;
 
-    private int mLastPosition = 1;
+    private int mLastPosition = 0;
 
     private boolean mOpenConnectDialog = true;
 
@@ -107,6 +113,8 @@ public class MainActivity extends ActionBarActivity {
 
         setContentView(R.layout.activity_main);
 
+        mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
         /*
          * Define here the available fragments in the main layout
          */
@@ -118,35 +126,48 @@ public class MainActivity extends ActionBarActivity {
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerMenu = (RelativeLayout) findViewById(R.id.drawer_menu_layout);
+        mDrawerList = (ListView) findViewById(R.id.drawer_list);
+
+        // Show Clementine with hostname and ip
+        TextView clementineHost = (TextView) findViewById(R.id.drawer_menu_text1);
+        TextView clementineIp = (TextView) findViewById(R.id.drawer_menu_text2);
+
+        clementineHost.setText(String.format(getString(R.string.navigation_drawer_clementine_on), App.Clementine.getHostname()));
+        clementineIp.setText(mSharedPref.getString(SharedPreferencesKeys.SP_KEY_IP, "") + ":" + mSharedPref
+                .getString(SharedPreferencesKeys.SP_KEY_PORT, ""));
 
         if (findViewById(R.id.player_frame) != null) {
             mPlayerFragment = new PlayerFragment();
             getFragmentManager().beginTransaction().add(R.id.player_frame, mPlayerFragment)
                     .commit();
-            mLastPosition = 2;
+            mLastPosition = 1;
         }
 
-        // Create the adapters for the sections
-        ArrayAdapter<String> remoteAdapter = new ArrayAdapter<>(this,
-                R.layout.drawer_list_item,
-                getResources().getStringArray(R.array.navigation_array_remote));
-        ArrayAdapter<String> settingsAdapter = new ArrayAdapter<>(this,
-                R.layout.drawer_list_item,
-                getResources().getStringArray(R.array.navigation_array_settings));
-        ArrayAdapter<String> disconnectAdapter = new ArrayAdapter<>(this,
-                R.layout.drawer_list_item,
-                getResources().getStringArray(R.array.navigation_array_disconnect));
-
         // Create the header adapter
-        SeparatedListAdapter separatedListAdapter = new SeparatedListAdapter(this);
-        String[] headers = getResources().getStringArray(R.array.navigation_headers);
+        LinkedList<NavigationDrawerListAdapter.NavigationDrawerItem> drawerItems = new LinkedList<>();
+        String[] itemNames = getResources().getStringArray(R.array.navigation_drawer_items);
+        TypedArray itemIcons = getResources().obtainTypedArray(R.array.navigation_drawer_icons);
 
-        separatedListAdapter.addSection(headers[0], remoteAdapter);
-        separatedListAdapter.addSection(headers[1], settingsAdapter);
-        separatedListAdapter.addSection(headers[2], disconnectAdapter);
+        for (int i=0;i<itemNames.length;i++) {
+            String item = itemNames[i];
+            Drawable icon = null;
+            try {
+                icon = itemIcons.getDrawable(i);
+            } catch (Resources.NotFoundException e) {
+                icon = null;
+            }
 
-        mDrawerList.setAdapter(separatedListAdapter);
+            NavigationDrawerListAdapter.NavigationDrawerItem.Type t = item.isEmpty() ?
+                    NavigationDrawerListAdapter.NavigationDrawerItem.Type.TYPE_SECTION :
+                    NavigationDrawerListAdapter.NavigationDrawerItem.Type.TYPE_ITEM;
+            drawerItems.add(new NavigationDrawerListAdapter.NavigationDrawerItem(item, icon, t));
+        }
+        itemIcons.recycle();
+
+        NavigationDrawerListAdapter navigationDrawerListAdapter = new NavigationDrawerListAdapter(this, R.layout.item_drawer_list, drawerItems);
+
+        mDrawerList.setAdapter(navigationDrawerListAdapter);
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
         mDrawerList.setDivider(null);
         mDrawerList.setDividerHeight(0);
@@ -166,16 +187,14 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-
         // When we have a download notifitication and it was clicked, show the download.
         if (getIntent().hasExtra(ClementineMediaSessionNotification.EXTRA_NOTIFICATION_ID)) {
             int id = getIntent()
                     .getIntExtra(ClementineMediaSessionNotification.EXTRA_NOTIFICATION_ID, 0);
             if (id == -1) {
-                mLastPosition = 1;
+                mLastPosition = 0;
             } else {
-                mLastPosition = 4;
+                mLastPosition = 3;
             }
         }
         selectItem(mLastPosition, 0);
@@ -337,10 +356,10 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
-                mDrawerLayout.closeDrawer(mDrawerList);
+            if (mDrawerLayout.isDrawerOpen(mDrawerMenu)) {
+                mDrawerLayout.closeDrawer(mDrawerMenu);
             } else {
-                mDrawerLayout.openDrawer(mDrawerList);
+                mDrawerLayout.openDrawer(mDrawerMenu);
             }
         }
 
@@ -382,7 +401,7 @@ public class MainActivity extends ActionBarActivity {
         } else {
             setResult(ConnectDialog.RESULT_QUIT);
         }
-        mLastPosition = 1;
+        mLastPosition = 0;
         finish();
     }
 
@@ -444,7 +463,7 @@ public class MainActivity extends ActionBarActivity {
      * Swaps fragments in the main content view
      */
     private void selectItem(final int position, int delay) {
-        mDrawerLayout.closeDrawer(mDrawerList);
+        mDrawerLayout.closeDrawer(mDrawerMenu);
 
         new Handler().postDelayed(new Runnable() {
 
@@ -459,9 +478,7 @@ public class MainActivity extends ActionBarActivity {
                 ft.setCustomAnimations(R.animator.anim_fade_in, R.animator.anim_fade_out);
 
                 switch (position) {
-                    case 0: // Header Remote
-                        break;
-                    case 1: // Player
+                    case 0: // Player
                         if (mPlayerFragment != null) {
                             ft.replace(R.id.content_frame, mFragments.get(1)).commit();
                         } else {
@@ -470,40 +487,40 @@ public class MainActivity extends ActionBarActivity {
                         mCurrentFragment = 0;
                         mLastPosition = position;
                         break;
-                    case 2: // Playlist
+                    case 1: // Playlist
                         ft.replace(R.id.content_frame, mFragments.get(1)).commit();
                         mCurrentFragment = 1;
                         mLastPosition = position;
                         break;
-                    case 3: // Library
+                    case 2: // Library
                         ft.replace(R.id.content_frame, mFragments.get(2)).commit();
                         mCurrentFragment = 2;
                         mLastPosition = position;
                         break;
-                    case 4: // Downloads
+                    case 3: // Downloads
                         ft.replace(R.id.content_frame, mFragments.get(3)).commit();
                         mCurrentFragment = 3;
                         mLastPosition = position;
                         break;
-                    case 5: // Header Settings
+                    case 4: // Header Settings
                         break;
-                    case 6: // Settings
+                    case 5: // Settings
                         Intent settingsIntent = new Intent(MainActivity.this,
                                 ClementineSettings.class);
                         startActivity(settingsIntent);
                         break;
-                    case 7: // Donate
+                    case 6: // Donate
                         ft.replace(R.id.content_frame, mFragments.get(4)).commit();
                         mCurrentFragment = 4;
                         mLastPosition = position;
                         break;
-                    case 8: // Header Disconnect
+                    case 7: // Header Disconnect
                         break;
-                    case 9: // Disonnect
+                    case 8: // Disonnect
                         mOpenConnectDialog = true;
                         requestDisconnect();
                         break;
-                    case 10: // Quit
+                    case 9: // Quit
                         mOpenConnectDialog = false;
                         requestDisconnect();
                     default:

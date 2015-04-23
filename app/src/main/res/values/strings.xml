@@ -266,25 +266,20 @@
 
     <string name="fragment_title_player">Player</string>
     <string name="fragment_title_details">Song details</string>
-    <string name="fragment_title_connection">Connection</string>
+    <string name="fragment_title_connection">Clementine</string>
 
+    <string name="navigation_drawer_clementine_on">Clementine on %s</string>
 
-    <string-array name="navigation_headers">
-        <item>Remote</item>
-        <item>Settings</item>
-        <item>Disconnect</item>
-    </string-array>
-    <string-array name="navigation_array_remote">
+    <!-- When changing this array, you must also update values/ids.xml navigation_drawer_icons! -->
+    <string-array name="navigation_drawer_items">
         <item>Player</item>
         <item>Playlists</item>
         <item>Library</item>
         <item>Downloads</item>
-    </string-array>
-    <string-array name="navigation_array_settings">
+        <item />
         <item>Settings</item>
         <item>Donate</item>
-    </string-array>
-    <string-array name="navigation_array_disconnect">
+        <item />
         <item>Disconnect</item>
         <item>Quit</item>
     </string-array>

@@ -38,6 +38,8 @@ public class Clementine {
 
     public final static String DefaultVolumeInc = "10";
 
+    private String mHostname;
+
     private String mVersion;
 
     private MySong mCurrentSong;
@@ -62,14 +64,12 @@ public class Clementine {
         this.mSongPosition = songPosition;
     }
 
-
     public Clementine() {
         mVersion = "";
         mCurrentSong = null;
         mVolume = 100;
         mState = State.STOP;
     }
-
 
     public String getVersion() {
         return mVersion;
@@ -94,7 +94,6 @@ public class Clementine {
     public void setVolume(int volume) {
         this.mVolume = volume;
     }
-
 
     public State getState() {
         return mState;
@@ -156,5 +155,13 @@ public class Clementine {
 
     public PlaylistManager getPlaylistManager() {
         return mPlaylistManager;
+    }
+
+    public String getHostname() {
+        return mHostname;
+    }
+
+    public void setHostname(String hostname) {
+        mHostname = hostname;
     }
 }

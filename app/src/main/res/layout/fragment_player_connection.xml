@@ -93,7 +93,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="0k / 10k"
         android:id="@+id/cn_traffic"
-        android:textColor="#444444" />
+        android:textColor="#444444"
+        android:singleLine="true" />
 
     <TextView
         android:layout_width="wrap_content"

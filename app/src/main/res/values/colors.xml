@@ -28,7 +28,8 @@
     <color name="actionmode">#FFBB33</color>
     <color name="actionmode_split">#FF8800</color>
 
-    <color name="actionbar_subtitle">#888888</color>
+    <color name="navigation_drawer_section">#e5e5e5</color>
+
     <color name="player_smalltext">#888888</color>
 
     <item name="grey_cab" type="color">#9b9b9b</item>

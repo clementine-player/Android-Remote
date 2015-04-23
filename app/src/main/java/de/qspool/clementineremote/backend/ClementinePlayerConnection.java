@@ -152,6 +152,9 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
             });
             mIncomingThread.start();
 
+            // Get hostname
+            App.Clementine.setHostname(mSocket.getInetAddress().getHostName());
+
             fireOnConnectionStatusChanged(ConnectionStatus.CONNECTED);
 
         } else {
