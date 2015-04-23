@@ -201,6 +201,7 @@ public class ConnectDialog extends ActionBarActivity {
         super.onPause();
         if (mClementineMDns != null) {
             mClementineMDns.stopServiceDiscovery();
+            mBtnClementine.clearAnimation();
         }
     }
 
@@ -564,6 +565,7 @@ public class ConnectDialog extends ActionBarActivity {
                 }
             } else {
                 mBtnClementine.clearAnimation();
+                mAnimationCancel = false;
             }
         }
 

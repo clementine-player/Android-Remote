@@ -45,24 +45,18 @@
             android:singleLine="true"
             android:textColor="@android:color/black" />
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="0dip"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:layout_weight="1">
-
-            <Button
-                android:id="@+id/btnConnect"
-                style="@style/OrangeButton.Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:minHeight="0dp"
-                android:text="@string/connectdialog_connect" />
-
-        </RelativeLayout>
+        <Button
+            android:id="@+id/btnConnect"
+            style="@style/OrangeButton.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:minHeight="0dp"
+            android:text="@string/connectdialog_connect"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
