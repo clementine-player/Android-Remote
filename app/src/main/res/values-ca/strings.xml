@@ -79,4 +79,5 @@
   <string name="crash_report_send">Envia</string>
   <string name="cm_next">Següent</string>
   <string name="cm_close">Tanca</string>
+  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

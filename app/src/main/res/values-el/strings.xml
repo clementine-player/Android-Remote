@@ -48,7 +48,6 @@
   <string name="library_optimize">Βελτιστοποίηση βάσης δεδομένων</string>
   <string name="library_please_wait">Παρακαλώ περιμένετε</string>
   <string name="library_refresh">Ανανέωση</string>
-  <string name="library_empty">Η βιβλιοθήκη ειναι άδεια. Πατήστε ανανέωση για να κατεβάσετε τη βιβλιοθήκη!</string>
   <string name="library_no_search_results">Δεν υπάρχουν τραγούδια που ταιριάζουν στα κριτήρια της αναζήτησής σας!</string>
   <string name="library_no_albums">%d άλμπουμ</string>
   <string name="library_no_tracks">%d τραγουδια</string>
@@ -219,4 +218,5 @@
   <string name="cm_player_lyrics_content">Ένας διάλογος με στίχους θα ανοίξει</string>
   <string name="cm_player_swipe_title">Σύρετε προς τα δεξιά</string>
   <string name="cm_player_swipe_content">για να δείτε λεπτομέρειες του τραγούδιου και να αξιολογήσετε το τραγούδι.</string>
+  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

@@ -48,7 +48,6 @@
   <string name="library_optimize">Mengoptimumkan pangkalan data</string>
   <string name="library_please_wait">Tunggu sebentar</string>
   <string name="library_refresh">Segar semula</string>
-  <string name="library_empty">Pustaka kosong. Tekan segar semula untuk memuat turun pustaka!</string>
   <string name="library_no_search_results">Tiada lagu memadani kriteria gelintar anda!</string>
   <string name="library_no_albums">%d album</string>
   <string name="library_no_tracks">%d trek</string>
@@ -215,23 +214,5 @@
   <string name="cm_player_lyrics_content">Satu dialog dengan lirik akan dibuka</string>
   <string name="cm_player_swipe_title">Leret ke arah kanan</string>
   <string name="cm_player_swipe_content">untuk melihat perincian trek dan tarafkan lagu.</string>
-  <string-array name="navigation_headers">
-    <item>Jauh</item>
-    <item>Tetapan</item>
-    <item>Putus</item>
-  </string-array>
-  <string-array name="navigation_array_remote">
-    <item>Pemain</item>
-    <item>Senarai Main</item>
-    <item>Pustaka</item>
-    <item>Muat Turun</item>
-  </string-array>
-  <string-array name="navigation_array_settings">
-    <item>Tetapan</item>
-    <item>Derma</item>
-  </string-array>
-  <string-array name="navigation_array_disconnect">
-    <item>Putuskan</item>
-    <item>Keluar</item>
-  </string-array>
+  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

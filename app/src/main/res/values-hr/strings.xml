@@ -48,7 +48,6 @@
   <string name="library_optimize">Optimiziranje baze podataka</string>
   <string name="library_please_wait">Molim pričekajte</string>
   <string name="library_refresh">Osvježi</string>
-  <string name="library_empty">Fonoteka je prazna. Pokrenite osvježavanje za preuzimanje fonoteke!</string>
   <string name="library_no_search_results">Nema pronađenih pjesama koje se podudaraju s vašim kriterijima pretraživanja</string>
   <string name="library_no_albums">%d albuma</string>
   <string name="library_no_tracks">%d pjesama</string>
@@ -218,23 +217,5 @@
   <string name="cm_player_lyrics_content">Dijalog teksta pjesme će se otvoriti</string>
   <string name="cm_player_swipe_title">Povucite prstom udesno</string>
   <string name="cm_player_swipe_content">da bi vidjeli pojedinosti pjesme i ocijenili pjesmu.</string>
-  <string-array name="navigation_headers">
-    <item>Daljinski upravljač</item>
-    <item>Postavke</item>
-    <item>Odspoji</item>
-  </string-array>
-  <string-array name="navigation_array_remote">
-    <item>Svirač</item>
-    <item>Popisi izvođenja</item>
-    <item>Fonoteka</item>
-    <item>Preuzimanja</item>
-  </string-array>
-  <string-array name="navigation_array_settings">
-    <item>Postavke</item>
-    <item>Doniraj</item>
-  </string-array>
-  <string-array name="navigation_array_disconnect">
-    <item>Odspoji</item>
-    <item>Zatvori</item>
-  </string-array>
+  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

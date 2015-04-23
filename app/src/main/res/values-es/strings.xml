@@ -48,7 +48,6 @@
   <string name="library_optimize">Optimizando la base de datos</string>
   <string name="library_please_wait">Espere</string>
   <string name="library_refresh">Actualizar</string>
-  <string name="library_empty">La colección está vacía. Pulse Actualizar para descargarla.</string>
   <string name="library_no_search_results">Ninguna canción coincide con los criterios de búsqueda.</string>
   <string name="library_no_albums">%d álbumes</string>
   <string name="library_no_tracks">%d pistas</string>
@@ -214,23 +213,5 @@
   <string name="cm_player_lyrics_content">Se abrirá un cuadro con la letra</string>
   <string name="cm_player_swipe_title">Deslice hacia la derecha</string>
   <string name="cm_player_swipe_content">para ver detalles de la pista y puntuar la canción.</string>
-  <string-array name="navigation_headers">
-    <item>Remoto</item>
-    <item>Configuración</item>
-    <item>Desconectar</item>
-  </string-array>
-  <string-array name="navigation_array_remote">
-    <item>Reproductor</item>
-    <item>Listas de reproducción</item>
-    <item>Colección</item>
-    <item>Descargas</item>
-  </string-array>
-  <string-array name="navigation_array_settings">
-    <item>Configuración</item>
-    <item>Donar</item>
-  </string-array>
-  <string-array name="navigation_array_disconnect">
-    <item>Desconectar</item>
-    <item>Salir</item>
-  </string-array>
+  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

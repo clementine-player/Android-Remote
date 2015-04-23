@@ -48,7 +48,6 @@
   <string name="library_optimize">Optymalizowanie bazy danych</string>
   <string name="library_please_wait">Proszę czekać</string>
   <string name="library_refresh">Odśwież</string>
-  <string name="library_empty">Biblioteka jest pusta. Wciśnij odśwież by pobrać bibliotekę!</string>
   <string name="library_no_search_results">Brak utworów spełniających Twoje warunki wyszukiwania</string>
   <string name="library_no_albums">%d albumy</string>
   <string name="library_no_tracks">%d utwory</string>
@@ -214,23 +213,5 @@ odtwarzaczem Clementine.</string>
   <string name="cm_player_lyrics_content">Okienko z tekstem zostanie otwarte</string>
   <string name="cm_player_swipe_title">Przesuń palcem w prawo</string>
   <string name="cm_player_swipe_content">aby zobaczyć informacje o ścieżce i ocenach utworu.</string>
-  <string-array name="navigation_headers">
-    <item>Sterowanie</item>
-    <item>Ustawienia</item>
-    <item>Rozłącz</item>
-  </string-array>
-  <string-array name="navigation_array_remote">
-    <item>Odtwarzacz</item>
-    <item>Listy odtwarzania</item>
-    <item>Biblioteka</item>
-    <item>Pobrane</item>
-  </string-array>
-  <string-array name="navigation_array_settings">
-    <item>Ustawienia</item>
-    <item>Darowizna</item>
-  </string-array>
-  <string-array name="navigation_array_disconnect">
-    <item>Rozłącz</item>
-    <item>Wyjdź</item>
-  </string-array>
+  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

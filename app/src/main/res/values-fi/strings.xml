@@ -48,7 +48,6 @@
   <string name="library_optimize">Optimoidaan tietokantaa</string>
   <string name="library_please_wait">Odota hetki</string>
   <string name="library_refresh">Päivitä</string>
-  <string name="library_empty">Kirjasto on tyhjä. Napauta Päivitä-painiketta ladataksesi kirjaston!</string>
   <string name="library_no_search_results">Ei hakuehtoihisi osuvia kappaleita!</string>
   <string name="library_no_albums">%d albumia</string>
   <string name="library_no_tracks">%d kappaletta</string>
@@ -204,23 +203,5 @@
   <string name="cm_player_lyrics_content">Sanoitukset aukeavat uuteen ikkunaan.</string>
   <string name="cm_player_swipe_title">Pyyhkäise oikealle</string>
   <string name="cm_player_swipe_content">nähdäksesi kappaleen tiedot ja arvostellaksesi laulun.</string>
-  <string-array name="navigation_headers">
-    <item>Kaukosäädin</item>
-    <item>Asetukset</item>
-    <item>Katkaise yhteys</item>
-  </string-array>
-  <string-array name="navigation_array_remote">
-    <item>Soitin</item>
-    <item>Soittolistat</item>
-    <item>Kirjasto</item>
-    <item>Lataukset</item>
-  </string-array>
-  <string-array name="navigation_array_settings">
-    <item>Asetukset</item>
-    <item>Lahjoita</item>
-  </string-array>
-  <string-array name="navigation_array_disconnect">
-    <item>Katkaise yhteys</item>
-    <item>Lopeta</item>
-  </string-array>
+  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

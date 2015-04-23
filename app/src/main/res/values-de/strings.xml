@@ -48,7 +48,6 @@
   <string name="library_optimize">Datenbank wird optimiert</string>
   <string name="library_please_wait">Bitte warten</string>
   <string name="library_refresh">Aktualisieren</string>
-  <string name="library_empty">Bibliothek leer. Um die Bibliothek herunterzuladen, auf aktualisieren klicken!</string>
   <string name="library_no_search_results">Keine Suchergebnisse gefunden!</string>
   <string name="library_no_albums">%d Alben</string>
   <string name="library_no_tracks">%d Titel</string>
@@ -211,23 +210,5 @@
   <string name="cm_player_lyrics_content">Ein Dialog mit dem Liedtext wird angezeigt</string>
   <string name="cm_player_swipe_title">Nach rechts wischen</string>
   <string name="cm_player_swipe_content">um Details des Titels zu sehen und das Lied zu bewerten.</string>
-  <string-array name="navigation_headers">
-    <item>Fernsteuerung</item>
-    <item>Einstellungen</item>
-    <item>Trennen</item>
-  </string-array>
-  <string-array name="navigation_array_remote">
-    <item>Spieler</item>
-    <item>Wiedergabelisten</item>
-    <item>Bibliothek</item>
-    <item>Übertragungen</item>
-  </string-array>
-  <string-array name="navigation_array_settings">
-    <item>Einstellungen</item>
-    <item>Spenden</item>
-  </string-array>
-  <string-array name="navigation_array_disconnect">
-    <item>Trennen</item>
-    <item>Beenden</item>
-  </string-array>
+  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

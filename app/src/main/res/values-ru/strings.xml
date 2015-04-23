@@ -48,7 +48,6 @@
   <string name="library_optimize">Оптимизация базы данных</string>
   <string name="library_please_wait">Пожалуйста, подождите</string>
   <string name="library_refresh">Обновить</string>
-  <string name="library_empty">Фонотека пуста. Нажмите \"Обновить\" для закачки фонотеки.</string>
   <string name="library_no_search_results">По данному запросу песен не найдено!</string>
   <string name="library_no_albums">%d альбомы</string>
   <string name="library_no_tracks">%d композиции</string>
@@ -220,23 +219,5 @@
   <string name="cm_player_lyrics_content">Откроется диалог с текстом песни</string>
   <string name="cm_player_swipe_title">Проведите вправо</string>
   <string name="cm_player_swipe_content">чтобы увидеть сведения о треке или оценить.</string>
-  <string-array name="navigation_headers">
-    <item>Работа удалённо</item>
-    <item>Настройки</item>
-    <item>Отключено</item>
-  </string-array>
-  <string-array name="navigation_array_remote">
-    <item>Плеер</item>
-    <item>Плейлисты</item>
-    <item>Фонотека</item>
-    <item>Загрузки</item>
-  </string-array>
-  <string-array name="navigation_array_settings">
-    <item>Настройки</item>
-    <item>Пожертвования</item>
-  </string-array>
-  <string-array name="navigation_array_disconnect">
-    <item>Отключить</item>
-    <item>Выход</item>
-  </string-array>
+  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

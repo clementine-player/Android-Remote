@@ -40,7 +40,6 @@
   <string name="library_optimize">Ottimizazione database</string>
   <string name="library_please_wait">Attendere prego</string>
   <string name="library_refresh">Aggiorna</string>
-  <string name="library_empty">Libreria vuota. Premi aggiorna per scaricare la libreria!</string>
   <string name="library_no_albums">%d album</string>
   <string name="library_no_tracks">%d tracce</string>
   <string name="library_songs_added">%d canzoni aggiunte alla playlist corrente</string>
@@ -152,23 +151,5 @@
   <string name="cm_connect_ip_title">Connetti a Clementine</string>
   <string name="cm_player_home_title">Menu Clementine Remote</string>
   <string name="cm_player_home_content">Fai click sul pulsante home per aprire il menu.</string>
-  <string-array name="navigation_headers">
-    <item>Remoto</item>
-    <item>Impostazioni</item>
-    <item>Disconetti</item>
-  </string-array>
-  <string-array name="navigation_array_remote">
-    <item>Player</item>
-    <item>Playlist</item>
-    <item>Libreria</item>
-    <item>Download</item>
-  </string-array>
-  <string-array name="navigation_array_settings">
-    <item>Impostazioni</item>
-    <item>Dona</item>
-  </string-array>
-  <string-array name="navigation_array_disconnect">
-    <item>Disconnetti</item>
-    <item>Chiudi</item>
-  </string-array>
+  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

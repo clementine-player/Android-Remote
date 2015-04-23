@@ -52,4 +52,5 @@
   <string name="shuffle_inside_album">ယခုအယ်လဘမ်မှာတေးသံလမ်းကြောများကုလားဖန်ထိုး</string>
   <string name="shuffle_albums">အယ်လဘမ်များကုလားဖန်ထိုး</string>
   <string name="notification_disconnect_keep_alive">ဆက်သွယ်မှုဆံုးရှုံး။ ပြန်လည်ဆက်သွယ်ရန်ထိတွေ့ပါ။</string>
+  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

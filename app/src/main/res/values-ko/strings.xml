@@ -40,7 +40,6 @@
   <string name="library_optimize">데이터베이스 최적화 중</string>
   <string name="library_please_wait">잠시만 기다려 주세요</string>
   <string name="library_refresh">새로고침</string>
-  <string name="library_empty">라이브러리가 비었습니다. 라이브러리 다운로드를 위해 새로고침을 눌르세요!</string>
   <string name="library_no_albums">%d 앨범 들</string>
   <string name="library_no_tracks">%d 트랙 들</string>
   <string name="library_songs_added">현재 재생목록에 %d 음악이 추가되었습니다.</string>
@@ -140,17 +139,5 @@
   <string name="crash_report_title">헐, 뭔가가 잘못 되었어요!</string>
   <string name="crash_report_message">최근에 Clementine Remote가 오류가 났습니다! 이것은 한번도 일어나지 않았었습니다! 저희에게 로그파일을 전송하여 이 앱이 발전하고 개선될 수 있도록 도와주세요, 감사합니다!</string>
   <string name="crash_report_send">보내기!</string>
-  <string-array name="navigation_headers">
-    <item>원격</item>
-    <item>설정</item>
-    <item>연결해제</item>
-  </string-array>
-  <string-array name="navigation_array_settings">
-    <item>설정</item>
-    <item>기부</item>
-  </string-array>
-  <string-array name="navigation_array_disconnect">
-    <item>연결 해제</item>
-    <item>종료</item>
-  </string-array>
+  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

@@ -48,7 +48,6 @@
   <string name="library_optimize">データベースの最適化中</string>
   <string name="library_please_wait">しばらくお待ちください</string>
   <string name="library_refresh">リフレッシュ</string>
-  <string name="library_empty">ライブラリーは空です。リフレッシュをクリックして、ライブラリーをダウンロードしてください!</string>
   <string name="library_no_search_results">検索条件に一致する曲はありません!</string>
   <string name="library_no_albums">%d アルバム</string>
   <string name="library_no_tracks">%d トラック</string>
@@ -215,23 +214,5 @@
   <string name="cm_player_lyrics_content">歌詞のダイアログが開きます</string>
   <string name="cm_player_swipe_title">右にスワイプしてください</string>
   <string name="cm_player_swipe_content">トラックの詳細を参照して、曲を評価します。</string>
-  <string-array name="navigation_headers">
-    <item>リモート</item>
-    <item>設定</item>
-    <item>切断</item>
-  </string-array>
-  <string-array name="navigation_array_remote">
-    <item>プレイヤー</item>
-    <item>プレイリスト</item>
-    <item>ライブラリー</item>
-    <item>ダウンロード</item>
-  </string-array>
-  <string-array name="navigation_array_settings">
-    <item>設定</item>
-    <item>寄付</item>
-  </string-array>
-  <string-array name="navigation_array_disconnect">
-    <item>切断</item>
-    <item>終了</item>
-  </string-array>
+  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

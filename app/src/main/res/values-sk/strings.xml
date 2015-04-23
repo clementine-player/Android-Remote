@@ -48,7 +48,6 @@
   <string name="library_optimize">Optimalizuje sa databáza</string>
   <string name="library_please_wait">Prosím, čakajte</string>
   <string name="library_refresh">Obnoviť</string>
-  <string name="library_empty">Zbierka je prázdna. Kliknutím na Obnoviť preberiete zbierku!</string>
   <string name="library_no_search_results">Vašim kritériám vyhľadávania nevyhuvujú žiadne skladby!</string>
   <string name="library_no_albums">%d albumov</string>
   <string name="library_no_tracks">%d skladieb</string>
@@ -218,23 +217,5 @@
   <string name="cm_player_lyrics_content">Otvorí sa dialógové okno s textom</string>
   <string name="cm_player_swipe_title">Potiahnite doprava</string>
   <string name="cm_player_swipe_content">na zobrazenie podrobností o stope a hodnoteniu skladby.</string>
-  <string-array name="navigation_headers">
-    <item>Diaľkové ovládanie</item>
-    <item>Nastavenia</item>
-    <item>Odpojenie</item>
-  </string-array>
-  <string-array name="navigation_array_remote">
-    <item>Prehrávač</item>
-    <item>Zoznamy skladieb</item>
-    <item>Zbierka</item>
-    <item>Prebratia</item>
-  </string-array>
-  <string-array name="navigation_array_settings">
-    <item>Nastavenia</item>
-    <item>Prispieť</item>
-  </string-array>
-  <string-array name="navigation_array_disconnect">
-    <item>Odpojiť</item>
-    <item>Ukončiť</item>
-  </string-array>
+  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

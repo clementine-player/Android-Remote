@@ -48,7 +48,6 @@
   <string name="library_optimize">Otimização da base de dados</string>
   <string name="library_please_wait">Por favor aguarde</string>
   <string name="library_refresh">Atualizar</string>
-  <string name="library_empty">Coleção vazia. Clique Atualizar para transferir a coleção!</string>
   <string name="library_no_search_results">Não existem faixas coincidentes com os critérios.</string>
   <string name="library_no_albums">%d álbuns</string>
   <string name="library_no_tracks">%d faixas</string>
@@ -213,23 +212,5 @@ e clique \"Ligar\"</string>
   <string name="cm_player_lyrics_content">Surgirá uma diálogo com a letra da faixa</string>
   <string name="cm_player_swipe_title">Deslize para a direita</string>
   <string name="cm_player_swipe_content">para ver os detalhes da faixa e avaliar.</string>
-  <string-array name="navigation_headers">
-    <item>Remoto</item>
-    <item>Definições</item>
-    <item>Desligar</item>
-  </string-array>
-  <string-array name="navigation_array_remote">
-    <item>Reprodutor</item>
-    <item>Listas de reprodução</item>
-    <item>Coleção</item>
-    <item>Transferências</item>
-  </string-array>
-  <string-array name="navigation_array_settings">
-    <item>Definições</item>
-    <item>Donativos</item>
-  </string-array>
-  <string-array name="navigation_array_disconnect">
-    <item>Desligar</item>
-    <item>Sair</item>
-  </string-array>
+  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

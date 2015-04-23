@@ -39,7 +39,6 @@
   <string name="library_optimize">ბაზის ოპტიმიზება</string>
   <string name="library_please_wait">გთხოვთ დაიცადოთ</string>
   <string name="library_refresh">განახლება</string>
-  <string name="library_empty">ბიბლიოთეკა ცარიელია. ჩამოსატვირთად დააჭირეთ განახლებას!</string>
   <string name="library_no_albums">%d ალბომი</string>
   <string name="library_no_tracks">%d ჩანაწერი</string>
   <string name="library_songs_added">მიმდინარე რეპერტუარში დაემატა %d სიმღერა</string>
@@ -138,17 +137,5 @@
   <string name="notification_action_playpause">დაკვრა / პაუზა</string>
   <string name="crash_report_title">ვაი, რაღაც მოხდა!</string>
   <string name="crash_report_send">გაგზავნა!</string>
-  <string-array name="navigation_headers">
-    <item>მართვა</item>
-    <item>პარამეტრები</item>
-    <item>კავშირის გაწყვეტა</item>
-  </string-array>
-  <string-array name="navigation_array_settings">
-    <item>პარამეტრები</item>
-    <item>დონაცია</item>
-  </string-array>
-  <string-array name="navigation_array_disconnect">
-    <item>კავშირის გაწყვეტა</item>
-    <item>გასვლა</item>
-  </string-array>
+  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

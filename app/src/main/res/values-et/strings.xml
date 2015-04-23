@@ -84,4 +84,5 @@
   <string name="crash_report_title">Pagan, midagi läks valesti!</string>
   <string name="crash_report_message">Clementine Remote crash\'is eelmisel korral! Seda poleks tohtinud juhtuda! Palun aidake mul seda appi parandada ja saatke logifail. Aitäh!</string>
   <string name="crash_report_send">Saada!</string>
+  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

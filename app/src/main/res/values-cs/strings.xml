@@ -48,7 +48,6 @@
   <string name="library_optimize">Optimalizuje se databáze</string>
   <string name="library_please_wait">Počkejte, prosím</string>
   <string name="library_refresh">Obnovit</string>
-  <string name="library_empty">Sbírka je prázdná. Stiskněte Obnovit pro stažení sbírky!</string>
   <string name="library_no_search_results">Žádné písně neodpovídají vašim hlediskům hledání!</string>
   <string name="library_no_albums">%d alb</string>
   <string name="library_no_tracks">%d skladeb</string>
@@ -222,23 +221,5 @@ Pokud máte díky mé práci skutečně dobrou náladu, malý dar od vás by byl
   <string name="cm_player_lyrics_content">Otevře se dialog s textem písně</string>
   <string name="cm_player_swipe_title">Postrčte doprava,</string>
   <string name="cm_player_swipe_content">abyste uviděli podrobnosti skladby a píseň ohodnotili.</string>
-  <string-array name="navigation_headers">
-    <item>Vzdálené</item>
-    <item>Nastavení</item>
-    <item>Odpojit</item>
-  </string-array>
-  <string-array name="navigation_array_remote">
-    <item>Přehrávač</item>
-    <item>Seznamy skladeb</item>
-    <item>Sbírka</item>
-    <item>Stahování</item>
-  </string-array>
-  <string-array name="navigation_array_settings">
-    <item>Nastavení</item>
-    <item>Darovat</item>
-  </string-array>
-  <string-array name="navigation_array_disconnect">
-    <item>Odpojit</item>
-    <item>Ukončit</item>
-  </string-array>
+  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

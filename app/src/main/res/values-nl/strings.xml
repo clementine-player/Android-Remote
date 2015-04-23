@@ -45,7 +45,6 @@
   <string name="library_optimize">Database aan het optimaliseren</string>
   <string name="library_please_wait">Even geduld</string>
   <string name="library_refresh">Ververs</string>
-  <string name="library_empty">Bibliotheek leeg. Klik ververs om bibliotheek te downloaden!</string>
   <string name="library_no_albums">%d albums</string>
   <string name="library_no_tracks">%d nummers</string>
   <string name="library_songs_added">%d nummers aan huidige afspeellijst toegevoegd</string>
@@ -180,19 +179,5 @@
   <string name="cm_player_home_title">Clementine Remote menu</string>
   <string name="cm_player_lyrics_title">Klik op de albumhoes</string>
   <string name="cm_player_swipe_title">Veeg naar rechts</string>
-  <string-array name="navigation_headers">
-    <item>Afstandsbediening</item>
-    <item>Instellingen</item>
-    <item>Verbinding verbreken</item>
-  </string-array>
-  <string-array name="navigation_array_remote">
-    <item>Speler</item>
-    <item>Afspeellijsten</item>
-    <item>Bibliotheek</item>
-    <item>Downloads</item>
-  </string-array>
-  <string-array name="navigation_array_settings">
-    <item>Instellingen</item>
-    <item>Doneren</item>
-  </string-array>
+  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

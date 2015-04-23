@@ -48,7 +48,6 @@
   <string name="library_optimize">Оптимізуємо базу даних</string>
   <string name="library_please_wait">Зачекайте</string>
   <string name="library_refresh">Оновити</string>
-  <string name="library_empty">Бібліотека порожня. Натисніть «Оновити», щоб отримати бібліотеку!</string>
   <string name="library_no_search_results">Вказаним вами критеріям не відповідає жодна композиція!</string>
   <string name="library_no_albums">%d альбомів</string>
   <string name="library_no_tracks">%d композицій</string>
@@ -216,23 +215,5 @@
   <string name="cm_player_lyrics_content">Буде відкрито діалогове вікно зі словами пісні</string>
   <string name="cm_player_swipe_title">Рух пальцем праворуч</string>
   <string name="cm_player_swipe_content">перегляд подробиць щодо композиції та можливість визначення оцінки.</string>
-  <string-array name="navigation_headers">
-    <item>Керування</item>
-    <item>Параметри</item>
-    <item>Від’єднати</item>
-  </string-array>
-  <string-array name="navigation_array_remote">
-    <item>Програвач</item>
-    <item>Списки відтворення</item>
-    <item>Бібліотека</item>
-    <item>Отримання даних</item>
-  </string-array>
-  <string-array name="navigation_array_settings">
-    <item>Параметри</item>
-    <item>Підтримати розробку</item>
-  </string-array>
-  <string-array name="navigation_array_disconnect">
-    <item>Від’єднати</item>
-    <item>Вийти</item>
-  </string-array>
+  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

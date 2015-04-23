@@ -113,9 +113,5 @@
   <string name="notification_action_playpause">Ijro ettirish / to\'xtatib turish</string>
   <string name="crash_report_title">Iye, nimadir noto\'g\'ri bo\'ldi!</string>
   <string name="crash_report_send">Yuborish!</string>
-  <string-array name="navigation_headers">
-    <item>Masofaviy</item>
-    <item>Sozlamalar</item>
-    <item>Ajratish</item>
-  </string-array>
+  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>
