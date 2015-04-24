@@ -34,7 +34,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer;
 
 public class ClementinePhoneStateCheck extends BroadcastReceiver {
 
-    public static String lastPhoneState = "";
+    private static String lastPhoneState = TelephonyManager.EXTRA_STATE_IDLE;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -68,16 +68,22 @@ public class ClementinePhoneStateCheck extends BroadcastReceiver {
 
             if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)
                     || state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
-                lastClementineState.volume = App.Clementine.getVolume();
-                lastClementineState.state = App.Clementine.getState();
-                lastClementineState.save();
 
-                if (volume >= 0) {
-                    msg.obj = ClementineMessageFactory
-                            .buildVolumeMessage(Integer.parseInt(volumeString));
-                } else {
-                    msg.obj = ClementineMessage.getMessage(
-                            ClementineRemoteProtocolBuffer.MsgType.PAUSE);
+                // Only lower the volume once. When receiving a call, the state is RINGING. On pickup
+                // OFFHOOK is broadcasted. So we only need to take action when we previously had the
+                // IDLE state.
+                if (lastPhoneState.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
+                    lastClementineState.volume = App.Clementine.getVolume();
+                    lastClementineState.state = App.Clementine.getState();
+                    lastClementineState.save();
+
+                    if (volume >= 0) {
+                        msg.obj = ClementineMessageFactory
+                                .buildVolumeMessage(Integer.parseInt(volumeString));
+                    } else {
+                        msg.obj = ClementineMessage.getMessage(
+                                ClementineRemoteProtocolBuffer.MsgType.PAUSE);
+                    }
                 }
             } else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
                 if (volume >= 0) {
