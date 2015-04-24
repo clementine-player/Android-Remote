@@ -74,7 +74,9 @@ public class ClementineSongDownloader extends
 
     private boolean mCreatePlaylistDir = false;
 
-    private boolean mCreatePlaylistArtistDir = false;
+    private boolean mCreateArtistDir = false;
+
+    private boolean mCreateAlbumDir = false;
 
     private boolean mOverrideExistingFiles = false;
 
@@ -389,10 +391,7 @@ public class ClementineSongDownloader extends
             sb.append(File.separator);
         }
 
-        // Create artist/album subfolder only when we have no playlist
-        // or user set the settings
-        if (!mIsPlaylist ||
-                mIsPlaylist && mCreatePlaylistArtistDir) {
+        if (mCreateArtistDir) {
             // Append artist name
             if (chunk.getSongMetadata().getAlbumartist().length() == 0) {
                 sb.append(
@@ -401,10 +400,12 @@ public class ClementineSongDownloader extends
                 sb.append(Utilities
                         .removeInvalidFileCharacters(chunk.getSongMetadata().getAlbumartist()));
             }
-
-            // append album
             sb.append(File.separator);
-            sb.append(Utilities.removeInvalidFileCharacters(chunk.getSongMetadata().getAlbum()));
+
+            if (mCreateAlbumDir) {
+                sb.append(Utilities.removeInvalidFileCharacters(chunk.getSongMetadata().getAlbum()));
+                sb.append(File.separator);
+            }
         }
 
         return sb.toString();
@@ -419,7 +420,6 @@ public class ClementineSongDownloader extends
     private String BuildFilePath(ResponseSongFileChunk chunk) {
         StringBuilder sb = new StringBuilder();
         sb.append(BuildDirPath(chunk));
-        sb.append(File.separator);
         sb.append(Utilities.removeInvalidFileCharacters(chunk.getSongMetadata().getFilename()));
 
         return sb.toString();
@@ -472,8 +472,12 @@ public class ClementineSongDownloader extends
         mCreatePlaylistDir = createPlaylistDir;
     }
 
-    public void setCreatePlaylistArtistDir(boolean createPlaylistArtistDir) {
-        mCreatePlaylistArtistDir = createPlaylistArtistDir;
+    public void setCreateArtistDir(boolean createArtistDir) {
+        mCreateArtistDir = createArtistDir;
+    }
+
+    public void setCreateAlbumDir(boolean createAlbumDir) {
+        mCreateAlbumDir = createAlbumDir;
     }
 
     public void setOverrideExistingFiles(boolean overrideExistingFiles) {

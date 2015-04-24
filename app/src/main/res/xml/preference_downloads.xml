@@ -1,28 +1,34 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:title="@string/pref_cat_downloads">
+    android:title="@string/pref_cat_downloads">
 
     <CheckBoxPreference
-            android:key="pref_dl_wifi_only"
-            android:title="@string/pref_dl_wifi_only_title"
-            android:summary="@string/pref_dl_wifi_only_summary"
-            android:defaultValue="false"/>
+        android:key="pref_dl_wifi_only"
+        android:title="@string/pref_dl_wifi_only_title"
+        android:summary="@string/pref_dl_wifi_only_summary"
+        android:defaultValue="false" />
     <Preference
-            android:key="pref_dl_dir"
-            android:title="@string/pref_dl_dir"/>
+        android:key="pref_dl_dir"
+        android:title="@string/pref_dl_dir" />
     <CheckBoxPreference
-            android:key="pref_dl_override"
-            android:title="@string/pref_dl_override"
-            android:defaultValue="false"/>
-    <PreferenceCategory android:title="@string/pref_dl_cat_playlist">
+        android:key="pref_dl_override"
+        android:title="@string/pref_dl_override"
+        android:defaultValue="false" />
+    <PreferenceCategory android:title="@string/pref_dl_cat_folders">
         <CheckBoxPreference
-                android:key="pref_dl_pl_save_own_dir"
-                android:title="@string/pref_dl_pl_save_own_dir_title"
-                android:summary="@string/pref_dl_pl_save_own_dir_summary"
-                android:defaultValue="false"/>
+            android:key="pref_dl_pl_save_own_dir"
+            android:title="@string/pref_dl_pl_save_own_dir_title"
+            android:summary="@string/pref_dl_pl_save_own_dir_summary"
+            android:defaultValue="false" />
         <CheckBoxPreference
-                android:key="pref_dl_pl_artist_dir"
-                android:title="@string/pref_dl_pl_artist_dir_title"
-                android:summary="@string/pref_dl_pl_artist_dir_summary"
-                android:defaultValue="true"/>
+            android:key="pref_dl_artist_dir"
+            android:title="@string/pref_dl_pl_artist_dir_title"
+            android:summary="@string/pref_dl_pl_artist_dir_summary"
+            android:defaultValue="true" />
+        <CheckBoxPreference
+            android:key="pref_dl_album_dir"
+            android:title="@string/pref_dl_pl_album_dir_title"
+            android:summary="@string/pref_dl_pl_album_dir_summary"
+            android:dependency="pref_dl_artist_dir"
+            android:defaultValue="true" />
     </PreferenceCategory>
 </PreferenceScreen>

@@ -178,11 +178,13 @@
     <string name="pref_dl_wifi_only_summary">Download songs only when connected to a wifi network.</string>
     <string name="pref_dl_dir">Set download folder</string>
     <string name="pref_dl_override">Override existing files</string>
-    <string name="pref_dl_cat_playlist">Playlist download</string>
+    <string name="pref_dl_cat_folders">Folders</string>
     <string name="pref_dl_pl_save_own_dir_title">Save tracks in playlist folder</string>
     <string name="pref_dl_pl_save_own_dir_summary">Creates a playlist-named folder and saves tracks in there.</string>
-    <string name="pref_dl_pl_artist_dir_title">Create artist/album subfolder</string>
-    <string name="pref_dl_pl_artist_dir_summary">Create a artist/album subfolder for each individual track.</string>
+    <string name="pref_dl_pl_artist_dir_title">Create artist subfolder</string>
+    <string name="pref_dl_pl_artist_dir_summary">Create a artist subfolder for each individual track.</string>
+    <string name="pref_dl_pl_album_dir_title">Create album subfolder</string>
+    <string name="pref_dl_pl_album_dir_summary">Create a album subfolder inside artist for each individual track.</string>
 
     <string name="file_dialog_set_dir">Select directory</string>
     <string name="file_dialog_not_writable">Directory not writable</string>

@@ -53,7 +53,9 @@ public class SharedPreferencesKeys {
 
     public final static String SP_DOWNLOAD_SAVE_OWN_DIR = "pref_dl_pl_save_own_dir";
 
-    public final static String SP_DOWNLOAD_PLAYLIST_CRT_ARTIST_DIR = "pref_dl_pl_artist_dir";
+    public final static String SP_DOWNLOAD_PLAYLIST_CRT_ARTIST_DIR = "pref_dl_artist_dir";
+
+    public final static String SP_DOWNLOAD_PLAYLIST_CRT_ALBUM_DIR = "pref_dl_album_dir";
 
     public final static String SP_LAST_STACKTRACE = "last_stacktrace";
 

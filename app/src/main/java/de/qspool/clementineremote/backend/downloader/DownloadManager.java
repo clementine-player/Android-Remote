@@ -180,8 +180,10 @@ public class DownloadManager {
                 mSharedPref.getBoolean(SharedPreferencesKeys.SP_WIFI_ONLY, false));
         songDownloader.setCreatePlaylistDir(mSharedPref
                 .getBoolean(SharedPreferencesKeys.SP_DOWNLOAD_SAVE_OWN_DIR, false));
-        songDownloader.setCreatePlaylistArtistDir(mSharedPref
+        songDownloader.setCreateArtistDir(mSharedPref
                 .getBoolean(SharedPreferencesKeys.SP_DOWNLOAD_PLAYLIST_CRT_ARTIST_DIR, true));
+        songDownloader.setCreateAlbumDir(mSharedPref
+                .getBoolean(SharedPreferencesKeys.SP_DOWNLOAD_PLAYLIST_CRT_ALBUM_DIR, true));
         songDownloader.setOverrideExistingFiles(mSharedPref
                 .getBoolean(SharedPreferencesKeys.SP_DOWNLOAD_OVERRIDE, false));
 
