@@ -146,11 +146,8 @@
   <string name="pref_dl_wifi_only_summary">Ladda endast ned låtar när du är ansluten till ett wifi nätverk.</string>
   <string name="pref_dl_dir">Ange nedladdningsmapp</string>
   <string name="pref_dl_override">Åsidosätt existerande filer</string>
-  <string name="pref_dl_cat_playlist">Ladda ned Spellista</string>
   <string name="pref_dl_pl_save_own_dir_title">Spara låtar i spellistans mapp</string>
   <string name="pref_dl_pl_save_own_dir_summary">Skapar en mapp med namnet spellistor och sparar låtarna i den.</string>
-  <string name="pref_dl_pl_artist_dir_title">Skapa en artist/album undermapp</string>
-  <string name="pref_dl_pl_artist_dir_summary">Skapa en artist/album undermapp för varje enskild låt.</string>
   <string name="file_dialog_set_dir">Välj katalog</string>
   <string name="file_dialog_not_writable">Katalog ej skrivbar</string>
   <string name="file_dialog_custom_paths_available">Välj annan</string>

@@ -48,6 +48,7 @@
   <string name="library_optimize">Optimalizuje se databáze</string>
   <string name="library_please_wait">Počkejte, prosím</string>
   <string name="library_refresh">Obnovit</string>
+  <string name="library_empty">Knihovna je prázdná. Švihněte dolů pro stažení knihovny!</string>
   <string name="library_no_search_results">Žádné písně neodpovídají vašim hlediskům hledání!</string>
   <string name="library_no_albums">%d alb</string>
   <string name="library_no_tracks">%d skladeb</string>
@@ -78,6 +79,7 @@
   <string name="menu_search">Hledat</string>
   <string name="menu_love">Oblíbit</string>
   <string name="menu_ban">Zakázat</string>
+  <string name="menu_download">Stahování</string>
   <string name="menu_download_song">Stáhnout píseň</string>
   <string name="menu_download_album">Stáhnout album</string>
   <string name="menu_download_playlist">Stáhnout seznam skladeb</string>
@@ -149,11 +151,8 @@ Pokud máte díky mé práci skutečně dobrou náladu, malý dar od vás by byl
   <string name="pref_dl_wifi_only_summary">Stahovat písně jen při připojení k síti Wifi.</string>
   <string name="pref_dl_dir">Nastavit složku pro stahování</string>
   <string name="pref_dl_override">Přepsat stávající soubory</string>
-  <string name="pref_dl_cat_playlist">Stahování seznamů skladeb</string>
   <string name="pref_dl_pl_save_own_dir_title">Ukládat skladby ve složce se seznamy skladeb</string>
   <string name="pref_dl_pl_save_own_dir_summary">Vytvoří složku pojmenovanou po seznamu skladeb a skladby uloží tam.</string>
-  <string name="pref_dl_pl_artist_dir_title">Vytvořit podsložku pro umělce/album</string>
-  <string name="pref_dl_pl_artist_dir_summary">Vytvořit podsložku pro umělce/album pro každou jednotlivou skladbu.</string>
   <string name="file_dialog_set_dir">Vybrat adresář</string>
   <string name="file_dialog_not_writable">Adresář není zapisovatelný</string>
   <string name="file_dialog_custom_paths_available">Vybrat jiný</string>
@@ -221,5 +220,26 @@ Pokud máte díky mé práci skutečně dobrou náladu, malý dar od vás by byl
   <string name="cm_player_lyrics_content">Otevře se dialog s textem písně</string>
   <string name="cm_player_swipe_title">Postrčte doprava,</string>
   <string name="cm_player_swipe_content">abyste uviděli podrobnosti skladby a píseň ohodnotili.</string>
+  <string name="fragment_title_player">Přehrávač</string>
+  <string name="fragment_title_details">Podrobnosti písně</string>
+  <string name="fragment_title_connection">Clementine</string>
+  <string name="navigation_drawer_clementine_on">Clementine na %s</string>
+  <string name="player_download_what">Co stahovat?</string>
+  <string-array name="player_download_list">
+    <item>Píseň</item>
+    <item>Album</item>
+    <item>Seznam skladeb</item>
+  </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
+  <string-array name="navigation_drawer_items">
+    <item>Přehrávač</item>
+    <item>Seznamy skladeb</item>
+    <item>Knihovna</item>
+    <item>Stahování</item>
+    <item></item>
+    <item>Nastavení</item>
+    <item>Darovat</item>
+    <item></item>
+    <item>Ukončit</item>
+  </string-array>
 </resources>

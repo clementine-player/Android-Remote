@@ -144,11 +144,8 @@
   <string name="pref_dl_wifi_only_summary">WiFi ネットワークに接続したときのみ、曲をダウンロードします。</string>
   <string name="pref_dl_dir">ダウンロード フォルダーを設定</string>
   <string name="pref_dl_override">既存のファイルを上書きする</string>
-  <string name="pref_dl_cat_playlist">プレイリスト ダウンロード</string>
   <string name="pref_dl_pl_save_own_dir_title">プレイリスト フォルダーにトラックを保存</string>
   <string name="pref_dl_pl_save_own_dir_summary">プレイリストという名前のフォルダを作成して、そこにトラックが保存されます。</string>
-  <string name="pref_dl_pl_artist_dir_title">アーティスト/アルバム サブフォルダーを作成</string>
-  <string name="pref_dl_pl_artist_dir_summary">それぞれのトラックに対して、アーティスト/アルバム サブフォルダーを作成します。</string>
   <string name="file_dialog_set_dir">ディレクトリーの選択</string>
   <string name="file_dialog_not_writable">ディレクトリーに書き込みできません</string>
   <string name="file_dialog_custom_paths_available">他を選択</string>

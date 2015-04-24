@@ -147,11 +147,8 @@
   <string name="pref_dl_wifi_only_summary">Solo descargar canciones mientras está conectado a una red wifi.</string>
   <string name="pref_dl_dir">Definir la carpeta de descargas</string>
   <string name="pref_dl_override">Sobrescribir archivos existentes</string>
-  <string name="pref_dl_cat_playlist">Descarga de listas de reproducción</string>
   <string name="pref_dl_pl_save_own_dir_title">Guardar pistas en la carpeta de la lista de reproducción</string>
   <string name="pref_dl_pl_save_own_dir_summary">Crea una carpeta con el nombre de la lista de reproducción y guarda las pistas ahí.</string>
-  <string name="pref_dl_pl_artist_dir_title">Crear subcarpeta de artista/álbum</string>
-  <string name="pref_dl_pl_artist_dir_summary">Crear subcarpeta «artista/álbum» para cada pista</string>
   <string name="file_dialog_set_dir">Seleccione la carpeta</string>
   <string name="file_dialog_not_writable">La carpeta no es escribible</string>
   <string name="file_dialog_custom_paths_available">Seleccionar otra</string>

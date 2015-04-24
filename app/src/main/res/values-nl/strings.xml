@@ -125,8 +125,6 @@
   <string name="pref_dl_wifi_only_summary">Download nummers alleen via een wifi netwerkverbinding.</string>
   <string name="pref_dl_dir">Downloadmap instellen</string>
   <string name="pref_dl_override">Overschrijf bestaande bestanden</string>
-  <string name="pref_dl_cat_playlist">Afspeellijst downloaden</string>
-  <string name="pref_dl_pl_artist_dir_title">Maak artiest/album submap</string>
   <string name="file_dialog_set_dir">Selecteer map</string>
   <string name="file_dialog_custom_paths_available">Selecteer andere</string>
   <string name="dialog_about_header">Over</string>

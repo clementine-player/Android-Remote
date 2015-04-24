@@ -140,11 +140,8 @@
   <string name="pref_dl_wifi_only_summary">Pobieraj utwory tylko kiedy w zasięgu sieci wifi</string>
   <string name="pref_dl_dir">Ustaw katalog pobierania</string>
   <string name="pref_dl_override">Nadpisuj istniejące pliki</string>
-  <string name="pref_dl_cat_playlist">Pobieranie listy odtwarzania</string>
   <string name="pref_dl_pl_save_own_dir_title">Zapisz utwory w katalogu listy odtwarzania</string>
   <string name="pref_dl_pl_save_own_dir_summary">Tworzy katalog o nazwie listy odtwarzania i zapisuje w nim utwory.</string>
-  <string name="pref_dl_pl_artist_dir_title">Tworzy podkatalog dla artysty/albumu</string>
-  <string name="pref_dl_pl_artist_dir_summary">Tworzy podkatalog artysty/albumu dla każdej ścieżki osobno.</string>
   <string name="file_dialog_set_dir">Wybierz katalog</string>
   <string name="file_dialog_not_writable">Folder nie zapisywalny</string>
   <string name="file_dialog_custom_paths_available">Wybierz inny</string>

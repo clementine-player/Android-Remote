@@ -57,10 +57,8 @@
   <string name="pref_dl_wifi_only_title">Ainult WIFI</string>
   <string name="pref_dl_dir">Määra allalaadimise kaust</string>
   <string name="pref_dl_override">Kirjuta olemasolevad failid üle</string>
-  <string name="pref_dl_cat_playlist">Esitusloendi allalaadimine</string>
   <string name="pref_dl_pl_save_own_dir_title">Salvesta lood esitusloendi kausta</string>
   <string name="pref_dl_pl_save_own_dir_summary">Loob esitusloendi-nimelise kausta ja salvestab lood sinna.</string>
-  <string name="pref_dl_pl_artist_dir_title">Tekita esitaja/album alamkaust</string>
   <string name="file_dialog_set_dir">Vali kaust</string>
   <string name="dialog_about_header">Lähemalt</string>
   <string name="dialog_about_authors">Autorid</string>

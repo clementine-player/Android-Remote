@@ -105,10 +105,8 @@
   <string name="pref_dl_wifi_only_summary">음악 다운로드는 Wifi 네트워크에 연결 되었을 때에만 가능합니다.</string>
   <string name="pref_dl_dir">다운로드 폴더 설정</string>
   <string name="pref_dl_override">존재하는 파일 덮어쓰기</string>
-  <string name="pref_dl_cat_playlist">재생목록 다운로드</string>
   <string name="pref_dl_pl_save_own_dir_title">재생목록 폴더에서 트랙 저장</string>
   <string name="pref_dl_pl_save_own_dir_summary">재생 목록 폴더를 생성하고 트랙들을 저장합니다.</string>
-  <string name="pref_dl_pl_artist_dir_title">음악가/앨범 하위 폴더 생성</string>
   <string name="file_dialog_set_dir">디렉터리 선택</string>
   <string name="dialog_about_header">대하여</string>
   <string name="dialog_about_authors">저작자들</string>

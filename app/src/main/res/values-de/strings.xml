@@ -48,6 +48,7 @@
   <string name="library_optimize">Datenbank wird optimiert</string>
   <string name="library_please_wait">Bitte warten</string>
   <string name="library_refresh">Aktualisieren</string>
+  <string name="library_empty">Bibliothek leer. Nach unten wischen, um die Bibliothek herunterzuladen!</string>
   <string name="library_no_search_results">Keine Suchergebnisse gefunden!</string>
   <string name="library_no_albums">%d Alben</string>
   <string name="library_no_tracks">%d Titel</string>
@@ -78,6 +79,7 @@
   <string name="menu_search">Suche</string>
   <string name="menu_love">Lieben</string>
   <string name="menu_ban">Sperren</string>
+  <string name="menu_download">Herunterladen</string>
   <string name="menu_download_song">Lied herunterladen</string>
   <string name="menu_download_album">Album herunterladen</string>
   <string name="menu_download_playlist">Wiedergabeliste herunterladen</string>
@@ -93,7 +95,7 @@
   <string name="donate_not_available">Google Play nicht verfügbar</string>
   <string name="donate_not_available_text">Bitte überprüfen Sie, ob Sie die neueste Google Play Store-Version installiert haben und versuchen Sie es erneut!</string>
   <string name="pref_cat_behavior">Verhalten</string>
-  <string name="pref_cat_player">Musikwiedergabe</string>
+  <string name="pref_cat_player">Musikspieler</string>
   <string name="pref_cat_library">Bibliothek</string>
   <string name="pref_cat_downloads">Übertragungen</string>
   <string name="pref_cat_advanced">Erweitert</string>
@@ -140,11 +142,8 @@
   <string name="pref_dl_wifi_only_summary">Lieder nur herunterladen, wenn mit einen WLAN-Netzwerk verbunden.</string>
   <string name="pref_dl_dir">Speicherort einstellen</string>
   <string name="pref_dl_override">Existierende Dateien überschreiben</string>
-  <string name="pref_dl_cat_playlist">Wiedergabelisten herunterladen</string>
   <string name="pref_dl_pl_save_own_dir_title">Im Wiedergabelistenordner speichern</string>
   <string name="pref_dl_pl_save_own_dir_summary">Erstellt einen nach der Wiedergabeliste benannten Ordner und speichert die Lieder dort.</string>
-  <string name="pref_dl_pl_artist_dir_title">Künstler/Album Unterordner erstellen</string>
-  <string name="pref_dl_pl_artist_dir_summary">Einen Künstler/Album-Unterordner für jeden Titel erstellen.</string>
   <string name="file_dialog_set_dir">Ordner auswählen</string>
   <string name="file_dialog_not_writable">Verzeichnis nicht beschreibbar</string>
   <string name="file_dialog_custom_paths_available">Anderen Ordner auswählen</string>
@@ -210,5 +209,26 @@
   <string name="cm_player_lyrics_content">Ein Dialog mit dem Liedtext wird angezeigt</string>
   <string name="cm_player_swipe_title">Nach rechts wischen</string>
   <string name="cm_player_swipe_content">um Details des Titels zu sehen und das Lied zu bewerten.</string>
+  <string name="fragment_title_player">Musikspieler</string>
+  <string name="fragment_title_details">Lieddetails</string>
+  <string name="fragment_title_connection">Clementine</string>
+  <string name="navigation_drawer_clementine_on">Clementine auf %s</string>
+  <string name="player_download_what">Was herunterladen?</string>
+  <string-array name="player_download_list">
+    <item>Lied</item>
+    <item>Album</item>
+    <item>Wiedergabeliste</item>
+  </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
+  <string-array name="navigation_drawer_items">
+    <item>Musikspieler</item>
+    <item>Wiedergabelisten</item>
+    <item>Bibliothek</item>
+    <item>Übertragungen</item>
+    <item></item>
+    <item>Einstellungen</item>
+    <item>Spenden</item>
+    <item></item>
+    <item>Beenden</item>
+  </string-array>
 </resources>

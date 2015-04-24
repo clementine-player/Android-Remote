@@ -144,11 +144,8 @@
   <string name="pref_dl_wifi_only_summary">Télécharger les morceaux uniquement lorsque connecté à un réseau Wifi.</string>
   <string name="pref_dl_dir">Dossier pour les téléchargements</string>
   <string name="pref_dl_override">Remplacer les fichiers existants</string>
-  <string name="pref_dl_cat_playlist">Téléchargement des listes de lecture</string>
   <string name="pref_dl_pl_save_own_dir_title">Enregistrer les morceaux dans le dossier de la liste de lecture</string>
   <string name="pref_dl_pl_save_own_dir_summary">Crée un dossier nommé comme la liste de lecture, et enregistre les morceaux dedans.</string>
-  <string name="pref_dl_pl_artist_dir_title">Créer un sous-dossier pour les artistes/albums</string>
-  <string name="pref_dl_pl_artist_dir_summary">Créer un sous-dossier pour les artistes/albums, pour chacun des morceaux.</string>
   <string name="file_dialog_set_dir">Sélectionner le dossier</string>
   <string name="file_dialog_not_writable">Répertoire en lecture seule</string>
   <string name="file_dialog_custom_paths_available">Autre sélection</string>

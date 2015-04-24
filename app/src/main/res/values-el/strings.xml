@@ -144,11 +144,8 @@
   <string name="pref_dl_wifi_only_summary">Λήψη τραγουδιών μόνο όταν είστε συνδεδεμένοι σε ένα δίκτυο Wi-Fi.</string>
   <string name="pref_dl_dir">Ορισμός φάκελου λήψης</string>
   <string name="pref_dl_override">Αντικατάσταση υπαρχόντων αρχείων</string>
-  <string name="pref_dl_cat_playlist">Λήψη λίστας αναπαραγωγής </string>
   <string name="pref_dl_pl_save_own_dir_title">Αποθήκευση τραγουδιών στο φάκελο λίστας αναπαραγωγής</string>
   <string name="pref_dl_pl_save_own_dir_summary">Δημιουργείται ένας φάκελος λίστας αναπαραγωγής και αποθηκεύει τα τραγουδια εκεί.</string>
-  <string name="pref_dl_pl_artist_dir_title">Δημιουργία καλλιτέχνη/άλμπουμ υποφάκελος</string>
-  <string name="pref_dl_pl_artist_dir_summary">Δημιουργία ένας υποφάκελου καλλιτέχνη/άλμπουμ για κάθε τραγουδι.</string>
   <string name="file_dialog_set_dir">Επιλογή καταλόγου</string>
   <string name="file_dialog_not_writable">Ο κατάλογος δεν είναι εγγράψιμος</string>
   <string name="file_dialog_custom_paths_available">Επιλογή άλλου</string>

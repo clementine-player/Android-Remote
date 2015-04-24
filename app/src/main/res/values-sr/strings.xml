@@ -48,6 +48,7 @@
   <string name="library_optimize">Оптимизујем базу података</string>
   <string name="library_please_wait">Сачекајте</string>
   <string name="library_refresh">Освежи</string>
+  <string name="library_empty">Библиотека је празна. Превуците на доле да преузмете библиотеку!</string>
   <string name="library_no_search_results">Ниједна песма се не поклапа са траженим изразом!</string>
   <string name="library_no_albums">%d албума</string>
   <string name="library_no_tracks">%d нумера</string>
@@ -78,6 +79,7 @@
   <string name="menu_search">Тражи</string>
   <string name="menu_love">Воли</string>
   <string name="menu_ban">Забрани</string>
+  <string name="menu_download">Преузми</string>
   <string name="menu_download_song">Преузми песму</string>
   <string name="menu_download_album">Преузми албум</string>
   <string name="menu_download_playlist">Преузми листу нумера</string>
@@ -144,11 +146,8 @@
   <string name="pref_dl_wifi_only_summary">Преузимај песме само преко бежичне мреже.</string>
   <string name="pref_dl_dir">Фасцикла преузимања</string>
   <string name="pref_dl_override">Пребриши постојеће фајлове</string>
-  <string name="pref_dl_cat_playlist">Преузимање листе нумера</string>
   <string name="pref_dl_pl_save_own_dir_title">Уписуј нумере у фасциклу листе</string>
   <string name="pref_dl_pl_save_own_dir_summary">Упис нумера у фасциклу именовану по листи нумера.</string>
-  <string name="pref_dl_pl_artist_dir_title">Потфасцикла извођач/албум</string>
-  <string name="pref_dl_pl_artist_dir_summary">Потфасцикла извођач/албум за сваку нумеру посебно.</string>
   <string name="file_dialog_set_dir">Изабери директоријум</string>
   <string name="file_dialog_not_writable">Директоријум није уписив</string>
   <string name="file_dialog_custom_paths_available">Одредите други</string>
@@ -214,5 +213,26 @@
   <string name="cm_player_lyrics_content">Отвориће се дијалог са стиховима</string>
   <string name="cm_player_swipe_title">Превуците прстом десно</string>
   <string name="cm_player_swipe_content">да бисте погледали детаље нумере и оценили песму.</string>
+  <string name="fragment_title_player">Плејер</string>
+  <string name="fragment_title_details">Детаљи песме</string>
+  <string name="fragment_title_connection">Клементина</string>
+  <string name="navigation_drawer_clementine_on">Клементина на %s</string>
+  <string name="player_download_what">Шта да преузмем?</string>
+  <string-array name="player_download_list">
+    <item>Песма</item>
+    <item>Албум</item>
+    <item>Листа нумера</item>
+  </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
+  <string-array name="navigation_drawer_items">
+    <item>Плејер</item>
+    <item>Листа нумера</item>
+    <item>Библиотека</item>
+    <item>Преузимања</item>
+    <item></item>
+    <item>Поставке</item>
+    <item>Донација</item>
+    <item></item>
+    <item>Напусти</item>
+  </string-array>
 </resources>

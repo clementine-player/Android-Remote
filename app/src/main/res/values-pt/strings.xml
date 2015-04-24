@@ -48,6 +48,7 @@
   <string name="library_optimize">Otimização da base de dados</string>
   <string name="library_please_wait">Por favor aguarde</string>
   <string name="library_refresh">Atualizar</string>
+  <string name="library_empty">Coleção vazia. Deslize para baixo para transferir a coleção!</string>
   <string name="library_no_search_results">Não existem faixas coincidentes com os critérios.</string>
   <string name="library_no_albums">%d álbuns</string>
   <string name="library_no_tracks">%d faixas</string>
@@ -78,6 +79,7 @@
   <string name="menu_search">Procurar</string>
   <string name="menu_love">Gosto</string>
   <string name="menu_ban">Banir</string>
+  <string name="menu_download">Transferir</string>
   <string name="menu_download_song">Transferir faixa</string>
   <string name="menu_download_album">Transdferir álbum</string>
   <string name="menu_download_playlist">Transferir lista de reprodução</string>
@@ -116,6 +118,10 @@
   <string name="pref_volume_inc_summary">Nível da mudança de volume: %s</string>
   <string name="pref_library_album_order_title">Organização do álbum</string>
   <string name="pref_library_album_order_summary">Os álbuns da coleção estão organizados por %1$s.</string>
+  <string-array name="pref_library_album_order_display">
+    <item>Alfabeto</item>
+    <item>Ano do álbum</item>
+  </string-array>
   <string name="pref_autoconnect_title">Ligação automática</string>
   <string name="pref_autoconnect_summary">Estabelecer ligação ao Clementine ao iniciar a aplicação.</string>
   <string name="pref_port_title">Porta</string>
@@ -140,11 +146,8 @@
   <string name="pref_dl_wifi_only_summary">Apenas transferir faixas se ligado a uma rede Wifi.</string>
   <string name="pref_dl_dir">Definir pasta de transferências</string>
   <string name="pref_dl_override">Substituir ficheiros existentes</string>
-  <string name="pref_dl_cat_playlist">Transferência de lista de reprodução</string>
   <string name="pref_dl_pl_save_own_dir_title">Gravar faixas na pasta de listas de reprodução</string>
   <string name="pref_dl_pl_save_own_dir_summary">Cria uma pasta com o nome da lista e grava as faixas nessa pasta.</string>
-  <string name="pref_dl_pl_artist_dir_title">Criar subpasta artista/álbum</string>
-  <string name="pref_dl_pl_artist_dir_summary">Criar uma subpasta artista/álbum para cada uma das faixas.</string>
   <string name="file_dialog_set_dir">Escolha a pasta</string>
   <string name="file_dialog_not_writable">Não pode escrever no diretório</string>
   <string name="file_dialog_custom_paths_available">Selecione outro</string>
@@ -212,5 +215,26 @@ e clique \"Ligar\"</string>
   <string name="cm_player_lyrics_content">Surgirá uma diálogo com a letra da faixa</string>
   <string name="cm_player_swipe_title">Deslize para a direita</string>
   <string name="cm_player_swipe_content">para ver os detalhes da faixa e avaliar.</string>
+  <string name="fragment_title_player">Reprodutor</string>
+  <string name="fragment_title_details">Detalhes da faixa</string>
+  <string name="fragment_title_connection">Clementine</string>
+  <string name="navigation_drawer_clementine_on">Clementine em %s</string>
+  <string name="player_download_what">O que transferir?</string>
+  <string-array name="player_download_list">
+    <item>Faixa</item>
+    <item>Álbum</item>
+    <item>Lista de reprodução</item>
+  </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
+  <string-array name="navigation_drawer_items">
+    <item>Reprodutor</item>
+    <item>Listas de reprodução</item>
+    <item>Coleção</item>
+    <item>Transferências</item>
+    <item></item>
+    <item>Definições</item>
+    <item>Donativos</item>
+    <item></item>
+    <item>Sair</item>
+  </string-array>
 </resources>

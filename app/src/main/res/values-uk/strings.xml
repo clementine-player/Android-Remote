@@ -48,6 +48,7 @@
   <string name="library_optimize">Оптимізуємо базу даних</string>
   <string name="library_please_wait">Зачекайте</string>
   <string name="library_refresh">Оновити</string>
+  <string name="library_empty">Бібліотека порожня. Проведіть пальцем вниз, щоб отримати бібліотеку!</string>
   <string name="library_no_search_results">Вказаним вами критеріям не відповідає жодна композиція!</string>
   <string name="library_no_albums">%d альбомів</string>
   <string name="library_no_tracks">%d композицій</string>
@@ -78,6 +79,7 @@
   <string name="menu_search">Пошук</string>
   <string name="menu_love">Уподобати</string>
   <string name="menu_ban">Заблокувати</string>
+  <string name="menu_download">Отримати</string>
   <string name="menu_download_song">Отримати композицію</string>
   <string name="menu_download_album">Отримати альбом</string>
   <string name="menu_download_playlist">Отримати список відтворення</string>
@@ -145,11 +147,8 @@
   <string name="pref_dl_wifi_only_summary">Отримувати композиції, лише якщо встановлено з’єднання з мережею Wi-Fi.</string>
   <string name="pref_dl_dir">Вкажіть теку отриманих даних</string>
   <string name="pref_dl_override">Перезаписувати наявні файли</string>
-  <string name="pref_dl_cat_playlist">Отримання списку відтворення</string>
   <string name="pref_dl_pl_save_own_dir_title">Зберегти композиції у теці списків відтворення</string>
   <string name="pref_dl_pl_save_own_dir_summary">Створює теку з назвою списку відтворення і зберігає композиції до неї.</string>
-  <string name="pref_dl_pl_artist_dir_title">Створити підтеку виконавець/альбом</string>
-  <string name="pref_dl_pl_artist_dir_summary">Створювати підтеку виконавець/альбом для кожної композиції.</string>
   <string name="file_dialog_set_dir">Виберіть теку</string>
   <string name="file_dialog_not_writable">Каталог захищено від запису</string>
   <string name="file_dialog_custom_paths_available">Виберіть інший</string>
@@ -215,5 +214,26 @@
   <string name="cm_player_lyrics_content">Буде відкрито діалогове вікно зі словами пісні</string>
   <string name="cm_player_swipe_title">Рух пальцем праворуч</string>
   <string name="cm_player_swipe_content">перегляд подробиць щодо композиції та можливість визначення оцінки.</string>
+  <string name="fragment_title_player">Програвач</string>
+  <string name="fragment_title_details">Параметри композиції</string>
+  <string name="fragment_title_connection">Clementine</string>
+  <string name="navigation_drawer_clementine_on">Clementine на %s</string>
+  <string name="player_download_what">Що отримати?</string>
+  <string-array name="player_download_list">
+    <item>Композицію</item>
+    <item>Альбом</item>
+    <item>Список композицій</item>
+  </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
+  <string-array name="navigation_drawer_items">
+    <item>Програвач</item>
+    <item>Списки</item>
+    <item>Бібліотека</item>
+    <item>Отримане</item>
+    <item></item>
+    <item>Параметри</item>
+    <item>Підтримати</item>
+    <item></item>
+    <item>Вийти</item>
+  </string-array>
 </resources>

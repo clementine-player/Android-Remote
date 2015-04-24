@@ -147,11 +147,8 @@
   <string name="pref_dl_wifi_only_summary">Preuzmi pjesme samo kada je povezana WI-FI mreža.</string>
   <string name="pref_dl_dir">Postavi mapu preuzimanja</string>
   <string name="pref_dl_override">Prepiši postojeće datoteke</string>
-  <string name="pref_dl_cat_playlist">Preuzmi popis izvođenja</string>
   <string name="pref_dl_pl_save_own_dir_title">Spremi pjesme u mapu popisa izvođenja</string>
   <string name="pref_dl_pl_save_own_dir_summary">Stvori mapu nazvanu po popisu izvođenja i spremi pjesme u mapu.</string>
-  <string name="pref_dl_pl_artist_dir_title">Stvori podmapu izvođača/albuma</string>
-  <string name="pref_dl_pl_artist_dir_summary">Stvori podmapu izvođača/albuma za svaku pjesmu posebno.</string>
   <string name="file_dialog_set_dir">Odaberi direktorij</string>
   <string name="file_dialog_not_writable">Direktorij nema dozvolu za pisanje</string>
   <string name="file_dialog_custom_paths_available">Odaberi drugo</string>

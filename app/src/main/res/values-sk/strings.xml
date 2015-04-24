@@ -48,6 +48,7 @@
   <string name="library_optimize">Optimalizuje sa databáza</string>
   <string name="library_please_wait">Prosím, čakajte</string>
   <string name="library_refresh">Obnoviť</string>
+  <string name="library_empty">Zbierka je prázdna. Potiahnutím dole prevezmite zbierku!</string>
   <string name="library_no_search_results">Vašim kritériám vyhľadávania nevyhuvujú žiadne skladby!</string>
   <string name="library_no_albums">%d albumov</string>
   <string name="library_no_tracks">%d skladieb</string>
@@ -78,6 +79,7 @@
   <string name="menu_search">Vyhľadať</string>
   <string name="menu_love">Obľúbená</string>
   <string name="menu_ban">zakázaná</string>
+  <string name="menu_download">Prevzatie</string>
   <string name="menu_download_song">Prebrať skladbu</string>
   <string name="menu_download_album">Prebrať album</string>
   <string name="menu_download_playlist">Prebrať zoznam skladieb</string>
@@ -94,7 +96,7 @@
   <string name="donate_not_available_text">Prosím, skontrolujte, či máte nainštalovanú najnovšiu verziu Obchodu Play a skúste to znovu!</string>
   <string name="pref_cat_behavior">Správanie</string>
   <string name="pref_cat_player">Prehrávač</string>
-  <string name="pref_cat_library">Knižnica</string>
+  <string name="pref_cat_library">Zbierka</string>
   <string name="pref_cat_downloads">Preberania</string>
   <string name="pref_cat_advanced">Pokročilé</string>
   <string name="pref_cat_network">Sieť</string>
@@ -115,7 +117,7 @@
   <string name="pref_volume_inc_title">Úroveň zmeny hlasitosti</string>
   <string name="pref_volume_inc_summary">Aktuálna úroveň zmeny hlasitosti: %s</string>
   <string name="pref_library_album_order_title">Usporiadanie albumov</string>
-  <string name="pref_library_album_order_summary">Albumy v knižnici sú aktuálne usporiadané podľa %1$s.</string>
+  <string name="pref_library_album_order_summary">Albumy v zbierke sú aktuálne usporiadané podľa %1$s.</string>
   <string-array name="pref_library_album_order_display">
     <item>Abecedne</item>
     <item>Vydanie</item>
@@ -147,11 +149,8 @@
   <string name="pref_dl_wifi_only_summary">Prebrať skladby iba počas pripojenia k sieti wifi.</string>
   <string name="pref_dl_dir">Nastaviť priečinok pre preberania</string>
   <string name="pref_dl_override">Prevážiť existujúce súbory</string>
-  <string name="pref_dl_cat_playlist">Preberanie zoznamu skladieb</string>
   <string name="pref_dl_pl_save_own_dir_title">Uložiť skladby v priečinku zoznamu skladieb</string>
   <string name="pref_dl_pl_save_own_dir_summary">Vytvorí priečinok s názvom zoznamu skladieb a uloží sem skladby.</string>
-  <string name="pref_dl_pl_artist_dir_title">Vytvoriť podpriečinok s menom umelca/album</string>
-  <string name="pref_dl_pl_artist_dir_summary">Vytvoriť podpriečinok s menom umelca/albumu pre každú jednotlivú skladbu.</string>
   <string name="file_dialog_set_dir">Vybrať adresár</string>
   <string name="file_dialog_not_writable">Adresár nie je zapisovateľný</string>
   <string name="file_dialog_custom_paths_available">Vybrať iný</string>
@@ -217,5 +216,26 @@
   <string name="cm_player_lyrics_content">Otvorí sa dialógové okno s textom</string>
   <string name="cm_player_swipe_title">Potiahnite doprava</string>
   <string name="cm_player_swipe_content">na zobrazenie podrobností o stope a hodnoteniu skladby.</string>
+  <string name="fragment_title_player">Prehrávač</string>
+  <string name="fragment_title_details">Podrobnosti o skladbe</string>
+  <string name="fragment_title_connection">Clementine</string>
+  <string name="navigation_drawer_clementine_on">Clementine na %s</string>
+  <string name="player_download_what">Čo sa má prevziať?</string>
+  <string-array name="player_download_list">
+    <item>Skladba</item>
+    <item>Album</item>
+    <item>Zoznam skladieb</item>
+  </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
+  <string-array name="navigation_drawer_items">
+    <item>Prehrávač</item>
+    <item>Zoznamy skladieb</item>
+    <item>Zbierka</item>
+    <item>Prevzatia</item>
+    <item></item>
+    <item>Nastavenia</item>
+    <item>Prispieť</item>
+    <item></item>
+    <item>Ukončiť</item>
+  </string-array>
 </resources>
