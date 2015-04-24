@@ -54,9 +54,7 @@
             android:layout_centerVertical="true"
             android:layout_gravity="center_horizontal|center_vertical"
             android:minHeight="0dp"
-            android:text="@string/connectdialog_connect"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
+            android:text="@string/connectdialog_connect"/>
 
     </LinearLayout>
 

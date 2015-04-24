@@ -3,6 +3,8 @@
 
     <style name="OrangeButton.Button" parent="@android:style/Widget.Button">
         <item name="android:background">@drawable/orange_button</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="Dialog_Transparent" parent="@android:style/Theme.Dialog">
