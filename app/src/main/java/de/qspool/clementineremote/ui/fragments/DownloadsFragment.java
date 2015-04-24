@@ -17,7 +17,9 @@
 
 package de.qspool.clementineremote.ui.fragments;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -108,7 +110,32 @@ public class DownloadsFragment extends Fragment implements BackPressHandleable, 
         mAdapter = new DownloaderAdapter(getActivity(), R.layout.item_download,
                 DownloadManager.getInstance().getAllDownloaders());
 
-        mList.setOnItemClickListener(oiclDownload);
+        mList.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final ClementineSongDownloader downloader = (ClementineSongDownloader) mList.getAdapter()
+                        .getItem(position);
+                if (downloader.getStatus() == AsyncTask.Status.FINISHED) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                    builder.setTitle(R.string.downloaded_songs);
+                    String[] songs = new String[downloader.getDownloadedSongs().size()];
+                    for (int i=0;i<songs.length;i++) {
+                        ClementineSongDownloader.DownloadedSong ds = downloader.getDownloadedSongs().get(i);
+                        songs[i] = ds.song.getArtist() + " - " + ds.song.getTitle();
+                    }
+                    builder.setItems(songs, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            playFile(downloader.getDownloadedSongs().get(which).uri);
+                        }
+                    });
+
+                    builder.setNegativeButton(R.string.dialog_close, null);
+                    builder.show();
+                }
+            }
+        });
         mList.setAdapter(mAdapter);
 
         mActionBar.setTitle("");
@@ -148,7 +175,6 @@ public class DownloadsFragment extends Fragment implements BackPressHandleable, 
         mList.setFastScrollEnabled(true);
         mList.setTextFilterEnabled(true);
         mList.setSelector(new ColorDrawable(android.R.color.transparent));
-        mList.setOnItemClickListener(oiclDownload);
         mList.setDivider(null);
         mList.setDividerHeight(0);
     }
@@ -164,35 +190,20 @@ public class DownloadsFragment extends Fragment implements BackPressHandleable, 
         }
     }
 
-    private OnItemClickListener oiclDownload = new OnItemClickListener() {
+    private void playFile(Uri file) {
+        Intent mediaIntent = new Intent();
+        mediaIntent.setAction(Intent.ACTION_VIEW);
+        mediaIntent.setDataAndType(file, "audio/*");
+        mediaIntent.addFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position,
-                long id) {
-            ClementineSongDownloader downloader = (ClementineSongDownloader) mList.getAdapter()
-                    .getItem(position);
-            if (downloader.getStatus() == AsyncTask.Status.FINISHED) {
-                Uri lastFile = downloader.getLastFileUri();
-                if (lastFile == null) {
-                    Toast.makeText(getActivity(), R.string.download_error, Toast.LENGTH_LONG)
-                            .show();
-                } else {
-                    Intent mediaIntent = new Intent();
-                    mediaIntent.setAction(Intent.ACTION_VIEW);
-                    mediaIntent.setDataAndType(lastFile, "audio/*");
-                    mediaIntent.addFlags(
-                            Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-                    if (mediaIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                        startActivity(mediaIntent);
-                    } else {
-                        Toast.makeText(getActivity(), R.string.app_not_available, Toast.LENGTH_LONG)
-                                .show();
-                    }
-                }
-            }
+        if (mediaIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivity(mediaIntent);
+        } else {
+            Toast.makeText(getActivity(), R.string.app_not_available, Toast.LENGTH_LONG)
+                    .show();
         }
-    };
+    }
 
     /**
      * Creates a timer task for refeshing the download list

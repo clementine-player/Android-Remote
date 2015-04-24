@@ -24,6 +24,7 @@ import android.os.AsyncTask;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.LinkedList;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.ClementineSimpleConnection;
@@ -42,6 +43,16 @@ import de.qspool.clementineremote.utils.Utilities;
 
 public class ClementineSongDownloader extends
         AsyncTask<ClementineMessage, DownloadStatus, DownloaderResult> {
+
+    public static class DownloadedSong {
+        public MySong song;
+        public Uri uri;
+
+        public DownloadedSong(MySong song, Uri uri) {
+            this.song = song;
+            this.uri = uri;
+        }
+    }
 
     private int mId;
 
@@ -69,7 +80,7 @@ public class ClementineSongDownloader extends
 
     private DownloadItem mItem;
 
-    private Uri mFileUri;
+    private LinkedList<DownloadedSong> mDownloadedSongs = new LinkedList<>();
 
     private int mTotalFileSize;
 
@@ -231,8 +242,8 @@ public class ClementineSongDownloader extends
             // If we received chunk no 0, then we have to decide wether to
             // accept the song offered or not
             if (chunk.getChunkNumber() == 0) {
-                boolean accepted = processSongOffer(chunk);
                 currentSong = MySong.fromProtocolBuffer(chunk.getSongMetadata());
+                boolean accepted = processSongOffer(currentSong, chunk);
 
                 // If we don't accept the file, add the size so the DownloadManager can show it correctly
                 if (!accepted) {
@@ -264,9 +275,6 @@ public class ClementineSongDownloader extends
                     dir.mkdirs();
                     f.createNewFile();
                     fo = new FileOutputStream(f);
-
-                    // File for download fragment
-                    mFileUri = Uri.fromFile(f);
                 }
 
                 // Write chunk to sdcard
@@ -329,7 +337,7 @@ public class ClementineSongDownloader extends
      * @param chunk The chunk with the metadata
      * @return a boolean indicating if the song will be sent or not
      */
-    private boolean processSongOffer(ResponseSongFileChunk chunk) {
+    private boolean processSongOffer(MySong song, ResponseSongFileChunk chunk) {
         File f = new File(BuildFilePath(chunk));
         boolean accept = true;
 
@@ -339,10 +347,8 @@ public class ClementineSongDownloader extends
 
         mClient.sendRequest(ClementineMessageFactory.buildSongOfferResponse(accept));
 
-        // File for download fragment
-        if (f.exists()) {
-            mFileUri = Uri.fromFile(f);
-        }
+        // Save the downloaded files
+        mDownloadedSongs.add(new DownloadedSong(song, Uri.fromFile(f)));
 
         return accept;
     }
@@ -424,10 +430,10 @@ public class ClementineSongDownloader extends
     }
 
     /**
-     * Get the last downloaded file
+     * Get the downloaded songs
      */
-    public Uri getLastFileUri() {
-        return mFileUri;
+    public LinkedList<DownloadedSong> getDownloadedSongs() {
+        return mDownloadedSongs;
     }
 
     public int getTotalFileSize() {

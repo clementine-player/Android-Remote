@@ -37,6 +37,7 @@
     <string name="downloads_empty">No downloads!</string>
     <string name="download_error">Could not open song!</string>
     <string name="download_freespace">Free space</string>
+    <string name="downloaded_songs">Downloaded songs - click to play</string>
 
     <string name="download_noti_title">Starting download</string>
     <string name="download_noti_n_downloads">%d active downloads</string>
