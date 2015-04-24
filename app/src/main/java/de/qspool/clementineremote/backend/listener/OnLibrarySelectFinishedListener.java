@@ -22,6 +22,5 @@ import java.util.LinkedList;
 import de.qspool.clementineremote.backend.player.MyLibraryItem;
 
 public interface OnLibrarySelectFinishedListener {
-
     void OnLibrarySelectFinished(LinkedList<MyLibraryItem> l);
 }

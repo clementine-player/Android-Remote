@@ -130,7 +130,8 @@ public class ClementineSongDownloader extends
     @Override
     protected void onPostExecute(DownloaderResult result) {
         mDownloaderResult = result;
-        mDownloadStatus.setState(DownloadStatus.DownloaderState.FINISHED);
+        mDownloadStatus.setState(DownloadStatus.DownloaderState.FINISHED)
+                       .setProgress(100);
         mSongDownloaderListener.onDownloadResult(result);
     }
 
@@ -230,8 +231,15 @@ public class ClementineSongDownloader extends
             // If we received chunk no 0, then we have to decide wether to
             // accept the song offered or not
             if (chunk.getChunkNumber() == 0) {
-                processSongOffer(chunk);
+                boolean accepted = processSongOffer(chunk);
                 currentSong = MySong.fromProtocolBuffer(chunk.getSongMetadata());
+
+                // If we don't accept the file, add the size so the DownloadManager can show it correctly
+                if (!accepted) {
+                    mTotalDownloaded += chunk.getSize();
+                    updateProgress(chunk, currentSong);
+                }
+
                 continue;
             }
 
@@ -340,7 +348,7 @@ public class ClementineSongDownloader extends
     }
 
     /**
-     * Updates the current notification
+     * Updates the current notification.
      *
      * @param chunk The current downloaded chunk
      */

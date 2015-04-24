@@ -58,17 +58,31 @@ public class ClementineMessageFactory {
         return new ClementineMessage(msg);
     }
 
+    public static ClementineMessage buildDownloadSongsMessage(DownloadItem downloadItem) {
+        return buildDownloadSongsMessage(downloadItem, -1, null);
+    }
+
+    public static ClementineMessage buildDownloadSongsMessage(DownloadItem downloadItem, int playlistId) {
+        return buildDownloadSongsMessage(downloadItem, playlistId, null);
+    }
+
+    public static ClementineMessage buildDownloadSongsMessage(DownloadItem downloadItem, LinkedList<String> urls) {
+        return buildDownloadSongsMessage(downloadItem, -1, urls);
+    }
+
     /**
      * Create a download song message
      *
      * @return The built request
      */
-    public static ClementineMessage buildDownloadSongsMessage(DownloadItem downloadItem, int playlistId) {
+    public static ClementineMessage buildDownloadSongsMessage(DownloadItem downloadItem, int playlistId, LinkedList<String> urls) {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.DOWNLOAD_SONGS);
         RequestDownloadSongs.Builder request = msg.getRequestDownloadSongsBuilder();
 
         request.setPlaylistId(playlistId);
         request.setDownloadItem(downloadItem);
+        if (urls != null && !urls.isEmpty())
+            request.addAllUrls(urls);
 
         return new ClementineMessage(msg);
     }

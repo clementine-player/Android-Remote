@@ -232,38 +232,47 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
             public boolean onActionItemClicked(ActionMode mode,
                     android.view.MenuItem item) {
                 SparseBooleanArray checkedPositions = mList.getCheckedItemPositions();
+                LinkedList<MySong> selectedSongs = new LinkedList<>();
 
-                switch (item.getItemId()) {
-                    case R.id.playlist_context_play:
-                        for (int i = 0; i < checkedPositions.size(); ++i) {
-                            int position = checkedPositions.keyAt(i);
-                            if (checkedPositions.valueAt(i)) {
-                                MySong s = getSelectedPlaylistSongs().get(position);
-                                playSong(s);
-                                break;
-                            }
-                        }
-                        mode.finish();
-                        return true;
-                    case R.id.playlist_context_remove:
-                        LinkedList<MySong> songs = new LinkedList<>();
-                        for (int i = 0; i < checkedPositions.size(); ++i) {
-                            int position = checkedPositions.keyAt(i);
-                            if (checkedPositions.valueAt(i)) {
-                                MySong s = getSelectedPlaylistSongs().get(position);
-                                songs.add(s);
-                            }
-                        }
-                        Message msg = Message.obtain();
-                        msg.obj = ClementineMessageFactory
-                                .buildRemoveMultipleSongsFromPlaylist(getPlaylistId(),
-                                        songs);
-                        App.ClementineConnection.mHandler.sendMessage(msg);
-                        mode.finish();
-                        return true;
-                    default:
-                        return false;
+                for (int i = 0; i < checkedPositions.size(); ++i) {
+                    int position = checkedPositions.keyAt(i);
+                    if (checkedPositions.valueAt(i)) {
+                        selectedSongs.add(getSelectedPlaylistSongs().get(position));
+                    }
                 }
+
+                if (!selectedSongs.isEmpty()) {
+                    switch (item.getItemId()) {
+                        case R.id.playlist_context_play:
+                            playSong(selectedSongs.get(0));
+
+                            mode.finish();
+                            return true;
+                        case R.id.playlist_context_download:
+                            LinkedList<String> urls = new LinkedList<>();
+                            for (MySong s : selectedSongs) {
+                                urls.add(s.getUrl());
+                            }
+                            if (!urls.isEmpty()) {
+                                DownloadManager.getInstance().addJob(ClementineMessageFactory
+                                        .buildDownloadSongsMessage(DownloadItem.Urls,
+                                                urls));
+                            }
+                            mode.finish();
+                            return true;
+                        case R.id.playlist_context_remove:
+                            Message msg = Message.obtain();
+                            msg.obj = ClementineMessageFactory
+                                    .buildRemoveMultipleSongsFromPlaylist(getPlaylistId(),
+                                            selectedSongs);
+                            App.ClementineConnection.mHandler.sendMessage(msg);
+                            mode.finish();
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+                return false;
             }
 
             @Override

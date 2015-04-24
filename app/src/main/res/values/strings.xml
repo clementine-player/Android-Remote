@@ -44,6 +44,7 @@
     <string name="download_noti_title_song">[Song]</string>
     <string name="download_noti_title_album">[Album]</string>
     <string name="download_noti_title_playlist">[Playlist]</string>
+    <string name="download_noti_title_songs">[Songs]</string>
     <string name="download_noti_n_finished">%d downloads finished</string>
     <string name="download_noti_complete">Download complete</string>
     <string name="download_noti_canceled">Download canceled</string>

@@ -196,11 +196,11 @@ public class PlayerPageFragment extends Fragment
                             switch (type) {
                                 case SONG:
                                     DownloadManager.getInstance().addJob(ClementineMessageFactory
-                                            .buildDownloadSongsMessage(DownloadItem.CurrentItem, -1));
+                                            .buildDownloadSongsMessage(DownloadItem.CurrentItem));
                                     break;
                                 case ALBUM:
                                     DownloadManager.getInstance().addJob(ClementineMessageFactory
-                                            .buildDownloadSongsMessage(DownloadItem.ItemAlbum, -1));
+                                            .buildDownloadSongsMessage(DownloadItem.ItemAlbum));
                                     break;
                                 case PLAYLIST:
                                     DownloadManager.getInstance().addJob(ClementineMessageFactory

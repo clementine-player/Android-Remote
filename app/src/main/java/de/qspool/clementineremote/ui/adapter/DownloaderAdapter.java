@@ -39,13 +39,13 @@ import de.qspool.clementineremote.utils.Utilities;
 /**
  * Class is used for displaying the song data
  */
-public class DownloadAdapter extends ArrayAdapter<ClementineSongDownloader> {
+public class DownloaderAdapter extends ArrayAdapter<ClementineSongDownloader> {
 
     private Context mContext;
 
     private DownloadManager mDownloadManager;
 
-    public DownloadAdapter(Context context, int resource,
+    public DownloaderAdapter(Context context, int resource,
             List<ClementineSongDownloader> data) {
         super(context, resource, data);
         mContext = context;

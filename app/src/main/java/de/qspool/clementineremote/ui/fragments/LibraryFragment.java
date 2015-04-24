@@ -51,12 +51,14 @@ import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.ClementineLibraryDownloader;
+import de.qspool.clementineremote.backend.downloader.DownloadManager;
 import de.qspool.clementineremote.backend.elements.DownloaderResult;
 import de.qspool.clementineremote.backend.elements.DownloaderResult.DownloadResult;
 import de.qspool.clementineremote.backend.listener.OnLibraryDownloadListener;
 import de.qspool.clementineremote.backend.listener.OnLibrarySelectFinishedListener;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.player.MyLibrary;
 import de.qspool.clementineremote.backend.player.MyLibraryItem;
@@ -68,7 +70,7 @@ import de.qspool.clementineremote.ui.settings.LibraryAlbumOrder;
 import de.qspool.clementineremote.utils.Utilities;
 
 public class LibraryFragment extends Fragment implements BackPressHandleable, RemoteDataReceiver,
-        OnLibrarySelectFinishedListener, SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener {
 
     private ActionBar mActionBar;
 
@@ -93,6 +95,8 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
     private ClementineLibraryDownloader mClementineLibraryDownloader;
 
     private LibraryAlbumOrder mAlbumOrder;
+
+    private int mLibraryQueriesDone;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -168,22 +172,61 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
             public boolean onActionItemClicked(ActionMode mode,
                     android.view.MenuItem item) {
                 SparseBooleanArray checkedPositions = mList.getCheckedItemPositions();
+                final LinkedList<MyLibraryItem> selectedItems = new LinkedList<>();
+                final LinkedList<String> urls = new LinkedList<>();
+                mLibraryQueriesDone = 0;
 
-                switch (item.getItemId()) {
-                    case R.id.library_context_add:
-                        for (int i = 0; i < checkedPositions.size(); ++i) {
-                            int position = checkedPositions.keyAt(i);
-                            if (checkedPositions.valueAt(i)) {
-                                MyLibraryItem libraryItem = mAdapters.getLast()
-                                        .getItem(position);
-                                addSongsToPlaylist(libraryItem);
-                            }
-                        }
-                        mode.finish();
-                        return true;
-                    default:
-                        return false;
+                for (int i = 0; i < checkedPositions.size(); ++i) {
+                    int position = checkedPositions.keyAt(i);
+                    if (checkedPositions.valueAt(i)) {
+                        selectedItems.add(mAdapters.getLast().getItem(position));
+                    }
                 }
+
+                for (MyLibraryItem libraryItem : selectedItems) {
+                    OnLibrarySelectFinishedListener listener;
+
+                    switch (item.getItemId()) {
+                        case R.id.library_context_add:
+
+                            listener = new OnLibrarySelectFinishedListener() {
+                                @Override
+                                public void OnLibrarySelectFinished(LinkedList<MyLibraryItem> l) {
+                                    addSongsToPlaylist(l);
+                                }
+                            };
+
+                            break;
+                        case R.id.library_context_download:
+                            listener = new OnLibrarySelectFinishedListener() {
+                                @Override
+                                public void OnLibrarySelectFinished(LinkedList<MyLibraryItem> l) {
+                                    for (MyLibraryItem libItem : l) {
+                                        urls.add(libItem.getUrl());
+                                    }
+                                    mLibraryQueriesDone++;
+
+                                    // Have we got all queries?
+                                    if (mLibraryQueriesDone == selectedItems.size() && !urls
+                                            .isEmpty()) {
+                                        DownloadManager.getInstance()
+                                                .addJob(ClementineMessageFactory
+                                                        .buildDownloadSongsMessage(
+                                                                ClementineRemoteProtocolBuffer.DownloadItem.Urls,
+                                                                urls));
+                                    }
+
+                                }
+                            };
+
+                            break;
+                        default:
+                            return false;
+                    }
+                    queryLibraryItems(libraryItem, listener);
+                }
+                mode.finish();
+                return true;
             }
 
             @Override
@@ -192,8 +235,10 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
                 android.view.MenuInflater inflater = mode.getMenuInflater();
                 inflater.inflate(R.menu.library_context_menu, menu);
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                    getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.grey_cab_status));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    getActivity().getWindow()
+                            .setStatusBarColor(getResources().getColor(R.color.grey_cab_status));
+                }
 
                 return true;
             }
@@ -206,8 +251,10 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                    getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.actionbar_dark));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    getActivity().getWindow()
+                            .setStatusBarColor(getResources().getColor(R.color.actionbar_dark));
+                }
             }
 
             @Override
@@ -348,26 +395,24 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
         super.onPrepareOptionsMenu(menu);
     }
 
-    private boolean addSongsToPlaylist(MyLibraryItem libraryItem) {
+    private boolean queryLibraryItems(MyLibraryItem libraryItem,
+            OnLibrarySelectFinishedListener onLibrarySelectFinishedListener) {
         switch (libraryItem.getLevel()) {
             case MyLibrary.LVL_ARTIST:
                 MyLibrary addArtist = new MyLibrary(getActivity());
-                addArtist.addOnLibrarySelectFinishedListener(LibraryFragment.this);
+                addArtist.addOnLibrarySelectFinishedListener(onLibrarySelectFinishedListener);
                 addArtist.getAllTitlesFromArtistAsync(libraryItem.getArtist(), mAlbumOrder);
 
                 return true;
             case MyLibrary.LVL_ALBUM:
                 MyLibrary addAlbums = new MyLibrary(getActivity());
-                addAlbums.addOnLibrarySelectFinishedListener(LibraryFragment.this);
+                addAlbums.addOnLibrarySelectFinishedListener(onLibrarySelectFinishedListener);
                 addAlbums.getTitlesAsync(libraryItem.getArtist(), libraryItem.getAlbum());
                 return true;
             case MyLibrary.LVL_TITLE:
-                Message msg = Message.obtain();
-                LinkedList<String> urls = new LinkedList<String>();
-                urls.add(libraryItem.getUrl());
-                msg.obj = ClementineMessageFactory.buildInsertUrl(
-                        App.Clementine.getPlaylistManager().getActivePlaylistId(), urls);
-                App.ClementineConnection.mHandler.sendMessage(msg);
+                LinkedList<MyLibraryItem> result = new LinkedList<>();
+                result.add(libraryItem);
+                onLibrarySelectFinishedListener.OnLibrarySelectFinished(result);
                 return false;
             default:
                 return false;
@@ -521,11 +566,6 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
             }
         }
     };
-
-    @Override
-    public void OnLibrarySelectFinished(LinkedList<MyLibraryItem> l) {
-        addSongsToPlaylist(l);
-    }
 
     @Override
     public void onRefresh() {

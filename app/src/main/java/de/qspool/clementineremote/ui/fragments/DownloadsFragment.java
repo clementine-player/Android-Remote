@@ -45,7 +45,7 @@ import de.qspool.clementineremote.backend.downloader.ClementineSongDownloader;
 import de.qspool.clementineremote.backend.downloader.DownloadManager;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.player.MySong;
-import de.qspool.clementineremote.ui.adapter.DownloadAdapter;
+import de.qspool.clementineremote.ui.adapter.DownloaderAdapter;
 import de.qspool.clementineremote.ui.interfaces.BackPressHandleable;
 import de.qspool.clementineremote.ui.interfaces.RemoteDataReceiver;
 import de.qspool.clementineremote.utils.Utilities;
@@ -56,7 +56,7 @@ public class DownloadsFragment extends Fragment implements BackPressHandleable, 
 
     private ListView mList;
 
-    private DownloadAdapter mAdapter;
+    private DownloaderAdapter mAdapter;
 
     private Timer mUpdateTimer;
 
@@ -105,7 +105,7 @@ public class DownloadsFragment extends Fragment implements BackPressHandleable, 
         mEmptyDownloads = view.findViewById(R.id.downloads_empty);
 
         // Create the adapter
-        mAdapter = new DownloadAdapter(getActivity(), R.layout.item_download,
+        mAdapter = new DownloaderAdapter(getActivity(), R.layout.item_download,
                 DownloadManager.getInstance().getAllDownloaders());
 
         mList.setOnItemClickListener(oiclDownload);

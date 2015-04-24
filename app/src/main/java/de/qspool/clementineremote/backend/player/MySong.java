@@ -75,6 +75,8 @@ public class MySong {
 
     private float rating;
 
+    private String url;
+
     public boolean equals(MySong song) {
         if (song.id == this.id
                 && song.index == this.index
@@ -128,6 +130,8 @@ public class MySong {
         song.setSize(songMetadata.getFileSize());
         song.setLocal(songMetadata.getIsLocal());
         song.setRating(songMetadata.getRating());
+        song.setUrl(songMetadata.getUrl());
+
         if (songMetadata.hasArt()) {
             song.setArt(songMetadata.getArt());
         }
@@ -293,5 +297,13 @@ public class MySong {
 
     public void setRating(float rating) {
         this.rating = rating;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

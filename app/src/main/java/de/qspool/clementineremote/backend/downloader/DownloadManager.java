@@ -249,6 +249,13 @@ public class DownloadManager {
                         sb.append(" ");
                         sb.append(status.getSong().getTitle());
                         break;
+                    case Urls:
+                        sb.append(mContext.getString(R.string.download_noti_title_songs));
+                        sb.append(" ");
+                        sb.append(status.getSong().getArtist());
+                        sb.append(" - ");
+                        sb.append(status.getSong().getTitle());
+                        break;
                     case ItemAlbum:
                         sb.append(mContext.getString(R.string.download_noti_title_album));
                         sb.append(" ");
@@ -287,6 +294,11 @@ public class DownloadManager {
                 sb.append(status.getSong().getTitle());
                 break;
             case FINISHED:
+                sb.append("(");
+                sb.append(status.getCurrentFileIndex());
+                sb.append("/");
+                sb.append(status.getTotalFiles());
+                sb.append(") ");
                 sb.append(
                         mContext.getString(downloader.getDownloaderResult().getMessageStringId()));
                 break;

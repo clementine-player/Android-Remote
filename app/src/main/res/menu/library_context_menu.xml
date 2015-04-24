@@ -5,5 +5,10 @@
         android:id="@+id/library_context_add"
         android:title="@string/library_context_add"
         android:icon="@drawable/ab_menu_add_to_playlist"
-        app:showAsAction="ifRoom"></item>
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/library_context_download"
+        android:title="@string/menu_download"
+        android:icon="@drawable/ab_download"
+        app:showAsAction="ifRoom" />
 </menu>
