@@ -29,12 +29,14 @@
   <string name="downloads_empty">Pas de téléchargements !</string>
   <string name="download_error">Impossible d\'ouvrir le morceau !</string>
   <string name="download_freespace">Espace disponible</string>
+  <string name="downloaded_songs">Titres téléchargés - cliquer pour écouter</string>
   <string name="download_noti_title">Démarrage du téléchargement</string>
   <string name="download_noti_n_downloads">%d de téléchargements actifs</string>
   <string name="download_noti_n_progress">Progression globale : %d %</string>
   <string name="download_noti_title_song">[Titre]</string>
   <string name="download_noti_title_album">[Album]</string>
   <string name="download_noti_title_playlist">[Liste de lecture]</string>
+  <string name="download_noti_title_songs">[Titres]</string>
   <string name="download_noti_n_finished">Téléchargements terminés à %d</string>
   <string name="download_noti_complete">Téléchargement terminé</string>
   <string name="download_noti_canceled">Téléchargement annulé</string>
@@ -48,6 +50,7 @@
   <string name="library_optimize">Optimisation de la base de données</string>
   <string name="library_please_wait">Merci de patienter</string>
   <string name="library_refresh">Rafraîchir</string>
+  <string name="library_empty">Bibliothèque vide. Glissez vers le bas pour télécharger la bibliothèque.</string>
   <string name="library_no_search_results">Aucun morceau ne correspond à vos critères de recherche !</string>
   <string name="library_no_albums">%d albums</string>
   <string name="library_no_tracks">%d pistes</string>
@@ -78,6 +81,7 @@
   <string name="menu_search">Recherche</string>
   <string name="menu_love">J\'aime</string>
   <string name="menu_ban">Je déteste</string>
+  <string name="menu_download">Téléchargement</string>
   <string name="menu_download_song">Télécharger le morceau</string>
   <string name="menu_download_album">Télécharger l\'album</string>
   <string name="menu_download_playlist">Télécharger la liste de lecture</string>
@@ -144,8 +148,13 @@
   <string name="pref_dl_wifi_only_summary">Télécharger les morceaux uniquement lorsque connecté à un réseau Wifi.</string>
   <string name="pref_dl_dir">Dossier pour les téléchargements</string>
   <string name="pref_dl_override">Remplacer les fichiers existants</string>
+  <string name="pref_dl_cat_folders">Dossiers</string>
   <string name="pref_dl_pl_save_own_dir_title">Enregistrer les morceaux dans le dossier de la liste de lecture</string>
   <string name="pref_dl_pl_save_own_dir_summary">Crée un dossier nommé comme la liste de lecture, et enregistre les morceaux dedans.</string>
+  <string name="pref_dl_pl_artist_dir_title">Créer un sous-dossier pour l\'artiste</string>
+  <string name="pref_dl_pl_artist_dir_summary">Créer un sous-dossier d\'album pour chaque titre.</string>
+  <string name="pref_dl_pl_album_dir_title">Créer un sous-dossier pour l\'album</string>
+  <string name="pref_dl_pl_album_dir_summary">Créer un sous-dossier d\'album sous l\'artiste pour chaque titre.</string>
   <string name="file_dialog_set_dir">Sélectionner le dossier</string>
   <string name="file_dialog_not_writable">Répertoire en lecture seule</string>
   <string name="file_dialog_custom_paths_available">Autre sélection</string>
@@ -212,5 +221,10 @@ des ordinateurs sur lesquels Clementine est disponible.</string>
   <string name="cm_player_lyrics_content">Une fenêtre avec les paroles va s\'ouvrir</string>
   <string name="cm_player_swipe_title">Glissez vers la droite</string>
   <string name="cm_player_swipe_content">pour voir les détails et noter le morceau.</string>
+  <string name="fragment_title_player">Lecteur</string>
+  <string name="fragment_title_details">Détails du titre</string>
+  <string name="fragment_title_connection">Clementine</string>
+  <string name="navigation_drawer_clementine_on">Clementine sur %s</string>
+  <string name="player_download_what">Que télécharger ?</string>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

@@ -29,12 +29,14 @@
   <string name="downloads_empty">Οχι λήψεις!</string>
   <string name="download_error">Αδύνατο το άνοιγμα τραγουδιού!</string>
   <string name="download_freespace">Ελεύθερος χώρος</string>
+  <string name="downloaded_songs">Κατεβάσμενα τραγούδια - κάντε κλικ για να αναπαραχθουν</string>
   <string name="download_noti_title">Έναρξη λήψης </string>
   <string name="download_noti_n_downloads">%d ενεργές λήψεις</string>
   <string name="download_noti_n_progress">Συνολική πρόοδος: %d %</string>
   <string name="download_noti_title_song">[Τραγούδι]</string>
   <string name="download_noti_title_album">[Αλμπουμ]</string>
   <string name="download_noti_title_playlist">[Λίστα αναπαραγωγής]</string>
+  <string name="download_noti_title_songs">[Τραγούδια]</string>
   <string name="download_noti_n_finished">%d λήψεις τελειώσαν</string>
   <string name="download_noti_complete">Η λήψη ολοκληρώθηκε</string>
   <string name="download_noti_canceled">Η λήψη ακυρώθηκε</string>
@@ -48,6 +50,7 @@
   <string name="library_optimize">Βελτιστοποίηση βάσης δεδομένων</string>
   <string name="library_please_wait">Παρακαλώ περιμένετε</string>
   <string name="library_refresh">Ανανέωση</string>
+  <string name="library_empty">Η βιβλιοθήκη ειναι κενή. Σύρετε προς τα κάτω για να κατεβάσετε την βιβλιοθήκη!</string>
   <string name="library_no_search_results">Δεν υπάρχουν τραγούδια που ταιριάζουν στα κριτήρια της αναζήτησής σας!</string>
   <string name="library_no_albums">%d άλμπουμ</string>
   <string name="library_no_tracks">%d τραγουδια</string>
@@ -78,6 +81,7 @@
   <string name="menu_search">Αναζήτηση </string>
   <string name="menu_love">Aγάπη</string>
   <string name="menu_ban">Aπαγόρευση</string>
+  <string name="menu_download">Λήψη </string>
   <string name="menu_download_song">Λήψη τραγουδιού</string>
   <string name="menu_download_album">Λήψη άλμπουμ</string>
   <string name="menu_download_playlist">Λήψη λίστας αναπαραγωγής</string>
@@ -144,8 +148,13 @@
   <string name="pref_dl_wifi_only_summary">Λήψη τραγουδιών μόνο όταν είστε συνδεδεμένοι σε ένα δίκτυο Wi-Fi.</string>
   <string name="pref_dl_dir">Ορισμός φάκελου λήψης</string>
   <string name="pref_dl_override">Αντικατάσταση υπαρχόντων αρχείων</string>
+  <string name="pref_dl_cat_folders">Φάκελοι</string>
   <string name="pref_dl_pl_save_own_dir_title">Αποθήκευση τραγουδιών στο φάκελο λίστας αναπαραγωγής</string>
   <string name="pref_dl_pl_save_own_dir_summary">Δημιουργείται ένας φάκελος λίστας αναπαραγωγής και αποθηκεύει τα τραγουδια εκεί.</string>
+  <string name="pref_dl_pl_artist_dir_title">Δημιουργία υποφάκελου καλλιτέχνη</string>
+  <string name="pref_dl_pl_artist_dir_summary">Δημιουργία ενός υποφακέλου του καλλιτέχνη για κάθε τραγουδι.</string>
+  <string name="pref_dl_pl_album_dir_title">Δημιουργία ενος υποφακέλου άλμπουμ </string>
+  <string name="pref_dl_pl_album_dir_summary">Δημιουργία ενός υποφακέλου στο εσωτερικό άλμπουμ του καλλιτέχνη για κάθε κομμάτι.</string>
   <string name="file_dialog_set_dir">Επιλογή καταλόγου</string>
   <string name="file_dialog_not_writable">Ο κατάλογος δεν είναι εγγράψιμος</string>
   <string name="file_dialog_custom_paths_available">Επιλογή άλλου</string>
@@ -215,5 +224,10 @@
   <string name="cm_player_lyrics_content">Ένας διάλογος με στίχους θα ανοίξει</string>
   <string name="cm_player_swipe_title">Σύρετε προς τα δεξιά</string>
   <string name="cm_player_swipe_content">για να δείτε λεπτομέρειες του τραγούδιου και να αξιολογήσετε το τραγούδι.</string>
+  <string name="fragment_title_player">Player</string>
+  <string name="fragment_title_details">Λεπτομέρειες τραγουδιού</string>
+  <string name="fragment_title_connection">Clementine</string>
+  <string name="navigation_drawer_clementine_on">Clementine σε %s</string>
+  <string name="player_download_what">Τι να κατεβάσω;</string>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

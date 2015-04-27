@@ -29,12 +29,14 @@
   <string name="downloads_empty">Nema preuzimanja!</string>
   <string name="download_error">Nemoguće otvaranje pjesme!</string>
   <string name="download_freespace">Slobodan prostor</string>
+  <string name="downloaded_songs">Preuzete pjesme - kliknite za reprodukciju</string>
   <string name="download_noti_title">Početak preuzimanja</string>
   <string name="download_noti_n_downloads">%d aktivnih preuzimanja</string>
   <string name="download_noti_n_progress">Ukupan napredak: %d %</string>
   <string name="download_noti_title_song">[Pjesma]</string>
   <string name="download_noti_title_album">[Album]</string>
   <string name="download_noti_title_playlist">[Popis izvođenja]</string>
+  <string name="download_noti_title_songs">[Pjesme]</string>
   <string name="download_noti_n_finished">%d preuzimanja završeno</string>
   <string name="download_noti_complete">Preuzimanje završeno</string>
   <string name="download_noti_canceled">Preuzimanje prekinuto</string>
@@ -48,6 +50,7 @@
   <string name="library_optimize">Optimiziranje baze podataka</string>
   <string name="library_please_wait">Molim pričekajte</string>
   <string name="library_refresh">Osvježi</string>
+  <string name="library_empty">Fonoteka prazna. Povucite dolje za preuzimanje fonoteke!</string>
   <string name="library_no_search_results">Nema pronađenih pjesama koje se podudaraju s vašim kriterijima pretraživanja</string>
   <string name="library_no_albums">%d albuma</string>
   <string name="library_no_tracks">%d pjesama</string>
@@ -78,6 +81,7 @@
   <string name="menu_search">Traži</string>
   <string name="menu_love">Sviđa mi se</string>
   <string name="menu_ban">Zabrana</string>
+  <string name="menu_download">Preuzmi</string>
   <string name="menu_download_song">Preuzmi pjesmu</string>
   <string name="menu_download_album">Preuzmi album</string>
   <string name="menu_download_playlist">Preuzmi popis izvođenja</string>
@@ -147,8 +151,13 @@
   <string name="pref_dl_wifi_only_summary">Preuzmi pjesme samo kada je povezana WI-FI mreža.</string>
   <string name="pref_dl_dir">Postavi mapu preuzimanja</string>
   <string name="pref_dl_override">Prepiši postojeće datoteke</string>
+  <string name="pref_dl_cat_folders">Mape</string>
   <string name="pref_dl_pl_save_own_dir_title">Spremi pjesme u mapu popisa izvođenja</string>
   <string name="pref_dl_pl_save_own_dir_summary">Stvori mapu nazvanu po popisu izvođenja i spremi pjesme u mapu.</string>
+  <string name="pref_dl_pl_artist_dir_title">Stvori podmapu izvođača</string>
+  <string name="pref_dl_pl_artist_dir_summary">Stvori podmapu izvođača za svaku pojedinu pjesmu.</string>
+  <string name="pref_dl_pl_album_dir_title">Stvori podmapu albuma</string>
+  <string name="pref_dl_pl_album_dir_summary">Stvori podmapu albuma unutar izvođača za svaku pojedinu pjesmu.</string>
   <string name="file_dialog_set_dir">Odaberi direktorij</string>
   <string name="file_dialog_not_writable">Direktorij nema dozvolu za pisanje</string>
   <string name="file_dialog_custom_paths_available">Odaberi drugo</string>
@@ -158,7 +167,7 @@
   <string name="dialog_about_others">Ostali</string>
   <string name="dialog_license_top"> Ovaj program je distribuiran u nadi da će biti koristan, ali BEZ IKAKVOG JAMSTVA</string>
   <string name="tasker_intro">Odaberite radnju.</string>
-  <string name="tasker_ip_help">Upišite pojedinosti s kojima se želite povezati ako ste odabrali \"Poveži se\" iznad. Kôd autentifikacije nije obavezan ako je onemogućen u Clementine.</string>
+  <string name="tasker_ip_help">Upišite pojedinosti s kojima se želite povezati ako ste odabrali \"Poveži se\" iznad. Kôd ovjere nije obavezan ako je onemogućen u Clementinu.</string>
   <string name="tasker_action">Radnja:</string>
   <string name="tasker_connect">Poveži se</string>
   <string name="tasker_disconnect">Odspoji</string>
@@ -214,5 +223,26 @@
   <string name="cm_player_lyrics_content">Dijalog teksta pjesme će se otvoriti</string>
   <string name="cm_player_swipe_title">Povucite prstom udesno</string>
   <string name="cm_player_swipe_content">da bi vidjeli pojedinosti pjesme i ocijenili pjesmu.</string>
+  <string name="fragment_title_player">Reproduktor</string>
+  <string name="fragment_title_details">Pojedinosti pjesme</string>
+  <string name="fragment_title_connection">Clementine</string>
+  <string name="navigation_drawer_clementine_on">Clementine na %s</string>
+  <string name="player_download_what">Što preuzeti?</string>
+  <string-array name="player_download_list">
+    <item>Pjesmu</item>
+    <item>Album</item>
+    <item>Popis izvođenja</item>
+  </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
+  <string-array name="navigation_drawer_items">
+    <item>Reproduktor</item>
+    <item>Popisi izvođenja</item>
+    <item>Fonoteka</item>
+    <item>Preuzimanja</item>
+    <item></item>
+    <item>Postavke</item>
+    <item>Doniraj</item>
+    <item></item>
+    <item>Zatvori</item>
+  </string-array>
 </resources>

@@ -35,6 +35,7 @@
   <string name="download_noti_title_song">[Песма]</string>
   <string name="download_noti_title_album">[Албум]</string>
   <string name="download_noti_title_playlist">[Листа нумера]</string>
+  <string name="download_noti_title_songs">[Песме]</string>
   <string name="download_noti_n_finished">%d преузимања завршено</string>
   <string name="download_noti_complete">Преузимање завршено</string>
   <string name="download_noti_canceled">Преузимање отказано</string>
@@ -146,6 +147,7 @@
   <string name="pref_dl_wifi_only_summary">Преузимај песме само преко бежичне мреже.</string>
   <string name="pref_dl_dir">Фасцикла преузимања</string>
   <string name="pref_dl_override">Пребриши постојеће фајлове</string>
+  <string name="pref_dl_cat_folders">Фасцикле</string>
   <string name="pref_dl_pl_save_own_dir_title">Уписуј нумере у фасциклу листе</string>
   <string name="pref_dl_pl_save_own_dir_summary">Упис нумера у фасциклу именовану по листи нумера.</string>
   <string name="file_dialog_set_dir">Изабери директоријум</string>

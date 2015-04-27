@@ -29,12 +29,14 @@
   <string name="downloads_empty">Нет загрузок!</string>
   <string name="download_error">Не могу открыть песню!</string>
   <string name="download_freespace">Свободное место</string>
+  <string name="downloaded_songs">Загруженные песни - нажмите для воспроизведения</string>
   <string name="download_noti_title">Загрузка начата</string>
   <string name="download_noti_n_downloads">%d активных загрузок</string>
   <string name="download_noti_n_progress">Общий прогресс: %d %</string>
   <string name="download_noti_title_song">[Песня]</string>
   <string name="download_noti_title_album">[Альбом]</string>
   <string name="download_noti_title_playlist">[Плейлист]</string>
+  <string name="download_noti_title_songs">[Песни]</string>
   <string name="download_noti_n_finished">%d загрузок завершено</string>
   <string name="download_noti_complete">Загрузка завершена</string>
   <string name="download_noti_canceled">Загрузка отменена</string>
@@ -48,6 +50,7 @@
   <string name="library_optimize">Оптимизация базы данных</string>
   <string name="library_please_wait">Пожалуйста, подождите</string>
   <string name="library_refresh">Обновить</string>
+  <string name="library_empty">Фонотека пуста. Проведите вниз для загрузки фонотеки!</string>
   <string name="library_no_search_results">По данному запросу песен не найдено!</string>
   <string name="library_no_albums">%d альбомы</string>
   <string name="library_no_tracks">%d композиции</string>
@@ -78,6 +81,7 @@
   <string name="menu_search">Поиск</string>
   <string name="menu_love">В любимые</string>
   <string name="menu_ban">Запретить</string>
+  <string name="menu_download">Скачать</string>
   <string name="menu_download_song">Скачать песню</string>
   <string name="menu_download_album">Загрузить альбом</string>
   <string name="menu_download_playlist">Загрузить плейлист</string>
@@ -147,8 +151,13 @@
   <string name="pref_dl_wifi_only_summary">Скачивать песни, только когда есть подключение к wifi сети.</string>
   <string name="pref_dl_dir">Папка для загрузок</string>
   <string name="pref_dl_override">Перезаписывать существующие файлы</string>
+  <string name="pref_dl_cat_folders">Папки</string>
   <string name="pref_dl_pl_save_own_dir_title">Сохранять композиции в папке плейлиста</string>
   <string name="pref_dl_pl_save_own_dir_summary">Создавать папку с названием плейлиста и сохранять композиции в ней.</string>
+  <string name="pref_dl_pl_artist_dir_title">Создать подпапку с именем артиста</string>
+  <string name="pref_dl_pl_artist_dir_summary">Создавать подпапку с именем артиста для каждого трека.</string>
+  <string name="pref_dl_pl_album_dir_title">Создать подпапку с именем альбома</string>
+  <string name="pref_dl_pl_album_dir_summary">Создавать подпапку с именем альбома внтури папки артиста для каждого трека.</string>
   <string name="file_dialog_set_dir">Выберите папку</string>
   <string name="file_dialog_not_writable">Папка не доступна для записи</string>
   <string name="file_dialog_custom_paths_available">Выберите другую</string>
@@ -216,5 +225,26 @@
   <string name="cm_player_lyrics_content">Откроется диалог с текстом песни</string>
   <string name="cm_player_swipe_title">Проведите вправо</string>
   <string name="cm_player_swipe_content">чтобы увидеть сведения о треке или оценить.</string>
+  <string name="fragment_title_player">Плеер</string>
+  <string name="fragment_title_details">Сведения о песне</string>
+  <string name="fragment_title_connection">Clementine</string>
+  <string name="navigation_drawer_clementine_on">Clementine на %s</string>
+  <string name="player_download_what">Что скачать?</string>
+  <string-array name="player_download_list">
+    <item>Песня</item>
+    <item>Альбом</item>
+    <item>Плейлист</item>
+  </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
+  <string-array name="navigation_drawer_items">
+    <item>Плеер</item>
+    <item>Плейлисты</item>
+    <item>Фонотека</item>
+    <item>Загрузки</item>
+    <item></item>
+    <item>Настройки</item>
+    <item>Пожертвовать</item>
+    <item></item>
+    <item>Выход</item>
+  </string-array>
 </resources>
