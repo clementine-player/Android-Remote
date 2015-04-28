@@ -148,6 +148,12 @@
         <item>Release</item>
     </string-array>
 
+    <string name="pref_library_grouping_title">Grouping</string>
+    <string name="pref_library_grouping_summary">The library is grouped by %1$s.</string>
+    <string-array name="pref_library_grouping">
+        <item>Artist / Album</item>
+    </string-array>
+
     <string name="pref_autoconnect_title">Auto-Connect</string>
     <string name="pref_autoconnect_summary">Automatically connect to Clementine when starting the remote.
     </string>

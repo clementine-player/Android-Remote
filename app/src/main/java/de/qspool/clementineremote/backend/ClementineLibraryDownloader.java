@@ -31,12 +31,12 @@ import java.util.LinkedList;
 import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.elements.DownloaderResult;
 import de.qspool.clementineremote.backend.elements.DownloaderResult.DownloadResult;
+import de.qspool.clementineremote.backend.library.LibraryDatabaseHelper;
 import de.qspool.clementineremote.backend.listener.OnLibraryDownloadListener;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseLibraryChunk;
-import de.qspool.clementineremote.backend.player.MyLibrary;
 import de.qspool.clementineremote.utils.Utilities;
 
 public class ClementineLibraryDownloader extends
@@ -50,7 +50,7 @@ public class ClementineLibraryDownloader extends
 
     private ClementineSimpleConnection mClient = new ClementineSimpleConnection();
 
-    private MyLibrary mLibrary;
+    private LibraryDatabaseHelper mLibrary;
 
     private LinkedList<OnLibraryDownloadListener> listeners
             = new LinkedList<>();
@@ -59,7 +59,7 @@ public class ClementineLibraryDownloader extends
 
     public ClementineLibraryDownloader(Context context) {
         mContext = context;
-        mLibrary = new MyLibrary(context);
+        mLibrary = new LibraryDatabaseHelper();
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
     }
 

@@ -19,8 +19,8 @@ package de.qspool.clementineremote.backend.listener;
 
 import java.util.LinkedList;
 
-import de.qspool.clementineremote.backend.player.MyLibraryItem;
+import de.qspool.clementineremote.backend.library.LibrarySelectItem;
 
 public interface OnLibrarySelectFinishedListener {
-    void OnLibrarySelectFinished(LinkedList<MyLibraryItem> l);
+    void OnLibrarySelectFinished(LinkedList<LibrarySelectItem> l);
 }

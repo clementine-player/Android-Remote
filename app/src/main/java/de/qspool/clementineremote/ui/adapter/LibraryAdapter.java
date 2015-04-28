@@ -27,9 +27,8 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import de.qspool.clementineremote.R;
-import de.qspool.clementineremote.backend.player.MyLibrary;
-import de.qspool.clementineremote.backend.player.MyLibraryItem;
-import de.qspool.clementineremote.ui.settings.LibraryAlbumOrder;
+import de.qspool.clementineremote.backend.library.LibraryGroup;
+import de.qspool.clementineremote.backend.library.LibrarySelectItem;
 
 /**
  * Class is used for displaying the song data
@@ -38,22 +37,13 @@ public class LibraryAdapter extends CursorAdapter implements Filterable {
 
     private Context mContext;
 
-    private MyLibrary mLibrary;
-
-    private int mLevel;
-
-    private LibraryAlbumOrder mAlbumOrder;
-
-    private String mUnknownItem;
+    private LibraryGroup mLibrary;
 
 
-    public LibraryAdapter(Context context, Cursor c, MyLibrary library, int level, LibraryAlbumOrder albumOrder) {
-        super(context, c, false);
+    public LibraryAdapter(Context context, LibraryGroup library) {
+        super(context, library.buildQuery(), false);
         mContext = context;
         mLibrary = library;
-        mLevel = level;
-        mAlbumOrder = albumOrder;
-        mUnknownItem = mContext.getString(R.string.library_unknown_item);
     }
 
     @Override
@@ -76,85 +66,28 @@ public class LibraryAdapter extends CursorAdapter implements Filterable {
     public void bindView(View view, Context context, Cursor cursor) {
         LibraryViewHolder libraryViewHolder = (LibraryViewHolder) view.getTag();
 
-        switch (mLevel) {
-            case MyLibrary.LVL_ARTIST:
-                if (cursor.getString(MyLibrary.IDX_ARTIST).isEmpty()) {
-                    libraryViewHolder.title.setText(mUnknownItem);
-                } else {
-                    libraryViewHolder.title.setText(cursor.getString(MyLibrary.IDX_ARTIST));
-                }
-                libraryViewHolder.subtitle.setText(String.format(
-                        mContext.getString(R.string.library_no_albums),
-                        mLibrary.getAlbumCountForArtist(cursor.getString(MyLibrary.IDX_ARTIST))));
-                break;
-            case MyLibrary.LVL_ALBUM:
-                if (cursor.getString(MyLibrary.IDX_ALBUM).isEmpty()) {
-                    libraryViewHolder.title.setText(mUnknownItem);
-                } else {
-                    if (LibraryAlbumOrder.RELEASE.equals(mAlbumOrder)) {
-                        String albumTitleWithYear = getAlbumTitleWithYearAsPrefix(cursor);
-                        libraryViewHolder.title.setText(albumTitleWithYear);
-                    } else {
-                        libraryViewHolder.title.setText(cursor.getString(MyLibrary.IDX_ALBUM));
-                    }
-                }
-                libraryViewHolder.subtitle.setText(String.format(
-                        mContext.getString(R.string.library_no_tracks),
-                        mLibrary.getTitleCountForAlbum(cursor.getString(MyLibrary.IDX_ARTIST),
-                                cursor.getString(MyLibrary.IDX_ALBUM))));
-                break;
-            case MyLibrary.LVL_TITLE:
-                if (cursor.getString(MyLibrary.IDX_TITLE).isEmpty()) {
-                    String url = cursor.getString(MyLibrary.IDX_URL);
-                    String filename = url.substring(url.lastIndexOf("/") + 1);
-                    libraryViewHolder.title.setText(filename);
-                } else {
-                    libraryViewHolder.title.setText(cursor.getString(MyLibrary.IDX_TITLE));
-                }
-                String artist = cursor.getString(MyLibrary.IDX_ARTIST);
-                String album = cursor.getString(MyLibrary.IDX_ALBUM);
-                libraryViewHolder.subtitle.setText((artist.isEmpty() ? mUnknownItem : artist)
-                        + " / " + (album.isEmpty() ? mUnknownItem : album));
-                break;
-            default:
-                break;
-        }
-    }
-
-    /**
-     * Checks if a cursor holds a valid release year and puts it in front of the album title.
-     * If successful, it looks like: "2015 - My Album Title", otherwise: "My Album Title". This is
-     * the same behavior like in the desktop client.
-     * @return The formatted title
-     */
-    private String getAlbumTitleWithYearAsPrefix(Cursor cursor) {
-        String albumTitleWithYear = cursor.getString(MyLibrary.IDX_ALBUM);
-        int releaseYear = cursor.getInt(MyLibrary.IDX_YEAR);
-        if (releaseYear > 0) {
-            albumTitleWithYear = releaseYear + " - " + albumTitleWithYear;
-        }
-        return albumTitleWithYear;
+        LibrarySelectItem librarySelectItem = mLibrary.fillLibrarySelectItem(cursor);
+        libraryViewHolder.title.setText(librarySelectItem.getListTitle());
+        libraryViewHolder.subtitle.setText(librarySelectItem.getListSubtitle());
     }
 
     @Override
-    public MyLibraryItem getItem(int position) {
+    public LibrarySelectItem getItem(int position) {
         Cursor c = getCursor();
         c.moveToPosition(position);
-        return mLibrary.createMyLibraryItem(c, c.getInt(MyLibrary.IDX_LEVEL));
+        return mLibrary.fillLibrarySelectItem(c);
     }
 
     @Override
     public Cursor runQueryOnBackgroundThread(CharSequence constraint) {
         if (constraint.length() == 0) {
-            return mLibrary.buildSelectSql(mLevel);
+            return mLibrary.buildQuery();
         } else {
-            return mLibrary.buildSelectSql(mLevel,
-                    mLibrary.getMatchesSubQuery(constraint.toString()));
+            return mLibrary.buildQuery(mLibrary.getMatchesSubQuery(constraint.toString()));
         }
     }
 
     private class LibraryViewHolder {
-
         TextView title;
 
         TextView subtitle;

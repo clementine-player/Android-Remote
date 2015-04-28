@@ -1,6 +1,15 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
                   android:title="@string/pref_cat_library">
 
+    <ListPreference
+        android:key="pref_library_grouping"
+        android:title="@string/pref_library_grouping_title"
+        android:summary="@string/pref_library_grouping_summary"
+        android:entries="@array/pref_library_grouping"
+        android:entryValues="@array/pref_library_grouping_values"
+        android:defaultValue="0"
+        />
+
     <!-- Allows the user to specify the sort order for albums in the LibraryFragment.
          Like in the desktop client the default value for sorting is alphabetical.
      -->

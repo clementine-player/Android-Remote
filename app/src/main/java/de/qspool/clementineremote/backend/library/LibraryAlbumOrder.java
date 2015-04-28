@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package de.qspool.clementineremote.ui.settings;
+package de.qspool.clementineremote.backend.library;
 
 /**
  * This enum represents the specified sort order for albums in the LibraryFragment
