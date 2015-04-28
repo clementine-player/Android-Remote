@@ -33,7 +33,7 @@ public abstract class LibraryGroup {
         // This order has to match R.array.pref_library_grouping !
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(context);
-        int grouping = sharedPreferences.getInt(SharedPreferencesKeys.SP_LIBRARY_GROUPING, 0);
+        int grouping = Integer.valueOf(sharedPreferences.getString(SharedPreferencesKeys.SP_LIBRARY_GROUPING, "0"));
 
         switch (grouping) {
             case 0:
