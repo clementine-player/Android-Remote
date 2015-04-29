@@ -63,8 +63,7 @@
     <string name="library_refresh">Refresh</string>
     <string name="library_empty">Library empty. Swipe down to download library!</string>
     <string name="library_no_search_results">No songs matching your search criteria!</string>
-    <string name="library_no_albums">%d albums</string>
-    <string name="library_no_tracks">%d tracks</string>
+    <string name="library_number_items">%d items</string>
     <string name="library_songs_added">%d songs added to current playlist</string>
     <string name="library_context_add">Add item to current playlist</string>
     <string name="library_download_error">Could not download library</string>
@@ -141,17 +140,22 @@
     <string name="pref_volume_inc_title">Volume change level</string>
     <string name="pref_volume_inc_summary">Current volume change level : %s</string>
 
-    <string name="pref_library_album_order_title">Album sorting</string>
-    <string name="pref_library_album_order_summary">The albums in the library are currently sorted by %1$s.</string>
-    <string-array name="pref_library_album_order_display">
-        <item>Alphabet</item>
-        <item>Release</item>
+    <string name="pref_library_sorting_title">Sorting</string>
+    <string name="pref_library_sorting_summary">The library is sorted in %1$s order.</string>
+    <string-array name="pref_library_sorting">
+        <item>Ascending</item>
+        <item>Descending</item>
     </string-array>
 
     <string name="pref_library_grouping_title">Grouping</string>
     <string name="pref_library_grouping_summary">The library is grouped by %1$s.</string>
     <string-array name="pref_library_grouping">
+        <item>Artist</item>
         <item>Artist / Album</item>
+        <item>Artist / Year</item>
+        <item>Album</item>
+        <item>Genre / Album</item>
+        <item>Genre / Artist / Album</item>
     </string-array>
 
     <string name="pref_autoconnect_title">Auto-Connect</string>

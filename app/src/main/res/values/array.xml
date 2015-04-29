@@ -63,15 +63,17 @@
         <item>20</item>
     </string-array>
 
-    <!-- These strings are used in preference_library.xml and the
-    Java class LibraryAlbumOrder -->
-    <string-array name="pref_library_album_order_values">
-        <item>alphabet</item>
-        <item>release</item>
+    <string-array name="pref_library_sorting_values">
+        <item>ASC</item>
+        <item>DESC</item>
     </string-array>
 
     <string-array name="pref_library_grouping_values">
-        <item>0</item>
-        <item>1</item>
+        <item>artist</item>
+        <item>artist-album</item>
+        <item>artist-year</item>
+        <item>album</item>
+        <item>genre-album</item>
+        <item>genre-artist-album</item>
     </string-array>
 </resources>

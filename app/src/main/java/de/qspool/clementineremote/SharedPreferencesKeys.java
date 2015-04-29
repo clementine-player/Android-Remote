@@ -45,7 +45,7 @@ public class SharedPreferencesKeys {
 
     public final static String SP_LIBRARY_GROUPING = "pref_library_grouping";
 
-    public final static String SP_LIBRARY_ALBUM_ORDER = "pref_library_album_order";
+    public final static String SP_LIBRARY_SORTING = "pref_library_sorting";
 
     public final static String SP_WIFI_ONLY = "pref_dl_wifi_only";
 

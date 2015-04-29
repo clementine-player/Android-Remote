@@ -20,10 +20,12 @@ package de.qspool.clementineremote.ui.fragments;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -46,6 +48,7 @@ import java.util.LinkedList;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.ClementineLibraryDownloader;
 import de.qspool.clementineremote.backend.downloader.DownloadManager;
 import de.qspool.clementineremote.backend.elements.DownloaderResult;
@@ -66,7 +69,7 @@ import de.qspool.clementineremote.ui.interfaces.RemoteDataReceiver;
 import de.qspool.clementineremote.utils.Utilities;
 
 public class LibraryFragment extends Fragment implements BackPressHandleable, RemoteDataReceiver,
-        SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private ActionBar mActionBar;
 
@@ -76,7 +79,7 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
 
     private ListView mList;
 
-    private LinkedList<LibraryAdapter> mAdapters = new LinkedList<LibraryAdapter>();
+    private LinkedList<LibraryAdapter> mAdapters = new LinkedList<>();
 
     private TextView mLibraryEmptyText;
 
@@ -243,24 +246,16 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
             }
         });
 
-        // Check if we have the correct Clementine library. Otherwise delete it
-        LibraryDatabaseHelper libraryDatabaseHelper = new LibraryDatabaseHelper();
-        libraryDatabaseHelper.removeDatabaseIfFromOtherClementine();
-
-        LibraryGroup libraryGroup = LibraryGroup.getSelectedLibraryGroup(getActivity());
-        mLibraryLevels = libraryGroup.getMaxLevels();
-
-        // Create the adapter
-        if (mClementineLibraryDownloader == null && libraryDatabaseHelper.databaseExists()) {
-            libraryGroup.setLevel(0);
-            LibraryAdapter a = new LibraryAdapter(getActivity(), libraryGroup);
-            mAdapters.add(a);
-        }
+        createRootAdapter();
 
         showList();
 
         mActionBar.setTitle("");
-        mActionBar.setSubtitle(" / ");
+        mActionBar.setSubtitle("/");
+
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(getActivity());
+        prefs.registerOnSharedPreferenceChangeListener(this);
 
         setHasOptionsMenu(true);
 
@@ -270,6 +265,10 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(getActivity());
+        prefs.unregisterOnSharedPreferenceChangeListener(this);
 
         mAdapters.clear();
     }
@@ -284,7 +283,7 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
             mEmptyLibrary.setRefreshing(false);
 
             if (result.getResult() == DownloadResult.SUCCESSFUL) {
-                LibraryGroup libraryGroup = LibraryGroup.getSelectedLibraryGroup(getActivity());
+                LibraryGroup libraryGroup = new LibraryGroup(getActivity());
                 libraryGroup.setLevel(0);
                 LibraryAdapter a = new LibraryAdapter(getActivity(), libraryGroup);
                 mAdapters.add(a);
@@ -323,6 +322,22 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
         mProgressDialog.setCancelable(false);
 
         mProgressDialog.show();
+    }
+
+    private void createRootAdapter() {
+        // Check if we have the correct Clementine library. Otherwise delete it
+        LibraryDatabaseHelper libraryDatabaseHelper = new LibraryDatabaseHelper();
+        libraryDatabaseHelper.removeDatabaseIfFromOtherClementine();
+
+        LibraryGroup libraryGroup = new LibraryGroup(getActivity());
+        mLibraryLevels = libraryGroup.getMaxLevels();
+
+        // Create the adapter
+        if (mClementineLibraryDownloader == null && libraryDatabaseHelper.databaseExists()) {
+            libraryGroup.setLevel(0);
+            LibraryAdapter a = new LibraryAdapter(getActivity(), libraryGroup);
+            mAdapters.add(a);
+        }
     }
 
     @Override
@@ -380,7 +395,7 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
             result.add(libraryItem);
             onLibrarySelectFinishedListener.OnLibrarySelectFinished(result);
         } else {
-            LibraryGroup libraryGroup = LibraryGroup.getSelectedLibraryGroup(getActivity());
+            LibraryGroup libraryGroup = new LibraryGroup(getActivity());
             libraryGroup.setLevel(mLibraryLevels-1);
             libraryGroup.setSelection(libraryItem.getSelection());
             libraryGroup.addOnLibrarySelectFinishedListener(onLibrarySelectFinishedListener);
@@ -445,15 +460,17 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
             LibraryAdapter adapter = mAdapters.getLast();
             adapter.getFilter().filter(mLastFilter);
             mList.setAdapter(adapter);
-            if (adapter.isEmpty() || adapter.getCount() == 0) {
-                mActionBar.setSubtitle("/");
+            if (adapter.isEmpty()) {
+                mActionBar.setSubtitle("/ ");
             } else {
                 LibrarySelectItem item = adapter.getItem(0);
 
                 StringBuilder sb = new StringBuilder();
+                sb.append("/ ");
                 for (int i=0;i<mAdapters.size()-1;i++) {
-                    sb.append(" / ");
                     sb.append(item.getSelection()[i]);
+                    if (i<mAdapters.size()-2)
+                        sb.append(" / ");
                 }
                 mActionBar.setSubtitle(sb.toString());
             }
@@ -496,7 +513,7 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
                         String.format(getString(R.string.library_songs_added), 1),
                         Toast.LENGTH_SHORT).show();
             } else {
-                LibraryGroup libraryGroup = LibraryGroup.getSelectedLibraryGroup(getActivity());
+                LibraryGroup libraryGroup = new LibraryGroup(getActivity());
                 libraryGroup.setLevel(mAdapters.size());
                 libraryGroup.setSelection(item.getSelection());
                 mAdapters.add(new LibraryAdapter(getActivity(), libraryGroup));
@@ -517,5 +534,16 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
                 .getMessage(MsgType.GET_LIBRARY));
 
         createDownloadProgressDialog();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(SharedPreferencesKeys.SP_LIBRARY_GROUPING)
+                || key.equals(SharedPreferencesKeys.SP_LIBRARY_SORTING)) {
+            mAdapters.clear();
+
+            createRootAdapter();
+            showList();
+        }
     }
 }
