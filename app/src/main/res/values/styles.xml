@@ -22,7 +22,7 @@
         <item name="colorPrimary">@color/actionbar</item>
         <item name="colorPrimaryDark">@color/actionbar_dark</item>
         <item name="colorAccent">@color/actionbar</item>
-        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlNormal">@color/actionbar</item>
         <item name="actionModeStyle">@style/AppTheme.ActionMode</item>
         <item name="android:activatedBackgroundIndicator">@drawable/selector_white_orange_selected
         </item>

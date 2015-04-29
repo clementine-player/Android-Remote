@@ -25,9 +25,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.internal.widget.TintSpinner;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.ContextMenu;
@@ -71,7 +69,7 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
 
     private ActionBar mActionBar;
 
-    private TintSpinner mPlaylistsSpinner;
+    private Spinner mPlaylistsSpinner;
 
     private ListView mList;
 
@@ -168,8 +166,7 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
         mPlaylistManager.addOnPlaylistReceivedListener(mPlaylistListener);
         mPlaylists = mPlaylistManager.getAllPlaylists();
 
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.addView(mPlaylistsSpinner);
+        mPlaylistsSpinner.setVisibility(View.VISIBLE);
 
         updatePlaylistSpinner();
 
@@ -185,8 +182,7 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
     public void onPause() {
         super.onPause();
 
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.removeView(mPlaylistsSpinner);
+        mPlaylistsSpinner.setVisibility(View.GONE);
 
         mPlaylistManager.removeOnPlaylistReceivedListener(mPlaylistListener);
     }
@@ -203,7 +199,7 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
         mEmptyPlaylist = view.findViewById(R.id.playlist_empty);
 
         // Add Spinner to toolbar
-        mPlaylistsSpinner = new TintSpinner(getActivity());
+        mPlaylistsSpinner = (Spinner) getActivity().findViewById(R.id.toolbar_spinner);
 
         mPlaylistsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
