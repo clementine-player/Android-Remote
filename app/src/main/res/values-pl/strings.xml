@@ -49,8 +49,6 @@
   <string name="library_please_wait">Proszę czekać</string>
   <string name="library_refresh">Odśwież</string>
   <string name="library_no_search_results">Brak utworów spełniających Twoje warunki wyszukiwania</string>
-  <string name="library_no_albums">%d albumy</string>
-  <string name="library_no_tracks">%d utwory</string>
   <string name="library_songs_added">%d utworów dodanych do aktualnej listy odtwarzania</string>
   <string name="library_context_add">Dodaj do aktualnej listy odtwarzania</string>
   <string name="library_download_error">Nie można było pobrać biblioteki</string>

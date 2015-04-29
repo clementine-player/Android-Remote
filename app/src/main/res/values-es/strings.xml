@@ -49,8 +49,6 @@
   <string name="library_please_wait">Espere</string>
   <string name="library_refresh">Actualizar</string>
   <string name="library_no_search_results">Ninguna canción coincide con los criterios de búsqueda.</string>
-  <string name="library_no_albums">%d álbumes</string>
-  <string name="library_no_tracks">%d pistas</string>
   <string name="library_songs_added">Se añadieron %d canciones a la lista de reprod. actual</string>
   <string name="library_context_add">Añadir elemento a la lista actual</string>
   <string name="library_download_error">No se pudo descargar la colección</string>
@@ -114,12 +112,6 @@
   <string name="pref_call_volume_summary">Nivel de volumen en llamadas actual: %s</string>
   <string name="pref_volume_inc_title">Cambiar nivel de volumen</string>
   <string name="pref_volume_inc_summary">Cambio de nivel de volumen actual: %s</string>
-  <string name="pref_library_album_order_title">Orden de álbumes</string>
-  <string name="pref_library_album_order_summary">Los álbumes de la colección están ordenados por %1$s.</string>
-  <string-array name="pref_library_album_order_display">
-    <item>Alfabeto</item>
-    <item>Publicación</item>
-  </string-array>
   <string name="pref_autoconnect_title">Conexión automática</string>
   <string name="pref_autoconnect_summary">Conectar automáticamente con Clementine al iniciar el control remoto.
 </string>

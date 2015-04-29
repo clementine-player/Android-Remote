@@ -52,8 +52,6 @@
   <string name="library_refresh">Rafraîchir</string>
   <string name="library_empty">Bibliothèque vide. Glissez vers le bas pour télécharger la bibliothèque.</string>
   <string name="library_no_search_results">Aucun morceau ne correspond à vos critères de recherche !</string>
-  <string name="library_no_albums">%d albums</string>
-  <string name="library_no_tracks">%d pistes</string>
   <string name="library_songs_added">%d chansons ajoutées à la liste de lecture courante</string>
   <string name="library_context_add">Ajouter l\'élément à la liste de lecture actuelle</string>
   <string name="library_download_error">Impossible de télécharger la bibliothèque</string>
@@ -118,12 +116,6 @@
   <string name="pref_call_volume_summary">Volume d\'appel actuel : %s</string>
   <string name="pref_volume_inc_title">Niveau du changement de volume</string>
   <string name="pref_volume_inc_summary">Niveau du changement de volume actuel : %s</string>
-  <string name="pref_library_album_order_title">Tri par album</string>
-  <string name="pref_library_album_order_summary">Les albums de la bibliothèque sont triés par  %1$s</string>
-  <string-array name="pref_library_album_order_display">
-    <item>Alphabétique</item>
-    <item>Date de sortie</item>
-  </string-array>
   <string name="pref_autoconnect_title">Connexion automatique</string>
   <string name="pref_autoconnect_summary">Connexion automatique à Clementine au démarrage de l\'application.</string>
   <string name="pref_port_title">Port</string>

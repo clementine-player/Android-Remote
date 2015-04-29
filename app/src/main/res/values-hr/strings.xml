@@ -52,8 +52,6 @@
   <string name="library_refresh">Osvježi</string>
   <string name="library_empty">Fonoteka prazna. Povucite dolje za preuzimanje fonoteke!</string>
   <string name="library_no_search_results">Nema pronađenih pjesama koje se podudaraju s vašim kriterijima pretraživanja</string>
-  <string name="library_no_albums">%d albuma</string>
-  <string name="library_no_tracks">%d pjesama</string>
   <string name="library_songs_added">%d pjesama dodano na trenutni popis izvođenja</string>
   <string name="library_context_add">Dodaj pjesmu na trenutni popis izvođenja</string>
   <string name="library_download_error">Nemoguće preuzimanje fonoteke</string>
@@ -118,12 +116,6 @@
   <string name="pref_call_volume_summary">Trenutna razina glasnoće zvuka poziva: %s</string>
   <string name="pref_volume_inc_title">Razina glasnoće zvuka</string>
   <string name="pref_volume_inc_summary">Trenutna razina glasnoće zvuka : %s</string>
-  <string name="pref_library_album_order_title">Razvrstavanje albuma</string>
-  <string name="pref_library_album_order_summary">Albumi u fonoteci su trenutno razvrstani %1$s.</string>
-  <string-array name="pref_library_album_order_display">
-    <item>abecedno</item>
-    <item>po datumu izdanja</item>
-  </string-array>
   <string name="pref_autoconnect_title">Automatsko-povezivanje</string>
   <string name="pref_autoconnect_summary">Automatisko povezivanje s Clementine pri pokretanju daljinskog upravljača.
     </string>

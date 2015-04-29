@@ -29,12 +29,14 @@
   <string name="downloads_empty">Žiadne preberania!</string>
   <string name="download_error">Nepodarilo sa otvoriť skladbu!</string>
   <string name="download_freespace">Voľné miesto</string>
+  <string name="downloaded_songs">Prevzaté skladby - kliknutím prehráte</string>
   <string name="download_noti_title">Spúšťanie preberania</string>
   <string name="download_noti_n_downloads">Aktívne preberania: %d</string>
   <string name="download_noti_n_progress">Celkový priebeh: %d %</string>
   <string name="download_noti_title_song">[Skladba]</string>
   <string name="download_noti_title_album">[Album]</string>
   <string name="download_noti_title_playlist">[Zoznam skladieb]</string>
+  <string name="download_noti_title_songs">[Skladby]</string>
   <string name="download_noti_n_finished">Dokončené preberania: %d</string>
   <string name="download_noti_complete">Preberanie dokončené</string>
   <string name="download_noti_canceled">Preberanie zrušené</string>
@@ -50,8 +52,6 @@
   <string name="library_refresh">Obnoviť</string>
   <string name="library_empty">Zbierka je prázdna. Potiahnutím dole prevezmite zbierku!</string>
   <string name="library_no_search_results">Vašim kritériám vyhľadávania nevyhuvujú žiadne skladby!</string>
-  <string name="library_no_albums">%d albumov</string>
-  <string name="library_no_tracks">%d skladieb</string>
   <string name="library_songs_added">%d skladieb bolo pridaných do aktuálneho zoznamu skladieb</string>
   <string name="library_context_add">Pridať položku do aktuálneho zoznamu skladieb</string>
   <string name="library_download_error">Nepodarilo sa prebrať zbierku</string>
@@ -116,12 +116,8 @@
   <string name="pref_call_volume_summary">Aktuálna úroveň hlasitosti počas hovoru: %s</string>
   <string name="pref_volume_inc_title">Úroveň zmeny hlasitosti</string>
   <string name="pref_volume_inc_summary">Aktuálna úroveň zmeny hlasitosti: %s</string>
-  <string name="pref_library_album_order_title">Usporiadanie albumov</string>
-  <string name="pref_library_album_order_summary">Albumy v zbierke sú aktuálne usporiadané podľa %1$s.</string>
-  <string-array name="pref_library_album_order_display">
-    <item>Abecedne</item>
-    <item>Vydanie</item>
-  </string-array>
+  <string name="pref_library_grouping_title">Zoskupenie</string>
+  <string name="pref_library_grouping_summary">Zbierka je zoskupená podľa %1$s.</string>
   <string name="pref_autoconnect_title">Pripojiť automaticky</string>
   <string name="pref_autoconnect_summary">Automaticky pripojiť k prehrávaču Clementine po spustení diaľkového ovládania.
 </string>
@@ -149,8 +145,13 @@
   <string name="pref_dl_wifi_only_summary">Prebrať skladby iba počas pripojenia k sieti wifi.</string>
   <string name="pref_dl_dir">Nastaviť priečinok pre preberania</string>
   <string name="pref_dl_override">Prevážiť existujúce súbory</string>
+  <string name="pref_dl_cat_folders">Priečinky</string>
   <string name="pref_dl_pl_save_own_dir_title">Uložiť skladby v priečinku zoznamu skladieb</string>
   <string name="pref_dl_pl_save_own_dir_summary">Vytvorí priečinok s názvom zoznamu skladieb a uloží sem skladby.</string>
+  <string name="pref_dl_pl_artist_dir_title">Vytvoriť podpriečinok s menom umelca</string>
+  <string name="pref_dl_pl_artist_dir_summary">Vytvorí podpriečinok s menom umelca pre každú jednotlivú stopu.</string>
+  <string name="pref_dl_pl_album_dir_title">Vytvoriť podpriečinok s názvom albumu</string>
+  <string name="pref_dl_pl_album_dir_summary">Vytvorí podpriečinok s názvom albumu v priečinku s menom umelca pre každú jednotlivú stopu.</string>
   <string name="file_dialog_set_dir">Vybrať adresár</string>
   <string name="file_dialog_not_writable">Adresár nie je zapisovateľný</string>
   <string name="file_dialog_custom_paths_available">Vybrať iný</string>

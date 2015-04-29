@@ -49,8 +49,6 @@
   <string name="library_please_wait">Var god vänta</string>
   <string name="library_refresh">Ladda om</string>
   <string name="library_no_search_results">Ingen låt matchar dina sökkriterier!</string>
-  <string name="library_no_albums">%d album</string>
-  <string name="library_no_tracks">%d låtar</string>
   <string name="library_songs_added">%d låtar tillagda i nuvarande spellista</string>
   <string name="library_context_add">Lägg till objekt i nuvarande spellista</string>
   <string name="library_download_error">Kunde inte ladda ned bibliotek</string>
@@ -114,12 +112,6 @@
   <string name="pref_call_volume_summary">Nuvarande nivå på volymen: %s</string>
   <string name="pref_volume_inc_title">Ändringsnivå på volymen</string>
   <string name="pref_volume_inc_summary">Nuvarande ändringsnivå på volymen : %s</string>
-  <string name="pref_library_album_order_title">Ordna skivor</string>
-  <string name="pref_library_album_order_summary">Skivorna i biblioteket är för närvarande ordnade enligt %1$s.</string>
-  <string-array name="pref_library_album_order_display">
-    <item>Alfabetisk</item>
-    <item>Utgåva</item>
-  </string-array>
   <string name="pref_autoconnect_title">Anslut automatiskt</string>
   <string name="pref_autoconnect_summary">Anslut till Clementine automatiskt när du startar fjärrkontrollen.
     </string>

@@ -29,6 +29,7 @@
   <string name="downloads_empty">Нема преузетих ставки!</string>
   <string name="download_error">Не могу да отворим песму!</string>
   <string name="download_freespace">Слободан простор</string>
+  <string name="downloaded_songs">Преузете песме — кликните за пуштање</string>
   <string name="download_noti_title">Почињем преузимање</string>
   <string name="download_noti_n_downloads">%d активних преузимања</string>
   <string name="download_noti_n_progress">Укупан напредак: %d %</string>
@@ -51,8 +52,6 @@
   <string name="library_refresh">Освежи</string>
   <string name="library_empty">Библиотека је празна. Превуците на доле да преузмете библиотеку!</string>
   <string name="library_no_search_results">Ниједна песма се не поклапа са траженим изразом!</string>
-  <string name="library_no_albums">%d албума</string>
-  <string name="library_no_tracks">%d нумера</string>
   <string name="library_songs_added">%d песама додато у текућу листу нумера</string>
   <string name="library_context_add">Додај ставку у текућу листу нумера</string>
   <string name="library_download_error">Не могу да преузмем библиотеку</string>
@@ -117,12 +116,8 @@
   <string name="pref_call_volume_summary">Ниво звука за позив: %s</string>
   <string name="pref_volume_inc_title">Ниво промене јачине звука</string>
   <string name="pref_volume_inc_summary">Ниво промене јачине звука: %s</string>
-  <string name="pref_library_album_order_title">Разврставање албума</string>
-  <string name="pref_library_album_order_summary">Албуми у библиотеци тренутно се слажу по %1$s.</string>
-  <string-array name="pref_library_album_order_display">
-    <item>Алфабету</item>
-    <item>Издању</item>
-  </string-array>
+  <string name="pref_library_grouping_title">Груписање</string>
+  <string name="pref_library_grouping_summary">Библиотека је груписана по %1$s.</string>
   <string name="pref_autoconnect_title">Ауто-повезивање</string>
   <string name="pref_autoconnect_summary">Аутоматски се повежи са Клементином по покретању даљинског.</string>
   <string name="pref_port_title">Порт</string>

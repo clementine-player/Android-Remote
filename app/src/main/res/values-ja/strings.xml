@@ -29,12 +29,14 @@
   <string name="downloads_empty">ダウンロードはありません!</string>
   <string name="download_error">曲を開くことができません!</string>
   <string name="download_freespace">空き容量</string>
+  <string name="downloaded_songs">ダウンロードした曲 - クリックで再生</string>
   <string name="download_noti_title">ダウンロードの開始中</string>
   <string name="download_noti_n_downloads">%d のアクティブなダウンロード</string>
   <string name="download_noti_n_progress">全体の状況: %d %</string>
   <string name="download_noti_title_song">[曲]</string>
   <string name="download_noti_title_album">[アルバム]</string>
   <string name="download_noti_title_playlist">[プレイリスト]</string>
+  <string name="download_noti_title_songs">[曲]</string>
   <string name="download_noti_n_finished">%d のダウンロードが完了</string>
   <string name="download_noti_complete">ダウンロードが完了しました</string>
   <string name="download_noti_canceled">ダウンロードをキャンセルしました</string>
@@ -48,9 +50,8 @@
   <string name="library_optimize">データベースの最適化中</string>
   <string name="library_please_wait">しばらくお待ちください</string>
   <string name="library_refresh">リフレッシュ</string>
+  <string name="library_empty">ライブラリーは空です。下にスワイプすると、ライブラリーをダウンロードします!</string>
   <string name="library_no_search_results">検索条件に一致する曲はありません!</string>
-  <string name="library_no_albums">%d アルバム</string>
-  <string name="library_no_tracks">%d トラック</string>
   <string name="library_songs_added">現在のプレイリストに %d 曲追加しました</string>
   <string name="library_context_add">現在のプレイリストにアイテムを追加</string>
   <string name="library_download_error">ライブラリーをダウンロードできません</string>
@@ -78,6 +79,7 @@
   <string name="menu_search">検索</string>
   <string name="menu_love">好き</string>
   <string name="menu_ban">禁止</string>
+  <string name="menu_download">ダウンロード</string>
   <string name="menu_download_song">曲のダウンロード</string>
   <string name="menu_download_album">アルバムのダウンロード</string>
   <string name="menu_download_playlist">プレイリストのダウンロード</string>
@@ -114,12 +116,6 @@
   <string name="pref_call_volume_summary">現在の呼び出し時の音量: %s</string>
   <string name="pref_volume_inc_title">音量変更レベル</string>
   <string name="pref_volume_inc_summary">現在の音量変更レベル : %s</string>
-  <string name="pref_library_album_order_title">アルバムの並び替え</string>
-  <string name="pref_library_album_order_summary">ライブラリーのアルバムの並び替えは現在 %1$s 順です。</string>
-  <string-array name="pref_library_album_order_display">
-    <item>アルファベット</item>
-    <item>リリース</item>
-  </string-array>
   <string name="pref_autoconnect_title">自動接続</string>
   <string name="pref_autoconnect_summary">リモートの起動時に自動的に Clementine に接続します。</string>
   <string name="pref_port_title">ポート</string>
@@ -144,8 +140,13 @@
   <string name="pref_dl_wifi_only_summary">WiFi ネットワークに接続したときのみ、曲をダウンロードします。</string>
   <string name="pref_dl_dir">ダウンロード フォルダーを設定</string>
   <string name="pref_dl_override">既存のファイルを上書きする</string>
+  <string name="pref_dl_cat_folders">フォルダー</string>
   <string name="pref_dl_pl_save_own_dir_title">プレイリスト フォルダーにトラックを保存</string>
   <string name="pref_dl_pl_save_own_dir_summary">プレイリストという名前のフォルダを作成して、そこにトラックが保存されます。</string>
+  <string name="pref_dl_pl_artist_dir_title">アーティスト サブフォルダーを作成</string>
+  <string name="pref_dl_pl_artist_dir_summary">それぞれのトラックに、アーティストのサブフォルダーを作成します。</string>
+  <string name="pref_dl_pl_album_dir_title">アルバム サブフォルダーを作成</string>
+  <string name="pref_dl_pl_album_dir_summary">それぞれのトラックのアーティスト内に、アルバムサブフォルダーを作成します。</string>
   <string name="file_dialog_set_dir">ディレクトリーの選択</string>
   <string name="file_dialog_not_writable">ディレクトリーに書き込みできません</string>
   <string name="file_dialog_custom_paths_available">他を選択</string>
@@ -211,5 +212,26 @@
   <string name="cm_player_lyrics_content">歌詞のダイアログが開きます</string>
   <string name="cm_player_swipe_title">右にスワイプしてください</string>
   <string name="cm_player_swipe_content">トラックの詳細を参照して、曲を評価します。</string>
+  <string name="fragment_title_player">プレイヤー</string>
+  <string name="fragment_title_details">曲の詳細</string>
+  <string name="fragment_title_connection">Clementine</string>
+  <string name="navigation_drawer_clementine_on">%s の Clementine</string>
+  <string name="player_download_what">何をダウンロードしますか?</string>
+  <string-array name="player_download_list">
+    <item>曲</item>
+    <item>アルバム</item>
+    <item>プレイリスト</item>
+  </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
+  <string-array name="navigation_drawer_items">
+    <item>プレイヤー</item>
+    <item>プレイリスト</item>
+    <item>ライブラリー</item>
+    <item>ダウンロード</item>
+    <item></item>
+    <item>設定</item>
+    <item>寄付</item>
+    <item></item>
+    <item>終了</item>
+  </string-array>
 </resources>

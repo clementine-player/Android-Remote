@@ -47,8 +47,6 @@
   <string name="library_please_wait">Lütfen bekleyin</string>
   <string name="library_refresh">Yenile</string>
   <string name="library_no_search_results">Arama kriterlerinizle eşleşen parça yok!</string>
-  <string name="library_no_albums">%d albüm</string>
-  <string name="library_no_tracks">%d parça</string>
   <string name="library_songs_added">Geçerli oynatma listesine %d şarkı eklendi</string>
   <string name="library_context_add">Ögeyi geçerli oynatma listesine ekle</string>
   <string name="library_download_error">Kütüphane indirilemedi</string>

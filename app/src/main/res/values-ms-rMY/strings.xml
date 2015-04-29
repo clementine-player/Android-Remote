@@ -49,8 +49,6 @@
   <string name="library_please_wait">Tunggu sebentar</string>
   <string name="library_refresh">Segar semula</string>
   <string name="library_no_search_results">Tiada lagu memadani kriteria gelintar anda!</string>
-  <string name="library_no_albums">%d album</string>
-  <string name="library_no_tracks">%d trek</string>
   <string name="library_songs_added">%d buah lagu ditambah ke dalam senarai main semasa</string>
   <string name="library_context_add">Tambah item ke senarai main semasa</string>
   <string name="library_download_error">Tidak dapat memuat turun pustaka</string>
@@ -114,12 +112,6 @@
   <string name="pref_call_volume_summary">Aras volum panggilan semasa: %s</string>
   <string name="pref_volume_inc_title">Aras ubah volum</string>
   <string name="pref_volume_inc_summary">Aras ubah volum semasa : %s</string>
-  <string name="pref_library_album_order_title">Pengisihan album</string>
-  <string name="pref_library_album_order_summary">Album di dalam pustaka buat masa ini diisih mengikut %1$s.</string>
-  <string-array name="pref_library_album_order_display">
-    <item>Abjad</item>
-    <item>Keluaran</item>
-  </string-array>
   <string name="pref_autoconnect_title">Auto-Sambung</string>
   <string name="pref_autoconnect_summary">Sambung secara automatik ke Clementine bila memulakan jauh.</string>
   <string name="pref_port_title">Port</string>

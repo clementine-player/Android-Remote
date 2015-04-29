@@ -52,8 +52,6 @@
   <string name="library_refresh">Obnovit</string>
   <string name="library_empty">Knihovna je prázdná. Švihněte dolů pro stažení knihovny!</string>
   <string name="library_no_search_results">Žádné písně neodpovídají vašim hlediskům hledání!</string>
-  <string name="library_no_albums">%d alb</string>
-  <string name="library_no_tracks">%d skladeb</string>
   <string name="library_songs_added">%d písní přidáno do nynějšího seznamu skladeb</string>
   <string name="library_context_add">Přidat položku do nynějšího seznamu skladeb</string>
   <string name="library_download_error">Nepopdařilo se stáhnout sbírku</string>
@@ -120,12 +118,8 @@ Pokud máte díky mé práci skutečně dobrou náladu, malý dar od vás by byl
   <string name="pref_call_volume_summary">Nynější úroveň hlasitosti volání: %s</string>
   <string name="pref_volume_inc_title">Úroveň změny hlasitosti</string>
   <string name="pref_volume_inc_summary">Nynější úroveň změny hlasitosti: %s</string>
-  <string name="pref_library_album_order_title">Třídění alb</string>
-  <string name="pref_library_album_order_summary">Alba ve sbírce jsou nyní tříděna podle %1$s.</string>
-  <string-array name="pref_library_album_order_display">
-    <item>Abeceda</item>
-    <item>Vydání</item>
-  </string-array>
+  <string name="pref_library_grouping_title">Seskupování</string>
+  <string name="pref_library_grouping_summary">Sbírka je seskupena podle %1$s.</string>
   <string name="pref_autoconnect_title">Automaticky připojit</string>
   <string name="pref_autoconnect_summary">Automaticky se spojit s Clementine při spouštění vzdáleného.
     </string>
