@@ -15,52 +15,90 @@
         android:paddingTop="5dp"
         android:scaleType="centerCrop"
         android:src="@drawable/icon_large"
-        android:layout_weight="1"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/ll_metadata"
+        android:layout_above="@+id/sbPosition"
         android:layout_centerInParent="true" />
 
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ll_metadata"
-        android:layout_above="@+id/sbPosition"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:paddingTop="4dp">
+        android:layout_alignBottom="@+id/imgArt"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="32dp"
+        android:id="@+id/ll_artist"
+        android:background="@drawable/album_cover_overlay">
 
         <TextView
-            android:id="@+id/tvGenre"
-            android:singleLine="true"
+            android:id="@+id/tvArtist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
+            android:maxLines="1"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@android:color/black"
+            android:gravity="center"
             android:layout_weight="1"
-            android:gravity="left"
-            android:textColor="@color/player_smalltext"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:text="artist" />
 
         <TextView
-            android:id="@+id/tvYear"
-            android:singleLine="true"
+            android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:maxLines="1"
+            android:gravity="center"
             android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:textColor="@color/player_smalltext"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:textColor="@android:color/black"/>
 
         <TextView
-            android:id="@+id/tvLength"
-            android:singleLine="true"
+            android:id="@+id/tvAlbum"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:maxLines="1"
+            android:gravity="center"
             android:layout_weight="1"
-            android:gravity="right"
-            android:textColor="@color/player_smalltext"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:textColor="@android:color/black" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ll_metadata">
+
+            <TextView
+                android:id="@+id/tvGenre"
+                android:singleLine="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:textColor="@color/player_smalltext"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/tvYear"
+                android:singleLine="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:textColor="@color/player_smalltext"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/tvLength"
+                android:singleLine="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:textColor="@color/player_smalltext"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -76,44 +114,5 @@
         android:thumb="@drawable/scrubber_control"
         android:layout_alignParentStart="false"
         android:layout_alignParentBottom="true" />
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imgArt"
-        android:background="@drawable/album_cover_overlay"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingBottom="8dp"
-        android:paddingTop="32dp">
-
-        <TextView
-            android:id="@+id/tvArtist"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@android:color/black"
-            android:gravity="center_horizontal"
-            android:text="artist" />
-
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:textColor="@android:color/black"
-            android:gravity="center_horizontal" />
-
-        <TextView
-            android:id="@+id/tvAlbum"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:textColor="@android:color/black"
-            android:gravity="center_horizontal" />
-
-    </LinearLayout>
 
 </RelativeLayout>
