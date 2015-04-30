@@ -284,6 +284,7 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
 
             if (result.getResult() == DownloadResult.SUCCESSFUL) {
                 LibraryGroup libraryGroup = new LibraryGroup(getActivity());
+                libraryGroup.openDatabase();
                 libraryGroup.setLevel(0);
                 LibraryAdapter a = new LibraryAdapter(getActivity(), libraryGroup);
                 mAdapters.add(a);
@@ -334,6 +335,7 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
 
         // Create the adapter
         if (mClementineLibraryDownloader == null && libraryDatabaseHelper.databaseExists()) {
+            libraryGroup.openDatabase();
             libraryGroup.setLevel(0);
             LibraryAdapter a = new LibraryAdapter(getActivity(), libraryGroup);
             mAdapters.add(a);
@@ -396,6 +398,7 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
             onLibrarySelectFinishedListener.OnLibrarySelectFinished(result);
         } else {
             LibraryGroup libraryGroup = new LibraryGroup(getActivity());
+            libraryGroup.openDatabase();
             libraryGroup.setLevel(mLibraryLevels-1);
             libraryGroup.setSelection(libraryItem.getSelection());
             libraryGroup.addOnLibrarySelectFinishedListener(onLibrarySelectFinishedListener);
@@ -514,6 +517,7 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
                         Toast.LENGTH_SHORT).show();
             } else {
                 LibraryGroup libraryGroup = new LibraryGroup(getActivity());
+                libraryGroup.openDatabase();
                 libraryGroup.setLevel(mAdapters.size());
                 libraryGroup.setSelection(item.getSelection());
                 mAdapters.add(new LibraryAdapter(getActivity(), libraryGroup));

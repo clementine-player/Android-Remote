@@ -35,7 +35,6 @@ public class LibraryGroup {
 
     public LibraryGroup(Context context) {
         mContext = context;
-        mDatabase = new LibraryDatabaseHelper().openDatabase(SQLiteDatabase.OPEN_READONLY);
 
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(mContext);
@@ -64,6 +63,10 @@ public class LibraryGroup {
                 break;
         }
         mMaxLevels = mSelectedFields.length;
+    }
+
+    public void openDatabase() {
+        mDatabase = new LibraryDatabaseHelper().openDatabase(SQLiteDatabase.OPEN_READONLY);
     }
 
     public int getMaxLevels() {
