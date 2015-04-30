@@ -29,7 +29,7 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
@@ -99,7 +99,7 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
         super.onCreate(savedInstanceState);
 
         // Get the actionbar
-        mActionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
+        mActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         setHasOptionsMenu(true);
     }
 

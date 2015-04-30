@@ -21,7 +21,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -42,7 +42,7 @@ import de.qspool.clementineremote.utils.Utilities;
 /**
  * The settings screen of Clementine Remote
  */
-public class ClementineSettings extends ActionBarActivity {
+public class ClementineSettings extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +126,7 @@ public class ClementineSettings extends ActionBarActivity {
                             .addToBackStack("Setting")
                             .commit();
 
-                    ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(items.get(position).title);
+                    ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(items.get(position).title);
                 }
             });
 

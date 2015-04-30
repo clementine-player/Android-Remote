@@ -39,7 +39,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.Menu;
@@ -82,7 +82,7 @@ import de.qspool.clementineremote.utils.Utilities;
 /**
  * The connect dialog
  */
-public class ConnectActivity extends ActionBarActivity {
+public class ConnectActivity extends AppCompatActivity {
 
     private final int ANIMATION_DURATION = 2000;
 

@@ -25,7 +25,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
@@ -98,7 +98,7 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
         super.onCreate(savedInstanceState);
 
         // Get the actionbar
-        mActionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
+        mActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         setHasOptionsMenu(true);
 
         mPlaylistManager = App.Clementine.getPlaylistManager();
