@@ -495,7 +495,7 @@ public class ConnectActivity extends AppCompatActivity {
      */
     void oldProtoVersion() {
         String title = getString(R.string.error_versions);
-        String message = getString(R.string.old_proto) + "\n(need Clementine 1.2.1 or later!)";
+        String message = getString(R.string.old_proto) + "\n(need Clementine-1.2.3-1110-gd322c12 (hourly build) or later!)";
         Utilities.ShowMessageDialog(this, title, message, false);
     }
 
