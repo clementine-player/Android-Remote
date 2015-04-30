@@ -17,12 +17,13 @@
 
 package de.qspool.clementineremote.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,7 +41,7 @@ import de.qspool.clementineremote.utils.bundle.PluginBundleManager;
 /**
  * Tasker settings page
  */
-public class TaskerSettings extends Activity {
+public class TaskerSettings extends AppCompatActivity {
 
     public final static int ACTION_CONNECT = 0;
 
@@ -76,7 +77,9 @@ public class TaskerSettings extends Activity {
 
         setContentView(R.layout.activity_taskersettings);
 
-        getActionBar().setDisplayShowHomeEnabled(true);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         mIp = (EditText) findViewById(R.id.tasker_ip);

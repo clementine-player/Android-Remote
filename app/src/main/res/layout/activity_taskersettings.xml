@@ -5,6 +5,8 @@
     android:background="@drawable/activity_background"
     android:orientation="vertical">
 
+    <include layout="@layout/toolbar" />
+
     <ScrollView
         android:background="@drawable/white_background"
         android:layout_margin="7dp"
