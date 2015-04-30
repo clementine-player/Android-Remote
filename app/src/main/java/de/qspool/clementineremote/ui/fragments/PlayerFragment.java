@@ -23,6 +23,7 @@ import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -212,9 +213,9 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
     private void stateChanged() {
         // display play / pause image
         if (App.Clementine.getState() == Clementine.State.PLAY) {
-            mBtnPlayPause.setImageDrawable(getResources().getDrawable(R.drawable.ic_media_pause));
+            mBtnPlayPause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_media_pause));
         } else {
-            mBtnPlayPause.setImageDrawable(getResources().getDrawable(R.drawable.ic_media_play));
+            mBtnPlayPause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_media_play));
         }
     }
 
