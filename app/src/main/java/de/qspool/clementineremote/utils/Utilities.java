@@ -1,5 +1,7 @@
 package de.qspool.clementineremote.utils;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Dialog;
@@ -13,12 +15,6 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.Html;
-import android.text.method.LinkMovementMethod;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.TextView;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -90,32 +86,19 @@ public class Utilities {
      */
     public static Dialog ShowMessageDialog(Context context, String title, String message,
             boolean hasHtml) {
-        final Dialog errorDialog = new Dialog(context, R.style.Dialog_Transparent);
-        errorDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        errorDialog.setContentView(R.layout.dialog_message);
 
-        // Set the Views
-        final TextView tvTitle = (TextView) errorDialog.findViewById(R.id.tvTitle);
-        final TextView tvMessage = (TextView) errorDialog.findViewById(R.id.tvMessage);
-        tvTitle.setText(title);
+        String content;
         if (hasHtml) {
-            tvMessage.setText(Html.fromHtml(message));
+            content = Html.fromHtml(message).toString();
         } else {
-            tvMessage.setText(message);
+            content = message;
         }
-        tvMessage.setMovementMethod(LinkMovementMethod.getInstance());
 
-        Button connectButton = (Button) errorDialog.findViewById(R.id.btnClose);
-        connectButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                errorDialog.cancel();
-            }
-        });
-
-        errorDialog.show();
-
-        return errorDialog;
+        return new MaterialDialog.Builder(context)
+                .title(title)
+                .content(content)
+                .negativeText(R.string.dialog_close)
+                .show();
     }
 
     public static byte[] ToIPByteArray(int addr) {

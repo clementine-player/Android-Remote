@@ -17,14 +17,12 @@
 
 package de.qspool.clementineremote.ui;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.NotificationManager;
-import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -50,15 +48,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager.LayoutParams;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -105,7 +100,7 @@ public class ConnectActivity extends ActionBarActivity {
 
     private AutoCompleteTextView mEtIp;
 
-    ProgressDialog mPdConnect;
+    MaterialDialog mPdConnect;
 
     private SharedPreferences mSharedPref;
 
@@ -143,11 +138,6 @@ public class ConnectActivity extends ActionBarActivity {
 
         mShowcaseStore = new ShowcaseStore(this);
 
-        // Create a progress dialog
-        mPdConnect = new ProgressDialog(this);
-        mPdConnect.setCancelable(true);
-        mPdConnect.setOnCancelListener(oclProgressDialog);
-
         initializeUi();
 
         // Check if we got a stack trace
@@ -164,7 +154,7 @@ public class ConnectActivity extends ActionBarActivity {
         super.onResume();
 
         // Check if we are currently connected, then open the player dialog
-        if (!mPdConnect.isShowing()
+        if ((mPdConnect == null || !mPdConnect.isShowing())
                 && App.ClementineConnection != null
                 && App.ClementineConnection.isConnected()) {
             showPlayerDialog();
@@ -305,16 +295,19 @@ public class ConnectActivity extends ActionBarActivity {
             // Only when we have Jelly Bean or higher
             if (!mClementineMDns.getServices().isEmpty()) {
                 mAnimationCancel = true;
-                final AlertDialog.Builder builder = new AlertDialog.Builder(ConnectActivity.this);
+                final MaterialDialog.Builder builder = new MaterialDialog.Builder(ConnectActivity.this);
 
-                builder.setTitle(R.string.connectdialog_services);
+                builder.title(R.string.connectdialog_services);
                 CustomClementinesAdapter adapter = new CustomClementinesAdapter(ConnectActivity.this,
                         R.layout.item_clementine, mClementineMDns.getServices());
-                builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
+                builder.adapter(adapter, new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog materialDialog, View view, int i,
+                            CharSequence charSequence) {
+                        materialDialog.dismiss();
                         // The 'which' argument contains the index position
                         // of the selected item
-                        ServiceInfo service = mClementineMDns.getServices().get(which);
+                        ServiceInfo service = mClementineMDns.getServices().get(i);
                         // Insert the host
                         String ip = service.getInet4Addresses()[0].toString().split("/")[1];
                         mEtIp.setText(ip);
@@ -327,11 +320,7 @@ public class ConnectActivity extends ActionBarActivity {
                         connect();
                     }
                 });
-                builder.setNegativeButton(R.string.dialog_close, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
+                builder.negativeText(R.string.dialog_close);
                 builder.show();
             }
         }
@@ -374,10 +363,15 @@ public class ConnectActivity extends ActionBarActivity {
         editor.putInt(SharedPreferencesKeys.SP_LAST_AUTH_CODE, mAuthCode);
         editor.putStringSet(SharedPreferencesKeys.SP_KNOWN_IP, mKnownIps);
 
-        editor.commit();
+        editor.apply();
 
-        mPdConnect.setMessage(getString(R.string.connectdialog_connecting));
-        mPdConnect.show();
+        // Create a progress dialog
+        mPdConnect = new MaterialDialog.Builder(this)
+                .cancelable(true)
+                .cancelListener(oclProgressDialog)
+                .content(R.string.connectdialog_connecting)
+                .progress(true, -1)
+                .show();
 
         // Start the service so it won't be stopped on unbindService
         Intent serviceIntent = new Intent(this, ClementineService.class);
@@ -427,29 +421,23 @@ public class ConnectActivity extends ActionBarActivity {
      * Show the user the dialog to enter the auth code
      */
     void showAuthCodePromt() {
-        final Dialog authCodeDialog = new Dialog(this, R.style.Dialog_Transparent);
-        authCodeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        authCodeDialog.setContentView(R.layout.dialog_auth_code);
-
-        // Set the Views
-        Button connectButton = (Button) authCodeDialog.findViewById(R.id.btnConnectAuth);
-        final EditText etAuthCode = (EditText) authCodeDialog.findViewById(R.id.etAuthCode);
-        connectButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    mAuthCode = Integer.parseInt(etAuthCode.getText().toString());
-                    authCodeDialog.dismiss();
-                    connect();
-                } catch (NumberFormatException e) {
-                    Toast.makeText(ConnectActivity.this, R.string.invalid_code, Toast.LENGTH_SHORT)
-                            .show();
-                }
-            }
-        });
-        // Show the keyboard directly
-        authCodeDialog.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        authCodeDialog.show();
+        new MaterialDialog.Builder(this)
+                .title(R.string.input_auth_code)
+                .inputType(InputType.TYPE_CLASS_NUMBER)
+                .input("", "", false, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        try {
+                            mAuthCode = Integer.parseInt(input.toString());
+                            dialog.dismiss();
+                            connect();
+                        } catch (NumberFormatException e) {
+                            Toast.makeText(ConnectActivity.this, R.string.invalid_code,
+                                    Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    }
+                }).show();
     }
 
     /**

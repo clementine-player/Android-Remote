@@ -17,9 +17,9 @@
 
 package de.qspool.clementineremote.ui.dialogs;
 
-import android.app.AlertDialog;
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -69,35 +69,26 @@ public class CrashReportDialog {
             return;
         }
 
-        AlertDialog.Builder builder;
-        builder = new AlertDialog.Builder(mContext);
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(mContext);
 
-        DialogInterface.OnClickListener dialogOnClickListener
-                = new DialogInterface.OnClickListener() {
+        builder.title(R.string.crash_report_title);
+        builder.content(R.string.crash_report_message);
+        builder.positiveText(R.string.crash_report_send);
+        builder.negativeText(R.string.dialog_close);
+        builder.callback(new MaterialDialog.ButtonCallback() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        SendMail();
-                        break;
-
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        break;
-                }
+            public void onPositive(MaterialDialog dialog) {
+                super.onPositive(dialog);
+                SendMail();
             }
-        };
-
-        builder.setTitle(R.string.crash_report_title);
-        builder.setMessage(R.string.crash_report_message);
-        builder.setPositiveButton(R.string.crash_report_send, dialogOnClickListener);
-        builder.setNegativeButton(R.string.dialog_close, dialogOnClickListener);
+        });
 
         builder.show();
 
         // Save the latest send file (even if it was not send)
         SharedPreferences.Editor edit = mSharedPref.edit();
         edit.putString(SharedPreferencesKeys.SP_LAST_SEND_STACKTRACE, mLastTraceFileName);
-        edit.commit();
+        edit.apply();
     }
 
     private void SendMail() {

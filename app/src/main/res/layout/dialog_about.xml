@@ -4,25 +4,6 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/TextView02"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center_vertical"
-        android:drawableLeft="@drawable/ic_launcher"
-        android:drawablePadding="15dp"
-        android:paddingLeft="10dp"
-        android:text="@string/dialog_about_header"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <View
-        android:id="@+id/View01"
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="6dp"
-        android:background="#ffffff" />
-
     <ScrollView
         android:id="@+id/ScrollView01"
         android:layout_width="match_parent"
@@ -84,13 +65,5 @@
         </LinearLayout>
 
     </ScrollView>
-
-    <Button
-        android:id="@+id/btnCloseAbout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:text="@string/dialog_close" />
 
 </LinearLayout>

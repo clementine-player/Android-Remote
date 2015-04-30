@@ -34,14 +34,4 @@
             android:text="@string/gpl" />
 
     </ScrollView>
-
-    <Button
-        android:id="@+id/btnCloseLicense"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:text="@string/dialog_close" />
-
-
 </LinearLayout>

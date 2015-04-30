@@ -17,9 +17,9 @@
 
 package de.qspool.clementineremote.ui.fragments;
 
-import android.app.AlertDialog;
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -116,22 +116,24 @@ public class DownloadsFragment extends Fragment implements BackPressHandleable, 
                 final ClementineSongDownloader downloader = (ClementineSongDownloader) mList.getAdapter()
                         .getItem(position);
                 if (downloader.getStatus() == AsyncTask.Status.FINISHED) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity());
 
-                    builder.setTitle(R.string.downloaded_songs);
+                    builder.title(R.string.downloaded_songs);
                     String[] songs = new String[downloader.getDownloadedSongs().size()];
                     for (int i=0;i<songs.length;i++) {
                         ClementineSongDownloader.DownloadedSong ds = downloader.getDownloadedSongs().get(i);
                         songs[i] = ds.song.getArtist() + " - " + ds.song.getTitle();
                     }
-                    builder.setItems(songs, new DialogInterface.OnClickListener() {
+                    builder.items(songs);
+                    builder.itemsCallback(new MaterialDialog.ListCallback() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            playFile(downloader.getDownloadedSongs().get(which).uri);
+                        public void onSelection(MaterialDialog materialDialog, View view, int i,
+                                CharSequence charSequence) {
+                            playFile(downloader.getDownloadedSongs().get(i).uri);
                         }
                     });
 
-                    builder.setNegativeButton(R.string.dialog_close, null);
+                    builder.negativeText(R.string.dialog_close);
                     builder.show();
                 }
             }

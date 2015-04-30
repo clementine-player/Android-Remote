@@ -35,7 +35,7 @@ public class ConnectActivityHandler extends Handler {
     WeakReference<ConnectActivity> mDialog;
 
     ConnectActivityHandler(ConnectActivity connectActivity) {
-        mDialog = new WeakReference<ConnectActivity>(connectActivity);
+        mDialog = new WeakReference<>(connectActivity);
     }
 
     @Override

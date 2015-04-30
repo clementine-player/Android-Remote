@@ -20,7 +20,7 @@
             android:title="@string/pref_lower_volume_title"
             android:summary="@string/pref_lower_volume_summary"
             android:defaultValue="true"/>
-    <ListPreference
+    <com.afollestad.materialdialogs.prefs.MaterialListPreference
             android:key="pref_call_volume"
             android:title="@string/pref_call_volume_title"
             android:summary="@string/pref_call_volume_summary"
@@ -28,7 +28,7 @@
             android:entryValues="@array/pref_volume_values"
             android:defaultValue="20"
             android:dependency="pref_lower_volume"/>
-    <ListPreference
+    <com.afollestad.materialdialogs.prefs.MaterialListPreference
             android:key="pref_volume_inc"
             android:title="@string/pref_volume_inc_title"
             android:summary="@string/pref_volume_inc_summary"

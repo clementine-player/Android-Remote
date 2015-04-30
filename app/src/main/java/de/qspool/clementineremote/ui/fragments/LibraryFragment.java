@@ -17,9 +17,10 @@
 
 package de.qspool.clementineremote.ui.fragments;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import android.annotation.SuppressLint;
 import android.app.Fragment;
-import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -83,7 +84,7 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
 
     private TextView mLibraryEmptyText;
 
-    private ProgressDialog mProgressDialog;
+    private MaterialDialog mProgressDialog;
 
     private String mLastFilter = "";
 
@@ -298,31 +299,29 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
         @Override
         public void OnProgressUpdate(long progress, int total) {
             mProgressDialog.setProgress((int) progress);
-            mProgressDialog.setMax(total);
+            mProgressDialog.setMaxProgress(total);
         }
 
         @Override
         public void OnOptimizeLibrary() {
             mProgressDialog.dismiss();
 
-            mProgressDialog = new ProgressDialog(getActivity());
-            mProgressDialog.setTitle(R.string.library_please_wait);
-            mProgressDialog.setMessage(getText(R.string.library_optimize));
-            mProgressDialog.setCancelable(false);
-            mProgressDialog.show();
+            mProgressDialog = new MaterialDialog.Builder(getActivity())
+                    .title(R.string.library_please_wait)
+                    .content(R.string.library_optimize)
+                    .cancelable(false)
+                    .progress(true, -1)
+                    .show();
         }
     };
 
     private void createDownloadProgressDialog() {
-        mProgressDialog = new ProgressDialog(getActivity());
-        mProgressDialog.setTitle(R.string.library_please_wait);
-        mProgressDialog.setMessage(getText(R.string.library_download));
-        mProgressDialog.setMax(0);
-        mProgressDialog.setProgress(0);
-        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        mProgressDialog.setCancelable(false);
-
-        mProgressDialog.show();
+        mProgressDialog = new MaterialDialog.Builder(getActivity())
+                .title(R.string.library_please_wait)
+                .content(R.string.library_download)
+                .cancelable(false)
+                .progress(false, 0)
+                .show();
     }
 
     private void createRootAdapter() {

@@ -5,7 +5,7 @@
             android:title="@string/pref_autoconnect_title"
             android:summary="@string/pref_autoconnect_summary"
             android:defaultValue="false"/>
-    <EditTextPreference
+    <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
             android:key="pref_port"
             android:title="@string/pref_port_title"
             android:summary="@string/pref_port_summary"

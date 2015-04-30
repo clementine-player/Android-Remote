@@ -1,10 +1,9 @@
 package de.qspool.clementineremote.ui.dialogs;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
@@ -68,64 +67,54 @@ public class FileDialog {
      * @return file dialog
      */
     public Dialog createFileDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(activity);
 
-        builder.setTitle(currentPath.getPath());
+        builder.title(currentPath.getPath());
         if (selectDirectoryOption) {
-            builder.setPositiveButton(activity.getString(R.string.file_dialog_set_dir),
-                    new OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) { }
-                    });
-
-            builder.setNegativeButton(activity.getString(R.string.dialog_close),
-                    new OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    });
+            builder.positiveText(activity.getString(R.string.file_dialog_set_dir));
+            builder.negativeText(activity.getString(R.string.dialog_close));
         }
 
-        builder.setItems(fileList, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                String fileChosen = fileList[which];
+        builder.items(fileList);
+        builder.itemsCallback(new MaterialDialog.ListCallback() {
+            @Override
+            public void onSelection(MaterialDialog materialDialog, View view, int i,
+                    CharSequence charSequence) {
+                String fileChosen = fileList[i];
                 File chosenFile = getChosenFile(fileChosen);
                 if (chosenFile.isDirectory()) {
                     loadFileList(chosenFile);
-                    dialog.cancel();
-                    dialog.dismiss();
                     showDialog();
                 } else {
                     fireFileSelectedEvent(chosenFile);
                 }
             }
         });
+        builder.callback(new MaterialDialog.ButtonCallback() {
+            @Override
+            public void onPositive(MaterialDialog dialog) {
+                super.onPositive(dialog);
+                if (isCheckIfWritable()) {
+                    // Check the external store state
+                    File checkFile = new File(currentPath.getAbsolutePath() + "/ClementineTestFile.CheckIfWritable");
+                    try {
+                        if (checkFile.createNewFile()) checkFile.delete();
 
-        final AlertDialog dialog = builder.show();
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (isCheckIfWritable()) {
-                            // Check the external store state
-                            File checkFile = new File(currentPath.getAbsolutePath() + "/ClementineTestFile.CheckIfWritable");
-                            try {
-                                if (checkFile.createNewFile()) checkFile.delete();
-
-                                Log.d(TAG, checkFile.getAbsolutePath() + " is writable");
-                                dialog.dismiss();
-                                fireDirectorySelectedEvent(currentPath);
-                            } catch (IOException e) {
-                                Toast.makeText(activity, R.string.file_dialog_not_writable, Toast.LENGTH_LONG).show();
-                            }
-                        } else {
-                            fireDirectorySelectedEvent(currentPath);
-                            dialog.dismiss();
-                        }
-
+                        Log.d(TAG, checkFile.getAbsolutePath() + " is writable");
+                        dialog.dismiss();
+                        fireDirectorySelectedEvent(currentPath);
+                    } catch (IOException e) {
+                        Toast.makeText(activity, R.string.file_dialog_not_writable, Toast.LENGTH_LONG).show();
                     }
-                });
+                } else {
+                    fireDirectorySelectedEvent(currentPath);
+                    dialog.dismiss();
+                }
 
-        return dialog;
+            }
+        });
+
+        return builder.show();
     }
 
 

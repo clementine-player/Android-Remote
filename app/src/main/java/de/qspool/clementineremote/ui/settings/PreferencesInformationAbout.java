@@ -17,7 +17,8 @@
 
 package de.qspool.clementineremote.ui.settings;
 
-import android.app.Dialog;
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -27,9 +28,6 @@ import android.preference.PreferenceFragment;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -106,16 +104,19 @@ public class PreferencesInformationAbout extends PreferenceFragment {
 
         @Override
         public boolean onPreferenceClick(Preference preference) {
-            final Dialog aboutDialog = new Dialog(getActivity());
-            aboutDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            aboutDialog.setContentView(R.layout.dialog_about);
-            aboutDialog.setCancelable(true);
-            aboutDialog.getWindow().getAttributes().width = ViewGroup.LayoutParams.MATCH_PARENT;
+            MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+                    .title(R.string.pref_about_title)
+                    .negativeText(R.string.dialog_close)
+                    .customView(R.layout.dialog_about, false)
+                    .cancelable(true)
+                    .show();
+
+            View view = dialog.getCustomView();
 
             // Fill the people working on this project
-            TextView tvAuthors = (TextView) aboutDialog.findViewById(R.id.tvAuthors);
-            TextView tvSupporters = (TextView) aboutDialog.findViewById(R.id.tvSupporters);
-            TextView tvOthers = (TextView) aboutDialog.findViewById(R.id.tvOthers);
+            TextView tvAuthors = (TextView) view.findViewById(R.id.tvAuthors);
+            TextView tvSupporters = (TextView) view.findViewById(R.id.tvSupporters);
+            TextView tvOthers = (TextView) view.findViewById(R.id.tvOthers);
 
             // Authors
             tvAuthors.setText("Andreas Muttscheller\n");
@@ -127,18 +128,9 @@ public class PreferencesInformationAbout extends PreferenceFragment {
 
             // Others
             tvOthers.setText(Html.fromHtml(
-                    "Thanks to all the <a href=\"https://www.transifex.com/projects/p/clementine-remote/\">translators</a>!"));
+                    "Thanks to all the <a href=\"https://github.com/clementine-player/Android-Remote/graphs/contributors\">contributors</a> and <a href=\"https://www.transifex.com/projects/p/clementine-remote/\">translators</a>!"));
             tvOthers.setMovementMethod(LinkMovementMethod.getInstance());
 
-            // Create the buttons and the listener
-            Button button = (Button) aboutDialog.findViewById(R.id.btnCloseAbout);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    aboutDialog.dismiss();
-                }
-            });
-            aboutDialog.show();
             return true;
         }
     };

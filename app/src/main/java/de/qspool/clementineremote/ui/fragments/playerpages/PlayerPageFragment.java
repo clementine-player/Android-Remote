@@ -17,9 +17,10 @@
 
 package de.qspool.clementineremote.ui.fragments.playerpages;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import android.annotation.SuppressLint;
 import android.app.Fragment;
-import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Message;
@@ -95,7 +96,7 @@ public class PlayerPageFragment extends Fragment
 
     private boolean mFirstCall = true;
 
-    ProgressDialog mPdDownloadLyrics;
+    private MaterialDialog mPdDownloadLyrics;
 
     private MySong mCurrentSong = new MySong();
 
@@ -140,10 +141,6 @@ public class PlayerPageFragment extends Fragment
         mAlphaDown.setAnimationListener(mAnimationListener);
         mAlphaDown.setInterpolator(new AccelerateInterpolator());
         mAlphaUp.setInterpolator(new AccelerateInterpolator());
-
-        mPdDownloadLyrics = new ProgressDialog(getActivity());
-        mPdDownloadLyrics.setMessage(getString(R.string.player_download_lyrics));
-        mPdDownloadLyrics.setCancelable(true);
 
         // Initialize interface
         updateTrackMetadata();
@@ -455,7 +452,7 @@ public class PlayerPageFragment extends Fragment
      */
     public void showLyricsDialog() {
         // Only show lyrics dialog, if the user is still waiting for it
-        if (!mPdDownloadLyrics.isShowing()) {
+        if (mPdDownloadLyrics == null || !mPdDownloadLyrics.isShowing()) {
             return;
         }
 
@@ -530,7 +527,11 @@ public class PlayerPageFragment extends Fragment
             switch (v.getId()) {
                 case R.id.imgArt:
                     // Shall we download the lyrics or do we have them already downloaded?
-                    mPdDownloadLyrics.show();
+                    mPdDownloadLyrics = new MaterialDialog.Builder(getActivity())
+                            .cancelable(true)
+                            .content(R.string.player_download_lyrics)
+                            .progress(true, -1)
+                            .show();
                     if (mCurrentSong.getLyricsProvider().isEmpty()) {
                         msg.obj = ClementineMessage.getMessage(MsgType.GET_LYRICS);
                     } else {

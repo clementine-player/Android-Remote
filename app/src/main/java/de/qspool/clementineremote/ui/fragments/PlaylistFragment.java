@@ -17,8 +17,9 @@
 
 package de.qspool.clementineremote.ui.fragments;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import android.app.Fragment;
-import android.app.ProgressDialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -65,7 +66,7 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
 
     private PlaylistSongAdapter mAdapter;
 
-    private ProgressDialog mProgressDialog;
+    private MaterialDialog mProgressDialog;
 
     private ActionBar mActionBar;
 
@@ -108,8 +109,8 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
                     @Override
                     public void run() {
                         if (mProgressDialog != null) {
-                            mProgressDialog.setProgress(mProgressDialog.getProgress() + 1);
-                            mProgressDialog.setMessage(p.getName());
+                            mProgressDialog.incrementProgress(1);
+                            mProgressDialog.setContent(p.getName());
                         }
 
                         updateSongList();
@@ -504,13 +505,11 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
         int requests = mPlaylistManager.requestAllPlaylistSongs();
         if (requests > 0) {
             // Start a Progressbar
-            mProgressDialog = new ProgressDialog(getActivity());
-            mProgressDialog.setMax(requests);
-            mProgressDialog.setCancelable(true);
-            mProgressDialog.setTitle(R.string.player_download_playlists);
-            mProgressDialog.setMessage(getString(R.string.playlist_loading));
-            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            mProgressDialog.show();
+            mProgressDialog = new MaterialDialog.Builder(getActivity())
+                    .progress(false, requests, true)
+                    .title(R.string.player_download_playlists)
+                    .content(R.string.playlist_loading)
+                    .show();
         } else {
             mPlaylistsSpinner.setSelection(
                     mPlaylists.indexOf(mPlaylistManager.getActivePlaylist()));
@@ -523,7 +522,7 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
     }
 
     private void updatePlaylistSpinner() {
-        List<CharSequence> arrayList = new ArrayList<CharSequence>();
+        List<CharSequence> arrayList = new ArrayList<>();
         for (int i = 0; i < mPlaylists.size(); i++) {
             arrayList.add(mPlaylists.get(i).getName());
         }

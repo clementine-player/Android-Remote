@@ -17,15 +17,12 @@
 
 package de.qspool.clementineremote.ui.settings;
 
-import android.app.Dialog;
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.webkit.WebView;
-import android.widget.Button;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -66,20 +63,10 @@ public class PreferencesInformationLicenses extends PreferenceFragment {
 
         @Override
         public boolean onPreferenceClick(Preference preference) {
-            final Dialog licenseDialog = new Dialog(getActivity());
-            licenseDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            licenseDialog.setContentView(R.layout.dialog_license);
-            licenseDialog.setCancelable(true);
-            licenseDialog.getWindow().getAttributes().width = ViewGroup.LayoutParams.MATCH_PARENT;
-
-            Button button = (Button) licenseDialog.findViewById(R.id.btnCloseLicense);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    licenseDialog.dismiss();
-                }
-            });
-            licenseDialog.show();
+            new MaterialDialog.Builder(getActivity())
+                    .negativeText(R.string.dialog_close)
+                    .customView(R.layout.dialog_license, false)
+                    .show();
             return true;
         }
     };
@@ -89,15 +76,13 @@ public class PreferencesInformationLicenses extends PreferenceFragment {
 
         @Override
         public boolean onPreferenceClick(Preference preference) {
-            final Dialog openSourceDialog = new Dialog(getActivity());
-            openSourceDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            openSourceDialog.setContentView(R.layout.dialog_opensource);
-            openSourceDialog.setCancelable(true);
-            openSourceDialog.getWindow().getAttributes().width
-                    = ViewGroup.LayoutParams.MATCH_PARENT;
+            MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+                    .title(R.string.pref_opensource)
+                    .negativeText(R.string.dialog_close)
+                    .customView(R.layout.dialog_opensource, false)
+                    .show();
 
-            Button button = (Button) openSourceDialog.findViewById(R.id.btnCloseLicense);
-            WebView text = (WebView) openSourceDialog.findViewById(R.id.opensource_licenses);
+            WebView text = (WebView) dialog.getCustomView().findViewById(R.id.opensource_licenses);
 
             InputStream is = getResources().openRawResource(R.raw.opensource);
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -114,13 +99,7 @@ public class PreferencesInformationLicenses extends PreferenceFragment {
             }
 
             text.loadDataWithBaseURL(null, sb.toString(), "text/html", "utf-8", null);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    openSourceDialog.dismiss();
-                }
-            });
-            openSourceDialog.show();
+
             return true;
         }
     };
