@@ -53,70 +53,83 @@
 
     </RelativeLayout>
 
-    <View
-        android:id="@+id/view1"
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:layout_marginBottom="6dp"
-        android:layout_marginTop="6dp"
-        android:background="#000000" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/connection_version"
-        android:id="@+id/textView2"
-        android:textColor="@color/black"
-        android:layout_marginTop="20dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Clementine 1.2.2"
-        android:id="@+id/cn_version"
-        android:textColor="#444444" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/connection_traffic"
-        android:id="@+id/textView3"
-        android:textColor="@color/black"
-        android:layout_marginTop="20dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="0k / 10k"
-        android:id="@+id/cn_traffic"
-        android:textColor="#444444"
-        android:singleLine="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/connection_volume"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/textView"
-        android:textColor="@color/black"
-        android:layout_marginTop="20dp" />
-
-    <SeekBar
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:layout_marginTop="12dp"
-        android:maxHeight="2dp"
-        android:progressDrawable="@drawable/seek_bar_clementine"
-        android:thumb="@drawable/scrubber_control"
-        android:max="100"
-        android:progress="100"
-        android:splitTrack="false"
-        android:id="@+id/cn_volume" />
+        android:layout_height="match_parent">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:orientation="vertical">
+
+            <View
+                android:id="@+id/view1"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="6dp"
+                android:layout_marginTop="6dp"
+                android:background="#000000" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/connection_version"
+                android:id="@+id/textView2"
+                android:textColor="@color/black"
+                android:layout_marginTop="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Clementine 1.2.2"
+                android:id="@+id/cn_version"
+                android:textColor="#444444" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/connection_traffic"
+                android:id="@+id/textView3"
+                android:textColor="@color/black"
+                android:layout_marginTop="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0k / 10k"
+                android:id="@+id/cn_traffic"
+                android:textColor="#444444"
+                android:singleLine="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/connection_volume"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/textView"
+                android:textColor="@color/black"
+                android:layout_marginTop="20dp" />
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:layout_marginTop="12dp"
+                android:maxHeight="2dp"
+                android:progressDrawable="@drawable/seek_bar_clementine"
+                android:thumb="@drawable/scrubber_control"
+                android:max="100"
+                android:progress="100"
+                android:splitTrack="false"
+                android:id="@+id/cn_volume" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>
