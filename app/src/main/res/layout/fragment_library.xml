@@ -45,11 +45,13 @@
                 <ImageView
                     android:id="@+id/library_empty_icon"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="300dp"
+                    android:layout_marginTop="16dp"
                     android:alpha="0.25"
                     android:scaleType="fitCenter"
                     android:contentDescription="@string/empty_fragment"
-                    android:src="@drawable/icon_large" />
+                    android:src="@drawable/icon_large"
+                    android:layout_below="@+id/library_empty_txt" />
 
             </RelativeLayout>
         </ScrollView>
