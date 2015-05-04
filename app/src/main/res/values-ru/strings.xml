@@ -52,6 +52,7 @@
   <string name="library_refresh">Обновить</string>
   <string name="library_empty">Фонотека пуста. Проведите вниз для загрузки фонотеки!</string>
   <string name="library_no_search_results">По данному запросу песен не найдено!</string>
+  <string name="library_number_items">%d элементы</string>
   <string name="library_songs_added">%d песен добавлено в текущий плейлист</string>
   <string name="library_context_add">Добавить пункт в текущий плейлист</string>
   <string name="library_download_error">Не могу загрузить фонотеку</string>
@@ -116,8 +117,22 @@
   <string name="pref_call_volume_summary">Текущая громкость при звонке: %s</string>
   <string name="pref_volume_inc_title">Шаг изменения громкости</string>
   <string name="pref_volume_inc_summary">Текущий шаг изменения громкости: %s</string>
+  <string name="pref_library_sorting_title">Сортировка</string>
+  <string name="pref_library_sorting_summary">Фонотека отсортирована по %1$s.</string>
+  <string-array name="pref_library_sorting">
+    <item>Возрастанию</item>
+    <item>Убыванию</item>
+  </string-array>
   <string name="pref_library_grouping_title">Группировка</string>
   <string name="pref_library_grouping_summary">Фонотека сгруппипрована по %1$s.</string>
+  <string-array name="pref_library_grouping">
+    <item>Исполнитель</item>
+    <item>Исполнитель / Альбом</item>
+    <item>Исполнитель / Гол</item>
+    <item>Альбом</item>
+    <item>Жанр / Альбом</item>
+    <item>Жанр / Исполнитель / Альбом</item>
+  </string-array>
   <string name="pref_autoconnect_title">Авто-подлючение</string>
   <string name="pref_autoconnect_summary">Автоматически подключаться к Clementine при запуске удалённого управления.
     </string>
@@ -137,6 +152,7 @@
   <string name="pref_license_summary">GNU GPLv3</string>
   <string name="pref_opensource_title">Открытый исходный код</string>
   <string name="pref_opensource_summary">Показать лицензии открытого программного обеспечения</string>
+  <string name="pref_opensource">Лицензии открытого программного обеспечения</string>
   <string name="pref_about_title">О программе</string>
   <string name="pref_about_summary">Люди, работающие над проектом</string>
   <string name="pref_clementine_title">Clementine</string>

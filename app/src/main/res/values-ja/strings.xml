@@ -52,6 +52,7 @@
   <string name="library_refresh">リフレッシュ</string>
   <string name="library_empty">ライブラリーは空です。下にスワイプすると、ライブラリーをダウンロードします!</string>
   <string name="library_no_search_results">検索条件に一致する曲はありません!</string>
+  <string name="library_number_items">%d アイテム</string>
   <string name="library_songs_added">現在のプレイリストに %d 曲追加しました</string>
   <string name="library_context_add">現在のプレイリストにアイテムを追加</string>
   <string name="library_download_error">ライブラリーをダウンロードできません</string>
@@ -116,6 +117,22 @@
   <string name="pref_call_volume_summary">現在の呼び出し時の音量: %s</string>
   <string name="pref_volume_inc_title">音量変更レベル</string>
   <string name="pref_volume_inc_summary">現在の音量変更レベル : %s</string>
+  <string name="pref_library_sorting_title">並び替え</string>
+  <string name="pref_library_sorting_summary">ライブラリーは %1$s で表示します。</string>
+  <string-array name="pref_library_sorting">
+    <item>昇順</item>
+    <item>降順</item>
+  </string-array>
+  <string name="pref_library_grouping_title">グループ化</string>
+  <string name="pref_library_grouping_summary">ライブラリーは %1$s でグループ化します。</string>
+  <string-array name="pref_library_grouping">
+    <item>アーティスト</item>
+    <item>アーティスト / アルバム</item>
+    <item>アーティスト / 年</item>
+    <item>アルバム</item>
+    <item>ジャンル / アルバム</item>
+    <item>ジャンル / アーティスト / アルバム</item>
+  </string-array>
   <string name="pref_autoconnect_title">自動接続</string>
   <string name="pref_autoconnect_summary">リモートの起動時に自動的に Clementine に接続します。</string>
   <string name="pref_port_title">ポート</string>
@@ -132,6 +149,7 @@
   <string name="pref_license_summary">GNU GPLv3</string>
   <string name="pref_opensource_title">オープンソース</string>
   <string name="pref_opensource_summary">オープンソース ソフトウェアライセンスを表示</string>
+  <string name="pref_opensource">オープンソース ソフトウェアライセンス</string>
   <string name="pref_about_title">アプリについて</string>
   <string name="pref_about_summary">このプロジェクトに参加している人々</string>
   <string name="pref_clementine_title">Clementine</string>

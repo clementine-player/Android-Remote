@@ -52,6 +52,7 @@
   <string name="library_refresh">Оновити</string>
   <string name="library_empty">Бібліотека порожня. Проведіть пальцем вниз, щоб отримати бібліотеку!</string>
   <string name="library_no_search_results">Вказаним вами критеріям не відповідає жодна композиція!</string>
+  <string name="library_number_items">%d записів</string>
   <string name="library_songs_added">До поточного списку відтворення додано %d композицій</string>
   <string name="library_context_add">Додати запис до поточного списку відтворення</string>
   <string name="library_download_error">Не вдалося отримати бібліотеку</string>
@@ -116,8 +117,22 @@
   <string name="pref_call_volume_summary">Поточна гучність під час дзвінка: %s</string>
   <string name="pref_volume_inc_title">Рівень зміни гучності</string>
   <string name="pref_volume_inc_summary">Поточний рівень зміни гучності: %s</string>
+  <string name="pref_library_sorting_title">Упорядковування</string>
+  <string name="pref_library_sorting_summary">Бібліотеку упорядковано за %1$s.</string>
+  <string-array name="pref_library_sorting">
+    <item>Зростанням</item>
+    <item>Спаданням</item>
+  </string-array>
   <string name="pref_library_grouping_title">Групування</string>
   <string name="pref_library_grouping_summary">Бібліотеку згруповано за %1$s.</string>
+  <string-array name="pref_library_grouping">
+    <item>Виконавець</item>
+    <item>Виконавець / Альбом</item>
+    <item>Виконавець / Рік</item>
+    <item>Альбом</item>
+    <item>Жанр / Альбом</item>
+    <item>Жанр / Виконавець / Альбом</item>
+  </string-array>
   <string name="pref_autoconnect_title">Автоз’єднання</string>
   <string name="pref_autoconnect_summary">Автоматично встановлювати з’єднання із Clementine після запуску дистанційного керування.
     </string>
@@ -135,6 +150,7 @@
   <string name="pref_license_summary">GNU GPLv3</string>
   <string name="pref_opensource_title">Відкрити джерело</string>
   <string name="pref_opensource_summary">Показувати умови ліцензування програм з відкритим кодом</string>
+  <string name="pref_opensource">Умови ліцензування ПЗ із відкритим кодом</string>
   <string name="pref_about_title">Про програму</string>
   <string name="pref_about_summary">Учасники проекту</string>
   <string name="pref_clementine_title">Clementine</string>

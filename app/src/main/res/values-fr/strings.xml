@@ -52,6 +52,7 @@
   <string name="library_refresh">Rafraîchir</string>
   <string name="library_empty">Bibliothèque vide. Glissez vers le bas pour télécharger la bibliothèque.</string>
   <string name="library_no_search_results">Aucun morceau ne correspond à vos critères de recherche !</string>
+  <string name="library_number_items">%d éléments</string>
   <string name="library_songs_added">%d chansons ajoutées à la liste de lecture courante</string>
   <string name="library_context_add">Ajouter l\'élément à la liste de lecture actuelle</string>
   <string name="library_download_error">Impossible de télécharger la bibliothèque</string>
@@ -116,6 +117,22 @@
   <string name="pref_call_volume_summary">Volume d\'appel actuel : %s</string>
   <string name="pref_volume_inc_title">Niveau du changement de volume</string>
   <string name="pref_volume_inc_summary">Niveau du changement de volume actuel : %s</string>
+  <string name="pref_library_sorting_title">Tri</string>
+  <string name="pref_library_sorting_summary">La bibliothèque est triée par %1$s</string>
+  <string-array name="pref_library_sorting">
+    <item>Croissant</item>
+    <item>Décroissant</item>
+  </string-array>
+  <string name="pref_library_grouping_title">Regroupement</string>
+  <string name="pref_library_grouping_summary">La bibliothèque est groupée par %1$s.</string>
+  <string-array name="pref_library_grouping">
+    <item>Artiste</item>
+    <item>Artiste / Album</item>
+    <item>Artiste / Année</item>
+    <item>Album</item>
+    <item>Genre / Album</item>
+    <item>Genre / Artiste / Album</item>
+  </string-array>
   <string name="pref_autoconnect_title">Connexion automatique</string>
   <string name="pref_autoconnect_summary">Connexion automatique à Clementine au démarrage de l\'application.</string>
   <string name="pref_port_title">Port</string>
@@ -132,6 +149,7 @@
   <string name="pref_license_summary">GNU GPLv3</string>
   <string name="pref_opensource_title">Open Source</string>
   <string name="pref_opensource_summary">Afficher les licences Open Source Software</string>
+  <string name="pref_opensource">Licences Open Source Software</string>
   <string name="pref_about_title">À propos</string>
   <string name="pref_about_summary">Personnes travaillant sur ce projet</string>
   <string name="pref_clementine_title">Clementine</string>
@@ -218,5 +236,21 @@ des ordinateurs sur lesquels Clementine est disponible.</string>
   <string name="fragment_title_connection">Clementine</string>
   <string name="navigation_drawer_clementine_on">Clementine sur %s</string>
   <string name="player_download_what">Que télécharger ?</string>
+  <string-array name="player_download_list">
+    <item>Titre</item>
+    <item>Album</item>
+    <item>Liste de lecture</item>
+  </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
+  <string-array name="navigation_drawer_items">
+    <item>Lecteur</item>
+    <item>Listes de lecture</item>
+    <item>Bibliothèque</item>
+    <item>Téléchargements</item>
+    <item></item>
+    <item>Paramètres</item>
+    <item>Donation</item>
+    <item></item>
+    <item>Quitter</item>
+  </string-array>
 </resources>

@@ -116,6 +116,7 @@
   <string name="pref_call_volume_summary">Aktuálna úroveň hlasitosti počas hovoru: %s</string>
   <string name="pref_volume_inc_title">Úroveň zmeny hlasitosti</string>
   <string name="pref_volume_inc_summary">Aktuálna úroveň zmeny hlasitosti: %s</string>
+  <string name="pref_library_sorting_title">Usporiadanie</string>
   <string name="pref_library_grouping_title">Zoskupenie</string>
   <string name="pref_library_grouping_summary">Zbierka je zoskupená podľa %1$s.</string>
   <string name="pref_autoconnect_title">Pripojiť automaticky</string>

@@ -52,6 +52,7 @@
   <string name="library_refresh">Atualizar</string>
   <string name="library_empty">Coleção vazia. Deslize para baixo para transferir a coleção!</string>
   <string name="library_no_search_results">Não existem faixas coincidentes com os critérios.</string>
+  <string name="library_number_items">%d itens</string>
   <string name="library_songs_added">%d faixas adicionadas à lista de reprodução atual</string>
   <string name="library_context_add">Adicionar item à lista de reprodução atual</string>
   <string name="library_download_error">Não foi possível transferir a coleção</string>
@@ -116,8 +117,22 @@
   <string name="pref_call_volume_summary">Nível de volume: %s</string>
   <string name="pref_volume_inc_title">Nível da mudança de volume</string>
   <string name="pref_volume_inc_summary">Nível da mudança de volume: %s</string>
+  <string name="pref_library_sorting_title">Organização</string>
+  <string name="pref_library_sorting_summary">A coleção está organizada pela ordem %1$s.</string>
+  <string-array name="pref_library_sorting">
+    <item>Ascendente</item>
+    <item>Descendente</item>
+  </string-array>
   <string name="pref_library_grouping_title">Agrupamento</string>
   <string name="pref_library_grouping_summary">A coleção está agrupada por %1$s.</string>
+  <string-array name="pref_library_grouping">
+    <item>Artista</item>
+    <item>Artista/Álbum</item>
+    <item>Artista/Ano</item>
+    <item>Álbum</item>
+    <item>Género/Álbum</item>
+    <item>Género/Artista/Álbum</item>
+  </string-array>
   <string name="pref_autoconnect_title">Ligação automática</string>
   <string name="pref_autoconnect_summary">Estabelecer ligação ao Clementine ao iniciar a aplicação.</string>
   <string name="pref_port_title">Porta</string>
@@ -134,6 +149,7 @@
   <string name="pref_license_summary">GNU GPLv3</string>
   <string name="pref_opensource_title">Código livre</string>
   <string name="pref_opensource_summary">Mostrar licenças Open Source</string>
+  <string name="pref_opensource">Licenças Open Source</string>
   <string name="pref_about_title">Sobre</string>
   <string name="pref_about_summary">Colaboradores deste projeto</string>
   <string name="pref_clementine_title">Clementine</string>

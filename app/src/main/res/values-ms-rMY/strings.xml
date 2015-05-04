@@ -29,12 +29,14 @@
   <string name="downloads_empty">Tiada muat turun!</string>
   <string name="download_error">Tidak dapat buka lagu!</string>
   <string name="download_freespace">Ruang bebas</string>
+  <string name="downloaded_songs">Lagu dimuat turun - klik untuk main</string>
   <string name="download_noti_title">Memulakan muat turun</string>
   <string name="download_noti_n_downloads">%d muat turun aktif</string>
   <string name="download_noti_n_progress">Jumlah kemajuan: %d %</string>
   <string name="download_noti_title_song">[Lagu]</string>
   <string name="download_noti_title_album">[Album]</string>
   <string name="download_noti_title_playlist">[Senarai Main]</string>
+  <string name="download_noti_title_songs">[Lagu]</string>
   <string name="download_noti_n_finished">%d muat turun selesai</string>
   <string name="download_noti_complete">Muat turun selesai</string>
   <string name="download_noti_canceled">Muat turun dibatalkan</string>
@@ -48,7 +50,9 @@
   <string name="library_optimize">Mengoptimumkan pangkalan data</string>
   <string name="library_please_wait">Tunggu sebentar</string>
   <string name="library_refresh">Segar semula</string>
+  <string name="library_empty">Pustaka kosong. Leret ke bawah untuk muat turun pustaka!</string>
   <string name="library_no_search_results">Tiada lagu memadani kriteria gelintar anda!</string>
+  <string name="library_number_items">%d item</string>
   <string name="library_songs_added">%d buah lagu ditambah ke dalam senarai main semasa</string>
   <string name="library_context_add">Tambah item ke senarai main semasa</string>
   <string name="library_download_error">Tidak dapat memuat turun pustaka</string>
@@ -76,6 +80,7 @@
   <string name="menu_search">Gelintar</string>
   <string name="menu_love">Suka</string>
   <string name="menu_ban">Larang</string>
+  <string name="menu_download">Muat Turun</string>
   <string name="menu_download_song">Muat turun lagu</string>
   <string name="menu_download_album">Muat turun album</string>
   <string name="menu_download_playlist">Muat turun senarai main</string>
@@ -112,6 +117,22 @@
   <string name="pref_call_volume_summary">Aras volum panggilan semasa: %s</string>
   <string name="pref_volume_inc_title">Aras ubah volum</string>
   <string name="pref_volume_inc_summary">Aras ubah volum semasa : %s</string>
+  <string name="pref_library_sorting_title">Mengisih</string>
+  <string name="pref_library_sorting_summary">Pustaka diisih dalam tertib %1$s.</string>
+  <string-array name="pref_library_sorting">
+    <item>Menaik</item>
+    <item>Menurun</item>
+  </string-array>
+  <string name="pref_library_grouping_title">Pengelompokan</string>
+  <string name="pref_library_grouping_summary">Pustaka dikelompok mengikut %1$s.</string>
+  <string-array name="pref_library_grouping">
+    <item>Artis</item>
+    <item>Artis / Album</item>
+    <item>Artis / Tahun</item>
+    <item>Album</item>
+    <item>Genre / Album</item>
+    <item>Genre / Artis / Album</item>
+  </string-array>
   <string name="pref_autoconnect_title">Auto-Sambung</string>
   <string name="pref_autoconnect_summary">Sambung secara automatik ke Clementine bila memulakan jauh.</string>
   <string name="pref_port_title">Port</string>
@@ -136,8 +157,13 @@
   <string name="pref_dl_wifi_only_summary">Hanya muat turun lagu bila bersambung dengan rangkaian wifi.</string>
   <string name="pref_dl_dir">Tetapkan folder muat turun</string>
   <string name="pref_dl_override">Batalkan fail sedia ada</string>
+  <string name="pref_dl_cat_folders">Folder</string>
   <string name="pref_dl_pl_save_own_dir_title">Simpan trek dalam folder senarai main</string>
   <string name="pref_dl_pl_save_own_dir_summary">Cipta folder bernama-senarai-main dan simpan trek di dalamnya.</string>
+  <string name="pref_dl_pl_artist_dir_title">Cipta subfolder artis</string>
+  <string name="pref_dl_pl_artist_dir_summary">Cipta subfolder artis bagi setiap trek individu.</string>
+  <string name="pref_dl_pl_album_dir_title">Cipta subfolder album</string>
+  <string name="pref_dl_pl_album_dir_summary">Cipat subfolder album di dalam artis bagi setiap trek individu.</string>
   <string name="file_dialog_set_dir">Pilih direktori</string>
   <string name="file_dialog_not_writable">Direktori tidak boleh ditulis</string>
   <string name="file_dialog_custom_paths_available">Pilih lain</string>
@@ -203,5 +229,26 @@
   <string name="cm_player_lyrics_content">Satu dialog dengan lirik akan dibuka</string>
   <string name="cm_player_swipe_title">Leret ke arah kanan</string>
   <string name="cm_player_swipe_content">untuk melihat perincian trek dan tarafkan lagu.</string>
+  <string name="fragment_title_player">Pemain</string>
+  <string name="fragment_title_details">Perincian lagu</string>
+  <string name="fragment_title_connection">Clementine</string>
+  <string name="navigation_drawer_clementine_on">Clementine dalam %s</string>
+  <string name="player_download_what">Apa yang hendak dimuat turun?</string>
+  <string-array name="player_download_list">
+    <item>Lagu</item>
+    <item>Album</item>
+    <item>Senarai Mai</item>
+  </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
+  <string-array name="navigation_drawer_items">
+    <item>Pemain</item>
+    <item>Senarai Main</item>
+    <item>Pustaka</item>
+    <item>Muat Turun</item>
+    <item></item>
+    <item>Tetapan</item>
+    <item>Derma</item>
+    <item></item>
+    <item>Keluar</item>
+  </string-array>
 </resources>

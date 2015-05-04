@@ -52,6 +52,7 @@
   <string name="library_refresh">Ανανέωση</string>
   <string name="library_empty">Η βιβλιοθήκη ειναι κενή. Σύρετε προς τα κάτω για να κατεβάσετε την βιβλιοθήκη!</string>
   <string name="library_no_search_results">Δεν υπάρχουν τραγούδια που ταιριάζουν στα κριτήρια της αναζήτησής σας!</string>
+  <string name="library_number_items">%d στοιχεία</string>
   <string name="library_songs_added">%d τραγούδια προστίθενται στην τρέχουσα λίστα αναπαραγωγής</string>
   <string name="library_context_add">Προσθήκη στη τρέχουσα λίστα αναπαραγωγής</string>
   <string name="library_download_error">Δεν ήταν δυνατή η λήψη της βιβλιοθήκης</string>
@@ -116,6 +117,10 @@
   <string name="pref_call_volume_summary">Τρέχον επίπεδο έντασης κλήσης: %s</string>
   <string name="pref_volume_inc_title">Επίπεδο αλλαγης επιπεδου εντασης</string>
   <string name="pref_volume_inc_summary">Τρέχον επίπεδο αλλαγης επιπεδου εντασης : %s</string>
+  <string name="pref_library_sorting_title">Ταξινόμηση </string>
+  <string name="pref_library_sorting_summary">Η βιβλιοθήκη είναι ταξινομημένη στην %1$s σειρα.</string>
+  <string name="pref_library_grouping_title">Ομαδοποίηση</string>
+  <string name="pref_library_grouping_summary">Η βιβλιοθήκη είναι ομαδοποιημένη  κατά %1$s.</string>
   <string name="pref_autoconnect_title">Αυτόματη Σύνδεση</string>
   <string name="pref_autoconnect_summary">Αυτόματη σύνδεση με το Clementine κατά την εκκίνηση του τηλεχειριστηρίου.</string>
   <string name="pref_port_title">Θυρα</string>

@@ -52,6 +52,7 @@
   <string name="library_refresh">Освежи</string>
   <string name="library_empty">Библиотека је празна. Превуците на доле да преузмете библиотеку!</string>
   <string name="library_no_search_results">Ниједна песма се не поклапа са траженим изразом!</string>
+  <string name="library_number_items">%d ставки</string>
   <string name="library_songs_added">%d песама додато у текућу листу нумера</string>
   <string name="library_context_add">Додај ставку у текућу листу нумера</string>
   <string name="library_download_error">Не могу да преузмем библиотеку</string>
@@ -116,8 +117,22 @@
   <string name="pref_call_volume_summary">Ниво звука за позив: %s</string>
   <string name="pref_volume_inc_title">Ниво промене јачине звука</string>
   <string name="pref_volume_inc_summary">Ниво промене јачине звука: %s</string>
+  <string name="pref_library_sorting_title">Ређање</string>
+  <string name="pref_library_sorting_summary">Библиотека је поређана %1$s.</string>
+  <string-array name="pref_library_sorting">
+    <item>растуће</item>
+    <item>опадајуће</item>
+  </string-array>
   <string name="pref_library_grouping_title">Груписање</string>
   <string name="pref_library_grouping_summary">Библиотека је груписана по %1$s.</string>
+  <string-array name="pref_library_grouping">
+    <item>извођачу</item>
+    <item>извођачу/албуму</item>
+    <item>извођачу/години</item>
+    <item>албуму</item>
+    <item>жанру/албуму</item>
+    <item>жанру/извођачу/албуму</item>
+  </string-array>
   <string name="pref_autoconnect_title">Ауто-повезивање</string>
   <string name="pref_autoconnect_summary">Аутоматски се повежи са Клементином по покретању даљинског.</string>
   <string name="pref_port_title">Порт</string>
@@ -134,6 +149,7 @@
   <string name="pref_license_summary">ГНУова ГПЛв3</string>
   <string name="pref_opensource_title">Отворени код</string>
   <string name="pref_opensource_summary">Прикажи лиценце за софтвер отвореног кода</string>
+  <string name="pref_opensource">Лиценце за софтвер отвореног кôда</string>
   <string name="pref_about_title">О програму</string>
   <string name="pref_about_summary">Људи који раде на овом пројекту</string>
   <string name="pref_clementine_title">Клементина</string>
@@ -145,6 +161,10 @@
   <string name="pref_dl_cat_folders">Фасцикле</string>
   <string name="pref_dl_pl_save_own_dir_title">Уписуј нумере у фасциклу листе</string>
   <string name="pref_dl_pl_save_own_dir_summary">Упис нумера у фасциклу именовану по листи нумера.</string>
+  <string name="pref_dl_pl_artist_dir_title">Потфасцикла за извођача</string>
+  <string name="pref_dl_pl_artist_dir_summary">Направи потфасциклу за извођача за сваку нумеру.</string>
+  <string name="pref_dl_pl_album_dir_title">Потфасцикла за албум</string>
+  <string name="pref_dl_pl_album_dir_summary">Направи потфасциклу за албум унутар фасцикле извођача за сваку нумеру.</string>
   <string name="file_dialog_set_dir">Изабери директоријум</string>
   <string name="file_dialog_not_writable">Директоријум није уписив</string>
   <string name="file_dialog_custom_paths_available">Одредите други</string>
