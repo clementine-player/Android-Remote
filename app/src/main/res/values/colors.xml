@@ -21,6 +21,8 @@
 
     <color name="navigation_drawer_section">#e5e5e5</color>
 
+    <color name="searchview_edittext_hint">#dddddd</color>
+
     <color name="player_smalltext">#444444</color>
 
     <item name="grey_cab" type="color">#9b9b9b</item>

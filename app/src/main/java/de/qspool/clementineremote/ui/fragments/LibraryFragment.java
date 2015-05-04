@@ -41,6 +41,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -384,6 +385,9 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
         };
         searchView.setOnQueryTextListener(queryTextListener);
         searchView.setQueryHint(getString(R.string.playlist_search_hint));
+
+        EditText searchText = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        searchText.setHintTextColor(getResources().getColor(R.color.searchview_edittext_hint));
 
         super.onPrepareOptionsMenu(menu);
     }
