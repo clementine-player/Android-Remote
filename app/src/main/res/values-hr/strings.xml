@@ -152,6 +152,7 @@
   <string name="pref_license_summary">GNU GPLv3</string>
   <string name="pref_opensource_title">Otvoreni kôd</string>
   <string name="pref_opensource_summary">Prikaži licencu Softvera otvorenog kôda</string>
+  <string name="pref_opensource">Licenca softvera otvorenog kôda</string>
   <string name="pref_about_title">O programu</string>
   <string name="pref_about_summary">Ljudi koji rade na ovom projektu</string>
   <string name="pref_clementine_title">Clementine</string>
