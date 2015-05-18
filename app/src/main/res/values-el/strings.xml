@@ -137,6 +137,7 @@
   <string name="pref_license_summary">GNU GPLv3</string>
   <string name="pref_opensource_title">Ανοικτος πηγαίος κώδικας</string>
   <string name="pref_opensource_summary">Εμφάνιση αδειών λογισμικού ανοικτής πηγής</string>
+  <string name="pref_opensource">Άδειες λογισμικού ανοικτής πηγής</string>
   <string name="pref_about_title">Σχετικά με</string>
   <string name="pref_about_summary">Οι άνθρωποι που εργάζονται για αυτό το έργο</string>
   <string name="pref_clementine_title">Clementine</string>

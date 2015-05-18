@@ -149,6 +149,7 @@
   <string name="pref_license_summary">GNU GPLv3</string>
   <string name="pref_opensource_title">Sumber Terbuka</string>
   <string name="pref_opensource_summary">Tunjuk lesen Perisian Sumber Terbuka</string>
+  <string name="pref_opensource">Lesen Perisian Sumber Terbuka</string>
   <string name="pref_about_title">Perihal</string>
   <string name="pref_about_summary">Individu yang membangunkan projek ini</string>
   <string name="pref_clementine_title">Clementine</string>
