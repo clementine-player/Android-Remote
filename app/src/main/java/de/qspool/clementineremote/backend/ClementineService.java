@@ -36,6 +36,7 @@ import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.downloader.DownloadManager;
+import de.qspool.clementineremote.backend.globalsearch.GlobalSearchManager;
 import de.qspool.clementineremote.backend.listener.PlayerConnectionListener;
 import de.qspool.clementineremote.backend.mediasession.ClementineMediaSessionNotification;
 import de.qspool.clementineremote.backend.mediasession.MediaSessionController;
@@ -73,6 +74,7 @@ public class ClementineService extends Service {
     private ClementineServiceBinder mClementineServiceBinder = new ClementineServiceBinder();
 
     public class ClementineServiceBinder extends Binder {
+
         public ClementineService getClementineService() {
             return ClementineService.this;
         }
@@ -124,6 +126,8 @@ public class ClementineService extends Service {
                             App.ClementineConnection);
                     mediaSessionController.registerMediaSession();
 
+                    GlobalSearchManager.getInstance().reset();
+
                     App.ClementineConnection.addPlayerConnectionListener(
                             new PlayerConnectionListener() {
                                 @Override
@@ -159,6 +163,8 @@ public class ClementineService extends Service {
                                 @Override
                                 public void onClementineMessageReceived(
                                         ClementineMessage clementineMessage) {
+                                    GlobalSearchManager.getInstance().parseClementineMessage(
+                                            clementineMessage);
                                 }
                             });
 

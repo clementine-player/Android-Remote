@@ -222,6 +222,10 @@ public final class ClementineRemoteProtocolBuffer {
      * <code>TRANSCODING_FILES = 55;</code>
      */
     TRANSCODING_FILES(45, 55),
+    /**
+     * <code>GLOBAL_SEARCH_STATUS = 56;</code>
+     */
+    GLOBAL_SEARCH_STATUS(46, 56),
     ;
 
     /**
@@ -429,6 +433,10 @@ public final class ClementineRemoteProtocolBuffer {
      * <code>TRANSCODING_FILES = 55;</code>
      */
     public static final int TRANSCODING_FILES_VALUE = 55;
+    /**
+     * <code>GLOBAL_SEARCH_STATUS = 56;</code>
+     */
+    public static final int GLOBAL_SEARCH_STATUS_VALUE = 56;
 
 
     public final int getNumber() { return value; }
@@ -481,6 +489,7 @@ public final class ClementineRemoteProtocolBuffer {
         case 53: return DOWNLOAD_TOTAL_SIZE;
         case 54: return GLOBAL_SEARCH_RESULT;
         case 55: return TRANSCODING_FILES;
+        case 56: return GLOBAL_SEARCH_STATUS;
         default: return null;
       }
     }
@@ -1050,6 +1059,88 @@ public final class ClementineRemoteProtocolBuffer {
     }
 
     // @@protoc_insertion_point(enum_scope:pb.remote.DownloadItem)
+  }
+
+  /**
+   * Protobuf enum {@code pb.remote.GlobalSearchStatus}
+   */
+  public enum GlobalSearchStatus
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>GlobalSearchStarted = 1;</code>
+     */
+    GlobalSearchStarted(0, 1),
+    /**
+     * <code>GlobalSearchFinished = 2;</code>
+     */
+    GlobalSearchFinished(1, 2),
+    ;
+
+    /**
+     * <code>GlobalSearchStarted = 1;</code>
+     */
+    public static final int GlobalSearchStarted_VALUE = 1;
+    /**
+     * <code>GlobalSearchFinished = 2;</code>
+     */
+    public static final int GlobalSearchFinished_VALUE = 2;
+
+
+    public final int getNumber() { return value; }
+
+    public static GlobalSearchStatus valueOf(int value) {
+      switch (value) {
+        case 1: return GlobalSearchStarted;
+        case 2: return GlobalSearchFinished;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<GlobalSearchStatus>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<GlobalSearchStatus>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<GlobalSearchStatus>() {
+            public GlobalSearchStatus findValueByNumber(int number) {
+              return GlobalSearchStatus.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.getDescriptor().getEnumTypes().get(6);
+    }
+
+    private static final GlobalSearchStatus[] VALUES = values();
+
+    public static GlobalSearchStatus valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private GlobalSearchStatus(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:pb.remote.GlobalSearchStatus)
   }
 
   public interface SongMetadataOrBuilder
@@ -20583,6 +20674,16 @@ public final class ClementineRemoteProtocolBuffer {
      */
     de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadataOrBuilder getSongMetadataOrBuilder(
         int index);
+
+    // optional bytes search_provider_icon = 5;
+    /**
+     * <code>optional bytes search_provider_icon = 5;</code>
+     */
+    boolean hasSearchProviderIcon();
+    /**
+     * <code>optional bytes search_provider_icon = 5;</code>
+     */
+    com.google.protobuf.ByteString getSearchProviderIcon();
   }
   /**
    * Protobuf type {@code pb.remote.ResponseGlobalSearch}
@@ -20656,6 +20757,11 @@ public final class ClementineRemoteProtocolBuffer {
                 mutable_bitField0_ |= 0x00000008;
               }
               songMetadata_.add(input.readMessage(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.PARSER, extensionRegistry));
+              break;
+            }
+            case 42: {
+              bitField0_ |= 0x00000008;
+              searchProviderIcon_ = input.readBytes();
               break;
             }
           }
@@ -20839,11 +20945,28 @@ public final class ClementineRemoteProtocolBuffer {
       return songMetadata_.get(index);
     }
 
+    // optional bytes search_provider_icon = 5;
+    public static final int SEARCH_PROVIDER_ICON_FIELD_NUMBER = 5;
+    private com.google.protobuf.ByteString searchProviderIcon_;
+    /**
+     * <code>optional bytes search_provider_icon = 5;</code>
+     */
+    public boolean hasSearchProviderIcon() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional bytes search_provider_icon = 5;</code>
+     */
+    public com.google.protobuf.ByteString getSearchProviderIcon() {
+      return searchProviderIcon_;
+    }
+
     private void initFields() {
       id_ = 0;
       query_ = "";
       searchProvider_ = "";
       songMetadata_ = java.util.Collections.emptyList();
+      searchProviderIcon_ = com.google.protobuf.ByteString.EMPTY;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -20869,6 +20992,9 @@ public final class ClementineRemoteProtocolBuffer {
       for (int i = 0; i < songMetadata_.size(); i++) {
         output.writeMessage(4, songMetadata_.get(i));
       }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBytes(5, searchProviderIcon_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -20893,6 +21019,10 @@ public final class ClementineRemoteProtocolBuffer {
       for (int i = 0; i < songMetadata_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(4, songMetadata_.get(i));
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(5, searchProviderIcon_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -21023,6 +21153,8 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           songMetadataBuilder_.clear();
         }
+        searchProviderIcon_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
 
@@ -21072,6 +21204,10 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           result.songMetadata_ = songMetadataBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.searchProviderIcon_ = searchProviderIcon_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -21126,6 +21262,9 @@ public final class ClementineRemoteProtocolBuffer {
               songMetadataBuilder_.addAllMessages(other.songMetadata_);
             }
           }
+        }
+        if (other.hasSearchProviderIcon()) {
+          setSearchProviderIcon(other.getSearchProviderIcon());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -21573,6 +21712,42 @@ public final class ClementineRemoteProtocolBuffer {
           songMetadata_ = null;
         }
         return songMetadataBuilder_;
+      }
+
+      // optional bytes search_provider_icon = 5;
+      private com.google.protobuf.ByteString searchProviderIcon_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>optional bytes search_provider_icon = 5;</code>
+       */
+      public boolean hasSearchProviderIcon() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>optional bytes search_provider_icon = 5;</code>
+       */
+      public com.google.protobuf.ByteString getSearchProviderIcon() {
+        return searchProviderIcon_;
+      }
+      /**
+       * <code>optional bytes search_provider_icon = 5;</code>
+       */
+      public Builder setSearchProviderIcon(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000010;
+        searchProviderIcon_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bytes search_provider_icon = 5;</code>
+       */
+      public Builder clearSearchProviderIcon() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        searchProviderIcon_ = getDefaultInstance().getSearchProviderIcon();
+        onChanged();
+        return this;
       }
 
       // @@protoc_insertion_point(builder_scope:pb.remote.ResponseGlobalSearch)
@@ -22063,16 +22238,658 @@ public final class ClementineRemoteProtocolBuffer {
     // @@protoc_insertion_point(class_scope:pb.remote.ResponseTranscoderStatus)
   }
 
+  public interface ResponseGlobalSearchStatusOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // optional int32 id = 1;
+    /**
+     * <code>optional int32 id = 1;</code>
+     */
+    boolean hasId();
+    /**
+     * <code>optional int32 id = 1;</code>
+     */
+    int getId();
+
+    // optional string query = 2;
+    /**
+     * <code>optional string query = 2;</code>
+     */
+    boolean hasQuery();
+    /**
+     * <code>optional string query = 2;</code>
+     */
+    java.lang.String getQuery();
+    /**
+     * <code>optional string query = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getQueryBytes();
+
+    // optional .pb.remote.GlobalSearchStatus status = 3;
+    /**
+     * <code>optional .pb.remote.GlobalSearchStatus status = 3;</code>
+     */
+    boolean hasStatus();
+    /**
+     * <code>optional .pb.remote.GlobalSearchStatus status = 3;</code>
+     */
+    de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.GlobalSearchStatus getStatus();
+  }
+  /**
+   * Protobuf type {@code pb.remote.ResponseGlobalSearchStatus}
+   */
+  public static final class ResponseGlobalSearchStatus extends
+      com.google.protobuf.GeneratedMessage
+      implements ResponseGlobalSearchStatusOrBuilder {
+    // Use ResponseGlobalSearchStatus.newBuilder() to construct.
+    private ResponseGlobalSearchStatus(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private ResponseGlobalSearchStatus(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final ResponseGlobalSearchStatus defaultInstance;
+    public static ResponseGlobalSearchStatus getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public ResponseGlobalSearchStatus getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private ResponseGlobalSearchStatus(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              id_ = input.readInt32();
+              break;
+            }
+            case 18: {
+              bitField0_ |= 0x00000002;
+              query_ = input.readBytes();
+              break;
+            }
+            case 24: {
+              int rawValue = input.readEnum();
+              de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.GlobalSearchStatus value = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.GlobalSearchStatus.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(3, rawValue);
+              } else {
+                bitField0_ |= 0x00000004;
+                status_ = value;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.internal_static_pb_remote_ResponseGlobalSearchStatus_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.internal_static_pb_remote_ResponseGlobalSearchStatus_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus.class, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<ResponseGlobalSearchStatus> PARSER =
+        new com.google.protobuf.AbstractParser<ResponseGlobalSearchStatus>() {
+      public ResponseGlobalSearchStatus parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new ResponseGlobalSearchStatus(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ResponseGlobalSearchStatus> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    // optional int32 id = 1;
+    public static final int ID_FIELD_NUMBER = 1;
+    private int id_;
+    /**
+     * <code>optional int32 id = 1;</code>
+     */
+    public boolean hasId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>optional int32 id = 1;</code>
+     */
+    public int getId() {
+      return id_;
+    }
+
+    // optional string query = 2;
+    public static final int QUERY_FIELD_NUMBER = 2;
+    private java.lang.Object query_;
+    /**
+     * <code>optional string query = 2;</code>
+     */
+    public boolean hasQuery() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional string query = 2;</code>
+     */
+    public java.lang.String getQuery() {
+      java.lang.Object ref = query_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          query_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string query = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getQueryBytes() {
+      java.lang.Object ref = query_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        query_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // optional .pb.remote.GlobalSearchStatus status = 3;
+    public static final int STATUS_FIELD_NUMBER = 3;
+    private de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.GlobalSearchStatus status_;
+    /**
+     * <code>optional .pb.remote.GlobalSearchStatus status = 3;</code>
+     */
+    public boolean hasStatus() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional .pb.remote.GlobalSearchStatus status = 3;</code>
+     */
+    public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.GlobalSearchStatus getStatus() {
+      return status_;
+    }
+
+    private void initFields() {
+      id_ = 0;
+      query_ = "";
+      status_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.GlobalSearchStatus.GlobalSearchStarted;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, id_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getQueryBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeEnum(3, status_.getNumber());
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, id_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, getQueryBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(3, status_.getNumber());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code pb.remote.ResponseGlobalSearchStatus}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatusOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.internal_static_pb_remote_ResponseGlobalSearchStatus_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.internal_static_pb_remote_ResponseGlobalSearchStatus_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus.class, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus.Builder.class);
+      }
+
+      // Construct using de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        id_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        query_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        status_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.GlobalSearchStatus.GlobalSearchStarted;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.internal_static_pb_remote_ResponseGlobalSearchStatus_descriptor;
+      }
+
+      public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus getDefaultInstanceForType() {
+        return de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus.getDefaultInstance();
+      }
+
+      public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus build() {
+        de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus buildPartial() {
+        de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus result = new de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.id_ = id_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.query_ = query_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.status_ = status_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus) {
+          return mergeFrom((de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus other) {
+        if (other == de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus.getDefaultInstance()) return this;
+        if (other.hasId()) {
+          setId(other.getId());
+        }
+        if (other.hasQuery()) {
+          bitField0_ |= 0x00000002;
+          query_ = other.query_;
+          onChanged();
+        }
+        if (other.hasStatus()) {
+          setStatus(other.getStatus());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // optional int32 id = 1;
+      private int id_ ;
+      /**
+       * <code>optional int32 id = 1;</code>
+       */
+      public boolean hasId() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>optional int32 id = 1;</code>
+       */
+      public int getId() {
+        return id_;
+      }
+      /**
+       * <code>optional int32 id = 1;</code>
+       */
+      public Builder setId(int value) {
+        bitField0_ |= 0x00000001;
+        id_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 id = 1;</code>
+       */
+      public Builder clearId() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        id_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional string query = 2;
+      private java.lang.Object query_ = "";
+      /**
+       * <code>optional string query = 2;</code>
+       */
+      public boolean hasQuery() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional string query = 2;</code>
+       */
+      public java.lang.String getQuery() {
+        java.lang.Object ref = query_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          query_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string query = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getQueryBytes() {
+        java.lang.Object ref = query_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          query_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string query = 2;</code>
+       */
+      public Builder setQuery(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        query_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string query = 2;</code>
+       */
+      public Builder clearQuery() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        query_ = getDefaultInstance().getQuery();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string query = 2;</code>
+       */
+      public Builder setQueryBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        query_ = value;
+        onChanged();
+        return this;
+      }
+
+      // optional .pb.remote.GlobalSearchStatus status = 3;
+      private de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.GlobalSearchStatus status_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.GlobalSearchStatus.GlobalSearchStarted;
+      /**
+       * <code>optional .pb.remote.GlobalSearchStatus status = 3;</code>
+       */
+      public boolean hasStatus() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional .pb.remote.GlobalSearchStatus status = 3;</code>
+       */
+      public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.GlobalSearchStatus getStatus() {
+        return status_;
+      }
+      /**
+       * <code>optional .pb.remote.GlobalSearchStatus status = 3;</code>
+       */
+      public Builder setStatus(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.GlobalSearchStatus value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000004;
+        status_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .pb.remote.GlobalSearchStatus status = 3;</code>
+       */
+      public Builder clearStatus() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        status_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.GlobalSearchStatus.GlobalSearchStarted;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:pb.remote.ResponseGlobalSearchStatus)
+    }
+
+    static {
+      defaultInstance = new ResponseGlobalSearchStatus(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:pb.remote.ResponseGlobalSearchStatus)
+  }
+
   public interface MessageOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // optional int32 version = 1 [default = 19];
+    // optional int32 version = 1 [default = 20];
     /**
-     * <code>optional int32 version = 1 [default = 19];</code>
+     * <code>optional int32 version = 1 [default = 20];</code>
      */
     boolean hasVersion();
     /**
-     * <code>optional int32 version = 1 [default = 19];</code>
+     * <code>optional int32 version = 1 [default = 20];</code>
      */
     int getVersion();
 
@@ -22513,6 +23330,20 @@ public final class ClementineRemoteProtocolBuffer {
      * <code>optional .pb.remote.ResponseTranscoderStatus response_transcoder_status = 39;</code>
      */
     de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseTranscoderStatusOrBuilder getResponseTranscoderStatusOrBuilder();
+
+    // optional .pb.remote.ResponseGlobalSearchStatus response_global_search_status = 40;
+    /**
+     * <code>optional .pb.remote.ResponseGlobalSearchStatus response_global_search_status = 40;</code>
+     */
+    boolean hasResponseGlobalSearchStatus();
+    /**
+     * <code>optional .pb.remote.ResponseGlobalSearchStatus response_global_search_status = 40;</code>
+     */
+    de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus getResponseGlobalSearchStatus();
+    /**
+     * <code>optional .pb.remote.ResponseGlobalSearchStatus response_global_search_status = 40;</code>
+     */
+    de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatusOrBuilder getResponseGlobalSearchStatusOrBuilder();
   }
   /**
    * Protobuf type {@code pb.remote.Message}
@@ -22552,6 +23383,7 @@ public final class ClementineRemoteProtocolBuffer {
         throws com.google.protobuf.InvalidProtocolBufferException {
       initFields();
       int mutable_bitField0_ = 0;
+      int mutable_bitField1_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
@@ -22975,6 +23807,19 @@ public final class ClementineRemoteProtocolBuffer {
               bitField0_ |= 0x80000000;
               break;
             }
+            case 322: {
+              de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus.Builder subBuilder = null;
+              if (((bitField1_ & 0x00000001) == 0x00000001)) {
+                subBuilder = responseGlobalSearchStatus_.toBuilder();
+              }
+              responseGlobalSearchStatus_ = input.readMessage(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(responseGlobalSearchStatus_);
+                responseGlobalSearchStatus_ = subBuilder.buildPartial();
+              }
+              bitField1_ |= 0x00000001;
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -23015,17 +23860,18 @@ public final class ClementineRemoteProtocolBuffer {
     }
 
     private int bitField0_;
-    // optional int32 version = 1 [default = 19];
+    private int bitField1_;
+    // optional int32 version = 1 [default = 20];
     public static final int VERSION_FIELD_NUMBER = 1;
     private int version_;
     /**
-     * <code>optional int32 version = 1 [default = 19];</code>
+     * <code>optional int32 version = 1 [default = 20];</code>
      */
     public boolean hasVersion() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>optional int32 version = 1 [default = 19];</code>
+     * <code>optional int32 version = 1 [default = 20];</code>
      */
     public int getVersion() {
       return version_;
@@ -23715,8 +24561,30 @@ public final class ClementineRemoteProtocolBuffer {
       return responseTranscoderStatus_;
     }
 
+    // optional .pb.remote.ResponseGlobalSearchStatus response_global_search_status = 40;
+    public static final int RESPONSE_GLOBAL_SEARCH_STATUS_FIELD_NUMBER = 40;
+    private de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus responseGlobalSearchStatus_;
+    /**
+     * <code>optional .pb.remote.ResponseGlobalSearchStatus response_global_search_status = 40;</code>
+     */
+    public boolean hasResponseGlobalSearchStatus() {
+      return ((bitField1_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>optional .pb.remote.ResponseGlobalSearchStatus response_global_search_status = 40;</code>
+     */
+    public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus getResponseGlobalSearchStatus() {
+      return responseGlobalSearchStatus_;
+    }
+    /**
+     * <code>optional .pb.remote.ResponseGlobalSearchStatus response_global_search_status = 40;</code>
+     */
+    public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatusOrBuilder getResponseGlobalSearchStatusOrBuilder() {
+      return responseGlobalSearchStatus_;
+    }
+
     private void initFields() {
-      version_ = 19;
+      version_ = 20;
       type_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType.UNKNOWN;
       requestConnect_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestConnect.getDefaultInstance();
       requestPlaylists_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestPlaylists.getDefaultInstance();
@@ -23748,6 +24616,7 @@ public final class ClementineRemoteProtocolBuffer {
       responseDownloadTotalSize_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseDownloadTotalSize.getDefaultInstance();
       responseGlobalSearch_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearch.getDefaultInstance();
       responseTranscoderStatus_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseTranscoderStatus.getDefaultInstance();
+      responseGlobalSearchStatus_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -23856,6 +24725,9 @@ public final class ClementineRemoteProtocolBuffer {
       }
       if (((bitField0_ & 0x80000000) == 0x80000000)) {
         output.writeMessage(39, responseTranscoderStatus_);
+      }
+      if (((bitField1_ & 0x00000001) == 0x00000001)) {
+        output.writeMessage(40, responseGlobalSearchStatus_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -23993,6 +24865,10 @@ public final class ClementineRemoteProtocolBuffer {
       if (((bitField0_ & 0x80000000) == 0x80000000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(39, responseTranscoderStatus_);
+      }
+      if (((bitField1_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(40, responseGlobalSearchStatus_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -24136,6 +25012,7 @@ public final class ClementineRemoteProtocolBuffer {
           getResponseDownloadTotalSizeFieldBuilder();
           getResponseGlobalSearchFieldBuilder();
           getResponseTranscoderStatusFieldBuilder();
+          getResponseGlobalSearchStatusFieldBuilder();
         }
       }
       private static Builder create() {
@@ -24144,7 +25021,7 @@ public final class ClementineRemoteProtocolBuffer {
 
       public Builder clear() {
         super.clear();
-        version_ = 19;
+        version_ = 20;
         bitField0_ = (bitField0_ & ~0x00000001);
         type_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -24328,6 +25205,12 @@ public final class ClementineRemoteProtocolBuffer {
           responseTranscoderStatusBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x80000000);
+        if (responseGlobalSearchStatusBuilder_ == null) {
+          responseGlobalSearchStatus_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus.getDefaultInstance();
+        } else {
+          responseGlobalSearchStatusBuilder_.clear();
+        }
+        bitField1_ = (bitField1_ & ~0x00000001);
         return this;
       }
 
@@ -24355,7 +25238,9 @@ public final class ClementineRemoteProtocolBuffer {
       public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message buildPartial() {
         de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message result = new de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message(this);
         int from_bitField0_ = bitField0_;
+        int from_bitField1_ = bitField1_;
         int to_bitField0_ = 0;
+        int to_bitField1_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
@@ -24604,7 +25489,16 @@ public final class ClementineRemoteProtocolBuffer {
         } else {
           result.responseTranscoderStatus_ = responseTranscoderStatusBuilder_.build();
         }
+        if (((from_bitField1_ & 0x00000001) == 0x00000001)) {
+          to_bitField1_ |= 0x00000001;
+        }
+        if (responseGlobalSearchStatusBuilder_ == null) {
+          result.responseGlobalSearchStatus_ = responseGlobalSearchStatus_;
+        } else {
+          result.responseGlobalSearchStatus_ = responseGlobalSearchStatusBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
+        result.bitField1_ = to_bitField1_;
         onBuilt();
         return result;
       }
@@ -24716,6 +25610,9 @@ public final class ClementineRemoteProtocolBuffer {
         if (other.hasResponseTranscoderStatus()) {
           mergeResponseTranscoderStatus(other.getResponseTranscoderStatus());
         }
+        if (other.hasResponseGlobalSearchStatus()) {
+          mergeResponseGlobalSearchStatus(other.getResponseGlobalSearchStatus());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -24742,23 +25639,24 @@ public final class ClementineRemoteProtocolBuffer {
         return this;
       }
       private int bitField0_;
+      private int bitField1_;
 
-      // optional int32 version = 1 [default = 19];
-      private int version_ = 19;
+      // optional int32 version = 1 [default = 20];
+      private int version_ = 20;
       /**
-       * <code>optional int32 version = 1 [default = 19];</code>
+       * <code>optional int32 version = 1 [default = 20];</code>
        */
       public boolean hasVersion() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>optional int32 version = 1 [default = 19];</code>
+       * <code>optional int32 version = 1 [default = 20];</code>
        */
       public int getVersion() {
         return version_;
       }
       /**
-       * <code>optional int32 version = 1 [default = 19];</code>
+       * <code>optional int32 version = 1 [default = 20];</code>
        */
       public Builder setVersion(int value) {
         bitField0_ |= 0x00000001;
@@ -24767,11 +25665,11 @@ public final class ClementineRemoteProtocolBuffer {
         return this;
       }
       /**
-       * <code>optional int32 version = 1 [default = 19];</code>
+       * <code>optional int32 version = 1 [default = 20];</code>
        */
       public Builder clearVersion() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        version_ = 19;
+        version_ = 20;
         onChanged();
         return this;
       }
@@ -28338,6 +29236,123 @@ public final class ClementineRemoteProtocolBuffer {
         return responseTranscoderStatusBuilder_;
       }
 
+      // optional .pb.remote.ResponseGlobalSearchStatus response_global_search_status = 40;
+      private de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus responseGlobalSearchStatus_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus.Builder, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatusOrBuilder> responseGlobalSearchStatusBuilder_;
+      /**
+       * <code>optional .pb.remote.ResponseGlobalSearchStatus response_global_search_status = 40;</code>
+       */
+      public boolean hasResponseGlobalSearchStatus() {
+        return ((bitField1_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>optional .pb.remote.ResponseGlobalSearchStatus response_global_search_status = 40;</code>
+       */
+      public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus getResponseGlobalSearchStatus() {
+        if (responseGlobalSearchStatusBuilder_ == null) {
+          return responseGlobalSearchStatus_;
+        } else {
+          return responseGlobalSearchStatusBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .pb.remote.ResponseGlobalSearchStatus response_global_search_status = 40;</code>
+       */
+      public Builder setResponseGlobalSearchStatus(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus value) {
+        if (responseGlobalSearchStatusBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          responseGlobalSearchStatus_ = value;
+          onChanged();
+        } else {
+          responseGlobalSearchStatusBuilder_.setMessage(value);
+        }
+        bitField1_ |= 0x00000001;
+        return this;
+      }
+      /**
+       * <code>optional .pb.remote.ResponseGlobalSearchStatus response_global_search_status = 40;</code>
+       */
+      public Builder setResponseGlobalSearchStatus(
+          de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus.Builder builderForValue) {
+        if (responseGlobalSearchStatusBuilder_ == null) {
+          responseGlobalSearchStatus_ = builderForValue.build();
+          onChanged();
+        } else {
+          responseGlobalSearchStatusBuilder_.setMessage(builderForValue.build());
+        }
+        bitField1_ |= 0x00000001;
+        return this;
+      }
+      /**
+       * <code>optional .pb.remote.ResponseGlobalSearchStatus response_global_search_status = 40;</code>
+       */
+      public Builder mergeResponseGlobalSearchStatus(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus value) {
+        if (responseGlobalSearchStatusBuilder_ == null) {
+          if (((bitField1_ & 0x00000001) == 0x00000001) &&
+              responseGlobalSearchStatus_ != de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus.getDefaultInstance()) {
+            responseGlobalSearchStatus_ =
+              de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus.newBuilder(responseGlobalSearchStatus_).mergeFrom(value).buildPartial();
+          } else {
+            responseGlobalSearchStatus_ = value;
+          }
+          onChanged();
+        } else {
+          responseGlobalSearchStatusBuilder_.mergeFrom(value);
+        }
+        bitField1_ |= 0x00000001;
+        return this;
+      }
+      /**
+       * <code>optional .pb.remote.ResponseGlobalSearchStatus response_global_search_status = 40;</code>
+       */
+      public Builder clearResponseGlobalSearchStatus() {
+        if (responseGlobalSearchStatusBuilder_ == null) {
+          responseGlobalSearchStatus_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus.getDefaultInstance();
+          onChanged();
+        } else {
+          responseGlobalSearchStatusBuilder_.clear();
+        }
+        bitField1_ = (bitField1_ & ~0x00000001);
+        return this;
+      }
+      /**
+       * <code>optional .pb.remote.ResponseGlobalSearchStatus response_global_search_status = 40;</code>
+       */
+      public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus.Builder getResponseGlobalSearchStatusBuilder() {
+        bitField1_ |= 0x00000001;
+        onChanged();
+        return getResponseGlobalSearchStatusFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .pb.remote.ResponseGlobalSearchStatus response_global_search_status = 40;</code>
+       */
+      public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatusOrBuilder getResponseGlobalSearchStatusOrBuilder() {
+        if (responseGlobalSearchStatusBuilder_ != null) {
+          return responseGlobalSearchStatusBuilder_.getMessageOrBuilder();
+        } else {
+          return responseGlobalSearchStatus_;
+        }
+      }
+      /**
+       * <code>optional .pb.remote.ResponseGlobalSearchStatus response_global_search_status = 40;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus.Builder, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatusOrBuilder> 
+          getResponseGlobalSearchStatusFieldBuilder() {
+        if (responseGlobalSearchStatusBuilder_ == null) {
+          responseGlobalSearchStatusBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus.Builder, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatusOrBuilder>(
+                  responseGlobalSearchStatus_,
+                  getParentForChildren(),
+                  isClean());
+          responseGlobalSearchStatus_ = null;
+        }
+        return responseGlobalSearchStatusBuilder_;
+      }
+
       // @@protoc_insertion_point(builder_scope:pb.remote.Message)
     }
 
@@ -28515,6 +29530,11 @@ public final class ClementineRemoteProtocolBuffer {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_pb_remote_ResponseTranscoderStatus_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_pb_remote_ResponseGlobalSearchStatus_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_pb_remote_ResponseGlobalSearchStatus_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_pb_remote_Message_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -28590,94 +29610,101 @@ public final class ClementineRemoteProtocolBuffer {
       "\022\016\n\006rating\030\001 \001(\002\"C\n\031ResponseDownloadTota",
       "lSize\022\022\n\ntotal_size\030\001 \001(\005\022\022\n\nfile_count\030" +
       "\002 \001(\005\"$\n\023RequestGlobalSearch\022\r\n\005query\030\001 " +
-      "\001(\t\"z\n\024ResponseGlobalSearch\022\n\n\002id\030\001 \001(\005\022" +
-      "\r\n\005query\030\002 \001(\t\022\027\n\017search_provider\030\003 \001(\t\022" +
-      ".\n\rsong_metadata\030\004 \003(\0132\027.pb.remote.SongM" +
-      "etadata\"<\n\030ResponseTranscoderStatus\022\021\n\tp" +
-      "rocessed\030\001 \001(\005\022\r\n\005total\030\002 \001(\005\"\231\017\n\007Messag" +
-      "e\022\023\n\007version\030\001 \001(\005:\00219\022)\n\004type\030\002 \001(\0162\022.p" +
-      "b.remote.MsgType:\007UNKNOWN\0222\n\017request_con" +
-      "nect\030\025 \001(\0132\031.pb.remote.RequestConnect\0226\n",
-      "\021request_playlists\030\033 \001(\0132\033.pb.remote.Req" +
-      "uestPlaylists\022?\n\026request_playlist_songs\030" +
-      "\n \001(\0132\037.pb.remote.RequestPlaylistSongs\0229" +
-      "\n\023request_change_song\030\013 \001(\0132\034.pb.remote." +
-      "RequestChangeSong\0227\n\022request_set_volume\030" +
-      "\014 \001(\0132\033.pb.remote.RequestSetVolume\022F\n\032re" +
-      "quest_set_track_position\030\027 \001(\0132\".pb.remo" +
-      "te.RequestSetTrackPosition\0229\n\023request_in" +
-      "sert_urls\030\031 \001(\0132\034.pb.remote.RequestInser" +
-      "tUrls\022;\n\024request_remove_songs\030\032 \001(\0132\035.pb",
-      ".remote.RequestRemoveSongs\022=\n\025request_op" +
-      "en_playlist\030\034 \001(\0132\036.pb.remote.RequestOpe" +
-      "nPlaylist\022?\n\026request_close_playlist\030\035 \001(" +
-      "\0132\037.pb.remote.RequestClosePlaylist\022?\n\026re" +
-      "quest_download_songs\030\037 \001(\0132\037.pb.remote.R" +
-      "equestDownloadSongs\0225\n\021request_rate_song" +
-      "\030# \001(\0132\032.pb.remote.RequestRateSong\022=\n\025re" +
-      "quest_global_search\030% \001(\0132\036.pb.remote.Re" +
-      "questGlobalSearch\022!\n\006repeat\030\r \001(\0132\021.pb.r" +
-      "emote.Repeat\022#\n\007shuffle\030\016 \001(\0132\022.pb.remot",
-      "e.Shuffle\022C\n\030response_clementine_info\030\017 " +
-      "\001(\0132!.pb.remote.ResponseClementineInfo\022E" +
-      "\n\031response_current_metadata\030\020 \001(\0132\".pb.r" +
-      "emote.ResponseCurrentMetadata\0228\n\022respons" +
-      "e_playlists\030\021 \001(\0132\034.pb.remote.ResponsePl" +
-      "aylists\022A\n\027response_playlist_songs\030\022 \001(\013" +
-      "2 .pb.remote.ResponsePlaylistSongs\022L\n\035re" +
-      "sponse_engine_state_changed\030\023 \001(\0132%.pb.r" +
-      "emote.ResponseEngineStateChanged\022N\n\036resp" +
-      "onse_update_track_position\030\024 \001(\0132&.pb.re",
-      "mote.ResponseUpdateTrackPosition\022:\n\023resp" +
-      "onse_disconnect\030\026 \001(\0132\035.pb.remote.Respon" +
-      "seDisconnect\022A\n\027response_active_changed\030" +
-      "\030 \001(\0132 .pb.remote.ResponseActiveChanged\022" +
-      "2\n\017response_lyrics\030\036 \001(\0132\031.pb.remote.Res" +
-      "ponseLyrics\022B\n\030response_song_file_chunk\030" +
-      "  \001(\0132 .pb.remote.ResponseSongFileChunk\022" +
-      "9\n\023response_song_offer\030! \001(\0132\034.pb.remote" +
-      ".ResponseSongOffer\022?\n\026response_library_c" +
-      "hunk\030\" \001(\0132\037.pb.remote.ResponseLibraryCh",
-      "unk\022J\n\034response_download_total_size\030$ \001(" +
-      "\0132$.pb.remote.ResponseDownloadTotalSize\022" +
-      "?\n\026response_global_search\030& \001(\0132\037.pb.rem" +
-      "ote.ResponseGlobalSearch\022G\n\032response_tra" +
-      "nscoder_status\030\' \001(\0132#.pb.remote.Respons" +
-      "eTranscoderStatus*\314\006\n\007MsgType\022\013\n\007UNKNOWN" +
-      "\020\000\022\013\n\007CONNECT\020\001\022\025\n\021REQUEST_PLAYLISTS\020\003\022\032" +
-      "\n\026REQUEST_PLAYLIST_SONGS\020\004\022\017\n\013CHANGE_SON" +
-      "G\020\005\022\016\n\nSET_VOLUME\020\006\022\026\n\022SET_TRACK_POSITIO" +
-      "N\020\007\022\017\n\013INSERT_URLS\020\010\022\020\n\014REMOVE_SONGS\020\t\022\021",
-      "\n\rOPEN_PLAYLIST\020\n\022\022\n\016CLOSE_PLAYLIST\020\013\022\016\n" +
-      "\nGET_LYRICS\020\016\022\022\n\016DOWNLOAD_SONGS\020\017\022\027\n\023SON" +
-      "G_OFFER_RESPONSE\020\020\022\010\n\004LOVE\020\014\022\007\n\003BAN\020\r\022\016\n" +
-      "\nSTOP_AFTER\020\021\022\017\n\013GET_LIBRARY\020\022\022\r\n\tRATE_S" +
-      "ONG\020\023\022\021\n\rGLOBAL_SEARCH\020d\022\016\n\nDISCONNECT\020\002" +
-      "\022\010\n\004PLAY\020\024\022\r\n\tPLAYPAUSE\020\025\022\t\n\005PAUSE\020\026\022\010\n\004" +
-      "STOP\020\027\022\010\n\004NEXT\020\030\022\014\n\010PREVIOUS\020\031\022\024\n\020SHUFFL" +
-      "E_PLAYLIST\020\032\022\n\n\006REPEAT\020\033\022\013\n\007SHUFFLE\020\034\022\010\n" +
-      "\004INFO\020(\022\024\n\020CURRENT_METAINFO\020)\022\r\n\tPLAYLIS" +
-      "TS\020*\022\022\n\016PLAYLIST_SONGS\020+\022\030\n\024ENGINE_STATE",
-      "_CHANGED\020,\022\016\n\nKEEP_ALIVE\020-\022\031\n\025UPDATE_TRA" +
-      "CK_POSITION\020.\022\033\n\027ACTIVE_PLAYLIST_CHANGED" +
-      "\020/\022\034\n\030FIRST_DATA_SENT_COMPLETE\0200\022\n\n\006LYRI" +
-      "CS\0201\022\023\n\017SONG_FILE_CHUNK\0202\022\030\n\024DOWNLOAD_QU" +
-      "EUE_EMPTY\0203\022\021\n\rLIBRARY_CHUNK\0204\022\027\n\023DOWNLO" +
-      "AD_TOTAL_SIZE\0205\022\030\n\024GLOBAL_SEARCH_RESULT\020" +
-      "6\022\025\n\021TRANSCODING_FILES\0207*;\n\013EngineState\022" +
-      "\t\n\005Empty\020\000\022\010\n\004Idle\020\001\022\013\n\007Playing\020\002\022\n\n\006Pau" +
-      "sed\020\003*U\n\nRepeatMode\022\016\n\nRepeat_Off\020\000\022\020\n\014R" +
-      "epeat_Track\020\001\022\020\n\014Repeat_Album\020\002\022\023\n\017Repea",
-      "t_Playlist\020\003*\\\n\013ShuffleMode\022\017\n\013Shuffle_O" +
-      "ff\020\000\022\017\n\013Shuffle_All\020\001\022\027\n\023Shuffle_InsideA" +
-      "lbum\020\002\022\022\n\016Shuffle_Albums\020\003*k\n\020ReasonDisc" +
-      "onnect\022\023\n\017Server_Shutdown\020\001\022\023\n\017Wrong_Aut" +
-      "h_Code\020\002\022\025\n\021Not_Authenticated\020\003\022\026\n\022Downl" +
-      "oad_Forbidden\020\004*G\n\014DownloadItem\022\017\n\013Curre" +
-      "ntItem\020\001\022\r\n\tItemAlbum\020\002\022\r\n\tAPlaylist\020\003\022\010" +
-      "\n\004Urls\020\004BG\n%de.qspool.clementineremote.b" +
-      "ackend.pbB\036ClementineRemoteProtocolBuffe" +
-      "r"
+      "\001(\t\"\230\001\n\024ResponseGlobalSearch\022\n\n\002id\030\001 \001(\005" +
+      "\022\r\n\005query\030\002 \001(\t\022\027\n\017search_provider\030\003 \001(\t" +
+      "\022.\n\rsong_metadata\030\004 \003(\0132\027.pb.remote.Song" +
+      "Metadata\022\034\n\024search_provider_icon\030\005 \001(\014\"<" +
+      "\n\030ResponseTranscoderStatus\022\021\n\tprocessed\030" +
+      "\001 \001(\005\022\r\n\005total\030\002 \001(\005\"f\n\032ResponseGlobalSe" +
+      "archStatus\022\n\n\002id\030\001 \001(\005\022\r\n\005query\030\002 \001(\t\022-\n" +
+      "\006status\030\003 \001(\0162\035.pb.remote.GlobalSearchSt",
+      "atus\"\347\017\n\007Message\022\023\n\007version\030\001 \001(\005:\00220\022)\n" +
+      "\004type\030\002 \001(\0162\022.pb.remote.MsgType:\007UNKNOWN" +
+      "\0222\n\017request_connect\030\025 \001(\0132\031.pb.remote.Re" +
+      "questConnect\0226\n\021request_playlists\030\033 \001(\0132" +
+      "\033.pb.remote.RequestPlaylists\022?\n\026request_" +
+      "playlist_songs\030\n \001(\0132\037.pb.remote.Request" +
+      "PlaylistSongs\0229\n\023request_change_song\030\013 \001" +
+      "(\0132\034.pb.remote.RequestChangeSong\0227\n\022requ" +
+      "est_set_volume\030\014 \001(\0132\033.pb.remote.Request" +
+      "SetVolume\022F\n\032request_set_track_position\030",
+      "\027 \001(\0132\".pb.remote.RequestSetTrackPositio" +
+      "n\0229\n\023request_insert_urls\030\031 \001(\0132\034.pb.remo" +
+      "te.RequestInsertUrls\022;\n\024request_remove_s" +
+      "ongs\030\032 \001(\0132\035.pb.remote.RequestRemoveSong" +
+      "s\022=\n\025request_open_playlist\030\034 \001(\0132\036.pb.re" +
+      "mote.RequestOpenPlaylist\022?\n\026request_clos" +
+      "e_playlist\030\035 \001(\0132\037.pb.remote.RequestClos" +
+      "ePlaylist\022?\n\026request_download_songs\030\037 \001(" +
+      "\0132\037.pb.remote.RequestDownloadSongs\0225\n\021re" +
+      "quest_rate_song\030# \001(\0132\032.pb.remote.Reques",
+      "tRateSong\022=\n\025request_global_search\030% \001(\013" +
+      "2\036.pb.remote.RequestGlobalSearch\022!\n\006repe" +
+      "at\030\r \001(\0132\021.pb.remote.Repeat\022#\n\007shuffle\030\016" +
+      " \001(\0132\022.pb.remote.Shuffle\022C\n\030response_cle" +
+      "mentine_info\030\017 \001(\0132!.pb.remote.ResponseC" +
+      "lementineInfo\022E\n\031response_current_metada" +
+      "ta\030\020 \001(\0132\".pb.remote.ResponseCurrentMeta" +
+      "data\0228\n\022response_playlists\030\021 \001(\0132\034.pb.re" +
+      "mote.ResponsePlaylists\022A\n\027response_playl" +
+      "ist_songs\030\022 \001(\0132 .pb.remote.ResponsePlay",
+      "listSongs\022L\n\035response_engine_state_chang" +
+      "ed\030\023 \001(\0132%.pb.remote.ResponseEngineState" +
+      "Changed\022N\n\036response_update_track_positio" +
+      "n\030\024 \001(\0132&.pb.remote.ResponseUpdateTrackP" +
+      "osition\022:\n\023response_disconnect\030\026 \001(\0132\035.p" +
+      "b.remote.ResponseDisconnect\022A\n\027response_" +
+      "active_changed\030\030 \001(\0132 .pb.remote.Respons" +
+      "eActiveChanged\0222\n\017response_lyrics\030\036 \001(\0132" +
+      "\031.pb.remote.ResponseLyrics\022B\n\030response_s" +
+      "ong_file_chunk\030  \001(\0132 .pb.remote.Respons",
+      "eSongFileChunk\0229\n\023response_song_offer\030! " +
+      "\001(\0132\034.pb.remote.ResponseSongOffer\022?\n\026res" +
+      "ponse_library_chunk\030\" \001(\0132\037.pb.remote.Re" +
+      "sponseLibraryChunk\022J\n\034response_download_" +
+      "total_size\030$ \001(\0132$.pb.remote.ResponseDow" +
+      "nloadTotalSize\022?\n\026response_global_search" +
+      "\030& \001(\0132\037.pb.remote.ResponseGlobalSearch\022" +
+      "G\n\032response_transcoder_status\030\' \001(\0132#.pb" +
+      ".remote.ResponseTranscoderStatus\022L\n\035resp" +
+      "onse_global_search_status\030( \001(\0132%.pb.rem",
+      "ote.ResponseGlobalSearchStatus*\346\006\n\007MsgTy" +
+      "pe\022\013\n\007UNKNOWN\020\000\022\013\n\007CONNECT\020\001\022\025\n\021REQUEST_" +
+      "PLAYLISTS\020\003\022\032\n\026REQUEST_PLAYLIST_SONGS\020\004\022" +
+      "\017\n\013CHANGE_SONG\020\005\022\016\n\nSET_VOLUME\020\006\022\026\n\022SET_" +
+      "TRACK_POSITION\020\007\022\017\n\013INSERT_URLS\020\010\022\020\n\014REM" +
+      "OVE_SONGS\020\t\022\021\n\rOPEN_PLAYLIST\020\n\022\022\n\016CLOSE_" +
+      "PLAYLIST\020\013\022\016\n\nGET_LYRICS\020\016\022\022\n\016DOWNLOAD_S" +
+      "ONGS\020\017\022\027\n\023SONG_OFFER_RESPONSE\020\020\022\010\n\004LOVE\020" +
+      "\014\022\007\n\003BAN\020\r\022\016\n\nSTOP_AFTER\020\021\022\017\n\013GET_LIBRAR" +
+      "Y\020\022\022\r\n\tRATE_SONG\020\023\022\021\n\rGLOBAL_SEARCH\020d\022\016\n",
+      "\nDISCONNECT\020\002\022\010\n\004PLAY\020\024\022\r\n\tPLAYPAUSE\020\025\022\t" +
+      "\n\005PAUSE\020\026\022\010\n\004STOP\020\027\022\010\n\004NEXT\020\030\022\014\n\010PREVIOU" +
+      "S\020\031\022\024\n\020SHUFFLE_PLAYLIST\020\032\022\n\n\006REPEAT\020\033\022\013\n" +
+      "\007SHUFFLE\020\034\022\010\n\004INFO\020(\022\024\n\020CURRENT_METAINFO" +
+      "\020)\022\r\n\tPLAYLISTS\020*\022\022\n\016PLAYLIST_SONGS\020+\022\030\n" +
+      "\024ENGINE_STATE_CHANGED\020,\022\016\n\nKEEP_ALIVE\020-\022" +
+      "\031\n\025UPDATE_TRACK_POSITION\020.\022\033\n\027ACTIVE_PLA" +
+      "YLIST_CHANGED\020/\022\034\n\030FIRST_DATA_SENT_COMPL" +
+      "ETE\0200\022\n\n\006LYRICS\0201\022\023\n\017SONG_FILE_CHUNK\0202\022\030" +
+      "\n\024DOWNLOAD_QUEUE_EMPTY\0203\022\021\n\rLIBRARY_CHUN",
+      "K\0204\022\027\n\023DOWNLOAD_TOTAL_SIZE\0205\022\030\n\024GLOBAL_S" +
+      "EARCH_RESULT\0206\022\025\n\021TRANSCODING_FILES\0207\022\030\n" +
+      "\024GLOBAL_SEARCH_STATUS\0208*;\n\013EngineState\022\t" +
+      "\n\005Empty\020\000\022\010\n\004Idle\020\001\022\013\n\007Playing\020\002\022\n\n\006Paus" +
+      "ed\020\003*U\n\nRepeatMode\022\016\n\nRepeat_Off\020\000\022\020\n\014Re" +
+      "peat_Track\020\001\022\020\n\014Repeat_Album\020\002\022\023\n\017Repeat" +
+      "_Playlist\020\003*\\\n\013ShuffleMode\022\017\n\013Shuffle_Of" +
+      "f\020\000\022\017\n\013Shuffle_All\020\001\022\027\n\023Shuffle_InsideAl" +
+      "bum\020\002\022\022\n\016Shuffle_Albums\020\003*k\n\020ReasonDisco" +
+      "nnect\022\023\n\017Server_Shutdown\020\001\022\023\n\017Wrong_Auth",
+      "_Code\020\002\022\025\n\021Not_Authenticated\020\003\022\026\n\022Downlo" +
+      "ad_Forbidden\020\004*G\n\014DownloadItem\022\017\n\013Curren" +
+      "tItem\020\001\022\r\n\tItemAlbum\020\002\022\r\n\tAPlaylist\020\003\022\010\n" +
+      "\004Urls\020\004*G\n\022GlobalSearchStatus\022\027\n\023GlobalS" +
+      "earchStarted\020\001\022\030\n\024GlobalSearchFinished\020\002" +
+      "BG\n%de.qspool.clementineremote.backend.p" +
+      "bB\036ClementineRemoteProtocolBuffer"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -28875,19 +29902,25 @@ public final class ClementineRemoteProtocolBuffer {
           internal_static_pb_remote_ResponseGlobalSearch_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pb_remote_ResponseGlobalSearch_descriptor,
-              new java.lang.String[] { "Id", "Query", "SearchProvider", "SongMetadata", });
+              new java.lang.String[] { "Id", "Query", "SearchProvider", "SongMetadata", "SearchProviderIcon", });
           internal_static_pb_remote_ResponseTranscoderStatus_descriptor =
             getDescriptor().getMessageTypes().get(32);
           internal_static_pb_remote_ResponseTranscoderStatus_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pb_remote_ResponseTranscoderStatus_descriptor,
               new java.lang.String[] { "Processed", "Total", });
-          internal_static_pb_remote_Message_descriptor =
+          internal_static_pb_remote_ResponseGlobalSearchStatus_descriptor =
             getDescriptor().getMessageTypes().get(33);
+          internal_static_pb_remote_ResponseGlobalSearchStatus_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_pb_remote_ResponseGlobalSearchStatus_descriptor,
+              new java.lang.String[] { "Id", "Query", "Status", });
+          internal_static_pb_remote_Message_descriptor =
+            getDescriptor().getMessageTypes().get(34);
           internal_static_pb_remote_Message_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pb_remote_Message_descriptor,
-              new java.lang.String[] { "Version", "Type", "RequestConnect", "RequestPlaylists", "RequestPlaylistSongs", "RequestChangeSong", "RequestSetVolume", "RequestSetTrackPosition", "RequestInsertUrls", "RequestRemoveSongs", "RequestOpenPlaylist", "RequestClosePlaylist", "RequestDownloadSongs", "RequestRateSong", "RequestGlobalSearch", "Repeat", "Shuffle", "ResponseClementineInfo", "ResponseCurrentMetadata", "ResponsePlaylists", "ResponsePlaylistSongs", "ResponseEngineStateChanged", "ResponseUpdateTrackPosition", "ResponseDisconnect", "ResponseActiveChanged", "ResponseLyrics", "ResponseSongFileChunk", "ResponseSongOffer", "ResponseLibraryChunk", "ResponseDownloadTotalSize", "ResponseGlobalSearch", "ResponseTranscoderStatus", });
+              new java.lang.String[] { "Version", "Type", "RequestConnect", "RequestPlaylists", "RequestPlaylistSongs", "RequestChangeSong", "RequestSetVolume", "RequestSetTrackPosition", "RequestInsertUrls", "RequestRemoveSongs", "RequestOpenPlaylist", "RequestClosePlaylist", "RequestDownloadSongs", "RequestRateSong", "RequestGlobalSearch", "Repeat", "Shuffle", "ResponseClementineInfo", "ResponseCurrentMetadata", "ResponsePlaylists", "ResponsePlaylistSongs", "ResponseEngineStateChanged", "ResponseUpdateTrackPosition", "ResponseDisconnect", "ResponseActiveChanged", "ResponseLyrics", "ResponseSongFileChunk", "ResponseSongOffer", "ResponseLibraryChunk", "ResponseDownloadTotalSize", "ResponseGlobalSearch", "ResponseTranscoderStatus", "ResponseGlobalSearchStatus", });
           return null;
         }
       };

@@ -289,4 +289,14 @@ public class ClementineMessageFactory {
 
         return new ClementineMessage(msg);
     }
+
+    public static ClementineMessage buildGlobalSearch(String query) {
+        Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.GLOBAL_SEARCH);
+        ClementineRemoteProtocolBuffer.RequestGlobalSearch.Builder requestGlobalSearch = msg.
+                getRequestGlobalSearchBuilder();
+
+        requestGlobalSearch.setQuery(query);
+
+        return new ClementineMessage(msg);
+    }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="navigation_drawer_icons">
+        <item>@drawable/nav_search</item>
         <item>@drawable/nav_player</item>
         <item>@drawable/nav_playlist</item>
         <item>@drawable/nav_library</item>

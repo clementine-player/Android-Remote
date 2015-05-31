@@ -2,13 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/library_context_add"
+        android:id="@+id/global_search_context_add"
         android:title="@string/context_add_to_playlist"
         android:icon="@drawable/ab_menu_add_to_playlist"
-        app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/library_context_download"
-        android:title="@string/menu_download"
-        android:icon="@drawable/ab_download"
         app:showAsAction="ifRoom" />
 </menu>

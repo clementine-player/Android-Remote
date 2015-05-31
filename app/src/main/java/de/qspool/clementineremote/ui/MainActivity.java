@@ -59,6 +59,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgT
 import de.qspool.clementineremote.ui.adapter.NavigationDrawerListAdapter;
 import de.qspool.clementineremote.ui.fragments.DonateFragment;
 import de.qspool.clementineremote.ui.fragments.DownloadsFragment;
+import de.qspool.clementineremote.ui.fragments.GlobalSearchFragment;
 import de.qspool.clementineremote.ui.fragments.LibraryFragment;
 import de.qspool.clementineremote.ui.fragments.PlayerFragment;
 import de.qspool.clementineremote.ui.fragments.PlaylistFragment;
@@ -94,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActionBarDrawerToggle mDrawerToggle;
 
-    private int mLastPosition = 0;
+    private int mLastPosition = 1;
 
     private boolean mOpenConnectDialog = true;
 
@@ -118,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
         /*
          * Define here the available fragments in the main layout
          */
+        mFragments.add(new GlobalSearchFragment());
         mFragments.add(new PlayerFragment());
         mFragments.add(new PlaylistFragment());
         mFragments.add(new LibraryFragment());
@@ -141,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
             mPlayerFragment = new PlayerFragment();
             getFragmentManager().beginTransaction().add(R.id.player_frame, mPlayerFragment)
                     .commit();
-            mLastPosition = 1;
+            mLastPosition = 2;
         }
 
         // Create the header adapter
@@ -151,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
         for (int i=0;i<itemNames.length;i++) {
             String item = itemNames[i];
-            Drawable icon = null;
+            Drawable icon;
             try {
                 icon = itemIcons.getDrawable(i);
             } catch (Resources.NotFoundException e) {
@@ -192,12 +194,12 @@ public class MainActivity extends AppCompatActivity {
             int id = getIntent()
                     .getIntExtra(ClementineMediaSessionNotification.EXTRA_NOTIFICATION_ID, 0);
             if (id == -1) {
-                mLastPosition = 0;
+                mLastPosition = 1;
             } else {
-                mLastPosition = 3;
+                mLastPosition = 4;
             }
         }
-        selectItem(mLastPosition, 0);
+        selectItem(mLastPosition, 1);
 
         // Hide the tabs by default. It's the fragments responsibility to enable and disable them.
         SlidingTabLayout tabs = (SlidingTabLayout) findViewById(R.id.tabs);
@@ -226,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
 
-        selectItem(mLastPosition, 0);
+        selectItem(mLastPosition, 1);
     }
 
     @Override
@@ -478,45 +480,50 @@ public class MainActivity extends AppCompatActivity {
                 ft.setCustomAnimations(R.animator.anim_fade_in, R.animator.anim_fade_out);
 
                 switch (position) {
-                    case 0: // Player
-                        if (mPlayerFragment != null) {
-                            ft.replace(R.id.content_frame, mFragments.get(1)).commit();
-                        } else {
-                            ft.replace(R.id.content_frame, mFragments.get(0)).commit();
-                        }
+                    case 0: // Global search
+                        ft.replace(R.id.content_frame, mFragments.get(0)).commit();
                         mCurrentFragment = 0;
                         mLastPosition = position;
                         break;
-                    case 1: // Playlist
-                        ft.replace(R.id.content_frame, mFragments.get(1)).commit();
+                    case 1: // Player
+                        if (mPlayerFragment != null) {
+                            ft.replace(R.id.content_frame, mFragments.get(2)).commit();
+                        } else {
+                            ft.replace(R.id.content_frame, mFragments.get(1)).commit();
+                        }
                         mCurrentFragment = 1;
                         mLastPosition = position;
                         break;
-                    case 2: // Library
+                    case 2: // Playlist
                         ft.replace(R.id.content_frame, mFragments.get(2)).commit();
                         mCurrentFragment = 2;
                         mLastPosition = position;
                         break;
-                    case 3: // Downloads
+                    case 3: // Library
                         ft.replace(R.id.content_frame, mFragments.get(3)).commit();
                         mCurrentFragment = 3;
                         mLastPosition = position;
                         break;
-                    case 4: // Header Settings
-                        break;
-                    case 5: // Settings
-                        Intent settingsIntent = new Intent(MainActivity.this,
-                                ClementineSettings.class);
-                        startActivity(settingsIntent);
-                        break;
-                    case 6: // Donate
+                    case 4: // Downloads
                         ft.replace(R.id.content_frame, mFragments.get(4)).commit();
                         mCurrentFragment = 4;
                         mLastPosition = position;
                         break;
-                    case 7: // Header Disconnect
+                    case 5: // Header Settings
                         break;
-                    case 8: // Quit
+                    case 6: // Settings
+                        Intent settingsIntent = new Intent(MainActivity.this,
+                                ClementineSettings.class);
+                        startActivity(settingsIntent);
+                        break;
+                    case 7: // Donate
+                        ft.replace(R.id.content_frame, mFragments.get(5)).commit();
+                        mCurrentFragment = 5;
+                        mLastPosition = position;
+                        break;
+                    case 8: // Header Disconnect
+                        break;
+                    case 9: // Quit
                         mOpenConnectDialog = false;
                         requestDisconnect();
                     default:

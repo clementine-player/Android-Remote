@@ -15,12 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package de.qspool.clementineremote.backend.library;
+package de.qspool.clementineremote.backend.database;
+
+import android.graphics.Bitmap;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-public class LibrarySelectItem {
+public class SongSelectItem {
 
     private int mLevel;
 
@@ -31,6 +33,8 @@ public class LibrarySelectItem {
     private String mListTitle = "";
 
     private String mListSubtitle = "";
+
+    private Bitmap mIcon;
 
     public int getLevel() {
         return mLevel;
@@ -74,5 +78,13 @@ public class LibrarySelectItem {
 
     public void setListSubtitle(String subtitle) {
         mListSubtitle = subtitle;
+    }
+
+    public Bitmap getIcon() {
+        return mIcon;
+    }
+
+    public void setIcon(Bitmap icon) {
+        mIcon = icon;
     }
 }

@@ -24,70 +24,81 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import de.qspool.clementineremote.R;
-import de.qspool.clementineremote.backend.library.LibraryGroup;
-import de.qspool.clementineremote.backend.library.LibrarySelectItem;
+import de.qspool.clementineremote.backend.database.DynamicSongQuery;
+import de.qspool.clementineremote.backend.database.SongSelectItem;
 
 /**
  * Class is used for displaying the song data
  */
-public class LibraryAdapter extends CursorAdapter implements Filterable {
+public class DynamicSongQueryAdapter extends CursorAdapter implements Filterable {
 
     private Context mContext;
 
-    private LibraryGroup mLibrary;
+    private DynamicSongQuery mDynamicSongQuery;
 
 
-    public LibraryAdapter(Context context, LibraryGroup library) {
+    public DynamicSongQueryAdapter(Context context, DynamicSongQuery library) {
         super(context, library.buildQuery(), false);
         mContext = context;
-        mLibrary = library;
+        mDynamicSongQuery = library;
     }
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         View convertView = ((Activity) mContext).getLayoutInflater()
-                .inflate(R.layout.item_library, parent, false);
+                .inflate(R.layout.item_dynamic_song_query, parent, false);
 
         convertView.setBackgroundResource(R.drawable.selector_white_orange_selected);
 
-        LibraryViewHolder libraryViewHolder = new LibraryViewHolder();
-        libraryViewHolder.title = (TextView) convertView.findViewById(R.id.tv_lib_title);
-        libraryViewHolder.subtitle = (TextView) convertView.findViewById(R.id.tv_lib_subtitle);
+        ViewHolder viewHolder = new ViewHolder();
+        viewHolder.title = (TextView) convertView.findViewById(R.id.tv_dsq_title);
+        viewHolder.subtitle = (TextView) convertView.findViewById(R.id.tv_dsq_subtitle);
+        viewHolder.image = (ImageView) convertView.findViewById(R.id.img_dsq_icon);
 
-        convertView.setTag(libraryViewHolder);
+        convertView.setTag(viewHolder);
 
         return convertView;
     }
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        LibraryViewHolder libraryViewHolder = (LibraryViewHolder) view.getTag();
+        ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        LibrarySelectItem librarySelectItem = mLibrary.fillLibrarySelectItem(cursor);
-        libraryViewHolder.title.setText(librarySelectItem.getListTitle());
-        libraryViewHolder.subtitle.setText(librarySelectItem.getListSubtitle());
+        SongSelectItem songSelectItem = mDynamicSongQuery.fillSongSelectItem(cursor);
+        viewHolder.title.setText(songSelectItem.getListTitle());
+        viewHolder.subtitle.setText(songSelectItem.getListSubtitle());
+
+        if (songSelectItem.getIcon() == null) {
+            viewHolder.image.setVisibility(View.GONE);
+        } else {
+            viewHolder.image.setVisibility(View.VISIBLE);
+            viewHolder.image.setImageBitmap(songSelectItem.getIcon());
+        }
     }
 
     @Override
-    public LibrarySelectItem getItem(int position) {
+    public SongSelectItem getItem(int position) {
         Cursor c = getCursor();
         c.moveToPosition(position);
-        return mLibrary.fillLibrarySelectItem(c);
+        return mDynamicSongQuery.fillSongSelectItem(c);
     }
 
     @Override
     public Cursor runQueryOnBackgroundThread(CharSequence constraint) {
         if (constraint.length() == 0) {
-            return mLibrary.buildQuery();
+            return mDynamicSongQuery.buildQuery();
         } else {
-            return mLibrary.buildQuery(mLibrary.getMatchesSubQuery(constraint.toString()));
+            return mDynamicSongQuery.buildQuery(mDynamicSongQuery.getMatchesSubQuery(constraint.toString()));
         }
     }
 
-    private class LibraryViewHolder {
+    private class ViewHolder {
+        ImageView image;
+
         TextView title;
 
         TextView subtitle;

@@ -63,11 +63,12 @@
     <string name="library_refresh">Refresh</string>
     <string name="library_empty">Library empty. Swipe down to download library!</string>
     <string name="library_no_search_results">No songs matching your search criteria!</string>
-    <string name="library_number_items">%d items</string>
-    <string name="library_songs_added">%d songs added to current playlist</string>
-    <string name="library_context_add">Add item to current playlist</string>
     <string name="library_download_error">Could not download library</string>
-    <string name="library_unknown_item">Unknown</string>
+
+
+    <string name="global_search_empty">Enter search terms above to find music on your computer and on the internet</string>
+    <string name="global_search_search">Search for anything</string>
+    <string name="global_search_query">Query: %s</string>
 
 
     <string name="song_info_album">Album</string>
@@ -238,6 +239,10 @@
     <string name="input_auth_code">Authentication Code</string>
     <string name="invalid_code">Invalid Code</string>
     <string name="done">Done</string>
+    <string name="unknown">Unknown</string>
+    <string name="number_items">%d items</string>
+    <string name="songs_added">%d songs added to current playlist</string>
+    <string name="context_add_to_playlist">Add item to current playlist</string>
 
 
     <string name="repeat_off">Don\'t repeat</string>
@@ -295,6 +300,7 @@
 
     <!-- When changing this array, you must also update values/ids.xml navigation_drawer_icons! -->
     <string-array name="navigation_drawer_items">
+        <item>Search</item>
         <item>Player</item>
         <item>Playlists</item>
         <item>Library</item>

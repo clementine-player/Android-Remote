@@ -67,7 +67,7 @@ public class ConnectActivityHandler extends Handler {
                     switch (clementineMessage.getMessageType()) {
                         case INFO:
                             cd.mPdConnect
-                                    .setMessage(cd.getString(R.string.connectdialog_download_data));
+                                    .setContent(cd.getString(R.string.connectdialog_download_data));
                             break;
                         case FIRST_DATA_SENT_COMPLETE:
                             cd.mPdConnect.dismiss();

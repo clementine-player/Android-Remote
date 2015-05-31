@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:id="@+id/img_dsq_icon"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/nocover"
+        android:layout_alignParentEnd="false"
+        android:scaleType="fitCenter"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_centerInParent="true" />
+
+    <TextView
+        android:id="@+id/tv_dsq_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentTop="true"
+        android:singleLine="true"
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/black"
+        android:layout_toRightOf="@+id/img_dsq_icon" />
+
+    <TextView
+        android:id="@+id/tv_dsq_subtitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="false"
+        android:layout_below="@id/tv_dsq_title"
+        android:singleLine="true"
+        android:text="Medium TextMedium TextMedium TextMedium TextMedium TextMedium Text"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/black"
+        android:layout_alignLeft="@+id/tv_dsq_title" />
+
+</RelativeLayout>

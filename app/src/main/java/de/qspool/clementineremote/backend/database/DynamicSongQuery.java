@@ -1,23 +1,20 @@
 
 
-package de.qspool.clementineremote.backend.library;
+package de.qspool.clementineremote.backend.database;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 
 import java.util.LinkedList;
 
 import de.qspool.clementineremote.R;
-import de.qspool.clementineremote.SharedPreferencesKeys;
-import de.qspool.clementineremote.backend.listener.OnLibrarySelectFinishedListener;
+import de.qspool.clementineremote.backend.listener.OnSongSelectFinishedListener;
 
-public class LibraryGroup {
+public abstract class DynamicSongQuery {
 
-    private Context mContext;
+    protected Context mContext;
 
     private SQLiteDatabase mDatabase;
 
@@ -31,42 +28,25 @@ public class LibraryGroup {
 
     private String mSort;
 
-    private LinkedList<OnLibrarySelectFinishedListener> listeners = new LinkedList<>();
+    private LinkedList<OnSongSelectFinishedListener> listeners = new LinkedList<>();
 
-    public LibraryGroup(Context context) {
+    abstract protected String[] getSelectedFields();
+    abstract protected String getSorting();
+    abstract protected String getTable();
+    abstract protected SQLiteDatabase getReadableDatabase();
+    abstract public String getMatchesSubQuery(String match);
+
+    public DynamicSongQuery(Context context) {
         mContext = context;
 
-        SharedPreferences sharedPreferences = PreferenceManager
-                .getDefaultSharedPreferences(mContext);
+        mSelectedFields = getSelectedFields();
+        mSort = getSorting();
 
-        String grouping = sharedPreferences.getString(SharedPreferencesKeys.SP_LIBRARY_GROUPING, "artist-album");
-        mSort = sharedPreferences.getString(SharedPreferencesKeys.SP_LIBRARY_SORTING, "ASC");
-
-        switch (grouping) {
-            case "artist":
-                mSelectedFields = new String[] {"artist", "title"};
-                break;
-            case "artist-album":
-                mSelectedFields = new String[] {"artist", "album", "title"};
-                break;
-            case "artist-year":
-                mSelectedFields = new String[] {"artist", "year", "title"};
-                break;
-            case "album":
-                mSelectedFields = new String[] {"album", "title"};
-                break;
-            case "genre-album":
-                mSelectedFields = new String[] {"genre", "album", "title"};
-                break;
-            case "genre-artist-album":
-                mSelectedFields = new String[] {"genre", "artist", "album", "title"};
-                break;
-        }
         mMaxLevels = mSelectedFields.length;
     }
 
     public void openDatabase() {
-        mDatabase = new LibraryDatabaseHelper().openDatabase(SQLiteDatabase.OPEN_READONLY);
+        mDatabase = getReadableDatabase();
     }
 
     public int getMaxLevels() {
@@ -132,7 +112,7 @@ public class LibraryGroup {
         query.append("))");
 
         query.append(" FROM ");
-        query.append(LibraryDatabaseHelper.SONGS);
+        query.append(getTable());
 
         if (selection.length > 0) {
             query.append(" WHERE ");
@@ -154,9 +134,9 @@ public class LibraryGroup {
         return items;
     }
 
-    public LibrarySelectItem fillLibrarySelectItem(Cursor c) {
-        LibrarySelectItem item = new LibrarySelectItem();
-        String unknownItem = mContext.getString(R.string.library_unknown_item);
+    public SongSelectItem fillSongSelectItem(Cursor c) {
+        SongSelectItem item = new SongSelectItem();
+        String unknownItem = mContext.getString(R.string.unknown);
 
         String[] values = new String[mSelectedFields.length];
         for (int i=0;i<mSelectedFields.length;i++) {
@@ -191,7 +171,7 @@ public class LibraryGroup {
                     + " / " + (album.isEmpty() ? unknownItem : album));
         } else {
             item.setListSubtitle(String.format(
-                    mContext.getString(R.string.library_number_items),
+                    mContext.getString(R.string.number_items),
                     countItems(item.getSelection())));
         }
 
@@ -206,32 +186,16 @@ public class LibraryGroup {
 
 
     public void addOnLibrarySelectFinishedListener(
-            OnLibrarySelectFinishedListener l) {
+            OnSongSelectFinishedListener l) {
         listeners.add(l);
     }
 
     public Cursor buildQuery() {
-        return buildQuery(LibraryDatabaseHelper.SONGS);
-    }
-
-    public String getMatchesSubQuery(String match) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("(SELECT * FROM ");
-        sb.append(LibraryDatabaseHelper.SONGS_FTS);
-        sb.append(" WHERE ");
-        sb.append(LibraryDatabaseHelper.SONGS_FTS);
-        sb.append(" MATCH \"");
-        sb.append(match);
-        sb.append("*");
-
-        sb.append("\" ) ");
-
-        return sb.toString();
+        return buildQuery(getTable());
     }
 
     public void selectDataAsync() {
-        new AsyncLibraryTask().execute();
+        new AsyncQueryTask().execute();
     }
 
     /**
@@ -239,15 +203,15 @@ public class LibraryGroup {
      *
      * @return The list of items
      */
-    public LinkedList<LibrarySelectItem> selectData() {
-        LinkedList<LibrarySelectItem> itemList = new LinkedList<>();
+    public LinkedList<SongSelectItem> selectData() {
+        LinkedList<SongSelectItem> itemList = new LinkedList<>();
 
         Cursor c = buildQuery();
 
         if (c != null && c.getCount() != 0) {
             c.moveToFirst();
             do {
-                itemList.add(fillLibrarySelectItem(c));
+                itemList.add(fillSongSelectItem(c));
             } while (c.moveToNext());
             c.close();
         }
@@ -271,20 +235,20 @@ public class LibraryGroup {
         mSelection = selection;
     }
 
-    private class AsyncLibraryTask extends
-            AsyncTask<Void, Void, LinkedList<LibrarySelectItem>> {
+    private class AsyncQueryTask extends
+            AsyncTask<Void, Void, LinkedList<SongSelectItem>> {
 
         @Override
-        protected LinkedList<LibrarySelectItem> doInBackground(
+        protected LinkedList<SongSelectItem> doInBackground(
                 Void... params) {
 
             return selectData();
         }
 
         @Override
-        protected void onPostExecute(LinkedList<LibrarySelectItem> items) {
-            for (OnLibrarySelectFinishedListener l : listeners) {
-                l.OnLibrarySelectFinished(items);
+        protected void onPostExecute(LinkedList<SongSelectItem> items) {
+            for (OnSongSelectFinishedListener l : listeners) {
+                l.OnSongSelectFinished(items);
             }
         }
     }
