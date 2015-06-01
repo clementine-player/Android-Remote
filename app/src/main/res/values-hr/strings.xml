@@ -52,11 +52,7 @@
   <string name="library_refresh">Osvježi</string>
   <string name="library_empty">Fonoteka prazna. Povucite dolje za preuzimanje fonoteke!</string>
   <string name="library_no_search_results">Nema pronađenih pjesama koje se podudaraju s vašim kriterijima pretraživanja</string>
-  <string name="library_number_items">%d stavaka</string>
-  <string name="library_songs_added">%d pjesama dodano na trenutni popis izvođenja</string>
-  <string name="library_context_add">Dodaj pjesmu na trenutni popis izvođenja</string>
   <string name="library_download_error">Nemoguće preuzimanje fonoteke</string>
-  <string name="library_unknown_item">Nepoznato</string>
   <string name="song_info_album">Album</string>
   <string name="song_info_genre">Vrsta glazbe</string>
   <string name="song_info_year">Godina</string>
@@ -244,15 +240,4 @@
     <item>Popis izvođenja</item>
   </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
-  <string-array name="navigation_drawer_items">
-    <item>Reproduktor</item>
-    <item>Popisi izvođenja</item>
-    <item>Fonoteka</item>
-    <item>Preuzimanja</item>
-    <item></item>
-    <item>Postavke</item>
-    <item>Doniraj</item>
-    <item></item>
-    <item>Zatvori</item>
-  </string-array>
 </resources>

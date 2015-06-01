@@ -52,11 +52,10 @@
   <string name="library_refresh">Освежи</string>
   <string name="library_empty">Библиотека је празна. Превуците на доле да преузмете библиотеку!</string>
   <string name="library_no_search_results">Ниједна песма се не поклапа са траженим изразом!</string>
-  <string name="library_number_items">%d ставки</string>
-  <string name="library_songs_added">%d песама додато у текућу листу нумера</string>
-  <string name="library_context_add">Додај ставку у текућу листу нумера</string>
   <string name="library_download_error">Не могу да преузмем библиотеку</string>
-  <string name="library_unknown_item">Непознато</string>
+  <string name="global_search_empty">Унесите изнад термине за претрагу да бисте пронашли музику на вашем рачунару и на интернету</string>
+  <string name="global_search_search">Тражите било шта</string>
+  <string name="global_search_query">Упит: %s</string>
   <string name="song_info_album">Албум</string>
   <string name="song_info_genre">Жанр</string>
   <string name="song_info_year">Година</string>
@@ -198,6 +197,10 @@
   <string name="input_auth_code">Аутентификацијски код</string>
   <string name="invalid_code">Неисправан код</string>
   <string name="done">Завршено</string>
+  <string name="unknown">Непознато</string>
+  <string name="number_items">%d ставки</string>
+  <string name="songs_added">%d песама додато у текућу листу нумера</string>
+  <string name="context_add_to_playlist">Додај ставку у текућу листу нумера</string>
   <string name="repeat_off">Не понављај</string>
   <string name="repeat_track">Понављај нумеру</string>
   <string name="repeat_album">Понављај албум</string>
@@ -242,6 +245,7 @@
   </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
   <string-array name="navigation_drawer_items">
+    <item>Претрага</item>
     <item>Плејер</item>
     <item>Листа нумера</item>
     <item>Библиотека</item>

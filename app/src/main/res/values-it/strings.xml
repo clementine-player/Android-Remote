@@ -40,8 +40,6 @@
   <string name="library_optimize">Ottimizazione database</string>
   <string name="library_please_wait">Attendere prego</string>
   <string name="library_refresh">Aggiorna</string>
-  <string name="library_songs_added">%d canzoni aggiunte alla playlist corrente</string>
-  <string name="library_context_add">Aggiungi elemento alla playlist corrente</string>
   <string name="library_download_error">Impossibile scaricare la libreria</string>
   <string name="song_info_album">Album</string>
   <string name="song_info_genre">Genere</string>

@@ -45,10 +45,7 @@
   <string name="library_optimize">Database aan het optimaliseren</string>
   <string name="library_please_wait">Even geduld</string>
   <string name="library_refresh">Ververs</string>
-  <string name="library_songs_added">%d nummers aan huidige afspeellijst toegevoegd</string>
-  <string name="library_context_add">Voeg item aan huidige afspeellijst toe</string>
   <string name="library_download_error">Kon bibliotheek niet downloaden</string>
-  <string name="library_unknown_item">Onbekend</string>
   <string name="song_info_album">Album</string>
   <string name="song_info_genre">Genre</string>
   <string name="song_info_year">Jaar</string>

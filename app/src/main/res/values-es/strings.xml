@@ -49,10 +49,7 @@
   <string name="library_please_wait">Espere</string>
   <string name="library_refresh">Actualizar</string>
   <string name="library_no_search_results">Ninguna canción coincide con los criterios de búsqueda.</string>
-  <string name="library_songs_added">Se añadieron %d canciones a la lista de reprod. actual</string>
-  <string name="library_context_add">Añadir elemento a la lista actual</string>
   <string name="library_download_error">No se pudo descargar la colección</string>
-  <string name="library_unknown_item">Desconocido</string>
   <string name="song_info_album">Álbum</string>
   <string name="song_info_genre">Género</string>
   <string name="song_info_year">Año</string>

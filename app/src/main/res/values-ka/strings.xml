@@ -39,8 +39,6 @@
   <string name="library_optimize">ბაზის ოპტიმიზება</string>
   <string name="library_please_wait">გთხოვთ დაიცადოთ</string>
   <string name="library_refresh">განახლება</string>
-  <string name="library_songs_added">მიმდინარე რეპერტუარში დაემატა %d სიმღერა</string>
-  <string name="library_context_add">მონიშნულის მიმდინარე რეპერტუარში დამატება</string>
   <string name="library_download_error">ბიბლიოთეკის ჩამოტვირთვა ვერ მოხერხდა</string>
   <string name="song_info_album">ალბომი</string>
   <string name="song_info_genre">ჟანრი</string>

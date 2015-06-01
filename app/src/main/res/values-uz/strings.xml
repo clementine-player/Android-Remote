@@ -31,8 +31,6 @@
   <string name="download_noti_insufficient_space">Joy yetarli emas, yuklab olish to\'xtatilmoqda.</string>
   <string name="download_noti_forbidden">Yuklab olish taqiqlangan. Clementine sozlamalarida faollashtiring.</string>
   <string name="download_noti_only_wifi">Faqat wifi ro\'xsat etilganda yuklab olish.</string>
-  <string name="library_songs_added">Joriy ijro ro\'yxatiga %d qo\'shiq qo\'shildi</string>
-  <string name="library_context_add">Joriy ijro ro\'yxatiga element qo\'shish</string>
   <string name="song_info_album">Albom</string>
   <string name="song_info_genre">Janr</string>
   <string name="song_info_year">Yil</string>

@@ -47,10 +47,7 @@
   <string name="library_please_wait">Lütfen bekleyin</string>
   <string name="library_refresh">Yenile</string>
   <string name="library_no_search_results">Arama kriterlerinizle eşleşen parça yok!</string>
-  <string name="library_songs_added">Geçerli oynatma listesine %d şarkı eklendi</string>
-  <string name="library_context_add">Ögeyi geçerli oynatma listesine ekle</string>
   <string name="library_download_error">Kütüphane indirilemedi</string>
-  <string name="library_unknown_item">Bilinmeyen</string>
   <string name="song_info_album">Albüm</string>
   <string name="song_info_genre">Tarz</string>
   <string name="song_info_year">Yıl</string>

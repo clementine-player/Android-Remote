@@ -52,11 +52,7 @@
   <string name="library_refresh">Rafraîchir</string>
   <string name="library_empty">Bibliothèque vide. Glissez vers le bas pour télécharger la bibliothèque.</string>
   <string name="library_no_search_results">Aucun morceau ne correspond à vos critères de recherche !</string>
-  <string name="library_number_items">%d éléments</string>
-  <string name="library_songs_added">%d chansons ajoutées à la liste de lecture courante</string>
-  <string name="library_context_add">Ajouter l\'élément à la liste de lecture actuelle</string>
   <string name="library_download_error">Impossible de télécharger la bibliothèque</string>
-  <string name="library_unknown_item">Inconnu</string>
   <string name="song_info_album">Album</string>
   <string name="song_info_genre">Genre</string>
   <string name="song_info_year">Année</string>
@@ -242,15 +238,4 @@ des ordinateurs sur lesquels Clementine est disponible.</string>
     <item>Liste de lecture</item>
   </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
-  <string-array name="navigation_drawer_items">
-    <item>Lecteur</item>
-    <item>Listes de lecture</item>
-    <item>Bibliothèque</item>
-    <item>Téléchargements</item>
-    <item></item>
-    <item>Paramètres</item>
-    <item>Donation</item>
-    <item></item>
-    <item>Quitter</item>
-  </string-array>
 </resources>
