@@ -496,7 +496,7 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
         App.ClementineConnection.mHandler.sendMessage(msg);
 
         Toast.makeText(getActivity(),
-                String.format(getString(R.string.library_songs_added), urls.size()),
+                String.format(getString(R.string.songs_added), urls.size()),
                 Toast.LENGTH_SHORT).show();
     }
 
