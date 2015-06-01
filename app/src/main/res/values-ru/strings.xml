@@ -52,11 +52,8 @@
   <string name="library_refresh">Обновить</string>
   <string name="library_empty">Фонотека пуста. Проведите вниз для загрузки фонотеки!</string>
   <string name="library_no_search_results">По данному запросу песен не найдено!</string>
-  <string name="library_number_items">%d элементы</string>
-  <string name="library_songs_added">%d песен добавлено в текущий плейлист</string>
-  <string name="library_context_add">Добавить пункт в текущий плейлист</string>
   <string name="library_download_error">Не могу загрузить фонотеку</string>
-  <string name="library_unknown_item">Неизвестный</string>
+  <string name="global_search_empty">Введите ключевое слово выше, чтобы найти музыку на вашем компьютере или в интернет</string>
   <string name="song_info_album">Альбом</string>
   <string name="song_info_genre">Жанр</string>
   <string name="song_info_year">Год</string>
@@ -246,15 +243,4 @@
     <item>Плейлист</item>
   </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
-  <string-array name="navigation_drawer_items">
-    <item>Плеер</item>
-    <item>Плейлисты</item>
-    <item>Фонотека</item>
-    <item>Загрузки</item>
-    <item></item>
-    <item>Настройки</item>
-    <item>Пожертвовать</item>
-    <item></item>
-    <item>Выход</item>
-  </string-array>
 </resources>

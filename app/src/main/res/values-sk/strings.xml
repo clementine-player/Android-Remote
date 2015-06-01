@@ -52,10 +52,10 @@
   <string name="library_refresh">Obnoviť</string>
   <string name="library_empty">Zbierka je prázdna. Potiahnutím dole prevezmite zbierku!</string>
   <string name="library_no_search_results">Vašim kritériám vyhľadávania nevyhuvujú žiadne skladby!</string>
-  <string name="library_songs_added">%d skladieb bolo pridaných do aktuálneho zoznamu skladieb</string>
-  <string name="library_context_add">Pridať položku do aktuálneho zoznamu skladieb</string>
   <string name="library_download_error">Nepodarilo sa prebrať zbierku</string>
-  <string name="library_unknown_item">Neznáma</string>
+  <string name="global_search_empty">Vyššie zadajte hľadané frázy na nájdenie hudby vo vašom počítači a na internete</string>
+  <string name="global_search_search">Vyhľadať čokoľvek</string>
+  <string name="global_search_query">Požiadavka: %s</string>
   <string name="song_info_album">Album</string>
   <string name="song_info_genre">Žáner</string>
   <string name="song_info_year">Rok</string>
@@ -138,6 +138,7 @@
   <string name="pref_license_summary">GNU GPLv3</string>
   <string name="pref_opensource_title">Otvorený zdroj</string>
   <string name="pref_opensource_summary">Zobraziť licencie softvéru s otvoreným zdrojom</string>
+  <string name="pref_opensource">Softvérové licencie otvoreného zdroja</string>
   <string name="pref_about_title">O programe</string>
   <string name="pref_about_summary">Ľudia, ktorí pracovali na tomto projekte</string>
   <string name="pref_clementine_title">Clementine</string>
@@ -186,6 +187,9 @@
   <string name="input_auth_code">Autorizačný kód</string>
   <string name="invalid_code">Neplatný kód</string>
   <string name="done">Hotovo</string>
+  <string name="unknown">Neznáme</string>
+  <string name="number_items">%d položiek</string>
+  <string name="context_add_to_playlist">Pridať položku do aktuálneho zoznamu skladieb</string>
   <string name="repeat_off">Neopakovať</string>
   <string name="repeat_track">Opakovať skladbu</string>
   <string name="repeat_album">Opakovať album</string>
@@ -230,6 +234,7 @@
   </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
   <string-array name="navigation_drawer_items">
+    <item>Vyhľadávanie</item>
     <item>Prehrávač</item>
     <item>Zoznamy skladieb</item>
     <item>Zbierka</item>

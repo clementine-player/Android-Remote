@@ -52,11 +52,10 @@
   <string name="library_refresh">Obnovit</string>
   <string name="library_empty">Knihovna je prázdná. Švihněte dolů pro stažení knihovny!</string>
   <string name="library_no_search_results">Žádné písně neodpovídají vašim hlediskům hledání!</string>
-  <string name="library_number_items">%d položek</string>
-  <string name="library_songs_added">%d písní přidáno do nynějšího seznamu skladeb</string>
-  <string name="library_context_add">Přidat položku do nynějšího seznamu skladeb</string>
   <string name="library_download_error">Nepopdařilo se stáhnout sbírku</string>
-  <string name="library_unknown_item">Neznámý</string>
+  <string name="global_search_empty">Zadejte hledané pojmy výše pro hledání hudby ve vašem počítači a na internetu</string>
+  <string name="global_search_search">Hledat cokoli</string>
+  <string name="global_search_query">Dotaz: %s</string>
   <string name="song_info_album">Album</string>
   <string name="song_info_genre">Žánr</string>
   <string name="song_info_year">Rok</string>
@@ -204,6 +203,10 @@ Pokud máte díky mé práci skutečně dobrou náladu, malý dar od vás by byl
   <string name="input_auth_code">Ověřovací kód</string>
   <string name="invalid_code">Neplatný kód</string>
   <string name="done">Hotovo</string>
+  <string name="unknown">Neznámý</string>
+  <string name="number_items">%d položek</string>
+  <string name="songs_added">%d písní přidáno do nynějšího seznamu skladeb</string>
+  <string name="context_add_to_playlist">Přidat položku do nynějšího seznamu skladeb</string>
   <string name="repeat_off">Neopakovat</string>
   <string name="repeat_track">Opakovat skladbu</string>
   <string name="repeat_album">Opakovat album</string>
@@ -249,6 +252,7 @@ Pokud máte díky mé práci skutečně dobrou náladu, malý dar od vás by byl
   </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
   <string-array name="navigation_drawer_items">
+    <item>Hledání</item>
     <item>Přehrávač</item>
     <item>Seznamy skladeb</item>
     <item>Knihovna</item>

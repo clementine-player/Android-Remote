@@ -52,11 +52,10 @@
   <string name="library_refresh">Atualizar</string>
   <string name="library_empty">Coleção vazia. Deslize para baixo para transferir a coleção!</string>
   <string name="library_no_search_results">Não existem faixas coincidentes com os critérios.</string>
-  <string name="library_number_items">%d itens</string>
-  <string name="library_songs_added">%d faixas adicionadas à lista de reprodução atual</string>
-  <string name="library_context_add">Adicionar item à lista de reprodução atual</string>
   <string name="library_download_error">Não foi possível transferir a coleção</string>
-  <string name="library_unknown_item">Desconhecido</string>
+  <string name="global_search_empty">Introduza os termos da pesquisa para procurar músicas no seu computador e na Internet</string>
+  <string name="global_search_search">Pesquisar por algo</string>
+  <string name="global_search_query">Consulta: %s</string>
   <string name="song_info_album">Álbum</string>
   <string name="song_info_genre">Género</string>
   <string name="song_info_year">Ano</string>
@@ -199,6 +198,10 @@
   <string name="input_auth_code">Código de autenticação</string>
   <string name="invalid_code">Código inválido</string>
   <string name="done">Terminado</string>
+  <string name="unknown">Desconhecido</string>
+  <string name="number_items">%d itens</string>
+  <string name="songs_added">%d faixas adicionadas à lista de reproduçao</string>
+  <string name="context_add_to_playlist">Adicionar à lista de reprodução atual</string>
   <string name="repeat_off">Não repetir</string>
   <string name="repeat_track">Repetir faixa</string>
   <string name="repeat_album">Repetir álbum</string>
@@ -244,6 +247,7 @@ e clique \"Ligar\"</string>
   </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
   <string-array name="navigation_drawer_items">
+    <item>Pesquisa</item>
     <item>Reprodutor</item>
     <item>Listas de reprodução</item>
     <item>Coleção</item>

@@ -52,11 +52,7 @@
   <string name="library_refresh">リフレッシュ</string>
   <string name="library_empty">ライブラリーは空です。下にスワイプすると、ライブラリーをダウンロードします!</string>
   <string name="library_no_search_results">検索条件に一致する曲はありません!</string>
-  <string name="library_number_items">%d アイテム</string>
-  <string name="library_songs_added">現在のプレイリストに %d 曲追加しました</string>
-  <string name="library_context_add">現在のプレイリストにアイテムを追加</string>
   <string name="library_download_error">ライブラリーをダウンロードできません</string>
-  <string name="library_unknown_item">不明</string>
   <string name="song_info_album">アルバム</string>
   <string name="song_info_genre">ジャンル</string>
   <string name="song_info_year">年</string>
@@ -241,15 +237,4 @@
     <item>プレイリスト</item>
   </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
-  <string-array name="navigation_drawer_items">
-    <item>プレイヤー</item>
-    <item>プレイリスト</item>
-    <item>ライブラリー</item>
-    <item>ダウンロード</item>
-    <item></item>
-    <item>設定</item>
-    <item>寄付</item>
-    <item></item>
-    <item>終了</item>
-  </string-array>
 </resources>

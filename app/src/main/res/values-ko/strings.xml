@@ -40,7 +40,6 @@
   <string name="library_optimize">데이터베이스 최적화 중</string>
   <string name="library_please_wait">잠시만 기다려 주세요</string>
   <string name="library_refresh">새로고침</string>
-  <string name="library_songs_added">현재 재생목록에 %d 음악이 추가되었습니다.</string>
   <string name="song_info_album">앨범</string>
   <string name="song_info_genre">장르</string>
   <string name="song_info_year">연도</string>

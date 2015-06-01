@@ -52,11 +52,7 @@
   <string name="library_refresh">Оновити</string>
   <string name="library_empty">Бібліотека порожня. Проведіть пальцем вниз, щоб отримати бібліотеку!</string>
   <string name="library_no_search_results">Вказаним вами критеріям не відповідає жодна композиція!</string>
-  <string name="library_number_items">%d записів</string>
-  <string name="library_songs_added">До поточного списку відтворення додано %d композицій</string>
-  <string name="library_context_add">Додати запис до поточного списку відтворення</string>
   <string name="library_download_error">Не вдалося отримати бібліотеку</string>
-  <string name="library_unknown_item">Невідомо</string>
   <string name="song_info_album">Альбом</string>
   <string name="song_info_genre">Жанр</string>
   <string name="song_info_year">Рік</string>
@@ -242,15 +238,4 @@
     <item>Список композицій</item>
   </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
-  <string-array name="navigation_drawer_items">
-    <item>Програвач</item>
-    <item>Списки</item>
-    <item>Бібліотека</item>
-    <item>Отримане</item>
-    <item></item>
-    <item>Параметри</item>
-    <item>Підтримати</item>
-    <item></item>
-    <item>Вийти</item>
-  </string-array>
 </resources>

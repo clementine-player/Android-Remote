@@ -49,10 +49,7 @@
   <string name="library_please_wait">Odota hetki</string>
   <string name="library_refresh">Päivitä</string>
   <string name="library_no_search_results">Ei hakuehtoihisi osuvia kappaleita!</string>
-  <string name="library_songs_added">%d kappaletta lisätty nykyiseen soittolistaan</string>
-  <string name="library_context_add">Lisää kohde nykyiseen soittolistaan</string>
   <string name="library_download_error">Kirjaston lataaminen ei onnistunut</string>
-  <string name="library_unknown_item">Tuntematon</string>
   <string name="song_info_album">Albumi</string>
   <string name="song_info_genre">Tyylilaji</string>
   <string name="song_info_year">Vuosi</string>

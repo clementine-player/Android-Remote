@@ -49,10 +49,7 @@
   <string name="library_please_wait">Var god vänta</string>
   <string name="library_refresh">Ladda om</string>
   <string name="library_no_search_results">Ingen låt matchar dina sökkriterier!</string>
-  <string name="library_songs_added">%d låtar tillagda i nuvarande spellista</string>
-  <string name="library_context_add">Lägg till objekt i nuvarande spellista</string>
   <string name="library_download_error">Kunde inte ladda ned bibliotek</string>
-  <string name="library_unknown_item">Okänd</string>
   <string name="song_info_album">Album</string>
   <string name="song_info_genre">Genre</string>
   <string name="song_info_year">År</string>

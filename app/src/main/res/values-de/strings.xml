@@ -52,11 +52,8 @@
   <string name="library_refresh">Aktualisieren</string>
   <string name="library_empty">Bibliothek leer. Nach unten wischen, um die Bibliothek herunterzuladen!</string>
   <string name="library_no_search_results">Keine Suchergebnisse gefunden!</string>
-  <string name="library_number_items">%d Elemente</string>
-  <string name="library_songs_added">%d Lieder wurden zur aktuellen Wiedergabeliste hinzugefügt</string>
-  <string name="library_context_add">Element der aktuellen Wiedergabeliste hinzufügen</string>
   <string name="library_download_error">Bibliothek konnte nicht geladen werden</string>
-  <string name="library_unknown_item">Unbekannt</string>
+  <string name="global_search_query">Suchanfrage: %s</string>
   <string name="song_info_album">Album</string>
   <string name="song_info_genre">Genre</string>
   <string name="song_info_year">Jahr</string>
@@ -198,6 +195,10 @@
   <string name="input_auth_code">Legitimierungscode</string>
   <string name="invalid_code">Ungültiger Code</string>
   <string name="done">Fertig</string>
+  <string name="unknown">Unbekannt</string>
+  <string name="number_items">%d Elemente</string>
+  <string name="songs_added">%d Lieder wurden zur aktuellen Wiedergabeliste hinzugefügt</string>
+  <string name="context_add_to_playlist">Element zur aktuellen Wiedergabeliste hinzufügen</string>
   <string name="repeat_off">Wiederholen aus</string>
   <string name="repeat_track">Stück wiederholen</string>
   <string name="repeat_album">Album wiederholen</string>
@@ -242,14 +243,15 @@
   </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
   <string-array name="navigation_drawer_items">
+    <item>Suche</item>
     <item>Musikspieler</item>
     <item>Wiedergabelisten</item>
     <item>Bibliothek</item>
-    <item>Übertragungen</item>
+    <item>Downloads</item>
     <item></item>
     <item>Einstellungen</item>
     <item>Spenden</item>
     <item></item>
-    <item>Beenden</item>
+    <item>Schließen</item>
   </string-array>
 </resources>
