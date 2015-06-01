@@ -52,6 +52,7 @@
   <string name="library_refresh">Obnoviť</string>
   <string name="library_empty">Zbierka je prázdna. Potiahnutím dole prevezmite zbierku!</string>
   <string name="library_no_search_results">Vašim kritériám vyhľadávania nevyhuvujú žiadne skladby!</string>
+  <string name="library_number_items">%d položiek</string>
   <string name="library_songs_added">%d skladieb bolo pridaných do aktuálneho zoznamu skladieb</string>
   <string name="library_context_add">Pridať položku do aktuálneho zoznamu skladieb</string>
   <string name="library_download_error">Nepodarilo sa prebrať zbierku</string>
@@ -138,6 +139,7 @@
   <string name="pref_license_summary">GNU GPLv3</string>
   <string name="pref_opensource_title">Otvorený zdroj</string>
   <string name="pref_opensource_summary">Zobraziť licencie softvéru s otvoreným zdrojom</string>
+  <string name="pref_opensource">Softvérové licencie otvoreného zdroja</string>
   <string name="pref_about_title">O programe</string>
   <string name="pref_about_summary">Ľudia, ktorí pracovali na tomto projekte</string>
   <string name="pref_clementine_title">Clementine</string>
