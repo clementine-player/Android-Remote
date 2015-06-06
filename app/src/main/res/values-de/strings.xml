@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="app_name">Clementine-Fernbedienung</string>
   <string name="app_not_available">Anwendung nicht verfügbar!</string>
   <string name="connectdialog_connect">Verbinden</string>
@@ -217,20 +217,6 @@
   <string name="crash_report_title">Huch, irgendwas ist schief gelaufen!</string>
   <string name="crash_report_message">Clementine-Fernbedienung ist das letzte mal abgestürzt! Das hätte nicht passieren dürfen! Helfen Sie mir die Anwendung zu verbessern und senden Sie mir die Protokolldatei. Danke!</string>
   <string name="crash_report_send">Senden!</string>
-  <string name="cm_next">Weiter</string>
-  <string name="cm_close">Schließen</string>
-  <string name="cm_connect_ip_title">Mit Clementine verbinden</string>
-  <string name="cm_connect_ip_content">Die IP-Adresse Ihres Rechners, auf dem Clementine läuft, eingeben und auf »Verbinden« klicken</string>
-  <string name="cm_connect_mdns_title">Automatisches Verbinden</string>
-  <string name="cm_connect_mdns_content">Wenn die Clementine pulsiert, darauf klicken, um eine Liste von verfügbaren Rechnern zu sehen, auf denen Clementine läuft.</string>
-  <string name="cm_player_home_title">Clementine-Fernbedienungsmenü</string>
-  <string name="cm_player_home_content">Auf den Startknopf klicken, um das Menü zu öffnen.</string>
-  <string name="cm_player_hold_pause_title">Pause gedrückt halten</string>
-  <string name="cm_player_hold_pause_content">Es schaltet die »Nach Titel anhalten«-Funktion ein/aus.</string>
-  <string name="cm_player_lyrics_title">Auf das Albumbild klicken</string>
-  <string name="cm_player_lyrics_content">Ein Dialog mit dem Liedtext wird angezeigt</string>
-  <string name="cm_player_swipe_title">Nach rechts wischen</string>
-  <string name="cm_player_swipe_content">um Details des Titels zu sehen und das Lied zu bewerten.</string>
   <string name="fragment_title_player">Musikspieler</string>
   <string name="fragment_title_details">Lieddetails</string>
   <string name="fragment_title_connection">Clementine</string>

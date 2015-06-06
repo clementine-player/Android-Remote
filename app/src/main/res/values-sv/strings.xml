@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="app_name">Clementine\'s Fjärrkontroll</string>
   <string name="app_not_available">Appen ej tillgänglig!</string>
   <string name="connectdialog_connect">Anslut</string>
@@ -188,19 +188,5 @@
   <string name="crash_report_title">Hoppsan, någonting gick snett!</string>
   <string name="crash_report_message">Clementine kraschade förra gången! Detta skulle ju inte hända! Snälla hjälp mig att förbättra appen och sänd mig loggfilen är du snäll. Tack!</string>
   <string name="crash_report_send">Sänd!</string>
-  <string name="cm_next">Nästa</string>
-  <string name="cm_close">Stäng</string>
-  <string name="cm_connect_ip_title">Anslut till Clementine</string>
-  <string name="cm_connect_ip_content">Ange IP adressen från din dator som kör Clementine och knacka på \"Anslut\"</string>
-  <string name="cm_connect_mdns_title">Automatisk matchning</string>
-  <string name="cm_connect_mdns_content">Om ikonen pulserar, knacka på den för att se en lista med tillgängliga datorer som kör Clementine.</string>
-  <string name="cm_player_home_title">Clementine Fjärrkontrollsmeny</string>
-  <string name="cm_player_home_content">Knacka på hemknappen för att öppna menyn.</string>
-  <string name="cm_player_hold_pause_title">Håll paus intryckt</string>
-  <string name="cm_player_hold_pause_content">Det startar stoppa efter låt egenskapen.</string>
-  <string name="cm_player_lyrics_title">Knacka på albumomslaget</string>
-  <string name="cm_player_lyrics_content">En dialog med låttext kommer att öppnas</string>
-  <string name="cm_player_swipe_title">Svep till höger</string>
-  <string name="cm_player_swipe_content">för att se låtdetaljer och betygsätta låten.</string>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

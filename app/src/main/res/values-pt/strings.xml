@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="app_name">Clementine Remote</string>
   <string name="app_not_available">Aplicação não disponível!</string>
   <string name="connectdialog_connect">Ligar</string>
@@ -220,21 +220,6 @@
   <string name="crash_report_title">Algo errado se passou!</string>
   <string name="crash_report_message">O Clementine Remote terminou abruptamente! Isto não devia ter acontecido! Ajude-me a corrigir o problema enviando o ficheiro de registo. Obrigado!</string>
   <string name="crash_report_send">Enviar!</string>
-  <string name="cm_next">Seguinte</string>
-  <string name="cm_close">Fechar</string>
-  <string name="cm_connect_ip_title">Ligar ao Clementine</string>
-  <string name="cm_connect_ip_content">Introduza o endereço IP do computador a executar o Clementine
-e clique \"Ligar\"</string>
-  <string name="cm_connect_mdns_title">Peer automático</string>
-  <string name="cm_connect_mdns_content">Se o ícone estiver a pulsar, clique-lhe para ver a lista de computadores com o Clementine.</string>
-  <string name="cm_player_home_title">Menu do Clementine Remote</string>
-  <string name="cm_player_home_content">Clique no botão Home para abrir o menu</string>
-  <string name="cm_player_hold_pause_title">Prima o botão de pausa</string>
-  <string name="cm_player_hold_pause_content">Alterna a função Parar após esta faixa.</string>
-  <string name="cm_player_lyrics_title">Clique na capa do álbum</string>
-  <string name="cm_player_lyrics_content">Surgirá uma diálogo com a letra da faixa</string>
-  <string name="cm_player_swipe_title">Deslize para a direita</string>
-  <string name="cm_player_swipe_content">para ver os detalhes da faixa e avaliar.</string>
   <string name="fragment_title_player">Reprodutor</string>
   <string name="fragment_title_details">Detalhes da faixa</string>
   <string name="fragment_title_connection">Clementine</string>

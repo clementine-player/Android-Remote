@@ -18,8 +18,6 @@
 package de.qspool.clementineremote.ui;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import android.app.Activity;
 import android.app.NotificationManager;
@@ -47,7 +45,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
@@ -55,7 +52,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.util.LinkedHashSet;
@@ -122,10 +118,6 @@ public class ConnectActivity extends AppCompatActivity {
 
     private Set<String> mKnownIps;
 
-    private ShowcaseStore mShowcaseStore;
-
-    private int mShowcaseCounter;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,8 +127,6 @@ public class ConnectActivity extends AppCompatActivity {
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         mKnownIps = mSharedPref
                 .getStringSet(SharedPreferencesKeys.SP_KNOWN_IP, new LinkedHashSet<String>());
-
-        mShowcaseStore = new ShowcaseStore(this);
 
         initializeUi();
 
@@ -230,13 +220,11 @@ public class ConnectActivity extends AppCompatActivity {
         super.onPostResume();
 
         // First time called? Show an info screen
-        if (mShowcaseStore.showShowcase(ShowcaseStore.SC_CONNECTDIALOG)) {
-            mShowcaseStore.setShowcaseShown(ShowcaseStore.SC_CONNECTDIALOG);
+        if (mSharedPref.getBoolean(SharedPreferencesKeys.SP_FIRST_CALL, true)) {
+            mSharedPref.edit().putBoolean(SharedPreferencesKeys.SP_FIRST_CALL, false).apply();
 
             // Show the info screen
             showFirstTimeScreen();
-
-            showShowcase();
         }
     }
 
@@ -567,44 +555,4 @@ public class ConnectActivity extends AppCompatActivity {
         }
 
     };
-
-    public void showShowcase() {
-        final ShowcaseView sv = new ShowcaseView.Builder(this)
-                .setStyle(R.style.ShowcaseTheme)
-                .setTarget(new ViewTarget(this.mBtnConnect))
-                .setContentTitle(R.string.cm_connect_ip_title)
-                .setContentText(R.string.cm_connect_ip_content)
-                .build();
-        sv.setButtonText(getString(R.string.cm_next));
-
-        sv.overrideButtonClick(new OnClickListener() {
-                                   @Override
-                                   public void onClick(View v) {
-                                       switch (mShowcaseCounter) {
-                                           case 0:
-                                               sv.setButtonText(getString(R.string.cm_close));
-                                               sv.setShowcase(new ViewTarget(mBtnClementine), true);
-                                               sv.setContentTitle(
-                                                       getString(R.string.cm_connect_mdns_title));
-                                               sv.setContentText(
-                                                       getString(R.string.cm_connect_mdns_content));
-                                               break;
-                                           case 1:
-                                               sv.hide();
-                                               break;
-                                       }
-                                       mShowcaseCounter++;
-                                   }
-                               }
-        );
-
-        RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lps.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        int margin = ((Number) (getResources().getDisplayMetrics().density * 12)).intValue();
-        lps.setMargins(margin, margin * 3, margin, margin);
-
-        sv.setButtonPosition(lps);
-    }
 }

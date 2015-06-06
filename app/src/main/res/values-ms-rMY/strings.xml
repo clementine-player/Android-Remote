@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="app_name">Clementine Remote</string>
   <string name="app_not_available">Apl tidak tersedia!</string>
   <string name="connectdialog_connect">Sambung</string>
@@ -212,20 +212,6 @@
   <string name="crash_report_title">Alamak, ada masalah berlaku!</string>
   <string name="crash_report_message">Kali terakhir Clementine Remote mengalami kerosakan! Ia tidak sepatutnya berlaku! Sila bantu kami menambanbaik apl ini dan hantar kepada kami log fail. Terima kasih!</string>
   <string name="crash_report_send">Hantar!</string>
-  <string name="cm_next">Berikutnya</string>
-  <string name="cm_close">Tutup</string>
-  <string name="cm_connect_ip_title">Sambung ke Clementine</string>
-  <string name="cm_connect_ip_content">Masukkan alamat IP komputer anda yang menjalankan Clementine dan klik \"Connect\"</string>
-  <string name="cm_connect_mdns_title">Peering automatik</string>
-  <string name="cm_connect_mdns_content">Jika ikon berdenyut, klik padanya untuk melihat senarai komputer yang menjalankan Clementine.</string>
-  <string name="cm_player_home_title">Menu Clementine Remote</string>
-  <string name="cm_player_home_content">Klik butang rumah untuk buka menu.</string>
-  <string name="cm_player_hold_pause_title">Tahan jeda</string>
-  <string name="cm_player_hold_pause_content">Jika togol henti selepas fitur trek.</string>
-  <string name="cm_player_lyrics_title">Klik pada kulit album</string>
-  <string name="cm_player_lyrics_content">Satu dialog dengan lirik akan dibuka</string>
-  <string name="cm_player_swipe_title">Leret ke arah kanan</string>
-  <string name="cm_player_swipe_content">untuk melihat perincian trek dan tarafkan lagu.</string>
   <string name="fragment_title_player">Pemain</string>
   <string name="fragment_title_details">Perincian lagu</string>
   <string name="fragment_title_connection">Clementine</string>

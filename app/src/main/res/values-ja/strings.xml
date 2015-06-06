@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="app_name">Clementine リモート</string>
   <string name="app_not_available">アプリが利用できません!</string>
   <string name="connectdialog_connect">接続</string>
@@ -212,20 +212,6 @@
   <string name="crash_report_title">申し訳ありません、何か問題が発生しました!</string>
   <string name="crash_report_message">前回 Clementine リモートはクラッシュしました! これは起きてはいけないことです! アプリを改善するためにご協力ください。私にログファイルをお送りください。ありがとうございます!</string>
   <string name="crash_report_send">送信!</string>
-  <string name="cm_next">次へ</string>
-  <string name="cm_close">閉じる</string>
-  <string name="cm_connect_ip_title">Clementine に接続</string>
-  <string name="cm_connect_ip_content">Clementine を実行しているコンピュータの IP アドレスを入力して、\"接続\" をクリックしてください。</string>
-  <string name="cm_connect_mdns_title">自動ピア接続</string>
-  <string name="cm_connect_mdns_content">アイコンが点滅している場合は、クリックすると、Clementine を実行しているコンピュータの一覧を表示します。</string>
-  <string name="cm_player_home_title">Clementine リモート メニュー</string>
-  <string name="cm_player_home_content">ホームボタンをクリックすると、メニューを開きます。</string>
-  <string name="cm_player_hold_pause_title">一時停止を保持</string>
-  <string name="cm_player_hold_pause_content">トラック停止後の機能を切り替えます。</string>
-  <string name="cm_player_lyrics_title">アルバムカバーをクリックしてください</string>
-  <string name="cm_player_lyrics_content">歌詞のダイアログが開きます</string>
-  <string name="cm_player_swipe_title">右にスワイプしてください</string>
-  <string name="cm_player_swipe_content">トラックの詳細を参照して、曲を評価します。</string>
   <string name="fragment_title_player">プレイヤー</string>
   <string name="fragment_title_details">曲の詳細</string>
   <string name="fragment_title_connection">Clementine</string>

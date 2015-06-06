@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="app_not_available">L’aplicació no està disponible.</string>
   <string name="connectdialog_connect">Connecta</string>
   <string name="connectdialog_connecting">S’està connectant amb el Clementine</string>
@@ -76,7 +76,5 @@
   <string name="notification_action_playpause">Reprodueix/pausa</string>
   <string name="crash_report_title">Òstres, hi ha un problema!</string>
   <string name="crash_report_send">Envia</string>
-  <string name="cm_next">Següent</string>
-  <string name="cm_close">Tanca</string>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

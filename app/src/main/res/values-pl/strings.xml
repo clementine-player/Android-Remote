@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="app_name">Clementine Remote</string>
   <string name="app_not_available">Aplikacja niedostępna!</string>
   <string name="connectdialog_connect">Połącz</string>
@@ -188,22 +188,5 @@
   <string name="crash_report_title">Ups, coś poszło nie tak!</string>
   <string name="crash_report_message">Poprzednim razem Clementine Remote uległo awarii! To nie powinno się zdażyć! Proszę pomóż mi w ulepszeniu aplikacji i wyślij mi plik z logami. Dzięki!</string>
   <string name="crash_report_send">Wyślij!</string>
-  <string name="cm_next">Następne</string>
-  <string name="cm_close">Zamknij</string>
-  <string name="cm_connect_ip_title">Łączenie z Clementine</string>
-  <string name="cm_connect_ip_content">Wpisz adres IP komputera z uruchomionym odtwarzaczem Clementine
-i kliknij \"Połącz\"</string>
-  <string name="cm_connect_mdns_title">Automatyczne wykrywanie</string>
-  <string name="cm_connect_mdns_content">Jeśli ikonka pulsuje, kliknij ją aby zobaczyć listę
-dostępnych komputerów z uruchomionym
-odtwarzaczem Clementine.</string>
-  <string name="cm_player_home_title">Menu Clementine Remote</string>
-  <string name="cm_player_home_content">Kliknij przycisk Home aby otworzyć menu.</string>
-  <string name="cm_player_hold_pause_title">Wstrzymaj pausę</string>
-  <string name="cm_player_hold_pause_content">Włącza zatrzymywanie po zakończeniu utworu.</string>
-  <string name="cm_player_lyrics_title">Kliknij na okładkę albumu</string>
-  <string name="cm_player_lyrics_content">Okienko z tekstem zostanie otwarte</string>
-  <string name="cm_player_swipe_title">Przesuń palcem w prawo</string>
-  <string name="cm_player_swipe_content">aby zobaczyć informacje o ścieżce i ocenach utworu.</string>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

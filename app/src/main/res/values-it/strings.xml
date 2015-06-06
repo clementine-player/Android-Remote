@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="app_name">Clementine Remote</string>
   <string name="app_not_available">App non disponibile!</string>
   <string name="connectdialog_connect">Connetti</string>
@@ -140,10 +140,5 @@
   <string name="crash_report_title">Ops, qualcosa non va!</string>
   <string name="crash_report_message">L\'ultima volta Clementine Remote è andato in crash! Questo non doveva accadere! Aiutami a migliorare l\'app e inviami il file di log. Grazie!</string>
   <string name="crash_report_send">Inviato!</string>
-  <string name="cm_next">Prossima</string>
-  <string name="cm_close">Chiudi</string>
-  <string name="cm_connect_ip_title">Connetti a Clementine</string>
-  <string name="cm_player_home_title">Menu Clementine Remote</string>
-  <string name="cm_player_home_content">Fai click sul pulsante home per aprire il menu.</string>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

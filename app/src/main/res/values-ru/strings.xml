@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="app_name">Clementine Remote</string>
   <string name="app_not_available">Приложение не доступно!</string>
   <string name="connectdialog_connect">Подключиться</string>
@@ -216,22 +216,6 @@
   <string name="crash_report_title">Кажется, что-то пошло не так!</string>
   <string name="crash_report_message">В последний раз Clementine Remote завершилось с ошибкой! Этого не должно было случиться! Пожалуйста, помогите мне улучшить приложение и вышлите мне лог-файл. Спасибо!</string>
   <string name="crash_report_send">Послать!</string>
-  <string name="cm_next">Следующий</string>
-  <string name="cm_close">Закрыть</string>
-  <string name="cm_connect_ip_title">Подключиться к Clementine</string>
-  <string name="cm_connect_ip_content">Введить IP адрес компьютера с включенным Clementine
-и нажмите \"Подключить\"</string>
-  <string name="cm_connect_mdns_title">Автоматический обмен траффиком</string>
-  <string name="cm_connect_mdns_content">Если иконка пульсирует, нажмите на неё, чтобы увидеть
-список компьютеров с включенным Clementine.</string>
-  <string name="cm_player_home_title">Меню Clementine Remote</string>
-  <string name="cm_player_home_content">Нажмите кнопку Домой, чтобы открыть меню</string>
-  <string name="cm_player_hold_pause_title">Нажмите паузу и держите </string>
-  <string name="cm_player_hold_pause_content">Это включит функцию остановки после трека.</string>
-  <string name="cm_player_lyrics_title">Нажмите на обложку альбома</string>
-  <string name="cm_player_lyrics_content">Откроется диалог с текстом песни</string>
-  <string name="cm_player_swipe_title">Проведите вправо</string>
-  <string name="cm_player_swipe_content">чтобы увидеть сведения о треке или оценить.</string>
   <string name="fragment_title_player">Плеер</string>
   <string name="fragment_title_details">Сведения о песне</string>
   <string name="fragment_title_connection">Clementine</string>

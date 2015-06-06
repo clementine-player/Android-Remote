@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="app_name">Clementine À Distance</string>
   <string name="app_not_available">L\'application n\'est pas disponible !</string>
   <string name="connectdialog_connect">Se connecter</string>
@@ -212,21 +212,6 @@
   <string name="crash_report_title">Oups, une erreur s\'est produite !</string>
   <string name="crash_report_message">« Clementine À Distance » a planté lors de la dernière utilisation : ceci ne devrait pas arriver. Aidez-moi à l\'améliorer en m\'envoyant le rapport d\'erreur. Merci !</string>
   <string name="crash_report_send">Envoyé !</string>
-  <string name="cm_next">Suivant</string>
-  <string name="cm_close">Fermer</string>
-  <string name="cm_connect_ip_title">Connecter à Clemtentine</string>
-  <string name="cm_connect_ip_content">Saisissez l\'adresse IP de l\'ordinateur avec Clementine et cliquez sur \" Se connecter\"</string>
-  <string name="cm_connect_mdns_title">Association Automatique</string>
-  <string name="cm_connect_mdns_content">Si l\'icône s\'anime, cliquez dessus pour voir la liste
-des ordinateurs sur lesquels Clementine est disponible.</string>
-  <string name="cm_player_home_title">Menu de Clementine À Distance</string>
-  <string name="cm_player_home_content">Cliquez sur le bouton dans le coin supérieur gauche pour ouvrir le Menu</string>
-  <string name="cm_player_hold_pause_title">Maintenir Pause</string>
-  <string name="cm_player_hold_pause_content">La lecture s\'arrêtera à la fin du morceau en cours.</string>
-  <string name="cm_player_lyrics_title">Cliquez sur la couverture de l\'Album</string>
-  <string name="cm_player_lyrics_content">Une fenêtre avec les paroles va s\'ouvrir</string>
-  <string name="cm_player_swipe_title">Glissez vers la droite</string>
-  <string name="cm_player_swipe_content">pour voir les détails et noter le morceau.</string>
   <string name="fragment_title_player">Lecteur</string>
   <string name="fragment_title_details">Détails du titre</string>
   <string name="fragment_title_connection">Clementine</string>

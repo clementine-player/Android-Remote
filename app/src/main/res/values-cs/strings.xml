@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="app_name">Clementine Remote</string>
   <string name="app_not_available">Aplikace je nedostupná!</string>
   <string name="connectdialog_connect">Připojit</string>
@@ -225,21 +225,6 @@ Pokud máte díky mé práci skutečně dobrou náladu, malý dar od vás by byl
   <string name="crash_report_title">Jejda, něco není v pořádku!</string>
   <string name="crash_report_message">Naposledy Clementine Remote spadl! To by se nemělo stát! Pomozte, prosím, se zlepšením aplikace a odešlete soubor se zápisem o činnosti programu. Děkujeme!</string>
   <string name="crash_report_send">Poslat!</string>
-  <string name="cm_next">Další</string>
-  <string name="cm_close">Zavřít</string>
-  <string name="cm_connect_ip_title">Připojit se ke Clementine</string>
-  <string name="cm_connect_ip_content">Zadejte adresu IP vašeho počítače, na němž běží Clementine a klepněte na \"Připojit\"</string>
-  <string name="cm_connect_mdns_title">Automatické spojení</string>
-  <string name="cm_connect_mdns_content">Pokud ikona pulzuje, klepněte na ni, abyste viděli seznam dostupných počítačů, na nichž běží Clementine.
-    </string>
-  <string name="cm_player_home_title">Nabídka pro Clementine Remote</string>
-  <string name="cm_player_home_content">Klepněte na tlačítko Domů pro otevření nabídky</string>
-  <string name="cm_player_hold_pause_title">Podržet Pozastavit</string>
-  <string name="cm_player_hold_pause_content">Zapne/Vypne funkci zastavení po dokončení skladby.</string>
-  <string name="cm_player_lyrics_title">Klepněte na obal alba</string>
-  <string name="cm_player_lyrics_content">Otevře se dialog s textem písně</string>
-  <string name="cm_player_swipe_title">Postrčte doprava,</string>
-  <string name="cm_player_swipe_content">abyste uviděli podrobnosti skladby a píseň ohodnotili.</string>
   <string name="fragment_title_player">Přehrávač</string>
   <string name="fragment_title_details">Podrobnosti písně</string>
   <string name="fragment_title_connection">Clementine</string>

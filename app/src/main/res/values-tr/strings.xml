@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="app_name">Clementine Kumanda</string>
   <string name="app_not_available">Uygulama mevcut değil!</string>
   <string name="connectdialog_connect">Bağla</string>
@@ -183,19 +183,5 @@
   <string name="crash_report_title">Olamaz, bir şeyler yanlış gitti!</string>
   <string name="crash_report_message">En son Clementine Kumanda çökmüştü! Bu olmamalıydı! Lütfen günlük dosyasını göndererek uygulamayı geliştirmemde bana yardımcı olun! Teşekkürler!</string>
   <string name="crash_report_send">Gönder!</string>
-  <string name="cm_next">Sonraki</string>
-  <string name="cm_close">Kapat</string>
-  <string name="cm_connect_ip_title">Clementine\'e bağlan</string>
-  <string name="cm_connect_ip_content">Clementine\'in çalıştığı bilgisayarınızın IP adresini girin ve \"Bağlan\" tıklayın</string>
-  <string name="cm_connect_mdns_title">Otomatik eşleşme</string>
-  <string name="cm_connect_mdns_content">Simge yanım sönerse, Clementine ile çalışan bilgisayarların listesini görmek için tıklayın.</string>
-  <string name="cm_player_home_title">Clementine Kumanda menüsü</string>
-  <string name="cm_player_home_content">Menüyü açmak için ev düğmesine basın</string>
-  <string name="cm_player_hold_pause_title">Duraklatılmış tut</string>
-  <string name="cm_player_hold_pause_content">Parça bittiğinde durdurma özelliğini açar/kapatır.</string>
-  <string name="cm_player_lyrics_title">Albüm kapağına tıklayın</string>
-  <string name="cm_player_lyrics_content">Şarkı sözlerinin açılacağı bir pencere</string>
-  <string name="cm_player_swipe_title">Parça detaylarını görmek ve</string>
-  <string name="cm_player_swipe_content">şarkıyı beğenmek için sağa kaydırın.</string>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

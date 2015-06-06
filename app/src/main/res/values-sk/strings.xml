@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="app_name">Clementine Remote</string>
   <string name="app_not_available">Aplikácia nie je dostupná!</string>
   <string name="connectdialog_connect">Pripojiť</string>
@@ -208,20 +208,6 @@
   <string name="crash_report_title">Ale nie, niekde sa stala chyba!</string>
   <string name="crash_report_message">Naposledy aplikácia Clementine Remote zlyhala! Nemalo by sa to stávať! Prosím, pomôžte nám vylepšiť aplikáciu odoslaním záznamového súboru. Ďakujeme!</string>
   <string name="crash_report_send">Odoslať!</string>
-  <string name="cm_next">Ďalej</string>
-  <string name="cm_close">Zavrieť</string>
-  <string name="cm_connect_ip_title">Pripojte s k prehrávaču Clementine</string>
-  <string name="cm_connect_ip_content">Zadajte IP adresu vášho počítača, na ktorom je spsutený prehrávač Clementine a kliknite na \"Pripojiť\"</string>
-  <string name="cm_connect_mdns_title">Automatické preskúmanie</string>
-  <string name="cm_connect_mdns_content">Ak ikona pulzuje, kliknite na ňu a zobrazí sa vám zoznam dostupných počítačov, na ktorých je spustený prehrávač Clementine.</string>
-  <string name="cm_player_home_title">Ponuka Clementine Remote</string>
-  <string name="cm_player_home_content">Kliknite na domovské tlačidlo na otvorenie ponuky.</string>
-  <string name="cm_player_hold_pause_title">Podržte tlačidlo pozastavenia</string>
-  <string name="cm_player_hold_pause_content">Prepína funkciu zastavenia skladby po jej prehratí.</string>
-  <string name="cm_player_lyrics_title">Kliknite na obal albumu</string>
-  <string name="cm_player_lyrics_content">Otvorí sa dialógové okno s textom</string>
-  <string name="cm_player_swipe_title">Potiahnite doprava</string>
-  <string name="cm_player_swipe_content">na zobrazenie podrobností o stope a hodnoteniu skladby.</string>
   <string name="fragment_title_player">Prehrávač</string>
   <string name="fragment_title_details">Podrobnosti o skladbe</string>
   <string name="fragment_title_connection">Clementine</string>

@@ -19,6 +19,8 @@ package de.qspool.clementineremote;
 
 public class SharedPreferencesKeys {
 
+    public final static String SP_FIRST_CALL = "first_call";
+
     public final static String SP_KEY_IP = "save_clementine_ip";
 
     public final static String SP_KEY_AC = "pref_autoconnect";

@@ -17,9 +17,6 @@
 
 package de.qspool.clementineremote.ui.fragments;
 
-import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.ViewTarget;
-
 import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Message;
@@ -27,14 +24,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.lang.reflect.Field;
@@ -44,7 +39,6 @@ import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
-import de.qspool.clementineremote.ui.ShowcaseStore;
 import de.qspool.clementineremote.ui.adapter.PlayerPageAdapter;
 import de.qspool.clementineremote.ui.fragments.playerpages.ConnectionFragment;
 import de.qspool.clementineremote.ui.fragments.playerpages.PlayerPageFragment;
@@ -75,10 +69,6 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
 
     private ViewPager myPager;
 
-    private ShowcaseStore mShowcaseStore;
-
-    private int mShowcaseCounter;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -93,8 +83,6 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_player,
                 container, false);
-
-        mShowcaseStore = new ShowcaseStore(getActivity());
 
         mPlayerPageFragment = new PlayerPageFragment();
 
@@ -125,11 +113,6 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
         stateChanged();
         metadataChanged();
 
-        if (mShowcaseStore.showShowcase(ShowcaseStore.SC_PLAYER)) {
-            showShowcase();
-            mShowcaseStore.setShowcaseShown(ShowcaseStore.SC_PLAYER);
-        }
-
         mTabs = (SlidingTabLayout) getActivity().findViewById(R.id.tabs);
 
         setHasOptionsMenu(true);
@@ -141,7 +124,6 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
     public void onResume() {
         super.onResume();
         myPager.setCurrentItem(0);
-
 
         mTabs.setDistributeEvenly(true);
         mTabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
@@ -213,9 +195,11 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
     private void stateChanged() {
         // display play / pause image
         if (App.Clementine.getState() == Clementine.State.PLAY) {
-            mBtnPlayPause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_media_pause));
+            mBtnPlayPause.setImageDrawable(
+                    ContextCompat.getDrawable(getActivity(), R.drawable.ic_media_pause));
         } else {
-            mBtnPlayPause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_media_play));
+            mBtnPlayPause.setImageDrawable(
+                    ContextCompat.getDrawable(getActivity(), R.drawable.ic_media_play));
         }
     }
 
@@ -271,63 +255,5 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
     @Override
     public boolean onBackPressed() {
         return false;
-    }
-
-    public void showShowcase() {
-        final ShowcaseView sv = new ShowcaseView.Builder(getActivity())
-                .setStyle(R.style.ShowcaseTheme)
-                .setTarget(new ViewTarget(((Toolbar) getActivity().findViewById(R.id.toolbar)).getChildAt(0)))
-                .setContentTitle(R.string.cm_player_home_title)
-                .setContentText(R.string.cm_player_home_content)
-                .build();
-        sv.setButtonText(getString(R.string.cm_next));
-
-        sv.overrideButtonClick(new OnClickListener() {
-                                   @Override
-                                   public void onClick(View v) {
-                                       switch (mShowcaseCounter) {
-                                           case 0:
-                                               sv.setShowcase(new ViewTarget(myPager), true);
-                                               sv.setContentTitle(
-                                                       getString(R.string.cm_player_swipe_title));
-                                               sv.setContentText(
-                                                       getString(R.string.cm_player_swipe_content));
-                                               break;
-                                           case 1:
-                                               sv.setShowcase(new ViewTarget(
-                                                       mPlayerPageFragment.getImageArt()), true);
-                                               sv.setContentTitle(
-                                                       getString(R.string.cm_player_lyrics_title));
-                                               sv.setContentText(
-                                                       getString(
-                                                               R.string.cm_player_lyrics_content));
-                                               break;
-                                           case 2:
-                                               sv.setButtonText(getString(R.string.cm_close));
-                                               sv.setShowcase(new ViewTarget(mBtnPlayPause), true);
-                                               sv.setContentTitle(
-                                                       getString(
-                                                               R.string.cm_player_hold_pause_title));
-                                               sv.setContentText(
-                                                       getString(
-                                                               R.string.cm_player_hold_pause_content));
-                                               break;
-                                           case 3:
-                                               sv.hide();
-                                               break;
-                                       }
-                                       mShowcaseCounter++;
-                                   }
-                               }
-        );
-
-        RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lps.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        int margin = ((Number) (getResources().getDisplayMetrics().density * 12)).intValue();
-        lps.setMargins(margin, margin * 3, margin, margin);
-
-        sv.setButtonPosition(lps);
     }
 }

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="app_name">Clementine-kaukosäädin</string>
   <string name="app_not_available">Sovellus ei ole saatavilla!</string>
   <string name="connectdialog_connect">Yhdistä</string>
@@ -181,19 +181,5 @@
   <string name="crash_report_title">Hups, jokin meni pieleen!</string>
   <string name="crash_report_message">Clementine-kaukosäädin kaatui viime käyttökerralla! Niin ei olisi pitänyt tapahtua. Auta parantamaan sovellusta lähettämällä lokitiedosto, kiitos!</string>
   <string name="crash_report_send">Lähetä!</string>
-  <string name="cm_next">Seuraava</string>
-  <string name="cm_close">Sulje</string>
-  <string name="cm_connect_ip_title">Yhdistä Clementineen</string>
-  <string name="cm_connect_ip_content">Kirjoita sen tietokoneen IP-osoite, jossa Clementine on käynnissä ja napauta \"Yhdistä\"</string>
-  <string name="cm_connect_mdns_title">Automaattinen tähyily</string>
-  <string name="cm_connect_mdns_content">Klikkaamalla kuvaketta sen sykkiessä näet listan koneista, joissa Clementine on käynnissä.</string>
-  <string name="cm_player_home_title">Clementine-kaukosäätimen valikko</string>
-  <string name="cm_player_home_content">Napauta kotipainiketta avataksesi valikon.</string>
-  <string name="cm_player_hold_pause_title">Paina pitkään taukoa</string>
-  <string name="cm_player_hold_pause_content">Se vaihtaa pysäytä kappaleen jälkeen -tilaa.</string>
-  <string name="cm_player_lyrics_title">Napauta albumin kansikuvaa</string>
-  <string name="cm_player_lyrics_content">Sanoitukset aukeavat uuteen ikkunaan.</string>
-  <string name="cm_player_swipe_title">Pyyhkäise oikealle</string>
-  <string name="cm_player_swipe_content">nähdäksesi kappaleen tiedot ja arvostellaksesi laulun.</string>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

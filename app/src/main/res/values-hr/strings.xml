@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="app_name">Clementine daljinski upravljač</string>
   <string name="app_not_available">Aplikacija nije dostupna!</string>
   <string name="connectdialog_connect">Poveži se</string>
@@ -215,20 +215,6 @@
   <string name="crash_report_title">Ups, nešto je pošlo po krivu!</string>
   <string name="crash_report_message">Prošli puta Clementine daljinski upravljač se srušio! To se nebi trebalo događati! Molim vas da mi pomognete poboljšati aplikaciju i pošaljite mi datoteku zapisa. Hvala vam!</string>
   <string name="crash_report_send">Pošalji!</string>
-  <string name="cm_next">Sljedeće</string>
-  <string name="cm_close">Zatvori</string>
-  <string name="cm_connect_ip_title">Povezivanje s Clementine</string>
-  <string name="cm_connect_ip_content">Upišite IP adresu vašeg računala na kojemu je pokrenut Clementine i kliknite \"Poveži se\"</string>
-  <string name="cm_connect_mdns_title">Automatsko uparivanje</string>
-  <string name="cm_connect_mdns_content">Ako ikona pulsira, kliknite na ikonu da bi vidjeli dostupna računala na kojima je pokrenut Clementine.</string>
-  <string name="cm_player_home_title">Izbornik Clementine daljinskog upravljanja</string>
-  <string name="cm_player_home_content">Klikni tipku naslovnice za otvaranje izbornika.</string>
-  <string name="cm_player_hold_pause_title">Zadrži pauzu</string>
-  <string name="cm_player_hold_pause_content">Uključi/Isključi zaustavljanje nakon završetka pjesme.</string>
-  <string name="cm_player_lyrics_title">Klikni na omot albuma</string>
-  <string name="cm_player_lyrics_content">Dijalog teksta pjesme će se otvoriti</string>
-  <string name="cm_player_swipe_title">Povucite prstom udesno</string>
-  <string name="cm_player_swipe_content">da bi vidjeli pojedinosti pjesme i ocijenili pjesmu.</string>
   <string name="fragment_title_player">Reproduktor</string>
   <string name="fragment_title_details">Pojedinosti pjesme</string>
   <string name="fragment_title_connection">Clementine</string>

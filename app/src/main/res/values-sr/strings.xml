@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="app_name">Даљински за Клементину</string>
   <string name="app_not_available">Апликација није доступна!</string>
   <string name="connectdialog_connect">Повежи</string>
@@ -219,20 +219,6 @@
   <string name="crash_report_title">Опс, нешто није у реду!</string>
   <string name="crash_report_message">Даљински за Клементину се срушио прошли пут! Ово не би смело да се догоди! Помозите ми да побољшам апликацију и пошаљите ми фајл дневника. Хвала!</string>
   <string name="crash_report_send">Пошаљи!</string>
-  <string name="cm_next">Следеће</string>
-  <string name="cm_close">Затвори</string>
-  <string name="cm_connect_ip_title">Повежите се са Клементином</string>
-  <string name="cm_connect_ip_content">Унесите ИП адресу вашег рачунара на којем је покренута Клементина и кликните на „Повежи“</string>
-  <string name="cm_connect_mdns_title">Аутоматско откривање</string>
-  <string name="cm_connect_mdns_content">Ако икона пулсира, кликните је да бисте видели списак доступних рачунара на којима ради Клементина.</string>
-  <string name="cm_player_home_title">Мени Даљинског за Клементину</string>
-  <string name="cm_player_home_content">Кликните на почетно дугме да бисте отворили мени.</string>
-  <string name="cm_player_hold_pause_title">Држите паузу</string>
-  <string name="cm_player_hold_pause_content">Мења опцију заустављања након нумере.</string>
-  <string name="cm_player_lyrics_title">Кликните на омот албума</string>
-  <string name="cm_player_lyrics_content">Отвориће се дијалог са стиховима</string>
-  <string name="cm_player_swipe_title">Превуците прстом десно</string>
-  <string name="cm_player_swipe_content">да бисте погледали детаље нумере и оценили песму.</string>
   <string name="fragment_title_player">Плејер</string>
   <string name="fragment_title_details">Детаљи песме</string>
   <string name="fragment_title_connection">Клементина</string>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="app_name">Control remoto de Clementine</string>
   <string name="app_not_available">La aplicación no está disponible</string>
   <string name="connectdialog_connect">Conectar</string>
@@ -187,17 +187,5 @@
   <string name="crash_report_title">Vaya, algo ha fallado.</string>
   <string name="crash_report_message">La última vez, el Control remoto de Clementine se cerró inesperadamente. Para ayudar a que este error no se produzca de nuevo, envíe el archivo de registro al desarrollador. ¡Gracias!</string>
   <string name="crash_report_send">Enviar</string>
-  <string name="cm_next">Siguiente</string>
-  <string name="cm_close">Cerrar</string>
-  <string name="cm_connect_ip_title">Conectar con Clementine</string>
-  <string name="cm_connect_ip_content">Escriba la dirección IP del equipo con Clementine y pulse en «Conectar»</string>
-  <string name="cm_connect_mdns_title">Emparejamiento automático</string>
-  <string name="cm_player_home_title">Menú del control remoto de Clementine</string>
-  <string name="cm_player_home_content">Pulse en el botón Inicio para abrir el menú.</string>
-  <string name="cm_player_hold_pause_content">Activa o desactiva la detención tras finalizar la pista.</string>
-  <string name="cm_player_lyrics_title">Pulsar en la carátula del álbum</string>
-  <string name="cm_player_lyrics_content">Se abrirá un cuadro con la letra</string>
-  <string name="cm_player_swipe_title">Deslice hacia la derecha</string>
-  <string name="cm_player_swipe_content">para ver detalles de la pista y puntuar la canción.</string>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

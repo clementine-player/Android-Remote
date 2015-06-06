@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="app_name">Clementine Remote</string>
   <string name="app_not_available">App niet beschikbaar!</string>
   <string name="connectdialog_connect">Verbinden</string>
@@ -165,12 +165,5 @@
   <string name="notification_action_playpause">Afspelen / Pauzeren</string>
   <string name="crash_report_title">Oeps, er is iets misgegaan!</string>
   <string name="crash_report_send">Verstuur!</string>
-  <string name="cm_next">Volgende</string>
-  <string name="cm_close">Sluiten</string>
-  <string name="cm_connect_ip_title">Verbind met Clementine</string>
-  <string name="cm_connect_mdns_title">Automatisch koppelen</string>
-  <string name="cm_player_home_title">Clementine Remote menu</string>
-  <string name="cm_player_lyrics_title">Klik op de albumhoes</string>
-  <string name="cm_player_swipe_title">Veeg naar rechts</string>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

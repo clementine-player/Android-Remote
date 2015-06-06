@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="app_name">Clementine Remote</string>
   <string name="app_not_available">Η εφαρμογή δεν είναι διαθέσιμη!</string>
   <string name="connectdialog_connect">Σύνδεση</string>
@@ -204,20 +204,6 @@
   <string name="crash_report_title">Ωχ, κάτι πήγε στραβά!</string>
   <string name="crash_report_message">Τελευταία φορά το Clementine Remote συνετρίβη! Αυτό δεν έπρεπε να συμβεί! Παρακαλώ βοηθήστε με να βελτιωθεί η εφαρμογή και στείλτε μου το αρχείο καταγραφής. Ευχαριστώ!</string>
   <string name="crash_report_send">Αποστολή!</string>
-  <string name="cm_next">Επόμενο</string>
-  <string name="cm_close">Κλείσιμο</string>
-  <string name="cm_connect_ip_title">Σύνδεση στο Clementine</string>
-  <string name="cm_connect_ip_content">Εισάγετε τη διεύθυνση IP του υπολογιστή σας την ωρα που λειτουργεί το Clementine και κάντε κλικ στο \"Συνδεση\"</string>
-  <string name="cm_connect_mdns_title">Αυτόματη ανταλλαγή κίνησης</string>
-  <string name="cm_connect_mdns_content">Εάν το εικονίδιο πάλλεται, κάντε κλικ για να δείτε μια λίστα των διαθέσιμων υπολογιστων που εκτελούν το Clementine.</string>
-  <string name="cm_player_home_title">Clementine Remote μενου</string>
-  <string name="cm_player_home_content">Κάντε κλικ στο κουμπί για να ανοίξετε το μενού.</string>
-  <string name="cm_player_hold_pause_title">Κράτηση παύσης</string>
-  <string name="cm_player_hold_pause_content">Εναλλαγή της διακοπής μετά το χαρακτηριστικό τραγουδι.</string>
-  <string name="cm_player_lyrics_title">Κάντε κλικ στο εξώφυλλο του άλμπουμ</string>
-  <string name="cm_player_lyrics_content">Ένας διάλογος με στίχους θα ανοίξει</string>
-  <string name="cm_player_swipe_title">Σύρετε προς τα δεξιά</string>
-  <string name="cm_player_swipe_content">για να δείτε λεπτομέρειες του τραγούδιου και να αξιολογήσετε το τραγούδι.</string>
   <string name="fragment_title_player">Player</string>
   <string name="fragment_title_details">Λεπτομέρειες τραγουδιού</string>
   <string name="fragment_title_connection">Clementine</string>

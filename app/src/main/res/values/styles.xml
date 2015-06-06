@@ -52,14 +52,6 @@
         <item name="backgroundSplit">@color/grey_cab_status</item>
     </style>
 
-    <style name="ShowcaseTheme" parent="ShowcaseView.Light">
-        <item name="sv_backgroundColor">#80000000</item>
-        <item name="sv_showcaseColor">@color/orange</item>
-        <item name="sv_titleTextAppearance">@style/ShowcaseView.Title</item>
-        <item name="sv_detailTextAppearance">@style/ShowcaseView.Detail</item>
-        <item name="sv_tintButtonColor">true</item>
-    </style>
-
     <style name="ShowcaseView.Title" parent="android:style/TextAppearance.Large">
         <item name="android:textColor">@color/orange_light</item>
     </style>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="app_name">Дистанційне керування Clementine</string>
   <string name="app_not_available">Програма недоступна!</string>
   <string name="connectdialog_connect">З’єднатися</string>
@@ -213,20 +213,6 @@
   <string name="crash_report_title">Ех, щось пішло не так!</string>
   <string name="crash_report_message">Попередній сеанс роботи Віддаленого керування Clementine завершився аварійно! Цього не повинно було статися! Допоможіть розробникові виправити проблему: надішліть йому файл журналу роботи програми. Дякуємо!</string>
   <string name="crash_report_send">Надіслати!</string>
-  <string name="cm_next">Далі</string>
-  <string name="cm_close">Закрити</string>
-  <string name="cm_connect_ip_title">З’єднатися з Clementine</string>
-  <string name="cm_connect_ip_content">Вкажіть IP-адресу вашого комп’ютера, на якому запущено Clementine, і натисніть кнопку «З’єднати»</string>
-  <string name="cm_connect_mdns_title">Автоматичне встановлення вузлів</string>
-  <string name="cm_connect_mdns_content">Якщо піктограма блимає, натисніть її, щоб переглянути список доступних комп’ютерів із запущеною Clementine.  </string>
-  <string name="cm_player_home_title">Меню Clementine Remote</string>
-  <string name="cm_player_home_content">Натисніть кнопку домівки, щоб відкрити меню.</string>
-  <string name="cm_player_hold_pause_title">Утримуйте кнопку паузи</string>
-  <string name="cm_player_hold_pause_content">Вона вмикає або вимикає зупинку відтворення після композиції.</string>
-  <string name="cm_player_lyrics_title">Натискання піктограми обкладинки альбому</string>
-  <string name="cm_player_lyrics_content">Буде відкрито діалогове вікно зі словами пісні</string>
-  <string name="cm_player_swipe_title">Рух пальцем праворуч</string>
-  <string name="cm_player_swipe_content">перегляд подробиць щодо композиції та можливість визначення оцінки.</string>
   <string name="fragment_title_player">Програвач</string>
   <string name="fragment_title_details">Параметри композиції</string>
   <string name="fragment_title_connection">Clementine</string>
