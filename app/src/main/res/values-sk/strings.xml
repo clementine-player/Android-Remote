@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="app_name">Clementine Remote</string>
   <string name="app_not_available">Aplikácia nie je dostupná!</string>
   <string name="connectdialog_connect">Pripojiť</string>
@@ -117,8 +117,21 @@
   <string name="pref_volume_inc_title">Úroveň zmeny hlasitosti</string>
   <string name="pref_volume_inc_summary">Aktuálna úroveň zmeny hlasitosti: %s</string>
   <string name="pref_library_sorting_title">Usporiadanie</string>
+  <string name="pref_library_sorting_summary">Zbierka je usporiadaná v %1$s poradí.</string>
+  <string-array name="pref_library_sorting">
+    <item>vzostupnom</item>
+    <item>zostupnom</item>
+  </string-array>
   <string name="pref_library_grouping_title">Zoskupenie</string>
   <string name="pref_library_grouping_summary">Zbierka je zoskupená podľa %1$s.</string>
+  <string-array name="pref_library_grouping">
+    <item>Interpret</item>
+    <item>Interpret / Album</item>
+    <item>Interpret / Rok</item>
+    <item>Album</item>
+    <item>Žáner / Album</item>
+    <item>Žáner / Interpret / Album</item>
+  </string-array>
   <string name="pref_autoconnect_title">Pripojiť automaticky</string>
   <string name="pref_autoconnect_summary">Automaticky pripojiť k prehrávaču Clementine po spustení diaľkového ovládania.
 </string>
@@ -189,6 +202,7 @@
   <string name="done">Hotovo</string>
   <string name="unknown">Neznáme</string>
   <string name="number_items">%d položiek</string>
+  <string name="songs_added">%d skladieb pridaných do aktuálneho zoznamu skladieb</string>
   <string name="context_add_to_playlist">Pridať položku do aktuálneho zoznamu skladieb</string>
   <string name="repeat_off">Neopakovať</string>
   <string name="repeat_track">Opakovať skladbu</string>

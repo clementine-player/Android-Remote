@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="app_name">Clementine リモート</string>
   <string name="app_not_available">アプリが利用できません!</string>
   <string name="connectdialog_connect">接続</string>
@@ -53,6 +53,9 @@
   <string name="library_empty">ライブラリーは空です。下にスワイプすると、ライブラリーをダウンロードします!</string>
   <string name="library_no_search_results">検索条件に一致する曲はありません!</string>
   <string name="library_download_error">ライブラリーをダウンロードできません</string>
+  <string name="global_search_empty">お使いのコンピュータからインターネット上の音楽を見つけるために、上に検索する言葉を入力してください</string>
+  <string name="global_search_search">何でも検索</string>
+  <string name="global_search_query">問い合わせ: %s</string>
   <string name="song_info_album">アルバム</string>
   <string name="song_info_genre">ジャンル</string>
   <string name="song_info_year">年</string>
@@ -194,6 +197,10 @@
   <string name="input_auth_code">認証コード</string>
   <string name="invalid_code">コードが正しくありません</string>
   <string name="done">完了</string>
+  <string name="unknown">不明</string>
+  <string name="number_items">%d アイテム</string>
+  <string name="songs_added">現在のプレイリストに %d 曲追加しました</string>
+  <string name="context_add_to_playlist">現在のプレイリストにアイテムを追加</string>
   <string name="repeat_off">リピートしない</string>
   <string name="repeat_track">トラックの繰り返し</string>
   <string name="repeat_album">アルバムの繰り返し</string>
@@ -223,4 +230,16 @@
     <item>プレイリスト</item>
   </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
+  <string-array name="navigation_drawer_items">
+    <item>検索</item>
+    <item>プレイヤー</item>
+    <item>プレイリスト</item>
+    <item>ライブラリー</item>
+    <item>ダウンロード</item>
+    <item></item>
+    <item>設定</item>
+    <item>寄付</item>
+    <item></item>
+    <item>終了</item>
+  </string-array>
 </resources>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="app_name">Дистанційне керування Clementine</string>
   <string name="app_not_available">Програма недоступна!</string>
   <string name="connectdialog_connect">З’єднатися</string>
@@ -53,6 +53,9 @@
   <string name="library_empty">Бібліотека порожня. Проведіть пальцем вниз, щоб отримати бібліотеку!</string>
   <string name="library_no_search_results">Вказаним вами критеріям не відповідає жодна композиція!</string>
   <string name="library_download_error">Не вдалося отримати бібліотеку</string>
+  <string name="global_search_empty">Вище можна ввести ключі пошуку музики на вашому комп’ютері та у інтернеті</string>
+  <string name="global_search_search">Шукати будь-що</string>
+  <string name="global_search_query">Запит: %s</string>
   <string name="song_info_album">Альбом</string>
   <string name="song_info_genre">Жанр</string>
   <string name="song_info_year">Рік</string>
@@ -195,6 +198,10 @@
   <string name="input_auth_code">Код розпізнавання</string>
   <string name="invalid_code">Некоректний код</string>
   <string name="done">Виконано</string>
+  <string name="unknown">Невідомо</string>
+  <string name="number_items">%d записів</string>
+  <string name="songs_added">До поточного списку відтворення додано %d композицій</string>
+  <string name="context_add_to_playlist">Додати запис до поточного списку відтворення</string>
   <string name="repeat_off">Не повторювати</string>
   <string name="repeat_track">Повторити композицію</string>
   <string name="repeat_album">Повторити альбом</string>
@@ -224,4 +231,16 @@
     <item>Список композицій</item>
   </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
+  <string-array name="navigation_drawer_items">
+    <item>Пошук</item>
+    <item>Програвач</item>
+    <item>Списки</item>
+    <item>Бібліотека</item>
+    <item>Отримане</item>
+    <item></item>
+    <item>Параметри</item>
+    <item>Підтримати</item>
+    <item></item>
+    <item>Вийти</item>
+  </string-array>
 </resources>

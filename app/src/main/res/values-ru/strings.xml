@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="app_name">Clementine Remote</string>
   <string name="app_not_available">Приложение не доступно!</string>
   <string name="connectdialog_connect">Подключиться</string>
@@ -54,6 +54,8 @@
   <string name="library_no_search_results">По данному запросу песен не найдено!</string>
   <string name="library_download_error">Не могу загрузить фонотеку</string>
   <string name="global_search_empty">Введите ключевое слово выше, чтобы найти музыку на вашем компьютере или в интернет</string>
+  <string name="global_search_search">Искать что угодно</string>
+  <string name="global_search_query">Очередь: %s</string>
   <string name="song_info_album">Альбом</string>
   <string name="song_info_genre">Жанр</string>
   <string name="song_info_year">Год</string>
@@ -198,6 +200,10 @@
   <string name="input_auth_code">Код авторизации</string>
   <string name="invalid_code">Неверный код</string>
   <string name="done">Готово</string>
+  <string name="unknown">Неизвестный</string>
+  <string name="number_items">%d элементов</string>
+  <string name="songs_added">%d песен добавлено в текущий плейлист</string>
+  <string name="context_add_to_playlist">Добавить пункт в текущий плейлист</string>
   <string name="repeat_off">Не повторять</string>
   <string name="repeat_track">Повторять композицию</string>
   <string name="repeat_album">Повторять альбом</string>
@@ -227,4 +233,16 @@
     <item>Плейлист</item>
   </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
+  <string-array name="navigation_drawer_items">
+    <item>Поиск</item>
+    <item>Плеер</item>
+    <item>Плейлисты</item>
+    <item>Фонотека</item>
+    <item>Загрузки</item>
+    <item></item>
+    <item>Настройки</item>
+    <item>Пожертвование</item>
+    <item></item>
+    <item>Выход</item>
+  </string-array>
 </resources>
