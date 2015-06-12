@@ -70,6 +70,11 @@ public class GlobalSearchRequest {
             contentValues.put("pretty_year", song.getPrettyYear());
             contentValues.put("genre", song.getGenre());
             contentValues.put("pretty_length", song.getPrettyLength());
+            try {
+                contentValues.put("year", Integer.parseInt(song.getPrettyYear()));
+            } catch (NumberFormatException e) {
+                contentValues.put("year", -1);
+            }
             contentValues.put("filename", song.getUrl()); // filename is url
             contentValues.put("is_local", song.getIsLocal() ? 1 : 0);
             contentValues.put("filesize", song.getFileSize());

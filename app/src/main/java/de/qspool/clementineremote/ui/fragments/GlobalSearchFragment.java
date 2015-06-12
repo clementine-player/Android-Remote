@@ -55,7 +55,6 @@ import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.database.SongSelectItem;
 import de.qspool.clementineremote.backend.globalsearch.GlobalSearchManager;
 import de.qspool.clementineremote.backend.globalsearch.GlobalSearchQuery;
-import de.qspool.clementineremote.backend.library.LibraryQuery;
 import de.qspool.clementineremote.backend.listener.OnGlobalSearchResponseListener;
 import de.qspool.clementineremote.backend.listener.OnSongSelectFinishedListener;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
@@ -65,7 +64,9 @@ import de.qspool.clementineremote.ui.adapter.DynamicSongQueryAdapter;
 import de.qspool.clementineremote.ui.interfaces.BackPressHandleable;
 import de.qspool.clementineremote.ui.interfaces.RemoteDataReceiver;
 
-public class GlobalSearchFragment extends Fragment implements BackPressHandleable, RemoteDataReceiver, SharedPreferences.OnSharedPreferenceChangeListener {
+public class GlobalSearchFragment extends Fragment
+        implements BackPressHandleable, RemoteDataReceiver, SharedPreferences.OnSharedPreferenceChangeListener,
+                    OnGlobalSearchResponseListener {
 
     private ActionBar mActionBar;
 
@@ -80,6 +81,8 @@ public class GlobalSearchFragment extends Fragment implements BackPressHandleabl
     private LinkedList<DynamicSongQueryAdapter> mAdapters = new LinkedList<>();
 
     private int mMaxLevels;
+
+    private int mQueryId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -125,7 +128,7 @@ public class GlobalSearchFragment extends Fragment implements BackPressHandleabl
                             String.format(getString(R.string.songs_added), 1),
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    GlobalSearchQuery globalSearchQuery = new GlobalSearchQuery(getActivity());
+                    GlobalSearchQuery globalSearchQuery = new GlobalSearchQuery(getActivity(), mQueryId);
                     globalSearchQuery.openDatabase();
                     globalSearchQuery.setLevel(mAdapters.size());
                     globalSearchQuery.setSelection(item.getSelection());
@@ -207,39 +210,7 @@ public class GlobalSearchFragment extends Fragment implements BackPressHandleabl
             }
         });
 
-        GlobalSearchManager.getInstance().addOnGlobalSearchResponseListerner(
-                new OnGlobalSearchResponseListener() {
-                    @Override
-                    public void onStatusChanged(int id,
-                            final ClementineRemoteProtocolBuffer.GlobalSearchStatus status) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (status
-                                        == ClementineRemoteProtocolBuffer.GlobalSearchStatus.GlobalSearchFinished) {
-                                    GlobalSearchQuery globalSearchQuery = new GlobalSearchQuery(
-                                            getActivity());
-                                    mMaxLevels = globalSearchQuery.getMaxLevels();
-
-                                    // Create the adapter
-                                    globalSearchQuery.openDatabase();
-                                    globalSearchQuery.setLevel(0);
-                                    DynamicSongQueryAdapter a = new DynamicSongQueryAdapter(
-                                            getActivity(), globalSearchQuery);
-                                    mAdapters.add(a);
-                                    showList();
-
-                                    mEmptyView.setRefreshing(false);
-                                    mSwipeRefreshLayout.setRefreshing(false);
-                                }
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onResultsReceived(int id) {
-                    }
-                });
+        GlobalSearchManager.getInstance().addOnGlobalSearchResponseListerner(this);
 
         setHasOptionsMenu(true);
 
@@ -247,6 +218,12 @@ public class GlobalSearchFragment extends Fragment implements BackPressHandleabl
         mActionBar.setSubtitle("/");
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        GlobalSearchManager.getInstance().removeOnGlobalSearchResponseListerner(this);
     }
 
     @Override
@@ -287,6 +264,10 @@ public class GlobalSearchFragment extends Fragment implements BackPressHandleabl
                 // Query must be empty in order to collapse the search view.
                 searchView.setQuery("", false);
                 searchView.setIconified(true);
+
+                // Remove currently present adapters
+                mAdapters.clear();
+                showList();
 
                 return true;
             }
@@ -331,6 +312,38 @@ public class GlobalSearchFragment extends Fragment implements BackPressHandleabl
         return true;
     }
 
+    @Override
+    public void onStatusChanged(final int id,
+    final ClementineRemoteProtocolBuffer.GlobalSearchStatus status) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (status
+                        == ClementineRemoteProtocolBuffer.GlobalSearchStatus.GlobalSearchFinished) {
+                    mQueryId = id;
+                    GlobalSearchQuery globalSearchQuery = new GlobalSearchQuery(
+                            getActivity(), mQueryId);
+                    mMaxLevels = globalSearchQuery.getMaxLevels();
+
+                    // Create the adapter
+                    globalSearchQuery.openDatabase();
+                    globalSearchQuery.setLevel(0);
+                    DynamicSongQueryAdapter a = new DynamicSongQueryAdapter(
+                            getActivity(), globalSearchQuery);
+                    mAdapters.add(a);
+                    showList();
+
+                    mEmptyView.setRefreshing(false);
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onResultsReceived(int id) {
+    }
+
     /**
      * Show the last element in the list of adapters
      */
@@ -365,12 +378,12 @@ public class GlobalSearchFragment extends Fragment implements BackPressHandleabl
             result.add(item);
             onSongSelectFinishedListener.OnSongSelectFinished(result);
         } else {
-            LibraryQuery libraryQuery = new LibraryQuery(getActivity());
-            libraryQuery.openDatabase();
-            libraryQuery.setLevel(mMaxLevels-1);
-            libraryQuery.setSelection(item.getSelection());
-            libraryQuery.addOnLibrarySelectFinishedListener(onSongSelectFinishedListener);
-            libraryQuery.selectDataAsync();
+            GlobalSearchQuery globalSearchQuery = new GlobalSearchQuery(getActivity(), mQueryId);
+            globalSearchQuery.openDatabase();
+            globalSearchQuery.setLevel(mMaxLevels - 1);
+            globalSearchQuery.setSelection(item.getSelection());
+            globalSearchQuery.addOnLibrarySelectFinishedListener(onSongSelectFinishedListener);
+            globalSearchQuery.selectDataAsync();
         }
     }
 

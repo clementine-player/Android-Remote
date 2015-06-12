@@ -15,8 +15,11 @@ import de.qspool.clementineremote.backend.database.SongSelectItem;
 
 public class GlobalSearchQuery extends DynamicSongQuery {
 
-    public GlobalSearchQuery(Context context) {
+    public int mQueryId;
+
+    public GlobalSearchQuery(Context context, int queryId) {
         super(context);
+        mQueryId = queryId;
     }
 
     @Override
@@ -50,6 +53,11 @@ public class GlobalSearchQuery extends DynamicSongQuery {
                 break;
         }
         return selectedFields;
+    }
+
+    @Override
+    protected String getHiddenWhere() {
+        return " global_search_id = " + mQueryId;
     }
 
     @Override

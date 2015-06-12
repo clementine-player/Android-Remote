@@ -35,6 +35,7 @@ public abstract class DynamicSongQuery {
     abstract protected String getTable();
     abstract protected SQLiteDatabase getReadableDatabase();
     abstract public String getMatchesSubQuery(String match);
+    protected String getHiddenWhere() { return ""; }
 
     public DynamicSongQuery(Context context) {
         mContext = context;
@@ -70,6 +71,8 @@ public abstract class DynamicSongQuery {
         query.append(" FROM ");
         query.append(fromTable);
 
+        // Append where clause
+        String hiddenWhere = getHiddenWhere();
         if (mSelection.length > 0) {
             query.append(" WHERE ");
             for (int i = 0; i < mSelection.length; i++) {
@@ -78,6 +81,14 @@ public abstract class DynamicSongQuery {
                 if (i < mSelection.length - 1)
                     query.append(" and ");
             }
+
+            if (!hiddenWhere.isEmpty()) {
+                query.append(" and ");
+                query.append(hiddenWhere);
+            }
+        } else if (!hiddenWhere.isEmpty()) {
+            query.append(" WHERE ");
+            query.append(hiddenWhere);
         }
 
         if (isTitleLevel()) {
@@ -114,6 +125,7 @@ public abstract class DynamicSongQuery {
         query.append(" FROM ");
         query.append(getTable());
 
+        String hiddenWhere = getHiddenWhere();
         if (selection.length > 0) {
             query.append(" WHERE ");
             for (int i = 0; i < selection.length; i++) {
@@ -122,6 +134,13 @@ public abstract class DynamicSongQuery {
                 if (i < selection.length - 1)
                     query.append(" and ");
             }
+            if (!hiddenWhere.isEmpty()) {
+                query.append(" and ");
+                query.append(hiddenWhere);
+            }
+        } else if (!hiddenWhere.isEmpty()) {
+            query.append(" WHERE ");
+            query.append(hiddenWhere);
         }
 
         Cursor c = mDatabase.rawQuery(query.toString(), selection);

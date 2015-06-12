@@ -27,7 +27,7 @@ public class GlobalSearchDatabaseHelper extends SQLiteOpenHelper {
 
     private final static String DATABASE_NAME = "GlobalSearchResults.db";
 
-    private final static int DATABASE_VERSION = 1;
+    private final static int DATABASE_VERSION = 2;
 
     public GlobalSearchDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -47,6 +47,7 @@ public class GlobalSearchDatabaseHelper extends SQLiteOpenHelper {
                         + "  track INTEGER,"
                         + "  disc INTEGER,"
                         + "  pretty_year TEXT,"
+                        + "  year INTEGER, "
                         + "  genre TEXT,"
                         + "  pretty_length TEXT,"
                         + "  filename TEXT NOT NULL,"
@@ -62,6 +63,8 @@ public class GlobalSearchDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE " + TABLE_NAME);
+        onCreate(db);
     }
 
     public void deleteAll() {
