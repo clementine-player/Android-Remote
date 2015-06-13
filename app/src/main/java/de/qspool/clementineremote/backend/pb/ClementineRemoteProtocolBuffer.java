@@ -1404,6 +1404,46 @@ public final class ClementineRemoteProtocolBuffer {
      */
     com.google.protobuf.ByteString
         getUrlBytes();
+
+    // optional string art_automatic = 20;
+    /**
+     * <code>optional string art_automatic = 20;</code>
+     */
+    boolean hasArtAutomatic();
+    /**
+     * <code>optional string art_automatic = 20;</code>
+     */
+    java.lang.String getArtAutomatic();
+    /**
+     * <code>optional string art_automatic = 20;</code>
+     */
+    com.google.protobuf.ByteString
+        getArtAutomaticBytes();
+
+    // optional string art_manual = 21;
+    /**
+     * <code>optional string art_manual = 21;</code>
+     */
+    boolean hasArtManual();
+    /**
+     * <code>optional string art_manual = 21;</code>
+     */
+    java.lang.String getArtManual();
+    /**
+     * <code>optional string art_manual = 21;</code>
+     */
+    com.google.protobuf.ByteString
+        getArtManualBytes();
+
+    // optional .pb.remote.SongMetadata.Type type = 22;
+    /**
+     * <code>optional .pb.remote.SongMetadata.Type type = 22;</code>
+     */
+    boolean hasType();
+    /**
+     * <code>optional .pb.remote.SongMetadata.Type type = 22;</code>
+     */
+    de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.Type getType();
   }
   /**
    * Protobuf type {@code pb.remote.SongMetadata}
@@ -1555,6 +1595,27 @@ public final class ClementineRemoteProtocolBuffer {
               url_ = input.readBytes();
               break;
             }
+            case 162: {
+              bitField0_ |= 0x00080000;
+              artAutomatic_ = input.readBytes();
+              break;
+            }
+            case 170: {
+              bitField0_ |= 0x00100000;
+              artManual_ = input.readBytes();
+              break;
+            }
+            case 176: {
+              int rawValue = input.readEnum();
+              de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.Type value = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.Type.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(22, rawValue);
+              } else {
+                bitField0_ |= 0x00200000;
+                type_ = value;
+              }
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -1592,6 +1653,205 @@ public final class ClementineRemoteProtocolBuffer {
     @java.lang.Override
     public com.google.protobuf.Parser<SongMetadata> getParserForType() {
       return PARSER;
+    }
+
+    /**
+     * Protobuf enum {@code pb.remote.SongMetadata.Type}
+     */
+    public enum Type
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>UNKNOWN = 0;</code>
+       */
+      UNKNOWN(0, 0),
+      /**
+       * <code>ASF = 1;</code>
+       */
+      ASF(1, 1),
+      /**
+       * <code>FLAC = 2;</code>
+       */
+      FLAC(2, 2),
+      /**
+       * <code>MP4 = 3;</code>
+       */
+      MP4(3, 3),
+      /**
+       * <code>MPC = 4;</code>
+       */
+      MPC(4, 4),
+      /**
+       * <code>MPEG = 5;</code>
+       */
+      MPEG(5, 5),
+      /**
+       * <code>OGGFLAC = 6;</code>
+       */
+      OGGFLAC(6, 6),
+      /**
+       * <code>OGGSPEEX = 7;</code>
+       */
+      OGGSPEEX(7, 7),
+      /**
+       * <code>OGGVORBIS = 8;</code>
+       */
+      OGGVORBIS(8, 8),
+      /**
+       * <code>AIFF = 9;</code>
+       */
+      AIFF(9, 9),
+      /**
+       * <code>WAV = 10;</code>
+       */
+      WAV(10, 10),
+      /**
+       * <code>TRUEAUDIO = 11;</code>
+       */
+      TRUEAUDIO(11, 11),
+      /**
+       * <code>CDDA = 12;</code>
+       */
+      CDDA(12, 12),
+      /**
+       * <code>OGGOPUS = 13;</code>
+       */
+      OGGOPUS(13, 13),
+      /**
+       * <code>STREAM = 99;</code>
+       */
+      STREAM(14, 99),
+      ;
+
+      /**
+       * <code>UNKNOWN = 0;</code>
+       */
+      public static final int UNKNOWN_VALUE = 0;
+      /**
+       * <code>ASF = 1;</code>
+       */
+      public static final int ASF_VALUE = 1;
+      /**
+       * <code>FLAC = 2;</code>
+       */
+      public static final int FLAC_VALUE = 2;
+      /**
+       * <code>MP4 = 3;</code>
+       */
+      public static final int MP4_VALUE = 3;
+      /**
+       * <code>MPC = 4;</code>
+       */
+      public static final int MPC_VALUE = 4;
+      /**
+       * <code>MPEG = 5;</code>
+       */
+      public static final int MPEG_VALUE = 5;
+      /**
+       * <code>OGGFLAC = 6;</code>
+       */
+      public static final int OGGFLAC_VALUE = 6;
+      /**
+       * <code>OGGSPEEX = 7;</code>
+       */
+      public static final int OGGSPEEX_VALUE = 7;
+      /**
+       * <code>OGGVORBIS = 8;</code>
+       */
+      public static final int OGGVORBIS_VALUE = 8;
+      /**
+       * <code>AIFF = 9;</code>
+       */
+      public static final int AIFF_VALUE = 9;
+      /**
+       * <code>WAV = 10;</code>
+       */
+      public static final int WAV_VALUE = 10;
+      /**
+       * <code>TRUEAUDIO = 11;</code>
+       */
+      public static final int TRUEAUDIO_VALUE = 11;
+      /**
+       * <code>CDDA = 12;</code>
+       */
+      public static final int CDDA_VALUE = 12;
+      /**
+       * <code>OGGOPUS = 13;</code>
+       */
+      public static final int OGGOPUS_VALUE = 13;
+      /**
+       * <code>STREAM = 99;</code>
+       */
+      public static final int STREAM_VALUE = 99;
+
+
+      public final int getNumber() { return value; }
+
+      public static Type valueOf(int value) {
+        switch (value) {
+          case 0: return UNKNOWN;
+          case 1: return ASF;
+          case 2: return FLAC;
+          case 3: return MP4;
+          case 4: return MPC;
+          case 5: return MPEG;
+          case 6: return OGGFLAC;
+          case 7: return OGGSPEEX;
+          case 8: return OGGVORBIS;
+          case 9: return AIFF;
+          case 10: return WAV;
+          case 11: return TRUEAUDIO;
+          case 12: return CDDA;
+          case 13: return OGGOPUS;
+          case 99: return STREAM;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<Type>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<Type>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<Type>() {
+              public Type findValueByNumber(int number) {
+                return Type.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final Type[] VALUES = values();
+
+      public static Type valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private Type(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:pb.remote.SongMetadata.Type)
     }
 
     private int bitField0_;
@@ -2166,6 +2426,108 @@ public final class ClementineRemoteProtocolBuffer {
       }
     }
 
+    // optional string art_automatic = 20;
+    public static final int ART_AUTOMATIC_FIELD_NUMBER = 20;
+    private java.lang.Object artAutomatic_;
+    /**
+     * <code>optional string art_automatic = 20;</code>
+     */
+    public boolean hasArtAutomatic() {
+      return ((bitField0_ & 0x00080000) == 0x00080000);
+    }
+    /**
+     * <code>optional string art_automatic = 20;</code>
+     */
+    public java.lang.String getArtAutomatic() {
+      java.lang.Object ref = artAutomatic_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          artAutomatic_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string art_automatic = 20;</code>
+     */
+    public com.google.protobuf.ByteString
+        getArtAutomaticBytes() {
+      java.lang.Object ref = artAutomatic_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        artAutomatic_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // optional string art_manual = 21;
+    public static final int ART_MANUAL_FIELD_NUMBER = 21;
+    private java.lang.Object artManual_;
+    /**
+     * <code>optional string art_manual = 21;</code>
+     */
+    public boolean hasArtManual() {
+      return ((bitField0_ & 0x00100000) == 0x00100000);
+    }
+    /**
+     * <code>optional string art_manual = 21;</code>
+     */
+    public java.lang.String getArtManual() {
+      java.lang.Object ref = artManual_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          artManual_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string art_manual = 21;</code>
+     */
+    public com.google.protobuf.ByteString
+        getArtManualBytes() {
+      java.lang.Object ref = artManual_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        artManual_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // optional .pb.remote.SongMetadata.Type type = 22;
+    public static final int TYPE_FIELD_NUMBER = 22;
+    private de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.Type type_;
+    /**
+     * <code>optional .pb.remote.SongMetadata.Type type = 22;</code>
+     */
+    public boolean hasType() {
+      return ((bitField0_ & 0x00200000) == 0x00200000);
+    }
+    /**
+     * <code>optional .pb.remote.SongMetadata.Type type = 22;</code>
+     */
+    public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.Type getType() {
+      return type_;
+    }
+
     private void initFields() {
       id_ = 0;
       index_ = 0;
@@ -2186,6 +2548,9 @@ public final class ClementineRemoteProtocolBuffer {
       fileSize_ = 0;
       rating_ = 0F;
       url_ = "";
+      artAutomatic_ = "";
+      artManual_ = "";
+      type_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.Type.UNKNOWN;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -2255,6 +2620,15 @@ public final class ClementineRemoteProtocolBuffer {
       }
       if (((bitField0_ & 0x00040000) == 0x00040000)) {
         output.writeBytes(19, getUrlBytes());
+      }
+      if (((bitField0_ & 0x00080000) == 0x00080000)) {
+        output.writeBytes(20, getArtAutomaticBytes());
+      }
+      if (((bitField0_ & 0x00100000) == 0x00100000)) {
+        output.writeBytes(21, getArtManualBytes());
+      }
+      if (((bitField0_ & 0x00200000) == 0x00200000)) {
+        output.writeEnum(22, type_.getNumber());
       }
       getUnknownFields().writeTo(output);
     }
@@ -2340,6 +2714,18 @@ public final class ClementineRemoteProtocolBuffer {
       if (((bitField0_ & 0x00040000) == 0x00040000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(19, getUrlBytes());
+      }
+      if (((bitField0_ & 0x00080000) == 0x00080000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(20, getArtAutomaticBytes());
+      }
+      if (((bitField0_ & 0x00100000) == 0x00100000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(21, getArtManualBytes());
+      }
+      if (((bitField0_ & 0x00200000) == 0x00200000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(22, type_.getNumber());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2499,6 +2885,12 @@ public final class ClementineRemoteProtocolBuffer {
         bitField0_ = (bitField0_ & ~0x00020000);
         url_ = "";
         bitField0_ = (bitField0_ & ~0x00040000);
+        artAutomatic_ = "";
+        bitField0_ = (bitField0_ & ~0x00080000);
+        artManual_ = "";
+        bitField0_ = (bitField0_ & ~0x00100000);
+        type_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.Type.UNKNOWN;
+        bitField0_ = (bitField0_ & ~0x00200000);
         return this;
       }
 
@@ -2603,6 +2995,18 @@ public final class ClementineRemoteProtocolBuffer {
           to_bitField0_ |= 0x00040000;
         }
         result.url_ = url_;
+        if (((from_bitField0_ & 0x00080000) == 0x00080000)) {
+          to_bitField0_ |= 0x00080000;
+        }
+        result.artAutomatic_ = artAutomatic_;
+        if (((from_bitField0_ & 0x00100000) == 0x00100000)) {
+          to_bitField0_ |= 0x00100000;
+        }
+        result.artManual_ = artManual_;
+        if (((from_bitField0_ & 0x00200000) == 0x00200000)) {
+          to_bitField0_ |= 0x00200000;
+        }
+        result.type_ = type_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -2693,6 +3097,19 @@ public final class ClementineRemoteProtocolBuffer {
           bitField0_ |= 0x00040000;
           url_ = other.url_;
           onChanged();
+        }
+        if (other.hasArtAutomatic()) {
+          bitField0_ |= 0x00080000;
+          artAutomatic_ = other.artAutomatic_;
+          onChanged();
+        }
+        if (other.hasArtManual()) {
+          bitField0_ |= 0x00100000;
+          artManual_ = other.artManual_;
+          onChanged();
+        }
+        if (other.hasType()) {
+          setType(other.getType());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -3764,6 +4181,190 @@ public final class ClementineRemoteProtocolBuffer {
   }
   bitField0_ |= 0x00040000;
         url_ = value;
+        onChanged();
+        return this;
+      }
+
+      // optional string art_automatic = 20;
+      private java.lang.Object artAutomatic_ = "";
+      /**
+       * <code>optional string art_automatic = 20;</code>
+       */
+      public boolean hasArtAutomatic() {
+        return ((bitField0_ & 0x00080000) == 0x00080000);
+      }
+      /**
+       * <code>optional string art_automatic = 20;</code>
+       */
+      public java.lang.String getArtAutomatic() {
+        java.lang.Object ref = artAutomatic_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          artAutomatic_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string art_automatic = 20;</code>
+       */
+      public com.google.protobuf.ByteString
+          getArtAutomaticBytes() {
+        java.lang.Object ref = artAutomatic_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          artAutomatic_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string art_automatic = 20;</code>
+       */
+      public Builder setArtAutomatic(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00080000;
+        artAutomatic_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string art_automatic = 20;</code>
+       */
+      public Builder clearArtAutomatic() {
+        bitField0_ = (bitField0_ & ~0x00080000);
+        artAutomatic_ = getDefaultInstance().getArtAutomatic();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string art_automatic = 20;</code>
+       */
+      public Builder setArtAutomaticBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00080000;
+        artAutomatic_ = value;
+        onChanged();
+        return this;
+      }
+
+      // optional string art_manual = 21;
+      private java.lang.Object artManual_ = "";
+      /**
+       * <code>optional string art_manual = 21;</code>
+       */
+      public boolean hasArtManual() {
+        return ((bitField0_ & 0x00100000) == 0x00100000);
+      }
+      /**
+       * <code>optional string art_manual = 21;</code>
+       */
+      public java.lang.String getArtManual() {
+        java.lang.Object ref = artManual_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          artManual_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string art_manual = 21;</code>
+       */
+      public com.google.protobuf.ByteString
+          getArtManualBytes() {
+        java.lang.Object ref = artManual_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          artManual_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string art_manual = 21;</code>
+       */
+      public Builder setArtManual(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00100000;
+        artManual_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string art_manual = 21;</code>
+       */
+      public Builder clearArtManual() {
+        bitField0_ = (bitField0_ & ~0x00100000);
+        artManual_ = getDefaultInstance().getArtManual();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string art_manual = 21;</code>
+       */
+      public Builder setArtManualBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00100000;
+        artManual_ = value;
+        onChanged();
+        return this;
+      }
+
+      // optional .pb.remote.SongMetadata.Type type = 22;
+      private de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.Type type_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.Type.UNKNOWN;
+      /**
+       * <code>optional .pb.remote.SongMetadata.Type type = 22;</code>
+       */
+      public boolean hasType() {
+        return ((bitField0_ & 0x00200000) == 0x00200000);
+      }
+      /**
+       * <code>optional .pb.remote.SongMetadata.Type type = 22;</code>
+       */
+      public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.Type getType() {
+        return type_;
+      }
+      /**
+       * <code>optional .pb.remote.SongMetadata.Type type = 22;</code>
+       */
+      public Builder setType(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.Type value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00200000;
+        type_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .pb.remote.SongMetadata.Type type = 22;</code>
+       */
+      public Builder clearType() {
+        bitField0_ = (bitField0_ & ~0x00200000);
+        type_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.Type.UNKNOWN;
         onChanged();
         return this;
       }
@@ -12570,6 +13171,31 @@ public final class ClementineRemoteProtocolBuffer {
      * <code>optional bool enqueue = 5 [default = false];</code>
      */
     boolean getEnqueue();
+
+    // repeated .pb.remote.SongMetadata songs = 6;
+    /**
+     * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+     */
+    java.util.List<de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata> 
+        getSongsList();
+    /**
+     * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+     */
+    de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata getSongs(int index);
+    /**
+     * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+     */
+    int getSongsCount();
+    /**
+     * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+     */
+    java.util.List<? extends de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadataOrBuilder> 
+        getSongsOrBuilderList();
+    /**
+     * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+     */
+    de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadataOrBuilder getSongsOrBuilder(
+        int index);
   }
   /**
    * Protobuf type {@code pb.remote.RequestInsertUrls}
@@ -12650,6 +13276,14 @@ public final class ClementineRemoteProtocolBuffer {
               enqueue_ = input.readBool();
               break;
             }
+            case 50: {
+              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+                songs_ = new java.util.ArrayList<de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata>();
+                mutable_bitField0_ |= 0x00000020;
+              }
+              songs_.add(input.readMessage(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.PARSER, extensionRegistry));
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -12660,6 +13294,9 @@ public final class ClementineRemoteProtocolBuffer {
       } finally {
         if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
           urls_ = new com.google.protobuf.UnmodifiableLazyStringList(urls_);
+        }
+        if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+          songs_ = java.util.Collections.unmodifiableList(songs_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -12795,12 +13432,49 @@ public final class ClementineRemoteProtocolBuffer {
       return enqueue_;
     }
 
+    // repeated .pb.remote.SongMetadata songs = 6;
+    public static final int SONGS_FIELD_NUMBER = 6;
+    private java.util.List<de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata> songs_;
+    /**
+     * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+     */
+    public java.util.List<de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata> getSongsList() {
+      return songs_;
+    }
+    /**
+     * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+     */
+    public java.util.List<? extends de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadataOrBuilder> 
+        getSongsOrBuilderList() {
+      return songs_;
+    }
+    /**
+     * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+     */
+    public int getSongsCount() {
+      return songs_.size();
+    }
+    /**
+     * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+     */
+    public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata getSongs(int index) {
+      return songs_.get(index);
+    }
+    /**
+     * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+     */
+    public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadataOrBuilder getSongsOrBuilder(
+        int index) {
+      return songs_.get(index);
+    }
+
     private void initFields() {
       playlistId_ = 0;
       urls_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       position_ = -1;
       playNow_ = false;
       enqueue_ = false;
+      songs_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -12828,6 +13502,9 @@ public final class ClementineRemoteProtocolBuffer {
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeBool(5, enqueue_);
+      }
+      for (int i = 0; i < songs_.size(); i++) {
+        output.writeMessage(6, songs_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -12862,6 +13539,10 @@ public final class ClementineRemoteProtocolBuffer {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(5, enqueue_);
+      }
+      for (int i = 0; i < songs_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(6, songs_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -12971,6 +13652,7 @@ public final class ClementineRemoteProtocolBuffer {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getSongsFieldBuilder();
         }
       }
       private static Builder create() {
@@ -12989,6 +13671,12 @@ public final class ClementineRemoteProtocolBuffer {
         bitField0_ = (bitField0_ & ~0x00000008);
         enqueue_ = false;
         bitField0_ = (bitField0_ & ~0x00000010);
+        if (songsBuilder_ == null) {
+          songs_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000020);
+        } else {
+          songsBuilder_.clear();
+        }
         return this;
       }
 
@@ -13039,6 +13727,15 @@ public final class ClementineRemoteProtocolBuffer {
           to_bitField0_ |= 0x00000008;
         }
         result.enqueue_ = enqueue_;
+        if (songsBuilder_ == null) {
+          if (((bitField0_ & 0x00000020) == 0x00000020)) {
+            songs_ = java.util.Collections.unmodifiableList(songs_);
+            bitField0_ = (bitField0_ & ~0x00000020);
+          }
+          result.songs_ = songs_;
+        } else {
+          result.songs_ = songsBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -13076,6 +13773,32 @@ public final class ClementineRemoteProtocolBuffer {
         }
         if (other.hasEnqueue()) {
           setEnqueue(other.getEnqueue());
+        }
+        if (songsBuilder_ == null) {
+          if (!other.songs_.isEmpty()) {
+            if (songs_.isEmpty()) {
+              songs_ = other.songs_;
+              bitField0_ = (bitField0_ & ~0x00000020);
+            } else {
+              ensureSongsIsMutable();
+              songs_.addAll(other.songs_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.songs_.isEmpty()) {
+            if (songsBuilder_.isEmpty()) {
+              songsBuilder_.dispose();
+              songsBuilder_ = null;
+              songs_ = other.songs_;
+              bitField0_ = (bitField0_ & ~0x00000020);
+              songsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getSongsFieldBuilder() : null;
+            } else {
+              songsBuilder_.addAllMessages(other.songs_);
+            }
+          }
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -13343,6 +14066,246 @@ public final class ClementineRemoteProtocolBuffer {
         enqueue_ = false;
         onChanged();
         return this;
+      }
+
+      // repeated .pb.remote.SongMetadata songs = 6;
+      private java.util.List<de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata> songs_ =
+        java.util.Collections.emptyList();
+      private void ensureSongsIsMutable() {
+        if (!((bitField0_ & 0x00000020) == 0x00000020)) {
+          songs_ = new java.util.ArrayList<de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata>(songs_);
+          bitField0_ |= 0x00000020;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.Builder, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadataOrBuilder> songsBuilder_;
+
+      /**
+       * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+       */
+      public java.util.List<de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata> getSongsList() {
+        if (songsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(songs_);
+        } else {
+          return songsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+       */
+      public int getSongsCount() {
+        if (songsBuilder_ == null) {
+          return songs_.size();
+        } else {
+          return songsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+       */
+      public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata getSongs(int index) {
+        if (songsBuilder_ == null) {
+          return songs_.get(index);
+        } else {
+          return songsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+       */
+      public Builder setSongs(
+          int index, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata value) {
+        if (songsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureSongsIsMutable();
+          songs_.set(index, value);
+          onChanged();
+        } else {
+          songsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+       */
+      public Builder setSongs(
+          int index, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.Builder builderForValue) {
+        if (songsBuilder_ == null) {
+          ensureSongsIsMutable();
+          songs_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          songsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+       */
+      public Builder addSongs(de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata value) {
+        if (songsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureSongsIsMutable();
+          songs_.add(value);
+          onChanged();
+        } else {
+          songsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+       */
+      public Builder addSongs(
+          int index, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata value) {
+        if (songsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureSongsIsMutable();
+          songs_.add(index, value);
+          onChanged();
+        } else {
+          songsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+       */
+      public Builder addSongs(
+          de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.Builder builderForValue) {
+        if (songsBuilder_ == null) {
+          ensureSongsIsMutable();
+          songs_.add(builderForValue.build());
+          onChanged();
+        } else {
+          songsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+       */
+      public Builder addSongs(
+          int index, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.Builder builderForValue) {
+        if (songsBuilder_ == null) {
+          ensureSongsIsMutable();
+          songs_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          songsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+       */
+      public Builder addAllSongs(
+          java.lang.Iterable<? extends de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata> values) {
+        if (songsBuilder_ == null) {
+          ensureSongsIsMutable();
+          super.addAll(values, songs_);
+          onChanged();
+        } else {
+          songsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+       */
+      public Builder clearSongs() {
+        if (songsBuilder_ == null) {
+          songs_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000020);
+          onChanged();
+        } else {
+          songsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+       */
+      public Builder removeSongs(int index) {
+        if (songsBuilder_ == null) {
+          ensureSongsIsMutable();
+          songs_.remove(index);
+          onChanged();
+        } else {
+          songsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+       */
+      public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.Builder getSongsBuilder(
+          int index) {
+        return getSongsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+       */
+      public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadataOrBuilder getSongsOrBuilder(
+          int index) {
+        if (songsBuilder_ == null) {
+          return songs_.get(index);  } else {
+          return songsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+       */
+      public java.util.List<? extends de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadataOrBuilder> 
+           getSongsOrBuilderList() {
+        if (songsBuilder_ != null) {
+          return songsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(songs_);
+        }
+      }
+      /**
+       * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+       */
+      public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.Builder addSongsBuilder() {
+        return getSongsFieldBuilder().addBuilder(
+            de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+       */
+      public de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.Builder addSongsBuilder(
+          int index) {
+        return getSongsFieldBuilder().addBuilder(
+            index, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .pb.remote.SongMetadata songs = 6;</code>
+       */
+      public java.util.List<de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.Builder> 
+           getSongsBuilderList() {
+        return getSongsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.Builder, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadataOrBuilder> 
+          getSongsFieldBuilder() {
+        if (songsBuilder_ == null) {
+          songsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata.Builder, de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadataOrBuilder>(
+                  songs_,
+                  ((bitField0_ & 0x00000020) == 0x00000020),
+                  getParentForChildren(),
+                  isClean());
+          songs_ = null;
+        }
+        return songsBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:pb.remote.RequestInsertUrls)
@@ -22883,13 +23846,13 @@ public final class ClementineRemoteProtocolBuffer {
   public interface MessageOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // optional int32 version = 1 [default = 20];
+    // optional int32 version = 1 [default = 21];
     /**
-     * <code>optional int32 version = 1 [default = 20];</code>
+     * <code>optional int32 version = 1 [default = 21];</code>
      */
     boolean hasVersion();
     /**
-     * <code>optional int32 version = 1 [default = 20];</code>
+     * <code>optional int32 version = 1 [default = 21];</code>
      */
     int getVersion();
 
@@ -23861,17 +24824,17 @@ public final class ClementineRemoteProtocolBuffer {
 
     private int bitField0_;
     private int bitField1_;
-    // optional int32 version = 1 [default = 20];
+    // optional int32 version = 1 [default = 21];
     public static final int VERSION_FIELD_NUMBER = 1;
     private int version_;
     /**
-     * <code>optional int32 version = 1 [default = 20];</code>
+     * <code>optional int32 version = 1 [default = 21];</code>
      */
     public boolean hasVersion() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>optional int32 version = 1 [default = 20];</code>
+     * <code>optional int32 version = 1 [default = 21];</code>
      */
     public int getVersion() {
       return version_;
@@ -24584,7 +25547,7 @@ public final class ClementineRemoteProtocolBuffer {
     }
 
     private void initFields() {
-      version_ = 20;
+      version_ = 21;
       type_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType.UNKNOWN;
       requestConnect_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestConnect.getDefaultInstance();
       requestPlaylists_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestPlaylists.getDefaultInstance();
@@ -25021,7 +25984,7 @@ public final class ClementineRemoteProtocolBuffer {
 
       public Builder clear() {
         super.clear();
-        version_ = 20;
+        version_ = 21;
         bitField0_ = (bitField0_ & ~0x00000001);
         type_ = de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -25641,22 +26604,22 @@ public final class ClementineRemoteProtocolBuffer {
       private int bitField0_;
       private int bitField1_;
 
-      // optional int32 version = 1 [default = 20];
-      private int version_ = 20;
+      // optional int32 version = 1 [default = 21];
+      private int version_ = 21;
       /**
-       * <code>optional int32 version = 1 [default = 20];</code>
+       * <code>optional int32 version = 1 [default = 21];</code>
        */
       public boolean hasVersion() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>optional int32 version = 1 [default = 20];</code>
+       * <code>optional int32 version = 1 [default = 21];</code>
        */
       public int getVersion() {
         return version_;
       }
       /**
-       * <code>optional int32 version = 1 [default = 20];</code>
+       * <code>optional int32 version = 1 [default = 21];</code>
        */
       public Builder setVersion(int value) {
         bitField0_ |= 0x00000001;
@@ -25665,11 +26628,11 @@ public final class ClementineRemoteProtocolBuffer {
         return this;
       }
       /**
-       * <code>optional int32 version = 1 [default = 20];</code>
+       * <code>optional int32 version = 1 [default = 21];</code>
        */
       public Builder clearVersion() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        version_ = 20;
+        version_ = 21;
         onChanged();
         return this;
       }
@@ -29550,7 +30513,7 @@ public final class ClementineRemoteProtocolBuffer {
     java.lang.String[] descriptorData = {
       "\nOsrc/main/java/de/qspool/clementineremo" +
       "te/backend/pb/remotecontrolmessages.prot" +
-      "o\022\tpb.remote\"\310\002\n\014SongMetadata\022\n\n\002id\030\001 \001(" +
+      "o\022\tpb.remote\"\323\004\n\014SongMetadata\022\n\n\002id\030\001 \001(" +
       "\005\022\r\n\005index\030\002 \001(\005\022\r\n\005title\030\003 \001(\t\022\r\n\005album" +
       "\030\004 \001(\t\022\016\n\006artist\030\005 \001(\t\022\023\n\013albumartist\030\006 " +
       "\001(\t\022\r\n\005track\030\007 \001(\005\022\014\n\004disc\030\010 \001(\005\022\023\n\013pret" +
@@ -29558,153 +30521,161 @@ public final class ClementineRemoteProtocolBuffer {
       "t\030\013 \001(\005\022\025\n\rpretty_length\030\014 \001(\t\022\013\n\003art\030\r " +
       "\001(\014\022\016\n\006length\030\016 \001(\005\022\020\n\010is_local\030\017 \001(\010\022\020\n" +
       "\010filename\030\020 \001(\t\022\021\n\tfile_size\030\021 \001(\005\022\016\n\006ra",
-      "ting\030\022 \001(\002\022\013\n\003url\030\023 \001(\t\"X\n\010Playlist\022\n\n\002i" +
-      "d\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\022\n\nitem_count\030\003 \001(" +
-      "\005\022\016\n\006active\030\004 \001(\010\022\016\n\006closed\030\005 \001(\010\"*\n\020Req" +
-      "uestPlaylists\022\026\n\016include_closed\030\001 \001(\010\"\"\n" +
-      "\024RequestPlaylistSongs\022\n\n\002id\030\001 \001(\005\"<\n\021Req" +
-      "uestChangeSong\022\023\n\013playlist_id\030\001 \001(\005\022\022\n\ns" +
-      "ong_index\030\002 \001(\005\"\"\n\020RequestSetVolume\022\016\n\006v" +
-      "olume\030\001 \001(\005\"4\n\006Repeat\022*\n\013repeat_mode\030\001 \001" +
-      "(\0162\025.pb.remote.RepeatMode\"7\n\007Shuffle\022,\n\014" +
-      "shuffle_mode\030\001 \001(\0162\026.pb.remote.ShuffleMo",
-      "de\"P\n\026ResponseClementineInfo\022\017\n\007version\030" +
-      "\001 \001(\t\022%\n\005state\030\002 \001(\0162\026.pb.remote.EngineS" +
-      "tate\"I\n\027ResponseCurrentMetadata\022.\n\rsong_" +
-      "metadata\030\001 \001(\0132\027.pb.remote.SongMetadata\"" +
-      ":\n\021ResponsePlaylists\022%\n\010playlist\030\001 \003(\0132\023" +
-      ".pb.remote.Playlist\"p\n\025ResponsePlaylistS" +
-      "ongs\022/\n\022requested_playlist\030\001 \001(\0132\023.pb.re" +
-      "mote.Playlist\022&\n\005songs\030\002 \003(\0132\027.pb.remote" +
-      ".SongMetadata\"C\n\032ResponseEngineStateChan" +
-      "ged\022%\n\005state\030\001 \001(\0162\026.pb.remote.EngineSta",
-      "te\"/\n\033ResponseUpdateTrackPosition\022\020\n\010pos" +
-      "ition\030\001 \001(\005\"T\n\016RequestConnect\022\021\n\tauth_co" +
-      "de\030\001 \001(\005\022\033\n\023send_playlist_songs\030\002 \001(\010\022\022\n" +
-      "\ndownloader\030\003 \001(\010\"L\n\022ResponseDisconnect\022" +
-      "6\n\021reason_disconnect\030\001 \001(\0162\033.pb.remote.R" +
-      "easonDisconnect\"#\n\025ResponseActiveChanged" +
-      "\022\n\n\002id\030\001 \001(\005\"+\n\027RequestSetTrackPosition\022" +
-      "\020\n\010position\030\001 \001(\005\"}\n\021RequestInsertUrls\022\023" +
-      "\n\013playlist_id\030\001 \001(\005\022\014\n\004urls\030\002 \003(\t\022\024\n\010pos" +
-      "ition\030\003 \001(\005:\002-1\022\027\n\010play_now\030\004 \001(\010:\005false",
-      "\022\026\n\007enqueue\030\005 \001(\010:\005false\"8\n\022RequestRemov" +
-      "eSongs\022\023\n\013playlist_id\030\001 \001(\005\022\r\n\005songs\030\002 \003" +
-      "(\005\"*\n\023RequestOpenPlaylist\022\023\n\013playlist_id" +
-      "\030\001 \001(\005\"+\n\024RequestClosePlaylist\022\023\n\013playli" +
-      "st_id\030\001 \001(\005\"2\n\016ResponseLyrics\022 \n\006lyrics\030" +
-      "\001 \003(\0132\020.pb.remote.Lyric\"3\n\005Lyric\022\n\n\002id\030\001" +
-      " \001(\t\022\r\n\005title\030\002 \001(\t\022\017\n\007content\030\003 \001(\t\"i\n\024" +
-      "RequestDownloadSongs\022.\n\rdownload_item\030\001 " +
-      "\001(\0162\027.pb.remote.DownloadItem\022\023\n\013playlist" +
-      "_id\030\002 \001(\005\022\014\n\004urls\030\003 \003(\t\"\312\001\n\025ResponseSong",
-      "FileChunk\022\024\n\014chunk_number\030\001 \001(\005\022\023\n\013chunk" +
-      "_count\030\002 \001(\005\022\023\n\013file_number\030\003 \001(\005\022\022\n\nfil" +
-      "e_count\030\004 \001(\005\022.\n\rsong_metadata\030\006 \001(\0132\027.p" +
-      "b.remote.SongMetadata\022\014\n\004data\030\007 \001(\014\022\014\n\004s" +
-      "ize\030\010 \001(\005\022\021\n\tfile_hash\030\t \001(\014\"p\n\024Response" +
-      "LibraryChunk\022\024\n\014chunk_number\030\001 \001(\005\022\023\n\013ch" +
-      "unk_count\030\002 \001(\005\022\014\n\004data\030\003 \001(\014\022\014\n\004size\030\004 " +
-      "\001(\005\022\021\n\tfile_hash\030\005 \001(\014\"%\n\021ResponseSongOf" +
-      "fer\022\020\n\010accepted\030\001 \001(\010\"!\n\017RequestRateSong" +
-      "\022\016\n\006rating\030\001 \001(\002\"C\n\031ResponseDownloadTota",
-      "lSize\022\022\n\ntotal_size\030\001 \001(\005\022\022\n\nfile_count\030" +
-      "\002 \001(\005\"$\n\023RequestGlobalSearch\022\r\n\005query\030\001 " +
-      "\001(\t\"\230\001\n\024ResponseGlobalSearch\022\n\n\002id\030\001 \001(\005" +
-      "\022\r\n\005query\030\002 \001(\t\022\027\n\017search_provider\030\003 \001(\t" +
-      "\022.\n\rsong_metadata\030\004 \003(\0132\027.pb.remote.Song" +
-      "Metadata\022\034\n\024search_provider_icon\030\005 \001(\014\"<" +
-      "\n\030ResponseTranscoderStatus\022\021\n\tprocessed\030" +
-      "\001 \001(\005\022\r\n\005total\030\002 \001(\005\"f\n\032ResponseGlobalSe" +
-      "archStatus\022\n\n\002id\030\001 \001(\005\022\r\n\005query\030\002 \001(\t\022-\n" +
-      "\006status\030\003 \001(\0162\035.pb.remote.GlobalSearchSt",
-      "atus\"\347\017\n\007Message\022\023\n\007version\030\001 \001(\005:\00220\022)\n" +
-      "\004type\030\002 \001(\0162\022.pb.remote.MsgType:\007UNKNOWN" +
-      "\0222\n\017request_connect\030\025 \001(\0132\031.pb.remote.Re" +
-      "questConnect\0226\n\021request_playlists\030\033 \001(\0132" +
-      "\033.pb.remote.RequestPlaylists\022?\n\026request_" +
-      "playlist_songs\030\n \001(\0132\037.pb.remote.Request" +
-      "PlaylistSongs\0229\n\023request_change_song\030\013 \001" +
-      "(\0132\034.pb.remote.RequestChangeSong\0227\n\022requ" +
-      "est_set_volume\030\014 \001(\0132\033.pb.remote.Request" +
-      "SetVolume\022F\n\032request_set_track_position\030",
-      "\027 \001(\0132\".pb.remote.RequestSetTrackPositio" +
-      "n\0229\n\023request_insert_urls\030\031 \001(\0132\034.pb.remo" +
-      "te.RequestInsertUrls\022;\n\024request_remove_s" +
-      "ongs\030\032 \001(\0132\035.pb.remote.RequestRemoveSong" +
-      "s\022=\n\025request_open_playlist\030\034 \001(\0132\036.pb.re" +
-      "mote.RequestOpenPlaylist\022?\n\026request_clos" +
-      "e_playlist\030\035 \001(\0132\037.pb.remote.RequestClos" +
-      "ePlaylist\022?\n\026request_download_songs\030\037 \001(" +
-      "\0132\037.pb.remote.RequestDownloadSongs\0225\n\021re" +
-      "quest_rate_song\030# \001(\0132\032.pb.remote.Reques",
-      "tRateSong\022=\n\025request_global_search\030% \001(\013" +
-      "2\036.pb.remote.RequestGlobalSearch\022!\n\006repe" +
-      "at\030\r \001(\0132\021.pb.remote.Repeat\022#\n\007shuffle\030\016" +
-      " \001(\0132\022.pb.remote.Shuffle\022C\n\030response_cle" +
-      "mentine_info\030\017 \001(\0132!.pb.remote.ResponseC" +
-      "lementineInfo\022E\n\031response_current_metada" +
-      "ta\030\020 \001(\0132\".pb.remote.ResponseCurrentMeta" +
-      "data\0228\n\022response_playlists\030\021 \001(\0132\034.pb.re" +
-      "mote.ResponsePlaylists\022A\n\027response_playl" +
-      "ist_songs\030\022 \001(\0132 .pb.remote.ResponsePlay",
-      "listSongs\022L\n\035response_engine_state_chang" +
-      "ed\030\023 \001(\0132%.pb.remote.ResponseEngineState" +
-      "Changed\022N\n\036response_update_track_positio" +
-      "n\030\024 \001(\0132&.pb.remote.ResponseUpdateTrackP" +
-      "osition\022:\n\023response_disconnect\030\026 \001(\0132\035.p" +
-      "b.remote.ResponseDisconnect\022A\n\027response_" +
-      "active_changed\030\030 \001(\0132 .pb.remote.Respons" +
-      "eActiveChanged\0222\n\017response_lyrics\030\036 \001(\0132" +
-      "\031.pb.remote.ResponseLyrics\022B\n\030response_s" +
-      "ong_file_chunk\030  \001(\0132 .pb.remote.Respons",
-      "eSongFileChunk\0229\n\023response_song_offer\030! " +
-      "\001(\0132\034.pb.remote.ResponseSongOffer\022?\n\026res" +
-      "ponse_library_chunk\030\" \001(\0132\037.pb.remote.Re" +
-      "sponseLibraryChunk\022J\n\034response_download_" +
-      "total_size\030$ \001(\0132$.pb.remote.ResponseDow" +
-      "nloadTotalSize\022?\n\026response_global_search" +
-      "\030& \001(\0132\037.pb.remote.ResponseGlobalSearch\022" +
-      "G\n\032response_transcoder_status\030\' \001(\0132#.pb" +
-      ".remote.ResponseTranscoderStatus\022L\n\035resp" +
-      "onse_global_search_status\030( \001(\0132%.pb.rem",
-      "ote.ResponseGlobalSearchStatus*\346\006\n\007MsgTy" +
-      "pe\022\013\n\007UNKNOWN\020\000\022\013\n\007CONNECT\020\001\022\025\n\021REQUEST_" +
-      "PLAYLISTS\020\003\022\032\n\026REQUEST_PLAYLIST_SONGS\020\004\022" +
-      "\017\n\013CHANGE_SONG\020\005\022\016\n\nSET_VOLUME\020\006\022\026\n\022SET_" +
-      "TRACK_POSITION\020\007\022\017\n\013INSERT_URLS\020\010\022\020\n\014REM" +
-      "OVE_SONGS\020\t\022\021\n\rOPEN_PLAYLIST\020\n\022\022\n\016CLOSE_" +
-      "PLAYLIST\020\013\022\016\n\nGET_LYRICS\020\016\022\022\n\016DOWNLOAD_S" +
-      "ONGS\020\017\022\027\n\023SONG_OFFER_RESPONSE\020\020\022\010\n\004LOVE\020" +
-      "\014\022\007\n\003BAN\020\r\022\016\n\nSTOP_AFTER\020\021\022\017\n\013GET_LIBRAR" +
-      "Y\020\022\022\r\n\tRATE_SONG\020\023\022\021\n\rGLOBAL_SEARCH\020d\022\016\n",
-      "\nDISCONNECT\020\002\022\010\n\004PLAY\020\024\022\r\n\tPLAYPAUSE\020\025\022\t" +
-      "\n\005PAUSE\020\026\022\010\n\004STOP\020\027\022\010\n\004NEXT\020\030\022\014\n\010PREVIOU" +
-      "S\020\031\022\024\n\020SHUFFLE_PLAYLIST\020\032\022\n\n\006REPEAT\020\033\022\013\n" +
-      "\007SHUFFLE\020\034\022\010\n\004INFO\020(\022\024\n\020CURRENT_METAINFO" +
-      "\020)\022\r\n\tPLAYLISTS\020*\022\022\n\016PLAYLIST_SONGS\020+\022\030\n" +
-      "\024ENGINE_STATE_CHANGED\020,\022\016\n\nKEEP_ALIVE\020-\022" +
-      "\031\n\025UPDATE_TRACK_POSITION\020.\022\033\n\027ACTIVE_PLA" +
-      "YLIST_CHANGED\020/\022\034\n\030FIRST_DATA_SENT_COMPL" +
-      "ETE\0200\022\n\n\006LYRICS\0201\022\023\n\017SONG_FILE_CHUNK\0202\022\030" +
-      "\n\024DOWNLOAD_QUEUE_EMPTY\0203\022\021\n\rLIBRARY_CHUN",
-      "K\0204\022\027\n\023DOWNLOAD_TOTAL_SIZE\0205\022\030\n\024GLOBAL_S" +
-      "EARCH_RESULT\0206\022\025\n\021TRANSCODING_FILES\0207\022\030\n" +
-      "\024GLOBAL_SEARCH_STATUS\0208*;\n\013EngineState\022\t" +
-      "\n\005Empty\020\000\022\010\n\004Idle\020\001\022\013\n\007Playing\020\002\022\n\n\006Paus" +
-      "ed\020\003*U\n\nRepeatMode\022\016\n\nRepeat_Off\020\000\022\020\n\014Re" +
-      "peat_Track\020\001\022\020\n\014Repeat_Album\020\002\022\023\n\017Repeat" +
-      "_Playlist\020\003*\\\n\013ShuffleMode\022\017\n\013Shuffle_Of" +
-      "f\020\000\022\017\n\013Shuffle_All\020\001\022\027\n\023Shuffle_InsideAl" +
-      "bum\020\002\022\022\n\016Shuffle_Albums\020\003*k\n\020ReasonDisco" +
-      "nnect\022\023\n\017Server_Shutdown\020\001\022\023\n\017Wrong_Auth",
-      "_Code\020\002\022\025\n\021Not_Authenticated\020\003\022\026\n\022Downlo" +
-      "ad_Forbidden\020\004*G\n\014DownloadItem\022\017\n\013Curren" +
-      "tItem\020\001\022\r\n\tItemAlbum\020\002\022\r\n\tAPlaylist\020\003\022\010\n" +
-      "\004Urls\020\004*G\n\022GlobalSearchStatus\022\027\n\023GlobalS" +
-      "earchStarted\020\001\022\030\n\024GlobalSearchFinished\020\002" +
-      "BG\n%de.qspool.clementineremote.backend.p" +
-      "bB\036ClementineRemoteProtocolBuffer"
+      "ting\030\022 \001(\002\022\013\n\003url\030\023 \001(\t\022\025\n\rart_automatic" +
+      "\030\024 \001(\t\022\022\n\nart_manual\030\025 \001(\t\022*\n\004type\030\026 \001(\016" +
+      "2\034.pb.remote.SongMetadata.Type\"\261\001\n\004Type\022" +
+      "\013\n\007UNKNOWN\020\000\022\007\n\003ASF\020\001\022\010\n\004FLAC\020\002\022\007\n\003MP4\020\003" +
+      "\022\007\n\003MPC\020\004\022\010\n\004MPEG\020\005\022\013\n\007OGGFLAC\020\006\022\014\n\010OGGS" +
+      "PEEX\020\007\022\r\n\tOGGVORBIS\020\010\022\010\n\004AIFF\020\t\022\007\n\003WAV\020\n" +
+      "\022\r\n\tTRUEAUDIO\020\013\022\010\n\004CDDA\020\014\022\013\n\007OGGOPUS\020\r\022\n" +
+      "\n\006STREAM\020c\"X\n\010Playlist\022\n\n\002id\030\001 \001(\005\022\014\n\004na" +
+      "me\030\002 \001(\t\022\022\n\nitem_count\030\003 \001(\005\022\016\n\006active\030\004" +
+      " \001(\010\022\016\n\006closed\030\005 \001(\010\"*\n\020RequestPlaylists",
+      "\022\026\n\016include_closed\030\001 \001(\010\"\"\n\024RequestPlayl" +
+      "istSongs\022\n\n\002id\030\001 \001(\005\"<\n\021RequestChangeSon" +
+      "g\022\023\n\013playlist_id\030\001 \001(\005\022\022\n\nsong_index\030\002 \001" +
+      "(\005\"\"\n\020RequestSetVolume\022\016\n\006volume\030\001 \001(\005\"4" +
+      "\n\006Repeat\022*\n\013repeat_mode\030\001 \001(\0162\025.pb.remot" +
+      "e.RepeatMode\"7\n\007Shuffle\022,\n\014shuffle_mode\030" +
+      "\001 \001(\0162\026.pb.remote.ShuffleMode\"P\n\026Respons" +
+      "eClementineInfo\022\017\n\007version\030\001 \001(\t\022%\n\005stat" +
+      "e\030\002 \001(\0162\026.pb.remote.EngineState\"I\n\027Respo" +
+      "nseCurrentMetadata\022.\n\rsong_metadata\030\001 \001(",
+      "\0132\027.pb.remote.SongMetadata\":\n\021ResponsePl" +
+      "aylists\022%\n\010playlist\030\001 \003(\0132\023.pb.remote.Pl" +
+      "aylist\"p\n\025ResponsePlaylistSongs\022/\n\022reque" +
+      "sted_playlist\030\001 \001(\0132\023.pb.remote.Playlist" +
+      "\022&\n\005songs\030\002 \003(\0132\027.pb.remote.SongMetadata" +
+      "\"C\n\032ResponseEngineStateChanged\022%\n\005state\030" +
+      "\001 \001(\0162\026.pb.remote.EngineState\"/\n\033Respons" +
+      "eUpdateTrackPosition\022\020\n\010position\030\001 \001(\005\"T" +
+      "\n\016RequestConnect\022\021\n\tauth_code\030\001 \001(\005\022\033\n\023s" +
+      "end_playlist_songs\030\002 \001(\010\022\022\n\ndownloader\030\003",
+      " \001(\010\"L\n\022ResponseDisconnect\0226\n\021reason_dis" +
+      "connect\030\001 \001(\0162\033.pb.remote.ReasonDisconne" +
+      "ct\"#\n\025ResponseActiveChanged\022\n\n\002id\030\001 \001(\005\"" +
+      "+\n\027RequestSetTrackPosition\022\020\n\010position\030\001" +
+      " \001(\005\"\245\001\n\021RequestInsertUrls\022\023\n\013playlist_i" +
+      "d\030\001 \001(\005\022\014\n\004urls\030\002 \003(\t\022\024\n\010position\030\003 \001(\005:" +
+      "\002-1\022\027\n\010play_now\030\004 \001(\010:\005false\022\026\n\007enqueue\030" +
+      "\005 \001(\010:\005false\022&\n\005songs\030\006 \003(\0132\027.pb.remote." +
+      "SongMetadata\"8\n\022RequestRemoveSongs\022\023\n\013pl" +
+      "aylist_id\030\001 \001(\005\022\r\n\005songs\030\002 \003(\005\"*\n\023Reques",
+      "tOpenPlaylist\022\023\n\013playlist_id\030\001 \001(\005\"+\n\024Re" +
+      "questClosePlaylist\022\023\n\013playlist_id\030\001 \001(\005\"" +
+      "2\n\016ResponseLyrics\022 \n\006lyrics\030\001 \003(\0132\020.pb.r" +
+      "emote.Lyric\"3\n\005Lyric\022\n\n\002id\030\001 \001(\t\022\r\n\005titl" +
+      "e\030\002 \001(\t\022\017\n\007content\030\003 \001(\t\"i\n\024RequestDownl" +
+      "oadSongs\022.\n\rdownload_item\030\001 \001(\0162\027.pb.rem" +
+      "ote.DownloadItem\022\023\n\013playlist_id\030\002 \001(\005\022\014\n" +
+      "\004urls\030\003 \003(\t\"\312\001\n\025ResponseSongFileChunk\022\024\n" +
+      "\014chunk_number\030\001 \001(\005\022\023\n\013chunk_count\030\002 \001(\005" +
+      "\022\023\n\013file_number\030\003 \001(\005\022\022\n\nfile_count\030\004 \001(",
+      "\005\022.\n\rsong_metadata\030\006 \001(\0132\027.pb.remote.Son" +
+      "gMetadata\022\014\n\004data\030\007 \001(\014\022\014\n\004size\030\010 \001(\005\022\021\n" +
+      "\tfile_hash\030\t \001(\014\"p\n\024ResponseLibraryChunk" +
+      "\022\024\n\014chunk_number\030\001 \001(\005\022\023\n\013chunk_count\030\002 " +
+      "\001(\005\022\014\n\004data\030\003 \001(\014\022\014\n\004size\030\004 \001(\005\022\021\n\tfile_" +
+      "hash\030\005 \001(\014\"%\n\021ResponseSongOffer\022\020\n\010accep" +
+      "ted\030\001 \001(\010\"!\n\017RequestRateSong\022\016\n\006rating\030\001" +
+      " \001(\002\"C\n\031ResponseDownloadTotalSize\022\022\n\ntot" +
+      "al_size\030\001 \001(\005\022\022\n\nfile_count\030\002 \001(\005\"$\n\023Req" +
+      "uestGlobalSearch\022\r\n\005query\030\001 \001(\t\"\230\001\n\024Resp",
+      "onseGlobalSearch\022\n\n\002id\030\001 \001(\005\022\r\n\005query\030\002 " +
+      "\001(\t\022\027\n\017search_provider\030\003 \001(\t\022.\n\rsong_met" +
+      "adata\030\004 \003(\0132\027.pb.remote.SongMetadata\022\034\n\024" +
+      "search_provider_icon\030\005 \001(\014\"<\n\030ResponseTr" +
+      "anscoderStatus\022\021\n\tprocessed\030\001 \001(\005\022\r\n\005tot" +
+      "al\030\002 \001(\005\"f\n\032ResponseGlobalSearchStatus\022\n" +
+      "\n\002id\030\001 \001(\005\022\r\n\005query\030\002 \001(\t\022-\n\006status\030\003 \001(" +
+      "\0162\035.pb.remote.GlobalSearchStatus\"\347\017\n\007Mes" +
+      "sage\022\023\n\007version\030\001 \001(\005:\00221\022)\n\004type\030\002 \001(\0162" +
+      "\022.pb.remote.MsgType:\007UNKNOWN\0222\n\017request_",
+      "connect\030\025 \001(\0132\031.pb.remote.RequestConnect" +
+      "\0226\n\021request_playlists\030\033 \001(\0132\033.pb.remote." +
+      "RequestPlaylists\022?\n\026request_playlist_son" +
+      "gs\030\n \001(\0132\037.pb.remote.RequestPlaylistSong" +
+      "s\0229\n\023request_change_song\030\013 \001(\0132\034.pb.remo" +
+      "te.RequestChangeSong\0227\n\022request_set_volu" +
+      "me\030\014 \001(\0132\033.pb.remote.RequestSetVolume\022F\n" +
+      "\032request_set_track_position\030\027 \001(\0132\".pb.r" +
+      "emote.RequestSetTrackPosition\0229\n\023request" +
+      "_insert_urls\030\031 \001(\0132\034.pb.remote.RequestIn",
+      "sertUrls\022;\n\024request_remove_songs\030\032 \001(\0132\035" +
+      ".pb.remote.RequestRemoveSongs\022=\n\025request" +
+      "_open_playlist\030\034 \001(\0132\036.pb.remote.Request" +
+      "OpenPlaylist\022?\n\026request_close_playlist\030\035" +
+      " \001(\0132\037.pb.remote.RequestClosePlaylist\022?\n" +
+      "\026request_download_songs\030\037 \001(\0132\037.pb.remot" +
+      "e.RequestDownloadSongs\0225\n\021request_rate_s" +
+      "ong\030# \001(\0132\032.pb.remote.RequestRateSong\022=\n" +
+      "\025request_global_search\030% \001(\0132\036.pb.remote" +
+      ".RequestGlobalSearch\022!\n\006repeat\030\r \001(\0132\021.p",
+      "b.remote.Repeat\022#\n\007shuffle\030\016 \001(\0132\022.pb.re" +
+      "mote.Shuffle\022C\n\030response_clementine_info" +
+      "\030\017 \001(\0132!.pb.remote.ResponseClementineInf" +
+      "o\022E\n\031response_current_metadata\030\020 \001(\0132\".p" +
+      "b.remote.ResponseCurrentMetadata\0228\n\022resp" +
+      "onse_playlists\030\021 \001(\0132\034.pb.remote.Respons" +
+      "ePlaylists\022A\n\027response_playlist_songs\030\022 " +
+      "\001(\0132 .pb.remote.ResponsePlaylistSongs\022L\n" +
+      "\035response_engine_state_changed\030\023 \001(\0132%.p" +
+      "b.remote.ResponseEngineStateChanged\022N\n\036r",
+      "esponse_update_track_position\030\024 \001(\0132&.pb" +
+      ".remote.ResponseUpdateTrackPosition\022:\n\023r" +
+      "esponse_disconnect\030\026 \001(\0132\035.pb.remote.Res" +
+      "ponseDisconnect\022A\n\027response_active_chang" +
+      "ed\030\030 \001(\0132 .pb.remote.ResponseActiveChang" +
+      "ed\0222\n\017response_lyrics\030\036 \001(\0132\031.pb.remote." +
+      "ResponseLyrics\022B\n\030response_song_file_chu" +
+      "nk\030  \001(\0132 .pb.remote.ResponseSongFileChu" +
+      "nk\0229\n\023response_song_offer\030! \001(\0132\034.pb.rem" +
+      "ote.ResponseSongOffer\022?\n\026response_librar",
+      "y_chunk\030\" \001(\0132\037.pb.remote.ResponseLibrar" +
+      "yChunk\022J\n\034response_download_total_size\030$" +
+      " \001(\0132$.pb.remote.ResponseDownloadTotalSi" +
+      "ze\022?\n\026response_global_search\030& \001(\0132\037.pb." +
+      "remote.ResponseGlobalSearch\022G\n\032response_" +
+      "transcoder_status\030\' \001(\0132#.pb.remote.Resp" +
+      "onseTranscoderStatus\022L\n\035response_global_" +
+      "search_status\030( \001(\0132%.pb.remote.Response" +
+      "GlobalSearchStatus*\346\006\n\007MsgType\022\013\n\007UNKNOW" +
+      "N\020\000\022\013\n\007CONNECT\020\001\022\025\n\021REQUEST_PLAYLISTS\020\003\022",
+      "\032\n\026REQUEST_PLAYLIST_SONGS\020\004\022\017\n\013CHANGE_SO" +
+      "NG\020\005\022\016\n\nSET_VOLUME\020\006\022\026\n\022SET_TRACK_POSITI" +
+      "ON\020\007\022\017\n\013INSERT_URLS\020\010\022\020\n\014REMOVE_SONGS\020\t\022" +
+      "\021\n\rOPEN_PLAYLIST\020\n\022\022\n\016CLOSE_PLAYLIST\020\013\022\016" +
+      "\n\nGET_LYRICS\020\016\022\022\n\016DOWNLOAD_SONGS\020\017\022\027\n\023SO" +
+      "NG_OFFER_RESPONSE\020\020\022\010\n\004LOVE\020\014\022\007\n\003BAN\020\r\022\016" +
+      "\n\nSTOP_AFTER\020\021\022\017\n\013GET_LIBRARY\020\022\022\r\n\tRATE_" +
+      "SONG\020\023\022\021\n\rGLOBAL_SEARCH\020d\022\016\n\nDISCONNECT\020" +
+      "\002\022\010\n\004PLAY\020\024\022\r\n\tPLAYPAUSE\020\025\022\t\n\005PAUSE\020\026\022\010\n" +
+      "\004STOP\020\027\022\010\n\004NEXT\020\030\022\014\n\010PREVIOUS\020\031\022\024\n\020SHUFF",
+      "LE_PLAYLIST\020\032\022\n\n\006REPEAT\020\033\022\013\n\007SHUFFLE\020\034\022\010" +
+      "\n\004INFO\020(\022\024\n\020CURRENT_METAINFO\020)\022\r\n\tPLAYLI" +
+      "STS\020*\022\022\n\016PLAYLIST_SONGS\020+\022\030\n\024ENGINE_STAT" +
+      "E_CHANGED\020,\022\016\n\nKEEP_ALIVE\020-\022\031\n\025UPDATE_TR" +
+      "ACK_POSITION\020.\022\033\n\027ACTIVE_PLAYLIST_CHANGE" +
+      "D\020/\022\034\n\030FIRST_DATA_SENT_COMPLETE\0200\022\n\n\006LYR" +
+      "ICS\0201\022\023\n\017SONG_FILE_CHUNK\0202\022\030\n\024DOWNLOAD_Q" +
+      "UEUE_EMPTY\0203\022\021\n\rLIBRARY_CHUNK\0204\022\027\n\023DOWNL" +
+      "OAD_TOTAL_SIZE\0205\022\030\n\024GLOBAL_SEARCH_RESULT" +
+      "\0206\022\025\n\021TRANSCODING_FILES\0207\022\030\n\024GLOBAL_SEAR",
+      "CH_STATUS\0208*;\n\013EngineState\022\t\n\005Empty\020\000\022\010\n" +
+      "\004Idle\020\001\022\013\n\007Playing\020\002\022\n\n\006Paused\020\003*U\n\nRepe" +
+      "atMode\022\016\n\nRepeat_Off\020\000\022\020\n\014Repeat_Track\020\001" +
+      "\022\020\n\014Repeat_Album\020\002\022\023\n\017Repeat_Playlist\020\003*" +
+      "\\\n\013ShuffleMode\022\017\n\013Shuffle_Off\020\000\022\017\n\013Shuff" +
+      "le_All\020\001\022\027\n\023Shuffle_InsideAlbum\020\002\022\022\n\016Shu" +
+      "ffle_Albums\020\003*k\n\020ReasonDisconnect\022\023\n\017Ser" +
+      "ver_Shutdown\020\001\022\023\n\017Wrong_Auth_Code\020\002\022\025\n\021N" +
+      "ot_Authenticated\020\003\022\026\n\022Download_Forbidden" +
+      "\020\004*G\n\014DownloadItem\022\017\n\013CurrentItem\020\001\022\r\n\tI",
+      "temAlbum\020\002\022\r\n\tAPlaylist\020\003\022\010\n\004Urls\020\004*G\n\022G" +
+      "lobalSearchStatus\022\027\n\023GlobalSearchStarted" +
+      "\020\001\022\030\n\024GlobalSearchFinished\020\002BG\n%de.qspoo" +
+      "l.clementineremote.backend.pbB\036Clementin" +
+      "eRemoteProtocolBuffer"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -29716,7 +30687,7 @@ public final class ClementineRemoteProtocolBuffer {
           internal_static_pb_remote_SongMetadata_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pb_remote_SongMetadata_descriptor,
-              new java.lang.String[] { "Id", "Index", "Title", "Album", "Artist", "Albumartist", "Track", "Disc", "PrettyYear", "Genre", "Playcount", "PrettyLength", "Art", "Length", "IsLocal", "Filename", "FileSize", "Rating", "Url", });
+              new java.lang.String[] { "Id", "Index", "Title", "Album", "Artist", "Albumartist", "Track", "Disc", "PrettyYear", "Genre", "Playcount", "PrettyLength", "Art", "Length", "IsLocal", "Filename", "FileSize", "Rating", "Url", "ArtAutomatic", "ArtManual", "Type", });
           internal_static_pb_remote_Playlist_descriptor =
             getDescriptor().getMessageTypes().get(1);
           internal_static_pb_remote_Playlist_fieldAccessorTable = new
@@ -29824,7 +30795,7 @@ public final class ClementineRemoteProtocolBuffer {
           internal_static_pb_remote_RequestInsertUrls_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pb_remote_RequestInsertUrls_descriptor,
-              new java.lang.String[] { "PlaylistId", "Urls", "Position", "PlayNow", "Enqueue", });
+              new java.lang.String[] { "PlaylistId", "Urls", "Position", "PlayNow", "Enqueue", "Songs", });
           internal_static_pb_remote_RequestRemoveSongs_descriptor =
             getDescriptor().getMessageTypes().get(19);
           internal_static_pb_remote_RequestRemoveSongs_fieldAccessorTable = new

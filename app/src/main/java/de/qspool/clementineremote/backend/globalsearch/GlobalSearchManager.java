@@ -136,4 +136,8 @@ public class GlobalSearchManager {
     public GlobalSearchProviderIconStore getGlobalSearchProviderIconStore() {
         return mGlobalSearchProviderIconStore;
     }
+
+    public GlobalSearchRequest getRequest() {
+        return mRequest;
+    }
 }

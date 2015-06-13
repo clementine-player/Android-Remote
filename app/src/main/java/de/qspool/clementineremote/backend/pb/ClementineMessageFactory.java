@@ -256,6 +256,17 @@ public class ClementineMessageFactory {
         return new ClementineMessage(msg);
     }
 
+    public static ClementineMessage buildInsertSongs(int playistId,
+            LinkedList<ClementineRemoteProtocolBuffer.SongMetadata> songs) {
+        Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.INSERT_URLS);
+
+        RequestInsertUrls.Builder insertSongs = msg.getRequestInsertUrlsBuilder();
+        insertSongs.setPlaylistId(playistId);
+        insertSongs.addAllSongs(songs);
+
+        return new ClementineMessage(msg);
+    }
+
     public static ClementineMessage buildRemoveSongFromPlaylist(int playlistId, MySong song) {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.REMOVE_SONGS);
 

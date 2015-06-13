@@ -20,6 +20,8 @@ package de.qspool.clementineremote.backend.globalsearch;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.HashMap;
+
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer;
 
 public class GlobalSearchRequest {
@@ -28,6 +30,8 @@ public class GlobalSearchRequest {
     private GlobalSearchDatabaseHelper mGlobalSearchDatabaseHelper;
 
     private ClementineRemoteProtocolBuffer.GlobalSearchStatus mStatus;
+
+    private HashMap<String, ClementineRemoteProtocolBuffer.SongMetadata> mUrlMetadata = new HashMap<>();
 
     public GlobalSearchRequest(int id, GlobalSearchDatabaseHelper db) {
         mId = id;
@@ -81,10 +85,16 @@ public class GlobalSearchRequest {
             contentValues.put("rating", song.getRating());
 
             db.insert(GlobalSearchDatabaseHelper.TABLE_NAME, null, contentValues);
+
+            mUrlMetadata.put(song.getUrl(), song);
         }
 
         db.setTransactionSuccessful();
         db.endTransaction();
         db.close();
+    }
+
+    public ClementineRemoteProtocolBuffer.SongMetadata getSongFromUrl(String url) {
+        return mUrlMetadata.get(url);
     }
 }

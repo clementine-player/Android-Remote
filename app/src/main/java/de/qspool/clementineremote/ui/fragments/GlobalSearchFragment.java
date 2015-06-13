@@ -29,7 +29,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -118,10 +117,10 @@ public class GlobalSearchFragment extends Fragment
 
                 if (item.getLevel() == mMaxLevels-1) {
                     Message msg = Message.obtain();
-                    LinkedList<String> urls = new LinkedList<>();
-                    urls.add(item.getUrl());
-                    msg.obj = ClementineMessageFactory.buildInsertUrl(
-                            App.Clementine.getPlaylistManager().getActivePlaylistId(), urls);
+                    LinkedList<ClementineRemoteProtocolBuffer.SongMetadata> songs = new LinkedList<>();
+                    songs.add(GlobalSearchManager.getInstance().getRequest().getSongFromUrl(item.getUrl()));
+                    msg.obj = ClementineMessageFactory.buildInsertSongs(
+                            App.Clementine.getPlaylistManager().getActivePlaylistId(), songs);
                     App.ClementineConnection.mHandler.sendMessage(msg);
 
                     Toast.makeText(getActivity(),
@@ -389,19 +388,18 @@ public class GlobalSearchFragment extends Fragment
 
     private void addSongsToPlaylist(LinkedList<SongSelectItem> l) {
         Message msg = Message.obtain();
-        LinkedList<String> urls = new LinkedList<>();
+        LinkedList<ClementineRemoteProtocolBuffer.SongMetadata> songs = new LinkedList<>();
         for (SongSelectItem item : l) {
-            Log.d("GS", "Insert url " + item.getUrl());
-            urls.add(item.getUrl());
+            songs.add(GlobalSearchManager.getInstance().getRequest().getSongFromUrl(item.getUrl()));
         }
 
-        msg.obj = ClementineMessageFactory.buildInsertUrl(
-                App.Clementine.getPlaylistManager().getActivePlaylistId(), urls);
+        msg.obj = ClementineMessageFactory.buildInsertSongs(
+                App.Clementine.getPlaylistManager().getActivePlaylistId(), songs);
 
         App.ClementineConnection.mHandler.sendMessage(msg);
 
         Toast.makeText(getActivity(),
-                String.format(getString(R.string.songs_added), urls.size()),
+                String.format(getString(R.string.songs_added), songs.size()),
                 Toast.LENGTH_SHORT).show();
     }
 
