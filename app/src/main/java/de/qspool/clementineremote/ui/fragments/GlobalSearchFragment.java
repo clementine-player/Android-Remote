@@ -323,6 +323,7 @@ public class GlobalSearchFragment extends Fragment
                     GlobalSearchQuery globalSearchQuery = new GlobalSearchQuery(
                             getActivity(), mQueryId);
                     mMaxLevels = globalSearchQuery.getMaxLevels();
+                    mAdapters.clear();
 
                     // Create the adapter
                     globalSearchQuery.openDatabase();
