@@ -53,6 +53,8 @@
   <string name="library_empty">Bibliothek leer. Nach unten wischen, um die Bibliothek herunterzuladen!</string>
   <string name="library_no_search_results">Keine Suchergebnisse gefunden!</string>
   <string name="library_download_error">Bibliothek konnte nicht geladen werden</string>
+  <string name="global_search_empty">Oben Suchbegriffe eingeben, um Musik auf Ihrem Rechner oder im Internet zu finden</string>
+  <string name="global_search_search">Nach etwas suchen</string>
   <string name="global_search_query">Suchanfrage: %s</string>
   <string name="song_info_album">Album</string>
   <string name="song_info_genre">Genre</string>
@@ -233,7 +235,7 @@
     <item>Musikspieler</item>
     <item>Wiedergabelisten</item>
     <item>Bibliothek</item>
-    <item>Downloads</item>
+    <item>Übertragungen</item>
     <item></item>
     <item>Einstellungen</item>
     <item>Spenden</item>

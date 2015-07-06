@@ -53,6 +53,9 @@
   <string name="library_empty">Fonoteka prazna. Povucite dolje za preuzimanje fonoteke!</string>
   <string name="library_no_search_results">Nema pronađenih pjesama koje se podudaraju s vašim kriterijima pretraživanja</string>
   <string name="library_download_error">Nemoguće preuzimanje fonoteke</string>
+  <string name="global_search_empty">Upišite izraz pretrage iznad za pronalazak glazbe na vašem računalu i Internetu</string>
+  <string name="global_search_search">Pretraži bilo što</string>
+  <string name="global_search_query">Zahtjev: %s</string>
   <string name="song_info_album">Album</string>
   <string name="song_info_genre">Vrsta glazbe</string>
   <string name="song_info_year">Godina</string>
@@ -197,6 +200,10 @@
   <string name="input_auth_code">Kôd autentifikacije</string>
   <string name="invalid_code">Pogrešan kôd</string>
   <string name="done">Završeno</string>
+  <string name="unknown">Nepoznato</string>
+  <string name="number_items">%d stavki</string>
+  <string name="songs_added">%d pjesama dodano na trenutni popis izvođenja</string>
+  <string name="context_add_to_playlist">Dodaj pjesmu na trenutni popis izvođenja</string>
   <string name="repeat_off">Ne ponavljaj</string>
   <string name="repeat_track">Ponovi pjesmu</string>
   <string name="repeat_album">Ponovi album</string>
@@ -226,4 +233,16 @@
     <item>Popis izvođenja</item>
   </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
+  <string-array name="navigation_drawer_items">
+    <item>Pretraži</item>
+    <item>Reproduktor</item>
+    <item>Popis izvođenja</item>
+    <item>Fonoteka</item>
+    <item>Preuzimanja</item>
+    <item></item>
+    <item>Postavke</item>
+    <item>Doniraj</item>
+    <item></item>
+    <item>Zatvori</item>
+  </string-array>
 </resources>
