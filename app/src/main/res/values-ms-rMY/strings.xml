@@ -53,6 +53,9 @@
   <string name="library_empty">Pustaka kosong. Leret ke bawah untuk muat turun pustaka!</string>
   <string name="library_no_search_results">Tiada lagu memadani kriteria gelintar anda!</string>
   <string name="library_download_error">Tidak dapat memuat turun pustaka</string>
+  <string name="global_search_empty">Masukkan terma gelintar di atas untuk mencari muzik dalam komputer anda dan juga di internet</string>
+  <string name="global_search_search">Gelintar segalanya</string>
+  <string name="global_search_query">Tanya: %s</string>
   <string name="song_info_album">Album</string>
   <string name="song_info_genre">Genre</string>
   <string name="song_info_year">Tahun</string>
@@ -194,6 +197,10 @@
   <string name="input_auth_code">Kod Pengesahihan</string>
   <string name="invalid_code">Kod Tidak Sah</string>
   <string name="done">Selesai</string>
+  <string name="unknown">Tidak diketahui</string>
+  <string name="number_items">%d item</string>
+  <string name="songs_added">%d buah lagu ditambah ke dalam senarai main semasa</string>
+  <string name="context_add_to_playlist">Tambah item ke senarai main semasa</string>
   <string name="repeat_off">Jangan ulang</string>
   <string name="repeat_track">Ulang trek</string>
   <string name="repeat_album">Ulang album</string>
@@ -223,4 +230,16 @@
     <item>Senarai Mai</item>
   </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
+  <string-array name="navigation_drawer_items">
+    <item>Gelintar</item>
+    <item>Pemain</item>
+    <item>Senarai Main</item>
+    <item>Pustaka</item>
+    <item>Muat Turun</item>
+    <item></item>
+    <item>Tetapan</item>
+    <item>Derma</item>
+    <item></item>
+    <item>Keluar</item>
+  </string-array>
 </resources>
