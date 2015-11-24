@@ -81,7 +81,7 @@
   <string name="menu_ban">Banir</string>
   <string name="menu_download">Transferir</string>
   <string name="menu_download_song">Transferir faixa</string>
-  <string name="menu_download_album">Transdferir álbum</string>
+  <string name="menu_download_album">Transferir álbum</string>
   <string name="menu_download_playlist">Transferir lista de reprodução</string>
   <string name="donate_header">Donativos</string>
   <string name="donate_text">Obrigado por utilizar esta aplicação. Espero que lhe seja útil!\n\nSe você está satisfeito com o meu trabalho, pode efetuar um pequeno donativo.</string>
