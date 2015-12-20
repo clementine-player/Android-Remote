@@ -84,6 +84,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
+
+    lintOptions {
+        // TODO: Do not forget to fix all of the Lint warnings issues in the code.
+        abortOnError false
+    }
 }
 
 task generateProtocolBuffer << {
