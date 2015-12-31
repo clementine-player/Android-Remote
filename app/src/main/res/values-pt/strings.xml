@@ -158,8 +158,8 @@
   <string name="pref_dl_dir">Definir pasta de transferências</string>
   <string name="pref_dl_override">Substituir ficheiros existentes</string>
   <string name="pref_dl_cat_folders">Pastas</string>
-  <string name="pref_dl_pl_save_own_dir_title">Gravar faixas na pasta de listas de reprodução</string>
-  <string name="pref_dl_pl_save_own_dir_summary">Cria uma pasta com o nome da lista e grava as faixas nessa pasta.</string>
+  <string name="pref_dl_pl_save_own_dir_title">Guardar faixas na pasta de listas de reprodução</string>
+  <string name="pref_dl_pl_save_own_dir_summary">Cria uma pasta com o nome da lista e guarda as faixas nessa pasta.</string>
   <string name="pref_dl_pl_artist_dir_title">Criar subpasta de artista</string>
   <string name="pref_dl_pl_artist_dir_summary">Criar uma subpasta de artista para cada uma das faixas.</string>
   <string name="pref_dl_pl_album_dir_title">Criar subpasta de álbum</string>
