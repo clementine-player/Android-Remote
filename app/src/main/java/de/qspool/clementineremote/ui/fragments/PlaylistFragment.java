@@ -17,6 +17,7 @@
 
 package de.qspool.clementineremote.ui.fragments;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import android.app.Fragment;
@@ -330,8 +331,19 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
                         .buildDownloadSongsMessage(DownloadItem.APlaylist, getPlaylistId()));
                 return true;
             case R.id.clear_playlist:
-                mPlaylistManager.clearPlaylist(getPlaylistId());
-                updateSongList();
+                new MaterialDialog.Builder(getActivity())
+                        .title(R.string.playlist_clear)
+                        .content(R.string.playlist_clear_content)
+                        .positiveText(R.string.playlist_clear_confirm)
+                        .negativeText(R.string.dialog_cancel)
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(MaterialDialog dialog, DialogAction which) {
+                                mPlaylistManager.clearPlaylist(getPlaylistId());
+                                updateSongList();
+                            }
+                        })
+                        .show();
                 return true;
             case R.id.close_playlist:
                 Message msg = Message.obtain();

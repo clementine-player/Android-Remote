@@ -32,6 +32,8 @@
     <string name="playlist_loading">Loading</string>
     <string name="playlist_close">Close playlist</string>
     <string name="playlist_clear">Clear playlist</string>
+    <string name="playlist_clear_content">This will irretrievably remove all songs from the playlist. Continue?</string>
+    <string name="playlist_clear_confirm">Clear playlist</string>
 
 
     <string name="downloads_empty">No downloads!</string>
@@ -228,6 +230,7 @@
     <string name="widget_couldnt_connect">Could not connect</string>
 
     <string name="dialog_close">Close</string>
+    <string name="dialog_cancel">Cancel</string>
 
     <string name="error_versions">Incompatible version</string>
     <string name="old_proto">Please update Clementine!</string>
