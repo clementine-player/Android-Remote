@@ -219,7 +219,7 @@ public class Utilities {
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(resultIntent);
-        return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        return stackBuilder.getPendingIntent(9912, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     public static Inet4Address getIp4Address() {
