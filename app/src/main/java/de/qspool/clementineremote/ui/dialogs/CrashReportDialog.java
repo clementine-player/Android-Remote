@@ -17,6 +17,7 @@
 
 package de.qspool.clementineremote.ui.dialogs;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import android.content.Context;
@@ -75,10 +76,9 @@ public class CrashReportDialog {
         builder.content(R.string.crash_report_message);
         builder.positiveText(R.string.crash_report_send);
         builder.negativeText(R.string.dialog_close);
-        builder.callback(new MaterialDialog.ButtonCallback() {
+        builder.onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
-            public void onPositive(MaterialDialog dialog) {
-                super.onPositive(dialog);
+            public void onClick(MaterialDialog dialog, DialogAction which) {
                 SendMail();
             }
         });

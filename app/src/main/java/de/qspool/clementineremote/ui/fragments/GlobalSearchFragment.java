@@ -25,6 +25,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -183,7 +184,7 @@ public class GlobalSearchFragment extends Fragment
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     getActivity().getWindow()
-                            .setStatusBarColor(getResources().getColor(R.color.grey_cab_status));
+                            .setStatusBarColor(ContextCompat.getColor(getActivity(), R.color.grey_cab_status));
                 }
 
                 return true;
@@ -199,7 +200,8 @@ public class GlobalSearchFragment extends Fragment
             public void onDestroyActionMode(ActionMode mode) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     getActivity().getWindow()
-                            .setStatusBarColor(getResources().getColor(R.color.actionbar_dark));
+                            .setStatusBarColor(ContextCompat.getColor(getActivity(),
+                                    R.color.actionbar_dark));
                 }
             }
 
@@ -276,7 +278,8 @@ public class GlobalSearchFragment extends Fragment
 
         EditText searchText = (EditText) searchView.findViewById(
                 android.support.v7.appcompat.R.id.search_src_text);
-        searchText.setHintTextColor(getResources().getColor(R.color.searchview_edittext_hint));
+        searchText.setHintTextColor(ContextCompat.getColor(getActivity(),
+                R.color.searchview_edittext_hint));
 
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -286,7 +289,7 @@ public class GlobalSearchFragment extends Fragment
         super.onActivityCreated(savedInstanceState);
         mList.setFastScrollEnabled(true);
         mList.setTextFilterEnabled(true);
-        mList.setSelector(new ColorDrawable(android.R.color.transparent));
+        mList.setSelector(new ColorDrawable(ContextCompat.getColor(getActivity(), android.R.color.transparent)));
         mList.setDivider(null);
         mList.setDividerHeight(0);
 

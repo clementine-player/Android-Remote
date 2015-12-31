@@ -1,5 +1,6 @@
 package de.qspool.clementineremote.ui.dialogs;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import android.app.Activity;
@@ -90,21 +91,23 @@ public class FileDialog {
                 }
             }
         });
-        builder.callback(new MaterialDialog.ButtonCallback() {
+        builder.onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
-            public void onPositive(MaterialDialog dialog) {
-                super.onPositive(dialog);
+            public void onClick(MaterialDialog dialog, DialogAction which) {
                 if (isCheckIfWritable()) {
                     // Check the external store state
-                    File checkFile = new File(currentPath.getAbsolutePath() + "/ClementineTestFile.CheckIfWritable");
+                    File checkFile = new File(
+                            currentPath.getAbsolutePath() + "/ClementineTestFile.CheckIfWritable");
                     try {
-                        if (checkFile.createNewFile()) checkFile.delete();
+                        if (checkFile.createNewFile())
+                            checkFile.delete();
 
                         Log.d(TAG, checkFile.getAbsolutePath() + " is writable");
                         dialog.dismiss();
                         fireDirectorySelectedEvent(currentPath);
                     } catch (IOException e) {
-                        Toast.makeText(activity, R.string.file_dialog_not_writable, Toast.LENGTH_LONG).show();
+                        Toast.makeText(activity, R.string.file_dialog_not_writable,
+                                Toast.LENGTH_LONG).show();
                     }
                 } else {
                     fireDirectorySelectedEvent(currentPath);

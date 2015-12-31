@@ -17,6 +17,7 @@
 
 package de.qspool.clementineremote.backend.mediasession;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.content.ComponentName;
@@ -31,6 +32,7 @@ import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.backend.receivers.ClementineMediaButtonEventReceiver;
 
+@SuppressLint("NewApi")
 @SuppressWarnings("deprecation")
 @TargetApi(20)
 public class ClementineMediaSessionV20 extends ClementineMediaSession {

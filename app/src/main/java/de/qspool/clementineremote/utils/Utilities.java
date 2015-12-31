@@ -9,6 +9,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.net.Network;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Environment;
@@ -151,12 +152,29 @@ public class Utilities {
      *
      * @return true if connected to a wifi network
      */
+    @SuppressWarnings("deprecation")
     public static boolean onWifi() {
         ConnectivityManager connManager = (ConnectivityManager) App.getApp()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        boolean onWifi = false;
 
-        return mWifi.isConnected();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Network[] networks = connManager.getAllNetworks();
+            NetworkInfo networkInfo;
+            for (Network mNetwork : networks) {
+                networkInfo = connManager.getNetworkInfo(mNetwork);
+                if (networkInfo.getState().equals(NetworkInfo.State.CONNECTED) &&
+                        networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                    onWifi = true;
+                    break;
+                }
+            }
+        } else {
+            //noinspection deprecation
+            onWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected();
+        }
+
+        return onWifi;
     }
 
     /**

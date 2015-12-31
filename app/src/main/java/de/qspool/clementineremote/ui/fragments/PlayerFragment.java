@@ -129,10 +129,10 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
         mTabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             @Override
             public int getIndicatorColor(int position) {
-                return getResources().getColor(R.color.actionbar_dark);
+                return ContextCompat.getColor(getActivity(), R.color.actionbar_dark);
             }
         });
-        mTabs.setTextViewColor(getResources().getColor(R.color.white));
+        mTabs.setTextViewColor(ContextCompat.getColor(getActivity(), R.color.white));
         mTabs.setViewPager(myPager);
         mTabs.setVisibility(View.VISIBLE);
     }

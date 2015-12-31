@@ -29,8 +29,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -465,11 +463,7 @@ public class ConnectActivity extends AppCompatActivity {
         int ip = wifiInfo.getIpAddress();
 
         // Get the current wifi state
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(
-                CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-        if (!networkInfo.isConnected()) {
+        if (!Utilities.onWifi()) {
             Utilities.ShowMessageDialog(this, R.string.connectdialog_error, R.string.wifi_disabled);
         } else if (!Utilities.ToInetAddress(ip).isSiteLocalAddress()) {
             Utilities.ShowMessageDialog(this, R.string.connectdialog_error, R.string.no_private_ip);
