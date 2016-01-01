@@ -176,6 +176,8 @@ public class SongDetailFragment extends Fragment
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+
         inflater.inflate(R.menu.song_info_menu, menu);
 
         // Shall we show the lastfm buttons?

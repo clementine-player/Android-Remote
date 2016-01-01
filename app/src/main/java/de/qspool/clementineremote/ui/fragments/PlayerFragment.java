@@ -18,6 +18,7 @@
 package de.qspool.clementineremote.ui.fragments;
 
 import android.app.Fragment;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
@@ -65,8 +66,6 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
 
     private ConnectionFragment mConnectionFragment;
 
-    private PlayerPageAdapter mPlayerPageAdapter;
-
     private ViewPager myPager;
 
     @Override
@@ -90,12 +89,17 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
 
         mConnectionFragment = new ConnectionFragment();
 
-        mPlayerPageAdapter = new PlayerPageAdapter(getActivity(), getChildFragmentManager());
-        mPlayerPageAdapter.addFragment(mPlayerPageFragment);
-        mPlayerPageAdapter.addFragment(mSongDetailFragment);
-        mPlayerPageAdapter.addFragment(mConnectionFragment);
+        PlayerPageAdapter playerPageAdapter;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            playerPageAdapter = new PlayerPageAdapter(getActivity(), getChildFragmentManager());
+        } else {
+            playerPageAdapter = new PlayerPageAdapter(getActivity(), getFragmentManager());
+        }
+        playerPageAdapter.addFragment(mPlayerPageFragment);
+        playerPageAdapter.addFragment(mSongDetailFragment);
+        playerPageAdapter.addFragment(mConnectionFragment);
         myPager = (ViewPager) view.findViewById(R.id.player_pager);
-        myPager.setAdapter(mPlayerPageAdapter);
+        myPager.setAdapter(playerPageAdapter);
         myPager.setCurrentItem(0);
 
         // Get the Views
@@ -152,10 +156,8 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
             childFragmentManager.setAccessible(true);
             childFragmentManager.set(this, null);
 
-        } catch (NoSuchFieldException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+        } catch (NoSuchFieldException ignored) {
+        } catch (IllegalAccessException ignored) {
         }
     }
 

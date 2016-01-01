@@ -151,6 +151,8 @@ public class PlayerPageFragment extends Fragment
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+
         inflater.inflate(R.menu.player_menu, menu);
 
         mMenuRepeat = menu.findItem(R.id.repeat);

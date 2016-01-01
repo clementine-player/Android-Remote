@@ -229,6 +229,8 @@ public class GlobalSearchFragment extends Fragment
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+
         inflater.inflate(R.menu.global_search_menu, menu);
 
         // Create a listener for search change

@@ -25,6 +25,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -159,6 +160,8 @@ public class DownloadsFragment extends Fragment implements BackPressHandleable, 
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -176,7 +179,8 @@ public class DownloadsFragment extends Fragment implements BackPressHandleable, 
         super.onActivityCreated(savedInstanceState);
         mList.setFastScrollEnabled(true);
         mList.setTextFilterEnabled(true);
-        mList.setSelector(new ColorDrawable(android.R.color.transparent));
+        mList.setSelector(new ColorDrawable(
+                ContextCompat.getColor(getActivity(), android.R.color.transparent)));
         mList.setDivider(null);
         mList.setDividerHeight(0);
     }

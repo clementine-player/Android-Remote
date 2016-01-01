@@ -347,6 +347,8 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+
         inflater.inflate(R.menu.library_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -427,7 +429,7 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
         super.onActivityCreated(savedInstanceState);
         mList.setFastScrollEnabled(true);
         mList.setTextFilterEnabled(true);
-        mList.setSelector(new ColorDrawable(android.R.color.transparent));
+        mList.setSelector(new ColorDrawable(ContextCompat.getColor(getActivity(), android.R.color.transparent)));
         mList.setOnItemClickListener(oiclLibraryClick);
         mList.setDivider(null);
         mList.setDividerHeight(0);

@@ -209,6 +209,8 @@ public class TaskerSettings extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
+
         MenuInflater inf = getMenuInflater();
         inf.inflate(R.menu.tasker_menu, menu);
 

@@ -113,6 +113,7 @@
         android:splitTrack="false"
         android:thumb="@drawable/scrubber_control"
         android:layout_alignParentStart="false"
+        android:layout_alignParentLeft="false"
         android:layout_alignParentBottom="true" />
 
 </RelativeLayout>
