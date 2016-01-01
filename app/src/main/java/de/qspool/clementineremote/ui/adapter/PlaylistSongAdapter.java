@@ -117,8 +117,8 @@ public class PlaylistSongAdapter extends ArrayAdapter<MySong> implements Filtera
             playlistViewHolder.trackNo.setText(beautifyMissingTrackNr(mData.get(position).getTrack()));
         }
 
-        playlistViewHolder.artist.setText(mData.get(position).getArtist());
-        playlistViewHolder.title.setText(mData.get(position).getTitle() +
+        playlistViewHolder.title.setText(mData.get(position).getTitle());
+        playlistViewHolder.artist.setText(mData.get(position).getArtist() +
                 " / " +
                 mData.get(position).getAlbum());
         playlistViewHolder.length.setText(mData.get(position).getPrettyLength());
