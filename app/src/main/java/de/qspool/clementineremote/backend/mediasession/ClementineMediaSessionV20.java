@@ -25,23 +25,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
-import android.media.RemoteControlClient;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.backend.receivers.ClementineMediaButtonEventReceiver;
 
-@SuppressLint("NewApi")
 @SuppressWarnings("deprecation")
-@TargetApi(20)
 public class ClementineMediaSessionV20 extends ClementineMediaSession {
 
     private AudioManager mAudioManager;
 
     private ComponentName mClementineMediaButtonEventReceiver;
 
-    private RemoteControlClient mRcClient;
+    private android.media.RemoteControlClient mRcClient;
 
     public ClementineMediaSessionV20(Context context) {
         super(context);
@@ -66,16 +63,16 @@ public class ClementineMediaSessionV20 extends ClementineMediaSession {
                         0);
 
         // Create the client
-        mRcClient = new RemoteControlClient(mediaPendingIntent);
+        mRcClient = new android.media.RemoteControlClient(mediaPendingIntent);
         if (App.Clementine.getState() == Clementine.State.PLAY) {
-            mRcClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
+            mRcClient.setPlaybackState(android.media.RemoteControlClient.PLAYSTATE_PLAYING);
         } else {
-            mRcClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
+            mRcClient.setPlaybackState(android.media.RemoteControlClient.PLAYSTATE_PAUSED);
         }
-        mRcClient.setTransportControlFlags(RemoteControlClient.FLAG_KEY_MEDIA_NEXT |
-                RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS |
-                RemoteControlClient.FLAG_KEY_MEDIA_PLAY |
-                RemoteControlClient.FLAG_KEY_MEDIA_PAUSE);
+        mRcClient.setTransportControlFlags(android.media.RemoteControlClient.FLAG_KEY_MEDIA_NEXT |
+                android.media.RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS |
+                android.media.RemoteControlClient.FLAG_KEY_MEDIA_PLAY |
+                android.media.RemoteControlClient.FLAG_KEY_MEDIA_PAUSE);
         mAudioManager.registerRemoteControlClient(mRcClient);
     }
 
@@ -93,16 +90,16 @@ public class ClementineMediaSessionV20 extends ClementineMediaSession {
     public void updateSession() {
         // Update playstate
         if (App.Clementine.getState() == Clementine.State.PLAY) {
-            mRcClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
+            mRcClient.setPlaybackState(android.media.RemoteControlClient.PLAYSTATE_PLAYING);
         } else {
-            mRcClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
+            mRcClient.setPlaybackState(android.media.RemoteControlClient.PLAYSTATE_PAUSED);
         }
 
         // Change the data
         MySong song = App.Clementine.getCurrentSong();
         if (song != null && song.getArt() != null) {
-            RemoteControlClient.MetadataEditor editor = mRcClient.editMetadata(false);
-            editor.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, song.getArt());
+            android.media.RemoteControlClient.MetadataEditor editor = mRcClient.editMetadata(false);
+            editor.putBitmap(android.media.RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, song.getArt());
 
             // The RemoteControlClients displays the following info:
             // METADATA_KEY_TITLE (white) - METADATA_KEY_ALBUMARTIST (grey) - METADATA_KEY_ALBUM (grey)

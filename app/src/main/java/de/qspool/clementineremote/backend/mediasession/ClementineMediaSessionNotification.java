@@ -86,7 +86,6 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
         mNotificationManager.cancel(NOTIFIFCATION_ID);
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void updateSession() {
         MySong song = App.Clementine.getCurrentSong();
@@ -130,11 +129,16 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
                                 PendingIntent.FLAG_ONE_SHOT));
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-            //noinspection deprecation
-            mNotificationManager.notify(NOTIFIFCATION_ID, mNotificationBuilder.getNotification());
+            notifyV15();
         } else {
             mNotificationManager.notify(NOTIFIFCATION_ID, mNotificationBuilder.build());
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    private void notifyV15() {
+        //noinspection deprecation
+        mNotificationManager.notify(NOTIFIFCATION_ID, mNotificationBuilder.getNotification());
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
