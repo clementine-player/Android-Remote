@@ -20,7 +20,7 @@
         android:layout_toLeftOf="@id/llConnect"
         android:layout_weight="1"
         android:background="@android:color/transparent"
-        android:contentDescription="@string/connect_desc_icon"
+        android:contentDescription="@string/cd_clementine_icon"
         android:paddingTop="?attr/actionBarSize"
         android:scaleType="fitCenter"
         android:src="@drawable/icon_large" />

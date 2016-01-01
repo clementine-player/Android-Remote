@@ -8,7 +8,7 @@
         android:id="@+id/imgArt"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:contentDescription="@string/player_desc_img"
+        android:contentDescription="@string/cd_cover_image"
         android:paddingBottom="5dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"

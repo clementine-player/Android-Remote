@@ -35,7 +35,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_below="@id/downloads_empty_txt"
                 android:alpha="0.25"
-                android:contentDescription="@string/empty_fragment"
+                android:contentDescription="@string/cd_empty_fragment"
                 android:scaleType="fitCenter"
                 android:src="@drawable/icon_large"/>
 

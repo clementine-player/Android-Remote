@@ -49,7 +49,7 @@
                     android:layout_marginTop="16dp"
                     android:alpha="0.25"
                     android:scaleType="fitCenter"
-                    android:contentDescription="@string/empty_fragment"
+                    android:contentDescription="@string/cd_empty_fragment"
                     android:src="@drawable/icon_large"
                     android:layout_below="@+id/library_empty_txt" />
 

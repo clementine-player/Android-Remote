@@ -37,7 +37,7 @@
             android:layout_above="@id/playlist_empty_txt"
             android:alpha="0.25"
             android:scaleType="fitCenter"
-            android:contentDescription="@string/empty_fragment"
+            android:contentDescription="@string/cd_empty_fragment"
             android:src="@drawable/icon_large" />
 
 

@@ -26,7 +26,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:scaleType="centerCrop"
-                    android:contentDescription="@string/player_desc_img"
+                    android:contentDescription="@string/cd_cover_image"
                     android:src="@drawable/icon_large" />
 
                 <TextView
@@ -303,7 +303,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitCenter"
-        android:contentDescription="@string/songinfo_image"
+        android:contentDescription="@string/cd_songinfo_image"
         android:visibility="invisible" />
 
 </FrameLayout>

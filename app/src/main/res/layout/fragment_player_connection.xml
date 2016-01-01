@@ -17,7 +17,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:scaleType="centerCrop"
-            android:contentDescription="@string/player_desc_img"
+            android:contentDescription="@string/cd_cover_image"
             android:src="@drawable/icon_large" />
 
         <TextView

@@ -17,7 +17,7 @@
         android:layout_marginRight="10dp"
         android:layout_weight="0.90"
         android:background="@android:color/transparent"
-        android:contentDescription="@string/connect_desc_icon"
+        android:contentDescription="@string/cd_clementine_icon"
         android:scaleType="fitCenter"
         android:src="@drawable/icon_large" />
 
