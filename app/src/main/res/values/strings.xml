@@ -37,7 +37,6 @@
 
 
     <string name="downloads_empty">No downloads!</string>
-    <string name="download_error">Could not open song!</string>
     <string name="download_freespace">Free space</string>
     <string name="downloaded_songs">Downloaded songs - click to play</string>
 
@@ -68,7 +67,6 @@
     <string name="library_download">Downloading library</string>
     <string name="library_optimize">Optimizing database</string>
     <string name="library_please_wait">Please wait</string>
-    <string name="library_refresh">Refresh</string>
     <string name="library_empty">Library empty. Swipe down to download library!</string>
     <string name="library_no_search_results">No songs matching your search criteria!</string>
     <string name="library_download_error">Could not download library</string>
@@ -90,7 +88,6 @@
     <string name="song_info_filename">Filename</string>
     <string name="song_info_rating">Rating</string>
     <string name="song_info_rated">Song rated $stars$ stars</string>
-    <string name="song_info_volume">Volume</string>
 
 
     <string name="connection_connected_to">Connected to:</string>
@@ -107,8 +104,6 @@
     <string name="menu_love">Love</string>
     <string name="menu_ban">Ban</string>
     <string name="menu_download">Download</string>
-    <string name="menu_download_song">Download song</string>
-    <string name="menu_download_album">Download album</string>
     <string name="menu_download_playlist">Download playlist</string>
 
 
@@ -211,7 +206,6 @@
     <string name="file_dialog_custom_paths_available">Select other</string>
 
 
-    <string name="dialog_about_header">About</string>
     <string name="dialog_about_authors">Authors</string>
     <string name="dialog_about_supporters">Supporters</string>
     <string name="dialog_about_others">Others</string>
@@ -276,10 +270,7 @@
     <string name="track_loved">Track loved &lt;3</string>
     <string name="track_banned">Track banned :-(</string>
 
-
     <string name="notification_disconnect_keep_alive">Lost connection. Touch to reconnect.</string>
-    <string name="notification_action_next">Next</string>
-    <string name="notification_action_playpause">Play / Pause</string>
 
     <string name="crash_report_title">Oops, something went wrong!</string>
     <string name="crash_report_message">Last time Clementine Remote crashed! This should not have happened! Please help me to improve the app and send me the logfile. Thanks!</string>

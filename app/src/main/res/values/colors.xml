@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="actionbar_border">#edb49b</color>
     <color name="actionbar">#db6835</color>
     <color name="actionbar_dark">#bb5325</color>
 
@@ -15,9 +14,6 @@
 
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
-
-    <color name="actionmode">#FFBB33</color>
-    <color name="actionmode_split">#FF8800</color>
 
     <color name="navigation_drawer_section">#e5e5e5</color>
 

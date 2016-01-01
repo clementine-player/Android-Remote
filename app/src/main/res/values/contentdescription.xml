@@ -3,7 +3,6 @@
     <string name="player_desc_img">Cover Image</string>
     <string name="player_desc_buttons">Buttons to control the player</string>
     <string name="connect_desc_icon">Clementine Icon</string>
-    <string name="connect_settings_icon">Settings Icon</string>
     <string name="empty_fragment">Fragment is empty</string>
     <string name="songinfo_image">Songinfo image</string>
 </resources>
