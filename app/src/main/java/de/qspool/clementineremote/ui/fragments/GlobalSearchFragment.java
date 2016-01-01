@@ -124,8 +124,10 @@ public class GlobalSearchFragment extends Fragment
                             App.Clementine.getPlaylistManager().getActivePlaylistId(), songs);
                     App.ClementineConnection.mHandler.sendMessage(msg);
 
+                    String text = getActivity().getResources().getQuantityString(R.plurals.songs_added,
+                            1, 1);
                     Toast.makeText(getActivity(),
-                            String.format(getString(R.string.songs_added), 1),
+                            text,
                             Toast.LENGTH_SHORT).show();
                 } else {
                     GlobalSearchQuery globalSearchQuery = new GlobalSearchQuery(getActivity(), mQueryId);
@@ -404,8 +406,11 @@ public class GlobalSearchFragment extends Fragment
 
         App.ClementineConnection.mHandler.sendMessage(msg);
 
+        String text = getActivity().getResources().getQuantityString(R.plurals.songs_added,
+                songs.size(),
+                songs.size());
         Toast.makeText(getActivity(),
-                String.format(getString(R.string.songs_added), songs.size()),
+                text,
                 Toast.LENGTH_SHORT).show();
     }
 

@@ -42,13 +42,19 @@
     <string name="downloaded_songs">Downloaded songs - click to play</string>
 
     <string name="download_noti_title">Starting download</string>
-    <string name="download_noti_n_downloads">%d active downloads</string>
+    <plurals name="download_noti_n_downloads">
+        <item quantity="one">%d active download</item>
+        <item quantity="other">%d active downloads</item>
+    </plurals>
     <string name="download_noti_n_progress">Total progress: %d %</string>
     <string name="download_noti_title_song">[Song]</string>
     <string name="download_noti_title_album">[Album]</string>
     <string name="download_noti_title_playlist">[Playlist]</string>
     <string name="download_noti_title_songs">[Songs]</string>
-    <string name="download_noti_n_finished">%d downloads finished</string>
+    <plurals name="download_noti_n_finished">
+        <item quantity="one">%d download finished</item>
+        <item quantity="other">%d downloads finished</item>
+    </plurals>
     <string name="download_noti_complete">Download complete</string>
     <string name="download_noti_canceled">Download canceled</string>
     <string name="download_noti_insufficient_space">Insufficient space, aborting download.</string>
@@ -243,8 +249,15 @@
     <string name="invalid_code">Invalid Code</string>
     <string name="done">Done</string>
     <string name="unknown">Unknown</string>
-    <string name="number_items">%d items</string>
-    <string name="songs_added">%d songs added to current playlist</string>
+    <plurals name="number_items">
+        <item quantity="one">%d item</item>
+        <item quantity="other">%d items</item>
+    </plurals>
+
+    <plurals name="songs_added">
+        <item quantity="one">%d song added to current playlist</item>
+        <item quantity="other">%d songs added to current playlist</item>
+    </plurals>
     <string name="context_add_to_playlist">Add item to current playlist</string>
 
 

@@ -140,8 +140,10 @@ public class DownloadManager {
                 }
 
                 //download_noti_n_finished
-                String title = mContext.getString(R.string.download_noti_n_finished);
-                title = title.replace("%d", String.valueOf(mFinishedDownloads.size()));
+                String title = mContext.getResources().getQuantityString(
+                        R.plurals.download_noti_n_finished,
+                        mFinishedDownloads.size(),
+                        mFinishedDownloads.size());
                 NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(
                         mContext)
                         .setContentTitle(title)
@@ -348,8 +350,9 @@ public class DownloadManager {
                 new NotificationCompat.InboxStyle();
 
         // Title
-        String title = mContext.getString(R.string.download_noti_n_downloads);
-        title = title.replace("%d", String.valueOf(mActiveDownloads.size()));
+        String title = mContext.getResources().getQuantityString(R.plurals.download_noti_n_downloads,
+                mActiveDownloads.size(),
+                mActiveDownloads.size());
         notificationBuilder.setContentTitle(title);
 
         // Total progress in subtitle

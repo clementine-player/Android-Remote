@@ -501,8 +501,10 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
 
         App.ClementineConnection.mHandler.sendMessage(msg);
 
+        String text = getActivity().getResources().getQuantityString(R.plurals.songs_added,
+                urls.size(), urls.size());
         Toast.makeText(getActivity(),
-                String.format(getString(R.string.songs_added), urls.size()),
+                text,
                 Toast.LENGTH_SHORT).show();
     }
 
@@ -521,8 +523,10 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
                         App.Clementine.getPlaylistManager().getActivePlaylistId(), urls);
                 App.ClementineConnection.mHandler.sendMessage(msg);
 
+                String text = getActivity().getResources().getQuantityString(R.plurals.songs_added,
+                        1, 1);
                 Toast.makeText(getActivity(),
-                        String.format(getString(R.string.songs_added), 1),
+                        text,
                         Toast.LENGTH_SHORT).show();
             } else {
                 LibraryQuery libraryQuery = new LibraryQuery(getActivity());

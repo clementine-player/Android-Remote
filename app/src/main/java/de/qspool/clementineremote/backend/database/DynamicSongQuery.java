@@ -189,9 +189,10 @@ public abstract class DynamicSongQuery {
             item.setListSubtitle((artist.isEmpty() ? unknownItem : artist)
                     + " / " + (album.isEmpty() ? unknownItem : album));
         } else {
-            item.setListSubtitle(String.format(
-                    mContext.getString(R.string.number_items),
-                    countItems(item.getSelection())));
+            int count = countItems(item.getSelection());
+            item.setListSubtitle(
+                    mContext.getResources().getQuantityString(R.plurals.number_items,
+                            count, count));
         }
 
         item.setLevel(mLevel);
