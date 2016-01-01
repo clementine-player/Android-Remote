@@ -4,6 +4,7 @@
     android:background="@drawable/activity_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <!-- The main content view -->
     <RelativeLayout
         android:layout_height="match_parent"
@@ -29,6 +30,7 @@
             android:layout_margin="7dp" />
 
     </RelativeLayout>
+
     <!-- The navigation drawer -->
     <RelativeLayout
         android:layout_width="match_parent"
@@ -53,7 +55,9 @@
                 android:layout_alignParentStart="false"
                 android:layout_alignParentLeft="false"
                 android:scaleType="fitCenter"
+                android:contentDescription="@string/cd_clementine_icon"
                 android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp" />
 
             <LinearLayout
@@ -71,9 +75,7 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/white"
-                    android:text="Medium Text"
                     android:id="@+id/drawer_menu_text1"
-                    android:layout_below="@+id/drawer_icon"
                     android:singleLine="true" />
 
                 <TextView
@@ -81,9 +83,7 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/white"
-                    android:text="Small Text"
                     android:id="@+id/drawer_menu_text2"
-                    android:layout_below="@+id/textView5"
                     android:singleLine="true" />
             </LinearLayout>
 

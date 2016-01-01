@@ -81,7 +81,7 @@
         android:layout_alignRight="@+id/widget_sep_right"
         android:layout_alignEnd="@+id/widget_sep_right"
         android:padding="4dp"
-        android:contentDescription="@string/cd_play_button"
+        android:contentDescription="@string/cd_playpause_button"
         android:scaleType="fitCenter" />
 
     <TextView

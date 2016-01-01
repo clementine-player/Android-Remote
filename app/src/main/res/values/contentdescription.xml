@@ -5,6 +5,8 @@
     <string name="cd_clementine_icon">Clementine Icon</string>
     <string name="cd_empty_fragment">Fragment is empty</string>
     <string name="cd_songinfo_image">Songinfo image</string>
-    <string name="cd_play_button">Play or pause song</string>
+    <string name="cd_playpause_button">Play or pause song</string>
     <string name="cd_next_button">Play next song</string>
+    <string name="cd_pref_icon">Icon describing a preference</string>
+    <string name="cd_cancel_download">Cancel the download</string>
 </resources>

@@ -13,8 +13,11 @@
         android:layout_alignParentEnd="false"
         android:layout_alignParentRight="false"
         android:scaleType="fitCenter"
+        android:contentDescription="@string/cd_cover_image"
         android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         android:layout_centerInParent="true" />
@@ -24,23 +27,25 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
         android:layout_alignParentTop="true"
         android:singleLine="true"
-        android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/black"
-        android:layout_toRightOf="@+id/img_dsq_icon" />
+        android:layout_toRightOf="@+id/img_dsq_icon"
+        android:layout_toEndOf="@+id/img_dsq_icon"/>
 
     <TextView
         android:id="@+id/tv_dsq_subtitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
         android:layout_below="@id/tv_dsq_title"
         android:singleLine="true"
-        android:text="Medium TextMedium TextMedium TextMedium TextMedium TextMedium Text"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@android:color/black"
-        android:layout_alignLeft="@+id/tv_dsq_title" />
+        android:layout_alignLeft="@+id/tv_dsq_title"
+        android:layout_alignStart="@+id/tv_dsq_title" />
 
 </RelativeLayout>

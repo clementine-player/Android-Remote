@@ -10,9 +10,9 @@
         android:id="@+id/noti_icon"
         android:src="@drawable/ic_launcher"
         android:adjustViewBounds="true"
-        android:layout_weight="5"
         android:scaleType="fitCenter"
-        android:layout_gravity="left"
+        android:layout_gravity="start"
+        android:contentDescription="@string/cd_cover_image"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true" />
 
@@ -22,7 +22,9 @@
         android:layout_height="match_parent"
         android:padding="4dp"
         android:layout_toRightOf="@+id/noti_icon"
+        android:layout_toEndOf="@+id/noti_icon"
         android:layout_toLeftOf="@+id/noti_play_pause"
+        android:layout_toStartOf="@+id/noti_play_pause"
         android:gravity="center_vertical">
 
         <TextView
@@ -30,16 +32,14 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:id="@+id/noti_title"
-            android:singleLine="true"
-            android:text="Medium" />
+            android:singleLine="true"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:id="@+id/noti_subtitle"
-            android:singleLine="true"
-            android:text="Small" />
+            android:singleLine="true" />
     </LinearLayout>
 
     <ImageButton
@@ -50,6 +50,8 @@
         android:background="@android:color/transparent"
         android:padding="4dp"
         android:layout_toLeftOf="@+id/noti_next"
+        android:layout_toStartOf="@+id/noti_next"
+        android:contentDescription="@string/cd_playpause_button"
         android:scaleType="fitCenter" />
 
     <ImageButton
@@ -62,6 +64,7 @@
         android:padding="4dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:contentDescription="@string/cd_next_button"
         android:scaleType="fitCenter" />
 
 </RelativeLayout>
