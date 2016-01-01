@@ -161,12 +161,14 @@ public class LibraryDatabaseHelper {
     }
 
     private boolean databaseIntegrityOk() {
-        boolean result = true;
+        boolean result;
         try {
             Cursor c = db.rawQuery("PRAGMA main.integrity_check(1)", null);
             c.moveToFirst();
 
             result = c.getString(0).equalsIgnoreCase("ok");
+
+            c.close();
         } catch (SQLiteException e) {
             result = false;
         }
