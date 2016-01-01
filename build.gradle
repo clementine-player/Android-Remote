@@ -20,10 +20,4 @@ allprojects {
         maven { url 'https://dl.bintray.com/twofortyfouram/maven' }
         maven { url 'https://jitpack.io' }
     }
-
-    gradle.projectsEvaluated {
-        tasks.withType(JavaCompile) {
-            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-        }
-    }
 }
