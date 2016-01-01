@@ -17,6 +17,7 @@
 
 package de.qspool.clementineremote.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
@@ -46,6 +47,7 @@ public class CustomClementinesAdapter extends ArrayAdapter<ServiceInfo> {
         mData = data;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ClementineViewHolder clementineViewHolder;

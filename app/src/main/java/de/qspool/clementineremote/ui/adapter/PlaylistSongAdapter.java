@@ -17,6 +17,7 @@
 
 package de.qspool.clementineremote.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -78,6 +79,7 @@ public class PlaylistSongAdapter extends ArrayAdapter<MySong> implements Filtera
         return mFilter;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         PlaylistViewHolder playlistViewHolder;

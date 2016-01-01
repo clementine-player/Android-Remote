@@ -18,6 +18,7 @@ his file is part of the Android Clementine Remote.
 
 package de.qspool.clementineremote.ui.fragments.playerpages;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.net.TrafficStats;
@@ -74,6 +75,7 @@ public class ConnectionFragment extends Fragment
         setHasOptionsMenu(true);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -145,6 +147,7 @@ public class ConnectionFragment extends Fragment
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void updateData() {
         if (App.ClementineConnection == null) {
             return;
@@ -172,14 +175,7 @@ public class ConnectionFragment extends Fragment
             long a = total / TimeUnit.MILLISECONDS.toSeconds(diff);
             String perSecond = Utilities.humanReadableBytes(a, true);
 
-            StringBuilder sb = new StringBuilder();
-            sb.append(tx);
-            sb.append(" / ");
-            sb.append(rx);
-            sb.append(" (");
-            sb.append(perSecond);
-            sb.append("/s)");
-            tv_traffic.setText(sb.toString());
+            tv_traffic.setText(tx + " / " + rx + " (" + perSecond + "/s)");
         }
     }
 

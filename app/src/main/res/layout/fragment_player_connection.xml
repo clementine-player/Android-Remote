@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="top"
@@ -84,7 +85,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Clementine 1.2.2"
                 android:id="@+id/cn_version"
                 android:textColor="#444444" />
 
@@ -101,7 +101,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="0k / 10k"
                 android:id="@+id/cn_traffic"
                 android:textColor="#444444"
                 android:singleLine="true" />
@@ -126,7 +125,8 @@
                 android:max="100"
                 android:progress="100"
                 android:splitTrack="false"
-                android:id="@+id/cn_volume" />
+                android:id="@+id/cn_volume"
+                tools:ignore="UnusedAttribute" />
 
         </LinearLayout>
 

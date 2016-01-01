@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -95,7 +96,8 @@
             android:maxHeight="2dp"
             android:progressDrawable="@drawable/seek_bar_clementine"
             android:splitTrack="false"
-            android:thumb="@drawable/scrubber_control" />
+            android:thumb="@drawable/scrubber_control"
+            tools:ignore="UnusedAttribute" />
 
     </LinearLayout>
 

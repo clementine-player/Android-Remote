@@ -17,6 +17,7 @@
 
 package de.qspool.clementineremote.ui;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -101,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean mInstanceSaved = false;
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
