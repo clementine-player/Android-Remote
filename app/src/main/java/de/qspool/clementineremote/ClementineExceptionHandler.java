@@ -46,6 +46,7 @@ public class ClementineExceptionHandler implements UncaughtExceptionHandler {
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
     }
 
+    @SuppressLint("CommitPrefEdits")
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
         // Delete the last trace file!

@@ -126,7 +126,7 @@ public class ClementinePhoneStateCheck extends BroadcastReceiver {
             editor.putInt(KEY_LAST_VOLUME, App.Clementine.getVolume());
             editor.putInt(KEY_LAST_STATE, App.Clementine.getState().ordinal());
 
-            editor.commit();
+            editor.apply();
         }
     }
 

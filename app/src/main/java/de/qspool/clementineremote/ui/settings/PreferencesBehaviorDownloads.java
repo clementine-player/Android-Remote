@@ -74,7 +74,7 @@ public class PreferencesBehaviorDownloads extends PreferenceFragment {
                         .edit();
                 editor.putString(SharedPreferencesKeys.SP_DOWNLOAD_DIR,
                         directory.getAbsolutePath());
-                editor.commit();
+                editor.apply();
                 mDownloadDir.setSummary(directory.getAbsolutePath());
             }
         });
@@ -89,7 +89,7 @@ public class PreferencesBehaviorDownloads extends PreferenceFragment {
                     SharedPreferences.Editor editor = getPreferenceScreen().getSharedPreferences()
                             .edit();
                     editor.putString(SharedPreferencesKeys.SP_DOWNLOAD_DIR, dir);
-                    editor.commit();
+                    editor.apply();
                     mDownloadDir.setSummary(dir);
                 } else {
                     if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {

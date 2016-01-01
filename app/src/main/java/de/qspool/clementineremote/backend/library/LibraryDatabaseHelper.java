@@ -111,7 +111,7 @@ public class LibraryDatabaseHelper {
             // Save the current library ip
             SharedPreferences.Editor edit = prefs.edit();
             edit.putString(SharedPreferencesKeys.SP_LIBRARY_IP, currentClementine);
-            edit.commit();
+            edit.apply();
             // Delete the file if exists
             return getLibraryDb().delete();
         }

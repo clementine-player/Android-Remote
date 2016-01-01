@@ -91,7 +91,7 @@ public class PreferencesConnection extends PreferenceFragment implements
                 port = String.valueOf(Clementine.DefaultPort);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString(SharedPreferencesKeys.SP_KEY_PORT, port);
-                editor.commit();
+                editor.apply();
 
                 // Tell the user that he specified an illegal port
                 Toast.makeText(getActivity(), getString(R.string.pref_port_error),
