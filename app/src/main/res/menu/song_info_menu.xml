@@ -5,10 +5,10 @@
         android:id="@+id/love"
         android:title="@string/menu_love"
         android:icon="@drawable/ab_love"
-        app:showAsAction="always"></item>
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/ban"
         android:title="@string/menu_ban"
         android:icon="@drawable/ab_ban"
-        app:showAsAction="always"></item>
+        app:showAsAction="ifRoom" />
 </menu>

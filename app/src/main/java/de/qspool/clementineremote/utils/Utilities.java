@@ -23,6 +23,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
+import java.util.Locale;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
@@ -203,7 +204,7 @@ public class Utilities {
         }
 
         // Return a human readable String
-        return String.format("%.2f %sB", newBytes, prefix);
+        return String.format(Locale.US, "%.2f %sB", newBytes, prefix);
     }
 
     /**

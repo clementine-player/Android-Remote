@@ -32,6 +32,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.Date;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -153,7 +154,7 @@ public class ConnectionFragment extends Fragment
             return;
         }
         long diff = new Date().getTime() - App.ClementineConnection.getStartTime();
-        String dateFormat = String.format("%02d:%02d:%02d",
+        String dateFormat = String.format(Locale.US, "%02d:%02d:%02d",
                 TimeUnit.MILLISECONDS.toHours(diff),
                 TimeUnit.MILLISECONDS.toMinutes(diff) % 60,
                 TimeUnit.MILLISECONDS.toSeconds(diff) % 60

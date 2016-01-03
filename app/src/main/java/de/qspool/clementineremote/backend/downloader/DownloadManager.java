@@ -17,6 +17,7 @@
 
 package de.qspool.clementineremote.backend.downloader;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -86,6 +87,7 @@ public class DownloadManager {
         createNewActiveNotification();
     }
 
+    @SuppressLint("InlinedApi")
     private void createNewActiveNotification() {
         mActiveNofiticationBuilder = new NotificationCompat.Builder(mContext)
                 .setContentTitle(mContext.getString(R.string.download_noti_title))
@@ -122,6 +124,7 @@ public class DownloadManager {
                 DownloadManager.this.onProgress(progress);
             }
 
+            @SuppressLint("InlinedApi")
             @Override
             public void onDownloadResult(DownloaderResult result) {
                 int id = result.getId();

@@ -17,6 +17,7 @@
 
 package de.qspool.clementineremote.backend;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
@@ -236,8 +237,9 @@ public class ClementineService extends Service {
     /**
      * Create a notification that shows, that we got a keep alive timeout
      */
+    @SuppressLint("InlinedApi")
     private void showKeepAliveDisconnectNotification() {
-        Notification notification = new NotificationCompat.Builder(this)
+         Notification notification = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.notification)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(getString(R.string.notification_disconnect_keep_alive))
