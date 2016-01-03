@@ -53,7 +53,8 @@
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".backend.receivers.ClementineBroadcastReceiver">
+        <receiver android:name=".backend.receivers.ClementineBroadcastReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="de.qspool.clementineremote.playpause" />
                 <action android:name="de.qspool.clementineremote.next" />

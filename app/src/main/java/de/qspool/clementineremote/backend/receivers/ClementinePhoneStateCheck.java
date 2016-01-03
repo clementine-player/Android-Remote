@@ -45,6 +45,10 @@ public class ClementinePhoneStateCheck extends BroadcastReceiver {
             return;
         }
 
+        if (!intent.getAction().equals("android.intent.action.PHONE_STATE")) {
+            return;
+        }
+
         // Check if we need to change the volume
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(App.getApp());
         String volumeString = prefs
