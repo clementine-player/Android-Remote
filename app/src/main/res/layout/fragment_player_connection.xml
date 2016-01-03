@@ -16,6 +16,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             android:scaleType="centerCrop"
             android:contentDescription="@string/cd_cover_image"
@@ -26,7 +27,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_toLeftOf="@id/cn_icon"
+            android:layout_toStartOf="@id/cn_icon"
             android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@android:color/black"
@@ -37,8 +40,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_below="@id/cn_connected_to"
             android:layout_toLeftOf="@id/cn_icon"
+            android:layout_toStartOf="@id/cn_icon"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@android:color/black" />
 
@@ -47,8 +52,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_below="@id/cn_ip"
             android:layout_toLeftOf="@id/cn_icon"
+            android:layout_toStartOf="@id/cn_icon"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@android:color/black" />
 

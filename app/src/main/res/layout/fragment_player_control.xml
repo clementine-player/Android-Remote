@@ -70,9 +70,9 @@
                 android:singleLine="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
+                android:layout_gravity="start"
                 android:layout_weight="1"
-                android:gravity="left"
+                android:gravity="start"
                 android:textColor="@color/player_smalltext"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -92,9 +92,9 @@
                 android:singleLine="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
+                android:layout_gravity="end"
                 android:layout_weight="1"
-                android:gravity="right"
+                android:gravity="end"
                 android:textColor="@color/player_smalltext"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -104,6 +104,7 @@
 
     <SeekBar
         android:id="@+id/sbPosition"
+        android:layoutDirection="ltr"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"

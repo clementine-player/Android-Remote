@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
+    android:layoutDirection="ltr"
     android:id="@+id/widget_layout"
     android:background="#DDdb6835"
     android:layout_width="match_parent"
@@ -11,7 +13,8 @@
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
     android:paddingRight="3dp"
-    android:paddingEnd="3dp">
+    android:paddingEnd="3dp"
+    tools:ignore="UnusedAttribute">
 
     <ImageView
         android:layout_width="25dp"

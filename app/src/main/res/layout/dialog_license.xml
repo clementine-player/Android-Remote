@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:drawablePadding="1dp"
         android:drawableRight="@drawable/gplv3"
+        android:drawableEnd="@drawable/gplv3"
         android:text="@string/dialog_license_top" />
 
     <View
