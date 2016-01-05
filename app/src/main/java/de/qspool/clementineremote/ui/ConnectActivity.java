@@ -432,7 +432,10 @@ public class ConnectActivity extends AppCompatActivity {
      * Show the user the first time called dialog
      */
     private void showFirstTimeScreen() {
-        Utilities.ShowHtmlMessageDialog(this, R.string.first_time_title, R.string.first_time_text);
+        Utilities.ShowMessageDialog(this,
+                getString(R.string.first_time_title),
+                getString(R.string.first_time_text, getString(R.string.clementine_version)),
+                true);
     }
 
     /**
@@ -470,7 +473,10 @@ public class ConnectActivity extends AppCompatActivity {
         } else if (!Utilities.ToInetAddress(ip).isSiteLocalAddress()) {
             Utilities.ShowMessageDialog(this, R.string.connectdialog_error, R.string.no_private_ip);
         } else {
-            Utilities.ShowMessageDialog(this, R.string.connectdialog_error, R.string.check_ip);
+            Utilities.ShowMessageDialog(this,
+                    getString(R.string.connectdialog_error),
+                    getString(R.string.check_ip, getString(R.string.clementine_version)),
+                    false);
         }
     }
 
@@ -479,7 +485,7 @@ public class ConnectActivity extends AppCompatActivity {
      */
     void oldProtoVersion() {
         String title = getString(R.string.error_versions);
-        String message = getString(R.string.old_proto) + "\n(need Clementine-1.2.3-1110-gd322c12 (hourly build) or later!)";
+        String message = getString(R.string.old_proto, getString(R.string.clementine_version));
         Utilities.ShowMessageDialog(this, title, message, false);
     }
 
