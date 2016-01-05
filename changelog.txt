@@ -1,3 +1,25 @@
+Version 11 (unreleased)
+  Features:
+    - Complete design overhaul, using Material Design.
+    - Global Search
+    - rtl language support
+  Improvements:
+    - Download every song in your library, long click and select download
+    - Clicking on finished downloads open a file chooser which song to play back
+    - Sorting and grouping library is possible now
+    - Show download speed and total file size in download view
+    - Stop playback
+    - Show transcoding status (Clementine can transcode lossless file before the download. Check Clementine settings)
+    - Add tabs in player view for easier navigation
+  Bugfixes:
+    - Fix timeout when downloading library
+    - Fix crash in download settings when clicking "Set download folder"
+    - Fix volume reset when receiving a call
+  Other:
+    - Build against API 23 Marshmallow
+    - Use latest buildtools
+    - Remove ShowcaseView
+
 Version 10.1
   Bugfixes:
     - Fix NullPointerException when trying to connect
