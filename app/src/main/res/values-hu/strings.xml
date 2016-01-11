@@ -1,0 +1,253 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="app_name">Clementine távvezérlő</string>
+  <string name="app_not_available">Az app nem elérhető!</string>
+  <string name="connectdialog_connect">Kapcsolódás</string>
+  <string name="connectdialog_connecting">Kapcsolódás a Clementine-hoz</string>
+  <string name="connectdialog_download_data">Adatok letöltése</string>
+  <string name="connectdialog_error">A kiszolgáló nem elérhető</string>
+  <string name="connectdialog_ip_hint">Írja be az IP-címet</string>
+  <string name="connectdialog_services">Clementine példányok</string>
+  <string name="player_nosong">Épp nincs lejátszás</string>
+  <string name="player_disconnected">Kapcsolat bontva</string>
+  <string name="player_playlist">Lejátszólista:</string>
+  <string name="player_download_playlists">Lejátszólisták letöltése</string>
+  <string name="playler_volume">Hangerő</string>
+  <string name="player_stop_after_current">Leállítás, amint a szám véget ér.</string>
+  <string name="player_download_lyrics">Dalszöveg letöltése</string>
+  <string name="player_no_lyrics">Nem található dalszöveg</string>
+  <string name="player_download_started">Letöltés elindult!</string>
+  <string name="player_song_is_stream">Az adatfolyam nem tölthető le!</string>
+  <string name="player_stream">[S]</string>
+  <string name="playlist_search_hint">Szám keresése</string>
+  <string name="playlist_empty">A lejátszólista üres!</string>
+  <string name="playlist_context_play">Elem lejátszása</string>
+  <string name="playlist_context_remove">Eltávolítás a lejátszólistáról</string>
+  <string name="playlist_loading">Betöltés</string>
+  <string name="playlist_close">Lejátszólista bezárása</string>
+  <string name="playlist_clear">Lejátszólista ürítése</string>
+  <string name="playlist_clear_content">Ez végleg eltávolít minden számot a lejátszólistáról. Folytatja?</string>
+  <string name="playlist_clear_confirm">Lejátszólista ürítése</string>
+  <string name="downloads_empty">Nincsenek letöltések</string>
+  <string name="download_freespace">Szabad terület</string>
+  <string name="downloaded_songs">Letöltött számok - kattintson a lejátszáshoz</string>
+  <string name="download_noti_title">Letöltés elkezdése</string>
+  <plurals name="download_noti_n_downloads">
+    <item quantity="one">%d aktív letöltés</item>
+    <item quantity="other">%d aktív letöltés</item>
+  </plurals>
+  <string name="download_noti_n_progress">Teljes haladás: %d %</string>
+  <string name="download_noti_title_song">[Szám]</string>
+  <string name="download_noti_title_album">[Album]</string>
+  <string name="download_noti_title_playlist">[Lejátszólista]</string>
+  <string name="download_noti_title_songs">[Számok]</string>
+  <plurals name="download_noti_n_finished">
+    <item quantity="one">%d letöltés befejeződött</item>
+    <item quantity="other">%d letöltés befejeződött</item>
+  </plurals>
+  <string name="download_noti_complete">Letöltés kész</string>
+  <string name="download_noti_canceled">Letöltés megszakítva</string>
+  <string name="download_noti_insufficient_space">Elégtelen tárterület, letöltés megszakítása.</string>
+  <string name="download_noti_forbidden">Letöltés tiltva, aktiválja a Clementine beállításaiban</string>
+  <string name="download_noti_not_mounted">Tárolóeszköz nem található!</string>
+  <string name="download_noti_only_wifi">A letöltés csak WiFi-n engedélyezett.</string>
+  <string name="download_noti_transcoding">Fájlok átkódolása</string>
+  <string name="download_noti_transcoding_subtitle">Kérem várjon</string>
+  <string name="library_download">Zenetár letöltése</string>
+  <string name="library_optimize">Adatbázis optimalizálása</string>
+  <string name="library_please_wait">Kérem várjon</string>
+  <string name="library_empty">A zenetár üres. Csúsztassa ujját lefelé a zenetár letöltéséhez.</string>
+  <string name="library_no_search_results">Nincs a keresésnek megfelelő szám!</string>
+  <string name="library_download_error">A zenetár letöltése nem sikerült</string>
+  <string name="global_search_empty">Írja be a keresési kifejezéseit a számítógépén és az interneten található zenék kereséséhez</string>
+  <string name="global_search_search">Keresés bármire</string>
+  <string name="global_search_query">Keresés: %s</string>
+  <string name="song_info_album">Album</string>
+  <string name="song_info_genre">Műfaj</string>
+  <string name="song_info_year">Év</string>
+  <string name="song_info_track">Szám</string>
+  <string name="song_info_disc">Lemez</string>
+  <string name="song_info_playcount">Lejátszások</string>
+  <string name="song_info_length">Hossz</string>
+  <string name="song_info_size">Méret</string>
+  <string name="song_info_filename">Fájlnév</string>
+  <string name="song_info_rating">Értékelés</string>
+  <string name="song_info_rated">A szám értékelése $stars$ csillag</string>
+  <string name="connection_connected_to">Kapcsolódva ide:</string>
+  <string name="connection_volume">Hangerő</string>
+  <string name="connection_version">Clementine verzió</string>
+  <string name="connection_traffic">Forgalom fel / le (átlag / mp)</string>
+  <string name="connection_traffic_unsupported">Statisztika nem elérhető ezen az eszközön</string>
+  <string name="menu_shuffle">Véletlenszerű lejátszás</string>
+  <string name="menu_repeat">Ismétlés</string>
+  <string name="menu_settings">Beállítások</string>
+  <string name="menu_search">Keresés</string>
+  <string name="menu_love">Kedvelés</string>
+  <string name="menu_ban">Tiltás</string>
+  <string name="menu_download">Letöltés</string>
+  <string name="menu_download_playlist">Lejátszólista letöltése</string>
+  <string name="donate_header">Adományok</string>
+  <string name="donate_text">Köszönöm hogy használja az alkalmazást, remélem hasznosnak találja!\n\nHa tényleg elégedett a munkámmal, akkor az adományokat nagyra értékelem.</string>
+  <string name="donate_i_want">Adományozni szeretnék:</string>
+  <string name="donate_one">egy fánkot (1,00 €)</string>
+  <string name="donate_two">egy kávét (2,00 €)</string>
+  <string name="donate_five">egy pizzát (5,00 €)</string>
+  <string name="donate_thanks">Köszönöm a támogatását! :-)</string>
+  <string name="donate_complete">Adományozás befejeződött, köszönöm! :-)</string>
+  <string name="donate_try_again">Legutóbbi adomány feldolgozása, próbálja újra</string>
+  <string name="donate_not_available">A Google Play nem elérhető</string>
+  <string name="donate_not_available_text">Kérem ellenőrizze, hogy a legfrissebb Google Play telepítve van-e, majd próbálja újra!</string>
+  <string name="pref_cat_behavior">Viselkedés</string>
+  <string name="pref_cat_player">Lejátszó</string>
+  <string name="pref_cat_library">Zenetár</string>
+  <string name="pref_cat_downloads">Letöltések</string>
+  <string name="pref_cat_advanced">Haladó</string>
+  <string name="pref_cat_network">Hálózat</string>
+  <string name="pref_cat_connection">Kapcsolódás</string>
+  <string name="pref_cat_info">Információk</string>
+  <string name="pref_cat_about">Névjegy</string>
+  <string name="pref_cat_license">Licencek</string>
+  <string name="pref_volume_title">Hangerőgombok használata</string>
+  <string name="pref_volume_summary">A hangerőgombok használata a Clementine hangerejének állítására.</string>
+  <string name="pref_trackno_title">Sorszám megjelenítése</string>
+  <string name="pref_trackno_summary">A számok sorszámának megjelenítése vagy elrejtése a lejátszólistában</string>
+  <string name="pref_lastfm_title">Last.fm</string>
+  <string name="pref_lastfm_summary">Kapcsolja be a számok kedveléséhez / tiltásához.</string>
+  <string name="pref_lower_volume_title">Hangerő csökkentése</string>
+  <string name="pref_lower_volume_summary">A hangerő csökkentése ki- és bejövő hívások alatt.</string>
+  <string name="pref_call_volume_title">Híváskori hangerő</string>
+  <string name="pref_call_volume_summary">Jelenlegi híváskori hangerő: %s</string>
+  <string name="pref_volume_inc_title">Hangerő-változtatás mértéke</string>
+  <string name="pref_volume_inc_summary">Hangerő-változtatás jelenlegi mértéke: %s</string>
+  <string name="pref_library_sorting_title">Rendezés</string>
+  <string name="pref_library_sorting_summary">A zenetár eszerint rendezett: %1$s</string>
+  <string-array name="pref_library_sorting">
+    <item>Növekvő</item>
+    <item>Csökkenő</item>
+  </string-array>
+  <string name="pref_library_grouping_title">Csoportosítás</string>
+  <string name="pref_library_grouping_summary">A zenetár eszerint csoportosított: %1$s</string>
+  <string-array name="pref_library_grouping">
+    <item>Előadó</item>
+    <item>Előadó / Album</item>
+    <item>Előadó / Év</item>
+    <item>Album</item>
+    <item>Műfaj / Album</item>
+    <item>Műfaj / Előadó / Album</item>
+  </string-array>
+  <string name="pref_autoconnect_title">Automatikus kapcsolódás</string>
+  <string name="pref_autoconnect_summary">Automatikus kapcsolódás a Clementine-hoz a távvezérlő indításakor.
+</string>
+  <string name="pref_port_title">Port</string>
+  <string name="pref_port_summary">Jelenlegi port:</string>
+  <string name="pref_port_default">5500</string>
+  <string name="pref_port_error">Érvénytelen port!</string>
+  <string name="pref_wake_lock_title">CPU ébren tartása</string>
+  <string name="pref_wake_lock_summary">Kapcsolja be, ha az app véletlenszerűen bontja a kapcsolatot a háttérben. Ez hamarabb lemerítheti az akkumulátort.</string>
+  <string name="pref_keep_screen_on_title">Képernyő bekapcsolva tartása</string>
+  <string name="pref_keep_screen_on_summary">Megakadályozza a képernyő kikapcsolását amíg a távvezérlő kapcsolódik a Clementine-hoz.</string>
+  <string name="pref_version_summary">A projekt weboldalának meglátogatása.</string>
+  <string name="pref_version_title">Verzió</string>
+  <string name="pref_license_title">Licenc</string>
+  <string name="pref_license_summary">GNU GPLv3</string>
+  <string name="pref_opensource_title">Nyílt forráskód</string>
+  <string name="pref_opensource_summary">Nyílt forráskódú szoftver licencek megjelenítése</string>
+  <string name="pref_opensource">Nyílt forráskódú szoftver licencek</string>
+  <string name="pref_about_title">Névjegy</string>
+  <string name="pref_about_summary">Emberek, akik a projekten dolgoznak</string>
+  <string name="pref_clementine_title">Clementine</string>
+  <string name="pref_clementine_summary">A Clementine weblapjának meglátogatása</string>
+  <string name="pref_dl_wifi_only_title">Csak WiFi-n</string>
+  <string name="pref_dl_wifi_only_summary">A számok csak WiFi hálózaton töltődjenek le.</string>
+  <string name="pref_dl_dir">Letöltési mappa beállítása</string>
+  <string name="pref_dl_override">Létező fájlok felülírása</string>
+  <string name="pref_dl_cat_folders">Mappák</string>
+  <string name="pref_dl_pl_save_own_dir_title">Számok mentése a lejátszólista mappájába</string>
+  <string name="pref_dl_pl_save_own_dir_summary">A lejátszólista nevével létrehoz egy mappát, és a számokat oda menti.</string>
+  <string name="pref_dl_pl_artist_dir_title">Előadó almappa létrehozása</string>
+  <string name="pref_dl_pl_artist_dir_summary">Előadó almappa létrehozása minden egyes számhoz.</string>
+  <string name="pref_dl_pl_album_dir_title">Album almappa létrehozása</string>
+  <string name="pref_dl_pl_album_dir_summary">Album almappa létrehozása minden egyes számhoz.</string>
+  <string name="file_dialog_set_dir">Mappa kiválasztása</string>
+  <string name="file_dialog_not_writable">A mappa nem írható</string>
+  <string name="file_dialog_custom_paths_available">Másik kiválasztása</string>
+  <string name="dialog_about_authors">Szerzők</string>
+  <string name="dialog_about_supporters">Támogatók</string>
+  <string name="dialog_about_others">Mások</string>
+  <string name="dialog_license_top">Ez a program abban a reményben kerül közreadásra, hogy hasznos lesz, de minden egyéb GARANCIA NÉLKÜL.</string>
+  <string name="tasker_intro">Válasszon egy műveletet.</string>
+  <string name="tasker_ip_help">Írja be a kapcsolódás részleteit ha a „Kapcsolódást” választotta. A hitelesítési kód nem kötelező, ha kikapcsolta a Clementine-ban.</string>
+  <string name="tasker_action">Művelet:</string>
+  <string name="tasker_connect">Kapcsolódás</string>
+  <string name="tasker_disconnect">Kapcsolat bontása</string>
+  <string name="tasker_play">Lejátszás</string>
+  <string name="tasker_pause">Szünet</string>
+  <string name="tasker_playpause">Lejátszás / Szünet</string>
+  <string name="tasker_stop">Leállítás</string>
+  <string name="tasker_next">Következő szám</string>
+  <string name="tasker_port_hint">Írja be a portot</string>
+  <string name="tasker_auth_hint">Írja be a hitelesítési kódot</string>
+  <string name="widget_connect_to">Kapcsolódás</string>
+  <string name="widget_not_connected">Nincs kapcsolódva</string>
+  <string name="widget_open_clementine">A Clementine távirányító indítása</string>
+  <string name="widget_couldnt_connect">Nem sikerült kapcsolódni</string>
+  <string name="dialog_close">Bezárás</string>
+  <string name="dialog_cancel">Mégsem</string>
+  <string name="error_versions">Nem kompatibilis verzió</string>
+  <string name="old_proto">Kérjük frissítse a Clementine-t! A Clementine %1$s vagy újabb szükséges.</string>
+  <string name="no_private_ip">Az Android eszközének nem helyi IP-címe van. Próbálja kikapcsolni a „Csak helyi IP-címek engedélyezése” opciót a Clementine beállításaiban.</string>
+  <string name="check_ip">1) Fut a Clementine?\n2) Clementine %1$s vagy újabbat használ?\n3) Engedélyezte a hálózati vezérlést a Clementine beállításaiban?\n4) Ellenőrizze, hogy a helyes IP-címet adta meg.\n</string>
+  <string name="wifi_disabled">A WiFi ki van kapcsolva. Ha az interneten keresztül szeretne kapcsolódni, akkor ellenőrizze hogy a portok helyesen vannak továbbítva, és hogy kikapcsolta a „Csak helyi IP-címek engedélyezése” beállítást.</string>
+  <string name="input_auth_code">Hitelesítési kód</string>
+  <string name="invalid_code">Érvénytelen kód</string>
+  <string name="done">Kész</string>
+  <string name="unknown">Ismeretlen</string>
+  <plurals name="number_items">
+    <item quantity="one">%d elem</item>
+    <item quantity="other">%d elem</item>
+  </plurals>
+  <plurals name="songs_added">
+    <item quantity="one">%d szám hozzáadva a lejátszólistához</item>
+    <item quantity="other">%d szám hozzáadva a lejátszólistához</item>
+  </plurals>
+  <string name="context_add_to_playlist">Elem hozzáadása a lejátszólistához</string>
+  <string name="repeat_off">Nincs ismétlés</string>
+  <string name="repeat_track">Szám ismétlése</string>
+  <string name="repeat_album">Album ismétlése</string>
+  <string name="repeat_playlist">Lejátszólista ismétlése</string>
+  <string name="shuffle_off">Nincs véletlenszerű lejátszás</string>
+  <string name="shuffle_all">Minden szám véletlenszerűen</string>
+  <string name="shuffle_inside_album">Az album számai véletlenszerűen</string>
+  <string name="shuffle_albums">Albumok véletlenszerűen</string>
+  <string name="first_time_title">Üdvözöljük</string>
+  <string name="first_time_text">Köszönöm hogy a Clementine távvezérlőt használja!\nRemélem ez az app hasznos lesz Önnek&lt;br&gt;&lt;br&gt;Az alkalmazás használatához le kell töltenie és fel kell telepítenie a Clementine %1$s vagy újabb verzióját &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;innen&lt;/a&gt;.</string>
+  <string name="track_loved">Szám kedvelve &lt;3</string>
+  <string name="track_banned">Szám letiltva :-(</string>
+  <string name="notification_disconnect_keep_alive">A kapcsolat elveszett. Érintse meg az újrakapcsolódáshoz.</string>
+  <string name="crash_report_title">Hupsz, valami rossz történt!</string>
+  <string name="crash_report_message">Legutóbb a Clementine távvezérlő összeomlott! Ennek nem kellett volna megtörténnie! Kérem segítsen az alkalmazás javításában, és küldje el nekem a naplófájlokat. Köszönöm!</string>
+  <string name="crash_report_send">Küldés!</string>
+  <string name="fragment_title_player">Lejátszó</string>
+  <string name="fragment_title_details">Szám részletei</string>
+  <string name="fragment_title_connection">Clementine</string>
+  <string name="navigation_drawer_clementine_on">Clementine itt: %s</string>
+  <string name="player_download_what">Mit töltsön le?</string>
+  <string-array name="player_download_list">
+    <item>Szám</item>
+    <item>Album</item>
+    <item>Lejátszólista</item>
+  </string-array>
+  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
+  <string-array name="navigation_drawer_items">
+    <item>Keresés</item>
+    <item>Lejátszó</item>
+    <item>Lejátszólista</item>
+    <item>Zenetár</item>
+    <item>Letöltések</item>
+    <item></item>
+    <item>Beállítások</item>
+    <item>Adományozás</item>
+    <item></item>
+    <item>Kilépés</item>
+  </string-array>
+</resources>

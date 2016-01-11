@@ -1,0 +1,252 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="app_name">Control remoto de Clementine</string>
+  <string name="app_not_available">La aplicación no está disponible</string>
+  <string name="connectdialog_connect">Conectar</string>
+  <string name="connectdialog_connecting">Conectando con Clementine</string>
+  <string name="connectdialog_download_data">Descargando datos</string>
+  <string name="connectdialog_error">No se pudo conectar con el equipo</string>
+  <string name="connectdialog_ip_hint">Escriba la dirección IP</string>
+  <string name="connectdialog_services">Instancias de Clementine</string>
+  <string name="player_nosong">No hay ninguna canción en reproducción</string>
+  <string name="player_disconnected">Desconectado</string>
+  <string name="player_playlist">Lista de reproducción:</string>
+  <string name="player_download_playlists">Descargando listas de reproducción</string>
+  <string name="playler_volume">Volumen</string>
+  <string name="player_stop_after_current">Activa/desactiva la detención tras finalizar la pista.</string>
+  <string name="player_download_lyrics">Descargando la letra</string>
+  <string name="player_no_lyrics">No se encontraron letras.</string>
+  <string name="player_download_started">La descarga ha comenzado.</string>
+  <string name="player_song_is_stream">No se pueden descargar los flujos</string>
+  <string name="player_stream">[S]</string>
+  <string name="playlist_search_hint">Buscar pista</string>
+  <string name="playlist_empty">La lista está vacía.</string>
+  <string name="playlist_context_play">Reproducir elemento</string>
+  <string name="playlist_context_remove">Quitar de la lista</string>
+  <string name="playlist_loading">Cargando</string>
+  <string name="playlist_close">Cerrar lista</string>
+  <string name="playlist_clear">Vaciar lista</string>
+  <string name="playlist_clear_content">Esto quitará todas las canciones de la lista irreversiblemente. ¿Continuar?</string>
+  <string name="playlist_clear_confirm">Vaciar lista</string>
+  <string name="downloads_empty">No hay descargas.</string>
+  <string name="download_freespace">Espacio libre</string>
+  <string name="downloaded_songs">Canciones descargadas - pulse para reproducir</string>
+  <string name="download_noti_title">Iniciando la descarga</string>
+  <plurals name="download_noti_n_downloads">
+    <item quantity="one">%d descarga en curso</item>
+    <item quantity="other">%d descargas en curso</item>
+  </plurals>
+  <string name="download_noti_n_progress">Progreso total: %d %</string>
+  <string name="download_noti_title_song">[Canción]</string>
+  <string name="download_noti_title_album">[Álbum]</string>
+  <string name="download_noti_title_playlist">[Lista de reproducción]</string>
+  <string name="download_noti_title_songs">[Canciones]</string>
+  <plurals name="download_noti_n_finished">
+    <item quantity="one">%d descarga finalizada</item>
+    <item quantity="other">%d descargas finalizadas</item>
+  </plurals>
+  <string name="download_noti_complete">Descarga completa</string>
+  <string name="download_noti_canceled">Descarga cancelada</string>
+  <string name="download_noti_insufficient_space">No hay espacio suficiente; se interrumpió la descarga.</string>
+  <string name="download_noti_forbidden">Se ha restringido la descarga. Actívela en la configuración de Clementine.</string>
+  <string name="download_noti_not_mounted">No se encontró ningún dispositivo de almacenamiento.</string>
+  <string name="download_noti_only_wifi">Solo se permiten las descargas al usar wifi.</string>
+  <string name="download_noti_transcoding">Convirtiendo archivos</string>
+  <string name="download_noti_transcoding_subtitle">Espere</string>
+  <string name="library_download">Descargando la colección</string>
+  <string name="library_optimize">Optimizando la base de datos</string>
+  <string name="library_please_wait">Espere</string>
+  <string name="library_empty">La colección está vacía. Pulse Actualizar para descargarla.</string>
+  <string name="library_no_search_results">Ninguna canción coincide con los criterios de búsqueda.</string>
+  <string name="library_download_error">No se pudo descargar la colección</string>
+  <string name="global_search_empty">Introduzca los términos de búsqueda arriba para encontrar música en su computadora o en internet</string>
+  <string name="global_search_search">Busque lo que quiera</string>
+  <string name="global_search_query">Consulta: %s</string>
+  <string name="song_info_album">Álbum</string>
+  <string name="song_info_genre">Género</string>
+  <string name="song_info_year">Año</string>
+  <string name="song_info_track">Pista</string>
+  <string name="song_info_disc">Disco</string>
+  <string name="song_info_playcount">N.º de reproducciones</string>
+  <string name="song_info_length">Duración</string>
+  <string name="song_info_size">Tamaño</string>
+  <string name="song_info_filename">Nombre de archivo</string>
+  <string name="song_info_rating">Valoración</string>
+  <string name="song_info_rated">Canciones con $stars$ estrellas</string>
+  <string name="connection_connected_to">Conectado con:</string>
+  <string name="connection_volume">Volumen</string>
+  <string name="connection_version">Versión de Clementine</string>
+  <string name="connection_traffic">Carga/descarga de tráfico (prom./s)</string>
+  <string name="connection_traffic_unsupported">Las estadísticas no están disponibles en este dispositivo</string>
+  <string name="menu_shuffle">Aleatorio</string>
+  <string name="menu_repeat">Repetir</string>
+  <string name="menu_settings">Configuración</string>
+  <string name="menu_search">Buscar</string>
+  <string name="menu_love">Me encanta</string>
+  <string name="menu_ban">Vetar</string>
+  <string name="menu_download">Descarga</string>
+  <string name="menu_download_playlist">Descargar lista</string>
+  <string name="donate_header">Donaciones</string>
+  <string name="donate_text">Gracias por utilizar esta aplicación. Esperamos que le sea útil.\n\nSi le gusta nuestro trabajo, puede realizar una pequeña donación.</string>
+  <string name="donate_i_want">Me gustaría donar:</string>
+  <string name="donate_one">Rosquillas (1,00 €)</string>
+  <string name="donate_two">Café (2,00 €)</string>
+  <string name="donate_five">Pizza (5,00 €)</string>
+  <string name="donate_thanks">Gracias por su apoyo :-)</string>
+  <string name="donate_complete">Gracias por su donación :-)</string>
+  <string name="donate_try_again">Procesando la última donación, inténtelo de nuevo</string>
+  <string name="donate_not_available">Google Play no está disponible</string>
+  <string name="donate_not_available_text">Compruebe que tiene la versión más reciente de Google Play e inténtelo de nuevo.</string>
+  <string name="pref_cat_behavior">Comportamiento</string>
+  <string name="pref_cat_player">Reproductor</string>
+  <string name="pref_cat_library">Colección</string>
+  <string name="pref_cat_downloads">Descargas</string>
+  <string name="pref_cat_advanced">Avanzadas</string>
+  <string name="pref_cat_network">Red</string>
+  <string name="pref_cat_connection">Conexión</string>
+  <string name="pref_cat_info">Información</string>
+  <string name="pref_cat_about">Acerca de</string>
+  <string name="pref_cat_license">Licencias</string>
+  <string name="pref_volume_title">Usar botones de volumen</string>
+  <string name="pref_volume_summary">Usar los botones de volumen para controlar el volumen de Clementine.</string>
+  <string name="pref_trackno_title">Mostrar n.º de pista</string>
+  <string name="pref_trackno_summary">Mostrar u ocultar el número de pista en las listas de reprod.</string>
+  <string name="pref_lastfm_title">Last.fm</string>
+  <string name="pref_lastfm_summary">Actívelo para marcar pistas como favoritas o vetarlas.</string>
+  <string name="pref_lower_volume_title">Disminuir el volumen</string>
+  <string name="pref_lower_volume_summary">Reducir el volumen al realizar/recibir una llamada.</string>
+  <string name="pref_call_volume_title">Nivel de volumen en llamadas</string>
+  <string name="pref_call_volume_summary">Nivel de volumen en llamadas actual: %s</string>
+  <string name="pref_volume_inc_title">Cambiar nivel de volumen</string>
+  <string name="pref_volume_inc_summary">Cambio de nivel de volumen actual: %s</string>
+  <string name="pref_library_sorting_title">Orden</string>
+  <string name="pref_library_sorting_summary">La colección está ordenada en orden %1$s.</string>
+  <string-array name="pref_library_sorting">
+    <item>Ascendente</item>
+    <item>Descendente</item>
+  </string-array>
+  <string name="pref_library_grouping_title">Agrupación</string>
+  <string name="pref_library_grouping_summary">La colección está agrupada por %1$s.</string>
+  <string-array name="pref_library_grouping">
+    <item>Artista</item>
+    <item>Artista / Álbum</item>
+    <item>Artista / Año</item>
+    <item>Álbum</item>
+    <item>Genero / Álbum</item>
+    <item>Genero / Artista / Álbum</item>
+  </string-array>
+  <string name="pref_autoconnect_title">Conexión automática</string>
+  <string name="pref_autoconnect_summary">Conectar automáticamente con Clementine al iniciar el control remoto.
+</string>
+  <string name="pref_port_title">Puerto</string>
+  <string name="pref_port_summary">Puerto actual:</string>
+  <string name="pref_port_default">5500</string>
+  <string name="pref_port_error">Puerto no válido.</string>
+  <string name="pref_wake_lock_title">Mantener CPU activa</string>
+  <string name="pref_wake_lock_summary">Active esta opción si la aplicación se desconecta por momentos. Reduce la energía de la batería.
+</string>
+  <string name="pref_keep_screen_on_title">Mantener pantalla encendida</string>
+  <string name="pref_keep_screen_on_summary">Evita que la pantalla se apague mientras el Control remoto de Clementine esté conectado con Clementine.
+    </string>
+  <string name="pref_version_summary">Pulse para visitar el sitio web del proyecto</string>
+  <string name="pref_version_title">Versión</string>
+  <string name="pref_license_title">Licencia</string>
+  <string name="pref_license_summary">GNU GPLv3</string>
+  <string name="pref_opensource_title">Código abierto</string>
+  <string name="pref_opensource_summary">Mostrar licencias de software de código abierto</string>
+  <string name="pref_opensource">Licencias de software de código abierto</string>
+  <string name="pref_about_title">Acerca de</string>
+  <string name="pref_about_summary">Personas que trabajan en este proyecto</string>
+  <string name="pref_clementine_title">Clementine</string>
+  <string name="pref_clementine_summary">Visitar sitio web de Clementine</string>
+  <string name="pref_dl_wifi_only_title">Solo wifi</string>
+  <string name="pref_dl_wifi_only_summary">Solo descargar canciones mientras está conectado a una red wifi.</string>
+  <string name="pref_dl_dir">Definir la carpeta de descargas</string>
+  <string name="pref_dl_override">Sobrescribir archivos existentes</string>
+  <string name="pref_dl_cat_folders">Carpetas</string>
+  <string name="pref_dl_pl_save_own_dir_title">Guardar pistas en la carpeta de la lista de reproducción</string>
+  <string name="pref_dl_pl_save_own_dir_summary">Crea una carpeta con el nombre de la lista de reproducción y guarda las pistas ahí.</string>
+  <string name="pref_dl_pl_artist_dir_title">Crear subcarpeta de artista</string>
+  <string name="pref_dl_pl_artist_dir_summary">Crear subcarpeta de artista para cada pista.</string>
+  <string name="pref_dl_pl_album_dir_title">Crear subcarpeta de álbum</string>
+  <string name="pref_dl_pl_album_dir_summary">Crear subcarpeta de álbum dentro del artista para cada pista.</string>
+  <string name="file_dialog_set_dir">Seleccione la carpeta</string>
+  <string name="file_dialog_not_writable">La carpeta no es escribible</string>
+  <string name="file_dialog_custom_paths_available">Seleccionar otra</string>
+  <string name="dialog_about_authors">Autores</string>
+  <string name="dialog_about_supporters">Partidarios</string>
+  <string name="dialog_about_others">Otros</string>
+  <string name="dialog_license_top"> Este programa se distribuye con la esperanza de que será útil, pero SIN NINGUNA GARANTÍA</string>
+  <string name="tasker_intro">Seleccione una acción.</string>
+  <string name="tasker_ip_help">Si seleccionó «Conectar», proporcione los detalles de conexión. El código de autenticación es opcional si se desactivó en Clementine.</string>
+  <string name="tasker_action">Acción:</string>
+  <string name="tasker_connect">Conectar</string>
+  <string name="tasker_disconnect">Desconectar</string>
+  <string name="tasker_play">Reproducir</string>
+  <string name="tasker_pause">Pausar</string>
+  <string name="tasker_playpause">Reproducir/pausar</string>
+  <string name="tasker_stop">Detener</string>
+  <string name="tasker_next">Próxima canción</string>
+  <string name="tasker_port_hint">Puerto</string>
+  <string name="tasker_auth_hint">Código de autenticación</string>
+  <string name="widget_connect_to">Toque para conectar</string>
+  <string name="widget_not_connected">No conectado</string>
+  <string name="widget_open_clementine">Toque para iniciar el Control remoto</string>
+  <string name="widget_couldnt_connect">No se pudo conectar</string>
+  <string name="dialog_close">Cerrar</string>
+  <string name="dialog_cancel">Cancelar</string>
+  <string name="error_versions">Versión incompatible</string>
+  <string name="no_private_ip">Su dispositivo Android tiene una dirección IP no local. Pruebe a desactivar «Solo usar direcciones IP locales» en la configuración de Clementine.</string>
+  <string name="wifi_disabled">El wifi está desactivado. Si quiere conectarse con Clementine mediante Internet, asegúrese de que redireccionó los puertos adecuadamente y de que desactivó «Solo usar direcciones IP locales».</string>
+  <string name="input_auth_code">Código de autenticación</string>
+  <string name="invalid_code">Código no válido</string>
+  <string name="done">Hecho</string>
+  <string name="unknown">Desconocido</string>
+  <plurals name="number_items">
+    <item quantity="one">%d elemento</item>
+    <item quantity="other">%d elementos</item>
+  </plurals>
+  <plurals name="songs_added">
+    <item quantity="one">Se añadió %d canción a la lista</item>
+    <item quantity="other">Se añadieron %d canciones a la lista</item>
+  </plurals>
+  <string name="context_add_to_playlist">Añadir elemento a la lista de reproducción actual</string>
+  <string name="repeat_off">No repetir</string>
+  <string name="repeat_track">Repetir pista</string>
+  <string name="repeat_album">Repetir álbum</string>
+  <string name="repeat_playlist">Repetir lista de reproducción</string>
+  <string name="shuffle_off">No mezclar</string>
+  <string name="shuffle_all">Mezclar todo</string>
+  <string name="shuffle_inside_album">Mezclar pistas en este álbum</string>
+  <string name="shuffle_albums">Mezclar álbumes</string>
+  <string name="first_time_title">Bienvenido/a</string>
+  <string name="track_loved">Le encanta esta pista &lt;3</string>
+  <string name="track_banned">Ha vetado esta pista :-(</string>
+  <string name="notification_disconnect_keep_alive">Se perdió la conexión. Toque para reconectar.</string>
+  <string name="crash_report_title">Vaya, algo ha fallado.</string>
+  <string name="crash_report_message">La última vez, el Control remoto de Clementine se cerró inesperadamente. Para ayudar a que este error no se produzca de nuevo, envíe el archivo de registro al desarrollador. ¡Gracias!</string>
+  <string name="crash_report_send">Enviar</string>
+  <string name="fragment_title_player">Reproductor</string>
+  <string name="fragment_title_details">Detalles de la canción</string>
+  <string name="fragment_title_connection">Clementine</string>
+  <string name="navigation_drawer_clementine_on">Clementine en %s</string>
+  <string name="player_download_what">¿Qué descargar?</string>
+  <string-array name="player_download_list">
+    <item>Canción</item>
+    <item>Álbum</item>
+    <item>Lista de reproducción</item>
+  </string-array>
+  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
+  <string-array name="navigation_drawer_items">
+    <item>Buscar</item>
+    <item>Reproductor</item>
+    <item>Listas de reproducción</item>
+    <item>Colección</item>
+    <item>Descargas</item>
+    <item></item>
+    <item>Configuración</item>
+    <item>Donar</item>
+    <item></item>
+    <item>Salir</item>
+  </string-array>
+</resources>

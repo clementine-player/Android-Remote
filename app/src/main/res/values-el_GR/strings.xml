@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="app_name">Clementine απομακρυσμένα</string>
+  <string name="app_not_available">Η εφαρμογή δεν βρέθηκε</string>
+  <string name="connectdialog_connect">Σύνδεση</string>
+  <string name="connectdialog_connecting">Συνδέεται στο Clementine</string>
+  <string name="connectdialog_download_data">Λήψη δεδομένων</string>
+  <string name="connectdialog_error">Δεν βρέθηκε host</string>
+  <string name="connectdialog_ip_hint">Δώστε διεύθυνση IP</string>
+  <string name="player_nosong">Δεν παίζει τραγούδι τώρα</string>
+  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
+</resources>

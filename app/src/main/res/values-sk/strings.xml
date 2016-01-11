@@ -1,0 +1,256 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="app_name">Clementine Remote</string>
+  <string name="app_not_available">Aplikácia nie je dostupná!</string>
+  <string name="connectdialog_connect">Pripojiť</string>
+  <string name="connectdialog_connecting">Pripája sa k prehrávaču Clementine</string>
+  <string name="connectdialog_download_data">Preberajú sa údaje</string>
+  <string name="connectdialog_error">Nepodarilo sa dosiahnuť hostiteľa</string>
+  <string name="connectdialog_ip_hint">Zadajte IP adresu</string>
+  <string name="connectdialog_services">Prehrávače Clementine</string>
+  <string name="player_nosong">Teraz sa neprehráva žiadna skladba</string>
+  <string name="player_disconnected">Odpojené</string>
+  <string name="player_playlist">Zoznam skladieb:</string>
+  <string name="player_download_playlists">Preberajú sa zoznamy skladieb</string>
+  <string name="playler_volume">Hlasitosť</string>
+  <string name="player_stop_after_current">Prepína zastavenie skladby po jej prehratí.</string>
+  <string name="player_download_lyrics">Preberá sa text skladby</string>
+  <string name="player_no_lyrics">Nenašiel sa žiadny text skladby.</string>
+  <string name="player_download_started">Preberanie bolo spustené!</string>
+  <string name="player_song_is_stream">Nedajú sa prebrať prúdy!</string>
+  <string name="player_stream">[S]</string>
+  <string name="playlist_search_hint">Vyhľadajte skladbu</string>
+  <string name="playlist_empty">Zoznam skladieb je prázdny!</string>
+  <string name="playlist_context_play">Prehrať položku</string>
+  <string name="playlist_context_remove">Odstrániť zo zoznamu skladieb</string>
+  <string name="playlist_loading">Načítava sa</string>
+  <string name="playlist_close">Zavrieť zoznam skladieb</string>
+  <string name="playlist_clear">Vymazať zoznam skladieb</string>
+  <string name="playlist_clear_content">Týmto sa nenávratne odstránia všetky skladby zo zoznamu skladieb. Pokračovať?</string>
+  <string name="playlist_clear_confirm">Vymazať zoznam skladieb</string>
+  <string name="downloads_empty">Žiadne preberania!</string>
+  <string name="download_freespace">Voľné miesto</string>
+  <string name="downloaded_songs">Prevzaté skladby - kliknutím prehráte</string>
+  <string name="download_noti_title">Spúšťanie preberania</string>
+  <plurals name="download_noti_n_downloads">
+    <item quantity="one">%d aktívne preberanie</item>
+    <item quantity="few">%d aktívne preberania</item>
+    <item quantity="other">%d aktívnych preberaní</item>
+  </plurals>
+  <string name="download_noti_n_progress">Celkový priebeh: %d %</string>
+  <string name="download_noti_title_song">[Skladba]</string>
+  <string name="download_noti_title_album">[Album]</string>
+  <string name="download_noti_title_playlist">[Zoznam skladieb]</string>
+  <string name="download_noti_title_songs">[Skladby]</string>
+  <plurals name="download_noti_n_finished">
+    <item quantity="one">%d dokončené preberanie</item>
+    <item quantity="few">%d dokončené preberania</item>
+    <item quantity="other">%d dokončených preberaní</item>
+  </plurals>
+  <string name="download_noti_complete">Preberanie dokončené</string>
+  <string name="download_noti_canceled">Preberanie zrušené</string>
+  <string name="download_noti_insufficient_space">Nedostatok miesta, preberanie sa prerušuje.</string>
+  <string name="download_noti_forbidden">Preberanie je zakázané. Aktivujte ho v nastaveniach prehrávača Clementine.</string>
+  <string name="download_noti_not_mounted">Nenašlo sa žiadne úložné zariadenie!</string>
+  <string name="download_noti_only_wifi">Preberanie je povolené iba počas pripojenia cez wifi.</string>
+  <string name="download_noti_transcoding">Prekódovávajú sa súbory</string>
+  <string name="download_noti_transcoding_subtitle">Prosím, čakajte</string>
+  <string name="library_download">Preberá sa zbierka</string>
+  <string name="library_optimize">Optimalizuje sa databáza</string>
+  <string name="library_please_wait">Prosím, čakajte</string>
+  <string name="library_empty">Zbierka je prázdna. Potiahnutím dole prevezmite zbierku!</string>
+  <string name="library_no_search_results">Vašim kritériám vyhľadávania nevyhuvujú žiadne skladby!</string>
+  <string name="library_download_error">Nepodarilo sa prebrať zbierku</string>
+  <string name="global_search_empty">Vyššie zadajte hľadané frázy na nájdenie hudby vo vašom počítači a na internete</string>
+  <string name="global_search_search">Vyhľadať čokoľvek</string>
+  <string name="global_search_query">Požiadavka: %s</string>
+  <string name="song_info_album">Album</string>
+  <string name="song_info_genre">Žáner</string>
+  <string name="song_info_year">Rok</string>
+  <string name="song_info_track">Stopa</string>
+  <string name="song_info_disc">Disk</string>
+  <string name="song_info_playcount">Počet prehratí</string>
+  <string name="song_info_length">Dĺžka</string>
+  <string name="song_info_size">Veľkosť</string>
+  <string name="song_info_filename">Názov súboru</string>
+  <string name="song_info_rating">Hodnotenie</string>
+  <string name="song_info_rated">Skladba je ohodnotená $stars$ hviezdičkami</string>
+  <string name="connection_connected_to">Pripojené k:</string>
+  <string name="connection_volume">Hlasitosť</string>
+  <string name="connection_version">Verzia prehrávača Clementine</string>
+  <string name="connection_traffic">Prenos hore/dole (priem./sek)</string>
+  <string name="connection_traffic_unsupported">Štatistiky nie sú na tomto zariadení dostupné</string>
+  <string name="menu_shuffle">Premiešať</string>
+  <string name="menu_repeat">Opakovať</string>
+  <string name="menu_settings">Nastavenia</string>
+  <string name="menu_search">Vyhľadať</string>
+  <string name="menu_love">Obľúbená</string>
+  <string name="menu_ban">zakázaná</string>
+  <string name="menu_download">Prevzatie</string>
+  <string name="menu_download_playlist">Prebrať zoznam skladieb</string>
+  <string name="donate_header">Príspevky</string>
+  <string name="donate_text">Ďakujeme za používanie našej aplikácie. Dúfame, že je pre vás užitočná!\n\nAk vám naša práca robí radosť, oceníme malý príspevok.</string>
+  <string name="donate_i_want">Chcem prispieť na:</string>
+  <string name="donate_one">Šišky (1.00 €)</string>
+  <string name="donate_two">Kávu (2.00 €)</string>
+  <string name="donate_five">Pizzu (5.00 €)</string>
+  <string name="donate_thanks">Ďakujeme za vašu podporu! :-)</string>
+  <string name="donate_complete">Prispievanie bolo dokončené, ďakujeme! :-)</string>
+  <string name="donate_try_again">Spracováva sa posledný príspevok, skúste to znovu</string>
+  <string name="donate_not_available">Obchod Play nie je dostupný</string>
+  <string name="donate_not_available_text">Prosím, skontrolujte, či máte nainštalovanú najnovšiu verziu Obchodu Play a skúste to znovu!</string>
+  <string name="pref_cat_behavior">Správanie</string>
+  <string name="pref_cat_player">Prehrávač</string>
+  <string name="pref_cat_library">Zbierka</string>
+  <string name="pref_cat_downloads">Preberania</string>
+  <string name="pref_cat_advanced">Pokročilé</string>
+  <string name="pref_cat_network">Sieť</string>
+  <string name="pref_cat_connection">Pripojenie</string>
+  <string name="pref_cat_info">Informácie</string>
+  <string name="pref_cat_about">O programe</string>
+  <string name="pref_cat_license">Licencie</string>
+  <string name="pref_volume_title">Použiť tlačidlá hlasitosti</string>
+  <string name="pref_volume_summary">Použiť tlačidlá hlasitosti na ovládanie hlasitosti prehrávača Clementine.</string>
+  <string name="pref_trackno_title">Zobraziť číslo stopy</string>
+  <string name="pref_trackno_summary">Zobraziť alebo skryť číslo stopy v zoznamoch skladieb.</string>
+  <string name="pref_lastfm_title">Last.fm</string>
+  <string name="pref_lastfm_summary">Aktivujte na určenie obľúbených/zakázaných skladieb.</string>
+  <string name="pref_lower_volume_title">Znížiť hlasitosť</string>
+  <string name="pref_lower_volume_summary">Znížiť hlasitosť počas prichádzajúceho/odchádzajúceho hovoru.</string>
+  <string name="pref_call_volume_title">Úroveň hlasitosti počas hovoru</string>
+  <string name="pref_call_volume_summary">Aktuálna úroveň hlasitosti počas hovoru: %s</string>
+  <string name="pref_volume_inc_title">Úroveň zmeny hlasitosti</string>
+  <string name="pref_volume_inc_summary">Aktuálna úroveň zmeny hlasitosti: %s</string>
+  <string name="pref_library_sorting_title">Usporiadanie</string>
+  <string name="pref_library_sorting_summary">Zbierka je usporiadaná v %1$s poradí.</string>
+  <string-array name="pref_library_sorting">
+    <item>vzostupnom</item>
+    <item>zostupnom</item>
+  </string-array>
+  <string name="pref_library_grouping_title">Zoskupenie</string>
+  <string name="pref_library_grouping_summary">Zbierka je zoskupená podľa %1$s.</string>
+  <string-array name="pref_library_grouping">
+    <item>Interpret</item>
+    <item>Interpret / Album</item>
+    <item>Interpret / Rok</item>
+    <item>Album</item>
+    <item>Žáner / Album</item>
+    <item>Žáner / Interpret / Album</item>
+  </string-array>
+  <string name="pref_autoconnect_title">Pripojiť automaticky</string>
+  <string name="pref_autoconnect_summary">Automaticky pripojiť k prehrávaču Clementine po spustení diaľkového ovládania.
+</string>
+  <string name="pref_port_title">Port</string>
+  <string name="pref_port_summary">Aktuálny Port:</string>
+  <string name="pref_port_default">5500</string>
+  <string name="pref_port_error">Neplatný port!</string>
+  <string name="pref_wake_lock_title">Udržiavať procesor nažive</string>
+  <string name="pref_wake_lock_summary">Povoľte ak sa aplikácia náhodne odpája pri spustení na pozadí. Môže rýchlejšie vybíjať batériu.
+</string>
+  <string name="pref_keep_screen_on_title">Ponechať obrazovku zapnutú</string>
+  <string name="pref_keep_screen_on_summary">Zamedziť vypnutiu obrazovky pokiaľ je aplikácia Clementine Remote pripojená k prehrávaču Clementine.
+</string>
+  <string name="pref_version_summary">Kliknite na navštívenie webovej stránky projektu</string>
+  <string name="pref_version_title">Verzia</string>
+  <string name="pref_license_title">Licencia</string>
+  <string name="pref_license_summary">GNU GPLv3</string>
+  <string name="pref_opensource_title">Otvorený zdroj</string>
+  <string name="pref_opensource_summary">Zobraziť licencie softvéru s otvoreným zdrojom</string>
+  <string name="pref_opensource">Softvérové licencie otvoreného zdroja</string>
+  <string name="pref_about_title">O programe</string>
+  <string name="pref_about_summary">Ľudia, ktorí pracovali na tomto projekte</string>
+  <string name="pref_clementine_title">Clementine</string>
+  <string name="pref_clementine_summary">Navštíviť webovú stránku prehrávača Clementine</string>
+  <string name="pref_dl_wifi_only_title">Iba cez WiFi</string>
+  <string name="pref_dl_wifi_only_summary">Prebrať skladby iba počas pripojenia k sieti wifi.</string>
+  <string name="pref_dl_dir">Nastaviť priečinok pre preberania</string>
+  <string name="pref_dl_override">Prevážiť existujúce súbory</string>
+  <string name="pref_dl_cat_folders">Priečinky</string>
+  <string name="pref_dl_pl_save_own_dir_title">Uložiť skladby v priečinku zoznamu skladieb</string>
+  <string name="pref_dl_pl_save_own_dir_summary">Vytvorí priečinok s názvom zoznamu skladieb a uloží sem skladby.</string>
+  <string name="pref_dl_pl_artist_dir_title">Vytvoriť podpriečinok s menom umelca</string>
+  <string name="pref_dl_pl_artist_dir_summary">Vytvorí podpriečinok s menom umelca pre každú jednotlivú stopu.</string>
+  <string name="pref_dl_pl_album_dir_title">Vytvoriť podpriečinok s názvom albumu</string>
+  <string name="pref_dl_pl_album_dir_summary">Vytvorí podpriečinok s názvom albumu v priečinku s menom umelca pre každú jednotlivú stopu.</string>
+  <string name="file_dialog_set_dir">Vybrať adresár</string>
+  <string name="file_dialog_not_writable">Adresár nie je zapisovateľný</string>
+  <string name="file_dialog_custom_paths_available">Vybrať iný</string>
+  <string name="dialog_about_authors">Autori</string>
+  <string name="dialog_about_supporters">Podporovatelia</string>
+  <string name="dialog_about_others">Ostatní</string>
+  <string name="dialog_license_top"> Tento program je poskytovaný s nádejou, že bude užitočný, ale BEZ AKEJKOĽVEK ZÁRUKY</string>
+  <string name="tasker_intro">Prosím, vyberte akciu.</string>
+  <string name="tasker_ip_help">Zadajte podrobnosti k pripojeniu, ktoré uskutočníte stlačením tlačidla \"Pripojiť\" vyššie. Autorizačný kód je voliteľný, ak je zakázaný v prehrávači Clementine.</string>
+  <string name="tasker_action">Akcia:</string>
+  <string name="tasker_connect">Pripojiť</string>
+  <string name="tasker_disconnect">Odpojiť</string>
+  <string name="tasker_play">Prehrať</string>
+  <string name="tasker_pause">Pozastaviť</string>
+  <string name="tasker_playpause">Prehrať / Pozastaviť</string>
+  <string name="tasker_stop">Zastaviť</string>
+  <string name="tasker_next">Ďalšia skladba</string>
+  <string name="tasker_port_hint">Zadajte port</string>
+  <string name="tasker_auth_hint">Zadajte autorizačný kód</string>
+  <string name="widget_connect_to">Ťuknite na pripojenie</string>
+  <string name="widget_not_connected">Nepripojené</string>
+  <string name="widget_open_clementine">Ťuknite na spustenie aplikácie Clementine Remote</string>
+  <string name="widget_couldnt_connect">Nepodarilo sa pripojiť</string>
+  <string name="dialog_close">Zavrieť</string>
+  <string name="dialog_cancel">Zrušiť</string>
+  <string name="error_versions">Nekompatibilná verzia</string>
+  <string name="no_private_ip">Vaše zariadenie Android neobsahuje lokálnu IP adresu. Skúste zakázať \"Povoliť spojenie iba z lokálnej siete\" v nastaveniach prehrávača Clementine.</string>
+  <string name="wifi_disabled">Sieť Wifi je zakázaná. Ak sa chcete pripojiť k prehrávaču Clementine cez internet, uistite sa, že máte správne nasmerované porty a zakázanú voľbu \"Povoliť spojenie iba z lokálnej siete\"\".</string>
+  <string name="input_auth_code">Autorizačný kód</string>
+  <string name="invalid_code">Neplatný kód</string>
+  <string name="done">Hotovo</string>
+  <string name="unknown">Neznáme</string>
+  <plurals name="number_items">
+    <item quantity="one">%d položka</item>
+    <item quantity="few">%d položky</item>
+    <item quantity="other">%d položiek</item>
+  </plurals>
+  <plurals name="songs_added">
+    <item quantity="one">%d skladba pridaná do aktuálneho zoznamu skladieb</item>
+    <item quantity="few">%d skladby pridané do aktuálneho zoznamu skladieb</item>
+    <item quantity="other">%d skladieb pridaných do aktuálneho zoznamu skladieb</item>
+  </plurals>
+  <string name="context_add_to_playlist">Pridať položku do aktuálneho zoznamu skladieb</string>
+  <string name="repeat_off">Neopakovať</string>
+  <string name="repeat_track">Opakovať skladbu</string>
+  <string name="repeat_album">Opakovať album</string>
+  <string name="repeat_playlist">Opakovať zoznam skladieb</string>
+  <string name="shuffle_off">Nezamiešať</string>
+  <string name="shuffle_all">Zamiešať všetko</string>
+  <string name="shuffle_inside_album">Zamišať skladby tohoto albumu</string>
+  <string name="shuffle_albums">Zamiešať albumy</string>
+  <string name="first_time_title">Vitajte</string>
+  <string name="track_loved">Skladba je obľúbená &lt;3</string>
+  <string name="track_banned">Skladba bola zakázaná :-(</string>
+  <string name="notification_disconnect_keep_alive">Pripojenie stratené. Ťuknite na znovu pripojenie.</string>
+  <string name="crash_report_title">Ale nie, niekde sa stala chyba!</string>
+  <string name="crash_report_message">Naposledy aplikácia Clementine Remote zlyhala! Nemalo by sa to stávať! Prosím, pomôžte nám vylepšiť aplikáciu odoslaním záznamového súboru. Ďakujeme!</string>
+  <string name="crash_report_send">Odoslať!</string>
+  <string name="fragment_title_player">Prehrávač</string>
+  <string name="fragment_title_details">Podrobnosti o skladbe</string>
+  <string name="fragment_title_connection">Clementine</string>
+  <string name="navigation_drawer_clementine_on">Clementine na %s</string>
+  <string name="player_download_what">Čo sa má prevziať?</string>
+  <string-array name="player_download_list">
+    <item>Skladba</item>
+    <item>Album</item>
+    <item>Zoznam skladieb</item>
+  </string-array>
+  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
+  <string-array name="navigation_drawer_items">
+    <item>Vyhľadávanie</item>
+    <item>Prehrávač</item>
+    <item>Zoznamy skladieb</item>
+    <item>Zbierka</item>
+    <item>Prevzatia</item>
+    <item></item>
+    <item>Nastavenia</item>
+    <item>Prispieť</item>
+    <item></item>
+    <item>Ukončiť</item>
+  </string-array>
+</resources>
