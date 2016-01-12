@@ -4,20 +4,20 @@
   <string name="app_not_available">Aplicação não disponível!</string>
   <string name="connectdialog_connect">Ligar</string>
   <string name="connectdialog_connecting">A ligar ao Clementine</string>
-  <string name="connectdialog_download_data">A transferir dados</string>
+  <string name="connectdialog_download_data">A descarregar dados</string>
   <string name="connectdialog_error">Endereço não encontrado</string>
   <string name="connectdialog_ip_hint">Introduza o endereço IP</string>
   <string name="connectdialog_services">Clementines</string>
   <string name="player_nosong">Nenhuma faixa em reprodução</string>
   <string name="player_disconnected">Desligado</string>
   <string name="player_playlist">Lista de reprodução:</string>
-  <string name="player_download_playlists">A receber listas de reprodução</string>
+  <string name="player_download_playlists">A descarregar listas de reprodução</string>
   <string name="playler_volume">Volume</string>
   <string name="player_stop_after_current">Parar alternação ao terminar a faixa.</string>
-  <string name="player_download_lyrics">TransferÊncia de letras</string>
+  <string name="player_download_lyrics">A descarregar letras</string>
   <string name="player_no_lyrics">Nada encontrado.</string>
-  <string name="player_download_started">Transferência iniciada!</string>
-  <string name="player_song_is_stream">Incapaz de transferir emissões!</string>
+  <string name="player_download_started">Descarga iniciada!</string>
+  <string name="player_song_is_stream">Incapaz de descarregar emissões!</string>
   <string name="player_stream">[S]</string>
   <string name="playlist_search_hint">Procurar faixa</string>
   <string name="playlist_empty">Listas de reprodução vazia!</string>
@@ -28,13 +28,13 @@
   <string name="playlist_clear">Limpar lista de reprodução</string>
   <string name="playlist_clear_content">Isto irá remover rodas as faixas da sua lista de reprodução. Continuar?</string>
   <string name="playlist_clear_confirm">Limpar lista de reprodução</string>
-  <string name="downloads_empty">Nenhuma transferÊncia!</string>
+  <string name="downloads_empty">Não existem descargas!</string>
   <string name="download_freespace">Espaço livre</string>
-  <string name="downloaded_songs">Faixas transferidas - clique para reproduzir</string>
-  <string name="download_noti_title">Iniciando transferência</string>
+  <string name="downloaded_songs">Faixas descarregadas - clique para reproduzir</string>
+  <string name="download_noti_title">A iniciar descarga</string>
   <plurals name="download_noti_n_downloads">
-    <item quantity="one">%d transferência ativa</item>
-    <item quantity="other">%d transferências ativas</item>
+    <item quantity="one">%d descarga ativa</item>
+    <item quantity="other">%d descargas ativas</item>
   </plurals>
   <string name="download_noti_n_progress">Evolução: %d %</string>
   <string name="download_noti_title_song">[Faixa]</string>
@@ -42,23 +42,23 @@
   <string name="download_noti_title_playlist">[Listas de reprodução]</string>
   <string name="download_noti_title_songs">[Faixas]</string>
   <plurals name="download_noti_n_finished">
-    <item quantity="one">%d transferência terminada</item>
-    <item quantity="other">%d transferências terminadas</item>
+    <item quantity="one">%d descarga terminada</item>
+    <item quantity="other">%d descargas terminadas</item>
   </plurals>
-  <string name="download_noti_complete">Transferência terminada</string>
-  <string name="download_noti_canceled">Transferência cancelada</string>
+  <string name="download_noti_complete">Descarga terminada</string>
+  <string name="download_noti_canceled">Descarga cancelada</string>
   <string name="download_noti_insufficient_space">Espaço insuficiente. A cancelar...</string>
-  <string name="download_noti_forbidden">Transferência proibida. Ative-a nas definições do Clementine.</string>
+  <string name="download_noti_forbidden">Descarga não possível. Ative-a nas definições do Clementine.</string>
   <string name="download_noti_not_mounted">Cartão de armazenamento não encontrado!</string>
-  <string name="download_noti_only_wifi">Apenas transferir através de Wifi.</string>
+  <string name="download_noti_only_wifi">Apenas descarregar por Wi-Fi.</string>
   <string name="download_noti_transcoding">Conversão de ficheiros</string>
   <string name="download_noti_transcoding_subtitle">Por favor aguarde</string>
-  <string name="library_download">Transferência da coleção</string>
+  <string name="library_download">A descarregar coleção</string>
   <string name="library_optimize">Otimização da base de dados</string>
   <string name="library_please_wait">Por favor aguarde</string>
-  <string name="library_empty">Coleção vazia. Deslize para baixo para transferir a coleção!</string>
+  <string name="library_empty">Coleção vazia. Deslize para baixo para descarregar a coleção!</string>
   <string name="library_no_search_results">Não existem faixas coincidentes com os critérios.</string>
-  <string name="library_download_error">Não foi possível transferir a coleção</string>
+  <string name="library_download_error">Não foi possível descarregar a coleção</string>
   <string name="global_search_empty">Introduza os termos da pesquisa para procurar músicas no seu computador e na Internet</string>
   <string name="global_search_search">Pesquisar por algo</string>
   <string name="global_search_query">Consulta: %s</string>
@@ -84,8 +84,8 @@
   <string name="menu_search">Procurar</string>
   <string name="menu_love">Gosto</string>
   <string name="menu_ban">Banir</string>
-  <string name="menu_download">Transferir</string>
-  <string name="menu_download_playlist">Transferir lista de reprodução</string>
+  <string name="menu_download">Descarregar</string>
+  <string name="menu_download_playlist">Descarregar lista de reprodução</string>
   <string name="donate_header">Donativos</string>
   <string name="donate_text">Obrigado por utilizar esta aplicação. Espero que lhe seja útil!\n\nSe você está satisfeito com o meu trabalho, pode efetuar um pequeno donativo.</string>
   <string name="donate_i_want">Quero doar:</string>
@@ -100,7 +100,7 @@
   <string name="pref_cat_behavior">Comportamento</string>
   <string name="pref_cat_player">Reprodutor</string>
   <string name="pref_cat_library">Coleção</string>
-  <string name="pref_cat_downloads">Transferências</string>
+  <string name="pref_cat_downloads">Descargas</string>
   <string name="pref_cat_advanced">Avançado</string>
   <string name="pref_cat_network">Rede</string>
   <string name="pref_cat_connection">Ligação</string>
@@ -157,8 +157,8 @@
   <string name="pref_clementine_title">Clementine</string>
   <string name="pref_clementine_summary">Aceda ao sítio web do Clementine</string>
   <string name="pref_dl_wifi_only_title">Apenas Wifi</string>
-  <string name="pref_dl_wifi_only_summary">Apenas transferir faixas se ligado a uma rede Wifi.</string>
-  <string name="pref_dl_dir">Definir pasta de transferências</string>
+  <string name="pref_dl_wifi_only_summary">Apenas descarregar faixas se ligado a uma rede Wi-Fi.</string>
+  <string name="pref_dl_dir">Definir pasta de descargas</string>
   <string name="pref_dl_override">Substituir ficheiros existentes</string>
   <string name="pref_dl_cat_folders">Pastas</string>
   <string name="pref_dl_pl_save_own_dir_title">Guardar faixas na pasta de listas de reprodução</string>
@@ -230,7 +230,7 @@
   <string name="fragment_title_details">Detalhes da faixa</string>
   <string name="fragment_title_connection">Clementine</string>
   <string name="navigation_drawer_clementine_on">Clementine em %s</string>
-  <string name="player_download_what">O que transferir?</string>
+  <string name="player_download_what">O que descarregar?</string>
   <string-array name="player_download_list">
     <item>Faixa</item>
     <item>Álbum</item>
@@ -242,7 +242,7 @@
     <item>Reprodutor</item>
     <item>Listas de reprodução</item>
     <item>Coleção</item>
-    <item>Transferências</item>
+    <item>Descargas</item>
     <item></item>
     <item>Definições</item>
     <item>Donativos</item>

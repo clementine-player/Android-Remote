@@ -26,15 +26,27 @@
   <string name="playlist_loading">Učitavanje</string>
   <string name="playlist_close">Zatvori popis izvođenja</string>
   <string name="playlist_clear">Obriši popis izvođenja</string>
+  <string name="playlist_clear_content">Ovo će nepovratno ukloniti sve pjesme s popisa izvođenja. Želite li nastaviti?</string>
+  <string name="playlist_clear_confirm">Obriši popis izvođenja</string>
   <string name="downloads_empty">Nema preuzimanja!</string>
   <string name="download_freespace">Slobodan prostor</string>
   <string name="downloaded_songs">Preuzete pjesme - kliknite za reprodukciju</string>
   <string name="download_noti_title">Početak preuzimanja</string>
+  <plurals name="download_noti_n_downloads">
+    <item quantity="one">%d aktivno preuzimanje</item>
+    <item quantity="few">%d aktivna preuzimanja</item>
+    <item quantity="other">%d aktivnih preuzimanja</item>
+  </plurals>
   <string name="download_noti_n_progress">Ukupan napredak: %d %</string>
   <string name="download_noti_title_song">[Pjesma]</string>
   <string name="download_noti_title_album">[Album]</string>
   <string name="download_noti_title_playlist">[Popis izvođenja]</string>
   <string name="download_noti_title_songs">[Pjesme]</string>
+  <plurals name="download_noti_n_finished">
+    <item quantity="one">%d preuzimanje završeno</item>
+    <item quantity="few">%d preuzimanja završena</item>
+    <item quantity="other">%d preuzimanja završenih</item>
+  </plurals>
   <string name="download_noti_complete">Preuzimanje završeno</string>
   <string name="download_noti_canceled">Preuzimanje prekinuto</string>
   <string name="download_noti_insufficient_space">Nedovoljno slobodnog prostora, prekidam preuzimanje.</string>
@@ -184,13 +196,26 @@
   <string name="widget_open_clementine">Dodirni za pokretanje Clementine daljinskog upravljača</string>
   <string name="widget_couldnt_connect">Nemoguće povezivanje</string>
   <string name="dialog_close">Zatvori</string>
+  <string name="dialog_cancel">Odustani</string>
   <string name="error_versions">Nekompatibilna inačica</string>
+  <string name="old_proto">Nadopunite Clementine! Potreban vam je Clementine %1$s ili noviji.</string>
   <string name="no_private_ip">Vaš Android uređaj nema lokalnu IP adresu. Pokušajte onemogućiti \"Koristi samo lokalnu IP adresu\" u Clementine postavkama.</string>
+  <string name="check_ip">1) Je li Clementine pokrenut?\n2) Koristite li Clementine %1$s ili noviji?\n3) Jeste li omogućili mrežno upravljanje u Clementine mogućnostima?\n4) Provjerite jeste li upisali ispravnu ip adresu.\n</string>
   <string name="wifi_disabled">WI-FI je onemogućen. Ako se želite povezati s Clementinom putem Interneta pobrinite se da ste otvorili ispravno ulaze i onemogućili \"Koristi samo lokalnu IP adresu\".</string>
   <string name="input_auth_code">Kôd autentifikacije</string>
   <string name="invalid_code">Pogrešan kôd</string>
   <string name="done">Završeno</string>
   <string name="unknown">Nepoznato</string>
+  <plurals name="number_items">
+    <item quantity="one">%d stavka</item>
+    <item quantity="few">%d stavke</item>
+    <item quantity="other">%d stavki</item>
+  </plurals>
+  <plurals name="songs_added">
+    <item quantity="one">%d pjesma dodana na trenutni popis izvođenja</item>
+    <item quantity="few">%d pjesme dodane na trenutni popis izvođenja</item>
+    <item quantity="other">%d pjesama dodano na trenutni popis izvođenja</item>
+  </plurals>
   <string name="context_add_to_playlist">Dodaj pjesmu na trenutni popis izvođenja</string>
   <string name="repeat_off">Ne ponavljaj</string>
   <string name="repeat_track">Ponovi pjesmu</string>
@@ -201,6 +226,7 @@
   <string name="shuffle_inside_album">Sviraj naizmjenično pjesme u ovom albumu</string>
   <string name="shuffle_albums">Sviraj naizmjenično albume</string>
   <string name="first_time_title">Dobrodošli</string>
+  <string name="first_time_text">Hvala vam na korištenju Clementine daljinskog upravljača!\nNadam se da vam je ova aplikacija korisna.&lt;br&gt;&lt;br&gt;Kako bi mogli koristiti ovu aplikaciju daljinskog upravljanja morate preuzeti i instalirati Clementine %1$s ili noviji s &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;.</string>
   <string name="track_loved">Sviđa mi se pjesma &lt;3</string>
   <string name="track_banned">Pjesma zabranjena :-(</string>
   <string name="notification_disconnect_keep_alive">Izgubljena veza. Dotaknite za ponovno povezivanje.</string>
