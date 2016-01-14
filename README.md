@@ -4,7 +4,7 @@ Android-Remote [![Build Status](https://travis-ci.org/clementine-player/Android-
 Clementine Remote lets you remotely control the music player "Clementine".
 
 __IMPORTANT:__<br /> 
-You need at least Clementine 1.2.1 to use this remote!
+You need at least Clementine 1.3 to use this remote!
 
 With this application you can control the music player "Clementine" while you are sitting on your couch eating potato chips.
 You have access to your library, playlists, read the lyrics while listening to your favourite song, enjoy the cover art, ...
@@ -17,6 +17,7 @@ __All Features:__
 * Control player
 * Download songs from Clementine to your phone
 * Browse your library
+* Search for songs
 * Displays the cover art
 * Read the lyrics
 * Rate, Love and ban tracks
@@ -24,11 +25,11 @@ __All Features:__
 * Volume lowers when you receive a call
 * Shuffle / Repeat playback
 * Playlist selection
-* Lockscreen Controls (Android 4.0+) 
+* Lockscreen Controls
 * Clementine Network Discovery: You don't have to enter the ip, Clementine Remote finds Clementine Players itself in the network!
 
 __INSTALLATION DETAILS:__<br />
-Download Clementine 1.2.1 from here: http://www.clementine-player.org/downloads
+Download Clementine 1.3 from here: http://www.clementine-player.org/downloads
 * The remote control is disabled by default. You have to activate it in the settings. *
 * Downloads are disabled by default. You have to activate it in the setting, too *
 
