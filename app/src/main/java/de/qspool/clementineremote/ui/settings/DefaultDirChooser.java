@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Environment;
+import android.support.v4.content.ContextCompat;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,14 +63,10 @@ public class DefaultDirChooser {
     private LinkedList<String> getDirectories() {
         LinkedList<String> directories = new LinkedList<>();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            File[] defaultDirs = mContext.getExternalFilesDirs(Environment.DIRECTORY_MUSIC);
-            for (File f : defaultDirs) {
-                if (f != null)
-                    directories.add(f.toString());
-            }
-        } else {
-            directories.add(mContext.getExternalFilesDir(Environment.DIRECTORY_MUSIC).toString());
+        File[] defaultDirs = ContextCompat.getExternalFilesDirs(mContext, Environment.DIRECTORY_MUSIC);
+        for (File f : defaultDirs) {
+            if (f != null)
+                directories.add(f.toString());
         }
 
         String publicMusicDir = Environment
@@ -87,8 +84,7 @@ public class DefaultDirChooser {
 
     private boolean canWriteToExternalStorage(String path) {
         // Check the external store state
-        File checkFile = new File(path
-                + "/ClementineTestFile.CheckIfWritable");
+        File checkFile = new File(path, "/ClementineTestFile.CheckIfWritable");
         try {
             if (checkFile.createNewFile()) {
                 checkFile.delete();
@@ -111,6 +107,6 @@ public class DefaultDirChooser {
 
     public interface DirectorySelectedListener {
 
-        public void directorySelected(String dir);
+        void directorySelected(String dir);
     }
 }

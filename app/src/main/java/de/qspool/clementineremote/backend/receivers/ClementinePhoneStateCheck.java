@@ -17,12 +17,15 @@
 
 package de.qspool.clementineremote.backend.receivers;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 
 import de.qspool.clementineremote.App;
@@ -46,6 +49,12 @@ public class ClementinePhoneStateCheck extends BroadcastReceiver {
         }
 
         if (!intent.getAction().equals("android.intent.action.PHONE_STATE")) {
+            return;
+        }
+
+        if (ContextCompat.checkSelfPermission(context,
+                Manifest.permission.READ_PHONE_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
             return;
         }
 

@@ -17,8 +17,10 @@
 
 package de.qspool.clementineremote.ui;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.ComponentName;
@@ -28,6 +30,7 @@ import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -35,6 +38,8 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
@@ -83,6 +88,8 @@ public class ConnectActivity extends AppCompatActivity {
     private final int ID_PLAYER_DIALOG = 1;
 
     private final int ID_SETTINGS = 2;
+
+    private final int ID_PERMISSION_REQUEST = 3;
 
     public final static int RESULT_DISCONNECT = 1;
 
@@ -226,6 +233,27 @@ public class ConnectActivity extends AppCompatActivity {
             // Show the info screen
             showFirstTimeScreen();
         }
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.READ_PHONE_STATE)
+                        != PackageManager.PERMISSION_GRANTED) {
+            new MaterialDialog.Builder(this)
+                    .title(R.string.permissions_required_title)
+                    .content(R.string.permissions_required_text)
+                    .negativeText(R.string.dialog_continue)
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                            ActivityCompat.requestPermissions(ConnectActivity.this,
+                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                            Manifest.permission.READ_PHONE_STATE},
+                                    ID_PERMISSION_REQUEST);
+                        }
+                    })
+                    .show();
+        }
     }
 
     private void initializeUi() {
@@ -283,10 +311,12 @@ public class ConnectActivity extends AppCompatActivity {
             // Only when we have Jelly Bean or higher
             if (!mClementineMDns.getServices().isEmpty()) {
                 mAnimationCancel = true;
-                final MaterialDialog.Builder builder = new MaterialDialog.Builder(ConnectActivity.this);
+                final MaterialDialog.Builder builder = new MaterialDialog.Builder(
+                        ConnectActivity.this);
 
                 builder.title(R.string.connectdialog_services);
-                CustomClementinesAdapter adapter = new CustomClementinesAdapter(ConnectActivity.this,
+                CustomClementinesAdapter adapter = new CustomClementinesAdapter(
+                        ConnectActivity.this,
                         R.layout.item_clementine, mClementineMDns.getServices());
                 builder.adapter(adapter, new MaterialDialog.ListCallback() {
                     @Override
@@ -368,7 +398,8 @@ public class ConnectActivity extends AppCompatActivity {
         bindService(serviceIntent, new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
-                ClementineService.ClementineServiceBinder clementineServiceBinder = (ClementineService.ClementineServiceBinder) service;
+                ClementineService.ClementineServiceBinder clementineServiceBinder
+                        = (ClementineService.ClementineServiceBinder) service;
 
                 clementineServiceBinder.getClementineService().setUiHandler(mHandler);
 
@@ -518,6 +549,8 @@ public class ConnectActivity extends AppCompatActivity {
             }
         } else if (requestCode == ID_SETTINGS) {
             doAutoConnect = false;
+        } else if (requestCode == ID_PERMISSION_REQUEST) {
+            return;
         }
     }
 

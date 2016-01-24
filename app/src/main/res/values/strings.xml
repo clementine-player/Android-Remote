@@ -231,6 +231,7 @@
 
     <string name="dialog_close">Close</string>
     <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_continue">Continue</string>
 
     <string name="error_versions">Incompatible version</string>
     <string name="old_proto">Please update Clementine! You need Clementine %1$s or later.</string>
@@ -269,6 +270,8 @@
     <string name="first_time_text">Thank you for using Clementine Remote!\nI hope this app will be useful for you.&lt;br>&lt;br>In order to use this remote app you have to download and install Clementine %1$s or later from &lt;a href=\"http://www.clementine-player.org/downloads\">here&lt;/a>.</string>
     <string name="track_loved">Track loved &lt;3</string>
     <string name="track_banned">Track banned :-(</string>
+    <string name="permissions_required_title">Permissions required</string>
+    <string name="permissions_required_text">Clementine Remote requires access to the devices storage for song downloads and phone state to silence Clementine on calls. Click continue to grant Clementine Remote the permissions.</string>
 
     <string name="notification_disconnect_keep_alive">Lost connection. Touch to reconnect.</string>
 
