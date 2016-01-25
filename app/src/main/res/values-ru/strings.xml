@@ -199,6 +199,7 @@
   <string name="widget_couldnt_connect">Не могу подключиться</string>
   <string name="dialog_close">Закрыть</string>
   <string name="dialog_cancel">Отмена</string>
+  <string name="dialog_continue">Продолжить</string>
   <string name="error_versions">Несовместимая версия</string>
   <string name="old_proto">Пожалуйста, обновите Clementine! Требуется версия Clementine %1$s или выше.</string>
   <string name="no_private_ip">Ваше Android устройство не имеет локального IP адреса. Попробуйте отключить \"Разрешать соединения только из локальной сети\" в настройках Clementine.</string>
@@ -233,6 +234,8 @@
   <string name="first_time_text">Спасибо за использование Clementine Remote!\nНадеюсь, что данное приложение вам полезно.&lt;br&gt;&lt;br&gt;Для правильной работы удалённого управления необходимо установить Clementine %1$s или старше отсюда &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;.</string>
   <string name="track_loved">Трек добавлен в любимые &lt;3</string>
   <string name="track_banned">Композиция запрещена :-(</string>
+  <string name="permissions_required_title">Требуется разрешение</string>
+  <string name="permissions_required_text">Clementine Remote требует доступ к хранилищу устройства для загрузки песен и отключения звука Clementine при звонках. Нажмите Продолжить, чтобы разрешить доступ Clementine Remote. </string>
   <string name="notification_disconnect_keep_alive">Соединение потеряно. Коснитесь для переподключения.</string>
   <string name="crash_report_title">Кажется, что-то пошло не так!</string>
   <string name="crash_report_message">В последний раз Clementine Remote завершилось с ошибкой! Этого не должно было случиться! Пожалуйста, помогите мне улучшить приложение и вышлите мне лог-файл. Спасибо!</string>

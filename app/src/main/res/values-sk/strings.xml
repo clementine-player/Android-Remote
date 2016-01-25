@@ -197,8 +197,11 @@
   <string name="widget_couldnt_connect">Nepodarilo sa pripojiť</string>
   <string name="dialog_close">Zavrieť</string>
   <string name="dialog_cancel">Zrušiť</string>
+  <string name="dialog_continue">Pokračovať</string>
   <string name="error_versions">Nekompatibilná verzia</string>
+  <string name="old_proto">Prosím, aktualizujte prehrávač Clementine! Vyžaduje sa prehrávač Clementine vo verzii %1$s alebo novšej.</string>
   <string name="no_private_ip">Vaše zariadenie Android neobsahuje lokálnu IP adresu. Skúste zakázať \"Povoliť spojenie iba z lokálnej siete\" v nastaveniach prehrávača Clementine.</string>
+  <string name="check_ip">1) Je prehrávač Clementine spustený?\n2) Používate prehrávač Clementine vo verzii %1$s alebo novšej?\n3) Povolili ste diaľkové ovládanie v nastaveniach prehrávača Clementine?\n4) Skontrolujte, či ste zadali správnu IP adresu.\n</string>
   <string name="wifi_disabled">Sieť Wifi je zakázaná. Ak sa chcete pripojiť k prehrávaču Clementine cez internet, uistite sa, že máte správne nasmerované porty a zakázanú voľbu \"Povoliť spojenie iba z lokálnej siete\"\".</string>
   <string name="input_auth_code">Autorizačný kód</string>
   <string name="invalid_code">Neplatný kód</string>
@@ -224,8 +227,11 @@
   <string name="shuffle_inside_album">Zamišať skladby tohoto albumu</string>
   <string name="shuffle_albums">Zamiešať albumy</string>
   <string name="first_time_title">Vitajte</string>
+  <string name="first_time_text">Ďakujeme za to, že používate aplikáciu Clementine Remote!\nDúfame, že táto aplikácia bude pre vás užitočná.&lt;br&gt;&lt;br&gt;Ak chcete používať tuúto aplikáciu diaľkového ovládania, musíte nainštalovať prehrávač Clementine vo verzii %1$s alebo novšej z &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;tejto adresy&lt;/a&gt;.</string>
   <string name="track_loved">Skladba je obľúbená &lt;3</string>
   <string name="track_banned">Skladba bola zakázaná :-(</string>
+  <string name="permissions_required_title">Vyžadujú sa oprávnenia</string>
+  <string name="permissions_required_text">Aplikácia Clementine Remote vyžaduje prístup k úložisku zariadenia pre preberania skladieb a stav telefónu na umlčanie prehrávača Clementine počas hovorov. Kliknutím na Pokračovať udelíte aplikácii Clementine Remote oprávnenia.</string>
   <string name="notification_disconnect_keep_alive">Pripojenie stratené. Ťuknite na znovu pripojenie.</string>
   <string name="crash_report_title">Ale nie, niekde sa stala chyba!</string>
   <string name="crash_report_message">Naposledy aplikácia Clementine Remote zlyhala! Nemalo by sa to stávať! Prosím, pomôžte nám vylepšiť aplikáciu odoslaním záznamového súboru. Ďakujeme!</string>

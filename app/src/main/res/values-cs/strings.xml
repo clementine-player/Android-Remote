@@ -199,6 +199,7 @@ Pokud máte díky mé práci skutečně dobrou náladu, malý dar od vás by byl
   <string name="widget_couldnt_connect">Nepodařilo se připojit</string>
   <string name="dialog_close">Zavřít</string>
   <string name="dialog_cancel">Zrušit</string>
+  <string name="dialog_continue">Pokračovat</string>
   <string name="error_versions">Nekompatibilní verze</string>
   <string name="old_proto">Aktualizujte Clementine! Potřebujete Clementine %1$s nebo novější.</string>
   <string name="no_private_ip">Zařízení Android má adresu IP, která není místní. Zkuste v nastavení Clementine zakázat Použít pouze místní adresu IP.</string>
@@ -232,6 +233,8 @@ Pokud máte díky mé práci skutečně dobrou náladu, malý dar od vás by byl
   <string name="first_time_text">Děkujeme vám, že používáte Clementine Remote!\nDoufáme, že pro vás tato aplikace bude užitečná.&lt;br&gt;&lt;br&gt;Abyste tento program mohli využívat, musíte stáhnout a nainstalovat Clementine %1$s nebo vyšší z &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;.</string>
   <string name="track_loved">Skladba je oblíbená &lt;3</string>
   <string name="track_banned">Skladba je zakázaná :-(</string>
+  <string name="permissions_required_title">Požadována oprávnění</string>
+  <string name="permissions_required_text">Clementine Remote vyžaduje přístup k úložišti zařízení pro stahování písní a stav telefonu kvůli ztišení Clementine při volání. Klepněte na Pokračovat pro udělení oprávnění Clementine Remote.</string>
   <string name="notification_disconnect_keep_alive">Spojení ztraceno. Ťukněte pro opětovné připojení.</string>
   <string name="crash_report_title">Jejda, něco není v pořádku!</string>
   <string name="crash_report_message">Naposledy Clementine Remote spadl! To by se nemělo stát! Pomozte, prosím, se zlepšením aplikace a odešlete soubor se zápisem o činnosti programu. Děkujeme!</string>
