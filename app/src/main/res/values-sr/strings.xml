@@ -194,6 +194,7 @@
   <string name="widget_couldnt_connect">Не могу да се повежем</string>
   <string name="dialog_close">Затвори</string>
   <string name="dialog_cancel">Одустани</string>
+  <string name="dialog_continue">Настави</string>
   <string name="error_versions">Некомпатибилно издање</string>
   <string name="old_proto">Надоградите Клементину! Потребна вам је Клементина %1$s или новија.</string>
   <string name="no_private_ip">Ваш Андроид уређај има нелокалну ИП адресу. Онемогућите опцију „Дозволи само везе са локалне мреже“ у поставкама Клементине.</string>
@@ -226,6 +227,8 @@
   <string name="first_time_text">Хвала вам што користите Даљински за Клементину!\nНадам се да ће вам ова апликација бити корисна.&lt;br&gt;&lt;br&gt;Да бисте користили ову апликацију преузмите и инсталирајте Клементину %1$s или новију &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;овде&lt;/a&gt;.</string>
   <string name="track_loved">Нумера вољена &lt;3</string>
   <string name="track_banned">Нумера забрањена :-(</string>
+  <string name="permissions_required_title">Потребне дозволе</string>
+  <string name="permissions_required_text">Даљински за клементину захтева приступ складишту уређаја да би преузимао песме и стању телефона да би утишао Клементину по позивима. Тапните „Настави“ за давање ових дозвола Даљинском.</string>
   <string name="notification_disconnect_keep_alive">Веза прекинута. Додирните за поновно повезивање.</string>
   <string name="crash_report_title">Опс, нешто није у реду!</string>
   <string name="crash_report_message">Даљински за Клементину се срушио прошли пут! Ово не би смело да се догоди! Помозите ми да побољшам апликацију и пошаљите ми фајл дневника. Хвала!</string>

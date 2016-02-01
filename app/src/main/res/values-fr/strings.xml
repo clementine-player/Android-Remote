@@ -192,6 +192,7 @@
   <string name="widget_couldnt_connect">Ne peut se connecter</string>
   <string name="dialog_close">Fermer</string>
   <string name="dialog_cancel">Annuler</string>
+  <string name="dialog_continue">Continuer</string>
   <string name="error_versions">Version incompatible</string>
   <string name="old_proto">Merci de mettre à jour Clementine ! La version de Clementine %1$s ou supérieure est nécessaire.</string>
   <string name="no_private_ip">Votre téléphone Android a une adresse IP non locale. Essayez de désactiver « Utiliser seulement les adresses IP locales » dans les préférences de Clementine.</string>
@@ -222,6 +223,8 @@
   <string name="first_time_text">Merci d\'utiliser Clementine À Distance !\nI Nous espérons que cette application vous est utile.&lt;br&gt;&lt;br&gt;Afin d\'utiliser cette application, il est nécessaire de télécharger et d\'installer Clementine %1$s ou supérieure depuis &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;.</string>
   <string name="track_loved">Piste aimée &lt;3</string>
   <string name="track_banned">Piste détestée :-(</string>
+  <string name="permissions_required_title">Permissions nécessaires</string>
+  <string name="permissions_required_text">Clementine Remote nécessite des accès aux périphériques de stockage pour enregistrer les titres et à l\'état du téléphone pour couper le son de Clementine lors des appels. Cliquer sur continuer pour accorder ces autorisations.</string>
   <string name="notification_disconnect_keep_alive">Connexion perdue. Touchez pour vous reconnecter.</string>
   <string name="crash_report_title">Oups, une erreur s\'est produite !</string>
   <string name="crash_report_message">« Clementine À Distance » a planté lors de la dernière utilisation : ceci ne devrait pas arriver. Aidez-moi à l\'améliorer en m\'envoyant le rapport d\'erreur. Merci !</string>
