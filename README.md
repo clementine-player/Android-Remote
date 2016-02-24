@@ -35,7 +35,7 @@ Download Clementine 1.3 from here: http://www.clementine-player.org/downloads
 
 Get Clementine Android-Remote from the Play store.
 
-*[![Play Store Badge](https://developer.android.com/images/brand/en_app_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=de.qspool.clementineremote)*
+*[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" width="200">](https://play.google.com/store/apps/details?id=de.qspool.clementineremote)*
 
 This application is licensed under the GNU GPLv3.
 
