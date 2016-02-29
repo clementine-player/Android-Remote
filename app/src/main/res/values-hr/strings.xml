@@ -197,6 +197,7 @@
   <string name="widget_couldnt_connect">Nemoguće povezivanje</string>
   <string name="dialog_close">Zatvori</string>
   <string name="dialog_cancel">Odustani</string>
+  <string name="dialog_continue">Nastavi</string>
   <string name="error_versions">Nekompatibilna inačica</string>
   <string name="old_proto">Nadopunite Clementine! Potreban vam je Clementine %1$s ili noviji.</string>
   <string name="no_private_ip">Vaš Android uređaj nema lokalnu IP adresu. Pokušajte onemogućiti \"Koristi samo lokalnu IP adresu\" u Clementine postavkama.</string>
@@ -229,6 +230,8 @@
   <string name="first_time_text">Hvala vam na korištenju Clementine daljinskog upravljača!\nNadam se da vam je ova aplikacija korisna.&lt;br&gt;&lt;br&gt;Kako bi mogli koristiti ovu aplikaciju daljinskog upravljanja morate preuzeti i instalirati Clementine %1$s ili noviji s &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;.</string>
   <string name="track_loved">Sviđa mi se pjesma &lt;3</string>
   <string name="track_banned">Pjesma zabranjena :-(</string>
+  <string name="permissions_required_title">Potrebna je dozvola</string>
+  <string name="permissions_required_text">Clementine daljinski upravljač zahtijeva pristup uređajima pohrane za preuzimanje pjesama i utišavanje Clementina prilikom poziva. Kliknite nastavi za davanje dozvole Clementine daljinskom upravljaču.</string>
   <string name="notification_disconnect_keep_alive">Izgubljena veza. Dotaknite za ponovno povezivanje.</string>
   <string name="crash_report_title">Ups, nešto je pošlo po krivu!</string>
   <string name="crash_report_message">Prošli puta Clementine daljinski upravljač se srušio! To se nebi trebalo događati! Molim vas da mi pomognete poboljšati aplikaciju i pošaljite mi datoteku zapisa. Hvala vam!</string>
