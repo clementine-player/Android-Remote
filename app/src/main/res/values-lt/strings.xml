@@ -17,6 +17,7 @@
   <string name="player_song_is_stream">Nepavyksta atsisiųsti srautų!</string>
   <string name="player_stream">[S]</string>
   <string name="playlist_empty">Grojaraštis tuščias!</string>
+  <string name="playlist_context_play">Groti elementą</string>
   <string name="playlist_context_remove">Šalinti iš grojaraščio</string>
   <string name="playlist_loading">Įkeliama</string>
   <string name="playlist_close">Užverti grojaraštį</string>
@@ -25,6 +26,7 @@
   <string name="playlist_clear_confirm">Išvalyti grojaraštį</string>
   <string name="downloads_empty">Atsiuntimų nėra!</string>
   <string name="download_freespace">Laisva vieta</string>
+  <string name="downloaded_songs">Dainos atsiųstos - spustelėkite, norėdami groti</string>
   <string name="download_noti_title">Pradedamas atsiuntimas</string>
   <plurals name="download_noti_n_downloads">
     <item quantity="one">%d aktyvus atsiuntimas</item>
@@ -46,6 +48,7 @@
   <string name="library_download">Atsiunčiama biblioteka</string>
   <string name="library_optimize">Optimizuojama duomenų bazė</string>
   <string name="library_please_wait">Prašome palaukti</string>
+  <string name="library_empty">Biblioteka tuščia. Perbraukite žemyn, kad atsisiųstumėte biblioteką!</string>
   <string name="library_no_search_results">Nėra dainų, atitinkančių jūsų paieškos kriterijų!</string>
   <string name="library_download_error">Nepavyko atsisiųsti bibliotekos</string>
   <string name="song_info_album">Albumas</string>
@@ -124,6 +127,7 @@
   <string name="pref_clementine_title">Clementine</string>
   <string name="pref_clementine_summary">Apsilankyti Clementine svetainėje</string>
   <string name="pref_dl_wifi_only_title">Tik WiFi</string>
+  <string name="pref_dl_override">Nustelbti esamus failus</string>
   <string name="pref_dl_cat_folders">Aplankai</string>
   <string name="pref_dl_pl_save_own_dir_title">Įrašyti takelius į grojaraščio aplanką</string>
   <string name="pref_dl_pl_artist_dir_title">Sukurti atlikėjo poaplankį</string>
@@ -134,6 +138,7 @@
   <string name="dialog_about_supporters">Remėjai</string>
   <string name="dialog_about_others">Kiti</string>
   <string name="dialog_license_top">Ši programa yra platinama tikintis, kad ji bus naudinga, tačiau BE JOKIOS GARANTIJOS</string>
+  <string name="tasker_intro">Prašome pasirinkti veiksmą.</string>
   <string name="tasker_action">Veiksmas:</string>
   <string name="tasker_connect">Prisijungti</string>
   <string name="tasker_disconnect">Atsijungti</string>
@@ -152,6 +157,7 @@
   <string name="wifi_disabled">Belaidis vietinis tinklas (Wifi) yra išjungtas. Jeigu norite prisijungti prie Clementine per internetą, įsitikinkite, kad teisingai nukreipėte visus prievadus ir esate išjungę \"Leisti tik ryšius iš vietinio tinklo\"\".</string>
   <string name="invalid_code">Neteisingas kodas</string>
   <string name="done">Atlikta</string>
+  <string name="unknown">Nežinoma</string>
   <plurals name="number_items">
     <item quantity="one">%d elementas</item>
     <item quantity="few">%d elementai</item>
