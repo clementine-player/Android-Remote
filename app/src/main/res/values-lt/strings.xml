@@ -109,6 +109,7 @@
   <string name="pref_port_title">Prievadas</string>
   <string name="pref_port_summary">Esamas prievadas:</string>
   <string name="pref_port_default">5500</string>
+  <string name="pref_port_error">Neleistinas prievadas!</string>
   <string name="pref_wake_lock_title">Išlaikyti kompiuterį prijungtą</string>
   <string name="pref_wake_lock_summary">Įjunkite, jeigu programa, būdama fone, atsitiktinai atsijungia. Tai gali išnaudoti daugiau baterijos energijos.
     </string>
@@ -154,6 +155,7 @@
   <string name="error_versions">Nesuderinama versija</string>
   <string name="old_proto">Prašome atnaujinti Clementine! Jums reikia Clementine %1$s arba naujesnės versijos.</string>
   <string name="no_private_ip">Jūsų Android įrenginio adresas yra ne vietinis. Pabandykite Clementine nustatymuose išjungti parinktį \"Leisti tik ryšius iš vietinio tinklo\".</string>
+  <string name="check_ip">1) Ar Clementine yra vykdoma?\n2) Ar jūs naudojate Clementine %1$s ar vėlesnę versiją?\n3) Ar Clementine nustatymuose įjungėte nuotolinį tinklą?\n4) Patikrinkite ar įvedėte teisingą IP adresą.\n</string>
   <string name="wifi_disabled">Belaidis vietinis tinklas (Wifi) yra išjungtas. Jeigu norite prisijungti prie Clementine per internetą, įsitikinkite, kad teisingai nukreipėte visus prievadus ir esate išjungę \"Leisti tik ryšius iš vietinio tinklo\"\".</string>
   <string name="invalid_code">Neteisingas kodas</string>
   <string name="done">Atlikta</string>
@@ -173,6 +175,8 @@
   <string name="shuffle_inside_album">Maišyti takelius šiame albume</string>
   <string name="shuffle_albums">Maišyti albumus</string>
   <string name="first_time_title">Sveiki</string>
+  <string name="track_loved">Takelis pažymėtas kaip patinkantis &lt;3</string>
+  <string name="track_banned">Takelis užblokuotas :-(</string>
   <string name="permissions_required_title">Reikia leidimų</string>
   <string name="notification_disconnect_keep_alive">Ryšys prarastas. Prilieskite, kad būtų jungiamasi iš naujo.</string>
   <string name="crash_report_title">Oi, kažkas atsitiko!</string>
