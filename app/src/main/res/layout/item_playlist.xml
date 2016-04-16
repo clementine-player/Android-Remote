@@ -26,6 +26,7 @@
         android:layout_toRightOf="@id/tvTrackNo"
         android:layout_toEndOf="@id/tvTrackNo"
         android:paddingEnd="48dp"
+        android:paddingRight="48dp"
         android:orientation="vertical" >
 
         <TextView
@@ -55,7 +56,9 @@
         android:textColor="@android:color/black"
         android:textDirection="anyRtl"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentStart="false"
+        android:layout_alignParentLeft="false"
         android:gravity="end" />
 
 </RelativeLayout>
