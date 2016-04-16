@@ -227,6 +227,8 @@ public class GlobalSearchFragment extends Fragment
     public void onDestroyView() {
         super.onDestroyView();
         GlobalSearchManager.getInstance().removeOnGlobalSearchResponseListerner(this);
+
+        hideSoftInput();
     }
 
     @Override
@@ -258,9 +260,7 @@ public class GlobalSearchFragment extends Fragment
                 msg.obj = ClementineMessageFactory.buildGlobalSearch(query);
                 App.ClementineConnection.mHandler.sendMessage(msg);
 
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
-                        Activity.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                hideSoftInput();
 
                 // Set the actionbar title
                 mActionBar.setTitle(getResources().getString(R.string.global_search_query, query));
@@ -286,6 +286,15 @@ public class GlobalSearchFragment extends Fragment
                 R.color.searchview_edittext_hint));
 
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    private void hideSoftInput() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
+                Activity.INPUT_METHOD_SERVICE);
+        View v = getActivity().getCurrentFocus();
+        if (v != null) {
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+        }
     }
 
     @Override
