@@ -6,7 +6,6 @@
 
     <TextView
         android:id="@+id/tvTrackNo"
-        android:layoutDirection="ltr"
         android:layout_width="35dp"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -14,6 +13,8 @@
         android:layout_marginStart="2dp"
         android:layout_marginRight="2dp"
         android:layout_marginEnd="2dp"
+        android:layout_gravity="start"
+        android:gravity="start"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@android:color/darker_gray"
         android:textStyle="bold"
@@ -24,7 +25,8 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/tvTrackNo"
         android:layout_toEndOf="@id/tvTrackNo"
-        android:orientation="vertical">
+        android:paddingEnd="48dp"
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/tvRowTitle"
@@ -47,11 +49,13 @@
 
     <TextView
         android:id="@+id/tvRowLength"
-        android:layout_width="fill_parent"
+        android:layout_width="40dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|center_vertical"
-        android:gravity="end"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@android:color/black" />
+        android:textColor="@android:color/black"
+        android:textDirection="anyRtl"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="false"
+        android:gravity="end" />
 
 </RelativeLayout>
