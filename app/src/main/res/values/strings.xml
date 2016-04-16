@@ -271,7 +271,7 @@
     <string name="track_loved">Track loved &lt;3</string>
     <string name="track_banned">Track banned :-(</string>
     <string name="permissions_required_title">Permissions required</string>
-    <string name="permissions_required_text">Clementine Remote requires access to the devices storage for song downloads and phone state to silence Clementine on calls. Click continue to grant Clementine Remote the permissions.</string>
+    <string name="permissions_required_text">Clementine Remote requires access to the device's storage for song downloads and phone state to silence Clementine on calls. Click continue to grant Clementine Remote the permissions.</string>
 
     <string name="notification_disconnect_keep_alive">Lost connection. Touch to reconnect.</string>
 
