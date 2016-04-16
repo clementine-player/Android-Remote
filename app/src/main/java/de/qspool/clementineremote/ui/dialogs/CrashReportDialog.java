@@ -23,10 +23,11 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -100,14 +101,22 @@ public class CrashReportDialog {
             reader.read(chars);
             body = new String(chars);
             reader.close();
-        } catch (FileNotFoundException e) {
-        } catch (IOException e) {
+        } catch (IOException ignored) {
+        }
+
+        String clementineVersion = mContext.getString(R.string.clementine_version);
+        try {
+            PackageInfo pInfo = mContext.getPackageManager()
+                    .getPackageInfo(mContext.getPackageName(), 0);
+            clementineVersion = pInfo.versionName + " - " + pInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
 
         Intent mailIntent = new Intent(Intent.ACTION_SEND);
         mailIntent.setType("message/rfc822");
-        mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"asfa194@gmail.com"});
-        mailIntent.putExtra(Intent.EXTRA_SUBJECT, "New Crashreport from Clementine Remote");
+        mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"asfa194+ClementineRemoteCrash@gmail.com"});
+        mailIntent.putExtra(Intent.EXTRA_SUBJECT, "New Crashreport from Clementine Remote " + clementineVersion);
         mailIntent.putExtra(Intent.EXTRA_TEXT, body);
         mContext.startActivity(Intent.createChooser(mailIntent, "Send email..."));
     }
