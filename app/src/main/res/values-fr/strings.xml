@@ -224,7 +224,7 @@
   <string name="track_loved">Piste aimée &lt;3</string>
   <string name="track_banned">Piste détestée :-(</string>
   <string name="permissions_required_title">Permissions nécessaires</string>
-  <string name="permissions_required_text">Clementine Remote nécessite des accès aux périphériques de stockage pour enregistrer les titres et à l\'état du téléphone pour couper le son de Clementine lors des appels. Cliquer sur continuer pour accorder ces autorisations.</string>
+  <string name="permissions_required_text">Clementine À Distance requiert l’accès à l\'espace de stockage du périphérique pour les téléchargements de musique ainsi qu\'à l\'état du téléphone pour arrêter Clementine lors des appels.  Cliquez sur continuer pour donner les permissions à Clementine À Distance.</string>
   <string name="notification_disconnect_keep_alive">Connexion perdue. Touchez pour vous reconnecter.</string>
   <string name="crash_report_title">Oups, une erreur s\'est produite !</string>
   <string name="crash_report_message">« Clementine À Distance » a planté lors de la dernière utilisation : ceci ne devrait pas arriver. Aidez-moi à l\'améliorer en m\'envoyant le rapport d\'erreur. Merci !</string>

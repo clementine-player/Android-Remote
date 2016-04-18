@@ -26,13 +26,24 @@
   <string name="playlist_loading">Ladataan</string>
   <string name="playlist_close">Sulje soittolista</string>
   <string name="playlist_clear">Tyhjennä soittolista</string>
+  <string name="playlist_clear_content">Tämä poistaa pysyvästi kaikki kappaleet soittolistalta. Jatketaanko?</string>
+  <string name="playlist_clear_confirm">Tyhjennä soittolista</string>
   <string name="downloads_empty">Ei latauksia!</string>
   <string name="download_freespace">Vapaa tila</string>
   <string name="download_noti_title">Aloitetaan latausta</string>
+  <plurals name="download_noti_n_downloads">
+    <item quantity="one">%d aktiivinen lataus</item>
+    <item quantity="other">%d aktiivista latausta</item>
+  </plurals>
   <string name="download_noti_n_progress">Kokonaistilanne: %d %</string>
   <string name="download_noti_title_song">[Kappale]</string>
   <string name="download_noti_title_album">[Albumi]</string>
   <string name="download_noti_title_playlist">[Soittolista]</string>
+  <string name="download_noti_title_songs">[Kappaleet]</string>
+  <plurals name="download_noti_n_finished">
+    <item quantity="one">%d lataus valmistui</item>
+    <item quantity="other">%d latausta valmistui</item>
+  </plurals>
   <string name="download_noti_complete">Lataus valmistui</string>
   <string name="download_noti_canceled">Lataus peruttiin</string>
   <string name="download_noti_insufficient_space">Ei riittävästi levytilaa, lopetetaan lataaminen.</string>
@@ -44,8 +55,11 @@
   <string name="library_download">Ladataan kirjastoa</string>
   <string name="library_optimize">Optimoidaan tietokantaa</string>
   <string name="library_please_wait">Odota hetki</string>
+  <string name="library_empty">Kirjaston tyhjä. Vedä alaspäin ladataksesi kirjaston!</string>
   <string name="library_no_search_results">Ei hakuehtoihisi osuvia kappaleita!</string>
   <string name="library_download_error">Kirjaston lataaminen ei onnistunut</string>
+  <string name="global_search_empty">Anna hakuehdot yläpuolella löytääksesi musiikkia tietokoneeltasi ja internetistä</string>
+  <string name="global_search_search">Etsi mitä tahansa</string>
   <string name="song_info_album">Albumi</string>
   <string name="song_info_genre">Tyylilaji</string>
   <string name="song_info_year">Vuosi</string>
@@ -68,6 +82,7 @@
   <string name="menu_search">Etsi</string>
   <string name="menu_love">Tykkää</string>
   <string name="menu_ban">En tykkää</string>
+  <string name="menu_download">Lataa</string>
   <string name="menu_download_playlist">Lataa soittolista</string>
   <string name="donate_header">Lahjoitukset</string>
   <string name="donate_text">Kiitos sovelluksen käyttämisestä, toivottavasti siitä oli hyötyä sinulle!\n\nJos olet todella kiitollinen, voit tehdä pienen lahjoituksen.</string>
@@ -82,6 +97,7 @@
   <string name="donate_not_available_text">Varmista, että laitteellesi on asennettu Googlen Play-kaupan uusin versio ja yritä uudelleen!</string>
   <string name="pref_cat_behavior">Toiminta</string>
   <string name="pref_cat_player">Soitin</string>
+  <string name="pref_cat_library">Kirjasto</string>
   <string name="pref_cat_downloads">Lataukset</string>
   <string name="pref_cat_advanced">Lisäasetukset</string>
   <string name="pref_cat_network">Verkko</string>
@@ -101,6 +117,8 @@
   <string name="pref_call_volume_summary">Puheluiden nykyinen äänitaso: %s</string>
   <string name="pref_volume_inc_title">Äänenvoimakkuuden muutostaso</string>
   <string name="pref_volume_inc_summary">Nykyinen äänen muutostaso: %s</string>
+  <string name="pref_library_sorting_title">Järjestys</string>
+  <string name="pref_library_grouping_title">Ryhmittely</string>
   <string name="pref_autoconnect_title">Yhdistä automaattisesti</string>
   <string name="pref_autoconnect_summary">Yhdistä Clementineen automaattisesti kaukosäätimen käynnistyessä.</string>
   <string name="pref_port_title">Portti</string>
@@ -114,6 +132,7 @@
   <string name="pref_license_summary">GNU GPLv3</string>
   <string name="pref_opensource_title">Avoin lähdekoodi</string>
   <string name="pref_opensource_summary">Näytä avoimen lähdekoodin ohjelmistojen lisenssit</string>
+  <string name="pref_opensource">Avoimen lähdekoodin ohjelmistojen lisenssit</string>
   <string name="pref_about_title">Tietoja</string>
   <string name="pref_about_summary">Projektin parissa työskentelevät henkilöt</string>
   <string name="pref_clementine_title">Clementine</string>
@@ -122,6 +141,7 @@
   <string name="pref_dl_wifi_only_summary">Lataa kappaleet vain wifi-yhteydellä.</string>
   <string name="pref_dl_dir">Aseta latauskansio</string>
   <string name="pref_dl_override">Korvaa olemassa olevat tiedostot</string>
+  <string name="pref_dl_cat_folders">Kansiot</string>
   <string name="pref_dl_pl_save_own_dir_title">Tallenna kappaleet soittolistan kansioon</string>
   <string name="pref_dl_pl_save_own_dir_summary">Luo soittolistan nimisen kansion ja tallentaa kappaleet sinne.</string>
   <string name="file_dialog_set_dir">Valitse kansio</string>
@@ -147,12 +167,25 @@
   <string name="widget_open_clementine">Kosketa käynnistääksesi Clementine-kaukosäätimen</string>
   <string name="widget_couldnt_connect">Yhdistäminen ei onnistunut</string>
   <string name="dialog_close">Sulje</string>
+  <string name="dialog_cancel">Peru</string>
+  <string name="dialog_continue">Jatka</string>
   <string name="error_versions">Yhteensopimaton versio</string>
+  <string name="old_proto">Päivitä Clementine! Tarvitset Clementinen version %1$s tai uudemman.</string>
   <string name="no_private_ip">Android-laitteesi IP-osoite ei ole paikallinen. Kokeile poistaa käytöstä \"Salli yhteydet vain paikallisverkosta\" Clementinen asetuksista.</string>
   <string name="wifi_disabled">Wifi ei ole päällä. Jos haluat yhdistää Clementineen internetin kautta, varmista että olet ohjannut portit oikein ja olet poistanut käytöstä \"Salli yhteydet vain paikallisverkosta\".</string>
   <string name="input_auth_code">Tunnistuskoodi</string>
   <string name="invalid_code">Virheellinen koodi</string>
   <string name="done">Valmis</string>
+  <string name="unknown">Tuntematon</string>
+  <plurals name="number_items">
+    <item quantity="one">%d kohde</item>
+    <item quantity="other">%d kohdetta</item>
+  </plurals>
+  <plurals name="songs_added">
+    <item quantity="one">%d kappale lisätty nykyiselle soittolistalle</item>
+    <item quantity="other">%d kappaletta lisätty nykyiselle soittolistalle</item>
+  </plurals>
+  <string name="context_add_to_playlist">Lisää kohde nykyiselle soittolistalle</string>
   <string name="repeat_off">Älä kertaa</string>
   <string name="repeat_track">Kertaa kappaletta</string>
   <string name="repeat_album">Kertaa albumi</string>
@@ -168,5 +201,26 @@
   <string name="crash_report_title">Hups, jokin meni pieleen!</string>
   <string name="crash_report_message">Clementine-kaukosäädin kaatui viime käyttökerralla! Niin ei olisi pitänyt tapahtua. Auta parantamaan sovellusta lähettämällä lokitiedosto, kiitos!</string>
   <string name="crash_report_send">Lähetä!</string>
+  <string name="fragment_title_player">Soitin</string>
+  <string name="fragment_title_details">Kappaleen tiedot</string>
+  <string name="fragment_title_connection">Clementine</string>
+  <string name="player_download_what">Mitä ladataan?</string>
+  <string-array name="player_download_list">
+    <item>Kappale</item>
+    <item>Albumi</item>
+    <item>Soittolista</item>
+  </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
+  <string-array name="navigation_drawer_items">
+    <item>Haku</item>
+    <item>Soitin</item>
+    <item>Soittolistat</item>
+    <item>Kirjasto</item>
+    <item>Lataukset</item>
+    <item></item>
+    <item>Asetukset</item>
+    <item>Lahjoita</item>
+    <item></item>
+    <item>Lopeta</item>
+  </string-array>
 </resources>

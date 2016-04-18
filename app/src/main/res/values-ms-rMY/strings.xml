@@ -220,7 +220,7 @@
   <string name="track_loved">Trek disukai &lt;3</string>
   <string name="track_banned">Trek dilarang :-(</string>
   <string name="permissions_required_title">Kebenaran diperlukan</string>
-  <string name="permissions_required_text">Clementine Remote memerlukan capaian ke storan peranti untuk ketahui muat turun lagu dan keadaan telefon supaya dapat senyapkan Clementine ketika panggilan. Klik teruskan untuk beri Clementine Remote keizinan tersebut.</string>
+  <string name="permissions_required_text">Clementine Remote memerlukan capaian ke storan peranti untuk muat turun lagu dan keadaan telefon untuk senyapkan Clementine ketika panggilan. Klik teruskan untuk beri kebenaran pada Clementine Remote.</string>
   <string name="notification_disconnect_keep_alive">Sambungan terputus. Sentuh untuk sambung semula.</string>
   <string name="crash_report_title">Alamak, ada masalah berlaku!</string>
   <string name="crash_report_message">Kali terakhir Clementine Remote mengalami kerosakan! Ia tidak sepatutnya berlaku! Sila bantu kami menambanbaik apl ini dan hantar kepada kami log fail. Terima kasih!</string>

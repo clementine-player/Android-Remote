@@ -1,26 +1,32 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+  <string name="app_name">Control remot del Clementine</string>
   <string name="app_not_available">L’aplicació no està disponible.</string>
   <string name="connectdialog_connect">Connecta</string>
   <string name="connectdialog_connecting">S’està connectant amb el Clementine</string>
   <string name="connectdialog_download_data">S’estan baixant les dades</string>
+  <string name="connectdialog_error">No s\'ha pogut connectar amb l\'amfitrió</string>
   <string name="connectdialog_ip_hint">Introduïu l\'adreça IP</string>
+  <string name="connectdialog_services">Clementines</string>
   <string name="player_nosong">No s\'està reproduint cap peça</string>
   <string name="player_disconnected">Desconnectat</string>
   <string name="player_playlist">Llista de reproducció:</string>
   <string name="player_download_playlists">S\'estan baixant les llistes de reproducció</string>
   <string name="playler_volume">Volum</string>
+  <string name="player_stop_after_current">Commuta la parada quan acaba la peça.</string>
   <string name="player_download_lyrics">S\'està descarregant la lletra</string>
   <string name="player_no_lyrics">No s\'ha trobat la lletra</string>
   <string name="player_download_started">Ha començat la baixada</string>
   <string name="player_song_is_stream">Els fluxos no es poden baixar</string>
   <string name="player_stream">[Flux]</string>
+  <string name="playlist_search_hint">Cerca</string>
   <string name="playlist_empty">La llista de reproducció és buida.</string>
   <string name="playlist_context_play">Reprodueix l\'element</string>
   <string name="playlist_context_remove">Esborra de la llista de reproducció</string>
   <string name="playlist_loading">S’està carregant</string>
   <string name="playlist_close">Tanca la llista de reproducció</string>
   <string name="playlist_clear">Esborra la llista de reproducció</string>
+  <string name="playlist_clear_content">Això eliminarà totes les peces de la llista. Voleu continuar?</string>
   <string name="playlist_clear_confirm">Esborra la llista de reproducció</string>
   <string name="downloads_empty">No hi ha baixades.</string>
   <string name="download_freespace">Espai disponible</string>
@@ -35,17 +41,27 @@
   <string name="download_noti_title_album">[Àlbum]</string>
   <string name="download_noti_title_playlist">[Llista]</string>
   <string name="download_noti_title_songs">[Peces]</string>
+  <plurals name="download_noti_n_finished">
+    <item quantity="one">S\'ha completat %d baixada</item>
+    <item quantity="other">S\'han completat %d baixades</item>
+  </plurals>
   <string name="download_noti_complete">S\'ha completat la baixada</string>
   <string name="download_noti_canceled">S\'ha cancel·lat la baixada</string>
   <string name="download_noti_insufficient_space">Espai insuficient: s\'interromp la baixada</string>
-  <string name="download_noti_forbidden">Baixada no autoritzada. Es pot autoritzar a les opcions del Clementine.</string>
+  <string name="download_noti_forbidden">Baixada no autoritzada. Es pot activar a la configuració del Clementine.</string>
   <string name="download_noti_not_mounted">No s\'ha trobat cap dispositiu d\'emmagatzematge.</string>
   <string name="download_noti_only_wifi">Baixa només amb connexió Wi-Fi.</string>
+  <string name="download_noti_transcoding">S\'estan convertint els arxius</string>
   <string name="download_noti_transcoding_subtitle">Espereu-vos</string>
   <string name="library_download">S’està baixant la col·lecció</string>
   <string name="library_optimize">S’està optimitzant la base de dades</string>
   <string name="library_please_wait">Espereu-vos</string>
+  <string name="library_empty">La biblioteca està buida. Feu-la lliscar cap avall per actualitzar-la!</string>
+  <string name="library_no_search_results">No hi ha peces que compleixin els criteris de cerca.</string>
   <string name="library_download_error">No s\'ha pogut baixar la biblioteca</string>
+  <string name="global_search_empty">Escriviu els termes de cerca per trobar peces al vostre ordinador o en Internet</string>
+  <string name="global_search_search">Cerca</string>
+  <string name="global_search_query">Consulta: %s</string>
   <string name="song_info_album">Àlbum</string>
   <string name="song_info_genre">Estil</string>
   <string name="song_info_year">Any</string>
@@ -56,20 +72,32 @@
   <string name="song_info_size">Mida</string>
   <string name="song_info_filename">Nom del fitxer</string>
   <string name="song_info_rating">Valoració</string>
+  <string name="song_info_rated">Nota de la peça $stars$ estrelles</string>
+  <string name="connection_connected_to">S\'està connectat a:</string>
   <string name="connection_volume">Volum</string>
   <string name="connection_version">Versió del Clementine</string>
+  <string name="connection_traffic">Velocitat (per segon) de pujada/baixada</string>
+  <string name="connection_traffic_unsupported">No es disposa de les estadístiques en aquest dispositiu</string>
+  <string name="menu_shuffle">Mescla</string>
   <string name="menu_repeat">Repeteix</string>
   <string name="menu_settings">Paràmetres</string>
   <string name="menu_search">Cerca</string>
   <string name="menu_love">M’encanta</string>
+  <string name="menu_ban">Veta</string>
   <string name="menu_download">Baixa</string>
   <string name="menu_download_playlist">Baixa la llista</string>
   <string name="donate_header">Donacions</string>
+  <string name="donate_text">Gràcies per emprar l\'aplicació. Esperem que la trobeu útil.\n\nSi us agrada, us agrairíem una petita donació.</string>
   <string name="donate_i_want">Vull fer una donació de:</string>
+  <string name="donate_one">Dònut (1.00 €)</string>
+  <string name="donate_two">Cafè (2.00 €)</string>
+  <string name="donate_five">Pizza (5.00 €)</string>
   <string name="donate_thanks">Gràcies pel vostre recolzament!</string>
   <string name="donate_complete">Donació efectuada. Gràcies!</string>
   <string name="donate_try_again">Encara hi ha una donació en procés. Proveu-ho d\'aquí un moment.</string>
   <string name="donate_not_available">El Google Play no està disponible.</string>
+  <string name="donate_not_available_text">Si us plau, comproveu si teniu instal·lada l\'última versió de la Google Play Store i proveu-ho un altre cop.</string>
+  <string name="pref_cat_behavior">Comportament</string>
   <string name="pref_cat_player">Reproductor</string>
   <string name="pref_cat_library">Col·lecció</string>
   <string name="pref_cat_downloads">Baixades</string>
@@ -80,22 +108,76 @@
   <string name="pref_cat_about">Quant a</string>
   <string name="pref_cat_license">Llicències</string>
   <string name="pref_volume_title">Feu servir les tecles del volum</string>
+  <string name="pref_volume_summary">Empreu les tecles de volum per controlar el volum del Clementine.</string>
   <string name="pref_trackno_title">Mostra el número de peça</string>
+  <string name="pref_trackno_summary">Mostra o amaga el número de peça de la llista de reproducció.</string>
   <string name="pref_lastfm_title">Last.fm</string>
+  <string name="pref_lastfm_summary">Activa l\'opció de vetar o marcar com a favorites</string>
   <string name="pref_lower_volume_title">Baixa el volum</string>
+  <string name="pref_lower_volume_summary">Baixa el volum mentre es rebin o facin trucades.</string>
+  <string name="pref_call_volume_title">Volum durant trucades</string>
+  <string name="pref_call_volume_summary">Nivell del volum durant trucades: %s</string>
+  <string name="pref_volume_inc_title">Nivell de canvi de volum</string>
+  <string name="pref_volume_inc_summary">Nivell del canvi de volum: %s</string>
+  <string name="pref_library_sorting_title">Ordenació</string>
+  <string name="pref_library_sorting_summary">S\'ha ordenat la biblioteca en ordre %1$s.</string>
+  <string-array name="pref_library_sorting">
+    <item>Ascendent</item>
+    <item>Descendent</item>
+  </string-array>
+  <string name="pref_library_grouping_title">Agrupació</string>
+  <string name="pref_library_grouping_summary">La biblioteca està agrupada per %1$s.</string>
+  <string-array name="pref_library_grouping">
+    <item>Artista</item>
+    <item>Artista / Àlbum</item>
+    <item>Artista / Any</item>
+    <item>Àlbum</item>
+    <item>Estil / Àlbum</item>
+    <item>Estil / Artista / Àlbum</item>
+  </string-array>
+  <string name="pref_autoconnect_title">Connexió automàtica</string>
+  <string name="pref_autoconnect_summary">Connecta\'t automàticament al Clementine quan s\'iniciï el control remot.
+</string>
+  <string name="pref_port_title">Port</string>
+  <string name="pref_port_summary">Port actual:</string>
   <string name="pref_port_default">5500</string>
+  <string name="pref_port_error">Port no vàlid!</string>
+  <string name="pref_wake_lock_title">Manté actiu el processador</string>
+  <string name="pref_wake_lock_summary">Activeu-ho si l\'aplicació es desconnecta quan està en segon pla. Pot augmentar el consum de bateria.
+</string>
+  <string name="pref_keep_screen_on_title">Manté la pantalla encesa</string>
+  <string name="pref_keep_screen_on_summary">Evita que s\'apagui la pantalla mentre el control remot estigui connectat al Clementine.</string>
+  <string name="pref_version_summary">Cliqueu per visitar el lloc web del projecte</string>
   <string name="pref_version_title">Versió</string>
   <string name="pref_license_title">Llicència</string>
   <string name="pref_license_summary">GNU GPLv3</string>
   <string name="pref_opensource_title">Codi obert</string>
-  <string name="pref_opensource_summary">Mostra les llicències de programari obert</string>
+  <string name="pref_opensource_summary">Mostra les llicències del programari de codi obert</string>
+  <string name="pref_opensource">Llicències del programari de codi obert</string>
   <string name="pref_about_title">Quant a</string>
   <string name="pref_about_summary">Gent que treballa en aquest projecte</string>
   <string name="pref_clementine_title">Clementine</string>
   <string name="pref_clementine_summary">Lloc web del Clementine</string>
   <string name="pref_dl_wifi_only_title">Només Wi-Fi</string>
+  <string name="pref_dl_wifi_only_summary">Baixa les peces només quan s\'estigui connectat a una xarxa Wi-Fi.</string>
+  <string name="pref_dl_dir">Estableix el directori de baixades</string>
+  <string name="pref_dl_override">Sobreescriu els arxius existents</string>
+  <string name="pref_dl_cat_folders">Carpetes</string>
+  <string name="pref_dl_pl_save_own_dir_title">Baixa les peces en una carpeta</string>
+  <string name="pref_dl_pl_save_own_dir_summary">Crea una carpeta amb el nom de la llista i hi desa les peces.</string>
+  <string name="pref_dl_pl_artist_dir_title">Crea subcarpetes per artista</string>
+  <string name="pref_dl_pl_artist_dir_summary">Crea subcarpetes d\'artista per cada peça.</string>
+  <string name="pref_dl_pl_album_dir_title">Crea subcarpetad\'àlbum</string>
+  <string name="pref_dl_pl_album_dir_summary">Crea una subcarpeta d\'àlbum dins de l\'artista per cada peça.</string>
+  <string name="file_dialog_set_dir">Escolliu una carpeta</string>
+  <string name="file_dialog_not_writable">No es pot escriure a la carpeta</string>
+  <string name="file_dialog_custom_paths_available">Seleccioneu-ne una altra</string>
   <string name="dialog_about_authors">Autors</string>
+  <string name="dialog_about_supporters">Simpatitzants</string>
+  <string name="dialog_about_others">Altres</string>
+  <string name="dialog_license_top">Aquesta aplicació es distribueix sense cap garantia.</string>
   <string name="tasker_intro">Trieu una acció.</string>
+  <string name="tasker_ip_help">Escriviu els detalls per connectar-se si heu seleccionat «Connecta» més amunt. El codi d\'autentificació és opcional si no el teniu activat al Clementine.</string>
   <string name="tasker_action">Acció:</string>
   <string name="tasker_connect">Connecta</string>
   <string name="tasker_disconnect">Desconnecta</string>
@@ -104,20 +186,72 @@
   <string name="tasker_playpause">Reprodueix/posa en pausa</string>
   <string name="tasker_stop">Atura</string>
   <string name="tasker_next">Peça següent</string>
+  <string name="tasker_port_hint">Escriviu el port</string>
+  <string name="tasker_auth_hint">Escriviu el codi d\'autentificació</string>
+  <string name="widget_connect_to">Toqueu per connectar</string>
   <string name="widget_not_connected">No està connectat</string>
+  <string name="widget_open_clementine">Toqueu per iniciar el control remot del Clementine</string>
+  <string name="widget_couldnt_connect">No s\'ha pogut connectar</string>
   <string name="dialog_close">Tanca</string>
   <string name="dialog_cancel">Cancel·la</string>
   <string name="dialog_continue">Continua</string>
   <string name="error_versions">La versió és incompatible</string>
+  <string name="old_proto">Si us plau, actualitzeu el Clementine! Necessiteu la versió %1$s o posterior.</string>
+  <string name="no_private_ip">El vostre dispositiu Android té una adreça ip no local. Proveu amb «Empra només adreces ip locals» a la configuració del Clementine.</string>
+  <string name="check_ip">1) S\'està executant el Clementine?\n2) Esteu usant la versió %1$s o posterior del Clementine?\n3) Heu activat el control remot per xarxa a la configuració del Clementine?\n4) Heu introduït l\'adreça ip?\n</string>
+  <string name="wifi_disabled">La xarxa Wi-Fi està desactivada. Si voleu connectar-vos al Clementine via Internet, si us plau, assegureu-vos que heu desactivat «Permet només connexions provinents de la xarxa local».</string>
   <string name="input_auth_code">Codi d’autenticació</string>
   <string name="invalid_code">El codi no és vàlid</string>
   <string name="done">Fet</string>
+  <string name="unknown">Desconegut</string>
   <plurals name="number_items">
     <item quantity="one">%d element</item>
     <item quantity="other">%d elements</item>
   </plurals>
+  <plurals name="songs_added">
+    <item quantity="one">%d peça afegida a la llista actual</item>
+    <item quantity="other">%d peces afegides a la llista actual</item>
+  </plurals>
+  <string name="context_add_to_playlist">Afegeix l\'element a la llista actual</string>
+  <string name="repeat_off">Sense repetició</string>
+  <string name="repeat_track">Repeteix la peça</string>
+  <string name="repeat_album">Repeteix l\'àlbum</string>
+  <string name="repeat_playlist">Repeteix la llista de reproducció</string>
+  <string name="shuffle_off">Sense mesclar</string>
+  <string name="shuffle_all">Mescla-ho tot</string>
+  <string name="shuffle_inside_album">Mescla les peces de l\'àlbum</string>
+  <string name="shuffle_albums">Mescla els àlbums</string>
   <string name="first_time_title">Us donem la benvinguda</string>
+  <string name="first_time_text">Gràcies per utilitzar el control remot del Clementine.\nEsperem que l\'aplicació us sigui útil.&lt;br&gt;&lt;br&gt;Per poder usar aquesta aplicació heu d\'instal·lar en un altre dispositiu la versió %1$s o posterior del Clementine disponible en &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;.</string>
+  <string name="track_loved">Peça favorita &lt;3</string>
+  <string name="track_banned">Peça vetada :-(</string>
+  <string name="permissions_required_title">Permisos necessaris</string>
+  <string name="permissions_required_text">El control remot del Clementine necessita accedir als dispositius d\'emmagatzematge per baixar arxius de música i accedir a l\'estat del telèfon per silenciar el Clementine durant les trucades. Cliqueu «Continua» per permetre al Clementine aquestes operacions.</string>
+  <string name="notification_disconnect_keep_alive">S\'ha perdut la connexió. Toqueu per reconnectar.</string>
   <string name="crash_report_title">S\'ha produït un problema.</string>
+  <string name="crash_report_message">L\'últim cop que vau usar el control remot del Clementine, va fallar. Ajudeu-nos a millorar l\'aplicació i envieu-nos l\'informe d\'error. Gràcies!</string>
   <string name="crash_report_send">Envia</string>
+  <string name="fragment_title_player">Reproductor</string>
+  <string name="fragment_title_details">Detalls de la peça</string>
+  <string name="fragment_title_connection">Clementine</string>
+  <string name="navigation_drawer_clementine_on">Clementine en %s</string>
+  <string name="player_download_what">Què s\'ha de baixar?</string>
+  <string-array name="player_download_list">
+    <item>Títol</item>
+    <item>Àlbum</item>
+    <item>Llista</item>
+  </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
+  <string-array name="navigation_drawer_items">
+    <item>Cerca</item>
+    <item>Reproductor</item>
+    <item>Llistes de reproducció</item>
+    <item>Biblioteca</item>
+    <item>Baixades</item>
+    <item></item>
+    <item>Configuració</item>
+    <item>Donacions</item>
+    <item></item>
+    <item>Surt</item>
+  </string-array>
 </resources>

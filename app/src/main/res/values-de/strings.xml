@@ -192,6 +192,7 @@
   <string name="widget_couldnt_connect">Verbindung nicht möglich</string>
   <string name="dialog_close">Schließen</string>
   <string name="dialog_cancel">Abbrechen</string>
+  <string name="dialog_continue">Fortfahren</string>
   <string name="error_versions">Inkompatible Version</string>
   <string name="old_proto">Bitte Clementine aktualisieren! Sie benötigen Clementine %1$s oder höher.</string>
   <string name="no_private_ip">Ihr Android-Gerät hat eine nicht lokale IP-Adresse. »Nur Verbindungen aus dem lokalen Netzwerk« in den Clementine-Einstellungen deaktivieren.</string>
@@ -222,6 +223,7 @@
   <string name="first_time_text">Danke, dass Sie die Clementine-Fernbedienung benutzen!\nIch hoffe, dass diese App nützlich für Sie ist.&lt;br&gt;&lt;br&gt;Um diese Fernsteuerung zu benutzen müssen Sie Clementine %1$s oder höher installiert haben. &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;Hier&lt;/a&gt; herunterladen</string>
   <string name="track_loved">Titel geliebt &lt;3</string>
   <string name="track_banned">Titel gesperrt :-(</string>
+  <string name="permissions_required_title">Berechtigungen benötigt</string>
   <string name="notification_disconnect_keep_alive">Verbindung verloren. Tippen, zum wieder Verbinden.</string>
   <string name="crash_report_title">Huch, irgendwas ist schief gelaufen!</string>
   <string name="crash_report_message">Clementine-Fernbedienung ist das letzte mal abgestürzt! Das hätte nicht passieren dürfen! Helfen Sie mir die Anwendung zu verbessern und senden Sie mir die Protokolldatei. Danke!</string>

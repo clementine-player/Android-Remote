@@ -231,7 +231,7 @@
   <string name="track_loved">Skladba je obľúbená &lt;3</string>
   <string name="track_banned">Skladba bola zakázaná :-(</string>
   <string name="permissions_required_title">Vyžadujú sa oprávnenia</string>
-  <string name="permissions_required_text">Aplikácia Clementine Remote vyžaduje prístup k úložisku zariadenia pre preberania skladieb a stav telefónu na umlčanie prehrávača Clementine počas hovorov. Kliknutím na Pokračovať udelíte aplikácii Clementine Remote oprávnenia.</string>
+  <string name="permissions_required_text">Clementine Remote vyžaduje prístup k úložisku zariadenia pre prevzatia skladieb a stavu telefónu na umlčanie prehrávača Clementine počas hovorov. Kliknutím na pokračovať udelíte oprávnenia aplikácii Clementine Remote.</string>
   <string name="notification_disconnect_keep_alive">Pripojenie stratené. Ťuknite na znovu pripojenie.</string>
   <string name="crash_report_title">Ale nie, niekde sa stala chyba!</string>
   <string name="crash_report_message">Naposledy aplikácia Clementine Remote zlyhala! Nemalo by sa to stávať! Prosím, pomôžte nám vylepšiť aplikáciu odoslaním záznamového súboru. Ďakujeme!</string>

@@ -26,15 +26,24 @@
   <string name="playlist_loading">Caricamento</string>
   <string name="playlist_close">Chiudi playlist</string>
   <string name="playlist_clear">Pulisci playlist</string>
+  <string name="playlist_clear_confirm">Pulisci playlist</string>
   <string name="downloads_empty">Nessun download!</string>
   <string name="download_freespace">Spazio libero</string>
   <string name="downloaded_songs">Brani scaricati - clicca per avviare</string>
   <string name="download_noti_title">Inzio download</string>
+  <plurals name="download_noti_n_downloads">
+    <item quantity="one">%d download attivo</item>
+    <item quantity="other">%d download attivi</item>
+  </plurals>
   <string name="download_noti_n_progress">Progresso Totale: %d %</string>
   <string name="download_noti_title_song">[Canzone]</string>
   <string name="download_noti_title_album">[Album]</string>
   <string name="download_noti_title_playlist">[Playlist]</string>
   <string name="download_noti_title_songs">[Canzoni]</string>
+  <plurals name="download_noti_n_finished">
+    <item quantity="one">%d download finito</item>
+    <item quantity="other">%d download finiti</item>
+  </plurals>
   <string name="download_noti_complete">Download completato</string>
   <string name="download_noti_canceled">Download cancellato</string>
   <string name="download_noti_insufficient_space">Spazio insufficente, download interrotto.</string>
@@ -77,6 +86,7 @@
   <string name="menu_download">Download</string>
   <string name="menu_download_playlist">Scarica playlist</string>
   <string name="donate_header">Donazioni</string>
+  <string name="donate_text">Grazie per aver usato la mia app, spero che l\'abbia trovata utile!\n\n se ti piace il mio lavoro, una piccola donazione sarebbe molto apprezzata.</string>
   <string name="donate_i_want">Voglio donare:</string>
   <string name="donate_one">Noccioline (1.00 €)</string>
   <string name="donate_two">Caffe (2.00 €)</string>
@@ -108,10 +118,12 @@
   <string name="pref_volume_inc_title">Livello cambio volume</string>
   <string name="pref_volume_inc_summary">Livello cambio volume corrente: %s</string>
   <string name="pref_library_sorting_title">Ordinamento</string>
+  <string name="pref_autoconnect_title">Auto-Connetti</string>
   <string name="pref_port_title">Porta</string>
   <string name="pref_port_summary">Porta corrente:</string>
   <string name="pref_port_default">5500</string>
   <string name="pref_port_error">Porta illegale!</string>
+  <string name="pref_wake_lock_title">Mantieni la CPU attiva</string>
   <string name="pref_keep_screen_on_title">Mantieni schermo acceso</string>
   <string name="pref_version_summary">Fai clic per vedere il sito del progetto</string>
   <string name="pref_version_title">Versione</string>
@@ -131,6 +143,10 @@
   <string name="pref_dl_cat_folders">Cartelle</string>
   <string name="pref_dl_pl_save_own_dir_title">Salva tracce nella cartella playlist</string>
   <string name="pref_dl_pl_save_own_dir_summary">Crea una cartella con il nome della playlist e salva dentro le tracce.</string>
+  <string name="pref_dl_pl_artist_dir_title">Crea sotto-cartella artista</string>
+  <string name="pref_dl_pl_artist_dir_summary">Crea una sotto-cartella artista per ogni singola traccia.</string>
+  <string name="pref_dl_pl_album_dir_title">Crea sotto cartella album</string>
+  <string name="pref_dl_pl_album_dir_summary">Crea una sotto cartella album dentro l\'artista per ogni singola canzone.</string>
   <string name="file_dialog_set_dir">Seleziona cartella</string>
   <string name="file_dialog_not_writable">Cartella non scrivibile</string>
   <string name="file_dialog_custom_paths_available">Seleziona altro</string>
@@ -147,17 +163,32 @@
   <string name="tasker_playpause">Play / Pausa</string>
   <string name="tasker_stop">Stop</string>
   <string name="tasker_next">Prossima canzone</string>
+  <string name="tasker_port_hint">Inserisci porta</string>
+  <string name="tasker_auth_hint">Inserisci codice di autenticazione</string>
   <string name="widget_connect_to">Tocca per connettere</string>
   <string name="widget_not_connected">Non connesso</string>
   <string name="widget_open_clementine">Tocca per avviare Clementine Remote</string>
+  <string name="widget_couldnt_connect">Impossibile connettersi</string>
   <string name="dialog_close">Chiudi</string>
+  <string name="dialog_cancel">Annulla</string>
+  <string name="dialog_continue">Continua</string>
   <string name="error_versions">Versione non compatibile</string>
+  <string name="old_proto">Aggiorna Clementine! Hai bisogno di Clementine %1$s o successivo.</string>
   <string name="no_private_ip">Il tuo device Android ha un indirizzo ip non locale. Prova a disabilitare \"Usa solo indirizzo ip locale\" nelle impostazioni di Clementine.</string>
   <string name="wifi_disabled">Wifi disabilitato. Se vuoi connetterti a Clementine via internet assicurati di aver impostato le porte correttamente e di aver disabilitato \" Usa solo indirizzi ip locali\". </string>
   <string name="input_auth_code">Codice di autenticazione</string>
   <string name="invalid_code">Codice non valido</string>
   <string name="done">Fatto</string>
   <string name="unknown">Sconosciuto</string>
+  <plurals name="number_items">
+    <item quantity="one">%d elemento</item>
+    <item quantity="other">%d elementi</item>
+  </plurals>
+  <plurals name="songs_added">
+    <item quantity="one">%d canzone aggiunta alla playlist corrente</item>
+    <item quantity="other">%d canzoni aggiunta alla playlist corrente</item>
+  </plurals>
+  <string name="context_add_to_playlist">Aggiungi elemento alla playlist corrente</string>
   <string name="repeat_off">Non ripetere</string>
   <string name="repeat_track">Ripeti traccia</string>
   <string name="repeat_album">Ripeti album</string>
@@ -169,6 +200,7 @@
   <string name="first_time_title">Benvenuto</string>
   <string name="track_loved">Tracce amate &lt;3</string>
   <string name="track_banned">Tracce bannatte :-(</string>
+  <string name="permissions_required_title">Permessi richiesti</string>
   <string name="notification_disconnect_keep_alive">Connessione persa. Tocca per riconnettere</string>
   <string name="crash_report_title">Ops, qualcosa non va!</string>
   <string name="crash_report_message">L\'ultima volta Clementine Remote è andato in crash! Questo non doveva accadere! Aiutami a migliorare l\'app e inviami il file di log. Grazie!</string>
@@ -177,10 +209,23 @@
   <string name="fragment_title_details">Dettagli canzone</string>
   <string name="fragment_title_connection">Clementine</string>
   <string name="navigation_drawer_clementine_on">Clementine su %s</string>
+  <string name="player_download_what">Cosa scaricare?</string>
   <string-array name="player_download_list">
     <item>Canzone</item>
     <item>Album</item>
     <item>Playlist</item>
   </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
+  <string-array name="navigation_drawer_items">
+    <item>Cerca</item>
+    <item>Player</item>
+    <item>Playlists</item>
+    <item>Libreria</item>
+    <item>Downloads</item>
+    <item></item>
+    <item>Impostazioni</item>
+    <item>Dona</item>
+    <item></item>
+    <item>Esci</item>
+  </string-array>
 </resources>

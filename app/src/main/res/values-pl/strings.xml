@@ -26,13 +26,26 @@
   <string name="playlist_loading">Wczytywanie</string>
   <string name="playlist_close">Zamknij listę odtwarzania</string>
   <string name="playlist_clear">Wyczyść listę odtwarzania</string>
+  <string name="playlist_clear_confirm">Wyczyść listę odtwarzania</string>
   <string name="downloads_empty">Brak pobranych!</string>
   <string name="download_freespace">Wolna przestrzeń</string>
+  <string name="downloaded_songs">Pobrane utwory - kliknij aby odtworzyć.</string>
   <string name="download_noti_title">Rozpoczynanie pobierania</string>
+  <plurals name="download_noti_n_downloads">
+    <item quantity="one">%d aktywne pobieranie</item>
+    <item quantity="few">%d aktywne pobierania</item>
+    <item quantity="other">%d aktywnych pobierań</item>
+  </plurals>
   <string name="download_noti_n_progress">Całkowity postęp %d %</string>
   <string name="download_noti_title_song">[Utwór]</string>
   <string name="download_noti_title_album">[Album]</string>
   <string name="download_noti_title_playlist">[Lista odtwarzania]</string>
+  <string name="download_noti_title_songs">[Utwory]</string>
+  <plurals name="download_noti_n_finished">
+    <item quantity="one">%d pobieranie ukończone</item>
+    <item quantity="few">%d pobierania ukończone</item>
+    <item quantity="other">%d pobierań ukończonych</item>
+  </plurals>
   <string name="download_noti_complete">Pobieranie ukończone</string>
   <string name="download_noti_canceled">Pobieranie anulowane</string>
   <string name="download_noti_insufficient_space">Brak miejsca, anulowanie pobierania.</string>
@@ -44,8 +57,12 @@
   <string name="library_download">Pobieranie biblioteki</string>
   <string name="library_optimize">Optymalizowanie bazy danych</string>
   <string name="library_please_wait">Proszę czekać</string>
+  <string name="library_empty">Biblioteka jest pusta. Przeciągnij w dół aby pobrać bibliotekę!</string>
   <string name="library_no_search_results">Brak utworów spełniających Twoje warunki wyszukiwania</string>
   <string name="library_download_error">Nie można było pobrać biblioteki</string>
+  <string name="global_search_empty">Podaj kryteria wyszukiwania aby znaleźć muzykę na twoim komputerze oraz w internecie</string>
+  <string name="global_search_search">Szukaj wszystkiego</string>
+  <string name="global_search_query">Zapytanie: %s</string>
   <string name="song_info_album">Album</string>
   <string name="song_info_genre">Gatunek</string>
   <string name="song_info_year">Rok</string>
@@ -68,6 +85,7 @@
   <string name="menu_search">Szukaj</string>
   <string name="menu_love">Ulubione</string>
   <string name="menu_ban">Ignoruj</string>
+  <string name="menu_download">Pobierz</string>
   <string name="menu_download_playlist">Pobierz listę odtwarzania</string>
   <string name="donate_header">Darowizny</string>
   <string name="donate_text">Dziękujemy za używanie naszej aplikacji, mamy nadzieję, że jest przydatna!\n\nJeśli nasza praca naprawdę Cię uszczęśliwia, mała darowizna byłaby mile widziana.</string>
@@ -82,6 +100,7 @@
   <string name="donate_not_available_text">Proszę sprawdź czy zainstalowałeś najnowszą wersję Sklepu Google Play i spróbuj ponownie!</string>
   <string name="pref_cat_behavior">Zachowanie</string>
   <string name="pref_cat_player">Odtwarzacz</string>
+  <string name="pref_cat_library">Biblioteka</string>
   <string name="pref_cat_downloads">Pobrane</string>
   <string name="pref_cat_advanced">Zaawansowane</string>
   <string name="pref_cat_network">Sieć</string>
@@ -101,6 +120,22 @@
   <string name="pref_call_volume_summary">Aktualny poziom głośności w trakcie połączenia: %s</string>
   <string name="pref_volume_inc_title">Poziom skoku zmiany głośności</string>
   <string name="pref_volume_inc_summary">Obecny skok głośności: %s</string>
+  <string name="pref_library_sorting_title">Sortowanie</string>
+  <string name="pref_library_sorting_summary">Biblioteka jest posortowana %1$s.</string>
+  <string-array name="pref_library_sorting">
+    <item>Rosnąco</item>
+    <item>Malejąco</item>
+  </string-array>
+  <string name="pref_library_grouping_title">Grupowanie</string>
+  <string name="pref_library_grouping_summary">Biblioteka jest pogrupowana według: %1$s</string>
+  <string-array name="pref_library_grouping">
+    <item>Artysta</item>
+    <item>Artysta / Album</item>
+    <item>Artysta / Rok</item>
+    <item>Album</item>
+    <item>Gatunek / Album</item>
+    <item>Gatunek / Artysta / Album</item>
+  </string-array>
   <string name="pref_autoconnect_title">Automatyczne podłączanie</string>
   <string name="pref_autoconnect_summary">Automatycznie połącz się z Clementine przy starcie Remote.
 </string>
@@ -120,6 +155,7 @@
   <string name="pref_license_summary">GNU GPLv3</string>
   <string name="pref_opensource_title">Wolne Oprogramowanie</string>
   <string name="pref_opensource_summary">Pokaż licencje Otwartego Oprogrogramowania</string>
+  <string name="pref_opensource">Licencje Otwartego Oprogramowania</string>
   <string name="pref_about_title">Informacje o</string>
   <string name="pref_about_summary">ludziach pracujących nad tym projektem</string>
   <string name="pref_clementine_title">Clementine</string>
@@ -128,6 +164,7 @@
   <string name="pref_dl_wifi_only_summary">Pobieraj utwory tylko kiedy w zasięgu sieci wifi</string>
   <string name="pref_dl_dir">Ustaw katalog pobierania</string>
   <string name="pref_dl_override">Nadpisuj istniejące pliki</string>
+  <string name="pref_dl_cat_folders">Foldery</string>
   <string name="pref_dl_pl_save_own_dir_title">Zapisz utwory w katalogu listy odtwarzania</string>
   <string name="pref_dl_pl_save_own_dir_summary">Tworzy katalog o nazwie listy odtwarzania i zapisuje w nim utwory.</string>
   <string name="file_dialog_set_dir">Wybierz katalog</string>
@@ -153,12 +190,26 @@
   <string name="widget_open_clementine">Dotknij aby uruchomnić Clementine Remote</string>
   <string name="widget_couldnt_connect">Nie można połączyć się</string>
   <string name="dialog_close">Zamknij</string>
+  <string name="dialog_cancel">Anuluj</string>
+  <string name="dialog_continue">Kontynuuj</string>
   <string name="error_versions">Niekompatybilna wersja</string>
+  <string name="old_proto">Proszę uaktualnić Clementine! Potrzebujesz Clementine w wersji %1$s lub późniejszej.</string>
   <string name="no_private_ip">Twoje urządzenie z Androidem nie ma lokalnego adresu ip. Spróbuj wyłączyć \"Używaj tylko lokalnych adresów ip\" w opcjach Clementine.</string>
   <string name="wifi_disabled">Wifi jest wyłączone. Jeśli chcesz połączyć się z Clementine przez internet upewnij się że przekierowałeś porty poprawnie oraz wyłączyłeś opcję \"Używaj tylko lokalnych adresów ip\".</string>
   <string name="input_auth_code">Kod uwierzytelniający</string>
   <string name="invalid_code">Nieprawidłowy kod</string>
   <string name="done">Zrobione</string>
+  <plurals name="number_items">
+    <item quantity="one">%d element</item>
+    <item quantity="few">%d elementy</item>
+    <item quantity="other">%d elementów</item>
+  </plurals>
+  <plurals name="songs_added">
+    <item quantity="one">%d utwór dodany do aktualnej listy odtwarzania</item>
+    <item quantity="few">%d utwory dodane do aktualnej listy odtwarzania</item>
+    <item quantity="other">%d utworów dodanych do aktualnej listy odtwarzania</item>
+  </plurals>
+  <string name="context_add_to_playlist">Dodaj element do aktualnej listy odtwarzania</string>
   <string name="repeat_off">Nie powtarzaj</string>
   <string name="repeat_track">Powtarzaj utwór</string>
   <string name="repeat_album">Powtarzaj album</string>
@@ -170,9 +221,13 @@
   <string name="first_time_title">Witamy</string>
   <string name="track_loved">Utwór dodany do ulubionych &lt;3</string>
   <string name="track_banned">Utwór zignorowany :-(</string>
+  <string name="permissions_required_title">Wymagane uprawnienia</string>
   <string name="notification_disconnect_keep_alive">Utracono połączenie. Dotknij by połączyć ponownie.</string>
   <string name="crash_report_title">Ups, coś poszło nie tak!</string>
   <string name="crash_report_message">Poprzednim razem Clementine Remote uległo awarii! To nie powinno się zdażyć! Proszę pomóż mi w ulepszeniu aplikacji i wyślij mi plik z logami. Dzięki!</string>
   <string name="crash_report_send">Wyślij!</string>
+  <string name="fragment_title_player">Odtwarzacz</string>
+  <string name="fragment_title_details">Szczegóły utworu</string>
+  <string name="fragment_title_connection">Clementine</string>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

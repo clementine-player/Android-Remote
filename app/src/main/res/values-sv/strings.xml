@@ -26,6 +26,7 @@
   <string name="playlist_loading">Laddar</string>
   <string name="playlist_close">Stäng spellistan</string>
   <string name="playlist_clear">Töm spellistan</string>
+  <string name="playlist_clear_confirm">Töm spellistan</string>
   <string name="downloads_empty">Inga nedladdningar!</string>
   <string name="download_freespace">Ledigt utrymme</string>
   <string name="downloaded_songs">Nerladdade låtar - klicka för att spela</string>

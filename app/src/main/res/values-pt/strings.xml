@@ -224,7 +224,7 @@
   <string name="track_loved">Gosto da faixa &lt;3</string>
   <string name="track_banned">Faixa banida :-(</string>
   <string name="permissions_required_title">Permissões necessárias</string>
-  <string name="permissions_required_text">O Clementine Remote requer acesso ao armazenamento do dispositivo para descarregar as faixas e ao estado do telefone para parar o Clementine ao receber uma chamada. Clique Continuar para conceder as permissões ao Clementine Remote.</string>
+  <string name="permissions_required_text">O Clementine Remote requer acesso ao armazenamento para descarregar as faixas e ao estado do telefone para silenciar o Clementine durante as chamadas. Clique Continuar para conceder as permissões.</string>
   <string name="notification_disconnect_keep_alive">Ligação abortada. Clique para ligar novamente.</string>
   <string name="crash_report_title">Algo errado se passou!</string>
   <string name="crash_report_message">O Clementine Remote terminou abruptamente! Isto não devia ter acontecido! Ajude-me a corrigir o problema enviando o ficheiro de registo. Obrigado!</string>

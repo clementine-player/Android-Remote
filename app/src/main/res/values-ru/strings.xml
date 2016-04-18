@@ -235,7 +235,7 @@
   <string name="track_loved">Трек добавлен в любимые &lt;3</string>
   <string name="track_banned">Композиция запрещена :-(</string>
   <string name="permissions_required_title">Требуется разрешение</string>
-  <string name="permissions_required_text">Clementine Remote требует доступ к хранилищу устройства для загрузки песен и отключения звука Clementine при звонках. Нажмите Продолжить, чтобы разрешить доступ Clementine Remote. </string>
+  <string name="permissions_required_text">Приложению нужен доступ к хранилищу вашего устройства для загрузки песен и приглушению Clementine во время звонков. Нажмите Продолжить, чтобы предоставить приложению разрешение.</string>
   <string name="notification_disconnect_keep_alive">Соединение потеряно. Коснитесь для переподключения.</string>
   <string name="crash_report_title">Кажется, что-то пошло не так!</string>
   <string name="crash_report_message">В последний раз Clementine Remote завершилось с ошибкой! Этого не должно было случиться! Пожалуйста, помогите мне улучшить приложение и вышлите мне лог-файл. Спасибо!</string>

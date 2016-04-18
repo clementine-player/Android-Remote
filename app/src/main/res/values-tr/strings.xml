@@ -28,22 +28,38 @@
   <string name="playlist_clear">Çalma listesini temizle</string>
   <string name="downloads_empty">İndirme yok!</string>
   <string name="download_freespace">Boş alan</string>
+  <string name="downloaded_songs">İndirilen şarkılar - çalmak için tıklayın</string>
   <string name="download_noti_title">İndirme başlatılıyor</string>
+  <plurals name="download_noti_n_downloads">
+    <item quantity="one">%d etkin indirme</item>
+    <item quantity="other">%d etkin indirme</item>
+  </plurals>
   <string name="download_noti_n_progress">Toplam ilerleme (yüzde): %d</string>
   <string name="download_noti_title_song">[Parça]</string>
   <string name="download_noti_title_album">[Albüm]</string>
   <string name="download_noti_title_playlist">[Oynatma Listesi]</string>
+  <string name="download_noti_title_songs">[Şarkılar]</string>
+  <plurals name="download_noti_n_finished">
+    <item quantity="one">%d tamamlanmış indirme</item>
+    <item quantity="other">%d tamamlanmış indirme</item>
+  </plurals>
   <string name="download_noti_complete">İndirme tamamlandı</string>
   <string name="download_noti_canceled">İndirme iptal edildi</string>
   <string name="download_noti_insufficient_space">Yetersiz alan, indirme iptal ediliyor.</string>
   <string name="download_noti_forbidden">İndirme yasak. Clementine ayarlarından etkinleştirin.</string>
   <string name="download_noti_not_mounted">Depolama aygıtı bulunamadı!</string>
   <string name="download_noti_only_wifi">Sadece kablosuz üzerinden indirmeye izin verilir.</string>
+  <string name="download_noti_transcoding">Dosyalar dönüştürülüyor</string>
+  <string name="download_noti_transcoding_subtitle">Lütfen bekleyin</string>
   <string name="library_download">Kütüphane indiriliyor</string>
   <string name="library_optimize">Veritabanı iyileştiriliyor</string>
   <string name="library_please_wait">Lütfen bekleyin</string>
+  <string name="library_empty">Kütüphane boş. İndirmek için aşağı çekin!</string>
   <string name="library_no_search_results">Arama kriterlerinizle eşleşen parça yok!</string>
   <string name="library_download_error">Kütüphane indirilemedi</string>
+  <string name="global_search_empty">Bilgisayarınızdaki ve internetteki müzikleri bulmak için yukarıya arama terimi girin</string>
+  <string name="global_search_search">Herhangi bir şey ara</string>
+  <string name="global_search_query">Sorgu: %s</string>
   <string name="song_info_album">Albüm</string>
   <string name="song_info_genre">Tarz</string>
   <string name="song_info_year">Yıl</string>
@@ -66,6 +82,7 @@
   <string name="menu_search">Ara</string>
   <string name="menu_love">Beğen</string>
   <string name="menu_ban">Engelle</string>
+  <string name="menu_download">İndir</string>
   <string name="menu_download_playlist">Oynatma listesi indir</string>
   <string name="donate_header">Bağışlar</string>
   <string name="donate_text">Uygulamamı kullandığınız için teşekkürler, umarım size faydalı olur! Gerçekten yaptığım şey ile mutluysanız, küçük bir bağışınız beni minnettar edecektir.</string>
@@ -80,6 +97,7 @@
   <string name="donate_not_available_text">Lütfen Google Play\'in en son sürümünün kurulu olduğunu denetleyin ve yeniden deneyin!</string>
   <string name="pref_cat_behavior">Davranış</string>
   <string name="pref_cat_player">Oynatıcı</string>
+  <string name="pref_cat_library">Kütüphane</string>
   <string name="pref_cat_downloads">İndirmeler</string>
   <string name="pref_cat_advanced">Gelişmiş</string>
   <string name="pref_cat_network">Ağ</string>
@@ -99,6 +117,22 @@
   <string name="pref_call_volume_summary">Geçerli arama ses seviyesi: %s</string>
   <string name="pref_volume_inc_title">Ses değiştirme seviyesi</string>
   <string name="pref_volume_inc_summary">Geçerli ses değiştirme seviyesi: %s</string>
+  <string name="pref_library_sorting_title">Sıralama</string>
+  <string name="pref_library_sorting_summary">Kütüphane %1$s sıralandı.</string>
+  <string-array name="pref_library_sorting">
+    <item>Artan</item>
+    <item>Azalan</item>
+  </string-array>
+  <string name="pref_library_grouping_title">Gruplandırma</string>
+  <string name="pref_library_grouping_summary">Kütüphane %1$s kriterine göre sıralandı.</string>
+  <string-array name="pref_library_grouping">
+    <item>Sanatçı</item>
+    <item>Sanatçı / Albüm</item>
+    <item>Sanatçı / Yıl</item>
+    <item>Albüm</item>
+    <item>Tarz / Albüm</item>
+    <item>Tarz / Sanatçı / Albüm</item>
+  </string-array>
   <string name="pref_autoconnect_title">Otomatik Bağlan</string>
   <string name="pref_autoconnect_summary">Kumanda başlatılırken Clementine\'e otomatik bağlan.
     </string>
@@ -116,6 +150,7 @@
   <string name="pref_license_summary">GNU GPLv3</string>
   <string name="pref_opensource_title">Açık Kaynak</string>
   <string name="pref_opensource_summary">Açık Kaynak Yazılım lisanslarını göster</string>
+  <string name="pref_opensource">Açık Kaynak Yazılım lisansları</string>
   <string name="pref_about_title">Hakkında</string>
   <string name="pref_about_summary">Bu projede çalışan kişiler</string>
   <string name="pref_clementine_title">Clementine</string>
@@ -124,8 +159,10 @@
   <string name="pref_dl_wifi_only_summary">Şarkıları sadece bir kablosuz ağa bağlıyken indir.</string>
   <string name="pref_dl_dir">İndirme klasörünü belirle</string>
   <string name="pref_dl_override">Mevcut dosyaların üzerine yaz</string>
+  <string name="pref_dl_cat_folders">Klasörler</string>
   <string name="pref_dl_pl_save_own_dir_title">Parçaları oynatma listesi klasörüne kaydet</string>
   <string name="pref_dl_pl_save_own_dir_summary">Oynatma listesi adında klasör oluşturur ve parçaları oraya kaydeder.</string>
+  <string name="pref_dl_pl_artist_dir_title">Sanatçı alt klasörünü oluştur</string>
   <string name="file_dialog_set_dir">Dizin seç</string>
   <string name="file_dialog_not_writable">Dizin yazılabilir değil</string>
   <string name="file_dialog_custom_paths_available">Başka seçin</string>
@@ -170,5 +207,11 @@
   <string name="crash_report_title">Olamaz, bir şeyler yanlış gitti!</string>
   <string name="crash_report_message">En son Clementine Kumanda çökmüştü! Bu olmamalıydı! Lütfen günlük dosyasını göndererek uygulamayı geliştirmemde bana yardımcı olun! Teşekkürler!</string>
   <string name="crash_report_send">Gönder!</string>
+  <string name="player_download_what">İndirilecek şey ne?</string>
+  <string-array name="player_download_list">
+    <item>Şarkı</item>
+    <item>Albüm</item>
+    <item>Çalma Listesi</item>
+  </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

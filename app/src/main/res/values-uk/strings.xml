@@ -229,7 +229,7 @@
   <string name="track_loved">Композицію уподобано &lt;3</string>
   <string name="track_banned">Композицію заблоковано :-(</string>
   <string name="permissions_required_title">Потрібен доступ</string>
-  <string name="permissions_required_text">Clementine Remote потрібен доступ до накопичувача даних пристрою для зберігання отриманих композицій та стану телефону для вимикання звуку у Clementine під час дзвінків. Натисніть кнопку «Продовжити», щоб надати Clementine Remote відповідні права доступу.</string>
+  <string name="permissions_required_text">Clementine Remote потрібен доступ до накопичувача даних пристрою для отримання композицій та до стану телефону для вимикання звуку у Clementine під час дзвінків. Натисніть кнопку «Продовжити», щоб надати Clementine Remote відповідні права доступу.</string>
   <string name="notification_disconnect_keep_alive">З’єднання розірвано. Натисніть, щоб відновити з’єднання.</string>
   <string name="crash_report_title">Ех, щось пішло не так!</string>
   <string name="crash_report_message">Попередній сеанс роботи Віддаленого керування Clementine завершився аварійно! Цього не повинно було статися! Допоможіть розробникові виправити проблему: надішліть йому файл журналу роботи програми. Дякуємо!</string>

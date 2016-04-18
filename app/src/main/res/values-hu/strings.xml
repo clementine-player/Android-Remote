@@ -225,7 +225,7 @@
   <string name="track_loved">Szám kedvelve &lt;3</string>
   <string name="track_banned">Szám letiltva :-(</string>
   <string name="permissions_required_title">Jogosultságok szükségesek</string>
-  <string name="permissions_required_text">A Clementine távvezérlőnek hozzáférésre van szüksége az eszköz tárolójához a számok letöltéséhez, és a telefon állapotára a Clementine elhalkítására hívás közben. Kattintson a folytatáshoz, hogy biztosítsa a jogokat a Clementine távvezérlőnek.</string>
+  <string name="permissions_required_text">A Clementine távvezérlő hozzáférést igényel az eszköz tárhelyéhez a számok letöltéséhez, és a telefonállapothoz, a Clementine elnémításához telefonhíváskor. Nyomja meg a folytatást a jogok megadásához a Clementine távvézérlőnek.</string>
   <string name="notification_disconnect_keep_alive">A kapcsolat elveszett. Érintse meg az újrakapcsolódáshoz.</string>
   <string name="crash_report_title">Hupsz, valami rossz történt!</string>
   <string name="crash_report_message">Legutóbb a Clementine távvezérlő összeomlott! Ennek nem kellett volna megtörténnie! Kérem segítsen az alkalmazás javításában, és küldje el nekem a naplófájlokat. Köszönöm!</string>
