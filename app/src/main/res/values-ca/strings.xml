@@ -80,7 +80,7 @@
   <string name="connection_traffic_unsupported">No es disposa de les estadístiques en aquest dispositiu</string>
   <string name="menu_shuffle">Mescla</string>
   <string name="menu_repeat">Repeteix</string>
-  <string name="menu_settings">Paràmetres</string>
+  <string name="menu_settings">Configuració</string>
   <string name="menu_search">Cerca</string>
   <string name="menu_love">M’encanta</string>
   <string name="menu_ban">Veta</string>

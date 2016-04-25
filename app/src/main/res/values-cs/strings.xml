@@ -234,6 +234,7 @@ Pokud máte díky mé práci skutečně dobrou náladu, malý dar od vás by byl
   <string name="track_loved">Skladba je oblíbená &lt;3</string>
   <string name="track_banned">Skladba je zakázaná :-(</string>
   <string name="permissions_required_title">Požadována oprávnění</string>
+  <string name="permissions_required_text">Clementine Remote vyžaduje přístup k úložišti zařízení pro stahování písní a stavu telefonu pro ztišení Clementine při volání. Klepněte na Pokračovat a udělte Clementine Remote tato oprávnění.</string>
   <string name="notification_disconnect_keep_alive">Spojení ztraceno. Ťukněte pro opětovné připojení.</string>
   <string name="crash_report_title">Jejda, něco není v pořádku!</string>
   <string name="crash_report_message">Naposledy Clementine Remote spadl! To by se nemělo stát! Pomozte, prosím, se zlepšením aplikace a odešlete soubor se zápisem o činnosti programu. Děkujeme!</string>
