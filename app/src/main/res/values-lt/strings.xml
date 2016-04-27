@@ -6,6 +6,7 @@
   <string name="connectdialog_connecting">Jungiamasi prie Clementine</string>
   <string name="connectdialog_download_data">Atsiunčiami duomenys</string>
   <string name="connectdialog_error">Nepavyko pasiekti kompiuterio</string>
+  <string name="connectdialog_services">Clementinai</string>
   <string name="player_nosong">Šiuo metu negroja jokia daina</string>
   <string name="player_disconnected">Atsijungta</string>
   <string name="player_playlist">Grojaraštis:</string>
@@ -67,6 +68,7 @@
   <string name="song_info_size">Dydis</string>
   <string name="song_info_filename">Failo pavadinimas</string>
   <string name="song_info_rating">Įvertinimas</string>
+  <string name="song_info_rated">Daina įvertinta $stars$ žvaigždutėmis</string>
   <string name="connection_connected_to">Prisijungta prie:</string>
   <string name="connection_volume">Garsumas</string>
   <string name="connection_version">Clementine versija</string>
@@ -86,6 +88,7 @@
   <string name="donate_five">Pica (5.00 €)</string>
   <string name="donate_thanks">Dėkojame už jūsų palaikymą! :-)</string>
   <string name="donate_complete">Paaukojimas užbaigtas, dėkoju! :-)</string>
+  <string name="donate_try_again">Vykdomas paskiausias paaukojimas, bandykite vėl</string>
   <string name="donate_not_available">Google Play neprieinama</string>
   <string name="donate_not_available_text">Prašome patikrinti ar turite įdiegtą naujausią \"Google Play\" parduotuvės versiją ir bandyti vėl!</string>
   <string name="pref_cat_behavior">Elgsena</string>
@@ -110,7 +113,21 @@
   <string name="pref_volume_inc_title">Garsumo keitimo lygis</string>
   <string name="pref_volume_inc_summary">Esamas garsumo keitimo lygis : %s</string>
   <string name="pref_library_sorting_title">Rikiavimas</string>
+  <string name="pref_library_sorting_summary">Biblioteka yra rikiuojama %1$s tvarka.</string>
+  <string-array name="pref_library_sorting">
+    <item>Didejančia</item>
+    <item>Mažėjančia</item>
+  </string-array>
   <string name="pref_library_grouping_title">Grupavimas</string>
+  <string name="pref_library_grouping_summary">Biblioteka yra grupuojama pagal %1$s.</string>
+  <string-array name="pref_library_grouping">
+    <item>Atlikėją</item>
+    <item>Atlikėją / Albumą</item>
+    <item>Atlikėją / Metus</item>
+    <item>Albumą</item>
+    <item>Žanrą / Albumą</item>
+    <item>Žanrą / Atlikėją / Albumą</item>
+  </string-array>
   <string name="pref_autoconnect_title">Automatinis prisijungimas</string>
   <string name="pref_autoconnect_summary">Paleidus nuotolinį valdymą, automatiškai jungtis prie Clementine.
     </string>
@@ -197,6 +214,7 @@
   <string name="fragment_title_player">Grotuvas</string>
   <string name="fragment_title_details">Išsamesnė dainos informacija</string>
   <string name="fragment_title_connection">Clementine</string>
+  <string name="navigation_drawer_clementine_on">Clementine ties %s</string>
   <string name="player_download_what">Ką atsisiųsti?</string>
   <string-array name="player_download_list">
     <item>Daina</item>

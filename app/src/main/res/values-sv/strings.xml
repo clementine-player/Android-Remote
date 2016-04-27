@@ -26,16 +26,25 @@
   <string name="playlist_loading">Laddar</string>
   <string name="playlist_close">Stäng spellistan</string>
   <string name="playlist_clear">Töm spellistan</string>
+  <string name="playlist_clear_content">Detta kommer oåterkalleligen ta bort alla låtar från spellistan. Fortsätt?</string>
   <string name="playlist_clear_confirm">Töm spellistan</string>
   <string name="downloads_empty">Inga nedladdningar!</string>
   <string name="download_freespace">Ledigt utrymme</string>
   <string name="downloaded_songs">Nerladdade låtar - klicka för att spela</string>
   <string name="download_noti_title">Startar nedladdning</string>
+  <plurals name="download_noti_n_downloads">
+    <item quantity="one">%d aktiv nedladdning</item>
+    <item quantity="other">%d aktiva nedladdningar</item>
+  </plurals>
   <string name="download_noti_n_progress">Totalt nedladdat: %d %</string>
   <string name="download_noti_title_song">[Låt]</string>
   <string name="download_noti_title_album">[Album]</string>
   <string name="download_noti_title_playlist">[Spellista]</string>
   <string name="download_noti_title_songs">[Låtar]</string>
+  <plurals name="download_noti_n_finished">
+    <item quantity="one">%d nedladdning klar</item>
+    <item quantity="other">%d nedladdningar klara</item>
+  </plurals>
   <string name="download_noti_complete">Nedladdning färdig</string>
   <string name="download_noti_canceled">Nedladdning avbruten</string>
   <string name="download_noti_insufficient_space">Otillräckligt utrymme, avbryter nedladdning.</string>
@@ -184,13 +193,25 @@
   <string name="widget_open_clementine">Knacka för att starta Clementine Fjärrkontroll</string>
   <string name="widget_couldnt_connect">Kunde inte ansluta</string>
   <string name="dialog_close">Stäng</string>
+  <string name="dialog_cancel">Avbryt</string>
+  <string name="dialog_continue">Fortsätt</string>
   <string name="error_versions">Okompatibel version</string>
+  <string name="old_proto">Uppdatera Clementine! Du behöver Clementine %1$s eller senare.</string>
   <string name="no_private_ip">Din Android enhet har en icke lokal ip adress. Försök att avaktivera \"Använd endast lokala ip adresser\" i Clementine\'s inställningar.</string>
+  <string name="check_ip">1) Körs Clementine?\n2) Använder du Clementine %1$s eller senare?\n3) Aktiverade du nätverksfjärrkontrollen i Clementine inställningar?\n4) Kontrollera om du angett rätt IP-adress.\n</string>
   <string name="wifi_disabled">Wifi är inaktiverat. Om du vill ansluta till Clementine via internet så se till att du kopplat portarna rätt och att du har \"Använd endast lokala ip adresser\" inaktiverat.</string>
   <string name="input_auth_code">Auktoriseringskod</string>
   <string name="invalid_code">Ogiltig Kod</string>
   <string name="done">Klart</string>
   <string name="unknown">Okänd</string>
+  <plurals name="number_items">
+    <item quantity="one">%d post</item>
+    <item quantity="other">%d poster</item>
+  </plurals>
+  <plurals name="songs_added">
+    <item quantity="one">%d låt har lagts till aktuella spellistan </item>
+    <item quantity="other">%d låtar har lagts till aktuella spellistan</item>
+  </plurals>
   <string name="context_add_to_playlist">Lägg till objekt i nuvarande spellista</string>
   <string name="repeat_off">Upprepa inte</string>
   <string name="repeat_track">Upprepa låt</string>
@@ -201,8 +222,11 @@
   <string name="shuffle_inside_album">Blanda låtarna i detta album</string>
   <string name="shuffle_albums">Blanda album</string>
   <string name="first_time_title">Välkommen</string>
+  <string name="first_time_text">Tack för att du använder Clementine Remote!\nI hoppas denna app kommer att vara användbart för dig.&lt;br&gt;&lt;br&gt;För att kunna använda denna fjärrkontroll app måste du ladda ner och installera Clementine %1$s eller senare från &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;.</string>
   <string name="track_loved">Låt älskad &lt;3</string>
   <string name="track_banned">Låt utesluten :-(</string>
+  <string name="permissions_required_title">Behörigheter krävs</string>
+  <string name="permissions_required_text">Clementine Remote kräver tillgång till enhetens lagring för sång nedladdningar och telefonstatus för att tysta Clementine vid samtal. Klicka fortsätta för att bevilja Clementine Remote behörigheterna.</string>
   <string name="notification_disconnect_keep_alive">Förlorade anslutningen. Knacka för att återansluta.</string>
   <string name="crash_report_title">Hoppsan, någonting gick snett!</string>
   <string name="crash_report_message">Clementine kraschade förra gången! Detta skulle ju inte hända! Snälla hjälp mig att förbättra appen och sänd mig loggfilen är du snäll. Tack!</string>
