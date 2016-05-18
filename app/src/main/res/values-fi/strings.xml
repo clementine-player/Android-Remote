@@ -125,7 +125,10 @@
   <string name="pref_port_summary">Nykyinen portti:</string>
   <string name="pref_port_default">5500</string>
   <string name="pref_port_error">Virheellinen portti!</string>
+  <string name="pref_wake_lock_title">Pidä CPU aktiivisena</string>
+  <string name="pref_wake_lock_summary">Aktivoi, mikäli yhteys pätkii satunnaisesti sovelluksen ollessa taustalla. Voi kuluttaa akkua nopeammin.</string>
   <string name="pref_keep_screen_on_title">Pidä näyttö päällä</string>
+  <string name="pref_keep_screen_on_summary">Estä näyttöä sammumasta kaukosäätimen ollessa yhteydessä soittimeen.</string>
   <string name="pref_version_summary">Napauta käydäksesi projektin verkkosivustolla</string>
   <string name="pref_version_title">Versio</string>
   <string name="pref_license_title">Lisenssi</string>
@@ -204,6 +207,7 @@
   <string name="fragment_title_player">Soitin</string>
   <string name="fragment_title_details">Kappaleen tiedot</string>
   <string name="fragment_title_connection">Clementine</string>
+  <string name="navigation_drawer_clementine_on">Clementine koneella %s</string>
   <string name="player_download_what">Mitä ladataan?</string>
   <string-array name="player_download_list">
     <item>Kappale</item>

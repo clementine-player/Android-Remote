@@ -78,7 +78,7 @@
   <string name="connection_connected_to">Pripojené k:</string>
   <string name="connection_volume">Hlasitosť</string>
   <string name="connection_version">Verzia prehrávača Clementine</string>
-  <string name="connection_traffic">Prenos hore/dole (priem./sek)</string>
+  <string name="connection_traffic">Prenos odos./prijím. (priem./sek)</string>
   <string name="connection_traffic_unsupported">Štatistiky nie sú na tomto zariadení dostupné</string>
   <string name="menu_shuffle">Premiešať</string>
   <string name="menu_repeat">Opakovať</string>

@@ -227,6 +227,7 @@
   <string name="track_loved">Le encanta esta pista &lt;3</string>
   <string name="track_banned">Ha vetado esta pista :-(</string>
   <string name="permissions_required_title">Se necesitan permisos</string>
+  <string name="permissions_required_text">Clementine remote requiere acceso al almacenamiento del dispositivo para descargas de canciones y el estado del dispositivo para silenciar clementine en llamadas. Haz clic en continuar para dar a Clementine Remote los permisos.</string>
   <string name="notification_disconnect_keep_alive">Se perdió la conexión. Toque para reconectar.</string>
   <string name="crash_report_title">Vaya, algo ha fallado.</string>
   <string name="crash_report_message">La última vez, el Control remoto de Clementine se cerró inesperadamente. Para ayudar a que este error no se produzca de nuevo, envíe el archivo de registro al desarrollador. ¡Gracias!</string>

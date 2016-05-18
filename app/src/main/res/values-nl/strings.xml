@@ -25,6 +25,7 @@
   <string name="playlist_loading">Bezig met laden</string>
   <string name="playlist_close">Afspeellijst sluiten</string>
   <string name="playlist_clear">Afspeellijst legen</string>
+  <string name="playlist_clear_confirm">Afspeellijst legen</string>
   <string name="downloads_empty">Geen downloads!</string>
   <string name="download_freespace">Vrije ruimte</string>
   <string name="download_noti_title">Download start</string>
@@ -32,12 +33,14 @@
   <string name="download_noti_title_song">[Song]</string>
   <string name="download_noti_title_album">[Album]</string>
   <string name="download_noti_title_playlist">[Playlist]</string>
+  <string name="download_noti_title_songs">[Songs]</string>
   <string name="download_noti_complete">Download voltooid</string>
   <string name="download_noti_canceled">Download geannuleerd</string>
   <string name="download_noti_insufficient_space">Onvoldoende ruimte, download wordt afgebroken</string>
   <string name="download_noti_forbidden">Download niet toegestaan. Activeer in Clementine instellingen.</string>
   <string name="download_noti_not_mounted">Geen opslagapparaat gevonden!</string>
   <string name="download_noti_only_wifi">Downloaden alleen toegestaan via wifi.</string>
+  <string name="download_noti_transcoding_subtitle">Even geduld</string>
   <string name="library_download">Bibliotheek aan het downloaden</string>
   <string name="library_optimize">Database aan het optimaliseren</string>
   <string name="library_please_wait">Even geduld</string>
@@ -64,6 +67,7 @@
   <string name="menu_search">Zoeken</string>
   <string name="menu_love">Love</string>
   <string name="menu_ban">Ban</string>
+  <string name="menu_download">Download</string>
   <string name="menu_download_playlist">Afspeellijst downloaden</string>
   <string name="donate_header">Donaties</string>
   <string name="donate_i_want">Ik wil doneren:</string>
