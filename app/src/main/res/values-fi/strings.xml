@@ -118,6 +118,11 @@
   <string name="pref_volume_inc_title">Äänenvoimakkuuden muutostaso</string>
   <string name="pref_volume_inc_summary">Nykyinen äänen muutostaso: %s</string>
   <string name="pref_library_sorting_title">Järjestys</string>
+  <string name="pref_library_sorting_summary">Kirjasto on järjestetty %1$s järjestykseen.</string>
+  <string-array name="pref_library_sorting">
+    <item>nousevaan</item>
+    <item>laskevaan</item>
+  </string-array>
   <string name="pref_library_grouping_title">Ryhmittely</string>
   <string name="pref_autoconnect_title">Yhdistä automaattisesti</string>
   <string name="pref_autoconnect_summary">Yhdistä Clementineen automaattisesti kaukosäätimen käynnistyessä.</string>
@@ -147,6 +152,8 @@
   <string name="pref_dl_cat_folders">Kansiot</string>
   <string name="pref_dl_pl_save_own_dir_title">Tallenna kappaleet soittolistan kansioon</string>
   <string name="pref_dl_pl_save_own_dir_summary">Luo soittolistan nimisen kansion ja tallentaa kappaleet sinne.</string>
+  <string name="pref_dl_pl_artist_dir_title">Luo alikansio artistille</string>
+  <string name="pref_dl_pl_album_dir_title">Luo alikansio albumille</string>
   <string name="file_dialog_set_dir">Valitse kansio</string>
   <string name="file_dialog_not_writable">Kansioon ei voi kirjoittaa</string>
   <string name="file_dialog_custom_paths_available">Valitse muu</string>
@@ -200,6 +207,7 @@
   <string name="first_time_title">Tervetuloa</string>
   <string name="track_loved">Pidin kappaleesta &lt;3</string>
   <string name="track_banned">En pitänyt kappaleesta :-(</string>
+  <string name="permissions_required_title">Vaaditaan oikeuksia</string>
   <string name="notification_disconnect_keep_alive">Yhteys katkesi. Kosketa yhdistääksesi uudelleen.</string>
   <string name="crash_report_title">Hups, jokin meni pieleen!</string>
   <string name="crash_report_message">Clementine-kaukosäädin kaatui viime käyttökerralla! Niin ei olisi pitänyt tapahtua. Auta parantamaan sovellusta lähettämällä lokitiedosto, kiitos!</string>
