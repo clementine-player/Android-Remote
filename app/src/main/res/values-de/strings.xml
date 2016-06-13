@@ -224,7 +224,7 @@
   <string name="track_loved">Titel geliebt &lt;3</string>
   <string name="track_banned">Titel gesperrt :-(</string>
   <string name="permissions_required_title">Berechtigungen benötigt</string>
-  <string name="permissions_required_text">Clementine Remote benötigt Rechte, um Lieder herunterzuladen und um die Musik bei einem Anruf stummzuschalten. Klicke auf Fortfahren, um Clementine Remote die Berechtigungen zu erteilen.</string>
+  <string name="permissions_required_text">Clementine-Fernbedienung benötigt Rechte, um Lieder herunterzuladen und um die Musik bei einem Anruf stummzuschalten. Bitte auf Fortfahren klicken, um Clementine-Fernbedienung die Berechtigungen zu erteilen.</string>
   <string name="notification_disconnect_keep_alive">Verbindung verloren. Tippen, zum wieder Verbinden.</string>
   <string name="crash_report_title">Huch, irgendwas ist schief gelaufen!</string>
   <string name="crash_report_message">Clementine-Fernbedienung ist das letzte mal abgestürzt! Das hätte nicht passieren dürfen! Helfen Sie mir die Anwendung zu verbessern und senden Sie mir die Protokolldatei. Danke!</string>
