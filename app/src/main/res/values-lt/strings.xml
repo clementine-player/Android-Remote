@@ -6,6 +6,7 @@
   <string name="connectdialog_connecting">Jungiamasi prie Clementine</string>
   <string name="connectdialog_download_data">Atsiunčiami duomenys</string>
   <string name="connectdialog_error">Nepavyko pasiekti kompiuterio</string>
+  <string name="connectdialog_ip_hint">Įrašykite IP adresą</string>
   <string name="connectdialog_services">Clementinai</string>
   <string name="player_nosong">Šiuo metu negroja jokia daina</string>
   <string name="player_disconnected">Atsijungta</string>
@@ -58,6 +59,7 @@
   <string name="library_no_search_results">Nėra dainų, atitinkančių jūsų paieškos kriterijų!</string>
   <string name="library_download_error">Nepavyko atsisiųsti bibliotekos</string>
   <string name="global_search_empty">Įrašykite paieškos žodžius, kad rastumėte muziką savo kompiuteryje ar internete</string>
+  <string name="global_search_query">Užklausa: %s</string>
   <string name="song_info_album">Albumas</string>
   <string name="song_info_genre">Žanras</string>
   <string name="song_info_year">Metai</string>
@@ -166,6 +168,7 @@
   <string name="dialog_about_others">Kiti</string>
   <string name="dialog_license_top">Ši programa yra platinama tikintis, kad ji bus naudinga, tačiau BE JOKIOS GARANTIJOS</string>
   <string name="tasker_intro">Prašome pasirinkti veiksmą.</string>
+  <string name="tasker_ip_help">Jei viršuje pasirinkote \"Prisijungti\", tuomet įrašykite prie kur jungsitės. Atpažinimo kodas yra nebūtinas, jeigu jis programoje Clementine yra išjungtas.</string>
   <string name="tasker_action">Veiksmas:</string>
   <string name="tasker_connect">Prisijungti</string>
   <string name="tasker_disconnect">Atsijungti</string>
@@ -174,6 +177,9 @@
   <string name="tasker_playpause">Groti / Pristabdyti</string>
   <string name="tasker_stop">Stabdyti</string>
   <string name="tasker_next">Kita daina</string>
+  <string name="tasker_port_hint">Įrašykite prievadą</string>
+  <string name="tasker_auth_hint">Įrašykite atpažinimo kodą</string>
+  <string name="widget_connect_to">Prilieskite, kad prisijungtumėte</string>
   <string name="widget_not_connected">Neprisijungta</string>
   <string name="widget_open_clementine">Palieskite, kad paleistumėte Clementine Remote</string>
   <string name="widget_couldnt_connect">Nepavyko prisijungti</string>
@@ -184,6 +190,7 @@
   <string name="no_private_ip">Jūsų Android įrenginio adresas yra ne vietinis. Pabandykite Clementine nustatymuose išjungti parinktį \"Leisti tik ryšius iš vietinio tinklo\".</string>
   <string name="check_ip">1) Ar Clementine yra vykdoma?\n2) Ar jūs naudojate Clementine %1$s ar vėlesnę versiją?\n3) Ar Clementine nustatymuose įjungėte nuotolinį tinklą?\n4) Patikrinkite ar įvedėte teisingą IP adresą.\n</string>
   <string name="wifi_disabled">Belaidis vietinis tinklas (Wifi) yra išjungtas. Jeigu norite prisijungti prie Clementine per internetą, įsitikinkite, kad teisingai nukreipėte visus prievadus ir esate išjungę \"Leisti tik ryšius iš vietinio tinklo\"\".</string>
+  <string name="input_auth_code">Atpažinimo kodas</string>
   <string name="invalid_code">Neteisingas kodas</string>
   <string name="done">Atlikta</string>
   <string name="unknown">Nežinoma</string>
@@ -191,6 +198,11 @@
     <item quantity="one">%d elementas</item>
     <item quantity="few">%d elementai</item>
     <item quantity="other">%d elementų</item>
+  </plurals>
+  <plurals name="songs_added">
+    <item quantity="one">%d daina pridėta į esamą grojaraštį</item>
+    <item quantity="few">%d dainos pridėtos į esamą grojaraštį</item>
+    <item quantity="other">%d dainų pridėta į esamą grojaraštį</item>
   </plurals>
   <string name="context_add_to_playlist">Pridėti elementą į esamą grojaraštį</string>
   <string name="repeat_off">Nekartoti</string>
@@ -222,4 +234,16 @@
     <item>Grojaraštis</item>
   </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
+  <string-array name="navigation_drawer_items">
+    <item>Paieška</item>
+    <item>Grotuvas</item>
+    <item>Grojaraščiai</item>
+    <item>Biblioteka</item>
+    <item>Atsiuntimai</item>
+    <item></item>
+    <item>Nustatymai</item>
+    <item>Paaukoti</item>
+    <item></item>
+    <item>Išeiti</item>
+  </string-array>
 </resources>
