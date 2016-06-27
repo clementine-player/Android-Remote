@@ -13,6 +13,7 @@
   <string name="player_playlist">Afspeellijst:</string>
   <string name="player_download_playlists">Afspeellijsten downloaden</string>
   <string name="playler_volume">Volume</string>
+  <string name="player_stop_after_current">Stop na afspelen nummer aan/uit.</string>
   <string name="player_download_lyrics">Songteksten downloaden</string>
   <string name="player_no_lyrics">Geen songteksten gevonden.</string>
   <string name="player_download_started">Download gestart!</string>
@@ -25,26 +26,42 @@
   <string name="playlist_loading">Bezig met laden</string>
   <string name="playlist_close">Afspeellijst sluiten</string>
   <string name="playlist_clear">Afspeellijst legen</string>
+  <string name="playlist_clear_content">Alle nummers zullen van de playlist verwijderd worden, dit is onomkeerbaar. doorgaan?</string>
   <string name="playlist_clear_confirm">Afspeellijst legen</string>
   <string name="downloads_empty">Geen downloads!</string>
   <string name="download_freespace">Vrije ruimte</string>
+  <string name="downloaded_songs">Gedownloade nummers - klik om te spelen</string>
   <string name="download_noti_title">Download start</string>
+  <plurals name="download_noti_n_downloads">
+    <item quantity="one">%d actieve download</item>
+    <item quantity="other">%d actieve downloads</item>
+  </plurals>
   <string name="download_noti_n_progress">Totale voortgang: %d %</string>
   <string name="download_noti_title_song">[Song]</string>
   <string name="download_noti_title_album">[Album]</string>
   <string name="download_noti_title_playlist">[Playlist]</string>
   <string name="download_noti_title_songs">[Songs]</string>
+  <plurals name="download_noti_n_finished">
+    <item quantity="one">%d downloads klaar</item>
+    <item quantity="other">%d downloads klaar</item>
+  </plurals>
   <string name="download_noti_complete">Download voltooid</string>
   <string name="download_noti_canceled">Download geannuleerd</string>
   <string name="download_noti_insufficient_space">Onvoldoende ruimte, download wordt afgebroken</string>
   <string name="download_noti_forbidden">Download niet toegestaan. Activeer in Clementine instellingen.</string>
   <string name="download_noti_not_mounted">Geen opslagapparaat gevonden!</string>
   <string name="download_noti_only_wifi">Downloaden alleen toegestaan via wifi.</string>
+  <string name="download_noti_transcoding">Bestanden transcoderen</string>
   <string name="download_noti_transcoding_subtitle">Even geduld</string>
   <string name="library_download">Bibliotheek aan het downloaden</string>
   <string name="library_optimize">Database aan het optimaliseren</string>
   <string name="library_please_wait">Even geduld</string>
+  <string name="library_empty">Bibliotheek leeg. Sleep naar beneden om bibliotheek te downloaden!</string>
+  <string name="library_no_search_results">Geen nummers komen overeen met je zoekcriteria!</string>
   <string name="library_download_error">Kon bibliotheek niet downloaden</string>
+  <string name="global_search_empty">Voer zoektermen hierboven in om muziek te zoeken op je computer en het internet.</string>
+  <string name="global_search_search">Zoek naar alles</string>
+  <string name="global_search_query">Zoekterm: %s</string>
   <string name="song_info_album">Album</string>
   <string name="song_info_genre">Genre</string>
   <string name="song_info_year">Jaar</string>
@@ -70,6 +87,7 @@
   <string name="menu_download">Download</string>
   <string name="menu_download_playlist">Afspeellijst downloaden</string>
   <string name="donate_header">Donaties</string>
+  <string name="donate_text">Bedankt voor het gebruiken van mijn app, Ik hoop dat je het nuttig vind. Een kleine donatie zal geapprecieerd worden als je blij bent met mijn werk.</string>
   <string name="donate_i_want">Ik wil doneren:</string>
   <string name="donate_one">Donuts (1.00 €)</string>
   <string name="donate_two">Koffie (2.00 €)</string>
@@ -78,8 +96,10 @@
   <string name="donate_complete">Donatie afgerond, dank u! :-)</string>
   <string name="donate_try_again">Laatste donatie aan het verwerken, probeer het opnieuw</string>
   <string name="donate_not_available">Google Play is niet beschikbaar</string>
+  <string name="donate_not_available_text">Controleer of je de nieuwste versie van Google Play Store hebt en probeer het opnieuw!</string>
   <string name="pref_cat_behavior">Gedrag</string>
   <string name="pref_cat_player">Speler</string>
+  <string name="pref_cat_library">Bibliotheek</string>
   <string name="pref_cat_downloads">Downloads</string>
   <string name="pref_cat_advanced">Geavanceerd</string>
   <string name="pref_cat_network">Netwerk</string>
@@ -92,23 +112,46 @@
   <string name="pref_trackno_title">Toon volgnummer</string>
   <string name="pref_trackno_summary">Toon of verberg het volgnummer in de afspeellijst.</string>
   <string name="pref_lastfm_title">Last.fm</string>
+  <string name="pref_lastfm_summary">Activeer love/ ban nummers.</string>
   <string name="pref_lower_volume_title">Volume verlagen</string>
   <string name="pref_lower_volume_summary">Volume verlagen bij in- en uitgaande gesprekken.</string>
   <string name="pref_call_volume_title">Gespreksvolume niveau</string>
   <string name="pref_call_volume_summary">Huidige gespreksvolume: %s</string>
+  <string name="pref_volume_inc_title">Volume niveau</string>
+  <string name="pref_volume_inc_summary">Huidig volume niveau: %s</string>
+  <string name="pref_library_sorting_title">Sorteren</string>
+  <string name="pref_library_sorting_summary">De bibliotheek is gesorteerd in %1$s volgorde.</string>
+  <string-array name="pref_library_sorting">
+    <item>Oplopend</item>
+    <item>Aflopend</item>
+  </string-array>
+  <string name="pref_library_grouping_title">Groeperen</string>
+  <string name="pref_library_grouping_summary">De bibliotheek is gegroepeerd als %1$s.</string>
+  <string-array name="pref_library_grouping">
+    <item>Artiest</item>
+    <item>Artiest / Album</item>
+    <item>Artiest / Jaar</item>
+    <item>Album</item>
+    <item>Genre / Album</item>
+    <item>Genre / Artiest / Album</item>
+  </string-array>
   <string name="pref_autoconnect_title">Auto-verbinden</string>
+  <string name="pref_autoconnect_summary">Automatisch connectie maken met Clementine bij opstarten remote. </string>
   <string name="pref_port_title">Poort</string>
   <string name="pref_port_summary">Huidige Poort:</string>
   <string name="pref_port_default">5500</string>
   <string name="pref_port_error">Ongeldige Poort!</string>
   <string name="pref_wake_lock_title">Houd CPU actief</string>
+  <string name="pref_wake_lock_summary">Aanzetten als de App willekeurig connectie verliest in de achtergrond. Battery verbruik kan hoger zijn.</string>
   <string name="pref_keep_screen_on_title">Houd scherm aan</string>
+  <string name="pref_keep_screen_on_summary">Voorkom dat het scherm uit gaat wanneer Clementine Remote een connectie heeft met Clementine.</string>
   <string name="pref_version_summary">Klik om de website te bezoeken.</string>
   <string name="pref_version_title">Versie</string>
   <string name="pref_license_title">Licentie</string>
   <string name="pref_license_summary">GNU GPLv3</string>
   <string name="pref_opensource_title">Open Source</string>
   <string name="pref_opensource_summary">Toon Open Source software licensties</string>
+  <string name="pref_opensource">Toon Open Source software licensties</string>
   <string name="pref_about_title">Over</string>
   <string name="pref_about_summary">Mensen die aan het project werken</string>
   <string name="pref_clementine_title">Clementine</string>
@@ -117,13 +160,22 @@
   <string name="pref_dl_wifi_only_summary">Download nummers alleen via een wifi netwerkverbinding.</string>
   <string name="pref_dl_dir">Downloadmap instellen</string>
   <string name="pref_dl_override">Overschrijf bestaande bestanden</string>
+  <string name="pref_dl_cat_folders">Mappen</string>
+  <string name="pref_dl_pl_save_own_dir_title">Nummers opslaan in afspeellijst map</string>
+  <string name="pref_dl_pl_save_own_dir_summary">Maakt een map genaamd afspeellijst en slaat nummers daar op.</string>
+  <string name="pref_dl_pl_artist_dir_title">Maak artiest submap</string>
+  <string name="pref_dl_pl_artist_dir_summary">Maak artiest submap voor elk individueel nummer.</string>
+  <string name="pref_dl_pl_album_dir_title">Maak album submap</string>
+  <string name="pref_dl_pl_album_dir_summary">Maak album submap in artiest voor elk individueel nummer.</string>
   <string name="file_dialog_set_dir">Selecteer map</string>
+  <string name="file_dialog_not_writable">Directory niet beschrijfbaar</string>
   <string name="file_dialog_custom_paths_available">Selecteer andere</string>
   <string name="dialog_about_authors">Auteurs</string>
   <string name="dialog_about_supporters">Met dank aan</string>
   <string name="dialog_about_others">Overig</string>
   <string name="dialog_license_top">Dit progamma is beschikbaar gesteld in de hoop dat het nuttig zal zijn, maar ZONDER ENIGE GARANTIE</string>
   <string name="tasker_intro">Selecteer een actie.</string>
+  <string name="tasker_ip_help">Voer de gegevens in als u \"connect\" geselecteerd heeft hier boven. Auth code is optioneel wanneer uitgezet in Clementine.</string>
   <string name="tasker_action">Actie:</string>
   <string name="tasker_connect">Verbinden</string>
   <string name="tasker_disconnect">Verbinding verbreken</string>
@@ -136,15 +188,29 @@
   <string name="tasker_auth_hint">Voer auth-code in</string>
   <string name="widget_connect_to">Raak aan om te verbinden</string>
   <string name="widget_not_connected">Niet verbonden</string>
+  <string name="widget_open_clementine">Raak aan om Clemetine Remote te starten</string>
   <string name="widget_couldnt_connect">Kon niet verbinden</string>
   <string name="dialog_close">Sluiten</string>
+  <string name="dialog_cancel">Annuleren</string>
+  <string name="dialog_continue">Doorgaan</string>
   <string name="error_versions">Versie niet compatibel</string>
+  <string name="old_proto">Update Clementine aub! U heeft Clementine %1$s of hoger nodig.</string>
   <string name="no_private_ip">Uw Android apparaat heeft een niet-lokaal IP adres. Schakel de optie \"Alleen niet-publieke apparaten gebruiken\" in de instellingen van Clementine uit.</string>
+  <string name="check_ip">1) Loopt Clementine?\n2) Gebruikt u Clementine versie %1$s of hoger?\n3) Heeft u de netwerk afstandsbediening aangezet in de instellingen?\n4) Controleer of u het correcte IP adress heeft ingevoerd.\n</string>
   <string name="wifi_disabled">Wifi is uitgeschakeld. Als u met Clementine wilt verbinden via internet zorg dan de poorten juist doorgestuurd worden en dat de optie \"Alleen niet-publieke apparaten accepteren\" uitgeschakeld is.</string>
   <string name="input_auth_code">Autorisatiecode</string>
   <string name="invalid_code">Code incorrect</string>
   <string name="done">Klaar</string>
   <string name="unknown">Onbekend</string>
+  <plurals name="number_items">
+    <item quantity="one">%d items</item>
+    <item quantity="other">%d items</item>
+  </plurals>
+  <plurals name="songs_added">
+    <item quantity="one">%d nummers toegevoegd aan huidige afspeellijst</item>
+    <item quantity="other">%d nummers aan huidige afspeellijst toegevoegd</item>
+  </plurals>
+  <string name="context_add_to_playlist">Voeg item aan huidige afspeellijst toe</string>
   <string name="repeat_off">Niet herhalen</string>
   <string name="repeat_track">Nummer herhalen</string>
   <string name="repeat_album">Album herhalen</string>
@@ -154,11 +220,36 @@
   <string name="shuffle_inside_album">Nummers van dit album willekeurig</string>
   <string name="shuffle_albums">Albums willekeurig afspelen</string>
   <string name="first_time_title">Welkom</string>
+  <string name="first_time_text">Bedankt voor het gebruiken van Clementine Remote!\nI Ik hoop dat deze app nuttig voor je zal zijn.&lt;br&gt;&lt;br&gt;Om deze app te gebruiken moet je Clementine %1$s of hoger installeren van &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;.</string>
   <string name="track_loved">Nummer ge-loved &lt;3</string>
   <string name="track_banned">Nummer ge-banned :-(</string>
+  <string name="permissions_required_title">Machtiging vereist</string>
+  <string name="permissions_required_text">Clementine Remote heeft toegang nodig tot de opslag van uw apparaat om nummers te downloaden en tot telefoon staat om Clementine te dempen bij oproepen. Klik doorgaan om Clementine toegang te geven.</string>
   <string name="notification_disconnect_keep_alive">Verbinding verbroken. Raak aan om opnieuw te verbinden.</string>
   <string name="crash_report_title">Oeps, er is iets misgegaan!</string>
+  <string name="crash_report_message">Clementine remote was onverwachts gestopt! Dit had niet mogen gebeuren! Help mij de app beter te maken en stuur me het logfile. Bedankt!</string>
   <string name="crash_report_send">Verstuur!</string>
+  <string name="fragment_title_player">Speler</string>
+  <string name="fragment_title_details">Nummer informatie</string>
   <string name="fragment_title_connection">Clementine</string>
+  <string name="navigation_drawer_clementine_on">Clementine op %s</string>
+  <string name="player_download_what">Wat te downloaden?</string>
+  <string-array name="player_download_list">
+    <item>Nummer</item>
+    <item>Album</item>
+    <item>Afspeellijst</item>
+  </string-array>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
+  <string-array name="navigation_drawer_items">
+    <item>Zoeken</item>
+    <item>Speler</item>
+    <item>Afspeellijsten</item>
+    <item>Bibliotheek</item>
+    <item>Downloads</item>
+    <item></item>
+    <item>Instellingen</item>
+    <item>Doneer</item>
+    <item></item>
+    <item>Afsluiten</item>
+  </string-array>
 </resources>
