@@ -26,6 +26,7 @@
   <string name="playlist_loading">Wczytywanie</string>
   <string name="playlist_close">Zamknij listę odtwarzania</string>
   <string name="playlist_clear">Wyczyść listę odtwarzania</string>
+  <string name="playlist_clear_content">To nieodwracalnie usunie wszystkie piosenki z listy. Kontynuować?</string>
   <string name="playlist_clear_confirm">Wyczyść listę odtwarzania</string>
   <string name="downloads_empty">Brak pobranych!</string>
   <string name="download_freespace">Wolna przestrzeń</string>
@@ -199,6 +200,7 @@
   <string name="input_auth_code">Kod uwierzytelniający</string>
   <string name="invalid_code">Nieprawidłowy kod</string>
   <string name="done">Zrobione</string>
+  <string name="unknown">Nieznane</string>
   <plurals name="number_items">
     <item quantity="one">%d element</item>
     <item quantity="few">%d elementy</item>
@@ -229,5 +231,6 @@
   <string name="fragment_title_player">Odtwarzacz</string>
   <string name="fragment_title_details">Szczegóły utworu</string>
   <string name="fragment_title_connection">Clementine</string>
+  <string name="player_download_what">Co pobrać?</string>
   <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>
