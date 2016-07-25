@@ -13,11 +13,13 @@
   <string name="player_playlist">Grojaraštis:</string>
   <string name="player_download_playlists">Atsiunčiami grojaraščiai</string>
   <string name="playler_volume">Garsumas</string>
+  <string name="player_stop_after_current">Po takelio pabaigos perjungti stabdymą.</string>
   <string name="player_download_lyrics">Atsiunčiami dainos žodžiai</string>
   <string name="player_no_lyrics">Dainos žodžių nerasta.</string>
   <string name="player_download_started">Atsiuntimas pradėtas!</string>
   <string name="player_song_is_stream">Nepavyksta atsisiųsti srautų!</string>
   <string name="player_stream">[S]</string>
+  <string name="playlist_search_hint">Ieškoti takelio</string>
   <string name="playlist_empty">Grojaraštis tuščias!</string>
   <string name="playlist_context_play">Groti elementą</string>
   <string name="playlist_context_remove">Šalinti iš grojaraščio</string>
@@ -50,6 +52,7 @@
   <string name="download_noti_insufficient_space">Nepakanka vietos, atsiuntimas nutraukiamas.</string>
   <string name="download_noti_forbidden">Atsiuntimas uždraustas. Aktyvuokite Clementine nustatymuose.</string>
   <string name="download_noti_not_mounted">Atminties įrenginys nerastas!</string>
+  <string name="download_noti_only_wifi">Atsiuntimas leidžiamas tik naudojantis belaidžiu (wifi) tinklu.</string>
   <string name="download_noti_transcoding">Perkoduojami failai</string>
   <string name="download_noti_transcoding_subtitle">Prašome palaukti</string>
   <string name="library_download">Atsiunčiama biblioteka</string>
@@ -59,6 +62,7 @@
   <string name="library_no_search_results">Nėra dainų, atitinkančių jūsų paieškos kriterijų!</string>
   <string name="library_download_error">Nepavyko atsisiųsti bibliotekos</string>
   <string name="global_search_empty">Įrašykite paieškos žodžius, kad rastumėte muziką savo kompiuteryje ar internete</string>
+  <string name="global_search_search">Ieškokite ko nors</string>
   <string name="global_search_query">Užklausa: %s</string>
   <string name="song_info_album">Albumas</string>
   <string name="song_info_genre">Žanras</string>
@@ -74,10 +78,12 @@
   <string name="connection_connected_to">Prisijungta prie:</string>
   <string name="connection_volume">Garsumas</string>
   <string name="connection_version">Clementine versija</string>
+  <string name="connection_traffic">Duomenų Išsiuntimas / Atsiuntimas (vid. / sek.)</string>
   <string name="connection_traffic_unsupported">Statistika šiame įrenginyje yra neprieinama</string>
   <string name="menu_shuffle">Maišyti</string>
   <string name="menu_repeat">Kartoti</string>
   <string name="menu_settings">Nustatymai</string>
+  <string name="menu_search">Paieška</string>
   <string name="menu_love">Patinka</string>
   <string name="menu_ban">Blokuoti</string>
   <string name="menu_download">Atsisiųsti</string>
@@ -108,6 +114,7 @@
   <string name="pref_trackno_title">Rodyti takelio numerį</string>
   <string name="pref_trackno_summary">Rodyti ar slėpti takelio numerį grojaraščiuose.</string>
   <string name="pref_lastfm_title">Last.fm</string>
+  <string name="pref_lastfm_summary">Aktyvuokite, kad žymėtumėte kaip patinkančius / blokuotumėte takelius.</string>
   <string name="pref_lower_volume_title">Mažinti garsumą</string>
   <string name="pref_lower_volume_summary">Mažinti garsumą įeinančių / išeinančių skambučių metu.</string>
   <string name="pref_call_volume_title">Skambučio garsumo lygis</string>
@@ -156,13 +163,18 @@
   <string name="pref_clementine_summary">Apsilankyti Clementine svetainėje</string>
   <string name="pref_dl_wifi_only_title">Tik WiFi</string>
   <string name="pref_dl_wifi_only_summary">Atsisiųsti dainas tik tuomet, kai yra prisijungta prie belaidžio tinklo.</string>
+  <string name="pref_dl_dir">Nustatyti atsiuntimo aplanką</string>
   <string name="pref_dl_override">Nustelbti esamus failus</string>
   <string name="pref_dl_cat_folders">Aplankai</string>
   <string name="pref_dl_pl_save_own_dir_title">Įrašyti takelius į grojaraščio aplanką</string>
+  <string name="pref_dl_pl_save_own_dir_summary">Sukuria grojaraščio pavadinimu pavadintą aplanką ir ten įrašo takelius.</string>
   <string name="pref_dl_pl_artist_dir_title">Sukurti atlikėjo poaplankį</string>
   <string name="pref_dl_pl_artist_dir_summary">Sukurti atlikėjo poaplankį kiekvienam atskiram takeliui.</string>
   <string name="pref_dl_pl_album_dir_title">Sukurti albumo poaplankį</string>
+  <string name="pref_dl_pl_album_dir_summary">Atlikėjo viduje sukurti albumo poaplankį kiekvienam atskiram takeliui.</string>
+  <string name="file_dialog_set_dir">Pasirinkti katalogą</string>
   <string name="file_dialog_not_writable">Katalogas neįrašomas</string>
+  <string name="file_dialog_custom_paths_available">Pasirinkti kitą</string>
   <string name="dialog_about_authors">Autoriai</string>
   <string name="dialog_about_supporters">Remėjai</string>
   <string name="dialog_about_others">Kiti</string>
@@ -184,6 +196,7 @@
   <string name="widget_open_clementine">Palieskite, kad paleistumėte Clementine Remote</string>
   <string name="widget_couldnt_connect">Nepavyko prisijungti</string>
   <string name="dialog_close">Užverti</string>
+  <string name="dialog_cancel">Atsisakyti</string>
   <string name="dialog_continue">Tęsti</string>
   <string name="error_versions">Nesuderinama versija</string>
   <string name="old_proto">Prašome atnaujinti Clementine! Jums reikia Clementine %1$s arba naujesnės versijos.</string>
