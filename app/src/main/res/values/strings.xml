@@ -176,7 +176,9 @@
     <string name="pref_keep_screen_on_title">Keep Screen On</string>
     <string name="pref_keep_screen_on_summary">Prevent the screen from turning off whilst Clementine Remote is connected to Clementine.
     </string>
-    <string name="pref_noti_color_title">Turn the color notifications</string>
+    <string name="pref_noti_color_title">Use system notification background color</string>
+    <string name="pref_noti_color_summary">Enable if notification colors does not fit into your system theme.
+    </string>
 
     <string name="pref_version_summary">Click to visit project website</string>
     <string name="pref_version_title">Version</string>
