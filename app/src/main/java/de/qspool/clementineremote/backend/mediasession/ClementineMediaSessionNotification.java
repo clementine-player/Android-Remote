@@ -55,14 +55,14 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
 
     private int mNotificationHeight;
 
-    private boolean turnColor;
+    private boolean mTurnColor;
 
     public ClementineMediaSessionNotification(Context context) {
         super(context);
         mNotificationManager = (NotificationManager) mContext.getSystemService(
                 Context.NOTIFICATION_SERVICE);
         SharedPreferences colorPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        turnColor = colorPreferences.getBoolean("pref_noti_color", false);
+        mTurnColor = colorPreferences.getBoolean("pref_noti_color", false);
 
     }
 
@@ -85,7 +85,7 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
         mNotificationBuilder.setContentIntent(Utilities.getClementineRemotePendingIntent(mContext));
 
         mNotificationView = new RemoteViews(mContext.getPackageName(), R.layout.notification_small);
-        if (turnColor) {
+        if (mTurnColor) {
             mNotificationView.setInt(R.id.noti, "setBackgroundColor", Color.TRANSPARENT);
             mNotificationView.setImageViewResource(R.id.noti_play_pause, R.drawable.ic_media_play);
             mNotificationView.setImageViewResource(R.id.noti_next, R.drawable.ic_media_next);
@@ -124,11 +124,11 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
 
         if (App.Clementine.getState() == Clementine.State.PLAY) {
             mNotificationView.setImageViewResource(R.id.noti_play_pause,
-                    turnColor ? R.drawable.ic_media_pause : R.drawable.ab_media_pause);
+                    mTurnColor ? R.drawable.ic_media_pause : R.drawable.ab_media_pause);
             intentPlayPause.setAction(ClementineBroadcastReceiver.PAUSE);
         } else {
             mNotificationView.setImageViewResource(R.id.noti_play_pause,
-                    turnColor ? R.drawable.ic_media_play : R.drawable.ab_media_play);
+                    mTurnColor ? R.drawable.ic_media_play : R.drawable.ab_media_play);
             intentPlayPause.setAction(ClementineBroadcastReceiver.PLAY);
         }
         mNotificationView.setOnClickPendingIntent(R.id.noti_play_pause,
