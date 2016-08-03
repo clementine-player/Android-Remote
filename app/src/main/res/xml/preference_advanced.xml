@@ -11,4 +11,9 @@
             android:title="@string/pref_wake_lock_title"
             android:summary="@string/pref_wake_lock_summary"
             android:defaultValue="false"/>
+    <CheckBoxPreference
+            android:key="pref_noti_color"
+            android:title="@string/pref_noti_color_title"
+            android:summary="@string/pref_noti_color_summary"
+            android:defaultValue="false"/>
 </PreferenceScreen>

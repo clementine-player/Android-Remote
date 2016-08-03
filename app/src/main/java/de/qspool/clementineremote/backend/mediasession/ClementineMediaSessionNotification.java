@@ -23,10 +23,13 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.media.session.MediaSession;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 
 import de.qspool.clementineremote.App;
@@ -52,10 +55,14 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
 
     private int mNotificationHeight;
 
+    private boolean mTurnColor;
+
     public ClementineMediaSessionNotification(Context context) {
         super(context);
         mNotificationManager = (NotificationManager) mContext.getSystemService(
                 Context.NOTIFICATION_SERVICE);
+        SharedPreferences colorPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        mTurnColor = colorPreferences.getBoolean("pref_noti_color", false);
 
     }
 
@@ -68,7 +75,7 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
         mNotificationWidth = (int) res.getDimension(android.R.dimen.notification_large_icon_width);
 
         mNotificationBuilder = new Notification.Builder(mContext)
-            .setSmallIcon(R.drawable.notification)
+                .setSmallIcon(R.drawable.notification)
                 .setOngoing(true);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -78,6 +85,11 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
         mNotificationBuilder.setContentIntent(Utilities.getClementineRemotePendingIntent(mContext));
 
         mNotificationView = new RemoteViews(mContext.getPackageName(), R.layout.notification_small);
+        if (mTurnColor) {
+            mNotificationView.setInt(R.id.noti, "setBackgroundColor", Color.TRANSPARENT);
+            mNotificationView.setImageViewResource(R.id.noti_play_pause, R.drawable.ic_media_play);
+            mNotificationView.setImageViewResource(R.id.noti_next, R.drawable.ic_media_next);
+        }
         mNotificationBuilder.setContent(mNotificationView);
     }
 
@@ -112,11 +124,11 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
 
         if (App.Clementine.getState() == Clementine.State.PLAY) {
             mNotificationView.setImageViewResource(R.id.noti_play_pause,
-                    R.drawable.ab_media_pause);
+                    mTurnColor ? R.drawable.ic_media_pause : R.drawable.ab_media_pause);
             intentPlayPause.setAction(ClementineBroadcastReceiver.PAUSE);
         } else {
             mNotificationView.setImageViewResource(R.id.noti_play_pause,
-                    R.drawable.ab_media_play);
+                    mTurnColor ? R.drawable.ic_media_play : R.drawable.ab_media_play);
             intentPlayPause.setAction(ClementineBroadcastReceiver.PLAY);
         }
         mNotificationView.setOnClickPendingIntent(R.id.noti_play_pause,
