@@ -145,6 +145,8 @@
   <string name="pref_wake_lock_summary">Ative esta opção se a aplicação se desligar aleatoriamente. Pode gastar mais energia.</string>
   <string name="pref_keep_screen_on_title">Manter ecrã ligado</string>
   <string name="pref_keep_screen_on_summary">Impedir que o ecrã se desligue quando o Clementine Remote estiver ligado ao Clementine.</string>
+  <string name="pref_noti_color_title">Utilizar cor de fundo do sistema</string>
+  <string name="pref_noti_color_summary">Ative esta opção se as cores da notificação não se adequarem ao tema do sistema.</string>
   <string name="pref_version_summary">Clique para aceder ao sítio do projeto</string>
   <string name="pref_version_title">Versão</string>
   <string name="pref_license_title">Licença</string>

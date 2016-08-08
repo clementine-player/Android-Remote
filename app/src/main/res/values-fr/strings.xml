@@ -145,6 +145,8 @@
   <string name="pref_wake_lock_summary">A activer si l\'application se déconnecte de façon aléatoire lorsqu\'elle est en arrière-plan. Peut décharger la batterie plus rapidement.</string>
   <string name="pref_keep_screen_on_title">Garder l\'écran allumé</string>
   <string name="pref_keep_screen_on_summary">Empêche l\'écran de s\'éteindre lorsque Clementine À Distance est connecté à Clementine.</string>
+  <string name="pref_noti_color_title">Utiliser la couleur de fond du système pour les notifications</string>
+  <string name="pref_noti_color_summary">Activer si la couleur de notification ne s\'adapte pas au thème du système</string>
   <string name="pref_version_summary">Cliquez pour visiter le site web du projet</string>
   <string name="pref_version_title">Version</string>
   <string name="pref_license_title">Licence</string>

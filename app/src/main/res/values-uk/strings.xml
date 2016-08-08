@@ -148,6 +148,8 @@
   <string name="pref_wake_lock_summary">Позначте, якщо програма потерпає від випадкових від’єднань, коли працює у фоновому режимі. Може призвести до швидшого розряджання акумулятора.</string>
   <string name="pref_keep_screen_on_title">Не вимикати екран</string>
   <string name="pref_keep_screen_on_summary">Запобігати вимиканню екрана, доки Clementine Remote з’єднано з Clementine.</string>
+  <string name="pref_noti_color_title">Використовувати колір тла сповіщень системи</string>
+  <string name="pref_noti_color_summary">Позначте, якщо кольори сповіщень не збігаються із кольорами теми вашої системи.</string>
   <string name="pref_version_summary">Натисніть, щоб відвідати сайт проекту</string>
   <string name="pref_version_title">Версія</string>
   <string name="pref_license_title">Ліцензування</string>

@@ -150,6 +150,9 @@
   <string name="pref_keep_screen_on_title">Išlaikyti ekraną įjungtą</string>
   <string name="pref_keep_screen_on_summary">Neleisti išjungti ekrano tol, kol Clementine Remote yra prisijungusi prie Clementine.
     </string>
+  <string name="pref_noti_color_title">Naudoti sistemos pranešimų fono spalvą</string>
+  <string name="pref_noti_color_summary">Įjunkite, jei pranešimų spalvos netinka jūsų sistemos temai.
+    </string>
   <string name="pref_version_summary">Spustelėkite, kad aplankytumėte projekto svetainę</string>
   <string name="pref_version_title">Versija</string>
   <string name="pref_license_title">Licencija</string>

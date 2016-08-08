@@ -147,6 +147,8 @@
 </string>
   <string name="pref_keep_screen_on_title">Manté la pantalla encesa</string>
   <string name="pref_keep_screen_on_summary">Evita que s\'apagui la pantalla mentre el control remot estigui connectat al Clementine.</string>
+  <string name="pref_noti_color_title">Empra el color de fons de les notificacions del sistema</string>
+  <string name="pref_noti_color_summary">Activeu aquesta opció si els colors de notificació no s\'adiuen al tema del sistema.</string>
   <string name="pref_version_summary">Cliqueu per visitar el lloc web del projecte</string>
   <string name="pref_version_title">Versió</string>
   <string name="pref_license_title">Llicència</string>

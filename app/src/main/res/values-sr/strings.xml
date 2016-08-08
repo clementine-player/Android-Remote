@@ -147,6 +147,8 @@
   <string name="pref_wake_lock_summary">Омогућите ако апликација насумично губи везу када ради у позадини. Може брже да исцрпи батерију.</string>
   <string name="pref_keep_screen_on_title">Држи екран укључен</string>
   <string name="pref_keep_screen_on_summary">Спречи искључивање екрана док је Даљински повезан са Клементином.</string>
+  <string name="pref_noti_color_title">Системска боја позадине обавештења</string>
+  <string name="pref_noti_color_summary">Користите ако се боје обавештења не уклапају у вашу тему.</string>
   <string name="pref_version_summary">Кликните за посету вебсајта пројекта</string>
   <string name="pref_version_title">Издање</string>
   <string name="pref_license_title">Лиценца</string>

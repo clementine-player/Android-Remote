@@ -143,6 +143,8 @@
   <string name="pref_wake_lock_summary">アプリがバックグラウンドで不定期に切断された場合に、有効にします。バッテリーの消耗が早くなります。</string>
   <string name="pref_keep_screen_on_title">画面をオンのままにする</string>
   <string name="pref_keep_screen_on_summary">Clementine リモートがClementine に接続している間、画面がオフになるのを防止します。</string>
+  <string name="pref_noti_color_title">システム通知の背景色を使用する</string>
+  <string name="pref_noti_color_summary">通知の色が、お使いのシステムのテーマにフィットしない場合に有効にします。</string>
   <string name="pref_version_summary">クリックしてプロジェクトのWebサイトを訪問してください</string>
   <string name="pref_version_title">バージョン</string>
   <string name="pref_license_title">ライセンス</string>

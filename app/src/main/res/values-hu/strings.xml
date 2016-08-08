@@ -146,6 +146,8 @@
   <string name="pref_wake_lock_summary">Kapcsolja be, ha az app véletlenszerűen bontja a kapcsolatot a háttérben. Ez hamarabb lemerítheti az akkumulátort.</string>
   <string name="pref_keep_screen_on_title">Képernyő bekapcsolva tartása</string>
   <string name="pref_keep_screen_on_summary">Megakadályozza a képernyő kikapcsolását amíg a távvezérlő kapcsolódik a Clementine-hoz.</string>
+  <string name="pref_noti_color_title">Rendszerértesítések háttérszínének használata</string>
+  <string name="pref_noti_color_summary">Engedélyezze, ha az értesítések színe nem illik a rendszertémához.</string>
   <string name="pref_version_summary">A projekt weboldalának meglátogatása.</string>
   <string name="pref_version_title">Verzió</string>
   <string name="pref_license_title">Licenc</string>

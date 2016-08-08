@@ -152,6 +152,8 @@
   <string name="pref_keep_screen_on_title">Держать экран включённым</string>
   <string name="pref_keep_screen_on_summary">Предотвращает затухание экрана, пока Clementine Remote подключен к Clementine.
     </string>
+  <string name="pref_noti_color_title">Использовать системный цвет фона уведомлений</string>
+  <string name="pref_noti_color_summary">Включите, если цвет уведомления не соответствует теме вашей системы.</string>
   <string name="pref_version_summary">Посетить страницу проекта</string>
   <string name="pref_version_title">Версия</string>
   <string name="pref_license_title">Лицензия</string>
