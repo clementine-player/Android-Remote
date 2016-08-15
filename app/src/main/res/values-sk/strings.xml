@@ -150,6 +150,9 @@
   <string name="pref_keep_screen_on_title">Ponechať obrazovku zapnutú</string>
   <string name="pref_keep_screen_on_summary">Zamedziť vypnutiu obrazovky pokiaľ je aplikácia Clementine Remote pripojená k prehrávaču Clementine.
 </string>
+  <string name="pref_noti_color_title">Použiť systémovú farbu pozadia upozornení</string>
+  <string name="pref_noti_color_summary">Povoľte, ak sa farby oznámení nezhodujú s vašim systémovým
+štýlom.</string>
   <string name="pref_version_summary">Kliknite na navštívenie webovej stránky projektu</string>
   <string name="pref_version_title">Verzia</string>
   <string name="pref_license_title">Licencia</string>
