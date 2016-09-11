@@ -1,3 +1,9 @@
+[Unreleased]
+
+  Other:
+   - Build against Android API 24 Nougat
+   - Update dependencies
+
 Version 11
   Features:
     - Complete design overhaul, using Material Design
