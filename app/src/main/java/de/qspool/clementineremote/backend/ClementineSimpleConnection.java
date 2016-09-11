@@ -78,6 +78,7 @@ public class ClementineSimpleConnection {
             mOut.flush();
         } catch (Exception e) {
             // Try to reconnect
+            e.printStackTrace();
             closeSocket();
             return false;
         }
