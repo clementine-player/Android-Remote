@@ -3,6 +3,7 @@
   Improvements:
    - Adding the ability to use different colors of the notification (Thanks @SemperPeritus)
   Bugfixes:
+   - Fix Android N connection problem
    - Show auth code dialog when Clementine returns a Not_Authenticated disconnect message
    - Override correct onCreate methods
   Other:
