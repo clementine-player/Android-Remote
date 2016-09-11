@@ -102,7 +102,7 @@ public class PlayerPageFragment extends Fragment
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+        super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
     }

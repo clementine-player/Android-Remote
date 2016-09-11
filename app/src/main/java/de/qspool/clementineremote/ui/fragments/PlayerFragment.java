@@ -70,7 +70,7 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+        super.onCreate(savedInstanceState);
 
         // Get the actionbar
         mActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
