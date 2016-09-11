@@ -533,7 +533,9 @@ public class ConnectActivity extends AppCompatActivity {
 
         if (!clementineMessage.isErrorMessage()) {
             if (clementineMessage.getMessage().getResponseDisconnect()
-                    .getReasonDisconnect() == ReasonDisconnect.Wrong_Auth_Code) {
+                    .getReasonDisconnect() == ReasonDisconnect.Wrong_Auth_Code ||
+                    clementineMessage.getMessage().getResponseDisconnect()
+                            .getReasonDisconnect() == ReasonDisconnect.Not_Authenticated ) {
                 showAuthCodePromt();
             }
         }
