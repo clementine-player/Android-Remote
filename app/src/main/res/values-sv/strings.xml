@@ -147,6 +147,8 @@
 </string>
   <string name="pref_keep_screen_on_title">Håll skärmen tänd</string>
   <string name="pref_keep_screen_on_summary">Förhindra att skärmen släcker sig medan Fjärrkontrollen är ansluten till Clementine.</string>
+  <string name="pref_noti_color_title">Använd systemets notisbakgrundsfärg</string>
+  <string name="pref_noti_color_summary">Aktivera om notisernas färg inte passar ihop med systemets tema.</string>
   <string name="pref_version_summary">Klicka för att besöka projektets hemsida</string>
   <string name="pref_version_title">Version</string>
   <string name="pref_license_title">Licens</string>
