@@ -1,5 +1,4 @@
-[Unreleased]
-
+Version 11.1
   Improvements:
    - Adding the ability to use different colors of the notification (Thanks @SemperPeritus)
   Bugfixes:
@@ -9,6 +8,7 @@
   Other:
    - Build against Android API 24 Nougat
    - Update dependencies
+   - Updated translations
 
 Version 11
   Features:
