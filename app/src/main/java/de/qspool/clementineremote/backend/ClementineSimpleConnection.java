@@ -17,6 +17,7 @@
 
 package de.qspool.clementineremote.backend;
 
+import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -28,7 +29,6 @@ import java.net.SocketTimeoutException;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessage.ErrorMessage;
 import de.qspool.clementineremote.backend.pb.ClementinePbParser;
-import de.qspool.clementineremote.utils.Utilities;
 
 public class ClementineSimpleConnection {
 
@@ -53,7 +53,7 @@ public class ClementineSimpleConnection {
         try {
             mSocket.connect(socketAddress, 3000);
             mIn = new DataInputStream(mSocket.getInputStream());
-            mOut = new DataOutputStream(mSocket.getOutputStream());
+            mOut = new DataOutputStream(new BufferedOutputStream(mSocket.getOutputStream()));
 
             // Send the connect request to clementine
             sendRequest(message);
@@ -74,8 +74,7 @@ public class ClementineSimpleConnection {
         // Create the protocolbuffer
         byte[] data = message.getMessage().toByteArray();
         try {
-            byte[] len = Utilities.intToByteArray(data.length);
-            mOut.write(len);
+            mOut.writeInt(data.length);
             mOut.write(data);
             mOut.flush();
         } catch (Exception e) {
