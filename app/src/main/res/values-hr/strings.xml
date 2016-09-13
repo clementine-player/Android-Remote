@@ -150,6 +150,9 @@
   <string name="pref_keep_screen_on_title">Drži zaslon upaljenim</string>
   <string name="pref_keep_screen_on_summary">Spriječava isključivanje zaslona dok je Clementine daljinski upravljač povezan s Clementine.
     </string>
+  <string name="pref_noti_color_title">Koristi pozadinsku boju obavijesti sustava</string>
+  <string name="pref_noti_color_summary">Omogućite ako boje obavijesti ne pristaju vašoj temi sustava.
+    </string>
   <string name="pref_version_summary">Kliknite za posjet web stranici projekta</string>
   <string name="pref_version_title">Inačica</string>
   <string name="pref_license_title">Licenca</string>
