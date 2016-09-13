@@ -1,3 +1,9 @@
+[UNRELEASED]
+  Bugfixes:
+   - Make connection to Clementine more robust
+  Other:
+   - Updated translations
+
 Version 11.1
   Improvements:
    - Adding the ability to use different colors of the notification (Thanks @SemperPeritus)
