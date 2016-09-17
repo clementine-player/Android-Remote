@@ -2,6 +2,7 @@
   Bugfixes:
    - Make connection to Clementine more robust
    - Fix crash when mSocket.getInetAddress() is null
+   - Fix crash when opening connect page too fast
   Other:
    - Updated translations
 

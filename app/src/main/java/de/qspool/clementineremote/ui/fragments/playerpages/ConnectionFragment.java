@@ -173,10 +173,12 @@ public class ConnectionFragment extends Fragment
 
             long total = TrafficStats.getUidTxBytes(uid) - App.ClementineConnection.getStartTx() +
                     TrafficStats.getUidRxBytes(uid) - App.ClementineConnection.getStartRx();
-            long a = total / TimeUnit.MILLISECONDS.toSeconds(diff);
-            String perSecond = Utilities.humanReadableBytes(a, true);
 
-            tv_traffic.setText(tx + " / " + rx + " (" + perSecond + "/s)");
+            if (TimeUnit.MILLISECONDS.toSeconds(diff) != 0) {
+                long a = total / TimeUnit.MILLISECONDS.toSeconds(diff);
+                String perSecond = Utilities.humanReadableBytes(a, true);
+                tv_traffic.setText(tx + " / " + rx + " (" + perSecond + "/s)");
+            }
         }
     }
 
