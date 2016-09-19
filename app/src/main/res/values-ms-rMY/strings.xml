@@ -143,6 +143,9 @@
   <string name="pref_wake_lock_summary">Benarkan jika Apl terputus secara rawak bila berada disebalik tabir. Mungkin menyebabkan kuasa bateri cepat habis.</string>
   <string name="pref_keep_screen_on_title">Kekalkan Skrin Hidup</string>
   <string name="pref_keep_screen_on_summary">Halang skrin dimatikan ketika Clementine Jauh bersambung ke Clementine.</string>
+  <string name="pref_noti_color_title">Guna warna latar belakang pemberitahuan sistem</string>
+  <string name="pref_noti_color_summary">Benarkan jika warna pemberitahuan tidak sepadan dengan tema sistem anda.
+</string>
   <string name="pref_version_summary">Klik untuk lawati laman sesawang projek</string>
   <string name="pref_version_title">Versi</string>
   <string name="pref_license_title">Lesen</string>
