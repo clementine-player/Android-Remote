@@ -153,8 +153,7 @@ Pokud máte díky mé práci skutečně dobrou náladu, malý dar od vás by byl
   <string name="pref_keep_screen_on_summary">Zabránit vypnutí obrazovky, zatímco je Clementine Remote připojena ke Clementine.
 </string>
   <string name="pref_noti_color_title">Použít barvu pozadí pro systémové oznámení</string>
-  <string name="pref_noti_color_summary">Povolit, pokud barvy oznámení nesedí k motivu systému.
-</string>
+  <string name="pref_noti_color_summary">Povolit, pokud barvy oznámení nesedí ke vzhledu systému.</string>
   <string name="pref_version_summary">Klepněte pro návštěvu stránek projektu</string>
   <string name="pref_version_title">Verze</string>
   <string name="pref_license_title">Licence</string>
