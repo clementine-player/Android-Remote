@@ -35,6 +35,7 @@
   <plurals name="download_noti_n_downloads">
     <item quantity="one">%d aktywne pobieranie</item>
     <item quantity="few">%d aktywne pobierania</item>
+    <item quantity="many">%d aktywnych pobierań</item>
     <item quantity="other">%d aktywnych pobierań</item>
   </plurals>
   <string name="download_noti_n_progress">Całkowity postęp %d %</string>
@@ -45,6 +46,7 @@
   <plurals name="download_noti_n_finished">
     <item quantity="one">%d pobieranie ukończone</item>
     <item quantity="few">%d pobierania ukończone</item>
+    <item quantity="many">%d pobierań ukończonych</item>
     <item quantity="other">%d pobierań ukończonych</item>
   </plurals>
   <string name="download_noti_complete">Pobieranie ukończone</string>
@@ -204,11 +206,13 @@
   <plurals name="number_items">
     <item quantity="one">%d element</item>
     <item quantity="few">%d elementy</item>
+    <item quantity="many">%d elementów</item>
     <item quantity="other">%d elementów</item>
   </plurals>
   <plurals name="songs_added">
     <item quantity="one">%d utwór dodany do aktualnej listy odtwarzania</item>
     <item quantity="few">%d utwory dodane do aktualnej listy odtwarzania</item>
+    <item quantity="many">%d utworów dodanych do aktualnej listy odtwarzania</item>
     <item quantity="other">%d utworów dodanych do aktualnej listy odtwarzania</item>
   </plurals>
   <string name="context_add_to_playlist">Dodaj element do aktualnej listy odtwarzania</string>
