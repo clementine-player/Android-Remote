@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 dependencies {
-    compile 'com.android.support:support-v13:24.2.1'
-    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:support-v13:25.2.0'
+    compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.google.protobuf:protobuf-java:2.6.1'
     compile 'javax.jmdns:jmdns:3.4.1'
     compile 'com.twofortyfouram:android-plugin-api-for-locale:1.0.1'
