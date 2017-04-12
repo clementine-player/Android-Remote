@@ -494,7 +494,8 @@ public class ConnectActivity extends AppCompatActivity {
         }
 
         // Check if we have not a local ip
-        WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
+        WifiManager wifiManager =
+                (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
         int ip = wifiInfo.getIpAddress();
 
