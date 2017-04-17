@@ -146,6 +146,7 @@
   <string name="pref_keep_screen_on_title">Bildschirm aktiv lassen</string>
   <string name="pref_keep_screen_on_summary">Wärend Clementine-Fernbedienung verbunden ist bleibt der Bildschirm aktiv.</string>
   <string name="pref_noti_color_title">Systembenachrichtigungs-Hintergrundfarbe verwenden</string>
+  <string name="pref_noti_color_summary">Aktivieren, falls Benachrichtigungsfarbe nicht der des Themes entspricht.</string>
   <string name="pref_version_summary">Anklicken, um die Internetseite des Projektes anzusehen</string>
   <string name="pref_version_title">Version</string>
   <string name="pref_license_title">Lizenz</string>
