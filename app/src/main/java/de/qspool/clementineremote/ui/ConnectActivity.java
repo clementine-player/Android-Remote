@@ -73,7 +73,7 @@ import de.qspool.clementineremote.backend.mediasession.ClementineMediaSessionNot
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ReasonDisconnect;
-import de.qspool.clementineremote.ui.adapter.CustomClementinesAdapter;
+import de.qspool.clementineremote.ui.adapter.ServiceInfoAdapter;
 import de.qspool.clementineremote.ui.dialogs.CrashReportDialog;
 import de.qspool.clementineremote.ui.settings.ClementineSettings;
 import de.qspool.clementineremote.utils.Utilities;
@@ -122,6 +122,8 @@ public class ConnectActivity extends AppCompatActivity {
     private boolean doAutoConnect = true;
 
     private Set<String> mKnownIps;
+
+    private MaterialDialog mServiceInfoDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -315,31 +317,28 @@ public class ConnectActivity extends AppCompatActivity {
                         ConnectActivity.this);
 
                 builder.title(R.string.connectdialog_services);
-                CustomClementinesAdapter adapter = new CustomClementinesAdapter(
-                        ConnectActivity.this,
-                        R.layout.item_clementine, mClementineMDns.getServices());
-                builder.adapter(adapter, new MaterialDialog.ListCallback() {
+                ServiceInfoAdapter adapter = new ServiceInfoAdapter(mClementineMDns.getServices());
+                adapter.setListener(new ServiceInfoAdapter.ItemClickListener() {
                     @Override
-                    public void onSelection(MaterialDialog materialDialog, View view, int i,
-                            CharSequence charSequence) {
-                        materialDialog.dismiss();
-                        // The 'which' argument contains the index position
-                        // of the selected item
-                        ServiceInfo service = mClementineMDns.getServices().get(i);
+                    public void onItemClick(ServiceInfo serviceInfo) {
+                        if (mServiceInfoDialog != null && mServiceInfoDialog.isShowing()) {
+                            mServiceInfoDialog.dismiss();
+                        }
                         // Insert the host
-                        String ip = service.getInet4Addresses()[0].toString().split("/")[1];
+                        String ip = serviceInfo.getInet4Addresses()[0].toString().split("/")[1];
                         mEtIp.setText(ip);
 
                         // Update the port
                         SharedPreferences.Editor editor = mSharedPref.edit();
                         editor.putString(SharedPreferencesKeys.SP_KEY_PORT,
-                                String.valueOf(service.getPort()));
+                                String.valueOf(serviceInfo.getPort()));
                         editor.apply();
                         connect();
                     }
                 });
+                builder.adapter(adapter, null);
                 builder.negativeText(R.string.dialog_close);
-                builder.show();
+                mServiceInfoDialog = builder.show();
             }
         }
     };
