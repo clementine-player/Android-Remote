@@ -1,18 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="app_name">Clementine Remote</string>
-  <string name="app_not_available">Apl tidak tersedia!</string>
-  <string name="connectdialog_connect">Sambung</string>
-  <string name="connectdialog_connecting">Menyambung ke Clementine</string>
-  <string name="connectdialog_download_data">Memuat turun data</string>
-  <string name="connectdialog_error">Tidak dapat capai hos</string>
-  <string name="connectdialog_ip_hint">Masukkan alamat IP</string>
-  <string name="connectdialog_services">Clementine</string>
-  <string name="player_nosong">Tiada Lagu dimainkan buat masa ini</string>
-  <string name="player_disconnected">Terputus</string>
-  <string name="player_playlist">Senarai main:</string>
-  <string name="player_download_playlists">Memuat Turun Senarai Main</string>
-  <string name="playler_volume">Volum</string>
   <string name="player_stop_after_current">Togol berhenti selesai trek selesai.</string>
   <string name="player_download_lyrics">Memuat turun lirik</string>
   <string name="player_no_lyrics">Tiada lirik ditemui.</string>
