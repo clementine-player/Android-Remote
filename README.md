@@ -33,9 +33,12 @@ Download Clementine 1.3 from here: http://www.clementine-player.org/downloads
 * The remote control is disabled by default. You have to activate it in the settings. *
 * Downloads are disabled by default. You have to activate it in the setting, too *
 
-Get Clementine Android-Remote from the Play store.
+Get Clementine Android-Remote:
 
-*[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" width="200">](https://play.google.com/store/apps/details?id=de.qspool.clementineremote)*
+<a href="https://f-droid.org/packages/de.qspool.clementineremote/" target="_blank">
+<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="80"/></a>
+<a href="https://play.google.com/store/apps/details?id=de.qspool.clementineremote" target="_blank">
+<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" alt="Get it on Google Play" height="80"/></a>
 
 This application is licensed under the GNU GPLv3.
 
