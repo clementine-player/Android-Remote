@@ -212,6 +212,7 @@
     <string name="dialog_about_authors">Authors</string>
     <string name="dialog_about_supporters">Supporters</string>
     <string name="dialog_about_others">Others</string>
+    <string name="dialog_about_others_summary">Thanks to all the &lt;a href=\"https://github.com/clementine-player/Android-Remote/graphs/contributors\">contributors&lt;/a> and &lt;a href=\"https://www.transifex.com/projects/p/clementine-remote/\">translators&lt;/a>!</string>
     <string name="dialog_license_top"> This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY</string>
 
     <string name="tasker_intro">Please select an action.</string>
