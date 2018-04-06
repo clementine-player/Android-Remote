@@ -56,6 +56,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
+            android:text="@string/dialog_about_others_summary"
             android:textAppearance="?android:attr/textAppearanceSmall" />
     </LinearLayout>
 
