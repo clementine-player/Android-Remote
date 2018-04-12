@@ -1,4 +1,6 @@
 [UNRELEASED]
+  Improvements:
+   - Added "Album Artist / Album" to Library Grouping
   Bugfixes:
    - Make connection to Clementine more robust
    - Fix crash when mSocket.getInetAddress() is null
