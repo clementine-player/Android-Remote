@@ -134,7 +134,6 @@ Pokud máte díky mé práci skutečně dobrou náladu, malý dar od vás by byl
   <string-array name="pref_library_grouping">
     <item>Umělec</item>
     <item>Umělec/Album</item>
-    <item>Album Umělec / Album</item> <!-- Needs propper translation - PhysK -->
     <item>Umělec/Rok</item>
     <item>Album</item>
     <item>Žánr/Album</item>

@@ -132,7 +132,6 @@
   <string-array name="pref_library_grouping">
     <item>Виконавець</item>
     <item>Виконавець / Альбом</item>
-    <item>Альбом Виконавець / Альбом</item> <!-- Needs propper translation - PhysK -->
     <item>Виконавець / Рік</item>
     <item>Альбом</item>
     <item>Жанр / Альбом</item>

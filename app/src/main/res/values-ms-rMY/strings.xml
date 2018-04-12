@@ -115,7 +115,6 @@
   <string-array name="pref_library_grouping">
     <item>Artis</item>
     <item>Artis / Album</item>
-    <item>Album Artis / Album</item> <!-- Needs propper translation - PhysK -->
     <item>Artis / Tahun</item>
     <item>Album</item>
     <item>Genre / Album</item>

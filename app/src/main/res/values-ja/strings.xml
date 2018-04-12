@@ -128,7 +128,6 @@
   <string-array name="pref_library_grouping">
     <item>アーティスト</item>
     <item>アーティスト / アルバム</item>
-    <item>アルバム アーティスト / アルバム</item> <!-- Needs propper translation - PhysK -->
     <item>アーティスト / 年</item>
     <item>アルバム</item>
     <item>ジャンル / アルバム</item>

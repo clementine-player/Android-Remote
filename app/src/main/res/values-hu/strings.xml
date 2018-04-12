@@ -130,7 +130,6 @@
   <string-array name="pref_library_grouping">
     <item>Előadó</item>
     <item>Előadó / Album</item>
-    <item>Album Előadó / Album</item> <!-- Needs propper translation - PhysK -->
     <item>Előadó / Év</item>
     <item>Album</item>
     <item>Műfaj / Album</item>

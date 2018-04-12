@@ -132,7 +132,6 @@
   <string-array name="pref_library_grouping">
     <item>извођачу</item>
     <item>извођачу/албуму</item>
-    <item>албуму извођачу / албуму</item> <!-- Needs propper translation - PhysK -->
     <item>извођачу/години</item>
     <item>албуму</item>
     <item>жанру/албуму</item>

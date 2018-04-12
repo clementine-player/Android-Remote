@@ -128,7 +128,6 @@
   <string-array name="pref_library_grouping">
     <item>Sanatçı</item>
     <item>Sanatçı / Albüm</item>
-    <item>Albüm Sanatçı / Albüm</item> <!-- Needs propper translation - PhysK -->
     <item>Sanatçı / Yıl</item>
     <item>Albüm</item>
     <item>Tarz / Albüm</item>

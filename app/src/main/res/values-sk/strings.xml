@@ -132,7 +132,6 @@
   <string-array name="pref_library_grouping">
     <item>Interpret</item>
     <item>Interpret / Album</item>
-    <item>Album Interpret / Album</item> <!-- Needs propper translation - PhysK -->
     <item>Interpret / Rok</item>
     <item>Album</item>
     <item>Žáner / Album</item>
