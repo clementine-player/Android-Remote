@@ -132,6 +132,7 @@
   <string-array name="pref_library_grouping">
     <item>Atlikėją</item>
     <item>Atlikėją / Albumą</item>
+    <item>Albumą Atlikėją / Albumą</item> <!-- Needs propper translation - PhysK -->
     <item>Atlikėją / Metus</item>
     <item>Albumą</item>
     <item>Žanrą / Albumą</item>

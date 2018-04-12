@@ -32,6 +32,9 @@ public class LibraryQuery extends DynamicSongQuery {
             case "artist-album":
                 selectedFields = new String[] {"artist", "album", "title"};
                 break;
+            case "albumartist-album":
+                selectedFields = new String[] {"albumartist", "album", "title"};
+                break;
             case "artist-year":
                 selectedFields = new String[] {"artist", "year", "title"};
                 break;

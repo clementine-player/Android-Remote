@@ -134,6 +134,7 @@
   <string-array name="pref_library_grouping">
     <item>Artysta</item>
     <item>Artysta / Album</item>
+    <item>Album Artysta / Album</item> <!-- Needs propper translation - PhysK -->
     <item>Artysta / Rok</item>
     <item>Album</item>
     <item>Gatunek / Album</item>
