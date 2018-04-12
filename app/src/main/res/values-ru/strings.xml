@@ -134,6 +134,7 @@
   <string-array name="pref_library_grouping">
     <item>Исполнитель</item>
     <item>Исполнитель / Альбом</item>
+    <item>Альбом Исполнитель /  Альбом</item> <!-- Needs propper translation - PhysK -->
     <item>Исполнитель / Гол</item>
     <item>Альбом</item>
     <item>Жанр / Альбом</item>

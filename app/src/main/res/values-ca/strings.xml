@@ -130,6 +130,7 @@
   <string-array name="pref_library_grouping">
     <item>Artista</item>
     <item>Artista / Àlbum</item>
+    <item>Àlbum Artista / Àlbum</item>  <!-- Needs propper translation - PhysK -->
     <item>Artista / Any</item>
     <item>Àlbum</item>
     <item>Estil / Àlbum</item>

@@ -132,6 +132,7 @@
   <string-array name="pref_library_grouping">
     <item>Izvođaču</item>
     <item>Izvođaču / Albumu</item>
+    <item>Albumu Izvođaču / Albumu</item> <!-- Needs propper translation - PhysK -->
     <item>Izvođaču / Godini</item>
     <item>Albumu</item>
     <item>Žanru / Albumu</item>
