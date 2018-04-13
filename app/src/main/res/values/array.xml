@@ -71,6 +71,7 @@
     <string-array name="pref_library_grouping_values">
         <item>artist</item>
         <item>artist-album</item>
+        <item>albumartist-album</item>
         <item>artist-year</item>
         <item>album</item>
         <item>genre-album</item>

@@ -156,6 +156,7 @@
     <string-array name="pref_library_grouping">
         <item>Artist</item>
         <item>Artist / Album</item>
+        <item>Album Artist / Album</item>
         <item>Artist / Year</item>
         <item>Album</item>
         <item>Genre / Album</item>
