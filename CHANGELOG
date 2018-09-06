@@ -6,7 +6,7 @@
    - Fix crash when mSocket.getInetAddress() is null
    - Fix crash when opening connect page too fast
   Other:
-   - Build with API level 25
+   - Build with API level 28
    - Updated translations
 
 Version 11.1

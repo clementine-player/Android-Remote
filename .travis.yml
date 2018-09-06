@@ -3,8 +3,8 @@ jdk: oraclejdk8
 android:
     components:
     - tools
-    - build-tools-25.0.3
-    - android-25
+    - build-tools-28.0.2
+    - android-28
     - platform-tools
     - extra-android-support
     - extra-android-m2repository
