@@ -19,11 +19,13 @@ package de.qspool.clementineremote.backend.downloader;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
@@ -35,6 +37,7 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.elements.DownloaderResult;
@@ -89,7 +92,16 @@ public class DownloadManager {
 
     @SuppressLint("InlinedApi")
     private void createNewActiveNotification() {
-        mActiveNofiticationBuilder = new NotificationCompat.Builder(mContext)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(
+                    App.notificationChannel, "Default",
+                    NotificationManager.IMPORTANCE_LOW
+            );
+
+            mNotifyManager.createNotificationChannel(notificationChannel);
+        }
+
+        mActiveNofiticationBuilder = new NotificationCompat.Builder(mContext, App.notificationChannel)
                 .setContentTitle(mContext.getString(R.string.download_noti_title))
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setOngoing(true)

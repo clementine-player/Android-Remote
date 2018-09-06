@@ -19,6 +19,7 @@ package de.qspool.clementineremote.backend.mediasession;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -74,9 +75,23 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
                 .getDimension(android.R.dimen.notification_large_icon_height);
         mNotificationWidth = (int) res.getDimension(android.R.dimen.notification_large_icon_width);
 
-        mNotificationBuilder = new Notification.Builder(mContext)
-                .setSmallIcon(R.drawable.notification)
-                .setOngoing(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(
+                    App.notificationChannel, "Default",
+                    NotificationManager.IMPORTANCE_LOW
+            );
+
+            mNotificationManager.createNotificationChannel(notificationChannel);
+
+            mNotificationBuilder = new Notification.Builder(mContext, App.notificationChannel)
+                    .setSmallIcon(R.drawable.notification)
+                    .setOngoing(true);
+        } else {
+            mNotificationBuilder = new Notification.Builder(mContext)
+                    .setSmallIcon(R.drawable.notification)
+                    .setOngoing(true);
+
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mNotificationBuilder.setVisibility(Notification.VISIBILITY_PUBLIC);

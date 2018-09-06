@@ -19,12 +19,14 @@ package de.qspool.clementineremote.backend;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -239,7 +241,16 @@ public class ClementineService extends Service {
      */
     @SuppressLint("InlinedApi")
     private void showKeepAliveDisconnectNotification() {
-         Notification notification = new NotificationCompat.Builder(this)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(
+                    App.notificationChannel, "Default",
+                    NotificationManager.IMPORTANCE_LOW
+            );
+
+            mNotificationManager.createNotificationChannel(notificationChannel);
+        }
+
+         Notification notification = new NotificationCompat.Builder(this, App.notificationChannel)
                 .setSmallIcon(R.drawable.notification)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(getString(R.string.notification_disconnect_keep_alive))

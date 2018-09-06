@@ -31,6 +31,8 @@ public class App extends Application {
 
     private static App mApp;
 
+    public final static String notificationChannel = "CR_NOT_CH_1";
+
     public App() {
         mApp = this;
     }

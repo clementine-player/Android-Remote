@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 dependencies {
-    compile 'com.android.support:support-v13:25.3.1'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'com.google.protobuf:protobuf-java:2.6.1'
-    compile 'javax.jmdns:jmdns:3.4.1'
-    compile 'com.twofortyfouram:android-plugin-api-for-locale:1.0.1'
-    compile 'com.afollestad.material-dialogs:core:0.9.4.4'
-    compile 'com.afollestad.material-dialogs:commons:0.9.4.4'
+    implementation 'com.android.support:support-v13:27.1.1'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.google.protobuf:protobuf-java:3.4.0'
+    implementation 'org.jmdns:jmdns:3.5.4'
+    implementation 'com.twofortyfouram:android-plugin-api-for-locale:1.0.1'
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+    implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
 }
 
 /*
@@ -69,13 +69,12 @@ android {
                 signingConfig signingConfigs.release
             }
             applicationVariants.all { variant ->
-                variant.outputs.each { output ->
+                variant.outputs.all { output ->
                     if (output.outputFile != null && output.outputFile.name.endsWith('.apk')) {
-                        def file = output.outputFile
                         if (variant.name == "release")
-                            output.outputFile = new File(file.parent,
-                                    "ClementineRemote-release-" + defaultConfig.versionName +
-                                            ".apk")
+                            outputFileName = "ClementineRemote-release-" +
+                                    defaultConfig.versionName +
+                                    ".apk"
                     }
                 }
             }
