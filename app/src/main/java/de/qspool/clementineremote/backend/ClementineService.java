@@ -178,8 +178,6 @@ public class ClementineService extends Service {
                 }
                 break;
             case SERVICE_DISCONNECTED:
-                intteruptThread();
-                App.ClementineConnection = null;
                 stopSelf();
                 break;
             default:
@@ -198,7 +196,7 @@ public class ClementineService extends Service {
             // Send the request to the thread
             App.ClementineConnection.mHandler.sendMessage(msg);
         }
-        intteruptThread();
+        interruptThread();
         App.ClementineConnection = null;
     }
 
@@ -215,7 +213,7 @@ public class ClementineService extends Service {
         startService(mServiceIntent);
     }
 
-    private void intteruptThread() {
+    private void interruptThread() {
         if (mPlayerThread != null) {
             mPlayerThread.interrupt();
         }

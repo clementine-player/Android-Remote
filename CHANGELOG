@@ -7,6 +7,7 @@
    - Fix crash when opening connect page too fast
    - Fix crash when Clementine closes the connection
    - Fix crash when opening playlist view
+   - Fix crash when service was destroyed but the app received a keep alive message
   Other:
    - Build with API level 28
    - Updated translations

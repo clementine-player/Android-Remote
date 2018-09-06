@@ -105,7 +105,9 @@ public class ClementinePbParser {
                 parseUpdateTrackPosition(msg.getResponseUpdateTrackPosition());
                 break;
             case KEEP_ALIVE:
-                App.ClementineConnection.setLastKeepAlive(System.currentTimeMillis());
+                if (App.ClementineConnection != null) {
+                    App.ClementineConnection.setLastKeepAlive(System.currentTimeMillis());
+                }
                 break;
             case SET_VOLUME:
                 App.Clementine.setVolume(msg.getRequestSetVolume().getVolume());
