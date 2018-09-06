@@ -560,7 +560,11 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
     }
 
     private LinkedList<MySong> getSelectedPlaylistSongs() {
-        return mPlaylists.get(getSelectedPlaylistPosition()).getPlaylistSongs();
+        int pos = getSelectedPlaylistPosition();
+        if (pos == Spinner.INVALID_POSITION || pos >= mPlaylists.size())
+            return new LinkedList<>();
+        else
+            return mPlaylists.get(pos).getPlaylistSongs();
     }
 
     private int getSelectedPlaylistPosition() {
