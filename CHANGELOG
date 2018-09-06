@@ -8,6 +8,7 @@
    - Fix crash when Clementine closes the connection
    - Fix crash when opening playlist view
    - Fix crash when service was destroyed but the app received a keep alive message
+   - Fix crash when album art cannot be decoded
   Other:
    - Build with API level 28
    - Updated translations

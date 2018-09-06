@@ -247,7 +247,11 @@ public class MySong {
         if (art == null) {
             return BitmapFactory.decodeResource(App.getApp().getResources(), R.drawable.nocover);
         } else {
-            return BitmapFactory.decodeByteArray(art, 0, art.length);
+            Bitmap b = BitmapFactory.decodeByteArray(art, 0, art.length);
+            if (b == null) // art cannot be decoded, use no cover instead
+                return BitmapFactory.decodeResource(App.getApp().getResources(), R.drawable.nocover);
+            else
+                return b;
         }
     }
 
