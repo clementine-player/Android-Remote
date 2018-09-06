@@ -5,6 +5,7 @@
    - Make connection to Clementine more robust
    - Fix crash when mSocket.getInetAddress() is null
    - Fix crash when opening connect page too fast
+   - Fix crash when Clementine closes the connection
   Other:
    - Build with API level 28
    - Updated translations

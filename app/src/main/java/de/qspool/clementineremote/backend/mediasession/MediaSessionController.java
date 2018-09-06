@@ -100,7 +100,10 @@ public class MediaSessionController {
                         break;
                     case DISCONNECTED:
                         mAudioManager.abandonAudioFocus(mOnAudioFocusChangeListener);
-                        mContext.unregisterReceiver(mMediaButtonBroadcastReceiver);
+                        try {
+                            mContext.unregisterReceiver(mMediaButtonBroadcastReceiver);
+                        } catch (IllegalArgumentException e) {
+                        }
 
                         mClementineMediaSession.unregisterSession();
                         mMediaSessionNotification.unregisterSession();
