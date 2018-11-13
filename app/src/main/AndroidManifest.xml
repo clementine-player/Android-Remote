@@ -18,7 +18,9 @@
         android:largeHeap="true"
         android:hardwareAccelerated="true"
         android:supportsRtl="true"
-        android:label="@string/app_name" >
+        android:label="@string/app_name"
+        android:installLocation="auto"
+        >
 
         <activity android:name=".ui.ConnectActivity"
                   android:configChanges="orientation|keyboardHidden|screenSize"
