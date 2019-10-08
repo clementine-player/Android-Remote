@@ -1,9 +1,9 @@
 apply plugin: 'com.android.application'
 
 dependencies {
-    implementation 'com.android.support:support-v13:27.1.1'
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.android.support:support-v13:28.0.0'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.google.protobuf:protobuf-java:3.4.0'
     implementation 'org.jmdns:jmdns:3.5.4'
     implementation 'com.twofortyfouram:android-plugin-api-for-locale:1.0.1'
@@ -17,7 +17,7 @@ dependencies {
 def getVersionName = { ->
     def stdout = new ByteArrayOutputStream()
     exec {
-        commandLine 'git', 'describe', '--tags'
+        commandLine 'git', 'describe', '--always', '--tags'
         standardOutput = stdout
     }
     return stdout.toString().trim()
@@ -86,8 +86,6 @@ android {
     }
 }
 
-task generateProtocolBuffer << {
-    exec {
-        commandLine 'protoc', '-I./', '--java_out=./src/main/java', './src/main/java/de/qspool/clementineremote/backend/pb/remotecontrolmessages.proto'
-    }
+task generateProtocolBuffer(type: Exec) {
+    commandLine 'protoc', '-I./', '--java_out=./src/main/java', './src/main/java/de/qspool/clementineremote/backend/pb/remotecontrolmessages.proto'
 }
