@@ -17,7 +17,7 @@ dependencies {
 def getVersionName = { ->
     def stdout = new ByteArrayOutputStream()
     exec {
-        commandLine 'git', 'describe', '--tags'
+        commandLine 'git', 'describe', '--always', '--tags'
         standardOutput = stdout
     }
     return stdout.toString().trim()
@@ -86,8 +86,6 @@ android {
     }
 }
 
-task generateProtocolBuffer << {
-    exec {
-        commandLine 'protoc', '-I./', '--java_out=./src/main/java', './src/main/java/de/qspool/clementineremote/backend/pb/remotecontrolmessages.proto'
-    }
+task generateProtocolBuffer(type: Exec) {
+    commandLine 'protoc', '-I./', '--java_out=./src/main/java', './src/main/java/de/qspool/clementineremote/backend/pb/remotecontrolmessages.proto'
 }
