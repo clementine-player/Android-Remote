@@ -90,7 +90,7 @@ public class ClementineService extends Service {
         // Get a Wakelock Object
         PowerManager pm = (PowerManager) getSystemService(
                 Context.POWER_SERVICE);
-        mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Clementine");
+        mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "clementine:service");
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         mUseWakeLock = prefs.getBoolean(SharedPreferencesKeys.SP_WAKE_LOCK, false);
