@@ -24,3 +24,9 @@ jobs:
       - run:
           name: Build APK
           command: ./gradlew clean build
+
+workflows:
+  version: 2
+  all:
+    jobs:
+      - build_android
