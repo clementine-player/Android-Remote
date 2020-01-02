@@ -10,7 +10,7 @@
    - Fix crash when service was destroyed but the app received a keep alive message
    - Fix crash when album art cannot be decoded
   Other:
-   - Build with API level 28
+   - Build with API level 29
    - Updated translations
 
 Version 11.1

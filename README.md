@@ -1,4 +1,4 @@
-Android-Remote [![Build Status](https://travis-ci.org/clementine-player/Android-Remote.svg)](https://travis-ci.org/clementine-player/Android-Remote)
+Android-Remote [![CircleCI](https://circleci.com/gh/clementine-player/Android-Remote/tree/master.svg?style=svg)](https://circleci.com/gh/clementine-player/Android-Remote/tree/master)
 ==============
 
 Clementine Remote lets you remotely control the music player "Clementine".
