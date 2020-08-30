@@ -74,7 +74,6 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ReasonDisconnect;
 import de.qspool.clementineremote.ui.adapter.ServiceInfoAdapter;
-import de.qspool.clementineremote.ui.dialogs.CrashReportDialog;
 import de.qspool.clementineremote.ui.settings.ClementineSettings;
 import de.qspool.clementineremote.utils.Utilities;
 
@@ -136,14 +135,6 @@ public class ConnectActivity extends AppCompatActivity {
                 .getStringSet(SharedPreferencesKeys.SP_KNOWN_IP, new LinkedHashSet<String>());
 
         initializeUi();
-
-        // Check if we got a stack trace
-        CrashReportDialog crashReportDialog = new CrashReportDialog(this);
-        crashReportDialog.showDialogIfTraceExists();
-
-        if (doAutoConnect && crashReportDialog.hasTrace()) {
-            doAutoConnect = false;
-        }
     }
 
     @Override

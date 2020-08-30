@@ -40,8 +40,6 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        // Register new default uncaught exception handler
-        Thread.setDefaultUncaughtExceptionHandler(new ClementineExceptionHandler(this));
 
         // Create a new downloadmanager instance
         DownloadManager.getInstance(this);
