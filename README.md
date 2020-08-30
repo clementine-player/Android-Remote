@@ -1,9 +1,11 @@
-Android-Remote [![CircleCI](https://circleci.com/gh/clementine-player/Android-Remote/tree/master.svg?style=svg)](https://circleci.com/gh/clementine-player/Android-Remote/tree/master)
+Android-Remote
 ==============
+
+[![ci][1]][2]
 
 Clementine Remote lets you remotely control the music player "Clementine".
 
-__IMPORTANT:__<br /> 
+__IMPORTANT:__<br />
 You need at least Clementine 1.3 to use this remote!
 
 With this application you can control the music player "Clementine" while you are sitting on your couch eating potato chips.
@@ -55,3 +57,6 @@ __PERMISSIONS:__<br />
 * android.permission.READ_PHONE_STATE: Is needed to detect calls and lower Clementine volume.
 * android.permission.WRITE_EXTERNAL_STORAGE: For downloading songs.
 * com.android.vending.BILLING: Is needed for doing donations.
+
+[1]: https://github.com/clementine-player/Android-Remote/workflows/ci/badge.svg
+[2]: https://github.com/clementine-player/Android-Remote/actions
