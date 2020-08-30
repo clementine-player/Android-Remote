@@ -33,7 +33,7 @@ def getVersionCode = { ->
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion '29.0.2'
+    buildToolsVersion '30.0.2'
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
