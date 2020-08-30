@@ -106,20 +106,6 @@
     <string name="menu_download">Download</string>
     <string name="menu_download_playlist">Download playlist</string>
 
-
-    <string name="donate_header">Donations</string>
-    <string name="donate_text">Thank you for using my app, I hope you find it useful!\n\nIf you are really happy with my work, a small donation would be appreciated.</string>
-    <string name="donate_i_want">I want to donate:</string>
-    <string name="donate_one">Donuts (1.00 €)</string>
-    <string name="donate_two">Coffee (2.00 €)</string>
-    <string name="donate_five">Pizza (5.00 €)</string>
-    <string name="donate_thanks">Thank you for your support! :-)</string>
-    <string name="donate_complete">Donation complete, thank you! :-)</string>
-    <string name="donate_try_again">Processing last donation, try again</string>
-    <string name="donate_not_available">Google Play not available</string>
-    <string name="donate_not_available_text">Please check if you have installed the latest Google Play Store version and try again!</string>
-
-
     <string name="pref_cat_behavior">Behavior</string>
     <string name="pref_cat_player">Player</string>
     <string name="pref_cat_library">Library</string>
@@ -279,10 +265,6 @@
 
     <string name="notification_disconnect_keep_alive">Lost connection. Touch to reconnect.</string>
 
-    <string name="crash_report_title">Oops, something went wrong!</string>
-    <string name="crash_report_message">Last time Clementine Remote crashed! This should not have happened! Please help me to improve the app and send me the logfile. Thanks!</string>
-    <string name="crash_report_send">Send!</string>
-
     <string name="fragment_title_player">Player</string>
     <string name="fragment_title_details">Song details</string>
     <string name="fragment_title_connection">Clementine</string>
@@ -305,7 +287,6 @@
         <item>Downloads</item>
         <item />
         <item>Settings</item>
-        <item>Donate</item>
         <item />
         <item>Quit</item>
     </string-array>

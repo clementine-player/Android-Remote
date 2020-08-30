@@ -58,7 +58,6 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.ui.adapter.NavigationDrawerListAdapter;
-import de.qspool.clementineremote.ui.fragments.DonateFragment;
 import de.qspool.clementineremote.ui.fragments.DownloadsFragment;
 import de.qspool.clementineremote.ui.fragments.GlobalSearchFragment;
 import de.qspool.clementineremote.ui.fragments.LibraryFragment;
@@ -126,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
         mFragments.add(new PlaylistFragment());
         mFragments.add(new LibraryFragment());
         mFragments.add(new DownloadsFragment());
-        mFragments.add(new DonateFragment());
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
@@ -519,14 +517,9 @@ public class MainActivity extends AppCompatActivity {
                                 ClementineSettings.class);
                         startActivity(settingsIntent);
                         break;
-                    case 7: // Donate
-                        ft.replace(R.id.content_frame, mFragments.get(5)).commit();
-                        mCurrentFragment = 5;
-                        mLastPosition = position;
+                    case 7: // Header Disconnect
                         break;
-                    case 8: // Header Disconnect
-                        break;
-                    case 9: // Quit
+                    case 8: // Quit
                         mOpenConnectDialog = false;
                         requestDisconnect();
                     default:

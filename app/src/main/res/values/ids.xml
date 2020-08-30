@@ -8,7 +8,6 @@
         <item>@drawable/nav_downloads</item>
         <item />
         <item>@drawable/nav_settings</item>
-        <item>@drawable/nav_donate</item>
         <item />
         <item>@drawable/nav_quit</item>
     </array>
