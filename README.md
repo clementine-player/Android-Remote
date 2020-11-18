@@ -30,6 +30,9 @@ __All Features:__
 * Lockscreen Controls
 * Clementine Network Discovery: You don't have to enter the ip, Clementine Remote finds Clementine Players itself in the network!
 
+__TRANSLATE:__
+We use [transifex](https://www.transifex.com/amuttsch/clementine-remote/dashboard/), you can login via your Github account or create a new one.
+
 __INSTALLATION DETAILS:__<br />
 Download Clementine 1.3 from here: http://www.clementine-player.org/downloads
 * The remote control is disabled by default. You have to activate it in the settings. *
