@@ -124,11 +124,10 @@ public class PreferencesInformationAbout extends PreferenceFragment {
             // Supporters
             tvSupporters.setText("David Sansome (Clementine-Dev)\n" +
                     "John Maguire (Clementine-Dev)\n" +
-                    "Arnaud Bienner (Clementine-Dev)");
+                    "Arnaud Bienner (Clementine-Dev)\n");
 
             // Others
-            tvOthers.setText(Html.fromHtml(
-                    "Thanks to all the <a href=\"https://github.com/clementine-player/Android-Remote/graphs/contributors\">contributors</a> and <a href=\"https://www.transifex.com/projects/p/clementine-remote/\">translators</a>!"));
+            tvOthers.setText(Html.fromHtml(getString(R.string.dialog_about_others_summary)));
             tvOthers.setMovementMethod(LinkMovementMethod.getInstance());
 
             return true;
