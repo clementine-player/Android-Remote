@@ -1,7 +1,7 @@
 package de.qspool.clementineremote.ui.dialogs;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
+import android.content.DialogInterface;
+import androidx.appcompat.app.AlertDialog;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -68,19 +68,17 @@ public class FileDialog {
      * @return file dialog
      */
     public Dialog createFileDialog() {
-        MaterialDialog.Builder builder = new MaterialDialog.Builder(activity);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
-        builder.title(currentPath.getPath());
+        builder.setTitle(currentPath.getPath());
         if (selectDirectoryOption) {
-            builder.positiveText(activity.getString(R.string.file_dialog_set_dir));
-            builder.negativeText(activity.getString(R.string.dialog_close));
+            builder.setPositiveButton(activity.getString(R.string.file_dialog_set_dir), null);
+            builder.setNegativeButton(activity.getString(R.string.dialog_close), null);
         }
 
-        builder.items(fileList);
-        builder.itemsCallback(new MaterialDialog.ListCallback() {
+        builder.setItems(fileList, new DialogInterface.OnClickListener() {
             @Override
-            public void onSelection(MaterialDialog materialDialog, View view, int i,
-                    CharSequence charSequence) {
+            public void onClick(DialogInterface dialog, int i) {
                 String fileChosen = fileList[i];
                 File chosenFile = getChosenFile(fileChosen);
                 if (chosenFile.isDirectory()) {
@@ -91,9 +89,14 @@ public class FileDialog {
                 }
             }
         });
-        builder.onPositive(new MaterialDialog.SingleButtonCallback() {
+        final AlertDialog dialog = builder.show();
+        if (!selectDirectoryOption) {
+            return dialog;
+        }
+        // Set the listener after show() so an unwritable directory keeps the dialog open.
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(MaterialDialog dialog, DialogAction which) {
+            public void onClick(View v) {
                 if (isCheckIfWritable()) {
                     // Check the external store state
                     File checkFile = new File(
@@ -117,7 +120,7 @@ public class FileDialog {
             }
         });
 
-        return builder.show();
+        return dialog;
     }
 
 

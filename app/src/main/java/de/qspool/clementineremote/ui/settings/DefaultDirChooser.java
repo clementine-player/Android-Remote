@@ -23,7 +23,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Environment;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,7 +59,6 @@ public class DefaultDirChooser {
         dialog.show();
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     private LinkedList<String> getDirectories() {
         LinkedList<String> directories = new LinkedList<>();
 

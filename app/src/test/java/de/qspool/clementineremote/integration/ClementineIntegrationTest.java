@@ -21,6 +21,7 @@ import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.GlobalSearchStatus;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Playlist;
@@ -260,6 +261,12 @@ public class ClementineIntegrationTest {
             for (SongMetadata song : results) {
                 assertEquals("Test Artist B", song.getArtist());
             }
+
+            // Stay connected until every search provider has answered: Clementine keeps a
+            // raw pointer to the requesting client and crashes if it has disconnected by
+            // the time a slower (internet radio) provider finishes.
+            session.await(MsgType.GLOBAL_SEARCH_STATUS, m -> m.getResponseGlobalSearchStatus()
+                    .getStatus() == GlobalSearchStatus.GlobalSearchFinished);
         }
     }
 

@@ -25,11 +25,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
+import androidx.core.content.ContextCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -184,10 +184,8 @@ public class GlobalSearchFragment extends Fragment
                 MenuInflater inflater = mode.getMenuInflater();
                 inflater.inflate(R.menu.global_search_context_menu, menu);
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    getActivity().getWindow()
-                            .setStatusBarColor(ContextCompat.getColor(getActivity(), R.color.grey_cab_status));
-                }
+                getActivity().getWindow()
+                        .setStatusBarColor(ContextCompat.getColor(getActivity(), R.color.grey_cab_status));
 
                 return true;
             }
@@ -200,11 +198,9 @@ public class GlobalSearchFragment extends Fragment
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    getActivity().getWindow()
-                            .setStatusBarColor(ContextCompat.getColor(getActivity(),
-                                    R.color.actionbar_dark));
-                }
+                getActivity().getWindow()
+                        .setStatusBarColor(ContextCompat.getColor(getActivity(),
+                                R.color.actionbar_dark));
             }
 
             @Override
@@ -281,7 +277,7 @@ public class GlobalSearchFragment extends Fragment
         searchView.setQueryHint(getString(R.string.global_search_search));
 
         EditText searchText = (EditText) searchView.findViewById(
-                android.support.v7.appcompat.R.id.search_src_text);
+                androidx.appcompat.R.id.search_src_text);
         searchText.setHintTextColor(ContextCompat.getColor(getActivity(),
                 R.color.searchview_edittext_hint));
 

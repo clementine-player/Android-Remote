@@ -1,6 +1,6 @@
 package de.qspool.clementineremote.utils;
 
-import com.afollestad.materialdialogs.MaterialDialog;
+import androidx.appcompat.app.AlertDialog;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -14,7 +14,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
-import android.support.v4.app.TaskStackBuilder;
+import androidx.core.app.TaskStackBuilder;
 import android.text.Html;
 
 import java.net.Inet4Address;
@@ -96,10 +96,10 @@ public class Utilities {
             content = message;
         }
 
-        return new MaterialDialog.Builder(context)
-                .title(title)
-                .content(content)
-                .negativeText(R.string.dialog_close)
+        return new AlertDialog.Builder(context)
+                .setTitle(title)
+                .setMessage(content)
+                .setNegativeButton(R.string.dialog_close, null)
                 .show();
     }
 
@@ -121,15 +121,9 @@ public class Utilities {
      *
      * @return The free space in byte
      */
-    @SuppressWarnings("deprecation")
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     public static double getFreeSpaceExternal() {
         StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            return (double) stat.getAvailableBlocks() * (double) stat.getBlockSize();
-        } else {
-            return (double) stat.getAvailableBlocksLong() * (double) stat.getBlockSizeLong();
-        }
+        return (double) stat.getAvailableBlocksLong() * (double) stat.getBlockSizeLong();
     }
 
     /**
@@ -137,15 +131,9 @@ public class Utilities {
      *
      * @return The free space in byte
      */
-    @SuppressWarnings("deprecation")
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     public static double getFreeSpaceInternal() {
         StatFs stat = new StatFs(App.getApp().getFilesDir().getPath());
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            return (double) stat.getAvailableBlocks() * (double) stat.getBlockSize();
-        } else {
-            return (double) stat.getAvailableBlocksLong() * (double) stat.getBlockSizeLong();
-        }
+        return (double) stat.getAvailableBlocksLong() * (double) stat.getBlockSizeLong();
     }
 
     /**
@@ -159,20 +147,15 @@ public class Utilities {
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         boolean onWifi = false;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Network[] networks = connManager.getAllNetworks();
-            NetworkInfo networkInfo;
-            for (Network mNetwork : networks) {
-                networkInfo = connManager.getNetworkInfo(mNetwork);
-                if (networkInfo.getState().equals(NetworkInfo.State.CONNECTED) &&
-                        networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-                    onWifi = true;
-                    break;
-                }
+        Network[] networks = connManager.getAllNetworks();
+        NetworkInfo networkInfo;
+        for (Network mNetwork : networks) {
+            networkInfo = connManager.getNetworkInfo(mNetwork);
+            if (networkInfo.getState().equals(NetworkInfo.State.CONNECTED) &&
+                    networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                onWifi = true;
+                break;
             }
-        } else {
-            //noinspection deprecation
-            onWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected();
         }
 
         return onWifi;

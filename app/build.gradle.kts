@@ -101,13 +101,14 @@ protobuf {
 }
 
 dependencies {
-    implementation(libs.support.v13)
-    implementation(libs.support.appcompat)
-    implementation(libs.support.recyclerview)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.drawerlayout)
+    implementation(libs.androidx.swiperefreshlayout)
+    implementation(libs.androidx.viewpager)
+    implementation(libs.androidx.legacy.support.v13)
     implementation(libs.protobuf.javalite)
     implementation(libs.jmdns)
-    implementation(libs.material.dialogs.core)
-    implementation(libs.material.dialogs.commons)
 
     testImplementation(libs.junit)
     testImplementation(libs.robolectric)

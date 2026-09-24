@@ -67,7 +67,6 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
 
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void registerSession() {
         Resources res = mContext.getResources();
@@ -93,9 +92,7 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
 
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mNotificationBuilder.setVisibility(Notification.VISIBILITY_PUBLIC);
-        }
+        mNotificationBuilder.setVisibility(Notification.VISIBILITY_PUBLIC);
 
         mNotificationBuilder.setContentIntent(Utilities.getClementineRemotePendingIntent(mContext));
 
@@ -155,20 +152,9 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
                         .getBroadcast(mContext, 0, intentNext,
                                 PendingIntent.FLAG_ONE_SHOT));
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-            notifyV15();
-        } else {
-            mNotificationManager.notify(NOTIFIFCATION_ID, mNotificationBuilder.build());
-        }
+        mNotificationManager.notify(NOTIFIFCATION_ID, mNotificationBuilder.build());
     }
 
-    @SuppressWarnings("deprecation")
-    private void notifyV15() {
-        //noinspection deprecation
-        mNotificationManager.notify(NOTIFIFCATION_ID, mNotificationBuilder.getNotification());
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void setMediaSessionCompat(MediaSession mediaSession) {
         if (mediaSession == null) {
             return;

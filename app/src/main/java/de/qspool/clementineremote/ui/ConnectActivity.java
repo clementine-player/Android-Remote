@@ -17,8 +17,11 @@
 
 package de.qspool.clementineremote.ui;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import android.widget.EditText;
+import de.qspool.clementineremote.ui.dialogs.ProgressDialog;
+import androidx.appcompat.app.AlertDialog;
 
 import android.Manifest;
 import android.app.Activity;
@@ -38,10 +41,10 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -100,7 +103,7 @@ public class ConnectActivity extends AppCompatActivity {
 
     private AutoCompleteTextView mEtIp;
 
-    MaterialDialog mPdConnect;
+    ProgressDialog mPdConnect;
 
     private SharedPreferences mSharedPref;
 
@@ -122,7 +125,7 @@ public class ConnectActivity extends AppCompatActivity {
 
     private Set<String> mKnownIps;
 
-    private MaterialDialog mServiceInfoDialog;
+    private AlertDialog mServiceInfoDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -232,13 +235,12 @@ public class ConnectActivity extends AppCompatActivity {
                 ContextCompat.checkSelfPermission(this,
                         Manifest.permission.READ_PHONE_STATE)
                         != PackageManager.PERMISSION_GRANTED) {
-            new MaterialDialog.Builder(this)
-                    .title(R.string.permissions_required_title)
-                    .content(R.string.permissions_required_text)
-                    .negativeText(R.string.dialog_continue)
-                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.permissions_required_title)
+                    .setMessage(R.string.permissions_required_text)
+                    .setNegativeButton(R.string.dialog_continue, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                        public void onClick(DialogInterface dialog, int which) {
                             ActivityCompat.requestPermissions(ConnectActivity.this,
                                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
                                             Manifest.permission.READ_PHONE_STATE},
@@ -304,10 +306,10 @@ public class ConnectActivity extends AppCompatActivity {
             // Only when we have Jelly Bean or higher
             if (!mClementineMDns.getServices().isEmpty()) {
                 mAnimationCancel = true;
-                final MaterialDialog.Builder builder = new MaterialDialog.Builder(
+                final AlertDialog.Builder builder = new AlertDialog.Builder(
                         ConnectActivity.this);
 
-                builder.title(R.string.connectdialog_services);
+                builder.setTitle(R.string.connectdialog_services);
                 ServiceInfoAdapter adapter = new ServiceInfoAdapter(mClementineMDns.getServices());
                 adapter.setListener(new ServiceInfoAdapter.ItemClickListener() {
                     @Override
@@ -327,8 +329,11 @@ public class ConnectActivity extends AppCompatActivity {
                         connect();
                     }
                 });
-                builder.adapter(adapter, null);
-                builder.negativeText(R.string.dialog_close);
+                RecyclerView services = new RecyclerView(ConnectActivity.this);
+                services.setLayoutManager(new LinearLayoutManager(ConnectActivity.this));
+                services.setAdapter(adapter);
+                builder.setView(services);
+                builder.setNegativeButton(R.string.dialog_close, null);
                 mServiceInfoDialog = builder.show();
             }
         }
@@ -374,12 +379,8 @@ public class ConnectActivity extends AppCompatActivity {
         editor.apply();
 
         // Create a progress dialog
-        mPdConnect = new MaterialDialog.Builder(this)
-                .cancelable(true)
-                .cancelListener(oclProgressDialog)
-                .content(R.string.connectdialog_connecting)
-                .progress(true, -1)
-                .show();
+        mPdConnect = ProgressDialog.showIndeterminate(this, 0,
+                R.string.connectdialog_connecting, true, oclProgressDialog);
 
         // Start the service so it won't be stopped on unbindService
         Intent serviceIntent = new Intent(this, ClementineService.class);
@@ -430,23 +431,28 @@ public class ConnectActivity extends AppCompatActivity {
      * Show the user the dialog to enter the auth code
      */
     void showAuthCodePromt() {
-        new MaterialDialog.Builder(this)
-                .title(R.string.input_auth_code)
-                .inputType(InputType.TYPE_CLASS_NUMBER)
-                .input("", "", false, new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(MaterialDialog dialog, CharSequence input) {
-                        try {
-                            mAuthCode = Integer.parseInt(input.toString());
-                            dialog.dismiss();
-                            connect();
-                        } catch (NumberFormatException e) {
-                            Toast.makeText(ConnectActivity.this, R.string.invalid_code,
-                                    Toast.LENGTH_SHORT)
-                                    .show();
-                        }
-                    }
-                }).show();
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        final AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.input_auth_code)
+                .setView(input)
+                .setPositiveButton(android.R.string.ok, null)
+                .show();
+        // Set the listener after show() so an invalid code keeps the dialog open.
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    mAuthCode = Integer.parseInt(input.getText().toString());
+                    dialog.dismiss();
+                    connect();
+                } catch (NumberFormatException e) {
+                    Toast.makeText(ConnectActivity.this, R.string.invalid_code,
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
+        });
     }
 
     /**
@@ -534,6 +540,7 @@ public class ConnectActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ID_PLAYER_DIALOG) {
             if (resultCode == Activity.RESULT_CANCELED || resultCode == RESULT_QUIT) {
                 finish();

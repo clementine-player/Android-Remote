@@ -1,9 +1,9 @@
 package de.qspool.clementineremote.ui.dialogs;
 
-import com.afollestad.materialdialogs.MaterialDialog;
+import androidx.appcompat.app.AlertDialog;
 
 import android.content.Context;
-import android.view.View;
+import android.content.DialogInterface;
 
 import de.qspool.clementineremote.R;
 
@@ -31,15 +31,13 @@ public class DownloadChooserDialog {
     }
 
     public void showDialog() {
-        MaterialDialog.Builder builder = new MaterialDialog.Builder(mContext);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 
-        builder.title(R.string.player_download_what);
-        builder.negativeText(R.string.dialog_close);
-        builder.items(R.array.player_download_list);
-        builder.itemsCallback(new MaterialDialog.ListCallback() {
+        builder.setTitle(R.string.player_download_what);
+        builder.setNegativeButton(R.string.dialog_close, null);
+        builder.setItems(R.array.player_download_list, new DialogInterface.OnClickListener() {
             @Override
-            public void onSelection(MaterialDialog materialDialog, View view, int i,
-                    CharSequence charSequence) {
+            public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case 0:
                         mCallback.onItemClick(Type.SONG);

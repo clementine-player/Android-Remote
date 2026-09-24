@@ -33,7 +33,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
+import androidx.core.app.NotificationCompat;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
@@ -253,7 +253,7 @@ public class ClementineService extends Service {
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(getString(R.string.notification_disconnect_keep_alive))
                 .setAutoCancel(true)
-                .setVisibility(Notification.VISIBILITY_PUBLIC)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setContentIntent(Utilities.getClementineRemotePendingIntent(this))
                 .build();
         mNotificationManager

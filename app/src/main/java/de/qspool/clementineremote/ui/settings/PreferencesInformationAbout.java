@@ -17,7 +17,7 @@
 
 package de.qspool.clementineremote.ui.settings;
 
-import com.afollestad.materialdialogs.MaterialDialog;
+import androidx.appcompat.app.AlertDialog;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -104,14 +104,13 @@ public class PreferencesInformationAbout extends PreferenceFragment {
 
         @Override
         public boolean onPreferenceClick(Preference preference) {
-            MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                    .title(R.string.pref_about_title)
-                    .negativeText(R.string.dialog_close)
-                    .customView(R.layout.dialog_about, false)
-                    .cancelable(true)
+            View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_about, null);
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.pref_about_title)
+                    .setNegativeButton(R.string.dialog_close, null)
+                    .setView(view)
+                    .setCancelable(true)
                     .show();
-
-            View view = dialog.getCustomView();
 
             // Fill the people working on this project
             TextView tvAuthors = (TextView) view.findViewById(R.id.tvAuthors);
