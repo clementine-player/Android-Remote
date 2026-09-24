@@ -55,6 +55,20 @@ android {
 
     testOptions {
         unitTests.isIncludeAndroidResources = true
+        unitTests.all { test ->
+            // Integration tests against a real Clementine (see clementine-it/) run only
+            // when a host is given: ./gradlew testDebugUnitTest -Pclementine.host=localhost
+            val host = project.findProperty("clementine.host") as String?
+            if (host == null) {
+                test.exclude("**/integration/**")
+            } else {
+                test.systemProperty("clementine.host", host)
+                listOf("clementine.port", "clementine.authCode").forEach { name ->
+                    project.findProperty(name)?.let { test.systemProperty(name, it) }
+                }
+                test.outputs.upToDateWhen { false }
+            }
+        }
     }
 
     lint {

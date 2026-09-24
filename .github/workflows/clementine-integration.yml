@@ -1,0 +1,88 @@
+# Runs the app's protocol code against a real, headless Clementine built from
+# source, and checks the protocol definition for drift from Clementine's.
+name: clementine-integration
+on:
+  push:
+    branches: [master]
+  pull_request:
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+    inputs:
+      clementine_ref:
+        description: Clementine branch, tag or commit to test against
+        default: master
+
+env:
+  CLEMENTINE_REF: ${{ inputs.clementine_ref || 'master' }}
+  AUTH_CODE: "12345"
+
+jobs:
+  proto-drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: clementine-player/Clementine
+          ref: ${{ env.CLEMENTINE_REF }}
+          path: clementine-src
+          sparse-checkout: ext/libclementine-remote
+      - run: sudo apt-get update && sudo apt-get install -y protobuf-compiler python3-protobuf
+      - run: >
+          python3 scripts/check-proto-drift.py
+          app/src/main/proto/remotecontrolmessages.proto
+          clementine-src/ext/libclementine-remote/remotecontrolmessages.proto
+
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: clementine-player/Clementine
+          ref: ${{ env.CLEMENTINE_REF }}
+          path: clementine-src
+
+      - uses: docker/setup-buildx-action@v3
+      - name: Build headless Clementine
+        uses: docker/build-push-action@v6
+        with:
+          context: clementine-it
+          build-contexts: clementine=clementine-src
+          tags: clementine-it
+          load: true
+          cache-from: type=gha,scope=clementine-it
+          cache-to: type=gha,scope=clementine-it,mode=max
+
+      - name: Start Clementine
+        run: |
+          docker run -d --name clementine -p 5500:5500 -e AUTH_CODE="$AUTH_CODE" clementine-it
+          for i in $(seq 90); do
+            status=$(docker inspect -f '{{.State.Health.Status}}' clementine)
+            [ "$status" = healthy ] && exit 0
+            [ "$(docker inspect -f '{{.State.Running}}' clementine)" = true ] || break
+            sleep 2
+          done
+          docker logs clementine
+          exit 1
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Integration tests
+        run: >
+          ./gradlew testDebugUnitTest --tests 'de.qspool.clementineremote.integration.*'
+          -Pclementine.host=localhost -Pclementine.authCode="$AUTH_CODE"
+
+      - name: Clementine log
+        if: always()
+        run: docker logs clementine 2>&1 | tail -n 300
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: integration-reports
+          path: app/build/reports/tests/
