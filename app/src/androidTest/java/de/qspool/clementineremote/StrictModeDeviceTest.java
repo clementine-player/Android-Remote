@@ -18,9 +18,10 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import de.qspool.clementineremote.ui.ConnectActivity;
@@ -91,24 +92,39 @@ public class StrictModeDeviceTest {
         System.runFinalization();
         InstrumentationRegistry.getInstrumentation().waitForIdleSync();
 
-        Set<String> seen = new TreeSet<>();
+        // Signature -> first violation with it, for its stack.
+        Map<String, Violation> seen = new TreeMap<>();
         synchronized (this) {
             for (Violation violation : mViolations) {
                 String signature = signature(violation);
-                if (seen.add(signature)) {
+                if (!seen.containsKey(signature)) {
+                    seen.put(signature, violation);
                     Log.w(TAG, signature, violation);
                 }
             }
         }
 
         Set<String> baseline = baseline();
-        Set<String> unexpected = new LinkedHashSet<>(seen);
-        unexpected.removeAll(baseline);
-        Log.i(TAG, "All signatures seen:\n" + String.join("\n", seen));
-        if (!unexpected.isEmpty()) {
-            fail("New StrictMode violations (see logcat tag " + TAG + " for stacks):\n"
-                    + String.join("\n", unexpected));
+        Log.i(TAG, "All signatures seen:\n" + String.join("\n", seen.keySet()));
+        StringBuilder unexpected = new StringBuilder();
+        for (Map.Entry<String, Violation> entry : seen.entrySet()) {
+            if (!baseline.contains(entry.getKey())) {
+                unexpected.append('\n').append(entry.getKey()).append(trimmedStack(entry.getValue()));
+            }
         }
+        if (unexpected.length() > 0) {
+            fail("New StrictMode violations:" + unexpected);
+        }
+    }
+
+    /** The first frames of a violation's stack, enough to see what did the I/O. */
+    private static String trimmedStack(Violation violation) {
+        StringBuilder out = new StringBuilder();
+        StackTraceElement[] stack = violation.getStackTrace();
+        for (int i = 0; i < Math.min(stack.length, 25); i++) {
+            out.append("\n    at ").append(stack[i]);
+        }
+        return out.toString();
     }
 
     /** "ViolationType at first.app.Class.method", or the first frame if none is ours. */
