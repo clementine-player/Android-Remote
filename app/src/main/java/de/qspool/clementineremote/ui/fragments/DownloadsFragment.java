@@ -199,8 +199,8 @@ public class DownloadsFragment extends Fragment implements BackPressHandleable, 
         Intent mediaIntent = new Intent();
         mediaIntent.setAction(Intent.ACTION_VIEW);
         mediaIntent.setDataAndType(file, "audio/*");
-        mediaIntent.addFlags(
-                Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        mediaIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP
+                | Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
         if (mediaIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivity(mediaIntent);

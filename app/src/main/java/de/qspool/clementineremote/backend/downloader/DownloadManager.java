@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Environment;
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.TaskStackBuilder;
 import android.util.SparseArray;
@@ -177,21 +178,13 @@ public class DownloadManager {
         mSharedPref = App.getPreferences();
 
         // Get preferences and set download settings
-        String defaultPath;
-        if (mContext.getExternalFilesDir(Environment.DIRECTORY_MUSIC) == null &&
-                !mSharedPref.contains(SharedPreferencesKeys.SP_DOWNLOAD_DIR)) {
+        DownloadStorage storage = createStorage();
+        if (storage == null) {
             Toast.makeText(mContext, R.string.download_noti_not_mounted, Toast.LENGTH_LONG).show();
             return false;
-        } else {
-            File defaultFile = mContext.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
-            if (defaultFile != null)
-                defaultPath = defaultFile.getAbsolutePath();
-            else
-                defaultPath = "";
         }
 
-        songDownloader.setDownloadPath(
-                mSharedPref.getString(SharedPreferencesKeys.SP_DOWNLOAD_DIR, defaultPath));
+        songDownloader.setStorage(storage);
         songDownloader.setDownloadOnWifiOnly(
                 mSharedPref.getBoolean(SharedPreferencesKeys.SP_WIFI_ONLY, false));
         songDownloader.setCreatePlaylistDir(mSharedPref
@@ -213,6 +206,24 @@ public class DownloadManager {
         songDownloader.startDownload(clementineMessage);
 
         return true;
+    }
+
+    /**
+     * Songs go to the shared Music collection on Android 10 and later, and to the directory
+     * picked in the settings before that. Returns null if there is nowhere to save them.
+     */
+    @Nullable
+    private DownloadStorage createStorage() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return new MediaStoreDownloadStorage(mContext);
+        }
+
+        String path = mSharedPref.getString(SharedPreferencesKeys.SP_DOWNLOAD_DIR, null);
+        if (path != null) {
+            return new FileDownloadStorage(mContext, new File(path));
+        }
+        File defaultDir = mContext.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
+        return defaultDir == null ? null : new FileDownloadStorage(mContext, defaultDir);
     }
 
     public List<ClementineSongDownloader> getAllDownloaders() {
