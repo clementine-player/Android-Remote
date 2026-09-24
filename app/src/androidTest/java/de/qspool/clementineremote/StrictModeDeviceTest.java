@@ -122,7 +122,7 @@ public class StrictModeDeviceTest {
         StringBuilder out = new StringBuilder();
         StackTraceElement[] stack = violation.getStackTrace();
         for (int i = 0; i < Math.min(stack.length, 25); i++) {
-            out.append("\n    at ").append(stack[i]);
+            out.append("\n    > ").append(stack[i]);
         }
         return out.toString();
     }
