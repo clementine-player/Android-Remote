@@ -21,8 +21,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 
+import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.Clementine;
@@ -41,8 +41,7 @@ public class PreferencesBehaviorPlayer extends PreferenceFragment implements
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preference_player);
 
-        SharedPreferences sharedPreferences = PreferenceManager
-                .getDefaultSharedPreferences(getActivity());
+        SharedPreferences sharedPreferences = App.getPreferences();
 
         mCallVolume = (ListPreference) getPreferenceScreen()
                 .findPreference(SharedPreferencesKeys.SP_CALL_VOLUME);

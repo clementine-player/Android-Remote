@@ -28,7 +28,6 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -106,7 +105,7 @@ public class SongDetailFragment extends Fragment
         super.onCreate(savedInstanceState);
 
         // Get the shared preferences
-        mSharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        mSharedPref = App.getPreferences();
 
         setHasOptionsMenu(true);
     }

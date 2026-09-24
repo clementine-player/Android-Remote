@@ -30,7 +30,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -107,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // Keep screen on if user has requested this in preferences
-        if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+        if (App.getPreferences()
                 .getBoolean(SharedPreferencesKeys.SP_KEEP_SCREEN_ON, true)
                 && Utilities.isRemoteConnected()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -117,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
         EdgeToEdge.apply(this);
 
-        mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        mSharedPref = App.getPreferences();
 
         /*
          * Define here the available fragments in the main layout
@@ -239,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         // Check if the user has changed the preferences to keep the screen on
-        if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+        if (App.getPreferences()
                 .getBoolean(SharedPreferencesKeys.SP_KEEP_SCREEN_ON, true)
                 && Utilities.isRemoteConnected()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

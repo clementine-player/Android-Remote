@@ -22,11 +22,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import java.io.File;
 
+import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.ui.dialogs.FileDialog;
@@ -57,8 +57,7 @@ public class PreferencesBehaviorDownloads extends PreferenceFragment {
             }
         });
 
-        SharedPreferences sharedPreferences = PreferenceManager
-                .getDefaultSharedPreferences(getActivity());
+        SharedPreferences sharedPreferences = App.getPreferences();
 
         // Create dialog
         String defaultPath = getActivity().getExternalFilesDir(Environment.DIRECTORY_MUSIC)

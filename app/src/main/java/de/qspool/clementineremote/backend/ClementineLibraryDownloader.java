@@ -21,13 +21,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.LinkedList;
 
+import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.elements.DownloaderResult;
 import de.qspool.clementineremote.backend.elements.DownloaderResult.DownloadResult;
@@ -60,7 +60,7 @@ public class ClementineLibraryDownloader extends
     public ClementineLibraryDownloader(Context context) {
         mContext = context;
         mLibrary = new LibraryDatabaseHelper();
-        mSharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
+        mSharedPref = App.getPreferences();
     }
 
     /**

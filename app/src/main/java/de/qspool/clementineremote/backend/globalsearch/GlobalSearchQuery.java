@@ -7,8 +7,8 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.preference.PreferenceManager;
 
+import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.database.DynamicSongQuery;
 import de.qspool.clementineremote.backend.database.SongSelectItem;
@@ -24,8 +24,7 @@ public class GlobalSearchQuery extends DynamicSongQuery {
 
     @Override
     protected String[] getSelectedFields() {
-        SharedPreferences sharedPreferences = PreferenceManager
-                .getDefaultSharedPreferences(mContext);
+        SharedPreferences sharedPreferences = App.getPreferences();
 
         String grouping = sharedPreferences.getString(SharedPreferencesKeys.SP_LIBRARY_GROUPING,
                 "artist-album");
@@ -62,8 +61,7 @@ public class GlobalSearchQuery extends DynamicSongQuery {
 
     @Override
     protected String getSorting() {
-        SharedPreferences sharedPreferences = PreferenceManager
-                .getDefaultSharedPreferences(mContext);
+        SharedPreferences sharedPreferences = App.getPreferences();
 
         return sharedPreferences.getString(SharedPreferencesKeys.SP_LIBRARY_SORTING, "ASC");
     }

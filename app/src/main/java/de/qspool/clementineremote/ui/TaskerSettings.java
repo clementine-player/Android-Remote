@@ -21,7 +21,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
@@ -32,6 +31,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 
+import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.Clementine;
@@ -83,7 +83,7 @@ public class TaskerSettings extends AppCompatActivity {
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        mSharedPref = App.getPreferences();
         mIp = (EditText) findViewById(R.id.tasker_ip);
         mPort = (EditText) findViewById(R.id.tasker_port);
         mAuth = (EditText) findViewById(R.id.tasker_auth);

@@ -20,7 +20,6 @@ package de.qspool.clementineremote.ui.settings;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -34,6 +33,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.ui.EdgeToEdge;
 import de.qspool.clementineremote.SharedPreferencesKeys;
@@ -58,8 +58,7 @@ public class ClementineSettings extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Keep screen on if user has requested this in preferences
-        if (PreferenceManager
-                .getDefaultSharedPreferences(this)
+        if (App.getPreferences()
                 .getBoolean(SharedPreferencesKeys.SP_KEEP_SCREEN_ON, true)
                 && Utilities.isRemoteConnected()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

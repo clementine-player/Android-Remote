@@ -26,7 +26,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import androidx.core.content.ContextCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.ActionBar;
@@ -254,8 +253,7 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
         mActionBar.setTitle("");
         mActionBar.setSubtitle("/");
 
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(getActivity());
+        SharedPreferences prefs = App.getPreferences();
         prefs.registerOnSharedPreferenceChangeListener(this);
 
         setHasOptionsMenu(true);
@@ -267,8 +265,7 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
     public void onDestroyView() {
         super.onDestroyView();
 
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(getActivity());
+        SharedPreferences prefs = App.getPreferences();
         prefs.unregisterOnSharedPreferenceChangeListener(this);
 
         mAdapters.clear();

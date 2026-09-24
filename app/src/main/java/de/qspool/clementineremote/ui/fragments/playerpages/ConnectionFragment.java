@@ -24,7 +24,6 @@ import android.content.SharedPreferences;
 import android.net.TrafficStats;
 import android.os.Bundle;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,7 +70,7 @@ public class ConnectionFragment extends Fragment
         super.onCreate(savedInstanceState);
 
         // Get the shared preferences
-        mSharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        mSharedPref = App.getPreferences();
 
         setHasOptionsMenu(true);
     }

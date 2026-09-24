@@ -41,7 +41,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
@@ -138,7 +137,7 @@ public class ConnectActivity extends AppCompatActivity {
 
         EdgeToEdge.apply(this);
 
-        mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        mSharedPref = App.getPreferences();
         mKnownIps = mSharedPref
                 .getStringSet(SharedPreferencesKeys.SP_KNOWN_IP, new LinkedHashSet<String>());
 

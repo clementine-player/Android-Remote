@@ -21,7 +21,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.preference.PreferenceManager;
 
 import java.io.File;
 
@@ -101,7 +100,7 @@ public class LibraryDatabaseHelper {
      * ip that the ip from the library. False otherwise
      */
     public boolean removeDatabaseIfFromOtherClementine() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(App.getApp());
+        SharedPreferences prefs = App.getPreferences();
         String libraryClementine = prefs.getString(SharedPreferencesKeys.SP_LIBRARY_IP, "");
         String currentClementine = prefs.getString(SharedPreferencesKeys.SP_KEY_IP, "");
 

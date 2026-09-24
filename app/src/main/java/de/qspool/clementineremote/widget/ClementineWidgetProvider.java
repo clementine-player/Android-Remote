@@ -24,7 +24,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 
 import de.qspool.clementineremote.App;
@@ -93,7 +92,7 @@ public class ClementineWidgetProvider extends AppWidgetProvider {
     }
 
     private void updateViewsOnConnectionStatusChange(Context context, RemoteViews views) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences prefs = App.getPreferences();
         boolean canConnect = prefs.contains(SharedPreferencesKeys.SP_KEY_IP);
 
         views.setBoolean(R.id.widget_btn_play_pause, "setEnabled", false);

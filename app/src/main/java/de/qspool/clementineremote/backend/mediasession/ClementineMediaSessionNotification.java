@@ -30,7 +30,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.session.MediaSession;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 
 import de.qspool.clementineremote.App;
@@ -62,7 +61,7 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
         super(context);
         mNotificationManager = (NotificationManager) mContext.getSystemService(
                 Context.NOTIFICATION_SERVICE);
-        SharedPreferences colorPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences colorPreferences = App.getPreferences();
         mTurnColor = colorPreferences.getBoolean("pref_noti_color", false);
 
     }
