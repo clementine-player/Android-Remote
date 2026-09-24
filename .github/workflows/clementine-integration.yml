@@ -104,9 +104,11 @@ jobs:
           ./gradlew testDebugUnitTest --tests 'de.qspool.clementineremote.integration.*'
           -Pclementine.host=localhost -Pclementine.authCode="$AUTH_CODE"
 
-      - name: Clementine log
+      - name: Clementine state and log
         if: always()
-        run: docker logs clementine 2>&1 | tail -n 300
+        run: |
+          docker inspect -f 'status={{.State.Status}} exit={{.State.ExitCode}} oom={{.State.OOMKilled}} error={{.State.Error}}' clementine || true
+          docker logs clementine 2>&1 | grep -v GstEnginePipeline | tail -n 300
       - uses: actions/upload-artifact@v5
         if: always()
         with:

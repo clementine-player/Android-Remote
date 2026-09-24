@@ -1,3 +1,4 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import java.util.Properties
 
 plugins {
@@ -56,6 +57,10 @@ android {
     testOptions {
         unitTests.isIncludeAndroidResources = true
         unitTests.all { test ->
+            test.testLogging {
+                events("failed")
+                exceptionFormat = TestExceptionFormat.FULL
+            }
             // Integration tests against a real Clementine (see clementine-it/) run only
             // when a host is given: ./gradlew testDebugUnitTest -Pclementine.host=localhost
             val host = project.findProperty("clementine.host") as String?

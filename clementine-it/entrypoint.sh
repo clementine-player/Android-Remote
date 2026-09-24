@@ -29,6 +29,10 @@ convert_lossless=false
 [GstEngine]
 sink=pulsesink
 
+[MainWindow]
+# Remote CHANGE_SONG plays the song rather than queueing it.
+doubleclick_playlist_addmode=1
+
 [General]
 startupbehaviour=1
 CONF
@@ -71,9 +75,16 @@ trap 'kill $pid 2>/dev/null' TERM INT
 wait_for "network remote" "nc -z localhost 5500"
 wait_for "library scan" \
   "[ \"\$(sqlite3 '$DB' 'select count(*) from songs where unavailable = 0' 2>/dev/null)\" = 10 ]"
-# Replace the playlist with the library, in path order, and leave it stopped.
+# Replace the playlist with the library, in path order, and leave it stopped
+# (loading starts playback).
 find /music -name '*.ogg' | sort | xargs -d '\n' clementine --load >/dev/null 2>&1
+sleep 1
+clementine --stop >/dev/null 2>&1
 touch /tmp/clementine-ready
 echo "Clementine ready on port 5500"
 
+set +e
 wait "$pid"
+status=$?
+echo "Clementine exited with status $status" >&2
+exit "$status"
