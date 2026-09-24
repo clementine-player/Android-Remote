@@ -23,6 +23,9 @@ import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import androidx.annotation.WorkerThread;
+
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -62,6 +65,9 @@ public class MySong {
     private int playcount;
 
     private byte[] art;
+
+    /** The decoded cover, or null if there is none or it could not be decoded. */
+    private Bitmap artBitmap;
 
     private boolean loved;
 
@@ -243,20 +249,34 @@ public class MySong {
         this.playcount = playcount;
     }
 
+    /**
+     * The cover art, or the "no cover" image. Cheap: the cover was decoded when the song was
+     * created, on the connection thread, so the UI never decodes it.
+     */
     public Bitmap getArt() {
-        if (art == null) {
-            return BitmapFactory.decodeResource(App.getApp().getResources(), R.drawable.nocover);
-        } else {
-            Bitmap b = BitmapFactory.decodeByteArray(art, 0, art.length);
-            if (b == null) // art cannot be decoded, use no cover instead
-                return BitmapFactory.decodeResource(App.getApp().getResources(), R.drawable.nocover);
-            else
-                return b;
+        if (artBitmap != null) {
+            return artBitmap;
         }
+        return BitmapFactory.decodeResource(App.getApp().getResources(), R.drawable.nocover);
     }
 
+    /**
+     * Sets and decodes the cover art. Songs with art come from Clementine's messages, which
+     * are parsed on the connection or downloader thread, so decoding here keeps it off the
+     * UI thread.
+     */
+    @WorkerThread
     public void setArt(ByteString byteString) {
         this.art = byteString.toByteArray();
+        this.artBitmap = BitmapFactory.decodeByteArray(art, 0, art.length);
+    }
+
+    /**
+     * Whether both songs have the same cover art (or both have none), comparing the
+     * compressed bytes Clementine sent rather than pixels.
+     */
+    public boolean hasSameArt(MySong other) {
+        return other != null && Arrays.equals(art, other.art);
     }
 
     public boolean isLoved() {

@@ -22,6 +22,8 @@ import de.qspool.clementineremote.ui.dialogs.ProgressDialog;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.graphics.Bitmap;
+
+import androidx.annotation.MainThread;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.LayoutInflater;
@@ -271,6 +273,7 @@ public class PlayerPageFragment extends Fragment
      * The track changed. Update the metadata shown on the user interface
      */
     @SuppressLint("NewApi")
+    @MainThread
     public void updateTrackMetadata() {
         // Get the currently played song
         MySong currentSong = App.Clementine.getCurrentSong();
@@ -295,14 +298,13 @@ public class PlayerPageFragment extends Fragment
             mTvGenre.setText(currentSong.getGenre());
             mTvYear.setText(currentSong.getYear());
 
-            // Check if a coverart is valid
+            // Transit only if the cover changed. Compare the bytes Clementine sent: a pixel
+            // comparison (Bitmap.sameAs) is too slow for the UI thread (issue #222).
             Bitmap newArt = currentSong.getArt();
-            Bitmap oldArt = mCurrentSong.getArt();
 
             if (newArt == null) {
                 mImgArt.setImageResource(R.drawable.icon_large);
-            } else if (oldArt == null
-                    || !oldArt.sameAs(newArt)) {
+            } else if (!currentSong.hasSameArt(mCurrentSong)) {
                 // Transit only if the cover changed
                 if (mFirstCall) {
                     mImgArt.setImageBitmap(newArt);
