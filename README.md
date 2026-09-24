@@ -59,7 +59,6 @@ __PERMISSIONS:__<br />
 * android.permission.WAKE_LOCK: The device is in partial wake mode when connect to increase stability.
 * android.permission.READ_PHONE_STATE: Is needed to detect calls and lower Clementine volume.
 * android.permission.WRITE_EXTERNAL_STORAGE: For downloading songs.
-* com.android.vending.BILLING: Is needed for doing donations.
 
 [1]: https://github.com/clementine-player/Android-Remote/workflows/ci/badge.svg
 [2]: https://github.com/clementine-player/Android-Remote/actions
