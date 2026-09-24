@@ -109,11 +109,11 @@ public class StrictModeDeviceTest {
         StringBuilder unexpected = new StringBuilder();
         for (Map.Entry<String, Violation> entry : seen.entrySet()) {
             if (!baseline.contains(entry.getKey())) {
-                unexpected.append('\n').append(entry.getKey()).append(trimmedStack(entry.getValue()));
+                unexpected.append(" | ").append(entry.getKey()).append(": ").append(trimmedStack(entry.getValue()));
             }
         }
         if (unexpected.length() > 0) {
-            fail("New StrictMode violations:" + unexpected);
+            fail("New StrictMode violations" + unexpected);
         }
     }
 
@@ -122,7 +122,8 @@ public class StrictModeDeviceTest {
         StringBuilder out = new StringBuilder();
         StackTraceElement[] stack = violation.getStackTrace();
         for (int i = 0; i < Math.min(stack.length, 25); i++) {
-            out.append("\n    > ").append(stack[i]);
+            // One line: the console only shows the start of a failure message.
+            out.append(" < ").append(stack[i]);
         }
         return out.toString();
     }
