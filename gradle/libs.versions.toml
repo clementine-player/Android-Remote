@@ -6,6 +6,7 @@ supportLib = "28.0.0"
 materialDialogs = "0.9.6.0"
 jmdns = "3.5.4"
 junit = "4.13.2"
+robolectric = "4.17"
 
 [libraries]
 support-v13 = { module = "com.android.support:support-v13", version.ref = "supportLib" }
@@ -17,6 +18,7 @@ jmdns = { module = "org.jmdns:jmdns", version.ref = "jmdns" }
 material-dialogs-core = { module = "com.afollestad.material-dialogs:core", version.ref = "materialDialogs" }
 material-dialogs-commons = { module = "com.afollestad.material-dialogs:commons", version.ref = "materialDialogs" }
 junit = { module = "junit:junit", version.ref = "junit" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

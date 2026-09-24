@@ -53,6 +53,10 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
+
     lint {
         disable += "MissingQuantity"
         // Existing issues are recorded in the baseline; CI fails on new ones.
@@ -87,4 +91,5 @@ dependencies {
     implementation(libs.material.dialogs.commons)
 
     testImplementation(libs.junit)
+    testImplementation(libs.robolectric)
 }
