@@ -23,7 +23,7 @@ A normal `./gradlew test` skips them.
 
 ```sh
 gh release download --repo clementine-player/Clementine \
-    --pattern '*~resolute_amd64.deb' --dir clementine-it
+    --pattern '*resolute_amd64.deb' --dir clementine-it
 docker build -t clementine-it clementine-it
 docker run --rm -d --name clementine -p 5500:5500 -e AUTH_CODE=12345 clementine-it
 # wait until `docker inspect -f '{{.State.Health.Status}}' clementine` says healthy

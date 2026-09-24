@@ -4,7 +4,7 @@
 # Installs a Clementine release .deb for Ubuntu Resolute, which Clementine's CI
 # publishes with every release. Put it next to this file first, e.g.:
 #   gh release download --repo clementine-player/Clementine \
-#     --pattern '*~resolute_amd64.deb' --dir clementine-it
+#     --pattern '*resolute_amd64.deb' --dir clementine-it
 #   docker build -t clementine-it clementine-it
 #   docker run --rm -p 5500:5500 clementine-it
 
@@ -20,7 +20,7 @@ RUN generate-music.sh /music
 
 FROM ${UBUNTU}
 ENV DEBIAN_FRONTEND=noninteractive
-COPY clementine_*~resolute_amd64.deb /tmp/
+COPY clementine_*resolute_amd64.deb /tmp/
 # apt resolves the .deb's Depends. PulseAudio's null sink gives real-time
 # playback without audio hardware.
 RUN apt-get update && apt-get install -y --no-install-recommends \
