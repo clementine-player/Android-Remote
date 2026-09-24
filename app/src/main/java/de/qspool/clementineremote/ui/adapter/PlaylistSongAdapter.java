@@ -21,7 +21,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -62,7 +61,7 @@ public class PlaylistSongAdapter extends ArrayAdapter<MySong> implements Filtera
         mData = data;
         mOrigData = new LinkedList<>(data);
 
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences sharedPref = App.getPreferences();
         mShowTrackNo = sharedPref.getBoolean(SharedPreferencesKeys.SP_SHOW_TRACKNO, true);
     }
 

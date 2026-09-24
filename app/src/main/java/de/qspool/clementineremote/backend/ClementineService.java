@@ -33,7 +33,6 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.ServiceCompat;
@@ -117,7 +116,7 @@ public class ClementineService extends Service {
                 Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "clementine:service");
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences prefs = App.getPreferences();
         mUseWakeLock = prefs.getBoolean(SharedPreferencesKeys.SP_WAKE_LOCK, false);
     }
 

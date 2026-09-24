@@ -1,0 +1,3 @@
+# StrictMode violations the app is known to have, one signature per line, each with the
+# reason it is accepted for now. StrictModeDeviceTest fails on any signature not listed.
+# Signature format: <ViolationType> at <first app class.method in the stack>

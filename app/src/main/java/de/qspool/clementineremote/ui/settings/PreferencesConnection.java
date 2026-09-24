@@ -22,9 +22,9 @@ import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 import android.widget.Toast;
 
+import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.Clementine;
@@ -44,8 +44,7 @@ public class PreferencesConnection extends PreferenceFragment implements
         // Read the port and fill in the summary
         mPortPreference = (EditTextPreference) getPreferenceScreen()
                 .findPreference(SharedPreferencesKeys.SP_KEY_PORT);
-        SharedPreferences sharedPreferences = PreferenceManager
-                .getDefaultSharedPreferences(getActivity());
+        SharedPreferences sharedPreferences = App.getPreferences();
 
         String port = sharedPreferences
                 .getString(SharedPreferencesKeys.SP_KEY_PORT,

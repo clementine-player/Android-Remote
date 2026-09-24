@@ -24,7 +24,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import androidx.core.content.ContextCompat;
 import android.telephony.TelephonyManager;
 
@@ -59,7 +58,7 @@ public class ClementinePhoneStateCheck extends BroadcastReceiver {
         }
 
         // Check if we need to change the volume
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(App.getApp());
+        SharedPreferences prefs = App.getPreferences();
         String volumeString = prefs
                 .getString(SharedPreferencesKeys.SP_CALL_VOLUME,
                         Clementine.DefaultCallVolume);
@@ -127,13 +126,13 @@ public class ClementinePhoneStateCheck extends BroadcastReceiver {
         public Clementine.State state;
 
         public void load() {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(App.getApp());
+            SharedPreferences prefs = App.getPreferences();
             volume = prefs.getInt(KEY_LAST_VOLUME, App.Clementine.getVolume());
             state = Clementine.State.values()[prefs.getInt(KEY_LAST_STATE, App.Clementine.getState().ordinal())];
         }
 
         public void save() {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(App.getApp());
+            SharedPreferences prefs = App.getPreferences();
             SharedPreferences.Editor editor = prefs.edit();
 
             editor.putInt(KEY_LAST_VOLUME, App.Clementine.getVolume());

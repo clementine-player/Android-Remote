@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Message;
-import android.preference.PreferenceManager;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.SharedPreferencesKeys;
@@ -52,7 +51,7 @@ public class ClementineBroadcastReceiver extends BroadcastReceiver {
         // Check which key was pressed
         switch (intent.getAction()) {
             case CONNECT:
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                SharedPreferences prefs = App.getPreferences();
                 String ip = prefs.getString(SharedPreferencesKeys.SP_KEY_IP, "");
                 int port = Integer.valueOf(
                         prefs.getString(SharedPreferencesKeys.SP_KEY_PORT,

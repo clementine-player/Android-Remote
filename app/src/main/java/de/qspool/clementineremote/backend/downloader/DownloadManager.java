@@ -27,7 +27,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.TaskStackBuilder;
 import android.util.SparseArray;
@@ -175,7 +174,7 @@ public class DownloadManager {
             }
         });
 
-        mSharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
+        mSharedPref = App.getPreferences();
 
         // Get preferences and set download settings
         String defaultPath;

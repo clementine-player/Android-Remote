@@ -20,11 +20,15 @@ package de.qspool.clementineremote;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.StrictMode;
+import android.preference.PreferenceManager;
 
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementinePlayerConnection;
 import de.qspool.clementineremote.backend.downloader.DownloadManager;
+import de.qspool.clementineremote.utils.StrictModePolicies;
 
 public class App extends Application {
 
@@ -33,6 +37,8 @@ public class App extends Application {
     public static Clementine Clementine = new Clementine();
 
     private static App mApp;
+
+    private static SharedPreferences sPreferences;
 
     public final static String notificationChannel = "CR_NOT_CH_1";
 
@@ -43,6 +49,12 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        if (BuildConfig.DEBUG) {
+            StrictModePolicies.enableLogging();
+        }
+
+        loadPreferences();
 
         createNotificationChannel();
 
@@ -60,5 +72,25 @@ public class App extends Application {
 
     public static App getApp() {
         return mApp;
+    }
+
+    /**
+     * The app's settings. Loaded once at startup, so screens and services never read (or, on
+     * first launch, create) the preferences file on the main thread.
+     */
+    public static SharedPreferences getPreferences() {
+        return sPreferences;
+    }
+
+    private void loadPreferences() {
+        // The one deliberate settings read on the main thread: before any screen needs them.
+        StrictMode.ThreadPolicy policy = StrictMode.allowThreadDiskWrites();
+        try {
+            sPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            // Wait for the file to be parsed, so later reads never block on it.
+            sPreferences.getAll();
+        } finally {
+            StrictMode.setThreadPolicy(policy);
+        }
     }
 }

@@ -10,6 +10,7 @@ import android.widget.ListView;
 import androidx.appcompat.app.AlertDialog;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -20,6 +21,7 @@ import org.robolectric.shadows.ShadowLooper;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.testing.StrictModeRule;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.ui.dialogs.DownloadChooserDialog;
 import de.qspool.clementineremote.ui.dialogs.ProgressDialog;
@@ -44,6 +46,9 @@ import static org.junit.Assert.assertTrue;
  */
 @RunWith(RobolectricTestRunner.class)
 public class UiSmokeTest {
+
+    @Rule
+    public final StrictModeRule mStrictMode = new StrictModeRule();
 
     private ClementineSettings mSettings;
 
