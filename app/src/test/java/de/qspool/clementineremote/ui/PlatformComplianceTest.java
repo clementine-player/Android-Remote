@@ -10,6 +10,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.WindowInsetsCompat;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.testing.StrictModeRule;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementineService;
 import de.qspool.clementineremote.ui.settings.ClementineSettings;
@@ -39,6 +41,9 @@ import static org.robolectric.Shadows.shadowOf;
  */
 @RunWith(RobolectricTestRunner.class)
 public class PlatformComplianceTest {
+
+    @Rule
+    public final StrictModeRule mStrictMode = new StrictModeRule();
 
     @Before
     public void setUp() {

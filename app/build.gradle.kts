@@ -26,6 +26,8 @@ android {
         // Bump both on every release; F-Droid reads them from here.
         versionCode = 800
         versionName = "13-dev"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
@@ -115,4 +117,8 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.robolectric)
+
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.core)
+    androidTestImplementation(libs.androidx.test.ext.junit)
 }

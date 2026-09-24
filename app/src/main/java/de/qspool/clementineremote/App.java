@@ -25,6 +25,7 @@ import android.os.Build;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementinePlayerConnection;
 import de.qspool.clementineremote.backend.downloader.DownloadManager;
+import de.qspool.clementineremote.utils.StrictModePolicies;
 
 public class App extends Application {
 
@@ -43,6 +44,10 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        if (BuildConfig.DEBUG) {
+            StrictModePolicies.enableLogging();
+        }
 
         createNotificationChannel();
 
