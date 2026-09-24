@@ -53,7 +53,7 @@ public class TaskerFireReceiver extends BroadcastReceiver {
                     serviceIntent.putExtra(ClementineService.EXTRA_STRING_IP, ip);
                     serviceIntent.putExtra(ClementineService.EXTRA_INT_PORT, port);
                     serviceIntent.putExtra(ClementineService.EXTRA_INT_AUTH, auth);
-                    context.startService(serviceIntent);
+                    ClementineService.startConnection(context, serviceIntent);
                     break;
                 case TaskerSettings.ACTION_DISCONNECT:
                     msg.obj = ClementineMessage.getMessage(MsgType.DISCONNECT);

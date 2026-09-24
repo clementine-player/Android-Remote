@@ -77,6 +77,8 @@ public class TaskerSettings extends AppCompatActivity {
 
         setContentView(R.layout.activity_taskersettings);
 
+        EdgeToEdge.apply(this);
+
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);

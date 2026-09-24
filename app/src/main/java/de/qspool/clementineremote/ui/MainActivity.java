@@ -115,6 +115,8 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+        EdgeToEdge.apply(this);
+
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
         /*

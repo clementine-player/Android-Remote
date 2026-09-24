@@ -25,6 +25,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ServiceInfo;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
@@ -33,7 +34,10 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.ServiceCompat;
+import androidx.core.content.ContextCompat;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
@@ -76,6 +80,27 @@ public class ClementineService extends Service {
 
     private ClementineServiceBinder mClementineServiceBinder = new ClementineServiceBinder();
 
+    private boolean mInForeground = false;
+
+    /**
+     * Starts the service to connect to Clementine. Works from the background too (widget,
+     * notification, Tasker): the service is started as a foreground service and goes to the
+     * foreground straight away.
+     *
+     * @return false if Android does not allow the app to start it right now
+     */
+    public static boolean startConnection(Context context, Intent serviceIntent) {
+        try {
+            ContextCompat.startForegroundService(context, serviceIntent);
+            return true;
+        } catch (IllegalStateException e) {
+            // Android 12+ refuses foreground service starts from the background except in
+            // specific cases (ForegroundServiceStartNotAllowedException).
+            Log.w("ClementineService", "Not allowed to start the service now", e);
+            return false;
+        }
+    }
+
     public class ClementineServiceBinder extends Binder {
 
         public ClementineService getClementineService() {
@@ -103,6 +128,10 @@ public class ClementineService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent != null && intent.hasExtra(EXTRA_STRING_IP)) {
+            // A connect request, possibly started with startForegroundService().
+            enterForeground();
+        }
         if (intent != null && intent.hasExtra(SERVICE_ID)) {
             handleServiceAction(intent);
         }
@@ -141,11 +170,15 @@ public class ClementineService extends Service {
                                             sendConnectMessageIfPossible(intent);
                                             break;
                                         case CONNECTING:
+                                            enterForeground();
                                             break;
                                         case NO_CONNECTION:
+                                            // Nothing worth keeping: drop "Connecting…".
+                                            leaveForeground(false);
                                             sendDisconnectServiceMessage();
                                             break;
                                         case CONNECTED:
+                                            enterForeground();
                                             if (mUseWakeLock) {
                                                 mWakeLock.acquire();
                                             }
@@ -154,6 +187,7 @@ public class ClementineService extends Service {
                                             showKeepAliveDisconnectNotification();
                                             break;
                                         case DISCONNECTED:
+                                            leaveForeground(true);
                                             sendDisconnectServiceMessage();
 
                                             if (mUseWakeLock) {
@@ -198,6 +232,42 @@ public class ClementineService extends Service {
         }
         interruptThread();
         App.ClementineConnection = null;
+        leaveForeground(false);
+    }
+
+    /**
+     * Keeps the connection alive while the app is in the background. The notification is
+     * replaced by the player notification (same id) once Clementine sends the current track.
+     */
+    private synchronized void enterForeground() {
+        if (mInForeground) {
+            return;
+        }
+        Notification notification = new NotificationCompat.Builder(this, App.notificationChannel)
+                .setSmallIcon(R.drawable.notification)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(getString(R.string.connectdialog_connecting))
+                .setOngoing(true)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setContentIntent(Utilities.getClementineRemotePendingIntent(this))
+                .build();
+        ServiceCompat.startForeground(this, ClementineMediaSessionNotification.NOTIFIFCATION_ID,
+                notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE);
+        mInForeground = true;
+    }
+
+    /**
+     * @param keepNotification leave the notification to the player notification code, which
+     *                         may be showing "connection lost"; otherwise remove it
+     */
+    private synchronized void leaveForeground(boolean keepNotification) {
+        if (!mInForeground) {
+            return;
+        }
+        ServiceCompat.stopForeground(this, keepNotification
+                ? ServiceCompat.STOP_FOREGROUND_DETACH
+                : ServiceCompat.STOP_FOREGROUND_REMOVE);
+        mInForeground = false;
     }
 
     public void setUiHandler(Handler uiHandler) {

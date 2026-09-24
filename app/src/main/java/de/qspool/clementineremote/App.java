@@ -18,6 +18,9 @@
 package de.qspool.clementineremote;
 
 import android.app.Application;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
 
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementinePlayerConnection;
@@ -41,8 +44,18 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
+        createNotificationChannel();
+
         // Create a new downloadmanager instance
         DownloadManager.getInstance(this);
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(notificationChannel, "Default",
+                    NotificationManager.IMPORTANCE_LOW);
+            getSystemService(NotificationManager.class).createNotificationChannel(channel);
+        }
     }
 
     public static App getApp() {
