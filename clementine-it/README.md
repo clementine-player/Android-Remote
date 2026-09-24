@@ -1,8 +1,8 @@
 # Integration tests against a real Clementine
 
-This directory builds a Docker image that runs Clementine headless, with these settings:
+This directory builds a Docker image that runs Clementine headless. It installs the Ubuntu Resolute `.deb` from a Clementine GitHub release, and sets it up like this:
 
-- Xvfb provides the display.
+- Qt renders offscreen, so no display is needed.
 - PulseAudio's null sink provides audio output, so playback runs in real time.
 - The network remote is enabled on port 5500.
 - The library holds ten generated test tracks (see `generate-music.sh`). They are also loaded as the active playlist.
@@ -22,15 +22,16 @@ A normal `./gradlew test` skips them.
 ## Running locally
 
 ```sh
-git clone https://github.com/clementine-player/Clementine ../Clementine
-docker build -t clementine-it --build-context clementine=../Clementine clementine-it
+gh release download --repo clementine-player/Clementine \
+    --pattern '*~resolute_amd64.deb' --dir clementine-it
+docker build -t clementine-it clementine-it
 docker run --rm -d --name clementine -p 5500:5500 -e AUTH_CODE=12345 clementine-it
 # wait until `docker inspect -f '{{.State.Health.Status}}' clementine` says healthy
 ./gradlew testDebugUnitTest --tests 'de.qspool.clementineremote.integration.*' \
     -Pclementine.host=localhost -Pclementine.authCode=12345
 ```
 
-The first image build compiles Clementine, which takes a while. Later builds reuse the Docker layer cache until the Clementine source changes.
+CI uses Clementine's latest release by default. You can choose a different release tag when starting the workflow by hand.
 
 ## Protocol drift
 

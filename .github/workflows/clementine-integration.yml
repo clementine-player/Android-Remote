@@ -1,5 +1,6 @@
-# Runs the app's protocol code against a real, headless Clementine built from
-# source, and checks the protocol definition for drift from Clementine's.
+# Runs the app's protocol code against a real, headless Clementine (the Ubuntu
+# Resolute .deb from a Clementine release), and checks the protocol definition
+# for drift from that release's.
 name: clementine-integration
 on:
   push:
@@ -9,23 +10,37 @@ on:
     - cron: "17 4 * * *"
   workflow_dispatch:
     inputs:
-      clementine_ref:
-        description: Clementine branch, tag or commit to test against
-        default: master
+      clementine_release:
+        description: Clementine release tag to test against (default latest)
+        default: ""
 
 env:
-  CLEMENTINE_REF: ${{ inputs.clementine_ref || 'master' }}
   AUTH_CODE: "12345"
+  GH_TOKEN: ${{ github.token }}
 
 jobs:
+  release:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+    steps:
+      - id: tag
+        env:
+          REQUESTED: ${{ inputs.clementine_release }}
+        run: |
+          tag=${REQUESTED:-$(gh release view --repo clementine-player/Clementine --json tagName -q .tagName)}
+          echo "Testing against Clementine $tag"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
   proto-drift:
+    needs: release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
         with:
           repository: clementine-player/Clementine
-          ref: ${{ env.CLEMENTINE_REF }}
+          ref: ${{ needs.release.outputs.tag }}
           path: clementine-src
           sparse-checkout: ext/libclementine-remote
       - run: sudo apt-get update && sudo apt-get install -y protobuf-compiler python3-protobuf
@@ -35,22 +50,22 @@ jobs:
           clementine-src/ext/libclementine-remote/remotecontrolmessages.proto
 
   integration:
+    needs: release
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
-        with:
-          repository: clementine-player/Clementine
-          ref: ${{ env.CLEMENTINE_REF }}
-          path: clementine-src
+      - name: Download Clementine ${{ needs.release.outputs.tag }}
+        run: >
+          gh release download "${{ needs.release.outputs.tag }}"
+          --repo clementine-player/Clementine
+          --pattern '*~resolute_amd64.deb' --dir clementine-it
 
       - uses: docker/setup-buildx-action@v3
       - name: Build headless Clementine
         uses: docker/build-push-action@v6
         with:
           context: clementine-it
-          build-contexts: clementine=clementine-src
           tags: clementine-it
           load: true
           cache-from: type=gha,scope=clementine-it

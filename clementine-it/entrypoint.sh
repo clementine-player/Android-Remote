@@ -1,6 +1,6 @@
 #!/bin/bash
-# Starts Clementine headless (Xvfb + PulseAudio null sink so playback runs in
-# real time) with the network remote on port 5500 and /music loaded into the
+# Starts Clementine headless (Qt offscreen platform, PulseAudio null sink so
+# playback runs in real time) with the network remote on port 5500 and /music loaded into the
 # active playlist.
 #
 #   entrypoint.sh           run Clementine in the foreground
@@ -34,12 +34,9 @@ startupbehaviour=1
 CONF
 }
 
-start_session() {
-  export DISPLAY=:99
-  Xvfb :99 -screen 0 1280x800x24 -nolisten tcp >/tmp/xvfb.log 2>&1 &
+start_audio() {
   pulseaudio --start --exit-idle-time=-1 --daemonize=yes \
     --load=module-null-sink --log-target=stderr 2>/tmp/pulse.log || true
-  for _ in $(seq 50); do [ -e /tmp/.X11-unix/X99 ] && break; sleep 0.1; done
 }
 
 wait_for() {
@@ -53,7 +50,7 @@ wait_for() {
 }
 
 write_config
-start_session
+start_audio
 
 if [ "${1:-}" = "--seed" ]; then
   dbus-run-session -- clementine --quiet >/tmp/clementine-seed.log 2>&1 &
