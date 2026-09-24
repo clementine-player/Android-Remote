@@ -58,7 +58,9 @@ __PERMISSIONS:__<br />
 * android.permission.INTERNET: To connect to Clementine.
 * android.permission.WAKE_LOCK: The device is in partial wake mode when connect to increase stability.
 * android.permission.READ_PHONE_STATE: Is needed to detect calls and lower Clementine volume.
-* android.permission.WRITE_EXTERNAL_STORAGE: For downloading songs.
+* android.permission.WRITE_EXTERNAL_STORAGE: For downloading songs to a folder of your choice (Android 9 and older only).
+* android.permission.POST_NOTIFICATIONS: Shows the player controls and download progress as notifications.
+* android.permission.FOREGROUND_SERVICE / FOREGROUND_SERVICE_CONNECTED_DEVICE: Keeps the connection to Clementine alive while the app is in the background.
 
 [1]: https://github.com/clementine-player/Android-Remote/workflows/ci/badge.svg
 [2]: https://github.com/clementine-player/Android-Remote/actions

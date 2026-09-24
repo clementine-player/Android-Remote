@@ -146,11 +146,11 @@ public class ClementineMediaSessionNotification extends ClementineMediaSession {
         mNotificationView.setOnClickPendingIntent(R.id.noti_play_pause,
                 PendingIntent
                         .getBroadcast(mContext, 0, intentPlayPause,
-                                PendingIntent.FLAG_ONE_SHOT));
+                                PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE));
         mNotificationView.setOnClickPendingIntent(R.id.noti_next,
                 PendingIntent
                         .getBroadcast(mContext, 0, intentNext,
-                                PendingIntent.FLAG_ONE_SHOT));
+                                PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE));
 
         mNotificationManager.notify(NOTIFIFCATION_ID, mNotificationBuilder.build());
     }

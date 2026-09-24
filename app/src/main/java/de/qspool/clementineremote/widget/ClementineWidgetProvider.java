@@ -117,7 +117,7 @@ public class ClementineWidgetProvider extends AppWidgetProvider {
                     Intent intentConnect = new Intent(context, ClementineBroadcastReceiver.class);
                     intentConnect.setAction(ClementineBroadcastReceiver.CONNECT);
                     views.setOnClickPendingIntent(R.id.widget_layout, PendingIntent
-                            .getBroadcast(context, 0, intentConnect, PendingIntent.FLAG_ONE_SHOT));
+                            .getBroadcast(context, 0, intentConnect, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE));
                 } else {
                     // Textviews
                     views.setTextViewText(R.id.widget_subtitle,
@@ -180,7 +180,7 @@ public class ClementineWidgetProvider extends AppWidgetProvider {
         views.setOnClickPendingIntent(R.id.widget_btn_play_pause,
                 PendingIntent
                         .getBroadcast(context, 0, intentPlayPause,
-                                PendingIntent.FLAG_ONE_SHOT));
+                                PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE));
 
         // Next track
         Intent intentNext = new Intent(context, ClementineBroadcastReceiver.class);
@@ -188,7 +188,7 @@ public class ClementineWidgetProvider extends AppWidgetProvider {
 
         views.setOnClickPendingIntent(R.id.widget_btn_next,
                 PendingIntent
-                        .getBroadcast(context, 0, intentNext, PendingIntent.FLAG_ONE_SHOT));
+                        .getBroadcast(context, 0, intentNext, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE));
 
         // When connected, user can start the app by touching anywhere
         views.setOnClickPendingIntent(R.id.widget_layout,

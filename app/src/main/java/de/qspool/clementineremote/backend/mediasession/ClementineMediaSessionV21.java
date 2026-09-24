@@ -108,11 +108,13 @@ public class ClementineMediaSessionV21 extends ClementineMediaSession {
         Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
         mediaButtonIntent.setComponent(new ComponentName(mContext.getPackageName(),
                 ClementineMediaButtonEventReceiver.class.getName()));
+        // Mutable: the system adds the pressed key as an extra. The intent is explicit, which
+        // Android 14+ requires for mutable PendingIntents.
         PendingIntent mediaPendingIntent = PendingIntent
                 .getBroadcast(mContext,
                         0,
                         mediaButtonIntent,
-                        0);
+                        PendingIntent.FLAG_MUTABLE);
         mMediaSession.setMediaButtonReceiver(mediaPendingIntent);
     }
 

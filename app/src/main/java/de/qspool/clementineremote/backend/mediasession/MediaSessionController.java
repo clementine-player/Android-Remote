@@ -26,6 +26,8 @@ import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.os.Build;
 
+import androidx.core.content.ContextCompat;
+
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementinePlayerConnection;
@@ -87,7 +89,8 @@ public class MediaSessionController {
 
                         // Register MediaButtonReceiver
                         IntentFilter filter = new IntentFilter(Intent.ACTION_MEDIA_BUTTON);
-                        mContext.registerReceiver(mMediaButtonBroadcastReceiver, filter);
+                        ContextCompat.registerReceiver(mContext, mMediaButtonBroadcastReceiver, filter,
+                                ContextCompat.RECEIVER_EXPORTED);
 
                         mClementineMediaSession.registerSession();
                         mMediaSessionNotification.registerSession();

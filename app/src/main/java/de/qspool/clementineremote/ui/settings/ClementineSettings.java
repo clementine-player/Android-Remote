@@ -35,6 +35,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.ui.EdgeToEdge;
 import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.ui.adapter.PreferenceHeaderAdapter;
 import de.qspool.clementineremote.ui.adapter.PreferenceHeaderAdapter.PreferenceHeader;
@@ -50,6 +51,8 @@ public class ClementineSettings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_preferences);
+
+        EdgeToEdge.apply(this);
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

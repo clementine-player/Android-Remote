@@ -17,12 +17,12 @@ fun signingValue(env: String, prop: String): String? =
 
 android {
     namespace = "de.qspool.clementineremote"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "de.qspool.clementineremote"
         minSdk = 23
-        targetSdk = 30
+        targetSdk = 36
         // Bump both on every release; F-Droid reads them from here.
         versionCode = 800
         versionName = "13-dev"
@@ -57,6 +57,9 @@ android {
     testOptions {
         unitTests.isIncludeAndroidResources = true
         unitTests.all { test ->
+            // Robolectric's Android 36 runtime reaches into JDK internals.
+            test.jvmArgs("--add-exports=java.base/jdk.internal.access=ALL-UNNAMED",
+                    "--add-opens=java.base/java.io=ALL-UNNAMED")
             test.testLogging {
                 events("failed")
                 exceptionFormat = TestExceptionFormat.FULL

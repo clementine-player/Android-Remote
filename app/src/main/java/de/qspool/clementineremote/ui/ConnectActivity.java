@@ -37,6 +37,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
@@ -60,7 +61,9 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.jmdns.ServiceInfo;
@@ -133,6 +136,8 @@ public class ConnectActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_connectdialog);
 
+        EdgeToEdge.apply(this);
+
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         mKnownIps = mSharedPref
                 .getStringSet(SharedPreferencesKeys.SP_KNOWN_IP, new LinkedHashSet<String>());
@@ -191,6 +196,7 @@ public class ConnectActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         setContentView(R.layout.activity_connectdialog);
+        EdgeToEdge.apply(this);
 
         initializeUi();
     }
@@ -230,25 +236,46 @@ public class ConnectActivity extends AppCompatActivity {
             showFirstTimeScreen();
         }
 
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.READ_PHONE_STATE)
-                        != PackageManager.PERMISSION_GRANTED) {
+        final String[] missing = missingPermissions();
+        if (missing.length > 0) {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.permissions_required_title)
                     .setMessage(R.string.permissions_required_text)
                     .setNegativeButton(R.string.dialog_continue, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions(ConnectActivity.this,
-                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                            Manifest.permission.READ_PHONE_STATE},
+                            ActivityCompat.requestPermissions(ConnectActivity.this, missing,
                                     ID_PERMISSION_REQUEST);
                         }
                     })
                     .show();
         }
+    }
+
+    /**
+     * The runtime permissions the app uses that have not been granted yet.
+     */
+    String[] missingPermissions() {
+        List<String> wanted = new ArrayList<>();
+        // Lowers Clementine's volume during calls.
+        wanted.add(Manifest.permission.READ_PHONE_STATE);
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            // Downloads to folders outside the app's own; not needed from Android 10.
+            wanted.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // The player controls and download progress notifications.
+            wanted.add(Manifest.permission.POST_NOTIFICATIONS);
+        }
+
+        List<String> missing = new ArrayList<>();
+        for (String permission : wanted) {
+            if (ContextCompat.checkSelfPermission(this, permission)
+                    != PackageManager.PERMISSION_GRANTED) {
+                missing.add(permission);
+            }
+        }
+        return missing.toArray(new String[0]);
     }
 
     private void initializeUi() {
