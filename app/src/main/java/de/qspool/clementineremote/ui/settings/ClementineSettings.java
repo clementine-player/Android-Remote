@@ -17,12 +17,13 @@
 
 package de.qspool.clementineremote.ui.settings;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -78,6 +79,9 @@ public class ClementineSettings extends AppCompatActivity {
         }
     }
 
+    // Replaces the default back handling for the platform fragment back stack; moves to
+    // OnBackPressedDispatcher together with the migration to AndroidX fragments.
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() <= 1) {

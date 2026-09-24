@@ -28,8 +28,8 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.TaskStackBuilder;
 import android.util.SparseArray;
 import android.widget.Toast;
 
@@ -105,7 +105,7 @@ public class DownloadManager {
                 .setContentTitle(mContext.getString(R.string.download_noti_title))
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setOngoing(true)
-                .setVisibility(Notification.VISIBILITY_PUBLIC);
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
         // Set the result intent
         mActiveNofiticationBuilder.setContentIntent(buildNotificationIntent());
@@ -167,7 +167,7 @@ public class DownloadManager {
                         .setPriority(NotificationCompat.PRIORITY_MIN)
                         .setAutoCancel(true)
                         .setContentIntent(buildNotificationIntent())
-                        .setVisibility(Notification.VISIBILITY_PUBLIC);
+                        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
                 // Displays the progress bar for the first time.
                 mNotifyManager

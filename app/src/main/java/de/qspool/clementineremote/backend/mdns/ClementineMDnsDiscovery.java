@@ -37,7 +37,6 @@ import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.elements.ServiceFound;
 import de.qspool.clementineremote.utils.Utilities;
 
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class ClementineMDnsDiscovery {
 
     private JmDNS mJmDNS;

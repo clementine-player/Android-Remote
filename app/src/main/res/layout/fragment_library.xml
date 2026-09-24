@@ -3,7 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent">
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/library_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -14,9 +14,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/library_refresh_empty_layout"
         android:visibility="gone"
         android:layout_width="match_parent"
@@ -56,6 +56,6 @@
             </RelativeLayout>
         </ScrollView>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

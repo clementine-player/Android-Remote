@@ -21,10 +21,10 @@ import android.app.Fragment;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -89,12 +89,8 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
 
         mConnectionFragment = new ConnectionFragment();
 
-        PlayerPageAdapter playerPageAdapter;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            playerPageAdapter = new PlayerPageAdapter(getActivity(), getChildFragmentManager());
-        } else {
-            playerPageAdapter = new PlayerPageAdapter(getActivity(), getFragmentManager());
-        }
+        PlayerPageAdapter playerPageAdapter =
+                new PlayerPageAdapter(getActivity(), getChildFragmentManager());
         playerPageAdapter.addFragment(mPlayerPageFragment);
         playerPageAdapter.addFragment(mSongDetailFragment);
         playerPageAdapter.addFragment(mConnectionFragment);

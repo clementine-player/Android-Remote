@@ -17,18 +17,19 @@
 
 package de.qspool.clementineremote.ui.fragments;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
+import android.content.DialogInterface;
+import de.qspool.clementineremote.ui.dialogs.ProgressDialog;
+import androidx.appcompat.app.AlertDialog;
 
 import android.app.Fragment;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.ContextMenu;
@@ -69,7 +70,7 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
 
     private PlaylistSongAdapter mAdapter;
 
-    private MaterialDialog mProgressDialog;
+    private ProgressDialog mProgressDialog;
 
     private ActionBar mActionBar;
 
@@ -281,9 +282,8 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
                 android.view.MenuInflater inflater = mode.getMenuInflater();
                 inflater.inflate(R.menu.playlist_context_menu, menu);
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                    getActivity().getWindow().setStatusBarColor(ContextCompat.getColor(
-                            getActivity(), R.color.grey_cab_status));
+                getActivity().getWindow().setStatusBarColor(ContextCompat.getColor(
+                        getActivity(), R.color.grey_cab_status));
 
                 return true;
             }
@@ -296,9 +296,8 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                    getActivity().getWindow().setStatusBarColor(ContextCompat.getColor(
-                            getActivity(), R.color.actionbar_dark));
+                getActivity().getWindow().setStatusBarColor(ContextCompat.getColor(
+                        getActivity(), R.color.actionbar_dark));
             }
 
             @Override
@@ -334,14 +333,13 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
                         .buildDownloadSongsMessage(DownloadItem.APlaylist, getPlaylistId()));
                 return true;
             case R.id.clear_playlist:
-                new MaterialDialog.Builder(getActivity())
-                        .title(R.string.playlist_clear)
-                        .content(R.string.playlist_clear_content)
-                        .positiveText(R.string.playlist_clear_confirm)
-                        .negativeText(R.string.dialog_cancel)
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.playlist_clear)
+                        .setMessage(R.string.playlist_clear_content)
+                        .setNegativeButton(R.string.dialog_cancel, null)
+                        .setPositiveButton(R.string.playlist_clear_confirm, new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(MaterialDialog dialog, DialogAction which) {
+                            public void onClick(DialogInterface dialog, int which) {
                                 mPlaylistManager.clearPlaylist(getPlaylistId());
                                 updateSongList();
                             }
@@ -410,7 +408,7 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
         searchView.setOnQueryTextListener(queryTextListener);
         searchView.setQueryHint(getString(R.string.playlist_search_hint));
 
-        EditText searchText = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        EditText searchText = (EditText) searchView.findViewById(androidx.appcompat.R.id.search_src_text);
         searchText.setHintTextColor(ContextCompat.getColor(getActivity(),
                 R.color.searchview_edittext_hint));
 
@@ -526,11 +524,9 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
         int requests = mPlaylistManager.requestAllPlaylistSongs();
         if (requests > 0) {
             // Start a Progressbar
-            mProgressDialog = new MaterialDialog.Builder(getActivity())
-                    .progress(false, requests, true)
-                    .title(R.string.player_download_playlists)
-                    .content(R.string.playlist_loading)
-                    .show();
+            mProgressDialog = ProgressDialog.showDeterminate(getActivity(),
+                    R.string.player_download_playlists, R.string.playlist_loading, requests,
+                    true);
         } else {
             mPlaylistsSpinner.setSelection(
                     mPlaylists.indexOf(mPlaylistManager.getActivePlaylist()));

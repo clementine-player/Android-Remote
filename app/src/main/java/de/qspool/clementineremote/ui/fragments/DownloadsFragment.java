@@ -17,7 +17,8 @@
 
 package de.qspool.clementineremote.ui.fragments;
 
-import com.afollestad.materialdialogs.MaterialDialog;
+import android.content.DialogInterface;
+import androidx.appcompat.app.AlertDialog;
 
 import android.app.Fragment;
 import android.content.Intent;
@@ -25,9 +26,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -117,24 +118,22 @@ public class DownloadsFragment extends Fragment implements BackPressHandleable, 
                 final ClementineSongDownloader downloader = (ClementineSongDownloader) mList.getAdapter()
                         .getItem(position);
                 if (downloader.getStatus() == AsyncTask.Status.FINISHED) {
-                    MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-                    builder.title(R.string.downloaded_songs);
+                    builder.setTitle(R.string.downloaded_songs);
                     String[] songs = new String[downloader.getDownloadedSongs().size()];
                     for (int i=0;i<songs.length;i++) {
                         ClementineSongDownloader.DownloadedSong ds = downloader.getDownloadedSongs().get(i);
                         songs[i] = ds.song.getArtist() + " - " + ds.song.getTitle();
                     }
-                    builder.items(songs);
-                    builder.itemsCallback(new MaterialDialog.ListCallback() {
+                    builder.setItems(songs, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onSelection(MaterialDialog materialDialog, View view, int i,
-                                CharSequence charSequence) {
+                        public void onClick(DialogInterface dialog, int i) {
                             playFile(downloader.getDownloadedSongs().get(i).uri);
                         }
                     });
 
-                    builder.negativeText(R.string.dialog_close);
+                    builder.setNegativeButton(R.string.dialog_close, null);
                     builder.show();
                 }
             }

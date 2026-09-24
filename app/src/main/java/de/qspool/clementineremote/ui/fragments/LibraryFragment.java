@@ -17,7 +17,7 @@
 
 package de.qspool.clementineremote.ui.fragments;
 
-import com.afollestad.materialdialogs.MaterialDialog;
+import de.qspool.clementineremote.ui.dialogs.ProgressDialog;
 
 import android.annotation.SuppressLint;
 import android.app.Fragment;
@@ -27,11 +27,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
+import androidx.core.content.ContextCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -86,7 +86,7 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
 
     private TextView mLibraryEmptyText;
 
-    private MaterialDialog mProgressDialog;
+    private ProgressDialog mProgressDialog;
 
     private String mLastFilter = "";
 
@@ -221,11 +221,9 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
                 android.view.MenuInflater inflater = mode.getMenuInflater();
                 inflater.inflate(R.menu.library_context_menu, menu);
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    getActivity().getWindow()
-                            .setStatusBarColor(
-                                    ContextCompat.getColor(getActivity(), R.color.grey_cab_status));
-                }
+                getActivity().getWindow()
+                        .setStatusBarColor(
+                                ContextCompat.getColor(getActivity(), R.color.grey_cab_status));
 
                 return true;
             }
@@ -238,11 +236,9 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    getActivity().getWindow()
-                            .setStatusBarColor(ContextCompat.getColor(getActivity(),
-                                    R.color.actionbar_dark));
-                }
+                getActivity().getWindow()
+                        .setStatusBarColor(ContextCompat.getColor(getActivity(),
+                                R.color.actionbar_dark));
             }
 
             @Override
@@ -310,22 +306,14 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
         public void OnOptimizeLibrary() {
             mProgressDialog.dismiss();
 
-            mProgressDialog = new MaterialDialog.Builder(getActivity())
-                    .title(R.string.library_please_wait)
-                    .content(R.string.library_optimize)
-                    .cancelable(false)
-                    .progress(true, -1)
-                    .show();
+            mProgressDialog = ProgressDialog.showIndeterminate(getActivity(),
+                    R.string.library_please_wait, R.string.library_optimize, false, null);
         }
     };
 
     private void createDownloadProgressDialog() {
-        mProgressDialog = new MaterialDialog.Builder(getActivity())
-                .title(R.string.library_please_wait)
-                .content(R.string.library_download)
-                .cancelable(false)
-                .progress(false, 0)
-                .show();
+        mProgressDialog = ProgressDialog.showDeterminate(getActivity(),
+                R.string.library_please_wait, R.string.library_download, 0, false);
     }
 
     private void createRootAdapter() {
@@ -391,7 +379,7 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
         searchView.setOnQueryTextListener(queryTextListener);
         searchView.setQueryHint(getString(R.string.playlist_search_hint));
 
-        EditText searchText = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        EditText searchText = (EditText) searchView.findViewById(androidx.appcompat.R.id.search_src_text);
         searchText.setHintTextColor(ContextCompat.getColor(getActivity(),
                 R.color.searchview_edittext_hint));
 

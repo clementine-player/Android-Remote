@@ -4,7 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.support.v13.app.FragmentPagerAdapter;
+import androidx.legacy.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;

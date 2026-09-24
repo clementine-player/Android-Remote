@@ -17,7 +17,7 @@
 
 package de.qspool.clementineremote.ui.fragments.playerpages;
 
-import com.afollestad.materialdialogs.MaterialDialog;
+import de.qspool.clementineremote.ui.dialogs.ProgressDialog;
 
 import android.annotation.SuppressLint;
 import android.app.Fragment;
@@ -96,7 +96,7 @@ public class PlayerPageFragment extends Fragment
 
     private boolean mFirstCall = true;
 
-    private MaterialDialog mPdDownloadLyrics;
+    private ProgressDialog mPdDownloadLyrics;
 
     private MySong mCurrentSong = new MySong();
 
@@ -529,11 +529,8 @@ public class PlayerPageFragment extends Fragment
             switch (v.getId()) {
                 case R.id.imgArt:
                     // Shall we download the lyrics or do we have them already downloaded?
-                    mPdDownloadLyrics = new MaterialDialog.Builder(getActivity())
-                            .cancelable(true)
-                            .content(R.string.player_download_lyrics)
-                            .progress(true, -1)
-                            .show();
+                    mPdDownloadLyrics = ProgressDialog.showIndeterminate(getActivity(), 0,
+                            R.string.player_download_lyrics, true, null);
                     if (mCurrentSong.getLyricsProvider().isEmpty()) {
                         msg.obj = ClementineMessage.getMessage(MsgType.GET_LYRICS);
                     } else {

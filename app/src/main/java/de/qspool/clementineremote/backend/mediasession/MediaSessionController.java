@@ -63,11 +63,7 @@ public class MediaSessionController {
 
         mMediaButtonBroadcastReceiver = new ClementineMediaButtonEventReceiver();
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            mClementineMediaSession = new ClementineMediaSessionV20(mContext);
-        } else {
-            mClementineMediaSession = new ClementineMediaSessionV21(mContext);
-        }
+        mClementineMediaSession = new ClementineMediaSessionV21(mContext);
         mMediaSessionNotification = new ClementineMediaSessionNotification(mContext);
     }
 

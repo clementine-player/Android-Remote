@@ -17,7 +17,8 @@
 
 package de.qspool.clementineremote.ui.settings;
 
-import com.afollestad.materialdialogs.MaterialDialog;
+import android.view.View;
+import androidx.appcompat.app.AlertDialog;
 
 import android.os.Bundle;
 import android.preference.Preference;
@@ -63,9 +64,9 @@ public class PreferencesInformationLicenses extends PreferenceFragment {
 
         @Override
         public boolean onPreferenceClick(Preference preference) {
-            new MaterialDialog.Builder(getActivity())
-                    .negativeText(R.string.dialog_close)
-                    .customView(R.layout.dialog_license, false)
+            new AlertDialog.Builder(getActivity())
+                    .setNegativeButton(R.string.dialog_close, null)
+                    .setView(R.layout.dialog_license)
                     .show();
             return true;
         }
@@ -76,13 +77,15 @@ public class PreferencesInformationLicenses extends PreferenceFragment {
 
         @Override
         public boolean onPreferenceClick(Preference preference) {
-            MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                    .title(R.string.pref_opensource)
-                    .negativeText(R.string.dialog_close)
-                    .customView(R.layout.dialog_opensource, false)
+            View view = getActivity().getLayoutInflater()
+                    .inflate(R.layout.dialog_opensource, null);
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.pref_opensource)
+                    .setNegativeButton(R.string.dialog_close, null)
+                    .setView(view)
                     .show();
 
-            WebView text = (WebView) dialog.getCustomView().findViewById(R.id.opensource_licenses);
+            WebView text = (WebView) view.findViewById(R.id.opensource_licenses);
 
             InputStream is = getResources().openRawResource(R.raw.opensource);
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
