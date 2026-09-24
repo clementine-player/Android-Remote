@@ -53,8 +53,10 @@ public class ClementineMessageFactory {
      */
     public static ClementineMessage buildSongOfferResponse(boolean accepted) {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.SONG_OFFER_RESPONSE);
-        ResponseSongOffer.Builder offer = msg.getResponseSongOfferBuilder();
+        ResponseSongOffer.Builder offer = ResponseSongOffer.newBuilder();
         offer.setAccepted(accepted);
+        msg.setResponseSongOffer(offer);
+
         return new ClementineMessage(msg);
     }
 
@@ -77,12 +79,14 @@ public class ClementineMessageFactory {
      */
     public static ClementineMessage buildDownloadSongsMessage(DownloadItem downloadItem, int playlistId, LinkedList<String> urls) {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.DOWNLOAD_SONGS);
-        RequestDownloadSongs.Builder request = msg.getRequestDownloadSongsBuilder();
+        RequestDownloadSongs.Builder request = RequestDownloadSongs.newBuilder();
 
         request.setPlaylistId(playlistId);
         request.setDownloadItem(downloadItem);
         if (urls != null && !urls.isEmpty())
             request.addAllUrls(urls);
+
+        msg.setRequestDownloadSongs(request);
 
         return new ClementineMessage(msg);
     }
@@ -95,8 +99,10 @@ public class ClementineMessageFactory {
     public static ClementineMessage buildVolumeMessage(int volume) {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.SET_VOLUME);
 
-        RequestSetVolume.Builder requestSetVolume = msg.getRequestSetVolumeBuilder();
+        RequestSetVolume.Builder requestSetVolume = RequestSetVolume.newBuilder();
         requestSetVolume.setVolume(volume);
+
+        msg.setRequestSetVolume(requestSetVolume);
 
         return new ClementineMessage(msg);
     }
@@ -110,11 +116,13 @@ public class ClementineMessageFactory {
             boolean getPlaylistSongs, boolean isDownloader) {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.CONNECT);
 
-        RequestConnect.Builder requestConnect = msg.getRequestConnectBuilder();
+        RequestConnect.Builder requestConnect = RequestConnect.newBuilder();
 
         requestConnect.setAuthCode(authCode);
         requestConnect.setSendPlaylistSongs(getPlaylistSongs);
         requestConnect.setDownloader(isDownloader);
+
+        msg.setRequestConnect(requestConnect);
 
         ClementineMessage clementineMessage = new ClementineMessage(msg);
         clementineMessage.setIp(ip);
@@ -131,7 +139,7 @@ public class ClementineMessageFactory {
     public static ClementineMessage buildShuffle() {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.SHUFFLE);
 
-        Shuffle.Builder shuffle = msg.getShuffleBuilder();
+        Shuffle.Builder shuffle = Shuffle.newBuilder();
 
         switch (App.Clementine.getShuffleMode()) {
             case OFF:
@@ -147,6 +155,8 @@ public class ClementineMessageFactory {
                 shuffle.setShuffleMode(ShuffleMode.Shuffle_Albums);
                 break;
         }
+        msg.setShuffle(shuffle);
+
         return new ClementineMessage(msg);
     }
 
@@ -158,7 +168,7 @@ public class ClementineMessageFactory {
     public static ClementineMessage buildRepeat() {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.REPEAT);
 
-        Repeat.Builder repeat = msg.getRepeatBuilder();
+        Repeat.Builder repeat = Repeat.newBuilder();
 
         switch (App.Clementine.getRepeatMode()) {
             case OFF:
@@ -174,6 +184,8 @@ public class ClementineMessageFactory {
                 repeat.setRepeatMode(ClementineRemoteProtocolBuffer.RepeatMode.Repeat_Playlist);
                 break;
         }
+        msg.setRepeat(repeat);
+
         return new ClementineMessage(msg);
     }
 
@@ -185,9 +197,11 @@ public class ClementineMessageFactory {
     public static ClementineMessage buildRequestPlaylistSongs(int playlistId) {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.REQUEST_PLAYLIST_SONGS);
 
-        RequestPlaylistSongs.Builder requestPlaylistSongs = msg.getRequestPlaylistSongsBuilder();
+        RequestPlaylistSongs.Builder requestPlaylistSongs = RequestPlaylistSongs.newBuilder();
 
         requestPlaylistSongs.setId(playlistId);
+
+        msg.setRequestPlaylistSongs(requestPlaylistSongs);
 
         return new ClementineMessage(msg);
     }
@@ -200,10 +214,12 @@ public class ClementineMessageFactory {
     public static ClementineMessage buildRequestChangeSong(int songIndex, int playlistId) {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.CHANGE_SONG);
 
-        RequestChangeSong.Builder request = msg.getRequestChangeSongBuilder();
+        RequestChangeSong.Builder request = RequestChangeSong.newBuilder();
 
         request.setSongIndex(songIndex);
         request.setPlaylistId(playlistId);
+
+        msg.setRequestChangeSong(request);
 
         return new ClementineMessage(msg);
     }
@@ -216,8 +232,10 @@ public class ClementineMessageFactory {
     public static ClementineMessage buildTrackPosition(int position) {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.SET_TRACK_POSITION);
 
-        RequestSetTrackPosition.Builder request = msg.getRequestSetTrackPositionBuilder();
+        RequestSetTrackPosition.Builder request = RequestSetTrackPosition.newBuilder();
         request.setPosition(position);
+
+        msg.setRequestSetTrackPosition(request);
 
         return new ClementineMessage(msg);
     }
@@ -231,8 +249,10 @@ public class ClementineMessageFactory {
     public static ClementineMessage buildRateTrack(float rating) {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.RATE_SONG);
 
-        RequestRateSong.Builder request = msg.getRequestRateSongBuilder();
+        RequestRateSong.Builder request = RequestRateSong.newBuilder();
         request.setRating(rating);
+
+        msg.setRequestRateSong(request);
 
         return new ClementineMessage(msg);
     }
@@ -247,11 +267,13 @@ public class ClementineMessageFactory {
     public static ClementineMessage buildInsertUrl(int playistId, LinkedList<String> urls) {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.INSERT_URLS);
 
-        RequestInsertUrls.Builder insertUrls = msg.getRequestInsertUrlsBuilder();
+        RequestInsertUrls.Builder insertUrls = RequestInsertUrls.newBuilder();
         insertUrls.setPlaylistId(playistId);
         for (String url : urls) {
             insertUrls.addUrls(url);
         }
+
+        msg.setRequestInsertUrls(insertUrls);
 
         return new ClementineMessage(msg);
     }
@@ -260,9 +282,11 @@ public class ClementineMessageFactory {
             LinkedList<ClementineRemoteProtocolBuffer.SongMetadata> songs) {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.INSERT_URLS);
 
-        RequestInsertUrls.Builder insertSongs = msg.getRequestInsertUrlsBuilder();
+        RequestInsertUrls.Builder insertSongs = RequestInsertUrls.newBuilder();
         insertSongs.setPlaylistId(playistId);
         insertSongs.addAllSongs(songs);
+
+        msg.setRequestInsertUrls(insertSongs);
 
         return new ClementineMessage(msg);
     }
@@ -270,9 +294,11 @@ public class ClementineMessageFactory {
     public static ClementineMessage buildRemoveSongFromPlaylist(int playlistId, MySong song) {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.REMOVE_SONGS);
 
-        RequestRemoveSongs.Builder removeItems = msg.getRequestRemoveSongsBuilder();
+        RequestRemoveSongs.Builder removeItems = RequestRemoveSongs.newBuilder();
         removeItems.setPlaylistId(playlistId);
         removeItems.addSongs(song.getIndex());
+
+        msg.setRequestRemoveSongs(removeItems);
 
         return new ClementineMessage(msg);
     }
@@ -281,12 +307,14 @@ public class ClementineMessageFactory {
             LinkedList<MySong> songs) {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.REMOVE_SONGS);
 
-        RequestRemoveSongs.Builder removeItems = msg.getRequestRemoveSongsBuilder();
+        RequestRemoveSongs.Builder removeItems = RequestRemoveSongs.newBuilder();
         removeItems.setPlaylistId(playlistId);
 
         for (MySong s : songs) {
             removeItems.addSongs(s.getIndex());
         }
+
+        msg.setRequestRemoveSongs(removeItems);
 
         return new ClementineMessage(msg);
     }
@@ -294,19 +322,21 @@ public class ClementineMessageFactory {
     public static ClementineMessage buildClosePlaylist(int playlistId) {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.CLOSE_PLAYLIST);
 
-        ClementineRemoteProtocolBuffer.RequestClosePlaylist.Builder requestClosePlaylist = msg
-                .getRequestClosePlaylistBuilder();
+        ClementineRemoteProtocolBuffer.RequestClosePlaylist.Builder requestClosePlaylist = ClementineRemoteProtocolBuffer.RequestClosePlaylist.newBuilder();
         requestClosePlaylist.setPlaylistId(playlistId);
+
+        msg.setRequestClosePlaylist(requestClosePlaylist);
 
         return new ClementineMessage(msg);
     }
 
     public static ClementineMessage buildGlobalSearch(String query) {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.GLOBAL_SEARCH);
-        ClementineRemoteProtocolBuffer.RequestGlobalSearch.Builder requestGlobalSearch = msg.
-                getRequestGlobalSearchBuilder();
+        ClementineRemoteProtocolBuffer.RequestGlobalSearch.Builder requestGlobalSearch = ClementineRemoteProtocolBuffer.RequestGlobalSearch.newBuilder();
 
         requestGlobalSearch.setQuery(query);
+
+        msg.setRequestGlobalSearch(requestGlobalSearch);
 
         return new ClementineMessage(msg);
     }

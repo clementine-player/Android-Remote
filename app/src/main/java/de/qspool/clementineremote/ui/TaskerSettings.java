@@ -93,7 +93,7 @@ public class TaskerSettings extends AppCompatActivity {
 
         BundleScrubber.scrub(getIntent());
         final Bundle localeBundle = getIntent()
-                .getBundleExtra(com.twofortyfouram.locale.api.Intent.EXTRA_BUNDLE);
+                .getBundleExtra(de.qspool.clementineremote.utils.bundle.LocalePluginIntent.EXTRA_BUNDLE);
         BundleScrubber.scrub(localeBundle);
 
         if (null == savedInstanceState) {
@@ -152,7 +152,7 @@ public class TaskerSettings extends AppCompatActivity {
                 PluginBundleManager.generateBundle(getApplicationContext(), mSelectedAction,
                         ip, port, auth);
 
-        resultIntent.putExtra(com.twofortyfouram.locale.api.Intent.EXTRA_BUNDLE, resultBundle);
+        resultIntent.putExtra(de.qspool.clementineremote.utils.bundle.LocalePluginIntent.EXTRA_BUNDLE, resultBundle);
 
         StringBuilder sb = new StringBuilder();
         sb.append(getString(R.string.tasker_action));
@@ -186,7 +186,7 @@ public class TaskerSettings extends AppCompatActivity {
                 break;
         }
 
-        resultIntent.putExtra(com.twofortyfouram.locale.api.Intent.EXTRA_STRING_BLURB,
+        resultIntent.putExtra(de.qspool.clementineremote.utils.bundle.LocalePluginIntent.EXTRA_STRING_BLURB,
                 generateBlurb(getApplicationContext(), sb.toString()));
 
         setResult(RESULT_OK, resultIntent);

@@ -219,7 +219,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
             if (!ret) {
                 // Failed. Close connection
                 Builder builder = ClementineMessage.getMessageBuilder(MsgType.DISCONNECT);
-                ResponseDisconnect.Builder disc = builder.getResponseDisconnectBuilder();
+                ResponseDisconnect.Builder disc = ResponseDisconnect.newBuilder();
                 disc.setReasonDisconnect(ReasonDisconnect.Server_Shutdown);
                 builder.setResponseDisconnect(disc);
                 closeConnection(new ClementineMessage(builder));

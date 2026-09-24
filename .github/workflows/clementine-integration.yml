@@ -1,0 +1,116 @@
+# Runs the app's protocol code against a real, headless Clementine (the Ubuntu
+# Resolute .deb from a Clementine release), and checks the protocol definition
+# for drift from that release's.
+name: clementine-integration
+on:
+  push:
+    branches: [master]
+  pull_request:
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+    inputs:
+      clementine_release:
+        description: Clementine release tag to test against (default latest)
+        default: ""
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  AUTH_CODE: "12345"
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+    steps:
+      - id: tag
+        env:
+          REQUESTED: ${{ inputs.clementine_release }}
+        run: |
+          tag=${REQUESTED:-$(gh release view --repo clementine-player/Clementine --json tagName -q .tagName)}
+          echo "Testing against Clementine $tag"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+  proto-drift:
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5
+        with:
+          repository: clementine-player/Clementine
+          ref: ${{ needs.release.outputs.tag }}
+          path: clementine-src
+          sparse-checkout: ext/libclementine-remote
+      - run: sudo apt-get update && sudo apt-get install -y protobuf-compiler python3-protobuf
+      - run: >
+          python3 scripts/check-proto-drift.py
+          app/src/main/proto/remotecontrolmessages.proto
+          clementine-src/ext/libclementine-remote/remotecontrolmessages.proto
+
+  integration:
+    needs: release
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - name: Download Clementine ${{ needs.release.outputs.tag }}
+        env:
+          TAG: ${{ needs.release.outputs.tag }}
+        # GitHub turns the "~" in the .deb's name into "." on upload.
+        run: |
+          if ! gh release download "$TAG" --repo clementine-player/Clementine \
+              --pattern '*resolute_amd64.deb' --dir clementine-it; then
+            echo "Assets of Clementine $TAG:"
+            gh release view "$TAG" --repo clementine-player/Clementine --json assets -q '.assets[].name'
+            exit 1
+          fi
+          ls -l clementine-it/*.deb
+
+      - uses: docker/setup-buildx-action@v3
+      - name: Build headless Clementine
+        uses: docker/build-push-action@v6
+        with:
+          context: clementine-it
+          tags: clementine-it
+          load: true
+          cache-from: type=gha,scope=clementine-it
+          cache-to: type=gha,scope=clementine-it,mode=max
+
+      - name: Start Clementine
+        run: |
+          docker run -d --name clementine -p 5500:5500 -e AUTH_CODE="$AUTH_CODE" clementine-it
+          for i in $(seq 90); do
+            status=$(docker inspect -f '{{.State.Health.Status}}' clementine)
+            [ "$status" = healthy ] && exit 0
+            [ "$(docker inspect -f '{{.State.Running}}' clementine)" = true ] || break
+            sleep 2
+          done
+          docker logs clementine
+          exit 1
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v5
+      - name: Integration tests
+        run: >
+          ./gradlew testDebugUnitTest --tests 'de.qspool.clementineremote.integration.*'
+          -Pclementine.host=localhost -Pclementine.authCode="$AUTH_CODE"
+
+      - name: Clementine state and log
+        if: always()
+        run: |
+          docker inspect -f 'status={{.State.Status}} exit={{.State.ExitCode}} oom={{.State.OOMKilled}} error={{.State.Error}}' clementine || true
+          docker logs clementine 2>&1 | grep -v GstEnginePipeline | tail -n 300
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: integration-reports
+          path: app/build/reports/tests/
