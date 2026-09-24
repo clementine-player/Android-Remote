@@ -17,9 +17,16 @@
 
 package de.qspool.clementineremote.ui.interfaces;
 
+import androidx.annotation.MainThread;
+
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 
 public interface RemoteDataReceiver {
 
+    /**
+     * A message from Clementine, delivered on the UI thread. Annotated so lint flags
+     * worker-thread-only calls (such as Bitmap.sameAs) made from the UI's message handling.
+     */
+    @MainThread
     public void MessageFromClementine(ClementineMessage clementineMessage);
 }
