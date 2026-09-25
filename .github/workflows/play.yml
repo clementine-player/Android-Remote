@@ -1,0 +1,118 @@
+# Publishes every change on master to the Google Play internal testing track, a private
+# channel for up to 100 testers.
+#
+# The upload key lives in Cloud KMS and cannot be exported: the bundle is built unsigned and
+# signed by tools/kms-signer, which only sends digests to KMS. GitHub Actions authenticates to
+# Google Cloud through Workload Identity Federation (the pool Clementine's macOS signing uses,
+# with its own provider and service account), for both signing and the Play upload, so the
+# repository holds no keys or credentials at all. See RELEASING.md and
+# scripts/gcp_play_setup.sh for the one-time setup; until the signing certificate is
+# committed, this only checks that the bundle builds.
+name: play
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+# Uploads must land in order, as each needs a higher version code than the last.
+concurrency:
+  group: play
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  id-token: write # for the OIDC token Workload Identity Federation exchanges
+
+# Created by scripts/gcp_play_setup.sh.
+env:
+  WORKLOAD_IDENTITY_PROVIDER: projects/611551928920/locations/global/workloadIdentityPools/github-actions/providers/android-remote-play
+  SERVICE_ACCOUNT: android-play-release@clementine-data.iam.gserviceaccount.com
+  ANDROID_KMS_KEY: projects/clementine-data/locations/global/keyRings/android-signing/cryptoKeys/play-upload/cryptoKeyVersions/1
+  UPLOAD_CERT: app/upload_cert.pem
+
+jobs:
+  internal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # The version code is the number of commits on the branch.
+          fetch-depth: 0
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v5
+
+      - name: Version
+        id: version
+        run: |
+          code=$(git rev-list --count HEAD)
+          name="$(sed -n 's/^ *versionName = "\(.*\)"/\1/p' app/build.gradle.kts)+$(git rev-parse --short HEAD)"
+          min_sdk=$(sed -n 's/^ *minSdk = \([0-9]*\)/\1/p' app/build.gradle.kts)
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+          echo "min_sdk=$min_sdk" >> "$GITHUB_OUTPUT"
+          echo "Building $name ($code)"
+
+      - name: Build the unsigned bundle
+        run: >
+          ./gradlew bundlePlayRelease
+          -PplayVersionCode=${{ steps.version.outputs.code }}
+          -PplayVersionName=${{ steps.version.outputs.name }}
+
+      - name: Build kms-signer
+        run: ./gradlew -p tools/kms-signer installDist
+
+      - name: Check the signing setup
+        id: setup
+        run: |
+          if [ -f "$UPLOAD_CERT" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::Built the Play bundle but did not sign or upload it: $UPLOAD_CERT \
+          is not committed yet (see RELEASING.md)."
+          fi
+
+      - uses: google-github-actions/auth@v3
+        id: auth
+        if: steps.setup.outputs.ready == 'true'
+        with:
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+
+      - name: Sign the bundle with Cloud KMS
+        if: steps.setup.outputs.ready == 'true'
+        run: |
+          signer=tools/kms-signer/build/install/kms-signer/bin/kms-signer
+          $signer sign --key "$ANDROID_KMS_KEY" --cert "$UPLOAD_CERT" \
+            --in app/build/outputs/bundle/playRelease/ClementineRemote-play-release.aab \
+            --out "$RUNNER_TEMP/ClementineRemote-play-release.aab" \
+            --min-sdk ${{ steps.version.outputs.min_sdk }}
+          $signer verify --in "$RUNNER_TEMP/ClementineRemote-play-release.aab"
+
+      - uses: actions/upload-artifact@v5
+        with:
+          name: play-bundle
+          path: |
+            ${{ runner.temp }}/ClementineRemote-play-release.aab
+            app/build/outputs/bundle/playRelease/*.aab
+
+      - name: Release notes
+        run: |
+          mkdir -p whatsnew
+          git log -1 --format=%s | cut -c1-500 > whatsnew/whatsnew-en-US
+
+      - name: Upload to the internal testing track
+        if: steps.setup.outputs.ready == 'true'
+        uses: r0adkll/upload-google-play@v1
+        with:
+          # The federated credentials from the auth step, not a service account key.
+          serviceAccountJson: ${{ steps.auth.outputs.credentials_file_path }}
+          packageName: org.clementine_player.remote
+          releaseFiles: ${{ runner.temp }}/ClementineRemote-play-release.aab
+          releaseName: ${{ steps.version.outputs.name }}
+          track: internal
+          # "draft" until the app's first release has been rolled out in Play Console.
+          status: ${{ vars.PLAY_RELEASE_STATUS || 'completed' }}
+          whatsNewDirectory: whatsnew
