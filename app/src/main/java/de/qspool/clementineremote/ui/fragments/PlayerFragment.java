@@ -33,8 +33,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import java.lang.reflect.Field;
-
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.Clementine;
@@ -141,20 +139,6 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
     public void onPause() {
         super.onPause();
         mTabs.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-        try {
-            Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
-            childFragmentManager.setAccessible(true);
-            childFragmentManager.set(this, null);
-
-        } catch (NoSuchFieldException ignored) {
-        } catch (IllegalAccessException ignored) {
-        }
     }
 
     @Override
