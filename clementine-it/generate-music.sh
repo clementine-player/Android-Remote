@@ -12,7 +12,8 @@ tone() { # tone <n> <seconds> <file> <ffmpeg metadata args...>
   n=$1 seconds=$2 file=$3
   shift 3
   mkdir -p "$(dirname "$file")"
-  ffmpeg -loglevel error -f lavfi -i "sine=frequency=$((220 + n * 55)):duration=$seconds" \
+  # -nostdin: the showcase loop feeds its list on stdin, which ffmpeg would read.
+  ffmpeg -nostdin -loglevel error -f lavfi -i "sine=frequency=$((220 + n * 55)):duration=$seconds" \
     -c:a libvorbis -q:a 0 "$@" "$file"
 }
 
