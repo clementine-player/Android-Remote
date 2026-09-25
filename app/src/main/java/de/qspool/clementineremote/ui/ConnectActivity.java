@@ -156,8 +156,10 @@ public class ConnectActivity extends AppCompatActivity {
             return;
         }
 
-        // mDNS Discovery
+        // mDNS discovery runs even when auto-connecting, so that if the saved address no longer
+        // works, the Clementines on the network are there to pick from.
         mClementineMDns = new ClementineMDnsDiscovery(mHandler);
+        mClementineMDns.discoverServices();
 
         // Check if Autoconnect is enabled
         if (mSharedPref.getBoolean(SharedPreferencesKeys.SP_KEY_AC, false) && doAutoConnect) {
@@ -168,9 +170,6 @@ public class ConnectActivity extends AppCompatActivity {
                     connect();
                 }
             }, 250);
-
-        } else {
-            mClementineMDns.discoverServices();
         }
         doAutoConnect = true;
 

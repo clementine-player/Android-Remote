@@ -9,20 +9,21 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.net.LinkAddress;
+import android.net.LinkProperties;
 import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
+import androidx.annotation.Nullable;
 import androidx.core.app.TaskStackBuilder;
 import android.text.Html;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.Enumeration;
 import java.util.Locale;
 
 import de.qspool.clementineremote.App;
@@ -224,25 +225,37 @@ public class Utilities {
         return stackBuilder.getPendingIntent(9912, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
     }
 
-    public static Inet4Address getIp4Address() {
-        try {
-            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-            while (interfaces.hasMoreElements()) {
-                NetworkInterface networkInterface = interfaces.nextElement();
-                Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
-
-                while (addresses.hasMoreElements()) {
-                    InetAddress address = addresses.nextElement();
-                    if (address instanceof Inet4Address
-                            && !address.isLoopbackAddress()) {
-                        return (Inet4Address) address;
-                    }
-                }
-            }
-        } catch (SocketException e) {
+    /**
+     * The device's IPv4 address on its local network (Wi-Fi or Ethernet), where Clementine
+     * announces itself. Not a VPN's or mobile data's: multicast DNS does not cross those, and
+     * the first address of any interface can well be a VPN's, such as Tailscale's.
+     */
+    @Nullable
+    public static Inet4Address getLocalNetworkIp4Address(Context context) {
+        ConnectivityManager connectivity = context.getSystemService(ConnectivityManager.class);
+        if (connectivity == null) {
             return null;
         }
-
+        for (Network network : connectivity.getAllNetworks()) {
+            NetworkCapabilities capabilities = connectivity.getNetworkCapabilities(network);
+            LinkProperties link = connectivity.getLinkProperties(network);
+            if (capabilities == null || link == null || !isLocalNetwork(capabilities)) {
+                continue;
+            }
+            for (LinkAddress linkAddress : link.getLinkAddresses()) {
+                InetAddress address = linkAddress.getAddress();
+                if (address instanceof Inet4Address && !address.isLoopbackAddress()) {
+                    return (Inet4Address) address;
+                }
+            }
+        }
         return null;
+    }
+
+    /** A VPN can also report the Wi-Fi it runs over as a transport, so it is ruled out first. */
+    static boolean isLocalNetwork(NetworkCapabilities capabilities) {
+        return !capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN)
+                && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET));
     }
 }

@@ -23,6 +23,7 @@ import android.net.wifi.WifiManager.MulticastLock;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import java.io.IOException;
 import java.net.Inet4Address;
@@ -38,6 +39,8 @@ import de.qspool.clementineremote.backend.elements.ServiceFound;
 import de.qspool.clementineremote.utils.Utilities;
 
 public class ClementineMDnsDiscovery {
+
+    private static final String TAG = "ClementineMDnsDiscovery";
 
     private JmDNS mJmDNS;
 
@@ -127,10 +130,12 @@ public class ClementineMDnsDiscovery {
 
     private void jmDnsListener() {
         try {
-            Inet4Address ip = Utilities.getIp4Address();
+            Inet4Address ip = Utilities.getLocalNetworkIp4Address(App.getApp());
             if (ip == null) {
+                Log.i(TAG, "Not on a local network, so not looking for Clementine");
                 return;
             }
+            Log.d(TAG, "Looking for Clementine from " + ip.getHostAddress());
 
             mJmDNS = JmDNS.create(ip);
             mJmDNS.addServiceListener(mDnsType, mListener = new ServiceListener() {
@@ -170,6 +175,7 @@ public class ClementineMDnsDiscovery {
 
             });
         } catch (Exception e) {
+            Log.w(TAG, "Network discovery failed", e);
             mJmDNS = null;
         }
     }
