@@ -80,8 +80,6 @@
   <string name="connection_version">Версія Clementine</string>
   <string name="connection_traffic">Обмін вивант./отр. (сер./за сек.)</string>
   <string name="connection_traffic_unsupported">На цьому пристрої доступ до статистики неможливий</string>
-  <string name="menu_shuffle">Перемішати</string>
-  <string name="menu_repeat">Повторити</string>
   <string name="menu_settings">Параметри</string>
   <string name="menu_search">Пошук</string>
   <string name="menu_love">Уподобати</string>

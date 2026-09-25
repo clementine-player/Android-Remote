@@ -97,8 +97,6 @@
     <string name="connection_traffic_unsupported">Stats not available on this device</string>
 
 
-    <string name="menu_shuffle">Shuffle</string>
-    <string name="menu_repeat">Repeat</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_search">Search</string>
     <string name="menu_love">Love</string>

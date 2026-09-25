@@ -29,8 +29,6 @@
   <string name="download_noti_insufficient_space">Ruum otsas, allalaadimise katkestamine.</string>
   <string name="download_noti_forbidden">Allalaadimine keelatud. Aktiveeri Clementine\'i seadetes.</string>
   <string name="download_noti_only_wifi">Allalaadimine on lubatud ainult wifi kaudu</string>
-  <string name="menu_shuffle">Sega järjekord</string>
-  <string name="menu_repeat">Korda</string>
   <string name="menu_settings">Seaded</string>
   <string name="menu_search">Otsi</string>
   <string name="menu_ban">Keela</string>

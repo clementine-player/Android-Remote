@@ -12,8 +12,6 @@
   <string name="player_download_playlists">သီချင်းစာရင်းများကူးဆွဲနေ</string>
   <string name="playler_volume">အသံပမာဏ</string>
   <string name="playlist_search_hint">တေးသံလမ်းကြောရှာဖွေ</string>
-  <string name="menu_shuffle">ကုလားဖန်ထိုး</string>
-  <string name="menu_repeat">ပြန်ဆို</string>
   <string name="menu_settings">ချိန်ညှိချက်</string>
   <string name="menu_search">ရှာဖွေ</string>
   <string name="pref_cat_behavior">လုပ်ဆောင်ပုံ</string>

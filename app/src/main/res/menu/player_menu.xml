@@ -2,16 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/shuffle"
-        android:title="@string/menu_shuffle"
-        app:showAsAction="always"
-        android:icon="@drawable/ab_shuffle_off" />
-    <item
-        android:id="@+id/repeat"
-        android:title="@string/menu_repeat"
-        app:showAsAction="always"
-        android:icon="@drawable/ab_repeat_off" />
-    <item
         android:id="@+id/download"
         android:title="@string/menu_download"
         android:icon="@drawable/ab_download"

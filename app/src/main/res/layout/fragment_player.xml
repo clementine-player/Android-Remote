@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="top"
     android:orientation="vertical"
     android:weightSum="1">
@@ -13,54 +12,9 @@
         android:layout_height="0dip"
         android:layout_weight="1"/>
 
-    <View
-        android:id="@+id/view1"
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="6dp"
-        android:background="#000000" />
-
-    <LinearLayout
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/player_controls"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layoutDirection="ltr"
-        android:gravity="center_horizontal"
-        tools:ignore="UnusedAttribute">
-
-        <ImageButton
-            android:id="@+id/btnPrev"
-            android:background="@drawable/selector_white_orange_selected"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_weight="1"
-            android:contentDescription="@string/cd_player_desc_buttons"
-            android:src="@drawable/ic_media_previous" />
-
-        <ImageButton
-            android:id="@+id/btnPlaypause"
-            android:background="@drawable/selector_white_orange_selected"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="17dp"
-            android:layout_marginRight="17dp"
-            android:layout_weight="1"
-            android:src="@drawable/ic_media_play"
-            android:contentDescription="@string/cd_player_desc_buttons" />
-
-        <ImageButton
-            android:id="@+id/btnNext"
-            android:background="@drawable/selector_white_orange_selected"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_weight="1"
-            android:contentDescription="@string/cd_player_desc_buttons"
-            android:src="@drawable/ic_media_next" />
-
-    </LinearLayout>
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

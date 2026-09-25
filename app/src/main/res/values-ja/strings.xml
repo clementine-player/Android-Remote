@@ -76,8 +76,6 @@
   <string name="connection_version">Clementine バージョン</string>
   <string name="connection_traffic">トラフィックアップ / ダウン (平均 / 秒)</string>
   <string name="connection_traffic_unsupported">統計はこのデバイスで利用できません</string>
-  <string name="menu_shuffle">シャッフル</string>
-  <string name="menu_repeat">リピート</string>
   <string name="menu_settings">設定</string>
   <string name="menu_search">検索</string>
   <string name="menu_love">好き</string>

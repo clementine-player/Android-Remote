@@ -78,8 +78,6 @@
   <string name="connection_version">Clementine verzió</string>
   <string name="connection_traffic">Forgalom fel / le (átlag / mp)</string>
   <string name="connection_traffic_unsupported">Statisztika nem elérhető ezen az eszközön</string>
-  <string name="menu_shuffle">Véletlenszerű lejátszás</string>
-  <string name="menu_repeat">Ismétlés</string>
   <string name="menu_settings">Beállítások</string>
   <string name="menu_search">Keresés</string>
   <string name="menu_love">Kedvelés</string>

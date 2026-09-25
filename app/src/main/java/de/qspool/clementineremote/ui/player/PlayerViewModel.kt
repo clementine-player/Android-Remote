@@ -2,6 +2,7 @@ package de.qspool.clementineremote.ui.player
 
 import androidx.lifecycle.ViewModel
 import de.qspool.clementineremote.App
+import de.qspool.clementineremote.backend.Clementine
 import de.qspool.clementineremote.backend.ClementinePlayerConnection.ConnectionStatus
 import de.qspool.clementineremote.backend.RemoteRepository
 import de.qspool.clementineremote.backend.RemoteRepository.NowPlaying
@@ -28,20 +29,30 @@ class PlayerViewModel(
 
     fun previous() = send(ClementineMessage.getMessage(MsgType.PREVIOUS))
 
-    fun seekTo(seconds: Int) = send(ClementineMessageFactory.buildTrackPosition(seconds))
+    /** Toggles stopping once the current song ends. */
+    fun stopAfterCurrent() = send(ClementineMessage.getMessage(MsgType.STOP_AFTER))
 
-    /** Moves to the next shuffle mode, as the old player's shuffle button does. */
-    fun cycleShuffle() {
+    /** Seeks, and shows the new position at once rather than when Clementine confirms it. */
+    fun seekTo(seconds: Int) {
+        App.Clementine.songPosition = seconds
+        RemoteRepository.refresh()
+        send(ClementineMessageFactory.buildTrackPosition(seconds))
+    }
+
+    /** Moves to the next shuffle mode, and returns it. */
+    fun cycleShuffle(): Clementine.ShuffleMode {
         App.Clementine.nextShuffleMode()
         RemoteRepository.refresh()
         send(ClementineMessageFactory.buildShuffle())
+        return App.Clementine.shuffleMode
     }
 
-    /** Moves to the next repeat mode, as the old player's repeat button does. */
-    fun cycleRepeat() {
+    /** Moves to the next repeat mode, and returns it. */
+    fun cycleRepeat(): Clementine.RepeatMode {
         App.Clementine.nextRepeatMode()
         RemoteRepository.refresh()
         send(ClementineMessageFactory.buildRepeat())
+        return App.Clementine.repeatMode
     }
 
     /** Rates the current song, from 0 to 5 stars. */
