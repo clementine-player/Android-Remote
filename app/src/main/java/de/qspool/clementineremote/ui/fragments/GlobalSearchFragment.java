@@ -157,20 +157,19 @@ public class GlobalSearchFragment extends Fragment
                 for (SongSelectItem songItem : selectedItems) {
                     OnSongSelectFinishedListener listener;
 
-                    switch (item.getItemId()) {
-                        case R.id.global_search_context_add:
+                    final int id = item.getItemId();
+                    if (id == R.id.global_search_context_add) {
 
-                            listener = new OnSongSelectFinishedListener() {
-                                @Override
-                                public void OnSongSelectFinished(
-                                        LinkedList<SongSelectItem> l) {
-                                    addSongsToPlaylist(l);
-                                }
-                            };
+                        listener = new OnSongSelectFinishedListener() {
+                            @Override
+                            public void OnSongSelectFinished(
+                                    LinkedList<SongSelectItem> l) {
+                                addSongsToPlaylist(l);
+                            }
+                        };
 
-                            break;
-                        default:
-                            return false;
+                    } else {
+                        return false;
                     }
                     queryItems(songItem, listener);
                 }

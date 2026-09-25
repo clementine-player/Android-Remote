@@ -191,18 +191,13 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
         public void onClick(View v) {
             Message msg = Message.obtain();
 
-            switch (v.getId()) {
-                case R.id.btnNext:
-                    msg.obj = ClementineMessage.getMessage(MsgType.NEXT);
-                    break;
-                case R.id.btnPrev:
-                    msg.obj = ClementineMessage.getMessage(MsgType.PREVIOUS);
-                    break;
-                case R.id.btnPlaypause:
-                    msg.obj = ClementineMessage.getMessage(MsgType.PLAYPAUSE);
-                    break;
-                default:
-                    break;
+            final int id = v.getId();
+            if (id == R.id.btnNext) {
+                msg.obj = ClementineMessage.getMessage(MsgType.NEXT);
+            } else if (id == R.id.btnPrev) {
+                msg.obj = ClementineMessage.getMessage(MsgType.PREVIOUS);
+            } else if (id == R.id.btnPlaypause) {
+                msg.obj = ClementineMessage.getMessage(MsgType.PLAYPAUSE);
             }
             // Send the request to the thread
             if (msg.obj != null) {
@@ -218,15 +213,12 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
             boolean ret = false;
             Message msg = Message.obtain();
 
-            switch (v.getId()) {
-                case R.id.btnPlaypause:
-                    Toast.makeText(getActivity(), R.string.player_stop_after_current,
-                            Toast.LENGTH_SHORT).show();
-                    msg.obj = ClementineMessage.getMessage(MsgType.STOP_AFTER);
-                    ret = true;
-                    break;
-                default:
-                    break;
+            final int id = v.getId();
+            if (id == R.id.btnPlaypause) {
+                Toast.makeText(getActivity(), R.string.player_stop_after_current,
+                        Toast.LENGTH_SHORT).show();
+                msg.obj = ClementineMessage.getMessage(MsgType.STOP_AFTER);
+                ret = true;
             }
 
             App.ClementineConnection.mHandler.sendMessage(msg);

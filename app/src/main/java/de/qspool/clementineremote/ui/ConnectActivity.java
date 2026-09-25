@@ -201,14 +201,14 @@ public class ConnectActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.settings:
-                Intent settingsIntent = new Intent(this, ClementineSettings.class);
-                startActivity(settingsIntent);
-                doAutoConnect = false;
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        final int id = item.getItemId();
+        if (id == R.id.settings) {
+            Intent settingsIntent = new Intent(this, ClementineSettings.class);
+            startActivity(settingsIntent);
+            doAutoConnect = false;
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 

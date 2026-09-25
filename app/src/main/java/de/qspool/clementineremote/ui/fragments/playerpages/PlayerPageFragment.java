@@ -177,54 +177,50 @@ public class PlayerPageFragment extends Fragment
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.shuffle:
-                doShuffle();
-                break;
-            case R.id.repeat:
-                doRepeat();
-                break;
-            case R.id.download:
-                if (App.Clementine.getCurrentSong() == null) {
-                    Toast.makeText(getActivity(), R.string.player_nosong, Toast.LENGTH_LONG).show();
-                    break;
-                }
-                if (App.Clementine.getCurrentSong().isLocal()) {
-                    DownloadChooserDialog downloadChooserDialog = new DownloadChooserDialog(getActivity());
-                    downloadChooserDialog.setCallback(new DownloadChooserDialog.Callback() {
-                        @Override
-                        public void onItemClick(DownloadChooserDialog.Type type) {
-                            switch (type) {
-                                case SONG:
-                                    DownloadManager.getInstance().addJob(ClementineMessageFactory
-                                            .buildDownloadSongsMessage(DownloadItem.CurrentItem));
-                                    break;
-                                case ALBUM:
-                                    DownloadManager.getInstance().addJob(ClementineMessageFactory
-                                            .buildDownloadSongsMessage(DownloadItem.ItemAlbum));
-                                    break;
-                                case PLAYLIST:
-                                    DownloadManager.getInstance().addJob(ClementineMessageFactory
-                                            .buildDownloadSongsMessage(DownloadItem.APlaylist,
-                                                    App.Clementine.getPlaylistManager().getActivePlaylistId()));
-                                    break;
-                            }
+        final int id = item.getItemId();
+        if (id == R.id.shuffle) {
+            doShuffle();
+        } else if (id == R.id.repeat) {
+            doRepeat();
+        } else if (id == R.id.download) {
+            if (App.Clementine.getCurrentSong() == null) {
+                Toast.makeText(getActivity(), R.string.player_nosong, Toast.LENGTH_LONG).show();
+                return true;
+            }
+            if (App.Clementine.getCurrentSong().isLocal()) {
+                DownloadChooserDialog downloadChooserDialog = new DownloadChooserDialog(getActivity());
+                downloadChooserDialog.setCallback(new DownloadChooserDialog.Callback() {
+                    @Override
+                    public void onItemClick(DownloadChooserDialog.Type type) {
+                        switch (type) {
+                            case SONG:
+                                DownloadManager.getInstance().addJob(ClementineMessageFactory
+                                        .buildDownloadSongsMessage(DownloadItem.CurrentItem));
+                                break;
+                            case ALBUM:
+                                DownloadManager.getInstance().addJob(ClementineMessageFactory
+                                        .buildDownloadSongsMessage(DownloadItem.ItemAlbum));
+                                break;
+                            case PLAYLIST:
+                                DownloadManager.getInstance().addJob(ClementineMessageFactory
+                                        .buildDownloadSongsMessage(DownloadItem.APlaylist,
+                                                App.Clementine.getPlaylistManager().getActivePlaylistId()));
+                                break;
                         }
-                    });
-                    downloadChooserDialog.showDialog();
+                    }
+                });
+                downloadChooserDialog.showDialog();
 
-                } else {
-                    Toast.makeText(getActivity(), R.string.player_song_is_stream, Toast.LENGTH_LONG)
-                            .show();
-                }
-                break;
-            case R.id.stop:
-                Message msg = Message.obtain();
-                msg.obj = ClementineMessage.getMessage(MsgType.STOP);
-                App.ClementineConnection.mHandler.sendMessage(msg);
-                break;
-            default:
-                return false;
+            } else {
+                Toast.makeText(getActivity(), R.string.player_song_is_stream, Toast.LENGTH_LONG)
+                        .show();
+            }
+        } else if (id == R.id.stop) {
+            Message msg = Message.obtain();
+            msg.obj = ClementineMessage.getMessage(MsgType.STOP);
+            App.ClementineConnection.mHandler.sendMessage(msg);
+        } else {
+            return false;
         }
         return true;
     }
@@ -528,19 +524,16 @@ public class PlayerPageFragment extends Fragment
         public void onClick(View v) {
             Message msg = Message.obtain();
 
-            switch (v.getId()) {
-                case R.id.imgArt:
-                    // Shall we download the lyrics or do we have them already downloaded?
-                    mPdDownloadLyrics = ProgressDialog.showIndeterminate(getActivity(), 0,
-                            R.string.player_download_lyrics, true, null);
-                    if (mCurrentSong.getLyricsProvider().isEmpty()) {
-                        msg.obj = ClementineMessage.getMessage(MsgType.GET_LYRICS);
-                    } else {
-                        showLyricsDialog();
-                    }
-                    break;
-                default:
-                    break;
+            final int id = v.getId();
+            if (id == R.id.imgArt) {
+                // Shall we download the lyrics or do we have them already downloaded?
+                mPdDownloadLyrics = ProgressDialog.showIndeterminate(getActivity(), 0,
+                        R.string.player_download_lyrics, true, null);
+                if (mCurrentSong.getLyricsProvider().isEmpty()) {
+                    msg.obj = ClementineMessage.getMessage(MsgType.GET_LYRICS);
+                } else {
+                    showLyricsDialog();
+                }
             }
             // Send the request to the thread
             if (msg.obj != null) {
