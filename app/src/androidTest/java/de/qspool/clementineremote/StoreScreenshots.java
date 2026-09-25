@@ -192,6 +192,25 @@ public class StoreScreenshots {
         }
     }
 
+    /**
+     * Searches Clementine. Enter only submits once the keyboard is attached to the field, which
+     * can take a moment; a submitted search collapses the field, so press it until it does.
+     */
+    private void search(String text) {
+        UiObject2 query = waitFor(id("search_src_text"));
+        query.click();
+        query.setText(text);
+        for (int attempt = 1; ; attempt++) {
+            mDevice.waitForIdle();
+            mDevice.pressEnter();
+            if (mDevice.wait(Until.gone(id("search_src_text")), 5000)) {
+                return;
+            }
+            assertTrue("Could not submit the search", attempt < 3);
+            waitFor(id("search_src_text")).click();
+        }
+    }
+
     @Test
     public void takeScreenshots() {
         mContext.startActivity(new Intent(mContext, ConnectActivity.class)
@@ -224,12 +243,7 @@ public class StoreScreenshots {
         screenshot("2_library_album");
 
         navigateTo("Search");
-        // The field needs focus for Enter to submit the search.
-        UiObject2 query = waitFor(id("search_src_text"));
-        query.click();
-        query.setText("Gymnopédie");
-        mDevice.waitForIdle();
-        mDevice.pressEnter();
+        search("Gymnopédie");
         // Results are grouped by source, then artist and album: open the first entry at each
         // level down to the tracks.
         BySelector tracks = By.textStartsWith("Gymnopédie No.");
