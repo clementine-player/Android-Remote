@@ -98,13 +98,23 @@ class RemoteRepositoryTest {
         player.previous()
         player.seekTo(61)
         player.rate(4f)
+        player.stopAfterCurrent()
 
         assertEquals(
             listOf(MsgType.PLAYPAUSE, MsgType.NEXT, MsgType.PREVIOUS, MsgType.SET_TRACK_POSITION,
-                MsgType.RATE_SONG),
+                MsgType.RATE_SONG, MsgType.STOP_AFTER),
             sent.map { it.messageType })
         assertEquals(61, sent[3].message.requestSetTrackPosition.position)
         assertEquals(0.8f, sent[4].message.requestRateSong.rating, 0.001f)
+    }
+
+    @Test
+    fun seekingShowsTheNewPositionAtOnce() {
+        val player = PlayerViewModel(send = {})
+
+        player.seekTo(61)
+
+        assertEquals(61, player.nowPlaying.value.positionSeconds)
     }
 
     @Test
@@ -112,7 +122,7 @@ class RemoteRepositoryTest {
         val sent = mutableListOf<ClementineMessage>()
         val player = PlayerViewModel(send = { sent += it })
 
-        player.cycleShuffle()
+        assertEquals(Clementine.ShuffleMode.ALL, player.cycleShuffle())
 
         assertEquals(Clementine.ShuffleMode.ALL, player.nowPlaying.value.shuffle)
         assertEquals(MsgType.SHUFFLE, sent.single().messageType)

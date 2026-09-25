@@ -80,8 +80,6 @@
   <string name="connection_version">Verze Clementine</string>
   <string name="connection_traffic">Přenos nahoru/dolů (prům/s)</string>
   <string name="connection_traffic_unsupported">Statistiky na tomto zařízení nejsou dostupné</string>
-  <string name="menu_shuffle">Zamíchat</string>
-  <string name="menu_repeat">Opakovat</string>
   <string name="menu_settings">Nastavení</string>
   <string name="menu_search">Hledat</string>
   <string name="menu_love">Oblíbit</string>

@@ -78,8 +78,6 @@
   <string name="connection_version">Versión de Clementine</string>
   <string name="connection_traffic">Carga/descarga de tráfico (prom./s)</string>
   <string name="connection_traffic_unsupported">Las estadísticas no están disponibles en este dispositivo</string>
-  <string name="menu_shuffle">Aleatorio</string>
-  <string name="menu_repeat">Repetir</string>
   <string name="menu_settings">Configuración</string>
   <string name="menu_search">Buscar</string>
   <string name="menu_love">Me encanta</string>

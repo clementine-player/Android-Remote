@@ -65,8 +65,6 @@
   <string name="connection_version">Clementine έκδοση</string>
   <string name="connection_traffic">Κυκλοφορία Πάνω / Κάτω (μέσος όρος / δευτ)</string>
   <string name="connection_traffic_unsupported">Στατιστικά δεν διατίθεται σε αυτή τη συσκευή</string>
-  <string name="menu_shuffle">Τυχαία αναπαραγωγή</string>
-  <string name="menu_repeat">Επανάληψη</string>
   <string name="menu_settings">Ρυθμίσεις</string>
   <string name="menu_search">Αναζήτηση </string>
   <string name="menu_love">Aγάπη</string>

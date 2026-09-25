@@ -76,8 +76,6 @@
   <string name="connection_version">Clementine sürümü</string>
   <string name="connection_traffic">Trafik Gönder/İndir (ort. / sn.)</string>
   <string name="connection_traffic_unsupported">Durumlar bu cihazda kullanılamıyor</string>
-  <string name="menu_shuffle">Karıştır</string>
-  <string name="menu_repeat">Tekrarla</string>
   <string name="menu_settings">Ayarlar</string>
   <string name="menu_search">Ara</string>
   <string name="menu_love">Beğen</string>

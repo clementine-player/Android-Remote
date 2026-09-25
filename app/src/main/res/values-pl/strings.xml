@@ -82,8 +82,6 @@
   <string name="connection_version">Wersja Clementine</string>
   <string name="connection_traffic">Ruch w górę / w dół (śr. / sek.)</string>
   <string name="connection_traffic_unsupported">Statystyki nie są dostępne dla tego urządzenia</string>
-  <string name="menu_shuffle">Losuj</string>
-  <string name="menu_repeat">Powtarzanie</string>
   <string name="menu_settings">Ustawienia</string>
   <string name="menu_search">Szukaj</string>
   <string name="menu_love">Ulubione</string>

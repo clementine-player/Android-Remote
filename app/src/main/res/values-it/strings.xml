@@ -77,8 +77,6 @@
   <string name="connection_version">Versione di Clementine</string>
   <string name="connection_traffic">Traffico su / Giu (media/sec)</string>
   <string name="connection_traffic_unsupported">Statistiche non disponibili su questo dispositivo</string>
-  <string name="menu_shuffle">Casuale</string>
-  <string name="menu_repeat">Ripeti</string>
   <string name="menu_settings">Impostazioni</string>
   <string name="menu_search">Cerca</string>
   <string name="menu_love">Amore</string>

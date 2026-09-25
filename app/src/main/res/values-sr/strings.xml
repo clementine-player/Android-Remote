@@ -80,8 +80,6 @@
   <string name="connection_version">Издање Клементине</string>
   <string name="connection_traffic">Саобраћај на/са (просек/сек)</string>
   <string name="connection_traffic_unsupported">Статистика није доступна на овом уређају</string>
-  <string name="menu_shuffle">Насумичност</string>
-  <string name="menu_repeat">Понављање</string>
   <string name="menu_settings">Поставке</string>
   <string name="menu_search">Тражи</string>
   <string name="menu_love">Воли</string>

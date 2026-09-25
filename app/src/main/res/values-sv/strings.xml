@@ -78,8 +78,6 @@
   <string name="connection_version">Clementine version</string>
   <string name="connection_traffic">Trafik Upp / Ned (genomsnitt / sek)</string>
   <string name="connection_traffic_unsupported">Statistik ej tillgängligt på denna enhet</string>
-  <string name="menu_shuffle">Blanda</string>
-  <string name="menu_repeat">Upprepa</string>
   <string name="menu_settings">Inställningar</string>
   <string name="menu_search">Sök</string>
   <string name="menu_love">Älska</string>

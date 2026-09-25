@@ -80,8 +80,6 @@
   <string name="connection_version">Clementine versija</string>
   <string name="connection_traffic">Duomenų Išsiuntimas / Atsiuntimas (vid. / sek.)</string>
   <string name="connection_traffic_unsupported">Statistika šiame įrenginyje yra neprieinama</string>
-  <string name="menu_shuffle">Maišyti</string>
-  <string name="menu_repeat">Kartoti</string>
   <string name="menu_settings">Nustatymai</string>
   <string name="menu_search">Paieška</string>
   <string name="menu_love">Patinka</string>

@@ -141,6 +141,11 @@ public class StoreScreenshots {
         return By.res(mPackage, name);
     }
 
+    /** A Compose element, by its test tag: its resource name, without the package. */
+    private static BySelector tag(String name) {
+        return By.res(name);
+    }
+
     private void screenshot(String name) {
         // Let animations and images settle.
         mDevice.waitForIdle();
@@ -185,7 +190,7 @@ public class StoreScreenshots {
             mDevice.waitForIdle();
             mDevice.findObject(By.text(title)).click();
             navigateTo("Player");
-            if (mDevice.wait(Until.hasObject(By.res(mPackage, "tvTitle").text(title)), 10_000)) {
+            if (mDevice.wait(Until.hasObject(tag("tvTitle").text(title)), 10_000)) {
                 return;
             }
             assertTrue("Could not play " + title, attempt < 3);
@@ -219,7 +224,7 @@ public class StoreScreenshots {
         screenshot("6_connect");
 
         mDevice.findObject(id("btnConnect")).click();
-        waitFor(id("btnPlaypause"));
+        waitFor(tag("btnPlaypause"));
 
         navigateTo("Playlists");
         waitFor(By.text("Clair de lune"));

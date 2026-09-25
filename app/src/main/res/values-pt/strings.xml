@@ -78,8 +78,6 @@
   <string name="connection_version">Versão do Clementine</string>
   <string name="connection_traffic">Enviado/Recebido (média/seg.)</string>
   <string name="connection_traffic_unsupported">Estatísticas não disponíveis</string>
-  <string name="menu_shuffle">Aleatório</string>
-  <string name="menu_repeat">Repetir</string>
   <string name="menu_settings">Definições</string>
   <string name="menu_search">Procurar</string>
   <string name="menu_love">Gosto</string>

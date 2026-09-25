@@ -76,8 +76,6 @@
   <string name="connection_version">Clementinen versio</string>
   <string name="connection_traffic">Liikenne ulos / sisään (ka. / s)</string>
   <string name="connection_traffic_unsupported">Tilastot eivät ole käytettävissä tällä laitteella</string>
-  <string name="menu_shuffle">Sekoita</string>
-  <string name="menu_repeat">Kertaa</string>
   <string name="menu_settings">Asetukset</string>
   <string name="menu_search">Etsi</string>
   <string name="menu_love">Tykkää</string>

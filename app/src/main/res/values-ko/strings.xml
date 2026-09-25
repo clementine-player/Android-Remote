@@ -49,8 +49,6 @@
   <string name="song_info_filename">파일명</string>
   <string name="song_info_rating">등급</string>
   <string name="song_info_rated">음악이 별 $star$ 등급입니다.</string>
-  <string name="menu_shuffle">셔플</string>
-  <string name="menu_repeat">반복</string>
   <string name="menu_settings">설정</string>
   <string name="menu_search">검색</string>
   <string name="menu_love">좋아요</string>

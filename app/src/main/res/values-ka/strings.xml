@@ -49,8 +49,6 @@
   <string name="song_info_filename">ფაილი</string>
   <string name="song_info_rating">შეფასება</string>
   <string name="song_info_rated">სიმღერა შეფასებულია $stars$ ვარსკვლავით</string>
-  <string name="menu_shuffle">შერევა</string>
-  <string name="menu_repeat">გამეორება</string>
   <string name="menu_settings">პარამეტრები</string>
   <string name="menu_search">ძებნა</string>
   <string name="menu_love">შეყვარება</string>

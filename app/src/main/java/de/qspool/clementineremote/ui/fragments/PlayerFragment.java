@@ -18,24 +18,18 @@
 package de.qspool.clementineremote.ui.fragments;
 
 import androidx.fragment.app.Fragment;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Message;
+import androidx.compose.ui.platform.ComposeView;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.Toast;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
-import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.ui.adapter.PlayerPageAdapter;
@@ -44,15 +38,10 @@ import de.qspool.clementineremote.ui.fragments.playerpages.PlayerPageFragment;
 import de.qspool.clementineremote.ui.fragments.playerpages.SongDetailFragment;
 import de.qspool.clementineremote.ui.interfaces.BackPressHandleable;
 import de.qspool.clementineremote.ui.interfaces.RemoteDataReceiver;
+import de.qspool.clementineremote.ui.player.PlayerViews;
 import de.qspool.clementineremote.ui.widgets.SlidingTabLayout;
 
 public class PlayerFragment extends Fragment implements BackPressHandleable, RemoteDataReceiver {
-
-    private ImageButton mBtnNext;
-
-    private ImageButton mBtnPrev;
-
-    private ImageButton mBtnPlayPause;
 
     private ActionBar mActionBar;
 
@@ -96,19 +85,8 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
         myPager.setAdapter(playerPageAdapter);
         myPager.setCurrentItem(0);
 
-        // Get the Views
-        mBtnNext = (ImageButton) view.findViewById(R.id.btnNext);
-        mBtnPrev = (ImageButton) view.findViewById(R.id.btnPrev);
-        mBtnPlayPause = (ImageButton) view.findViewById(R.id.btnPlaypause);
+        PlayerViews.showControls((ComposeView) view.findViewById(R.id.player_controls));
 
-        // Set the onclicklistener for the buttons
-        mBtnNext.setOnClickListener(oclControl);
-        mBtnPrev.setOnClickListener(oclControl);
-        mBtnPlayPause.setOnClickListener(oclControl);
-        mBtnPlayPause.setOnLongClickListener(olclControl);
-
-        // Initialize interface
-        stateChanged();
         metadataChanged();
 
         mTabs = (SlidingTabLayout) getActivity().findViewById(R.id.tabs);
@@ -143,16 +121,8 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
 
     @Override
     public void MessageFromClementine(ClementineMessage clementineMessage) {
-        switch (clementineMessage.getMessageType()) {
-            case PLAY:
-            case PAUSE:
-            case STOP:
-                stateChanged();
-                break;
-            case CURRENT_METAINFO:
-                metadataChanged();
-            default:
-                break;
+        if (clementineMessage.getMessageType() == MsgType.CURRENT_METAINFO) {
+            metadataChanged();
         }
 
         if (mPlayerPageFragment.isAdded()) {
@@ -173,58 +143,6 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
                     App.Clementine.getPlaylistManager().getActivePlaylist().getName());
         }
     }
-
-    private void stateChanged() {
-        // display play / pause image
-        if (App.Clementine.getState() == Clementine.State.PLAY) {
-            mBtnPlayPause.setImageDrawable(
-                    ContextCompat.getDrawable(getActivity(), R.drawable.ic_media_pause));
-        } else {
-            mBtnPlayPause.setImageDrawable(
-                    ContextCompat.getDrawable(getActivity(), R.drawable.ic_media_play));
-        }
-    }
-
-    private OnClickListener oclControl = new OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            Message msg = Message.obtain();
-
-            final int id = v.getId();
-            if (id == R.id.btnNext) {
-                msg.obj = ClementineMessage.getMessage(MsgType.NEXT);
-            } else if (id == R.id.btnPrev) {
-                msg.obj = ClementineMessage.getMessage(MsgType.PREVIOUS);
-            } else if (id == R.id.btnPlaypause) {
-                msg.obj = ClementineMessage.getMessage(MsgType.PLAYPAUSE);
-            }
-            // Send the request to the thread
-            if (msg.obj != null) {
-                App.ClementineConnection.mHandler.sendMessage(msg);
-            }
-        }
-    };
-
-    private OnLongClickListener olclControl = new OnLongClickListener() {
-
-        @Override
-        public boolean onLongClick(View v) {
-            boolean ret = false;
-            Message msg = Message.obtain();
-
-            final int id = v.getId();
-            if (id == R.id.btnPlaypause) {
-                Toast.makeText(getActivity(), R.string.player_stop_after_current,
-                        Toast.LENGTH_SHORT).show();
-                msg.obj = ClementineMessage.getMessage(MsgType.STOP_AFTER);
-                ret = true;
-            }
-
-            App.ClementineConnection.mHandler.sendMessage(msg);
-            return ret;
-        }
-    };
 
     @Override
     public boolean onBackPressed() {

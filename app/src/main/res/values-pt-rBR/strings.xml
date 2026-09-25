@@ -72,8 +72,6 @@
   <string name="connection_connected_to">Conectado a:</string>
   <string name="connection_volume">Volume</string>
   <string name="connection_version">Versão do Clementine:</string>
-  <string name="menu_shuffle">Misturar</string>
-  <string name="menu_repeat">Repetir</string>
   <string name="menu_settings">Configurações</string>
   <string name="menu_search">Pesquisar</string>
   <string name="menu_love">Gostei</string>

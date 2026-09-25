@@ -78,8 +78,6 @@
   <string name="connection_version">Clementine-Version</string>
   <string name="connection_traffic">Datenverkehr Hoch/Runter (Mittel/Sek)</string>
   <string name="connection_traffic_unsupported">Statistiken auf diesem Gerät nicht verfügbar</string>
-  <string name="menu_shuffle">Zufallsmodus</string>
-  <string name="menu_repeat">Wiederholen</string>
   <string name="menu_settings">Einstellungen</string>
   <string name="menu_search">Suche</string>
   <string name="menu_love">Lieben</string>

@@ -78,8 +78,6 @@
   <string name="connection_version">Clementine versie</string>
   <string name="connection_traffic">Verkeer Uit / In (gem / sec)</string>
   <string name="connection_traffic_unsupported">Stats niet beschikbaar op dit apparaat</string>
-  <string name="menu_shuffle">Willekeurig</string>
-  <string name="menu_repeat">Herhalen</string>
   <string name="menu_settings">Instellingen</string>
   <string name="menu_search">Zoeken</string>
   <string name="menu_love">Love</string>

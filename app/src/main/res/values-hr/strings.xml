@@ -80,8 +80,6 @@
   <string name="connection_version">Clementine inačica</string>
   <string name="connection_traffic">Promet Poslano / Preuzeto (pros / sek)</string>
   <string name="connection_traffic_unsupported">Status nije dostupan na ovom uređaju</string>
-  <string name="menu_shuffle">Naizmjenično</string>
-  <string name="menu_repeat">Ponovi</string>
   <string name="menu_settings">Postavke</string>
   <string name="menu_search">Traži</string>
   <string name="menu_love">Sviđa mi se</string>

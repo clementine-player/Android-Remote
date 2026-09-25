@@ -63,8 +63,6 @@
   <string name="connection_version">Versi Clementine</string>
   <string name="connection_traffic">Naik / Turun Trafik (pur / s)</string>
   <string name="connection_traffic_unsupported">Stat tidak tersedia pada peranti ini</string>
-  <string name="menu_shuffle">Kocok</string>
-  <string name="menu_repeat">Ulang</string>
   <string name="menu_settings">Tetapan</string>
   <string name="menu_search">Gelintar</string>
   <string name="menu_love">Suka</string>

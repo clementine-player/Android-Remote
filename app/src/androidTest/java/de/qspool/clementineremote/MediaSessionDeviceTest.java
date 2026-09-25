@@ -45,6 +45,8 @@ public class MediaSessionDeviceTest {
 
     private static final long TIMEOUT = 30_000;
 
+    private static final String SYSTEM_UI = "com.android.systemui";
+
     @Rule
     public final GrantPermissionRule mPermissions = GrantPermissionRule.grant(
             Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.READ_PHONE_STATE);
@@ -99,7 +101,7 @@ public class MediaSessionDeviceTest {
             connect.click();
         }
         assertNotNull("Not connected", mDevice.wait(
-                Until.findObject(By.res(mContext.getPackageName(), "btnPlaypause")), TIMEOUT));
+                Until.findObject(By.res("btnPlaypause")), TIMEOUT));
     }
 
     @After
@@ -156,7 +158,7 @@ public class MediaSessionDeviceTest {
         MySong song = waitForSong();
         // Start from playing, so the controls offer Pause.
         if (App.Clementine.getState() != Clementine.State.PLAY) {
-            mDevice.findObject(By.res(mContext.getPackageName(), "btnPlaypause")).click();
+            mDevice.findObject(By.res("btnPlaypause")).click();
             assertTrue("Clementine didn't start playing", waitForState(Clementine.State.PLAY));
         }
 
@@ -164,10 +166,11 @@ public class MediaSessionDeviceTest {
         assertNotNull("No media controls for " + song.getTitle(),
                 mDevice.wait(Until.findObject(By.text(song.getTitle())), TIMEOUT));
 
-        mDevice.wait(Until.findObject(By.desc("Pause")), TIMEOUT).click();
+        // System UI's buttons: the app's own player has buttons with the same descriptions.
+        mDevice.wait(Until.findObject(By.pkg(SYSTEM_UI).desc("Pause")), TIMEOUT).click();
         assertTrue("Clementine didn't pause", waitForState(Clementine.State.PAUSE));
 
-        mDevice.wait(Until.findObject(By.desc("Play")), TIMEOUT).click();
+        mDevice.wait(Until.findObject(By.pkg(SYSTEM_UI).desc("Play")), TIMEOUT).click();
         assertTrue("Clementine didn't resume", waitForState(Clementine.State.PLAY));
     }
 }
