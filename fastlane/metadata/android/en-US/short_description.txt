@@ -1,0 +1,1 @@
+Control the Clementine music player from your phone over Wi-Fi
