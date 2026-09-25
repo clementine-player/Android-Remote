@@ -153,6 +153,7 @@ public class ClementineService extends Service {
                 if (App.ClementineConnection == null) {
                     App.ClementineConnection = new ClementinePlayerConnection();
                     App.ClementineConnection.setUiHandler(mUiHandler);
+                    RemoteRepository.attach(App.ClementineConnection);
                     MediaSessionController mediaSessionController = new MediaSessionController(this,
                             App.ClementineConnection);
                     mediaSessionController.registerMediaSession();
