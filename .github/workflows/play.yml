@@ -3,9 +3,11 @@
 #
 # The upload key lives in Cloud KMS and cannot be exported: the bundle is built unsigned and
 # signed by tools/kms-signer, which only sends digests to KMS. GitHub Actions authenticates to
-# Google Cloud through Workload Identity Federation, for both signing and the Play upload, so
-# the repository holds no keys or credentials at all. See RELEASING.md for the one-time setup;
-# until the repository variables below are set, this only checks that the bundle builds.
+# Google Cloud through Workload Identity Federation (the pool Clementine's macOS signing uses,
+# with its own provider and service account), for both signing and the Play upload, so the
+# repository holds no keys or credentials at all. See RELEASING.md and
+# scripts/gcp_play_setup.sh for the one-time setup; until the signing certificate is
+# committed, this only checks that the bundle builds.
 name: play
 on:
   push:
@@ -21,10 +23,11 @@ permissions:
   contents: read
   id-token: write # for the OIDC token Workload Identity Federation exchanges
 
+# Created by scripts/gcp_play_setup.sh.
 env:
-  WORKLOAD_IDENTITY_PROVIDER: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-  SERVICE_ACCOUNT: ${{ vars.GCP_SERVICE_ACCOUNT }}
-  ANDROID_KMS_KEY: ${{ vars.ANDROID_KMS_KEY }}
+  WORKLOAD_IDENTITY_PROVIDER: projects/611551928920/locations/global/workloadIdentityPools/github-actions/providers/android-remote-play
+  SERVICE_ACCOUNT: android-play-release@clementine-data.iam.gserviceaccount.com
+  ANDROID_KMS_KEY: projects/clementine-data/locations/global/keyRings/android-signing/cryptoKeys/play-upload/cryptoKeyVersions/1
   UPLOAD_CERT: app/upload_cert.pem
 
 jobs:
@@ -64,12 +67,11 @@ jobs:
       - name: Check the signing setup
         id: setup
         run: |
-          if [ -n "$WORKLOAD_IDENTITY_PROVIDER" ] && [ -n "$SERVICE_ACCOUNT" ] \
-              && [ -n "$ANDROID_KMS_KEY" ] && [ -f "$UPLOAD_CERT" ]; then
+          if [ -f "$UPLOAD_CERT" ]; then
             echo "ready=true" >> "$GITHUB_OUTPUT"
           else
-            echo "::notice::Built the Play bundle but did not sign or upload it: Cloud KMS and \
-          Workload Identity Federation are not set up yet (see RELEASING.md)."
+            echo "::notice::Built the Play bundle but did not sign or upload it: $UPLOAD_CERT \
+          is not committed yet (see RELEASING.md)."
           fi
 
       - uses: google-github-actions/auth@v3

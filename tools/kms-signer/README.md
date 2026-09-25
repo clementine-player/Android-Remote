@@ -19,13 +19,13 @@ v3 only apply to APKs, and Play re-signs those itself with the app signing key).
 the tool enables JAR signing only; a bundle has no top-level manifest for apksig to read the
 minimum SDK from, so `--min-sdk` gives it. APKs get JAR signing and schemes v2 and v3.
 
-Use an `RSA_SIGN_PKCS1_3072_SHA256` key (or 2048-bit; `EC_SIGN_P256_SHA256` also works):
-Cloud KMS keys sign SHA-256 digests only, and APK signature schemes use SHA-512 with RSA keys
-larger than 3072 bits.
+The key, created by `scripts/gcp_play_setup.sh`, is `RSA_SIGN_PKCS1_3072_SHA256`. Keys must be
+RSA of at most 3072 bits or `EC_SIGN_P256_SHA256`: Cloud KMS keys sign SHA-256 digests only,
+and APK signature schemes use SHA-512 with RSA keys larger than 3072 bits.
 
 Authentication is Application Default Credentials: Workload Identity Federation in CI
-(`google-github-actions/auth`, no stored keys), `gcloud auth application-default login`
-locally.
+(`google-github-actions/auth`, no stored keys), and locally `gcloud auth
+application-default login --impersonate-service-account=android-play-release@clementine-data.iam.gserviceaccount.com`.
 
 ## Usage
 
@@ -41,7 +41,7 @@ the same certificate, so it is never regenerated:
 
 ```sh
 $signer gencert \
-  --key projects/PROJECT/locations/global/keyRings/android-signing/cryptoKeys/upload-key/cryptoKeyVersions/1 \
+  --key projects/clementine-data/locations/global/keyRings/android-signing/cryptoKeys/play-upload/cryptoKeyVersions/1 \
   --subject "CN=Clementine Remote Upload,O=Clementine" \
   --out app/upload_cert.pem
 ```
