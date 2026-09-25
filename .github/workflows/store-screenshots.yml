@@ -66,8 +66,7 @@ jobs:
           sudo udevadm trigger --name-match=kvm
 
       # A 1080x1920 phone: Google Play takes screenshots up to a 2:1 aspect ratio. The
-      # emulator reaches the host's Clementine at 10.0.2.2. System UI demo mode gives a
-      # clean status bar. The APKs stay installed so the screenshots can be pulled, also after
+      # emulator reaches the host's Clementine at 10.0.2.2. The APKs stay installed so the screenshots can be pulled, also after
       # a failure (with failure.png and failure.xml, the screen and its views).
       - uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -77,13 +76,6 @@ jobs:
           profile: pixel_2
           disable-animations: true
           script: |
-            adb shell settings put global sysui_demo_allowed 1
-            adb shell am broadcast -a com.android.systemui.demo -e command enter
-            adb shell am broadcast -a com.android.systemui.demo -e command clock -e hhmm 1000
-            adb shell am broadcast -a com.android.systemui.demo -e command battery -e level 100 -e plugged false
-            adb shell am broadcast -a com.android.systemui.demo -e command network -e wifi show -e level 4 -e fully true
-            adb shell am broadcast -a com.android.systemui.demo -e command network -e mobile hide
-            adb shell am broadcast -a com.android.systemui.demo -e command notifications -e visible false
             status=0; ./gradlew connectedFdroidDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=de.qspool.clementineremote.StoreScreenshots -Pandroid.testInstrumentationRunnerArguments.clementineHost=10.0.2.2 -Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true || status=$?; adb pull /sdcard/Android/data/de.qspool.clementineremote/files/screenshots screenshots; exit $status
 
       - uses: actions/upload-artifact@v5
