@@ -38,9 +38,20 @@ startupbehaviour=1
 CONF
 }
 
+# Without PulseAudio, Clementine cannot play anything: it skips through every track and stops
+# at the end of the playlist. The daemon does not always come up on the first try here.
 start_audio() {
-  pulseaudio --start --exit-idle-time=-1 --daemonize=yes \
-    --load=module-null-sink --log-target=stderr 2>/tmp/pulse.log || true
+  for attempt in 1 2 3 4 5; do
+    pulseaudio --start --exit-idle-time=-1 --daemonize=yes \
+      --load=module-null-sink --log-target=stderr 2>>/tmp/pulse.log || true
+    for _ in $(seq 25); do
+      pulseaudio --check && return 0
+      sleep 0.2
+    done
+    echo "PulseAudio did not start (attempt $attempt)" >&2
+  done
+  cat /tmp/pulse.log >&2
+  return 1
 }
 
 wait_for() {
@@ -54,7 +65,10 @@ wait_for() {
 }
 
 write_config
-start_audio
+# Seeding the database needs no playback.
+if ! start_audio && [ "${1:-}" != "--seed" ]; then
+  exit 1
+fi
 
 if [ "${1:-}" = "--seed" ]; then
   dbus-run-session -- clementine --quiet >/tmp/clementine-seed.log 2>&1 &
