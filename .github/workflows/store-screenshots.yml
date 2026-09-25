@@ -1,0 +1,99 @@
+# Takes the Google Play screenshots: the app on an emulator, connected to a real headless
+# Clementine (clementine-it) playing the showcase library. The screenshots are uploaded as
+# an artifact; scripts/store_graphics.py turns them into the store listing images.
+name: store-screenshots
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - .github/workflows/store-screenshots.yml
+      - app/src/androidTest/java/de/qspool/clementineremote/StoreScreenshots.java
+      - clementine-it/**
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  screenshots:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Download the latest Clementine release
+        run: |
+          tag=$(gh release view --repo clementine-player/Clementine --json tagName -q .tagName)
+          echo "Clementine $tag"
+          gh release download "$tag" --repo clementine-player/Clementine \
+            --pattern '*resolute_amd64.deb' --dir clementine-it
+
+      - uses: docker/setup-buildx-action@v3
+      - name: Build headless Clementine with the showcase library
+        uses: docker/build-push-action@v6
+        with:
+          context: clementine-it
+          tags: clementine-it
+          build-args: LIBRARY=showcase
+          load: true
+          cache-from: type=gha,scope=clementine-it-showcase
+          cache-to: type=gha,scope=clementine-it-showcase,mode=max
+
+      - name: Start Clementine
+        run: |
+          docker run -d --name clementine -p 5500:5500 clementine-it
+          for i in $(seq 90); do
+            status=$(docker inspect -f '{{.State.Health.Status}}' clementine)
+            [ "$status" = healthy ] && exit 0
+            [ "$(docker inspect -f '{{.State.Running}}' clementine)" = true ] || break
+            sleep 2
+          done
+          docker logs clementine
+          exit 1
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v5
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      # A 1080x1920 phone: Google Play takes screenshots up to a 2:1 aspect ratio. The
+      # emulator reaches the host's Clementine at 10.0.2.2. System UI demo mode gives a
+      # clean status bar. The APKs stay installed so the screenshots can be pulled.
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 36
+          target: google_apis
+          arch: x86_64
+          profile: pixel_2
+          disable-animations: true
+          script: |
+            adb shell settings put global sysui_demo_allowed 1
+            adb shell am broadcast -a com.android.systemui.demo -e command enter
+            adb shell am broadcast -a com.android.systemui.demo -e command clock -e hhmm 1000
+            adb shell am broadcast -a com.android.systemui.demo -e command battery -e level 100 -e plugged false
+            adb shell am broadcast -a com.android.systemui.demo -e command network -e wifi show -e level 4 -e mobile hide
+            adb shell am broadcast -a com.android.systemui.demo -e command notifications -e visible false
+            ./gradlew connectedFdroidDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=de.qspool.clementineremote.StoreScreenshots -Pandroid.testInstrumentationRunnerArguments.clementineHost=10.0.2.2 -Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true
+            adb pull /sdcard/Android/data/de.qspool.clementineremote/files/screenshots screenshots
+
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: store-screenshots
+          path: |
+            screenshots/
+            app/build/reports/androidTests/
+            app/build/outputs/androidTest-results/
+
+      - name: Clementine log
+        if: always()
+        run: docker logs clementine 2>&1 | grep -v GstEnginePipeline | tail -n 100

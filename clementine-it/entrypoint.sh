@@ -73,8 +73,9 @@ pid=$!
 trap 'kill $pid 2>/dev/null' TERM INT
 
 wait_for "network remote" "nc -z localhost 5500"
+tracks=$(find /music -name '*.ogg' | wc -l)
 wait_for "library scan" \
-  "[ \"\$(sqlite3 '$DB' 'select count(*) from songs where unavailable = 0' 2>/dev/null)\" = 10 ]"
+  "[ \"\$(sqlite3 '$DB' 'select count(*) from songs where unavailable = 0' 2>/dev/null)\" = $tracks ]"
 # Replace the playlist with the library, in path order, and leave it stopped
 # (loading starts playback).
 find /music -name '*.ogg' | sort | xargs -d '\n' clementine --load >/dev/null 2>&1

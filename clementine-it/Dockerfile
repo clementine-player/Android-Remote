@@ -7,16 +7,22 @@
 #     --pattern '*resolute_amd64.deb' --dir clementine-it
 #   docker build -t clementine-it clementine-it
 #   docker run --rm -p 5500:5500 clementine-it
+#
+# --build-arg LIBRARY=showcase builds it with the library the store screenshots
+# show (showcase-library.tsv) instead of the test library.
 
 ARG UBUNTU=ubuntu:resolute
 
-# Ten short tagged tracks: two artists, two albums each; see generate-music.sh.
+# The test library is ten short tagged tracks: two artists, two albums each; see
+# generate-music.sh.
 FROM ${UBUNTU} AS music
+ARG LIBRARY=test
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg \
     && rm -rf /var/lib/apt/lists/*
-COPY generate-music.sh /usr/local/bin/
-RUN generate-music.sh /music
+COPY generate-music.sh showcase-library.tsv /usr/local/bin/
+RUN if [ "$LIBRARY" = showcase ]; then generate-music.sh --showcase /music; \
+    else generate-music.sh /music; fi
 
 FROM ${UBUNTU}
 ENV DEBIAN_FRONTEND=noninteractive
