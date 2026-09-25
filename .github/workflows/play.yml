@@ -112,7 +112,7 @@ jobs:
           packageName: org.clementine_player.remote
           releaseFiles: ${{ runner.temp }}/ClementineRemote-play-release.aab
           releaseName: ${{ steps.version.outputs.name }}
-          track: internal
+          tracks: internal
           # "draft" until the app's first release has been rolled out in Play Console.
           status: ${{ vars.PLAY_RELEASE_STATUS || 'completed' }}
           whatsNewDirectory: whatsnew

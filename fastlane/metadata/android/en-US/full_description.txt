@@ -1,0 +1,16 @@
+Clementine Remote controls the Clementine music player on your computer from your phone, over your home Wi-Fi.
+
+<b>Features</b>
+• Play, pause, skip, seek and change the volume
+• Controls in the notification, on the lockscreen, and from Bluetooth headsets and watches
+• Browse your library and playlists, and search for songs
+• See the cover art and read the lyrics
+• Rate songs, and switch shuffle and repeat
+• Download songs, albums or whole playlists to your phone, no cable needed
+• Lowers the volume when you get a phone call (you can turn this off)
+• Finds Clementine on your network by itself, or connect by address
+
+<b>Setup</b>
+You need Clementine 1.3 or later. In Clementine, open Tools → Preferences → Network Remote and turn on "Use a network remote control". To download songs, also allow downloads there.
+
+Clementine Remote is free software (GPLv3). It collects no data: it only talks to your own Clementine, on your own network.
