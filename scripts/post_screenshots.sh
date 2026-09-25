@@ -23,8 +23,8 @@ if [ ${#shots[@]} -eq 0 ]; then
   exit 0
 fi
 
-# A new folder per run, so GitHub's image cache never shows an earlier run's images. The
-# bucket's lifecycle rule deletes them after 30 days.
+# A new folder per run, so GitHub's image cache never shows an earlier run's images. They're
+# kept, so old comments keep their images.
 prefix="pr-$pr/$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
 AWS_DEFAULT_REGION=auto \
 AWS_REQUEST_CHECKSUM_CALCULATION=when_required \

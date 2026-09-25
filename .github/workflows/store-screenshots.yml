@@ -21,6 +21,7 @@ on:
       - app/src/androidTest/java/de/qspool/clementineremote/MediaSessionDeviceTest.java
       - app/src/main/java/de/qspool/clementineremote/backend/mediasession/**
       - clementine-it/**
+      - scripts/post_screenshots.sh
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
