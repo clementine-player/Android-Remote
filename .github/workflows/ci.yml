@@ -19,7 +19,7 @@ jobs:
           distribution: temurin
           java-version: 21
       - uses: gradle/actions/setup-gradle@v5
-      - run: ./gradlew lintDebug testDebugUnitTest assembleDebug
+      - run: ./gradlew lintFdroidDebug testFdroidDebugUnitTest assembleFdroidDebug bundlePlayRelease
       - uses: actions/upload-artifact@v5
         if: always()
         with:
@@ -30,7 +30,7 @@ jobs:
       - uses: actions/upload-artifact@v5
         with:
           name: apk-debug
-          path: app/build/outputs/apk/debug/*.apk
+          path: app/build/outputs/apk/fdroid/debug/*.apk
 
   # Instrumented tests on an emulator. Only a real Android runtime detects StrictMode thread
   # violations (disk or network on the main thread); see StrictModeDeviceTest.
@@ -55,7 +55,7 @@ jobs:
           target: google_apis
           arch: x86_64
           disable-animations: true
-          script: ./gradlew connectedDebugAndroidTest
+          script: ./gradlew connectedFdroidDebugAndroidTest
       - uses: actions/upload-artifact@v5
         if: always()
         with:

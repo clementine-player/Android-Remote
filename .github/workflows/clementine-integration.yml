@@ -101,7 +101,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v5
       - name: Integration tests
         run: >
-          ./gradlew testDebugUnitTest --tests 'de.qspool.clementineremote.integration.*'
+          ./gradlew testFdroidDebugUnitTest --tests 'de.qspool.clementineremote.integration.*'
           -Pclementine.host=localhost -Pclementine.authCode="$AUTH_CODE"
 
       - name: Clementine state and log

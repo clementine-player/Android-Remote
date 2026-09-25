@@ -38,3 +38,4 @@ key.properties
 
 # Misc
 .DS_Store
+*.jks

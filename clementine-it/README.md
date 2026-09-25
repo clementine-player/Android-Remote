@@ -27,7 +27,7 @@ gh release download --repo clementine-player/Clementine \
 docker build -t clementine-it clementine-it
 docker run --rm -d --name clementine -p 5500:5500 -e AUTH_CODE=12345 clementine-it
 # wait until `docker inspect -f '{{.State.Health.Status}}' clementine` says healthy
-./gradlew testDebugUnitTest --tests 'de.qspool.clementineremote.integration.*' \
+./gradlew testFdroidDebugUnitTest --tests 'de.qspool.clementineremote.integration.*' \
     -Pclementine.host=localhost -Pclementine.authCode=12345
 ```
 

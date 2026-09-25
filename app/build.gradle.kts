@@ -30,6 +30,21 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // The builds differ only in their application ID. Google Play reserves
+    // de.qspool.clementineremote for the original author's account, so the Play build has its
+    // own; F-Droid and GitHub Releases keep the original, so existing installs upgrade.
+    flavorDimensions += "store"
+    productFlavors {
+        create("fdroid") {
+            dimension = "store"
+            isDefault = true
+        }
+        create("play") {
+            dimension = "store"
+            applicationId = "org.clementine_player.remote"
+        }
+    }
+
     signingConfigs {
         create("release") {
             signingValue("SIGNING_KEYSTORE", "keystore")?.let { storeFile = file(it) }
@@ -67,7 +82,7 @@ android {
                 exceptionFormat = TestExceptionFormat.FULL
             }
             // Integration tests against a real Clementine (see clementine-it/) run only
-            // when a host is given: ./gradlew testDebugUnitTest -Pclementine.host=localhost
+            // when a host is given: ./gradlew testFdroidDebugUnitTest -Pclementine.host=localhost
             val host = project.findProperty("clementine.host") as String?
             if (host == null) {
                 test.exclude("**/integration/**")
@@ -90,6 +105,20 @@ android {
 
 base {
     archivesName.set("ClementineRemote")
+}
+
+// Every build uploaded to Google Play needs a higher version code than the last, so the Play
+// workflow passes one in (see .github/workflows/play.yml). The versions above stay the ones
+// F-Droid reads.
+androidComponents {
+    onVariants(selector().withFlavor("store" to "play")) { variant ->
+        val code = project.findProperty("playVersionCode")?.toString()?.toInt()
+        val name = project.findProperty("playVersionName")?.toString()
+        variant.outputs.forEach { output ->
+            code?.let { output.versionCode.set(it) }
+            name?.let { output.versionName.set(it) }
+        }
+    }
 }
 
 protobuf {
