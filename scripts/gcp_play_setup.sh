@@ -6,7 +6,7 @@
 # Reuses the Workload Identity Federation pool Clementine's macOS signing already set up
 # (clementine-player/Clementine's dist/gcp_iam_setup.sh), and adds to it:
 #   - An upload key in Cloud KMS that cannot be exported: releases are signed by sending it
-#     digests (tools/kms-signer), so no key file ever exists
+#     digests (clementine-player/kms-signer), so no key file ever exists
 #   - A dedicated service account, the only identity that can sign with that key
 #   - A provider in the existing pool that admits only this repository's master branch, and
 #     lets it impersonate that service account
