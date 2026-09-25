@@ -24,6 +24,7 @@ on:
       - app/src/main/java/de/qspool/clementineremote/ui/**
       - app/src/main/res/layout*/**
       - clementine-it/**
+      - scripts/post_screenshots.sh
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
