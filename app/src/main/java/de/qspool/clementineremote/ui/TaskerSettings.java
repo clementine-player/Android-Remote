@@ -198,14 +198,14 @@ public class TaskerSettings extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.done:
-                if (userInputValid()) {
-                    finish();
-                }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        final int id = item.getItemId();
+        if (id == R.id.done) {
+            if (userInputValid()) {
+                finish();
+            }
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 
@@ -258,29 +258,21 @@ public class TaskerSettings extends AppCompatActivity {
         }
 
         // Check which radio button was clicked
-        switch (view.getId()) {
-            case R.id.radio_connect:
-                mSelectedAction = ACTION_CONNECT;
-                break;
-            case R.id.radio_disconnect:
-                mSelectedAction = ACTION_DISCONNECT;
-                break;
-            case R.id.radio_play:
-                mSelectedAction = ACTION_PLAY;
-                break;
-            case R.id.radio_pause:
-                mSelectedAction = ACTION_PAUSE;
-                break;
-            case R.id.radio_playpause:
-                mSelectedAction = ACTION_PLAYPAUSE;
-                break;
-            case R.id.radio_next:
-                mSelectedAction = ACTION_NEXT;
-                break;
-            case R.id.radio_stop:
-                mSelectedAction = ACTION_STOP;
-            default:
-                break;
+        final int id = view.getId();
+        if (id == R.id.radio_connect) {
+            mSelectedAction = ACTION_CONNECT;
+        } else if (id == R.id.radio_disconnect) {
+            mSelectedAction = ACTION_DISCONNECT;
+        } else if (id == R.id.radio_play) {
+            mSelectedAction = ACTION_PLAY;
+        } else if (id == R.id.radio_pause) {
+            mSelectedAction = ACTION_PAUSE;
+        } else if (id == R.id.radio_playpause) {
+            mSelectedAction = ACTION_PLAYPAUSE;
+        } else if (id == R.id.radio_next) {
+            mSelectedAction = ACTION_NEXT;
+        } else if (id == R.id.radio_stop) {
+            mSelectedAction = ACTION_STOP;
         }
     }
 }

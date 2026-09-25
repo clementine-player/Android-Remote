@@ -189,27 +189,22 @@ public class SongDetailFragment extends Fragment
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.love:
-                if (App.Clementine.getCurrentSong() != null
-                        && !App.Clementine.getCurrentSong().isLoved()) {
-                    // You can love only one
-                    Message msg = Message.obtain();
-                    msg.obj = ClementineMessage.getMessage(MsgType.LOVE);
-                    App.ClementineConnection.mHandler.sendMessage(msg);
-                    App.Clementine.getCurrentSong().setLoved(true);
-                }
-                Toast.makeText(getActivity(), R.string.track_loved, Toast.LENGTH_SHORT).show();
-                ;
-                break;
-            case R.id.ban:
+        final int id = item.getItemId();
+        if (id == R.id.love) {
+            if (App.Clementine.getCurrentSong() != null
+                    && !App.Clementine.getCurrentSong().isLoved()) {
+                // You can love only one
                 Message msg = Message.obtain();
-                msg.obj = ClementineMessage.getMessage(MsgType.BAN);
+                msg.obj = ClementineMessage.getMessage(MsgType.LOVE);
                 App.ClementineConnection.mHandler.sendMessage(msg);
-                Toast.makeText(getActivity(), R.string.track_banned, Toast.LENGTH_SHORT).show();
-                break;
-            default:
-                break;
+                App.Clementine.getCurrentSong().setLoved(true);
+            }
+            Toast.makeText(getActivity(), R.string.track_loved, Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.ban) {
+            Message msg = Message.obtain();
+            msg.obj = ClementineMessage.getMessage(MsgType.BAN);
+            App.ClementineConnection.mHandler.sendMessage(msg);
+            Toast.makeText(getActivity(), R.string.track_banned, Toast.LENGTH_SHORT).show();
         }
         return true;
     }

@@ -243,34 +243,34 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
                 }
 
                 if (!selectedSongs.isEmpty()) {
-                    switch (item.getItemId()) {
-                        case R.id.playlist_context_play:
-                            playSong(selectedSongs.get(0));
+                    final int id = item.getItemId();
+                    if (id == R.id.playlist_context_play) {
+                        playSong(selectedSongs.get(0));
 
-                            mode.finish();
-                            return true;
-                        case R.id.playlist_context_download:
-                            LinkedList<String> urls = new LinkedList<>();
-                            for (MySong s : selectedSongs) {
-                                urls.add(s.getUrl());
-                            }
-                            if (!urls.isEmpty()) {
-                                DownloadManager.getInstance().addJob(ClementineMessageFactory
-                                        .buildDownloadSongsMessage(DownloadItem.Urls,
-                                                urls));
-                            }
-                            mode.finish();
-                            return true;
-                        case R.id.playlist_context_remove:
-                            Message msg = Message.obtain();
-                            msg.obj = ClementineMessageFactory
-                                    .buildRemoveMultipleSongsFromPlaylist(getPlaylistId(),
-                                            selectedSongs);
-                            App.ClementineConnection.mHandler.sendMessage(msg);
-                            mode.finish();
-                            return true;
-                        default:
-                            return false;
+                        mode.finish();
+                        return true;
+                    } else if (id == R.id.playlist_context_download) {
+                        LinkedList<String> urls = new LinkedList<>();
+                        for (MySong s : selectedSongs) {
+                            urls.add(s.getUrl());
+                        }
+                        if (!urls.isEmpty()) {
+                            DownloadManager.getInstance().addJob(ClementineMessageFactory
+                                    .buildDownloadSongsMessage(DownloadItem.Urls,
+                                            urls));
+                        }
+                        mode.finish();
+                        return true;
+                    } else if (id == R.id.playlist_context_remove) {
+                        Message msg = Message.obtain();
+                        msg.obj = ClementineMessageFactory
+                                .buildRemoveMultipleSongsFromPlaylist(getPlaylistId(),
+                                        selectedSongs);
+                        App.ClementineConnection.mHandler.sendMessage(msg);
+                        mode.finish();
+                        return true;
+                    } else {
+                        return false;
                     }
                 }
                 return false;
@@ -327,32 +327,32 @@ public class PlaylistFragment extends Fragment implements BackPressHandleable, R
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.download_playlist:
-                DownloadManager.getInstance().addJob(ClementineMessageFactory
-                        .buildDownloadSongsMessage(DownloadItem.APlaylist, getPlaylistId()));
-                return true;
-            case R.id.clear_playlist:
-                new AlertDialog.Builder(getActivity())
-                        .setTitle(R.string.playlist_clear)
-                        .setMessage(R.string.playlist_clear_content)
-                        .setNegativeButton(R.string.dialog_cancel, null)
-                        .setPositiveButton(R.string.playlist_clear_confirm, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mPlaylistManager.clearPlaylist(getPlaylistId());
-                                updateSongList();
-                            }
-                        })
-                        .show();
-                return true;
-            case R.id.close_playlist:
-                Message msg = Message.obtain();
-                msg.obj = ClementineMessageFactory.buildClosePlaylist(getPlaylistId());
-                App.ClementineConnection.mHandler.sendMessage(msg);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        final int id = item.getItemId();
+        if (id == R.id.download_playlist) {
+            DownloadManager.getInstance().addJob(ClementineMessageFactory
+                    .buildDownloadSongsMessage(DownloadItem.APlaylist, getPlaylistId()));
+            return true;
+        } else if (id == R.id.clear_playlist) {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.playlist_clear)
+                    .setMessage(R.string.playlist_clear_content)
+                    .setNegativeButton(R.string.dialog_cancel, null)
+                    .setPositiveButton(R.string.playlist_clear_confirm, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mPlaylistManager.clearPlaylist(getPlaylistId());
+                            updateSongList();
+                        }
+                    })
+                    .show();
+            return true;
+        } else if (id == R.id.close_playlist) {
+            Message msg = Message.obtain();
+            msg.obj = ClementineMessageFactory.buildClosePlaylist(getPlaylistId());
+            App.ClementineConnection.mHandler.sendMessage(msg);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 

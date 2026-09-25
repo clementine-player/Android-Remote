@@ -171,42 +171,40 @@ public class LibraryFragment extends Fragment implements BackPressHandleable, Re
                 for (SongSelectItem libraryItem : selectedItems) {
                     OnSongSelectFinishedListener listener;
 
-                    switch (item.getItemId()) {
-                        case R.id.library_context_add:
+                    final int id = item.getItemId();
+                    if (id == R.id.library_context_add) {
 
-                            listener = new OnSongSelectFinishedListener() {
-                                @Override
-                                public void OnSongSelectFinished(LinkedList<SongSelectItem> l) {
-                                    addSongsToPlaylist(l);
+                        listener = new OnSongSelectFinishedListener() {
+                            @Override
+                            public void OnSongSelectFinished(LinkedList<SongSelectItem> l) {
+                                addSongsToPlaylist(l);
+                            }
+                        };
+
+                    } else if (id == R.id.library_context_download) {
+                        listener = new OnSongSelectFinishedListener() {
+                            @Override
+                            public void OnSongSelectFinished(LinkedList<SongSelectItem> l) {
+                                for (SongSelectItem libItem : l) {
+                                    urls.add(libItem.getUrl());
                                 }
-                            };
+                                mLibraryQueriesDone++;
 
-                            break;
-                        case R.id.library_context_download:
-                            listener = new OnSongSelectFinishedListener() {
-                                @Override
-                                public void OnSongSelectFinished(LinkedList<SongSelectItem> l) {
-                                    for (SongSelectItem libItem : l) {
-                                        urls.add(libItem.getUrl());
-                                    }
-                                    mLibraryQueriesDone++;
-
-                                    // Have we got all queries?
-                                    if (mLibraryQueriesDone == selectedItems.size() && !urls
-                                            .isEmpty()) {
-                                        DownloadManager.getInstance()
-                                                .addJob(ClementineMessageFactory
-                                                        .buildDownloadSongsMessage(
-                                                                ClementineRemoteProtocolBuffer.DownloadItem.Urls,
-                                                                urls));
-                                    }
-
+                                // Have we got all queries?
+                                if (mLibraryQueriesDone == selectedItems.size() && !urls
+                                        .isEmpty()) {
+                                    DownloadManager.getInstance()
+                                            .addJob(ClementineMessageFactory
+                                                    .buildDownloadSongsMessage(
+                                                            ClementineRemoteProtocolBuffer.DownloadItem.Urls,
+                                                            urls));
                                 }
-                            };
 
-                            break;
-                        default:
-                            return false;
+                            }
+                        };
+
+                    } else {
+                        return false;
                     }
                     queryLibraryItems(libraryItem, listener);
                 }
