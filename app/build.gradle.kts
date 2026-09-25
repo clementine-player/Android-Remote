@@ -5,7 +5,6 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.protobuf)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
 
@@ -20,7 +19,7 @@ fun signingValue(env: String, prop: String): String? =
 
 android {
     namespace = "de.qspool.clementineremote"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "de.qspool.clementineremote"
