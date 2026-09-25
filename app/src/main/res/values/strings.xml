@@ -163,9 +163,6 @@
     <string name="pref_keep_screen_on_title">Keep Screen On</string>
     <string name="pref_keep_screen_on_summary">Prevent the screen from turning off whilst Clementine Remote is connected to Clementine.
     </string>
-    <string name="pref_noti_color_title">Use system notification background color</string>
-    <string name="pref_noti_color_summary">Enable if notification colors does not fit into your system theme.
-    </string>
 
     <string name="pref_version_summary">Click to visit project website</string>
     <string name="pref_version_title">Version</string>
@@ -263,6 +260,10 @@
     <string name="permissions_required_title">Permissions required</string>
     <string name="permissions_required_text">Clementine Remote requires access to the device\'s storage for song downloads and phone state to silence Clementine on calls. Click continue to grant Clementine Remote the permissions.</string>
 
+    <string name="notification_previous">Previous</string>
+    <string name="notification_play">Play</string>
+    <string name="notification_pause">Pause</string>
+    <string name="notification_next">Next</string>
     <string name="notification_disconnect_keep_alive">Lost connection. Touch to reconnect.</string>
 
     <string name="fragment_title_player">Player</string>

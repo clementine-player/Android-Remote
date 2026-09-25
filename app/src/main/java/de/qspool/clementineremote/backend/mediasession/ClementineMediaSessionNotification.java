@@ -17,20 +17,19 @@
 
 package de.qspool.clementineremote.backend.mediasession;
 
-import android.annotation.TargetApi;
 import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.media.session.MediaSession;
-import android.os.Build;
-import android.widget.RemoteViews;
+
+import androidx.annotation.DrawableRes;
+import androidx.annotation.OptIn;
+import androidx.annotation.StringRes;
+import androidx.core.app.NotificationCompat;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.session.MediaSession;
+import androidx.media3.session.MediaStyleNotificationHelper;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
@@ -39,127 +38,79 @@ import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.backend.receivers.ClementineBroadcastReceiver;
 import de.qspool.clementineremote.utils.Utilities;
 
-public class ClementineMediaSessionNotification extends ClementineMediaSession {
+/**
+ * The player notification: a media notification for the media session, which Android shows
+ * with the session's controls and artwork (on Android 13+ also on the lockscreen and in quick
+ * settings). It replaces the service's "Connecting…" notification, using the same id.
+ */
+@OptIn(markerClass = UnstableApi.class)
+public class ClementineMediaSessionNotification {
 
     public final static int NOTIFIFCATION_ID = 78923748;
 
     public final static String EXTRA_NOTIFICATION_ID = "NotificationID";
 
-    private NotificationManager mNotificationManager;
+    private final Context mContext;
 
-    private Notification.Builder mNotificationBuilder;
-
-    private RemoteViews mNotificationView;
-
-    private int mNotificationWidth;
-
-    private int mNotificationHeight;
-
-    private boolean mTurnColor;
+    private final NotificationManager mNotificationManager;
 
     public ClementineMediaSessionNotification(Context context) {
-        super(context);
+        mContext = context;
         mNotificationManager = (NotificationManager) mContext.getSystemService(
                 Context.NOTIFICATION_SERVICE);
-        SharedPreferences colorPreferences = App.getPreferences();
-        mTurnColor = colorPreferences.getBoolean("pref_noti_color", false);
-
     }
 
-    @Override
-    public void registerSession() {
-        Resources res = mContext.getResources();
-        mNotificationHeight = (int) res
-                .getDimension(android.R.dimen.notification_large_icon_height);
-        mNotificationWidth = (int) res.getDimension(android.R.dimen.notification_large_icon_width);
+    public void update(MediaSession session) {
+        MySong song = App.Clementine.getCurrentSong();
+        boolean playing = App.Clementine.getState() == Clementine.State.PLAY;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel(
-                    App.notificationChannel, "Default",
-                    NotificationManager.IMPORTANCE_LOW
-            );
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext,
+                App.notificationChannel)
+                .setSmallIcon(R.drawable.notification)
+                .setContentIntent(Utilities.getClementineRemotePendingIntent(mContext))
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setCategory(NotificationCompat.CATEGORY_TRANSPORT)
+                .setOngoing(true)
+                .setOnlyAlertOnce(true)
+                .setShowWhen(false)
+                // Before Android 13 the notification's own actions are the controls.
+                .addAction(action(R.drawable.ic_media_previous, R.string.notification_previous,
+                        ClementineBroadcastReceiver.PREVIOUS))
+                .addAction(playing
+                        ? action(R.drawable.ic_media_pause, R.string.notification_pause,
+                                ClementineBroadcastReceiver.PAUSE)
+                        : action(R.drawable.ic_media_play, R.string.notification_play,
+                                ClementineBroadcastReceiver.PLAY))
+                .addAction(action(R.drawable.ic_media_next, R.string.notification_next,
+                        ClementineBroadcastReceiver.NEXT))
+                .setStyle(new MediaStyleNotificationHelper.MediaStyle(session)
+                        .setShowActionsInCompactView(0, 1, 2));
 
-            mNotificationManager.createNotificationChannel(notificationChannel);
-
-            mNotificationBuilder = new Notification.Builder(mContext, App.notificationChannel)
-                    .setSmallIcon(R.drawable.notification)
-                    .setOngoing(true);
+        if (song != null) {
+            builder.setContentTitle(song.getTitle())
+                    .setContentText(song.getArtist() + " / " + song.getAlbum())
+                    .setLargeIcon(song.getArt());
         } else {
-            mNotificationBuilder = new Notification.Builder(mContext)
-                    .setSmallIcon(R.drawable.notification)
-                    .setOngoing(true);
-
+            builder.setContentTitle(mContext.getString(R.string.app_name))
+                    .setContentText(mContext.getString(R.string.player_nosong));
         }
 
-        mNotificationBuilder.setVisibility(Notification.VISIBILITY_PUBLIC);
-
-        mNotificationBuilder.setContentIntent(Utilities.getClementineRemotePendingIntent(mContext));
-
-        mNotificationView = new RemoteViews(mContext.getPackageName(), R.layout.notification_small);
-        if (mTurnColor) {
-            mNotificationView.setInt(R.id.noti, "setBackgroundColor", Color.TRANSPARENT);
-            mNotificationView.setImageViewResource(R.id.noti_play_pause, R.drawable.ic_media_play);
-            mNotificationView.setImageViewResource(R.id.noti_next, R.drawable.ic_media_next);
-        }
-        mNotificationBuilder.setContent(mNotificationView);
+        Notification notification = builder.build();
+        mNotificationManager.notify(NOTIFIFCATION_ID, notification);
     }
 
-    @Override
-    public void unregisterSession() {
+    public void cancel() {
         mNotificationManager.cancel(NOTIFIFCATION_ID);
     }
 
-    @Override
-    public void updateSession() {
-        MySong song = App.Clementine.getCurrentSong();
-        if (song != null) {
-            Bitmap scaledArt = Bitmap.createScaledBitmap(song.getArt(),
-                    mNotificationWidth,
-                    mNotificationHeight,
-                    false);
-
-            mNotificationView.setImageViewBitmap(R.id.noti_icon, scaledArt);
-            mNotificationView.setTextViewText(R.id.noti_title, song.getTitle());
-            mNotificationView.setTextViewText(R.id.noti_subtitle, song.getArtist() +
-                    " / " +
-                    song.getAlbum());
-        } else {
-            mNotificationView.setTextViewText(R.id.noti_title, mContext.getString(R.string.app_name));
-            mNotificationView.setTextViewText(R.id.noti_subtitle, mContext.getString(R.string.player_nosong));
-        }
-
-        // Play or pause?
-        Intent intentPlayPause = new Intent(mContext, ClementineBroadcastReceiver.class);
-        Intent intentNext = new Intent(mContext, ClementineBroadcastReceiver.class);
-        intentNext.setAction(ClementineBroadcastReceiver.NEXT);
-
-        if (App.Clementine.getState() == Clementine.State.PLAY) {
-            mNotificationView.setImageViewResource(R.id.noti_play_pause,
-                    mTurnColor ? R.drawable.ic_media_pause : R.drawable.ab_media_pause);
-            intentPlayPause.setAction(ClementineBroadcastReceiver.PAUSE);
-        } else {
-            mNotificationView.setImageViewResource(R.id.noti_play_pause,
-                    mTurnColor ? R.drawable.ic_media_play : R.drawable.ab_media_play);
-            intentPlayPause.setAction(ClementineBroadcastReceiver.PLAY);
-        }
-        mNotificationView.setOnClickPendingIntent(R.id.noti_play_pause,
-                PendingIntent
-                        .getBroadcast(mContext, 0, intentPlayPause,
-                                PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE));
-        mNotificationView.setOnClickPendingIntent(R.id.noti_next,
-                PendingIntent
-                        .getBroadcast(mContext, 0, intentNext,
-                                PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE));
-
-        mNotificationManager.notify(NOTIFIFCATION_ID, mNotificationBuilder.build());
-    }
-
-    public void setMediaSessionCompat(MediaSession mediaSession) {
-        if (mediaSession == null) {
-            return;
-        }
-
-        //mNotificationBuilder.setStyle(new Notification.MediaStyle()
-        //        .setMediaSession(mediaSession.getSessionToken()));
+    private NotificationCompat.Action action(@DrawableRes int icon, @StringRes int title,
+            String broadcastAction) {
+        Intent intent = new Intent(mContext, ClementineBroadcastReceiver.class)
+                .setAction(broadcastAction);
+        // One request code per action, so the actions' intents don't replace each other.
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext,
+                broadcastAction.hashCode(), intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        return new NotificationCompat.Action(icon, mContext.getString(title), pendingIntent);
     }
 }

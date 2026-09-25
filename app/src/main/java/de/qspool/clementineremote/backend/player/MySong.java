@@ -23,6 +23,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 
 import java.util.Arrays;
@@ -258,6 +259,12 @@ public class MySong {
             return artBitmap;
         }
         return BitmapFactory.decodeResource(App.getApp().getResources(), R.drawable.nocover);
+    }
+
+    /** The cover art as Clementine sent it (compressed), or null if the song has none. */
+    @Nullable
+    public byte[] getArtData() {
+        return art;
     }
 
     /**

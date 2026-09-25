@@ -71,12 +71,6 @@
         <service android:name=".backend.ClementineService"
                  android:exported="false"
                  android:foregroundServiceType="connectedDevice" />
-        <receiver android:name=".backend.receivers.ClementineMediaButtonEventReceiver"
-                  android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MEDIA_BUTTON" />
-            </intent-filter>
-        </receiver>
         <receiver android:name=".backend.receivers.ClementinePhoneStateCheck"
                   android:exported="true">
             <intent-filter>

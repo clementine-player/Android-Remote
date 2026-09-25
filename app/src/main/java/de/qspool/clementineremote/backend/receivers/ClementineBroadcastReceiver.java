@@ -44,6 +44,8 @@ public class ClementineBroadcastReceiver extends BroadcastReceiver {
 
     public static final String NEXT = "de.qspool.clementineremote.next";
 
+    public static final String PREVIOUS = "de.qspool.clementineremote.previous";
+
     @Override
     public void onReceive(Context context, Intent intent) {
         Message msg = Message.obtain();
@@ -81,6 +83,9 @@ public class ClementineBroadcastReceiver extends BroadcastReceiver {
                 break;
             case NEXT:
                 msg.obj = ClementineMessage.getMessage(MsgType.NEXT);
+                break;
+            case PREVIOUS:
+                msg.obj = ClementineMessage.getMessage(MsgType.PREVIOUS);
                 break;
         }
 

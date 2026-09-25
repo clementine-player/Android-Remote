@@ -1,6 +1,9 @@
 # Takes the Google Play screenshots: the app on an emulator, connected to a real headless
 # Clementine (clementine-it) playing the showcase library. The screenshots are uploaded as
 # an artifact; scripts/store_graphics.py turns them into the store listing images.
+#
+# Also checks the media session against that Clementine (MediaSessionDeviceTest): Android
+# sees the session and its song, and the system media controls drive Clementine.
 name: store-screenshots
 on:
   workflow_dispatch:
@@ -8,6 +11,8 @@ on:
     paths:
       - .github/workflows/store-screenshots.yml
       - app/src/androidTest/java/de/qspool/clementineremote/StoreScreenshots.java
+      - app/src/androidTest/java/de/qspool/clementineremote/MediaSessionDeviceTest.java
+      - app/src/main/java/de/qspool/clementineremote/backend/mediasession/**
       - clementine-it/**
 
 concurrency:
@@ -76,7 +81,7 @@ jobs:
           profile: pixel_2
           disable-animations: true
           script: |
-            status=0; ./gradlew connectedFdroidDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=de.qspool.clementineremote.StoreScreenshots -Pandroid.testInstrumentationRunnerArguments.clementineHost=10.0.2.2 -Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true || status=$?; adb pull /sdcard/Android/data/de.qspool.clementineremote/files/screenshots screenshots; exit $status
+            status=0; ./gradlew connectedFdroidDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=de.qspool.clementineremote.StoreScreenshots,de.qspool.clementineremote.MediaSessionDeviceTest -Pandroid.testInstrumentationRunnerArguments.clementineHost=10.0.2.2 -Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true || status=$?; adb pull /sdcard/Android/data/de.qspool.clementineremote/files/screenshots screenshots; exit $status
 
       - uses: actions/upload-artifact@v5
         if: always()
