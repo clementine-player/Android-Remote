@@ -18,15 +18,23 @@
 package de.qspool.clementineremote.backend.mediasession;
 
 import android.appwidget.AppWidgetManager;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.media.AudioManager;
-import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 
-import androidx.core.content.ContextCompat;
+import androidx.annotation.Nullable;
+import androidx.annotation.OptIn;
+import androidx.media3.common.Rating;
+import androidx.media3.common.StarRating;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.session.MediaSession;
+import androidx.media3.session.SessionError;
+import androidx.media3.session.SessionResult;
+
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.Clementine;
@@ -34,39 +42,46 @@ import de.qspool.clementineremote.backend.ClementinePlayerConnection;
 import de.qspool.clementineremote.backend.listener.PlayerConnectionListener;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.player.MySong;
-import de.qspool.clementineremote.backend.receivers.ClementineMediaButtonEventReceiver;
+import de.qspool.clementineremote.utils.Utilities;
 import de.qspool.clementineremote.widget.ClementineWidgetProvider;
 import de.qspool.clementineremote.widget.WidgetIntent;
 
+/**
+ * Publishes Clementine's playback to the rest of the system while connected: a Media3 media
+ * session (lockscreen, Bluetooth, watches, other apps' media controllers), the player
+ * notification, the home-screen widget, and the "music changed" broadcasts scrobblers read.
+ *
+ * <p>The connection reports on its own thread; the session lives on the main thread.
+ */
+@OptIn(markerClass = UnstableApi.class)
 public class MediaSessionController {
 
     private final String PLAYSTATE_CHANGED = "com.android.music.playstatechanged";
 
     private final String META_CHANGED = "com.android.music.metachanged";
 
-    private Context mContext;
+    private final Context mContext;
 
-    private ClementinePlayerConnection mClementinePlayerConnection;
+    private final ClementinePlayerConnection mClementinePlayerConnection;
 
-    private ClementineMediaSession mClementineMediaSession;
+    private final Handler mMainHandler = new Handler(Looper.getMainLooper());
 
-    private ClementineMediaSessionNotification mMediaSessionNotification;
+    private final ClementinePlayer mPlayer;
 
-    private AudioManager mAudioManager;
+    private final ClementineMediaSessionNotification mNotification;
 
-    private BroadcastReceiver mMediaButtonBroadcastReceiver;
+    @Nullable
+    private MediaSession mSession;
+
+    /** Set when the connection was lost, so the service's "connection lost" notice stays. */
+    private volatile boolean mLostConnection;
 
     public MediaSessionController(Context context,
             ClementinePlayerConnection clementinePlayerConnection) {
         mContext = context;
         mClementinePlayerConnection = clementinePlayerConnection;
-
-        mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
-
-        mMediaButtonBroadcastReceiver = new ClementineMediaButtonEventReceiver();
-
-        mClementineMediaSession = new ClementineMediaSessionV21(mContext);
-        mMediaSessionNotification = new ClementineMediaSessionNotification(mContext);
+        mPlayer = new ClementinePlayer(Looper.getMainLooper());
+        mNotification = new ClementineMediaSessionNotification(mContext);
     }
 
     public void registerMediaSession() {
@@ -75,37 +90,18 @@ public class MediaSessionController {
             public void onConnectionStatusChanged(
                     ClementinePlayerConnection.ConnectionStatus status) {
                 switch (status) {
-                    case IDLE:
-                        break;
-                    case CONNECTING:
-                        break;
-                    case NO_CONNECTION:
-                        break;
                     case CONNECTED:
-                        // Request AudioFocus, so the widget is shown on the lock-screen
-                        mAudioManager.requestAudioFocus(mOnAudioFocusChangeListener,
-                                AudioManager.STREAM_MUSIC,
-                                AudioManager.AUDIOFOCUS_GAIN);
-
-                        // Register MediaButtonReceiver
-                        IntentFilter filter = new IntentFilter(Intent.ACTION_MEDIA_BUTTON);
-                        ContextCompat.registerReceiver(mContext, mMediaButtonBroadcastReceiver, filter,
-                                ContextCompat.RECEIVER_EXPORTED);
-
-                        mClementineMediaSession.registerSession();
-                        mMediaSessionNotification.registerSession();
-                        mMediaSessionNotification.setMediaSessionCompat(
-                                mClementineMediaSession.getMediaSession());
+                        mLostConnection = false;
+                        mMainHandler.post(MediaSessionController.this::startSession);
+                        break;
+                    case LOST_CONNECTION:
+                        mLostConnection = true;
                         break;
                     case DISCONNECTED:
-                        mAudioManager.abandonAudioFocus(mOnAudioFocusChangeListener);
-                        try {
-                            mContext.unregisterReceiver(mMediaButtonBroadcastReceiver);
-                        } catch (IllegalArgumentException e) {
-                        }
-
-                        mClementineMediaSession.unregisterSession();
-                        mMediaSessionNotification.unregisterSession();
+                        boolean keepNotification = mLostConnection;
+                        mMainHandler.post(() -> stopSession(keepNotification));
+                        break;
+                    default:
                         break;
                 }
                 sendWidgetUpdateIntent(WidgetIntent.ClementineAction.CONNECTION_STATUS, status);
@@ -119,8 +115,8 @@ public class MediaSessionController {
 
                 switch (clementineMessage.getMessageType()) {
                     case CURRENT_METAINFO:
-                        mClementineMediaSession.updateSession();
-                        mMediaSessionNotification.updateSession();
+                        mPlayer.invalidate();
+                        mMainHandler.post(MediaSessionController.this::updateNotification);
                         sendMetachangedIntent(META_CHANGED);
                         sendWidgetUpdateIntent(WidgetIntent.ClementineAction.STATE_CHANGE,
                                 ClementinePlayerConnection.ConnectionStatus.CONNECTED);
@@ -128,13 +124,19 @@ public class MediaSessionController {
                     case PLAY:
                     case PAUSE:
                     case STOP:
-                        mClementineMediaSession.updateSession();
-                        mMediaSessionNotification.updateSession();
+                        mPlayer.invalidate();
+                        mMainHandler.post(MediaSessionController.this::updateNotification);
                         sendMetachangedIntent(PLAYSTATE_CHANGED);
                         sendWidgetUpdateIntent(WidgetIntent.ClementineAction.STATE_CHANGE,
                                 ClementinePlayerConnection.ConnectionStatus.CONNECTED);
                         break;
+                    case UPDATE_TRACK_POSITION:
+                    case REPEAT:
+                    case SHUFFLE:
+                        mPlayer.invalidate();
+                        break;
                     case FIRST_DATA_SENT_COMPLETE:
+                        mPlayer.invalidate();
                         sendWidgetUpdateIntent(WidgetIntent.ClementineAction.STATE_CHANGE,
                                 ClementinePlayerConnection.ConnectionStatus.CONNECTED);
                         break;
@@ -143,6 +145,48 @@ public class MediaSessionController {
                 }
             }
         });
+    }
+
+    private void startSession() {
+        if (mSession == null) {
+            mSession = new MediaSession.Builder(mContext, mPlayer.asSessionPlayer())
+                    .setId("clementine")
+                    .setSessionActivity(Utilities.getClementineRemotePendingIntent(mContext))
+                    .setCallback(new MediaSession.Callback() {
+                        @Override
+                        public ListenableFuture<SessionResult> onSetRating(
+                                MediaSession session, MediaSession.ControllerInfo controller,
+                                Rating rating) {
+                            if (!(rating instanceof StarRating) || !rating.isRated()) {
+                                return Futures.immediateFuture(
+                                        new SessionResult(SessionError.ERROR_BAD_VALUE));
+                            }
+                            StarRating stars = (StarRating) rating;
+                            mPlayer.rate(stars.getStarRating() * 5 / stars.getMaxStars());
+                            return Futures.immediateFuture(
+                                    new SessionResult(SessionResult.RESULT_SUCCESS));
+                        }
+                    })
+                    .build();
+        }
+        mPlayer.setConnected(true);
+    }
+
+    private void stopSession(boolean keepNotification) {
+        mPlayer.setConnected(false);
+        if (mSession != null) {
+            mSession.release();
+            mSession = null;
+        }
+        if (!keepNotification) {
+            mNotification.cancel();
+        }
+    }
+
+    private void updateNotification() {
+        if (mSession != null) {
+            mNotification.update(mSession);
+        }
     }
 
     private void sendMetachangedIntent(String what) {
@@ -177,11 +221,4 @@ public class MediaSessionController {
             mContext.sendBroadcast(intent);
         }
     }
-
-    private AudioManager.OnAudioFocusChangeListener mOnAudioFocusChangeListener
-            = new AudioManager.OnAudioFocusChangeListener() {
-        @Override
-        public void onAudioFocusChange(int focusChange) {
-        }
-    };
 }
