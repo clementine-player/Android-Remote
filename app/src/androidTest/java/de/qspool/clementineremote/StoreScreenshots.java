@@ -51,6 +51,9 @@ public class StoreScreenshots {
 
     private static final long TIMEOUT = 30_000;
 
+    /** Long enough for the drawer to close and a screen to fade in. */
+    private static final long SETTLE_MILLIS = 1500;
+
     /** Downloading and indexing the library takes a while on an emulator. */
     private static final long LIBRARY_TIMEOUT = 120_000;
 
@@ -154,10 +157,15 @@ public class StoreScreenshots {
         mDevice.waitForIdle();
     }
 
-    /** Picks an item in the open drawer. */
+    /**
+     * Picks an item in the open drawer, and waits for the drawer to close and the new screen to
+     * fade in: until then, the old screen is still there to be found and tapped.
+     */
     private void select(String item) {
         waitFor(By.res(mPackage, "drawer_list").hasDescendant(By.text(item)))
                 .findObject(By.text(item)).click();
+        SystemClock.sleep(SETTLE_MILLIS);
+        mDevice.waitForIdle();
     }
 
     private void navigateTo(String item) {
@@ -171,7 +179,9 @@ public class StoreScreenshots {
      */
     private void play(String title) {
         for (int attempt = 1; ; attempt++) {
-            navigateTo("Playlists");
+            if (attempt > 1) {
+                navigateTo("Playlists");
+            }
             waitFor(By.text(title));
             mDevice.waitForIdle();
             mDevice.findObject(By.text(title)).click();
