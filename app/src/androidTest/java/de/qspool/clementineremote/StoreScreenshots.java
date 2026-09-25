@@ -135,10 +135,15 @@ public class StoreScreenshots {
         mDevice.waitForIdle();
     }
 
-    private void navigateTo(String item) {
-        openDrawer();
+    /** Picks an item in the open drawer. */
+    private void select(String item) {
         waitFor(By.res(mPackage, "drawer_list").hasDescendant(By.text(item)))
                 .findObject(By.text(item)).click();
+    }
+
+    private void navigateTo(String item) {
+        openDrawer();
+        select(item);
     }
 
     @Test
@@ -163,11 +168,10 @@ public class StoreScreenshots {
         SystemClock.sleep(8000);
         screenshot("1_player");
 
+        // Back would leave the player and disconnect, so move on from the open drawer.
         openDrawer();
         screenshot("5_navigation");
-        mDevice.pressBack();
-
-        navigateTo("Library");
+        select("Library");
         waitFor(By.text("Frédéric Chopin"), LIBRARY_TIMEOUT);
         screenshot("2_library");
         mDevice.findObject(By.text("Frédéric Chopin")).click();
