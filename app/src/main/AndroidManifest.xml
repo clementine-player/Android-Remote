@@ -105,6 +105,16 @@
             <meta-data android:name="android.appwidget.provider"
                        android:resource="@xml/clementine_widget_provider"/>
         </receiver>
+
+        <!-- Shares downloaded songs with music players on Android 9 and earlier; later
+             versions save them to MediaStore. -->
+        <provider android:name="androidx.core.content.FileProvider"
+                  android:authorities="${applicationId}.downloads"
+                  android:exported="false"
+                  android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
+                       android:resource="@xml/download_paths" />
+        </provider>
     </application>
 
 </manifest>

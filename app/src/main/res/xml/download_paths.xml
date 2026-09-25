@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The download directory can be anywhere on shared storage, including removable cards. -->
+<paths>
+    <external-path name="external" path="." />
+    <root-path name="root" path="." />
+</paths>

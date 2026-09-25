@@ -18,6 +18,7 @@
 package de.qspool.clementineremote.ui.settings;
 
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.Preference;
@@ -29,6 +30,7 @@ import java.io.File;
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.SharedPreferencesKeys;
+import de.qspool.clementineremote.backend.downloader.MediaStoreDownloadStorage;
 import de.qspool.clementineremote.ui.dialogs.FileDialog;
 
 public class PreferencesBehaviorDownloads extends PreferenceFragment {
@@ -48,6 +50,13 @@ public class PreferencesBehaviorDownloads extends PreferenceFragment {
 
         mDownloadDir = getPreferenceScreen()
                 .findPreference(SharedPreferencesKeys.SP_DOWNLOAD_DIR);
+
+        // Android 10 and later save songs to the shared Music collection.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            mDownloadDir.setEnabled(false);
+            mDownloadDir.setSummary(MediaStoreDownloadStorage.BASE_DIR);
+            return;
+        }
 
         mDownloadDir.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override

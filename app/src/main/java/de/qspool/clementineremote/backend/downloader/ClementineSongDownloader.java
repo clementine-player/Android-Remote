@@ -17,12 +17,9 @@
 
 package de.qspool.clementineremote.backend.downloader;
 
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.LinkedList;
 
@@ -64,7 +61,7 @@ public class ClementineSongDownloader extends
 
     private ClementineSimpleConnection mClient = new ClementineSimpleConnection();
 
-    private String mDownloadPath;
+    private DownloadStorage mStorage;
 
     private String mPlaylistName;
 
@@ -173,8 +170,7 @@ public class ClementineSongDownloader extends
     private DownloaderResult startDownloading(ClementineMessage clementineMessage) {
         DownloaderResult result = new DownloaderResult(mId, DownloadResult.SUCCESSFUL);
 
-        File f = null;
-        FileOutputStream fo = null;
+        DownloadStorage.PendingSong pending = null;
         MySong currentSong = new MySong();
 
         // Do we have a playlist?
@@ -186,18 +182,6 @@ public class ClementineSongDownloader extends
         while (true) {
             // Check if the user canceled the process
             if (isCancelled()) {
-                // Close the stream and delete the incomplete file
-                try {
-                    if (fo != null) {
-                        fo.flush();
-                        fo.close();
-                    }
-                    if (f != null) {
-                        f.delete();
-                    }
-                } catch (IOException e) {
-                }
-
                 result = new DownloaderResult(mId, DownloadResult.CANCELLED);
                 break;
             }
@@ -258,49 +242,42 @@ public class ClementineSongDownloader extends
 
             try {
                 // Check if we need to create a new file
-                if (f == null) {
+                if (pending == null) {
                     // Check if we have enougth free space
                     if (chunk.getSize() > Utilities.getFreeSpaceExternal()) {
                         result = new DownloaderResult(mId, DownloadResult.INSUFFIANT_SPACE);
                         break;
                     }
 
-                    File dir = new File(BuildDirPath(chunk));
-                    f = new File(BuildFilePath(chunk));
-
-                    // User wants to override files, so delete it here!
-                    // The check was already done in processSongOffer()
-                    if (f.exists()) {
-                        f.delete();
-                    }
-
-                    dir.mkdirs();
-                    f.createNewFile();
-                    fo = new FileOutputStream(f);
+                    // This replaces an existing song. processSongOffer() only accepted the
+                    // song if there is none or the user wants to override it.
+                    pending = mStorage.create(buildRelativeDir(chunk), buildFileName(chunk));
                 }
 
-                // Write chunk to sdcard
-                fo.write(chunk.getData().toByteArray());
+                chunk.getData().writeTo(pending.getOutputStream());
 
                 mTotalDownloaded += chunk.getData().size();
 
                 // Have we downloaded all chunks?
                 if (chunk.getChunkCount() == chunk.getChunkNumber()) {
-                    // Index file
-                    MediaScannerConnection
-                            .scanFile(App.getApp(), new String[]{f.getAbsolutePath()}, null, null);
-                    fo.flush();
-                    fo.close();
-                    f = null;
+                    mDownloadedSongs.add(new DownloadedSong(currentSong, pending.commit()));
+                    pending = null;
                 }
 
                 // Update notification
                 updateProgress(chunk, currentSong);
-            } catch (IOException e) {
+            } catch (IOException | RuntimeException e) {
+                // MediaStore reports some failures, such as a full or missing volume, as
+                // runtime exceptions.
                 result = new DownloaderResult(mId, DownloaderResult.DownloadResult.NOT_MOUNTED);
                 break;
             }
 
+        }
+
+        // Delete an incomplete song
+        if (pending != null) {
+            pending.abort();
         }
 
         // Disconnect at the end
@@ -340,17 +317,21 @@ public class ClementineSongDownloader extends
      * @return a boolean indicating if the song will be sent or not
      */
     private boolean processSongOffer(MySong song, ResponseSongFileChunk chunk) {
-        File f = new File(BuildFilePath(chunk));
-        boolean accept = true;
-
-        if (f.exists() && !mOverrideExistingFiles) {
-            accept = false;
+        Uri existing;
+        try {
+            existing = mStorage.find(buildRelativeDir(chunk), buildFileName(chunk));
+        } catch (IOException | RuntimeException e) {
+            existing = null;
         }
+        boolean accept = existing == null || mOverrideExistingFiles;
 
         mClient.sendRequest(ClementineMessageFactory.buildSongOfferResponse(accept));
 
-        // Save the downloaded files
-        mDownloadedSongs.add(new DownloadedSong(song, Uri.fromFile(f)));
+        // A refused song is listed with the downloaded ones, as it is already here. An
+        // accepted one is listed once it is saved.
+        if (!accept) {
+            mDownloadedSongs.add(new DownloadedSong(song, existing));
+        }
 
         return accept;
     }
@@ -378,51 +359,39 @@ public class ClementineSongDownloader extends
     }
 
     /**
-     * Return the folder where the file will be placed
-     *
-     * @param chunk The chunk
+     * Returns the folder the song is saved in, relative to the download location, such as
+     * "Artist/Album/", or "" for the download location itself.
      */
-    private String BuildDirPath(ResponseSongFileChunk chunk) {
+    String buildRelativeDir(ResponseSongFileChunk chunk) {
         StringBuilder sb = new StringBuilder();
-        sb.append(mDownloadPath);
-        sb.append(File.separator);
         if (mIsPlaylist && mCreatePlaylistDir) {
-            sb.append(Utilities.removeInvalidFileCharacters(mPlaylistName));
-            sb.append(File.separator);
+            appendDir(sb, mPlaylistName);
         }
 
         if (mCreateArtistDir) {
-            // Append artist name
-            if (chunk.getSongMetadata().getAlbumartist().length() == 0) {
-                sb.append(
-                        Utilities.removeInvalidFileCharacters(chunk.getSongMetadata().getArtist()));
-            } else {
-                sb.append(Utilities
-                        .removeInvalidFileCharacters(chunk.getSongMetadata().getAlbumartist()));
+            String artist = chunk.getSongMetadata().getAlbumartist();
+            if (artist.isEmpty()) {
+                artist = chunk.getSongMetadata().getArtist();
             }
-            sb.append(File.separator);
+            appendDir(sb, artist);
 
             if (mCreateAlbumDir) {
-                sb.append(Utilities.removeInvalidFileCharacters(chunk.getSongMetadata().getAlbum()));
-                sb.append(File.separator);
+                appendDir(sb, chunk.getSongMetadata().getAlbum());
             }
         }
 
         return sb.toString();
     }
 
-    /**
-     * Build the filename
-     *
-     * @param chunk The SongFileChunk
-     * @return /sdcard/Music/Artist/Album/file.mp3
-     */
-    private String BuildFilePath(ResponseSongFileChunk chunk) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(BuildDirPath(chunk));
-        sb.append(Utilities.removeInvalidFileCharacters(chunk.getSongMetadata().getFilename()));
+    private static void appendDir(StringBuilder sb, String name) {
+        String dir = Utilities.removeInvalidFileCharacters(name).trim();
+        if (!dir.isEmpty()) {
+            sb.append(dir).append('/');
+        }
+    }
 
-        return sb.toString();
+    static String buildFileName(ResponseSongFileChunk chunk) {
+        return Utilities.removeInvalidFileCharacters(chunk.getSongMetadata().getFilename());
     }
 
     public DownloadItem getItem() {
@@ -464,8 +433,13 @@ public class ClementineSongDownloader extends
         mDownloadOnWifiOnly = downloadOnWifiOnly;
     }
 
-    public void setDownloadPath(String downloadPath) {
-        mDownloadPath = downloadPath;
+    public void setStorage(DownloadStorage storage) {
+        mStorage = storage;
+    }
+
+    void setIsPlaylist(boolean isPlaylist, String playlistName) {
+        mIsPlaylist = isPlaylist;
+        mPlaylistName = playlistName;
     }
 
     public void setCreatePlaylistDir(boolean createPlaylistDir) {
