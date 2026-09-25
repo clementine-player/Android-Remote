@@ -4,6 +4,13 @@
 #
 # Also checks the media session against that Clementine (MediaSessionDeviceTest): Android
 # sees the session and its song, and the system media controls drive Clementine.
+#
+# On pull requests, the screenshots are also posted as a comment next to the store listing's
+# (scripts/post_screenshots.sh). They're hosted in a Cloudflare R2 bucket, which charges
+# nothing for bandwidth, with a token that can only read and write that bucket:
+#   secrets R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY;
+#   variables R2_BUCKET, R2_PUBLIC_URL (the bucket's public address).
+# Without them, and on pull requests from forks (which get no secrets), the comment is skipped.
 name: store-screenshots
 on:
   workflow_dispatch:
@@ -22,6 +29,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+  pull-requests: write # for the screenshots comment
+
 env:
   GH_TOKEN: ${{ github.token }}
 
@@ -29,6 +40,9 @@ jobs:
   screenshots:
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    env:
+      # A step's condition can't read secrets, so this says whether the R2 token is set.
+      HAS_R2_TOKEN: ${{ secrets.R2_ACCESS_KEY_ID != '' }}
     steps:
       - uses: actions/checkout@v5
 
@@ -94,6 +108,16 @@ jobs:
             screenshots/
             app/build/reports/androidTests/
             app/build/outputs/androidTest-results/
+
+      - name: Post the screenshots on the pull request
+        if: always() && github.event_name == 'pull_request' && env.HAS_R2_TOKEN == 'true'
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ vars.R2_BUCKET }}
+          R2_PUBLIC_URL: ${{ vars.R2_PUBLIC_URL }}
+        run: scripts/post_screenshots.sh screenshots ${{ github.event.pull_request.number }}
 
       - name: Clementine log
         if: always()
