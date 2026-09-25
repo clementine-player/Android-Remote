@@ -21,7 +21,8 @@ There are no keys or credentials in the repository or its secrets:
 
 - The **upload key** is a Cloud KMS key in the `clementine-data` project that cannot be
   exported. The bundle is built unsigned and signed by
-  [tools/kms-signer](tools/kms-signer/README.md), which sends only digests to KMS. Play
+  [kms-signer](https://github.com/clementine-player/kms-signer), which sends only digests to KMS.
+  `play.yml` pins a kms-signer release by version and checksum. Play
   re-signs the app with its own app signing key (Play App Signing).
 - GitHub Actions authenticates to Google Cloud with **Workload Identity Federation**, through
   the `github-actions` pool Clementine's macOS signing already uses. This repository has its
@@ -45,8 +46,8 @@ Until `app/upload_cert.pem` is committed, the workflow only builds the unsigned 
    ```sh
    gcloud auth application-default login \
      --impersonate-service-account=android-play-release@clementine-data.iam.gserviceaccount.com
-   ./gradlew -p tools/kms-signer installDist
-   tools/kms-signer/build/install/kms-signer/bin/kms-signer gencert \
+   # kms-signer from https://github.com/clementine-player/kms-signer/releases (see its README)
+   $signer gencert \
      --key projects/clementine-data/locations/global/keyRings/android-signing/cryptoKeys/play-upload/cryptoKeyVersions/1 \
      --subject "CN=Clementine Remote Upload,O=Clementine" --out app/upload_cert.pem
    ```
@@ -59,7 +60,7 @@ Until `app/upload_cert.pem` is committed, the workflow only builds the unsigned 
 
    ```sh
    ./gradlew bundlePlayRelease -PplayVersionCode=$(git rev-list --count HEAD)
-   tools/kms-signer/build/install/kms-signer/bin/kms-signer sign \
+   $signer sign \
      --key projects/clementine-data/locations/global/keyRings/android-signing/cryptoKeys/play-upload/cryptoKeyVersions/1 \
      --cert app/upload_cert.pem --min-sdk 23 \
      --in app/build/outputs/bundle/playRelease/ClementineRemote-play-release.aab \

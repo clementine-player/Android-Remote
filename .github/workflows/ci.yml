@@ -20,8 +20,6 @@ jobs:
           java-version: 21
       - uses: gradle/actions/setup-gradle@v5
       - run: ./gradlew lintFdroidDebug testFdroidDebugUnitTest assembleFdroidDebug bundlePlayRelease
-      - name: Test the release signer
-        run: ./gradlew -p tools/kms-signer test
       - uses: actions/upload-artifact@v5
         if: always()
         with:
@@ -29,7 +27,6 @@ jobs:
           path: |
             app/build/reports/
             app/build/test-results/
-            tools/kms-signer/build/reports/
       - uses: actions/upload-artifact@v5
         with:
           name: apk-debug

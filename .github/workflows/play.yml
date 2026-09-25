@@ -2,7 +2,7 @@
 # channel for up to 100 testers.
 #
 # The upload key lives in Cloud KMS and cannot be exported: the bundle is built unsigned and
-# signed by tools/kms-signer, which only sends digests to KMS. GitHub Actions authenticates to
+# signed by clementine-player/kms-signer, which only sends digests to KMS. GitHub Actions authenticates to
 # Google Cloud through Workload Identity Federation (the pool Clementine's macOS signing uses,
 # with its own provider and service account), for both signing and the Play upload, so the
 # repository holds no keys or credentials at all. See RELEASING.md and
@@ -29,6 +29,10 @@ env:
   SERVICE_ACCOUNT: android-play-release@clementine-data.iam.gserviceaccount.com
   ANDROID_KMS_KEY: projects/clementine-data/locations/global/keyRings/android-signing/cryptoKeys/play-upload/cryptoKeyVersions/1
   UPLOAD_CERT: app/upload_cert.pem
+  # The signer release to use, pinned with its checksum since it signs releases. To update, take
+  # both from https://github.com/clementine-player/kms-signer/releases.
+  KMS_SIGNER_VERSION: 2026.09.25-a3c0e5e
+  KMS_SIGNER_SHA256: 843d553610ebca4a4beee8fc9a66c0c9c7575bc614bc69ea3646eb656974798a
 
 jobs:
   internal:
@@ -61,8 +65,14 @@ jobs:
           -PplayVersionCode=${{ steps.version.outputs.code }}
           -PplayVersionName=${{ steps.version.outputs.name }}
 
-      - name: Build kms-signer
-        run: ./gradlew -p tools/kms-signer installDist
+      - name: Get kms-signer
+        run: |
+          zip="kms-signer-$KMS_SIGNER_VERSION.zip"
+          curl -sSfL -o "$RUNNER_TEMP/$zip" \
+            "https://github.com/clementine-player/kms-signer/releases/download/v$KMS_SIGNER_VERSION/$zip"
+          echo "$KMS_SIGNER_SHA256  $RUNNER_TEMP/$zip" | sha256sum --check
+          unzip -q "$RUNNER_TEMP/$zip" -d "$RUNNER_TEMP"
+          echo "KMS_SIGNER=$RUNNER_TEMP/kms-signer-$KMS_SIGNER_VERSION/bin/kms-signer" >> "$GITHUB_ENV"
 
       - name: Check the signing setup
         id: setup
@@ -84,7 +94,7 @@ jobs:
       - name: Sign the bundle with Cloud KMS
         if: steps.setup.outputs.ready == 'true'
         run: |
-          signer=tools/kms-signer/build/install/kms-signer/bin/kms-signer
+          signer="$KMS_SIGNER"
           $signer sign --key "$ANDROID_KMS_KEY" --cert "$UPLOAD_CERT" \
             --in app/build/outputs/bundle/playRelease/ClementineRemote-play-release.aab \
             --out "$RUNNER_TEMP/ClementineRemote-play-release.aab" \
