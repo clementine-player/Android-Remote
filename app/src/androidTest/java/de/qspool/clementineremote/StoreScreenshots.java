@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
-import android.view.KeyEvent;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.SdkSuppress;
@@ -225,9 +224,12 @@ public class StoreScreenshots {
         screenshot("2_library_album");
 
         navigateTo("Search");
+        // The field needs focus for Enter to submit the search.
         UiObject2 query = waitFor(id("search_src_text"));
-        query.setText("Gymnop");
-        mDevice.pressKeyCode(KeyEvent.KEYCODE_ENTER);
+        query.click();
+        query.setText("Gymnopédie");
+        mDevice.waitForIdle();
+        mDevice.pressEnter();
         // Submitting collapses the search field, which hides the keyboard.
         waitFor(By.textStartsWith("Gymnopédie No."));
         screenshot("4_search");
