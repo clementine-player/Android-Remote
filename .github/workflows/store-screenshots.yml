@@ -89,4 +89,6 @@ jobs:
 
       - name: Clementine log
         if: always()
-        run: docker logs clementine 2>&1 | grep -v GstEnginePipeline | tail -n 100
+        run: |
+          docker logs clementine 2>&1 | grep -v GstEnginePipeline | tail -n 100
+          docker exec clementine cat /tmp/pulse.log || true
