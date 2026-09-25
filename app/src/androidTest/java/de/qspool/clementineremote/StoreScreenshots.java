@@ -230,8 +230,14 @@ public class StoreScreenshots {
         query.setText("Gymnopédie");
         mDevice.waitForIdle();
         mDevice.pressEnter();
-        // Submitting collapses the search field, which hides the keyboard.
-        waitFor(By.textStartsWith("Gymnopédie No."));
+        // Results are grouped by source, then artist and album: open the first entry at each
+        // level down to the tracks.
+        BySelector tracks = By.textStartsWith("Gymnopédie No.");
+        for (int level = 0; level < 4 && !mDevice.wait(Until.hasObject(tracks), 5000); level++) {
+            waitFor(id("global_search")).getChildren().get(0).click();
+            SystemClock.sleep(SETTLE_MILLIS);
+        }
+        waitFor(tracks);
         screenshot("4_search");
     }
 }
