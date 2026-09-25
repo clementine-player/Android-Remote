@@ -28,6 +28,8 @@ import android.util.Log;
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceEvent;
@@ -52,14 +54,13 @@ public class ClementineMDnsDiscovery {
 
     private ServiceListener mListener;
 
-    private LinkedList<ServiceInfo> mServices;
+    /** Written by jmDNS threads and read on the UI thread. */
+    private final List<ServiceInfo> mServices = new CopyOnWriteArrayList<>();
 
     private Handler mConnectActivityHandler;
 
     public ClementineMDnsDiscovery(Handler handler) {
         mConnectActivityHandler = handler;
-
-        mServices = new LinkedList<>();
     }
 
     /**
@@ -111,8 +112,25 @@ public class ClementineMDnsDiscovery {
      *
      * @return A LinkedList of ServiceInfo with the services.
      */
-    public LinkedList<ServiceInfo> getServices() {
+    public List<ServiceInfo> getServices() {
         return mServices;
+    }
+
+    /**
+     * Keeps each Clementine once, by name: jmDNS resolves a service again as more of its records
+     * (A, AAAA, SRV) arrive.
+     */
+    synchronized void addService(ServiceInfo info) {
+        removeService(info.getName());
+        mServices.add(info);
+    }
+
+    synchronized void removeService(String name) {
+        for (ServiceInfo service : mServices) {
+            if (service.getName().equals(name)) {
+                mServices.remove(service);
+            }
+        }
     }
 
     /**
@@ -147,8 +165,7 @@ public class ClementineMDnsDiscovery {
 
                 @Override
                 public void serviceRemoved(ServiceEvent serviceEvent) {
-                    ServiceInfo info = serviceEvent.getInfo();
-                    mServices.remove(info);
+                    removeService(serviceEvent.getName());
                     // Send a message to the connect activity
                     if (mConnectActivityHandler != null) {
                         Message msg = Message.obtain();
@@ -162,7 +179,7 @@ public class ClementineMDnsDiscovery {
                     ServiceInfo info = serviceEvent.getInfo();
                     Inet4Address inet4[] = info.getInet4Addresses();
                     if (inet4.length > 0) {
-                        mServices.add(info);
+                        addService(info);
 
                         // Send a message to the connect activity
                         if (mConnectActivityHandler != null) {
