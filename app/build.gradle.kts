@@ -1,9 +1,12 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.protobuf)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
 }
 
 // Release signing: CI passes the keystore via environment variables; locally a
@@ -64,11 +67,18 @@ android {
 
     buildFeatures {
         buildConfig = true
+        compose = true
     }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+        }
     }
 
     testOptions {
@@ -143,6 +153,22 @@ dependencies {
     implementation(libs.androidx.fragment)
     implementation(libs.media3.session)
     implementation(libs.protobuf.javalite)
+
+    // The UI moves to Jetpack Compose one screen at a time (see the plan's Phase 5).
+    val composeBom = platform(libs.androidx.compose.bom)
+    implementation(composeBom)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material3.navigation.suite)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    testImplementation(composeBom)
+    testImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(composeBom)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     implementation(libs.jmdns)
 
     testImplementation(libs.junit)
