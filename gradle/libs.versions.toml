@@ -7,7 +7,7 @@ recyclerview = "1.4.0"
 drawerlayout = "1.2.0"
 swiperefreshlayout = "1.2.0"
 viewpager = "1.1.0"
-legacySupportV13 = "1.0.0"
+fragment = "1.9.1"
 jmdns = "3.5.4"
 junit = "4.13.2"
 robolectric = "4.17"
@@ -22,7 +22,7 @@ androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version
 androidx-drawerlayout = { module = "androidx.drawerlayout:drawerlayout", version.ref = "drawerlayout" }
 androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
 androidx-viewpager = { module = "androidx.viewpager:viewpager", version.ref = "viewpager" }
-androidx-legacy-support-v13 = { module = "androidx.legacy:legacy-support-v13", version.ref = "legacySupportV13" }
+androidx-fragment = { module = "androidx.fragment:fragment", version.ref = "fragment" }
 media3-session = { module = "androidx.media3:media3-session", version.ref = "media3" }
 protobuf-javalite = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobuf" }
 protoc = { module = "com.google.protobuf:protoc", version.ref = "protobuf" }

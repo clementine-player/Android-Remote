@@ -21,7 +21,7 @@ import android.content.DialogInterface;
 import de.qspool.clementineremote.ui.dialogs.ProgressDialog;
 import androidx.appcompat.app.AlertDialog;
 
-import android.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;

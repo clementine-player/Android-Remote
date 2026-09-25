@@ -13,6 +13,9 @@ on:
       - app/src/androidTest/java/de/qspool/clementineremote/StoreScreenshots.java
       - app/src/androidTest/java/de/qspool/clementineremote/MediaSessionDeviceTest.java
       - app/src/main/java/de/qspool/clementineremote/backend/mediasession/**
+      # UI changes: the screenshot run drives every main screen against a real Clementine.
+      - app/src/main/java/de/qspool/clementineremote/ui/**
+      - app/src/main/res/layout*/**
       - clementine-it/**
 
 concurrency:

@@ -19,7 +19,7 @@ package de.qspool.clementineremote.ui.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;

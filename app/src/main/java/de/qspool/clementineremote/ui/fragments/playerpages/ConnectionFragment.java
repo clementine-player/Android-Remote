@@ -19,7 +19,7 @@ his file is part of the Android Clementine Remote.
 package de.qspool.clementineremote.ui.fragments.playerpages;
 
 import android.annotation.SuppressLint;
-import android.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.content.SharedPreferences;
 import android.net.TrafficStats;
 import android.os.Bundle;

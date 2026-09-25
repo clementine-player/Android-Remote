@@ -18,9 +18,6 @@
 package de.qspool.clementineremote.ui;
 
 import android.annotation.SuppressLint;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -30,10 +27,13 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (findViewById(R.id.player_frame) != null) {
             mPlayerFragment = new PlayerFragment();
-            getFragmentManager().beginTransaction().add(R.id.player_frame, mPlayerFragment)
+            getSupportFragmentManager().beginTransaction().add(R.id.player_frame, mPlayerFragment)
                     .commit();
             mLastPosition = 2;
         }
@@ -476,7 +476,7 @@ public class MainActivity extends AppCompatActivity {
                 if (mInstanceSaved) {
                     return;
                 }
-                FragmentManager fragmentManager = getFragmentManager();
+                FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction ft = fragmentManager.beginTransaction();
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 ft.setCustomAnimations(R.animator.anim_fade_in, R.animator.anim_fade_out);
