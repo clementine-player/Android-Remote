@@ -7,10 +7,6 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="Dialog_Transparent" parent="@android:style/Theme.Dialog">
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:background">@android:color/transparent</item>
-    </style>
 
     <style name="AppTheme.PreferenceTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/actionbar</item>
@@ -52,13 +48,7 @@
         <item name="backgroundSplit">@color/grey_cab_status</item>
     </style>
 
-    <style name="ShowcaseView.Title" parent="android:style/TextAppearance.Large">
-        <item name="android:textColor">@color/orange_light</item>
-    </style>
 
-    <style name="ShowcaseView.Detail" parent="android:style/TextAppearance">
-        <item name="android:textColor">@color/white</item>
-    </style>
 
     <style name="ContentListView">
         <item name="android:clipToPadding">false</item>
