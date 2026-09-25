@@ -99,6 +99,24 @@ public class StoreScreenshots {
             }
         }
 
+        // A clean status bar: System UI demo mode, set up here rather than in the workflow so
+        // System UI is sure to be running.
+        for (String command : new String[]{
+                "settings put global sysui_demo_allowed 1",
+                "am broadcast -a com.android.systemui.demo -e command enter",
+                "am broadcast -a com.android.systemui.demo -e command clock -e hhmm 1000",
+                "am broadcast -a com.android.systemui.demo -e command battery -e level 100 -e plugged false",
+                "am broadcast -a com.android.systemui.demo -e command network -e wifi show -e level 4 -e fully true",
+                "am broadcast -a com.android.systemui.demo -e command network -e mobile hide",
+                "am broadcast -a com.android.systemui.demo -e command notifications -e visible false",
+        }) {
+            try {
+                mDevice.executeShellCommand(command);
+            } catch (IOException e) {
+                throw new AssertionError(command, e);
+            }
+        }
+
         // Skip the first-run message and fill in Clementine's address.
         App.getPreferences().edit()
                 .putBoolean(SharedPreferencesKeys.SP_FIRST_CALL, false)
@@ -147,6 +165,24 @@ public class StoreScreenshots {
         select(item);
     }
 
+    /**
+     * Plays a track by tapping it in the playlist, and shows the player. Clementine sometimes
+     * starts another track instead, so this checks and tries again.
+     */
+    private void play(String title) {
+        for (int attempt = 1; ; attempt++) {
+            navigateTo("Playlists");
+            waitFor(By.text(title));
+            mDevice.waitForIdle();
+            mDevice.findObject(By.text(title)).click();
+            navigateTo("Player");
+            if (mDevice.wait(Until.hasObject(By.res(mPackage, "tvTitle").text(title)), 10_000)) {
+                return;
+            }
+            assertTrue("Could not play " + title, attempt < 3);
+        }
+    }
+
     @Test
     public void takeScreenshots() {
         mContext.startActivity(new Intent(mContext, ConnectActivity.class)
@@ -157,14 +193,10 @@ public class StoreScreenshots {
         mDevice.findObject(id("btnConnect")).click();
         waitFor(id("btnPlaypause"));
 
-        // Play a track from the playlist.
         navigateTo("Playlists");
-        UiObject2 track = waitFor(By.text("Clair de lune"));
+        waitFor(By.text("Clair de lune"));
         screenshot("3_playlist");
-        track.click();
-
-        navigateTo("Player");
-        waitFor(By.res(mPackage, "tvTitle").text("Clair de lune"));
+        play("Clair de lune");
         // Let playback move along the seek bar.
         SystemClock.sleep(8000);
         screenshot("1_player");
