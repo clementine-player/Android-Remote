@@ -1,11 +1,12 @@
 package de.qspool.clementineremote.ui.adapter;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
-import androidx.legacy.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 
 import java.util.ArrayList;
 
@@ -15,22 +16,23 @@ public class PlayerPageAdapter extends FragmentPagerAdapter {
 
     private Context mContext;
 
-    private ArrayList<android.app.Fragment> fragments = new ArrayList<>();
+    private ArrayList<Fragment> fragments = new ArrayList<>();
 
     public PlayerPageAdapter(Context context, FragmentManager fragmentManager) {
-        super(fragmentManager);
+        // As the legacy adapter did: every page the pager holds is resumed.
+        super(fragmentManager, BEHAVIOR_SET_USER_VISIBLE_HINT);
         mContext = context;
     }
 
     @Override
-    public android.app.Fragment getItem(int i) {
+    public Fragment getItem(int i) {
         return fragments.get(i);
     }
 
     @Override
     public void destroyItem(ViewGroup viewPager, int position, Object object) {
         if (position >= getCount()) {
-            FragmentManager manager = ((Fragment) object).getFragmentManager();
+            FragmentManager manager = ((Fragment) object).getParentFragmentManager();
             FragmentTransaction trans = manager.beginTransaction();
             trans.remove((Fragment) object);
             trans.commit();

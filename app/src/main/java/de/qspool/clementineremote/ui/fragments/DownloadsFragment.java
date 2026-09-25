@@ -20,7 +20,7 @@ package de.qspool.clementineremote.ui.fragments;
 import android.content.DialogInterface;
 import androidx.appcompat.app.AlertDialog;
 
-import android.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;

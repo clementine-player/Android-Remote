@@ -20,7 +20,7 @@ package de.qspool.clementineremote.ui.fragments.playerpages;
 import de.qspool.clementineremote.ui.dialogs.ProgressDialog;
 
 import android.annotation.SuppressLint;
-import android.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.graphics.Bitmap;
 
 import androidx.annotation.MainThread;

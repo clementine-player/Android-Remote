@@ -22,7 +22,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.graphics.Rect;

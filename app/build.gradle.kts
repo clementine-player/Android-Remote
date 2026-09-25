@@ -140,7 +140,7 @@ dependencies {
     implementation(libs.androidx.drawerlayout)
     implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.androidx.viewpager)
-    implementation(libs.androidx.legacy.support.v13)
+    implementation(libs.androidx.fragment)
     implementation(libs.media3.session)
     implementation(libs.protobuf.javalite)
     implementation(libs.jmdns)
