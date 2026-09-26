@@ -10,8 +10,15 @@
     <string name="connectdialog_error">Could not reach host</string>
     <string name="connectdialog_ip_hint">Enter IP address</string>
     <string name="connectdialog_services">Clementines</string>
-    <string name="connect_searching">Looking for Clementine on this network…</string>
-    <string name="connect_searching_help">Clementine shows up here when it\'s on the same Wi-Fi network with its network remote turned on. You can also enter its address below.</string>
+    <string name="connect_intro">Pick the Clementine you want to control. It needs to be on the same Wi-Fi as this phone.</string>
+    <string name="connect_on_network">On your network</string>
+    <string name="connect_search_again">Search again</string>
+    <string name="connect_searching">Looking for Clementine…</string>
+    <string name="connect_searching_help">Not showing up? Check that its network remote is turned on, or enter its address below.</string>
+    <string name="connect_server_address">%1$s · port %2$d</string>
+    <string name="connect_enter_address">Or enter its address</string>
+    <string name="connect_address">Address</string>
+    <string name="connect_requirements">Needs Clementine %1$s or later, with Tools → Preferences → Network Remote turned on.</string>
 
 
     <string name="player_nosong">No Song playing right now</string>
