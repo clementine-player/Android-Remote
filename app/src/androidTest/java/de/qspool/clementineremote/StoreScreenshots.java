@@ -46,6 +46,7 @@ import static org.junit.Assume.assumeNotNull;
  */
 @RunWith(AndroidJUnit4.class)
 @SdkSuppress(minSdkVersion = 33)
+@NeedsClementine
 public class StoreScreenshots {
 
     private static final long TIMEOUT = 30_000;
@@ -94,10 +95,13 @@ public class StoreScreenshots {
         mPackage = mContext.getPackageName();
         mDir = new File(mContext.getExternalFilesDir(null), "screenshots");
         mDir.mkdirs();
+        // Screenshots from before; not what MediaSessionDeviceTest kept of a failure.
         File[] old = mDir.listFiles();
         if (old != null) {
             for (File file : old) {
-                file.delete();
+                if (!file.getName().startsWith("media-")) {
+                    file.delete();
+                }
             }
         }
 

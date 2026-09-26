@@ -30,7 +30,9 @@ import java.nio.file.Files;
 
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.RemoteRepository;
+import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.ui.ConnectActivity;
 
@@ -43,10 +45,12 @@ import static org.junit.Assume.assumeNotNull;
  * The media session against a real Clementine: once connected, Android knows the session and
  * its song, the system's media controls (in the notification shade) drive Clementine, and the
  * volume keys set Clementine's volume, in the app and out of it.
- * Runs only when given the Clementine host, as .github/workflows/store-screenshots.yml does.
+ * Runs only when given the Clementine host, as .github/workflows/store-screenshots.yml does
+ * for every {@link NeedsClementine} test.
  */
 @RunWith(AndroidJUnit4.class)
 @SdkSuppress(minSdkVersion = 33)
+@NeedsClementine
 public class MediaSessionDeviceTest {
 
     private static final long TIMEOUT = 30_000;
@@ -110,11 +114,19 @@ public class MediaSessionDeviceTest {
                 Until.findObject(By.res("navQueue")), TIMEOUT));
     }
 
+    /** Disconnects, so the next test (of any class) connects from the connect screen. */
     @After
     public void tearDown() {
-        if (mDevice != null) {
-            mDevice.pressHome();
+        if (mDevice == null) {
+            return;
         }
+        RemoteRepository.send(ClementineMessage.getMessage(MsgType.DISCONNECT));
+        long end = SystemClock.uptimeMillis() + TIMEOUT;
+        while (App.ClementineConnection != null && App.ClementineConnection.isConnected()
+                && SystemClock.uptimeMillis() < end) {
+            SystemClock.sleep(200);
+        }
+        mDevice.pressHome();
     }
 
     private String mediaSessions() {
