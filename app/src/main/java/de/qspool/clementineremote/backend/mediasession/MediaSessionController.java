@@ -17,8 +17,6 @@
 
 package de.qspool.clementineremote.backend.mediasession;
 
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
@@ -43,8 +41,7 @@ import de.qspool.clementineremote.backend.listener.PlayerConnectionListener;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.utils.Utilities;
-import de.qspool.clementineremote.widget.ClementineWidgetProvider;
-import de.qspool.clementineremote.widget.WidgetIntent;
+import de.qspool.clementineremote.widget.ClementineWidget;
 
 /**
  * Publishes Clementine's playback to the rest of the system while connected: a Media3 media
@@ -108,7 +105,7 @@ public class MediaSessionController {
                     default:
                         break;
                 }
-                sendWidgetUpdateIntent(WidgetIntent.ClementineAction.CONNECTION_STATUS, status);
+                ClementineWidget.update(mContext);
             }
 
             @Override
@@ -122,8 +119,7 @@ public class MediaSessionController {
                         mPlayer.invalidate();
                         mMainHandler.post(MediaSessionController.this::updateNotification);
                         sendMetachangedIntent(META_CHANGED);
-                        sendWidgetUpdateIntent(WidgetIntent.ClementineAction.STATE_CHANGE,
-                                ClementinePlayerConnection.ConnectionStatus.CONNECTED);
+                        ClementineWidget.update(mContext);
                         break;
                     case PLAY:
                     case PAUSE:
@@ -131,8 +127,7 @@ public class MediaSessionController {
                         mPlayer.invalidate();
                         mMainHandler.post(MediaSessionController.this::updateNotification);
                         sendMetachangedIntent(PLAYSTATE_CHANGED);
-                        sendWidgetUpdateIntent(WidgetIntent.ClementineAction.STATE_CHANGE,
-                                ClementinePlayerConnection.ConnectionStatus.CONNECTED);
+                        ClementineWidget.update(mContext);
                         break;
                     case UPDATE_TRACK_POSITION:
                     case REPEAT:
@@ -142,8 +137,7 @@ public class MediaSessionController {
                         break;
                     case FIRST_DATA_SENT_COMPLETE:
                         mPlayer.invalidate();
-                        sendWidgetUpdateIntent(WidgetIntent.ClementineAction.STATE_CHANGE,
-                                ClementinePlayerConnection.ConnectionStatus.CONNECTED);
+                        ClementineWidget.update(mContext);
                         break;
                     default:
                         break;
@@ -218,24 +212,5 @@ public class MediaSessionController {
         }
 
         mContext.sendBroadcast(i);
-    }
-
-    private void sendWidgetUpdateIntent(WidgetIntent.ClementineAction action,
-            ClementinePlayerConnection.ConnectionStatus connectionStatus) {
-        // Get widget ids
-        ComponentName widgetComponent = new ComponentName(mContext.getPackageName(),
-                ClementineWidgetProvider.class.getName());
-        int[] widgetIds = AppWidgetManager.getInstance(mContext).getAppWidgetIds(widgetComponent);
-
-        if (widgetIds.length > 0) {
-            Intent intent = new Intent(mContext, ClementineWidgetProvider.class);
-            intent.setAction(WidgetIntent.ACTION_APPWIDGET_UPDATE);
-            intent.putExtra(WidgetIntent.EXTRA_APPWIDGET_IDS, widgetIds);
-            intent.putExtra(WidgetIntent.EXTRA_CLEMENTINE_ACTION, action.ordinal());
-            intent.putExtra(WidgetIntent.EXTRA_CLEMENTINE_CONNECTION_STATE,
-                    connectionStatus.ordinal());
-
-            mContext.sendBroadcast(intent);
-        }
     }
 }

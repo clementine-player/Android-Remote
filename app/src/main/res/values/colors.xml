@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="orange_light">#edb49b</color>
-
-    <color name="list_pressed_start">#55FFA768</color>
-    <color name="list_pressed_end">#55FD964E</color>
-
-    <color name="white">#ffffff</color>
-
     <!-- ClementineTheme's light surface; the dark one is in values-night. -->
     <color name="window_background">#FFFFF8F6</color>
 </resources>

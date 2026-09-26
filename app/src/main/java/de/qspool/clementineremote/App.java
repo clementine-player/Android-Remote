@@ -28,6 +28,7 @@ import android.preference.PreferenceManager;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementinePlayerConnection;
 import de.qspool.clementineremote.backend.downloader.DownloadManager;
+import de.qspool.clementineremote.widget.ClementineWidget;
 import de.qspool.clementineremote.utils.StrictModePolicies;
 
 public class App extends Application {
@@ -60,6 +61,8 @@ public class App extends Application {
 
         // Create a new downloadmanager instance
         DownloadManager.getInstance(this);
+
+        ClementineWidget.publishPreview(this);
     }
 
     private void createNotificationChannel() {
