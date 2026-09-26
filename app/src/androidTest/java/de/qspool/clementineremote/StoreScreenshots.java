@@ -15,6 +15,7 @@ import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.Until;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -111,11 +112,7 @@ public class StoreScreenshots {
                 "am broadcast -a com.android.systemui.demo -e command network -e mobile hide",
                 "am broadcast -a com.android.systemui.demo -e command notifications -e visible false",
         }) {
-            try {
-                mDevice.executeShellCommand(command);
-            } catch (IOException e) {
-                throw new AssertionError(command, e);
-            }
+            shell(command);
         }
 
         // Skip the first-run message and fill in Clementine's address.
@@ -124,6 +121,22 @@ public class StoreScreenshots {
                 .putString(SharedPreferencesKeys.SP_KEY_IP, host)
                 .putString(SharedPreferencesKeys.SP_KEY_PORT, "5500")
                 .commit();
+    }
+
+    /** Back to the light theme, which the tests after this one expect. */
+    @After
+    public void tearDown() {
+        if (mDevice != null) {
+            shell("cmd uimode night no");
+        }
+    }
+
+    private void shell(String command) {
+        try {
+            mDevice.executeShellCommand(command);
+        } catch (IOException e) {
+            throw new AssertionError(command, e);
+        }
     }
 
     private UiObject2 waitFor(BySelector selector, long timeout) {
@@ -259,5 +272,40 @@ public class StoreScreenshots {
         }
         waitFor(tracks);
         screenshot("4_search");
+
+        // The same screens in the dark theme, for pull requests; the store listing takes only
+        // the numbered ones. The activity is recreated in the dark, keeping where it was.
+        shell("cmd uimode night yes");
+        SystemClock.sleep(SETTLE_MILLIS);
+        waitFor(tracks);
+        screenshot("dark_4_search");
+
+        navigateTo("navLibrary");
+        waitFor(By.textStartsWith("Nocturne in"));
+        screenshot("dark_2_library_album");
+        // Up from the album's songs to Chopin's albums, then to the artists.
+        mDevice.pressBack();
+        waitFor(By.text("Nocturnes, Op. 9"));
+        mDevice.pressBack();
+        waitFor(By.text("Frédéric Chopin"));
+        SystemClock.sleep(SETTLE_MILLIS);
+        screenshot("dark_2_library");
+
+        navigateTo("navQueue");
+        waitFor(By.text("Clair de lune").hasAncestor(tag("queueSongs")));
+        screenshot("dark_3_playlist");
+        openPlayer();
+        screenshot("dark_1_player");
+        closePlayer();
+
+        waitFor(tag("connectionChip")).click();
+        waitFor(tag("btnSwitch"));
+        SystemClock.sleep(SETTLE_MILLIS);
+        screenshot("dark_5_connection");
+        // Switching Clementine disconnects, back to the connect screen.
+        mDevice.findObject(tag("btnSwitch")).click();
+        waitFor(tag("btnConnect"));
+        SystemClock.sleep(SETTLE_MILLIS);
+        screenshot("dark_6_connect");
     }
 }

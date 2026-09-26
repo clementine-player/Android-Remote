@@ -46,10 +46,10 @@ run="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
   echo "$marker"
   echo "### Store screenshots"
   echo
-  echo "From [run $GITHUB_RUN_ID]($run), against clementine-it. Left: the store listing on master. Right: this pull request."
+  echo "From [run $GITHUB_RUN_ID]($run), against clementine-it. Left: the store listing on master. Right: this pull request, light and dark."
   echo
-  echo "| Screen | master | This PR |"
-  echo "| --- | --- | --- |"
+  echo "| Screen | master | This PR | This PR, dark |"
+  echo "| --- | --- | --- | --- |"
   i=0
   for shot in "${shots[@]}"; do
     name=$(basename "$shot" .png)
@@ -61,14 +61,20 @@ run="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
         else
           before="–"
         fi
-        echo "| \`$name\` | $before | <img src=\"$base/$name.png\" width=\"240\"> |"
+        # The same screen in the dark theme, when the run took it (dark_<name>.png).
+        if [ -f "$dir/dark_$name.png" ]; then
+          dark="<img src=\"$base/dark_$name.png\" width=\"240\">"
+        else
+          dark="–"
+        fi
+        echo "| \`$name\` | $before | <img src=\"$base/$name.png\" width=\"240\"> | $dark |"
         ;;
     esac
   done
   failures=()
   for shot in "${shots[@]}"; do
     case $(basename "$shot") in
-      [0-9]_*) ;;
+      [0-9]_* | dark_[0-9]_*) ;;
       *) failures+=("$shot") ;;
     esac
   done
