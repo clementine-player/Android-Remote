@@ -43,6 +43,17 @@
     <string name="playlist_clear">Clear playlist</string>
     <string name="playlist_clear_content">This will irretrievably remove all songs from the playlist. Continue?</string>
     <string name="playlist_clear_confirm">Clear playlist</string>
+    <plurals name="queue_songs">
+        <item quantity="one">%d song</item>
+        <item quantity="other">%d songs</item>
+    </plurals>
+    <string name="queue_minutes">%d min</string>
+    <string name="queue_hours_minutes">%1$d h %2$d min</string>
+    <plurals name="queue_selected">
+        <item quantity="one">%d selected</item>
+        <item quantity="other">%d selected</item>
+    </plurals>
+    <string name="queue_clear_selection">Clear selection</string>
 
 
     <string name="downloads_empty">No downloads!</string>
