@@ -110,6 +110,14 @@ jobs:
             app/build/reports/androidTests/
             app/build/outputs/androidTest-results/
 
+      # Which device tests ran, and how they did: a class the runner never started shows no line.
+      - name: Device tests run
+        if: always()
+        run: |
+          find app/build/outputs/androidTest-results -name '*.xml' -print0 \
+            | xargs -0 -r grep -ho '<testcase [^>]*>\|<skipped\|<failure message="[^"]*' \
+            || echo "No device test results"
+
       - name: Post the screenshots on the pull request
         if: always() && github.event_name == 'pull_request' && env.HAS_R2_TOKEN == 'true'
         env:
