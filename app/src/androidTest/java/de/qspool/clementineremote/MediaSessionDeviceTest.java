@@ -96,7 +96,7 @@ public class MediaSessionDeviceTest {
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
         // Already connected when another test connected first: the player shows straight away.
         UiObject2 connect = mDevice.wait(
-                Until.findObject(By.res(mContext.getPackageName(), "btnConnect")), 10_000);
+                Until.findObject(By.res("btnConnect")), 10_000);
         if (connect != null) {
             connect.click();
         }

@@ -49,15 +49,15 @@ public class ConnectActivityHandler extends Handler {
                     // We have got an error
                     switch (clementineMessage.getErrorMessage()) {
                         case NO_CONNECTION:
-                            cd.mPdConnect.dismiss();
+                            cd.connectionEnded();
                             cd.noConnection();
                             break;
                         case OLD_PROTO:
-                            cd.mPdConnect.dismiss();
+                            cd.connectionEnded();
                             cd.oldProtoVersion();
                             break;
                         default:
-                            cd.mPdConnect.dismiss();
+                            cd.connectionEnded();
                             cd.noConnection();
                             break;
                     }
@@ -66,15 +66,14 @@ public class ConnectActivityHandler extends Handler {
                     // Okay, normal message
                     switch (clementineMessage.getMessageType()) {
                         case INFO:
-                            cd.mPdConnect
-                                    .setContent(cd.getString(R.string.connectdialog_download_data));
+                            cd.showProgress(R.string.connectdialog_download_data);
                             break;
                         case FIRST_DATA_SENT_COMPLETE:
-                            cd.mPdConnect.dismiss();
+                            cd.connectionEnded();
                             cd.showPlayerDialog();
                             break;
                         case DISCONNECT:
-                            cd.mPdConnect.dismiss();
+                            cd.connectionEnded();
                             cd.disconnected(clementineMessage);
                             break;
                         default:

@@ -3,57 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/activity_background"
-    android:orientation="vertical"
-    android:paddingBottom="30dp">
+    android:orientation="vertical">
 
     <include layout="@layout/toolbar" />
 
-    <ImageButton
-        android:id="@+id/btnClementineIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="0dip"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_weight="0.90"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/cd_clementine_icon"
-        android:scaleType="fitCenter"
-        android:src="@drawable/icon_large" />
-
-    <LinearLayout
-        android:id="@+id/llConnect"
-        android:background="@drawable/white_background"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:orientation="vertical"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp">
-
-        <AutoCompleteTextView
-            android:id="@+id/etIp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:layout_marginBottom="6dp"
-            android:background="@drawable/edittext_orange_boarder"
-            android:textCursorDrawable="@null"
-            android:ems="10"
-            android:gravity="center_vertical|center_horizontal"
-            android:hint="@string/connectdialog_ip_hint"
-            android:singleLine="true"
-            android:textColor="@android:color/black" />
-
-        <Button
-            android:id="@+id/btnConnect"
-            style="@style/OrangeButton.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:minHeight="0dp"
-            android:text="@string/connectdialog_connect"/>
-
-    </LinearLayout>
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/connect_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
 </LinearLayout>
