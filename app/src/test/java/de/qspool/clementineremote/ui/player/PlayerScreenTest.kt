@@ -111,10 +111,9 @@ class PlayerScreenTest {
             .assert(SemanticsMatcher.expectValue(
                 SemanticsProperties.ProgressBarRangeInfo,
                 androidx.compose.ui.semantics.ProgressBarRangeInfo(90f, 0f..300f)))
-        compose.onNodeWithTag("volume")
-            .assert(SemanticsMatcher.expectValue(
-                SemanticsProperties.ProgressBarRangeInfo,
-                androidx.compose.ui.semantics.ProgressBarRangeInfo(50f, 0f..100f)))
+        // The volume is a button, not a slider beside the seek bar.
+        compose.onNodeWithContentDescription("Clementine volume, 50%").assertIsDisplayed()
+        compose.onNodeWithTag("volumeSlider").assertDoesNotExist()
     }
 
     @Test
@@ -147,7 +146,6 @@ class PlayerScreenTest {
         compose.onNodeWithTag("btnDetails").performClick()
         compose.onNodeWithTag("btnQueue").performClick()
         compose.onNodeWithTag("btnDownload").performClick()
-        compose.onNodeWithTag("volume").performSemanticsAction(SemanticsActions.SetProgress) { it(80f) }
         compose.onNodeWithTag("btnLove").performClick()
         // Loved once only.
         compose.onNodeWithTag("btnLove").assertIsOn().performClick()
@@ -158,8 +156,29 @@ class PlayerScreenTest {
         compose.onNodeWithTag("btnCollapse").performClick()
 
         assertEquals(
-            listOf("lyrics", "details", "queue", "download", "volume 80", "love", "stop", "ban", "collapse"),
+            listOf("lyrics", "details", "queue", "download", "love", "stop", "ban", "collapse"),
             done)
+    }
+
+    @Test
+    fun theVolumeButtonPopsUpAnUprightSlider() {
+        showPlayer()
+
+        compose.onNodeWithTag("btnVolume").performClick()
+        compose.onNodeWithTag("volumeLevel").assertTextEquals("50%")
+        compose.onNodeWithTag("volumeSlider")
+            .assert(SemanticsMatcher.expectValue(
+                SemanticsProperties.ProgressBarRangeInfo,
+                androidx.compose.ui.semantics.ProgressBarRangeInfo(50f, 0f..100f)))
+            .performSemanticsAction(SemanticsActions.SetProgress) { it(80f) }
+        // Shown at once, before Clementine answers.
+        compose.onNodeWithTag("volumeLevel").assertTextEquals("80%")
+        compose.onNodeWithTag("btnVolumeUp").performClick()
+        compose.onNodeWithTag("btnVolumeDown").performClick()
+        compose.onNodeWithTag("btnVolumeDown").performClick()
+
+        assertEquals(listOf("volume 80", "volume 85", "volume 80", "volume 75"), done)
+        compose.onNodeWithContentDescription("Clementine volume, 75%").assertExists()
     }
 
     @Test

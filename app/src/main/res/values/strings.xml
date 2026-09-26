@@ -74,6 +74,9 @@
     <string name="player_love">Love on Last.fm</string>
     <string name="player_details">Lyrics and details</string>
     <string name="player_download_song">Download song</string>
+    <string name="player_volume_level">Clementine volume, %1$d%%</string>
+    <string name="player_volume_up">Volume up</string>
+    <string name="player_volume_down">Volume down</string>
     <string name="details_tab">Details</string>
     <string name="lyrics_tab">Lyrics</string>
     <string name="connection_connected">Connected</string>
