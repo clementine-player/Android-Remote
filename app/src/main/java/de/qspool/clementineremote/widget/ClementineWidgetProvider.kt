@@ -15,21 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package de.qspool.clementineremote.widget;
+package de.qspool.clementineremote.widget
 
-import android.appwidget.AppWidgetManager;
+import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.GlanceAppWidgetReceiver
 
-public class WidgetIntent {
-
-    public static String ACTION_APPWIDGET_UPDATE = AppWidgetManager.ACTION_APPWIDGET_UPDATE;
-
-    public static String EXTRA_APPWIDGET_IDS = AppWidgetManager.EXTRA_APPWIDGET_IDS;
-
-    public static String EXTRA_CLEMENTINE_ACTION = "de.qspool.clementineremote.widget.extra.action";
-
-    public static String EXTRA_CLEMENTINE_CONNECTION_STATE
-            = "de.qspool.clementineremote.widget.extra.connnect.state";
-
-    public enum ClementineAction {DEFAULT, CONNECTION_STATUS, STATE_CHANGE}
-
+/**
+ * The home-screen widget's receiver. It keeps the old provider's name, so widgets already placed
+ * carry on as the Glance [ClementineWidget].
+ */
+class ClementineWidgetProvider : GlanceAppWidgetReceiver() {
+    override val glanceAppWidget: GlanceAppWidget = ClementineWidget()
 }
