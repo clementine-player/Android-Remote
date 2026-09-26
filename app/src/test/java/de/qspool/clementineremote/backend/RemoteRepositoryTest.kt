@@ -10,6 +10,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Resp
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuffle
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ShuffleMode
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata
+import de.qspool.clementineremote.backend.player.MySong
 import de.qspool.clementineremote.ui.player.PlayerViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -92,6 +93,7 @@ class RemoteRepositoryTest {
     fun playerSendsCommands() {
         val sent = mutableListOf<ClementineMessage>()
         val player = PlayerViewModel(send = { sent += it })
+        App.Clementine.currentSong = MySong()
 
         player.playPause()
         player.next()
@@ -126,5 +128,31 @@ class RemoteRepositoryTest {
 
         assertEquals(Clementine.ShuffleMode.ALL, player.nowPlaying.value.shuffle)
         assertEquals(MsgType.SHUFFLE, sent.single().messageType)
+    }
+
+    @Test
+    fun lastFmAndVolumeCommands() {
+        val sent = mutableListOf<ClementineMessage>()
+        val player = PlayerViewModel(send = { sent += it })
+        App.Clementine.currentSong = MySong()
+
+        player.love()
+        player.love()
+        player.ban()
+        player.setVolume(80)
+
+        // A song is loved once.
+        assertEquals(listOf(MsgType.LOVE, MsgType.BAN, MsgType.SET_VOLUME), sent.map { it.messageType })
+        assertEquals(80, sent[2].message.requestSetVolume.volume)
+    }
+
+    @Test
+    fun ratingShowsTheNewRatingAtOnce() {
+        val player = PlayerViewModel(send = {})
+        App.Clementine.currentSong = MySong()
+
+        player.rate(4f)
+
+        assertEquals(0.8f, player.nowPlaying.value.song!!.rating, 0.001f)
     }
 }

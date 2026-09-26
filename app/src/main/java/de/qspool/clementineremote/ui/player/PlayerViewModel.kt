@@ -55,6 +55,26 @@ class PlayerViewModel(
         return App.Clementine.repeatMode
     }
 
-    /** Rates the current song, from 0 to 5 stars. */
-    fun rate(stars: Float) = send(ClementineMessageFactory.buildRateTrack(stars / 5))
+    /** Rates the current song, from 0 to 5 stars, and shows the rating at once. */
+    fun rate(stars: Float) {
+        val song = App.Clementine.currentSong ?: return
+        song.rating = stars / 5
+        RemoteRepository.refresh()
+        send(ClementineMessageFactory.buildRateTrack(stars / 5))
+    }
+
+    /** Loves the current song on Last.fm; a song can be loved only once. */
+    fun love() {
+        val song = App.Clementine.currentSong ?: return
+        if (!song.isLoved) {
+            send(ClementineMessage.getMessage(MsgType.LOVE))
+            song.isLoved = true
+        }
+    }
+
+    /** Bans the current song on Last.fm. */
+    fun ban() = send(ClementineMessage.getMessage(MsgType.BAN))
+
+    /** Sets Clementine's volume, from 0 to 100. */
+    fun setVolume(percent: Int) = send(ClementineMessageFactory.buildVolumeMessage(percent))
 }

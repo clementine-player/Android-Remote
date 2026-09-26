@@ -21,23 +21,32 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Slider
+import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -58,6 +67,53 @@ import de.qspool.clementineremote.backend.RemoteRepository.NowPlaying
 import de.qspool.clementineremote.backend.player.MySong
 import de.qspool.clementineremote.utils.Utilities
 import kotlin.math.roundToInt
+import kotlinx.coroutines.launch
+
+/** The player's pages, in the order of their tabs. */
+internal val PLAYER_PAGES = listOf(
+    R.string.fragment_title_player,
+    R.string.fragment_title_details,
+    R.string.fragment_title_connection,
+)
+
+/**
+ * The player: tabs for the player, song details and connection pages, and the controls below
+ * them. [onPageChanged] hears which page is shown, starting with the first.
+ */
+@Composable
+fun PlayerScreen(
+    onArtClick: () -> Unit,
+    onPageChanged: (Int) -> Unit,
+    viewModel: PlayerViewModel = viewModel(),
+) {
+    val pagerState = rememberPagerState { PLAYER_PAGES.size }
+    val scope = rememberCoroutineScope()
+    val pageChanged by rememberUpdatedState(onPageChanged)
+    LaunchedEffect(pagerState) {
+        snapshotFlow { pagerState.currentPage }.collect { pageChanged(it) }
+    }
+    Column(Modifier.fillMaxSize()) {
+        PrimaryTabRow(selectedTabIndex = pagerState.currentPage, containerColor = Color.Transparent) {
+            PLAYER_PAGES.forEachIndexed { page, title ->
+                Tab(
+                    selected = pagerState.currentPage == page,
+                    onClick = { scope.launch { pagerState.animateScrollToPage(page) } },
+                    text = { Text(stringResource(title), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                    unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.testTag("tab$page"),
+                )
+            }
+        }
+        HorizontalPager(pagerState, Modifier.weight(1f)) { page ->
+            when (page) {
+                0 -> NowPlaying(onArtClick, viewModel)
+                1 -> SongDetails(viewModel)
+                else -> ConnectionInfo(viewModel)
+            }
+        }
+        PlayerControls(viewModel)
+    }
+}
 
 /**
  * The player page: the artwork, the song and the seek bar. Tapping the artwork asks for the

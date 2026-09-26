@@ -17,43 +17,60 @@
 
 package de.qspool.clementineremote.ui.fragments;
 
-import androidx.fragment.app.Fragment;
 import android.os.Bundle;
-import androidx.compose.ui.platform.ComposeView;
-import androidx.core.content.ContextCompat;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.compose.ui.platform.ComposeView;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
+import java.util.List;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.SharedPreferencesKeys;
+import de.qspool.clementineremote.backend.RemoteRepository;
+import de.qspool.clementineremote.backend.downloader.DownloadManager;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
+import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
-import de.qspool.clementineremote.ui.adapter.PlayerPageAdapter;
-import de.qspool.clementineremote.ui.fragments.playerpages.ConnectionFragment;
-import de.qspool.clementineremote.ui.fragments.playerpages.PlayerPageFragment;
-import de.qspool.clementineremote.ui.fragments.playerpages.SongDetailFragment;
+import de.qspool.clementineremote.backend.player.LyricsProvider;
+import de.qspool.clementineremote.backend.player.MySong;
+import de.qspool.clementineremote.ui.dialogs.DownloadChooserDialog;
+import de.qspool.clementineremote.ui.dialogs.ProgressDialog;
 import de.qspool.clementineremote.ui.interfaces.BackPressHandleable;
 import de.qspool.clementineremote.ui.interfaces.RemoteDataReceiver;
+import de.qspool.clementineremote.ui.player.PlayerViewModel;
 import de.qspool.clementineremote.ui.player.PlayerViews;
-import de.qspool.clementineremote.ui.widgets.SlidingTabLayout;
+import de.qspool.clementineremote.utils.Utilities;
 
+/**
+ * The player, drawn in Compose ({@code PlayerScreen}): the player, song details and connection
+ * pages, and the controls. This fragment keeps the app bar's menu for the page shown, and the
+ * lyrics, which the artwork asks for.
+ */
 public class PlayerFragment extends Fragment implements BackPressHandleable, RemoteDataReceiver {
+
+    private static final int PAGE_PLAYER = 0;
+
+    private static final int PAGE_DETAILS = 1;
 
     private ActionBar mActionBar;
 
-    private SlidingTabLayout mTabs;
+    private PlayerViewModel mViewModel;
 
-    private PlayerPageFragment mPlayerPageFragment;
+    private int mPage = PAGE_PLAYER;
 
-    private SongDetailFragment mSongDetailFragment;
-
-    private ConnectionFragment mConnectionFragment;
-
-    private ViewPager myPager;
+    private ProgressDialog mPdDownloadLyrics;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,77 +79,104 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
         // Get the actionbar
         mActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         mActionBar.setTitle(R.string.player_playlist);
+
+        mViewModel = new ViewModelProvider(this).get(PlayerViewModel.class);
+
+        setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_player,
-                container, false);
-
-        mPlayerPageFragment = new PlayerPageFragment();
-
-        mSongDetailFragment = new SongDetailFragment();
-
-        mConnectionFragment = new ConnectionFragment();
-
-        PlayerPageAdapter playerPageAdapter =
-                new PlayerPageAdapter(getActivity(), getChildFragmentManager());
-        playerPageAdapter.addFragment(mPlayerPageFragment);
-        playerPageAdapter.addFragment(mSongDetailFragment);
-        playerPageAdapter.addFragment(mConnectionFragment);
-        myPager = (ViewPager) view.findViewById(R.id.player_pager);
-        myPager.setAdapter(playerPageAdapter);
-        myPager.setCurrentItem(0);
-
-        PlayerViews.showControls((ComposeView) view.findViewById(R.id.player_controls));
+        ComposeView view = new ComposeView(requireContext());
+        PlayerViews.showPlayer(view, this::requestLyrics, page -> {
+            mPage = page;
+            requireActivity().invalidateOptionsMenu();
+        });
 
         metadataChanged();
-
-        mTabs = (SlidingTabLayout) getActivity().findViewById(R.id.tabs);
-
-        setHasOptionsMenu(true);
 
         return view;
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        myPager.setCurrentItem(0);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
 
-        mTabs.setDistributeEvenly(true);
-        mTabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-            @Override
-            public int getIndicatorColor(int position) {
-                return ContextCompat.getColor(getActivity(), R.color.actionbar_dark);
-            }
-        });
-        mTabs.setTextViewColor(ContextCompat.getColor(getActivity(), R.color.white));
-        mTabs.setViewPager(myPager);
-        mTabs.setVisibility(View.VISIBLE);
+        if (mPage == PAGE_PLAYER) {
+            inflater.inflate(R.menu.player_menu, menu);
+        } else if (mPage == PAGE_DETAILS) {
+            inflater.inflate(R.menu.song_info_menu, menu);
+
+            // Shall we show the lastfm buttons?
+            boolean showLastFm = App.getPreferences()
+                    .getBoolean(SharedPreferencesKeys.SP_LASTFM, true);
+            menu.findItem(R.id.love).setVisible(showLastFm);
+            menu.findItem(R.id.ban).setVisible(showLastFm);
+        }
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        mTabs.setVisibility(View.GONE);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        final int id = item.getItemId();
+        if (id == R.id.download) {
+            download();
+        } else if (id == R.id.stop) {
+            RemoteRepository.send(ClementineMessage.getMessage(MsgType.STOP));
+        } else if (id == R.id.love) {
+            mViewModel.love();
+            Toast.makeText(getActivity(), R.string.track_loved, Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.ban) {
+            mViewModel.ban();
+            Toast.makeText(getActivity(), R.string.track_banned, Toast.LENGTH_SHORT).show();
+        } else {
+            return false;
+        }
+        return true;
+    }
+
+    private void download() {
+        if (App.Clementine.getCurrentSong() == null) {
+            Toast.makeText(getActivity(), R.string.player_nosong, Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (!App.Clementine.getCurrentSong().isLocal()) {
+            Toast.makeText(getActivity(), R.string.player_song_is_stream, Toast.LENGTH_LONG)
+                    .show();
+            return;
+        }
+        DownloadChooserDialog downloadChooserDialog = new DownloadChooserDialog(getActivity());
+        downloadChooserDialog.setCallback(new DownloadChooserDialog.Callback() {
+            @Override
+            public void onItemClick(DownloadChooserDialog.Type type) {
+                switch (type) {
+                    case SONG:
+                        DownloadManager.getInstance().addJob(ClementineMessageFactory
+                                .buildDownloadSongsMessage(DownloadItem.CurrentItem));
+                        break;
+                    case ALBUM:
+                        DownloadManager.getInstance().addJob(ClementineMessageFactory
+                                .buildDownloadSongsMessage(DownloadItem.ItemAlbum));
+                        break;
+                    case PLAYLIST:
+                        DownloadManager.getInstance().addJob(ClementineMessageFactory
+                                .buildDownloadSongsMessage(DownloadItem.APlaylist,
+                                        App.Clementine.getPlaylistManager().getActivePlaylistId()));
+                        break;
+                }
+            }
+        });
+        downloadChooserDialog.showDialog();
     }
 
     @Override
     public void MessageFromClementine(ClementineMessage clementineMessage) {
         if (clementineMessage.getMessageType() == MsgType.CURRENT_METAINFO) {
             metadataChanged();
-        }
-
-        if (mPlayerPageFragment.isAdded()) {
-            mPlayerPageFragment.MessageFromClementine(clementineMessage);
-        }
-        if (mSongDetailFragment.isAdded()) {
-            mSongDetailFragment.MessageFromClementine(clementineMessage);
-        }
-        if (mConnectionFragment.isAdded()) {
-            mConnectionFragment.MessageFromClementine(clementineMessage);
+        } else if (clementineMessage.getMessageType() == MsgType.LYRICS) {
+            showLyricsDialog();
         }
     }
 
@@ -142,6 +186,65 @@ public class PlayerFragment extends Fragment implements BackPressHandleable, Rem
             mActionBar.setSubtitle(
                     App.Clementine.getPlaylistManager().getActivePlaylist().getName());
         }
+    }
+
+    /** Shows the current song's lyrics, asking Clementine for them first if need be. */
+    private void requestLyrics() {
+        MySong song = App.Clementine.getCurrentSong();
+        if (song == null) {
+            return;
+        }
+        mPdDownloadLyrics = ProgressDialog.showIndeterminate(getActivity(), 0,
+                R.string.player_download_lyrics, true, null);
+        if (song.getLyricsProvider().isEmpty()) {
+            RemoteRepository.send(ClementineMessage.getMessage(MsgType.GET_LYRICS));
+        } else {
+            showLyricsDialog();
+        }
+    }
+
+    /**
+     * Opens a dialog to show the lyrics
+     */
+    private void showLyricsDialog() {
+        // Only show lyrics dialog, if the user is still waiting for it
+        if (mPdDownloadLyrics == null || !mPdDownloadLyrics.isShowing()) {
+            return;
+        }
+
+        // Dismiss the dialog
+        mPdDownloadLyrics.dismiss();
+
+        // Check for a valid lyric
+        MySong song = App.Clementine.getCurrentSong();
+        if (song == null || song.getLyricsProvider().isEmpty()) {
+            Toast.makeText(getActivity(), R.string.player_no_lyrics, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Receive the provider and show the dialog
+        LyricsProvider provider = getBestLyricsProvider(song.getLyricsProvider());
+
+        // Show the dialog
+        Utilities.ShowMessageDialog(getActivity(), provider.getTitle(), provider.getContent(),
+                false);
+    }
+
+    /**
+     * Get the best lyrics provider for this song (currently the one with the most characters
+     *
+     * @param providers A list of lyrics providers
+     * @return The best possible provider
+     */
+    private LyricsProvider getBestLyricsProvider(List<LyricsProvider> providers) {
+        LyricsProvider bestProvider = providers.get(0);
+        for (LyricsProvider lyric : providers) {
+            // For now the provider with the longest lyrics wins
+            if (lyric.getContent().length() > bestProvider.getContent().length()) {
+                bestProvider = lyric;
+            }
+        }
+        return bestProvider;
     }
 
     @Override

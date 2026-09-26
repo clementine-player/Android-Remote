@@ -15,19 +15,10 @@
             layout="@layout/toolbar"
             android:id="@+id/toolbar" />
 
-        <de.qspool.clementineremote.ui.widgets.SlidingTabLayout
-            android:id="@+id/tabs"
-            android:layout_below="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layoutDirection="ltr"
-            android:background="@color/actionbar"
-            tools:ignore="UnusedAttribute"/>
-
         <FrameLayout
             android:id="@+id/content_frame"
             android:background="@drawable/white_background"
-            android:layout_below="@+id/tabs"
+            android:layout_below="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="7dp" />
