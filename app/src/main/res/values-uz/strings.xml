@@ -21,7 +21,6 @@
   <string name="playlist_empty">Ijro ro\'yxati bo\'sh!</string>
   <string name="playlist_context_remove">Ijro ro\'yxatidan o\'chirish</string>
   <string name="downloads_empty">Yuklanishlar yo\'q!</string>
-  <string name="download_freespace">Bo\'sh joy</string>
   <string name="download_noti_title">Yuklab olish boshlanmoqda</string>
   <string name="download_noti_title_album">[Albom]</string>
   <string name="download_noti_title_playlist">[Ijro ro\'yxati]</string>

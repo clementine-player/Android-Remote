@@ -29,7 +29,6 @@
   <string name="playlist_clear_content">Tämä poistaa pysyvästi kaikki kappaleet soittolistalta. Jatketaanko?</string>
   <string name="playlist_clear_confirm">Tyhjennä soittolista</string>
   <string name="downloads_empty">Ei latauksia!</string>
-  <string name="download_freespace">Vapaa tila</string>
   <string name="download_noti_title">Aloitetaan latausta</string>
   <plurals name="download_noti_n_downloads">
     <item quantity="one">%d aktiivinen lataus</item>

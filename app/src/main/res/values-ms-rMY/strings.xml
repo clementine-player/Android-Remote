@@ -16,7 +16,6 @@
   <string name="playlist_clear_content">Ini akan membuang semua lagu yang tidak boleh dikembalikan dari senarai main. Teruskan?</string>
   <string name="playlist_clear_confirm">Kosongkan senarai main</string>
   <string name="downloads_empty">Tiada muat turun!</string>
-  <string name="download_freespace">Ruang bebas</string>
   <string name="downloaded_songs">Lagu dimuat turun - klik untuk main</string>
   <string name="download_noti_title">Memulakan muat turun</string>
   <plurals name="download_noti_n_downloads">

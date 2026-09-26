@@ -29,7 +29,6 @@
   <string name="playlist_clear_content">To nieodwracalnie usunie wszystkie piosenki z listy. Kontynuować?</string>
   <string name="playlist_clear_confirm">Wyczyść listę odtwarzania</string>
   <string name="downloads_empty">Brak pobranych!</string>
-  <string name="download_freespace">Wolna przestrzeń</string>
   <string name="downloaded_songs">Pobrane utwory - kliknij aby odtworzyć.</string>
   <string name="download_noti_title">Rozpoczynanie pobierania</string>
   <plurals name="download_noti_n_downloads">

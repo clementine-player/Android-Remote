@@ -29,7 +29,6 @@
   <string name="playlist_clear_content">Ово ће неповратно да уклони све песме са листе нумера. Да наставим?</string>
   <string name="playlist_clear_confirm">Очисти листу</string>
   <string name="downloads_empty">Нема преузетих ставки!</string>
-  <string name="download_freespace">Слободан простор</string>
   <string name="downloaded_songs">Преузете песме — кликните за пуштање</string>
   <string name="download_noti_title">Почињем преузимање</string>
   <plurals name="download_noti_n_downloads">

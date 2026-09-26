@@ -25,7 +25,6 @@
   <string name="playlist_context_remove">재생목록으로부터 지우기</string>
   <string name="playlist_loading">불러오는 중</string>
   <string name="downloads_empty">다운로드 없음!</string>
-  <string name="download_freespace">여유 공간</string>
   <string name="download_noti_title">다운로드 시작 중</string>
   <string name="download_noti_title_album">[Album]</string>
   <string name="download_noti_title_playlist">[Playlist]</string>

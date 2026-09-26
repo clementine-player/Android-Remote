@@ -28,7 +28,6 @@
   <string name="playlist_clear">Pulisci playlist</string>
   <string name="playlist_clear_confirm">Pulisci playlist</string>
   <string name="downloads_empty">Nessun download!</string>
-  <string name="download_freespace">Spazio libero</string>
   <string name="downloaded_songs">Brani scaricati - clicca per avviare</string>
   <string name="download_noti_title">Inzio download</string>
   <plurals name="download_noti_n_downloads">

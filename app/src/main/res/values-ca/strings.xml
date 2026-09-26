@@ -29,7 +29,6 @@
   <string name="playlist_clear_content">Això eliminarà totes les peces de la llista. Voleu continuar?</string>
   <string name="playlist_clear_confirm">Esborra la llista de reproducció</string>
   <string name="downloads_empty">No hi ha baixades.</string>
-  <string name="download_freespace">Espai disponible</string>
   <string name="downloaded_songs">Peces baixades - cliqueu-les per reproduir-les</string>
   <string name="download_noti_title">S\'està iniciant la baixada</string>
   <plurals name="download_noti_n_downloads">

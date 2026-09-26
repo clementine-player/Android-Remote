@@ -29,7 +29,6 @@
   <string name="playlist_clear_content">Tímto budou nenávratně odstraněny všechny písně ze seznamu skladeb. Pokračovat?</string>
   <string name="playlist_clear_confirm">Smazat seznam skladeb</string>
   <string name="downloads_empty">Žádné stažené!</string>
-  <string name="download_freespace">Volné místo</string>
   <string name="downloaded_songs">Stažené písně - Klepněte pro přehrání</string>
   <string name="download_noti_title">Spouští se stahování</string>
   <plurals name="download_noti_n_downloads">

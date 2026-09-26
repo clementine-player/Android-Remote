@@ -29,7 +29,6 @@
   <string name="playlist_clear_content">Isto irá remover rodas as faixas da sua lista de reprodução. Continuar?</string>
   <string name="playlist_clear_confirm">Limpar lista de reprodução</string>
   <string name="downloads_empty">Não existem descargas!</string>
-  <string name="download_freespace">Espaço livre</string>
   <string name="downloaded_songs">Faixas descarregadas - clique para reproduzir</string>
   <string name="download_noti_title">A iniciar descarga</string>
   <plurals name="download_noti_n_downloads">

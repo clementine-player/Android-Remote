@@ -29,7 +29,6 @@
   <string name="playlist_clear_content">Týmto sa nenávratne odstránia všetky skladby zo zoznamu skladieb. Pokračovať?</string>
   <string name="playlist_clear_confirm">Vymazať zoznam skladieb</string>
   <string name="downloads_empty">Žiadne preberania!</string>
-  <string name="download_freespace">Voľné miesto</string>
   <string name="downloaded_songs">Prevzaté skladby - kliknutím prehráte</string>
   <string name="download_noti_title">Spúšťanie preberania</string>
   <plurals name="download_noti_n_downloads">

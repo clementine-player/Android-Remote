@@ -57,8 +57,13 @@
 
 
     <string name="downloads_empty">No downloads!</string>
-    <string name="download_freespace">Free space</string>
     <string name="downloaded_songs">Downloaded songs - click to play</string>
+    <string name="downloads_title">Downloads</string>
+    <string name="downloads_free_space">%s free on this phone</string>
+    <string name="downloads_running">Downloading</string>
+    <string name="downloads_finished">Finished</string>
+    <string name="downloads_wifi_only">Downloads only run on Wi-Fi.</string>
+    <string name="downloads_change">Change</string>
 
     <string name="download_noti_title">Starting download</string>
     <plurals name="download_noti_n_downloads">

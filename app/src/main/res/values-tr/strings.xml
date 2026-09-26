@@ -27,7 +27,6 @@
   <string name="playlist_close">Çalma listesini kapat</string>
   <string name="playlist_clear">Çalma listesini temizle</string>
   <string name="downloads_empty">İndirme yok!</string>
-  <string name="download_freespace">Boş alan</string>
   <string name="downloaded_songs">İndirilen şarkılar - çalmak için tıklayın</string>
   <string name="download_noti_title">İndirme başlatılıyor</string>
   <plurals name="download_noti_n_downloads">

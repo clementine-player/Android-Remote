@@ -2,7 +2,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="cd_cover_image">Album Cover Image</string>
     <string name="cd_clementine_icon">Clementine Icon</string>
-    <string name="cd_empty_fragment">Fragment is empty</string>
     <string name="cd_playpause_button">Play or pause song</string>
     <string name="cd_next_button">Play next song</string>
     <string name="cd_pref_icon">Icon describing a preference</string>

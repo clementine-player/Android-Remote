@@ -29,7 +29,6 @@
   <string name="playlist_clear_content">У результаті виконання цієї дії зі списку відтворення буде вилучено усі композиції. Виконати дію?</string>
   <string name="playlist_clear_confirm">Спорожнити список відтворення</string>
   <string name="downloads_empty">Немає отриманих даних!</string>
-  <string name="download_freespace">Вільне місце</string>
   <string name="downloaded_songs">Отримані композиції — натисніть, щоб відтворити</string>
   <string name="download_noti_title">Розпочинаємо отримання даних</string>
   <plurals name="download_noti_n_downloads">

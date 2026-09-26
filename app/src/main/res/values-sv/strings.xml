@@ -29,7 +29,6 @@
   <string name="playlist_clear_content">Detta kommer oåterkalleligen ta bort alla låtar från spellistan. Fortsätt?</string>
   <string name="playlist_clear_confirm">Töm spellistan</string>
   <string name="downloads_empty">Inga nedladdningar!</string>
-  <string name="download_freespace">Ledigt utrymme</string>
   <string name="downloaded_songs">Nerladdade låtar - klicka för att spela</string>
   <string name="download_noti_title">Startar nedladdning</string>
   <plurals name="download_noti_n_downloads">

@@ -29,7 +29,6 @@
   <string name="playlist_clear_content">Ovo će nepovratno ukloniti sve pjesme s popisa izvođenja. Želite li nastaviti?</string>
   <string name="playlist_clear_confirm">Obriši popis izvođenja</string>
   <string name="downloads_empty">Nema preuzimanja!</string>
-  <string name="download_freespace">Slobodan prostor</string>
   <string name="downloaded_songs">Preuzete pjesme - kliknite za reprodukciju</string>
   <string name="download_noti_title">Početak preuzimanja</string>
   <plurals name="download_noti_n_downloads">
