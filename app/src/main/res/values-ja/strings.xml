@@ -59,7 +59,6 @@
   <string name="library_download_error">ライブラリーをダウンロードできません</string>
   <string name="global_search_empty">お使いのコンピュータからインターネット上の音楽を見つけるために、上に検索する言葉を入力してください</string>
   <string name="global_search_search">何でも検索</string>
-  <string name="global_search_query">問い合わせ: %s</string>
   <string name="song_info_album">アルバム</string>
   <string name="song_info_genre">ジャンル</string>
   <string name="song_info_year">年</string>
@@ -204,7 +203,6 @@
   <plurals name="songs_added">
     <item quantity="other">現在のプレイリストに %d 曲追加しました</item>
   </plurals>
-  <string name="context_add_to_playlist">現在のプレイリストにアイテムを追加</string>
   <string name="repeat_off">リピートしない</string>
   <string name="repeat_track">トラックの繰り返し</string>
   <string name="repeat_album">アルバムの繰り返し</string>

@@ -63,7 +63,6 @@
   <string name="library_download_error">Nepodarilo sa prebrať zbierku</string>
   <string name="global_search_empty">Vyššie zadajte hľadané frázy na nájdenie hudby vo vašom počítači a na internete</string>
   <string name="global_search_search">Vyhľadať čokoľvek</string>
-  <string name="global_search_query">Požiadavka: %s</string>
   <string name="song_info_album">Album</string>
   <string name="song_info_genre">Žáner</string>
   <string name="song_info_year">Rok</string>
@@ -215,7 +214,6 @@
     <item quantity="few">%d skladby pridané do aktuálneho zoznamu skladieb</item>
     <item quantity="other">%d skladieb pridaných do aktuálneho zoznamu skladieb</item>
   </plurals>
-  <string name="context_add_to_playlist">Pridať položku do aktuálneho zoznamu skladieb</string>
   <string name="repeat_off">Neopakovať</string>
   <string name="repeat_track">Opakovať skladbu</string>
   <string name="repeat_album">Opakovať album</string>

@@ -65,7 +65,6 @@
   <string name="library_download_error">Nie można było pobrać biblioteki</string>
   <string name="global_search_empty">Podaj kryteria wyszukiwania aby znaleźć muzykę na twoim komputerze oraz w internecie</string>
   <string name="global_search_search">Szukaj wszystkiego</string>
-  <string name="global_search_query">Zapytanie: %s</string>
   <string name="song_info_album">Album</string>
   <string name="song_info_genre">Gatunek</string>
   <string name="song_info_year">Rok</string>
@@ -213,7 +212,6 @@
     <item quantity="many">%d utworów dodanych do aktualnej listy odtwarzania</item>
     <item quantity="other">%d utworów dodanych do aktualnej listy odtwarzania</item>
   </plurals>
-  <string name="context_add_to_playlist">Dodaj element do aktualnej listy odtwarzania</string>
   <string name="repeat_off">Nie powtarzaj</string>
   <string name="repeat_track">Powtarzaj utwór</string>
   <string name="repeat_album">Powtarzaj album</string>

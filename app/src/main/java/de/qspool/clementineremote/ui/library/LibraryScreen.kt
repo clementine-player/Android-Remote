@@ -55,6 +55,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.qspool.clementineremote.R
 import de.qspool.clementineremote.backend.database.SongSelectItem
+import de.qspool.clementineremote.ui.browse.BrowseItems
+import de.qspool.clementineremote.ui.browse.BrowseLevel
+import de.qspool.clementineremote.ui.browse.BrowseSelectionBar
+import de.qspool.clementineremote.ui.browse.ItemKind
 
 /**
  * The library: Clementine's library, browsed level by level (artists, their albums, their songs).
@@ -107,7 +111,7 @@ internal fun LibraryContent(
     Column(modifier.fillMaxSize()) {
         Progress(state.status)
         when {
-            selection.isNotEmpty() -> SelectionBar(
+            selection.isNotEmpty() -> BrowseSelectionBar(
                 count = selected.size,
                 onClear = { selection = emptySet() },
                 onAdd = {
@@ -118,6 +122,7 @@ internal fun LibraryContent(
                     onDownload(selected)
                     selection = emptySet()
                 },
+                tag = "library",
             )
             shown?.opened != null -> Opened(shown, onBack, onAdd, onDownload)
             else -> Top(shown)
@@ -134,7 +139,7 @@ internal fun LibraryContent(
             } else if (shown != null && shown.items.isEmpty() && state.filter.isNotBlank()) {
                 NoResults()
             } else if (shown != null) {
-                Items(
+                BrowseItems(
                     shown,
                     selection,
                     onClick = { index, item ->
@@ -145,6 +150,7 @@ internal fun LibraryContent(
                         }
                     },
                     onLongClick = { index -> selection = selection.toggle(index) },
+                    tag = "library",
                 )
             }
         }
@@ -179,7 +185,7 @@ private fun Progress(status: LibraryStatus) {
 }
 
 @Composable
-private fun Top(shown: LibraryLevel?) {
+private fun Top(shown: BrowseLevel?) {
     Column(Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 12.dp)) {
         Text(
             stringResource(R.string.library_title),
@@ -200,7 +206,7 @@ private fun Top(shown: LibraryLevel?) {
 /** The header of an opened item, such as an album: its name, what's in it, and what to do with it all. */
 @Composable
 private fun Opened(
-    shown: LibraryLevel,
+    shown: BrowseLevel,
     onBack: () -> Unit,
     onAdd: (List<SongSelectItem>) -> Unit,
     onDownload: (List<SongSelectItem>) -> Unit,
@@ -237,73 +243,6 @@ private fun Opened(
                 Text(stringResource(R.string.menu_download), modifier = Modifier.padding(start = 8.dp))
             }
         }
-    }
-}
-
-@Composable
-private fun SelectionBar(count: Int, onClear: () -> Unit, onAdd: () -> Unit, onDownload: () -> Unit) {
-    Surface(color = MaterialTheme.colorScheme.secondaryContainer, modifier = Modifier.fillMaxWidth().testTag("librarySelection")) {
-        Row(Modifier.padding(4.dp), verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = onClear) {
-                Icon(painterResource(R.drawable.ic_close), stringResource(R.string.queue_clear_selection))
-            }
-            Text(
-                pluralStringResource(R.plurals.queue_selected, count, count),
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.weight(1f).padding(start = 8.dp),
-            )
-            IconButton(onClick = onAdd, modifier = Modifier.testTag("libraryAdd")) {
-                Icon(painterResource(R.drawable.ic_add), stringResource(R.string.library_add_to_playlist))
-            }
-            IconButton(onClick = onDownload, modifier = Modifier.testTag("libraryDownload")) {
-                Icon(painterResource(R.drawable.ic_download), stringResource(R.string.menu_download))
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-private fun Items(
-    shown: LibraryLevel,
-    selection: Set<Int>,
-    onClick: (Int, SongSelectItem) -> Unit,
-    onLongClick: (Int) -> Unit,
-) {
-    LazyColumn(Modifier.fillMaxSize().testTag("library")) {
-        itemsIndexed(shown.items) { index, item ->
-            val isSelected = index in selection
-            ListItem(
-                headlineContent = { Text(item.listTitle, maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                supportingContent = { Text(item.listSubtitle.orEmpty(), maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                leadingContent = { Leading(shown.kind) },
-                colors = ListItemDefaults.colors(
-                    containerColor = if (isSelected) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent,
-                ),
-                modifier = Modifier
-                    .combinedClickable(onClick = { onClick(index, item) }, onLongClick = { onLongClick(index) })
-                    .semantics { selected = isSelected },
-            )
-        }
-    }
-}
-
-@Composable
-private fun Leading(kind: ItemKind) {
-    val icon = when (kind) {
-        ItemKind.ARTIST -> R.drawable.ic_person
-        ItemKind.ALBUM, ItemKind.YEAR -> R.drawable.ic_album
-        ItemKind.GENRE, ItemKind.SONG -> R.drawable.ic_music_note
-    }
-    val shape = if (kind == ItemKind.SONG) RoundedCornerShape(8.dp) else CircleShape
-    val size = if (kind == ItemKind.SONG) 48.dp else 40.dp
-    val background = if (kind == ItemKind.SONG) {
-        MaterialTheme.colorScheme.surfaceContainerHighest
-    } else {
-        MaterialTheme.colorScheme.secondaryContainer
-    }
-    Box(Modifier.size(size).clip(shape).background(background), contentAlignment = Alignment.Center) {
-        Icon(painterResource(icon), contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 

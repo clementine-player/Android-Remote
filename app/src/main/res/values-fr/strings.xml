@@ -61,7 +61,6 @@
   <string name="library_download_error">Impossible de télécharger la bibliothèque</string>
   <string name="global_search_empty">Saisir vos critères de recherche au dessous pour trouver la musique sur votre ordinateur ou sur internet</string>
   <string name="global_search_search">Rechercher dans la bibliothèque</string>
-  <string name="global_search_query">Recherche : %s</string>
   <string name="song_info_album">Album</string>
   <string name="song_info_genre">Genre</string>
   <string name="song_info_year">Année</string>
@@ -208,7 +207,6 @@
     <item quantity="one">%d titre ajouté à la liste de lecture en cours</item>
     <item quantity="other">%d titres ajoutés à la liste de lecture en cours</item>
   </plurals>
-  <string name="context_add_to_playlist">Ajouter l\'élément à la lsite de lecture en cours</string>
   <string name="repeat_off">Ne pas répéter</string>
   <string name="repeat_track">Répéter la piste</string>
   <string name="repeat_album">Répéter l\'album</string>

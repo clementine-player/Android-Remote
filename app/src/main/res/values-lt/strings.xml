@@ -63,7 +63,6 @@
   <string name="library_download_error">Nepavyko atsisiųsti bibliotekos</string>
   <string name="global_search_empty">Įrašykite paieškos žodžius, kad rastumėte muziką savo kompiuteryje ar internete</string>
   <string name="global_search_search">Ieškokite ko nors</string>
-  <string name="global_search_query">Užklausa: %s</string>
   <string name="song_info_album">Albumas</string>
   <string name="song_info_genre">Žanras</string>
   <string name="song_info_year">Metai</string>
@@ -215,7 +214,6 @@
     <item quantity="few">%d dainos pridėtos į esamą grojaraštį</item>
     <item quantity="other">%d dainų pridėta į esamą grojaraštį</item>
   </plurals>
-  <string name="context_add_to_playlist">Pridėti elementą į esamą grojaraštį</string>
   <string name="repeat_off">Nekartoti</string>
   <string name="repeat_track">Kartoti takelį</string>
   <string name="repeat_album">Kartoti albumą</string>

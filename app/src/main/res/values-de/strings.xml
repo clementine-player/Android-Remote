@@ -61,7 +61,6 @@
   <string name="library_download_error">Bibliothek konnte nicht geladen werden</string>
   <string name="global_search_empty">Oben Suchbegriffe eingeben, um Musik auf Ihrem Rechner oder im Internet zu finden</string>
   <string name="global_search_search">Nach etwas suchen</string>
-  <string name="global_search_query">Suchanfrage: %s</string>
   <string name="song_info_album">Album</string>
   <string name="song_info_genre">Genre</string>
   <string name="song_info_year">Jahr</string>
@@ -208,7 +207,6 @@
     <item quantity="one">%d Lied wurde zur aktuellen Wiedergabeliste hinzugefügt</item>
     <item quantity="other">%d Lieder wurden zur aktuellen Wiedergabeliste hinzugefügt</item>
   </plurals>
-  <string name="context_add_to_playlist">Element zur aktuellen Wiedergabeliste hinzufügen</string>
   <string name="repeat_off">Wiederholen aus</string>
   <string name="repeat_track">Stück wiederholen</string>
   <string name="repeat_album">Album wiederholen</string>

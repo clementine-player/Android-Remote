@@ -61,7 +61,6 @@
   <string name="library_download_error">Kunde inte ladda ned bibliotek</string>
   <string name="global_search_empty">Ange söktermer ovan för att hitta musik på din dator och på nätet</string>
   <string name="global_search_search">Sök efter någonting</string>
-  <string name="global_search_query">Förfrågan: %s</string>
   <string name="song_info_album">Album</string>
   <string name="song_info_genre">Genre</string>
   <string name="song_info_year">År</string>
@@ -210,7 +209,6 @@
     <item quantity="one">%d låt har lagts till aktuella spellistan </item>
     <item quantity="other">%d låtar har lagts till aktuella spellistan</item>
   </plurals>
-  <string name="context_add_to_playlist">Lägg till objekt i nuvarande spellista</string>
   <string name="repeat_off">Upprepa inte</string>
   <string name="repeat_track">Upprepa låt</string>
   <string name="repeat_album">Upprepa album</string>

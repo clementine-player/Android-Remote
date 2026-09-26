@@ -63,7 +63,6 @@
   <string name="library_download_error">Nepopdařilo se stáhnout sbírku</string>
   <string name="global_search_empty">Zadejte hledané pojmy výše pro hledání hudby ve vašem počítači a na internetu</string>
   <string name="global_search_search">Hledat cokoli</string>
-  <string name="global_search_query">Dotaz: %s</string>
   <string name="song_info_album">Album</string>
   <string name="song_info_genre">Žánr</string>
   <string name="song_info_year">Rok</string>
@@ -218,7 +217,6 @@ Pokud máte díky mé práci skutečně dobrou náladu, malý dar od vás by byl
     <item quantity="few">%d písně přidány do nynějšího seznamu skladeb</item>
     <item quantity="other">%d písní přidáno do nynějšího seznamu skladeb</item>
   </plurals>
-  <string name="context_add_to_playlist">Přidat položku do nynějšího seznamu skladeb</string>
   <string name="repeat_off">Neopakovat</string>
   <string name="repeat_track">Opakovat skladbu</string>
   <string name="repeat_album">Opakovat album</string>

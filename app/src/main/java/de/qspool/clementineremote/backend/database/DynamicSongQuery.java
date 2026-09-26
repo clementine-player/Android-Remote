@@ -5,12 +5,10 @@ package de.qspool.clementineremote.backend.database;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 
 import java.util.LinkedList;
 
 import de.qspool.clementineremote.R;
-import de.qspool.clementineremote.backend.listener.OnSongSelectFinishedListener;
 
 public abstract class DynamicSongQuery {
 
@@ -27,8 +25,6 @@ public abstract class DynamicSongQuery {
     private String[] mSelection = new String[] {};
 
     private String mSort;
-
-    private LinkedList<OnSongSelectFinishedListener> listeners = new LinkedList<>();
 
     abstract protected String[] getSelectedFields();
     abstract protected String getSorting();
@@ -216,18 +212,8 @@ public abstract class DynamicSongQuery {
         return mLevel == mMaxLevels-1;
     }
 
-
-    public void addOnLibrarySelectFinishedListener(
-            OnSongSelectFinishedListener l) {
-        listeners.add(l);
-    }
-
     public Cursor buildQuery() {
         return buildQuery(getTable());
-    }
-
-    public void selectDataAsync() {
-        new AsyncQueryTask().execute();
     }
 
     /**
@@ -275,23 +261,5 @@ public abstract class DynamicSongQuery {
 
     public void setSelection(String[] selection) {
         mSelection = selection;
-    }
-
-    private class AsyncQueryTask extends
-            AsyncTask<Void, Void, LinkedList<SongSelectItem>> {
-
-        @Override
-        protected LinkedList<SongSelectItem> doInBackground(
-                Void... params) {
-
-            return selectData();
-        }
-
-        @Override
-        protected void onPostExecute(LinkedList<SongSelectItem> items) {
-            for (OnSongSelectFinishedListener l : listeners) {
-                l.OnSongSelectFinished(items);
-            }
-        }
     }
 }

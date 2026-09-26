@@ -19,6 +19,9 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType
+import de.qspool.clementineremote.ui.browse.BrowseLevel
+import de.qspool.clementineremote.ui.browse.ItemKind
+import de.qspool.clementineremote.ui.browse.SongBrowser
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -31,17 +34,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.LinkedList
-
-/** What an item in the library groups: its field decides its icon. */
-enum class ItemKind { ARTIST, ALBUM, GENRE, YEAR, SONG }
-
-/** One level of the library: the items under what was opened (nothing at the top). */
-data class LibraryLevel(
-    /** What was opened to get here; null at the top. */
-    val opened: SongSelectItem?,
-    val kind: ItemKind,
-    val items: List<SongSelectItem>,
-)
 
 /** Where the library is. */
 sealed interface LibraryStatus {
@@ -60,10 +52,10 @@ sealed interface LibraryStatus {
 data class LibraryState(
     val status: LibraryStatus = LibraryStatus.Missing,
     /** The levels opened, from the top down; the last is shown. */
-    val levels: List<LibraryLevel> = emptyList(),
+    val levels: List<BrowseLevel> = emptyList(),
     val filter: String = "",
 ) {
-    val shown: LibraryLevel? get() = levels.lastOrNull()
+    val shown: BrowseLevel? get() = levels.lastOrNull()
 }
 
 /**
@@ -83,6 +75,8 @@ class LibraryViewModel(
         }
     },
 ) : ViewModel() {
+
+    private val browser = SongBrowser(newQuery)
 
     private val _state = MutableStateFlow(LibraryState())
 
@@ -224,47 +218,7 @@ class LibraryViewModel(
         }
     }
 
-    /** The items under [opened] (the top level for null), matching [filter]. */
-    private fun level(opened: SongSelectItem?, filter: String): LibraryLevel {
-        val query = newQuery()
-        val depth = opened?.let { it.level + 1 } ?: 0
-        query.openDatabase()
-        try {
-            query.level = depth
-            query.selection = opened?.selection ?: emptyArray()
-            return LibraryLevel(opened, kind(query, depth), query.selectData(filter))
-        } finally {
-            query.closeDatabase()
-        }
-    }
+    private fun level(opened: SongSelectItem?, filter: String) = browser.level(opened, filter)
 
-    /** The URLs of the songs [items] are or group. */
-    private fun songUrls(items: List<SongSelectItem>): List<String> {
-        val query = newQuery()
-        val songLevel = query.maxLevels - 1
-        query.openDatabase()
-        try {
-            return items.flatMap { item ->
-                if (item.level == songLevel) {
-                    listOf(item.url)
-                } else {
-                    query.level = songLevel
-                    query.selection = item.selection
-                    query.selectData().map { it.url }
-                }
-            }.filterNotNull()
-        } finally {
-            query.closeDatabase()
-        }
-    }
-
-    private fun kind(query: DynamicSongQuery, level: Int): ItemKind = when {
-        level == query.maxLevels - 1 -> ItemKind.SONG
-        else -> when (query.getField(level)) {
-            "album" -> ItemKind.ALBUM
-            "genre" -> ItemKind.GENRE
-            "year" -> ItemKind.YEAR
-            else -> ItemKind.ARTIST
-        }
-    }
+    private fun songUrls(items: List<SongSelectItem>) = browser.songs(items).mapNotNull { it.url }
 }

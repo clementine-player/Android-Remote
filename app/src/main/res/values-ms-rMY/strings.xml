@@ -46,7 +46,6 @@
   <string name="library_download_error">Tidak dapat memuat turun pustaka</string>
   <string name="global_search_empty">Masukkan terma gelintar di atas untuk mencari muzik dalam komputer anda dan juga di internet</string>
   <string name="global_search_search">Gelintar segalanya</string>
-  <string name="global_search_query">Tanya: %s</string>
   <string name="song_info_album">Album</string>
   <string name="song_info_genre">Genre</string>
   <string name="song_info_year">Tahun</string>
@@ -191,7 +190,6 @@
   <plurals name="songs_added">
     <item quantity="other">%d buah lagu ditambah ke dalam senarai main semasa</item>
   </plurals>
-  <string name="context_add_to_playlist">Tambah item ke senarai main semasa</string>
   <string name="repeat_off">Jangan ulang</string>
   <string name="repeat_track">Ulang trek</string>
   <string name="repeat_album">Ulang album</string>

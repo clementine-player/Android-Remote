@@ -91,7 +91,8 @@
 
     <string name="global_search_empty">Enter search terms above to find music on your computer and on the internet</string>
     <string name="global_search_search">Search for anything</string>
-    <string name="global_search_query">Query: %s</string>
+    <string name="search_searching">Searching for “%s”…</string>
+    <string name="search_clear">Clear search</string>
 
 
     <string name="song_info_album">Album</string>
@@ -255,7 +256,6 @@
         <item quantity="one">%d song added to current playlist</item>
         <item quantity="other">%d songs added to current playlist</item>
     </plurals>
-    <string name="context_add_to_playlist">Add item to current playlist</string>
 
 
     <string name="repeat_off">Don\'t repeat</string>

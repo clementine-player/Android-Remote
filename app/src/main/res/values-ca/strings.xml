@@ -61,7 +61,6 @@
   <string name="library_download_error">No s\'ha pogut baixar la biblioteca</string>
   <string name="global_search_empty">Escriviu els termes de cerca per trobar peces al vostre ordinador o en Internet</string>
   <string name="global_search_search">Cerca</string>
-  <string name="global_search_query">Consulta: %s</string>
   <string name="song_info_album">Àlbum</string>
   <string name="song_info_genre">Estil</string>
   <string name="song_info_year">Any</string>
@@ -210,7 +209,6 @@
     <item quantity="one">%d peça afegida a la llista actual</item>
     <item quantity="other">%d peces afegides a la llista actual</item>
   </plurals>
-  <string name="context_add_to_playlist">Afegeix l\'element a la llista actual</string>
   <string name="repeat_off">Sense repetició</string>
   <string name="repeat_track">Repeteix la peça</string>
   <string name="repeat_album">Repeteix l\'àlbum</string>
