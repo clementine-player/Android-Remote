@@ -13,6 +13,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextReplacement
 import de.qspool.clementineremote.R
 import de.qspool.clementineremote.ui.theme.ClementineTheme
@@ -46,9 +47,27 @@ class ConnectScreenTest {
                     servers = servers,
                     progress = progress,
                     onHostChange = { typed = it },
-                    onConnect = { done += "connect $typed" },
-                    onServer = { done += "server ${it.host}:${it.port}" },
-                    onCancel = { done += "cancel" },
+                    actions = object : ConnectActions {
+                        override fun onConnect() {
+                            done += "connect $typed"
+                        }
+
+                        override fun onServer(server: Server) {
+                            done += "server ${server.host}:${server.port}"
+                        }
+
+                        override fun onCancel() {
+                            done += "cancel"
+                        }
+
+                        override fun onSearchAgain() {
+                            done += "search again"
+                        }
+
+                        override fun onSettings() {
+                            done += "settings"
+                        }
+                    },
                 )
             }
         }
@@ -58,8 +77,8 @@ class ConnectScreenTest {
     fun withNothingFoundExplainsHowToFindClementine() {
         show()
 
-        compose.onNodeWithTag("searching").assertIsDisplayed()
-        compose.onNodeWithText("same Wi-Fi network", substring = true).assertIsDisplayed()
+        compose.onNodeWithTag("searching").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("network remote is turned on", substring = true).performScrollTo().assertIsDisplayed()
         // Nothing to connect to yet.
         compose.onNodeWithTag("btnConnect").assertIsNotEnabled()
     }
@@ -72,8 +91,8 @@ class ConnectScreenTest {
         ))
 
         compose.onNodeWithTag("searching").assertDoesNotExist()
-        compose.onNodeWithText("Study").assertIsDisplayed()
-        compose.onNodeWithText("192.168.1.21:5501").performClick()
+        compose.onNodeWithText("Study").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("192.168.1.21 · port 5501").performClick()
 
         assertEquals(listOf("server 192.168.1.21:5501"), done)
     }
@@ -103,12 +122,22 @@ class ConnectScreenTest {
     fun whileConnectingShowsProgressAndCanCancel() {
         show(host = "10.0.2.2", progress = R.string.connectdialog_download_data)
 
-        compose.onNodeWithTag("btnConnect").assertDoesNotExist()
-        compose.onNodeWithText("Downloading data").assertIsDisplayed()
+        compose.onNodeWithTag("btnConnect").assertIsNotEnabled()
+        compose.onNodeWithText("Downloading data").performScrollTo().assertIsDisplayed()
         compose.onNodeWithTag("etIp").assertIsNotEnabled()
         compose.onNodeWithTag("btnCancel").performClick()
 
         assertEquals(listOf("cancel"), done)
+    }
+
+    @Test
+    fun opensSettingsAndSearchesAgain() {
+        show()
+
+        compose.onNodeWithTag("btnSettings").performClick()
+        compose.onNodeWithTag("btnSearchAgain").performClick()
+
+        assertEquals(listOf("settings", "search again"), done)
     }
 
     @Test

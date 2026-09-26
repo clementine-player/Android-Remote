@@ -179,7 +179,7 @@ public class UiSmokeTest {
     public void connectActivityStarts() {
         ActivityController<ConnectActivity> controller =
                 Robolectric.buildActivity(ConnectActivity.class).setup();
-        assertNotNull(controller.get().findViewById(R.id.toolbar));
+        assertNotNull(controller.get().findViewById(R.id.connect_content));
         controller.pause().stop().destroy();
     }
 }
