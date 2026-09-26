@@ -1,5 +1,6 @@
 package de.qspool.clementineremote
 
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -10,6 +11,7 @@ import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.printToLog
 import androidx.compose.ui.test.tryPerformAccessibilityChecks
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import de.qspool.clementineremote.backend.Clementine
@@ -66,9 +68,25 @@ class AccessibilityDeviceTest {
             if (dialog) {
                 compose.onNode(isDialog()).tryPerformAccessibilityChecks()
             } else {
-                compose.onRoot().tryPerformAccessibilityChecks()
+                checkRoot()
             }
         }
+    }
+
+    /** Checks the screen; on a finding, logs the layout, whose bounds the finding names. */
+    private fun checkRoot() {
+        try {
+            compose.onRoot().tryPerformAccessibilityChecks()
+        } catch (e: Throwable) {
+            val window = compose.activity.window.decorView
+            Log.e(TAG, "Window ${window.width}x${window.height}px at ${window.resources.displayMetrics.density}x")
+            compose.onRoot(useUnmergedTree = true).printToLog(TAG)
+            throw e
+        }
+    }
+
+    private companion object {
+        const val TAG = "AccessibilityDeviceTest"
     }
 
     private val connectActions = object : ConnectActions {
@@ -124,7 +142,7 @@ class AccessibilityDeviceTest {
         check { AppShell(shell, actions) }
         shell.playerOpen = true
         compose.waitForIdle()
-        compose.onRoot().tryPerformAccessibilityChecks()
+        checkRoot()
     }
 
     @Test
