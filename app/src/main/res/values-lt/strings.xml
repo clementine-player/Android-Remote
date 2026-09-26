@@ -9,7 +9,6 @@
   <string name="connectdialog_ip_hint">Įrašykite IP adresą</string>
   <string name="player_nosong">Šiuo metu negroja jokia daina</string>
   <string name="player_disconnected">Atsijungta</string>
-  <string name="player_download_playlists">Atsiunčiami grojaraščiai</string>
   <string name="playler_volume">Garsumas</string>
   <string name="player_stop_after_current">Po takelio pabaigos perjungti stabdymą.</string>
   <string name="player_download_lyrics">Atsiunčiami dainos žodžiai</string>
@@ -21,7 +20,6 @@
   <string name="playlist_empty">Grojaraštis tuščias!</string>
   <string name="playlist_context_play">Groti elementą</string>
   <string name="playlist_context_remove">Šalinti iš grojaraščio</string>
-  <string name="playlist_loading">Įkeliama</string>
   <string name="playlist_close">Užverti grojaraštį</string>
   <string name="playlist_clear">Išvalyti grojaraštį</string>
   <string name="playlist_clear_content">Tai neatitaisomai pašalins visas dainas iš grojaraščio. Tęsti?</string>
@@ -54,7 +52,6 @@
   <string name="download_noti_transcoding_subtitle">Prašome palaukti</string>
   <string name="library_download">Atsiunčiama biblioteka</string>
   <string name="library_optimize">Optimizuojama duomenų bazė</string>
-  <string name="library_please_wait">Prašome palaukti</string>
   <string name="library_empty">Biblioteka tuščia. Perbraukite žemyn, kad atsisiųstumėte biblioteką!</string>
   <string name="library_no_search_results">Nėra dainų, atitinkančių jūsų paieškos kriterijų!</string>
   <string name="library_download_error">Nepavyko atsisiųsti bibliotekos</string>
@@ -191,7 +188,6 @@
   <string name="check_ip">1) Ar Clementine yra vykdoma?\n2) Ar jūs naudojate Clementine %1$s ar vėlesnę versiją?\n3) Ar Clementine nustatymuose įjungėte nuotolinį tinklą?\n4) Patikrinkite ar įvedėte teisingą IP adresą.\n</string>
   <string name="wifi_disabled">Belaidis vietinis tinklas (Wifi) yra išjungtas. Jeigu norite prisijungti prie Clementine per internetą, įsitikinkite, kad teisingai nukreipėte visus prievadus ir esate išjungę \"Leisti tik ryšius iš vietinio tinklo\"\".</string>
   <string name="input_auth_code">Atpažinimo kodas</string>
-  <string name="invalid_code">Neteisingas kodas</string>
   <string name="done">Atlikta</string>
   <string name="unknown">Nežinoma</string>
   <plurals name="number_items">

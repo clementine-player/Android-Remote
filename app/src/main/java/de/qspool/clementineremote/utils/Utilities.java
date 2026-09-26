@@ -1,10 +1,8 @@
 package de.qspool.clementineremote.utils;
 
-import androidx.appcompat.app.AlertDialog;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -19,7 +17,6 @@ import android.os.Environment;
 import android.os.StatFs;
 import androidx.annotation.Nullable;
 import androidx.core.app.TaskStackBuilder;
-import android.text.Html;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -27,7 +24,6 @@ import java.net.UnknownHostException;
 import java.util.Locale;
 
 import de.qspool.clementineremote.App;
-import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.mediasession.ClementineMediaSessionNotification;
 import de.qspool.clementineremote.ui.MainActivity;
 
@@ -51,57 +47,6 @@ public class Utilities {
         }
 
         return ret;
-    }
-
-    /**
-     * Show a simple designed message dialog
-     *
-     * @param context In which context will the dialog be displayed?
-     * @param title   The resource id of the message dialog title.
-     * @param message The resource id of the message
-     * @return The Dialog object
-     */
-    public static Dialog ShowMessageDialog(Context context, int title, int message) {
-        return ShowMessageDialog(context, context.getString(title), context.getString(message),
-                false);
-    }
-
-    /**
-     * Show a simple designed message dialog
-     *
-     * @param context In which context will the dialog be displayed?
-     * @param title   The resource id of the message dialog title.
-     * @param message The resource id of the message
-     * @return The Dialog object
-     */
-    public static Dialog ShowHtmlMessageDialog(Context context, int title, int message) {
-        return ShowMessageDialog(context, context.getString(title), context.getString(message),
-                true);
-    }
-
-    /**
-     * Show a simple designed message dialog
-     *
-     * @param context In which context will the dialog be displayed?
-     * @param title   The message string dialog title.
-     * @param message The string of the message
-     * @return The Dialog object
-     */
-    public static Dialog ShowMessageDialog(Context context, String title, String message,
-            boolean hasHtml) {
-
-        String content;
-        if (hasHtml) {
-            content = Html.fromHtml(message).toString();
-        } else {
-            content = message;
-        }
-
-        return new AlertDialog.Builder(context)
-                .setTitle(title)
-                .setMessage(content)
-                .setNegativeButton(R.string.dialog_close, null)
-                .show();
     }
 
     public static byte[] ToIPByteArray(int addr) {

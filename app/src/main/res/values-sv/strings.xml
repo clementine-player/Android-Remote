@@ -9,7 +9,6 @@
   <string name="connectdialog_ip_hint">Ange IP adress</string>
   <string name="player_nosong">Ingen Låt spelas för tillfället</string>
   <string name="player_disconnected">Ej ansluten</string>
-  <string name="player_download_playlists">Laddar ner Spellistor</string>
   <string name="playler_volume">Volym</string>
   <string name="player_stop_after_current">Gör stopp när låten är slut.</string>
   <string name="player_download_lyrics">Laddar ner låttext</string>
@@ -21,7 +20,6 @@
   <string name="playlist_empty">Spellistan är tom!</string>
   <string name="playlist_context_play">Spela objekt</string>
   <string name="playlist_context_remove">Ta bort från spellistan</string>
-  <string name="playlist_loading">Laddar</string>
   <string name="playlist_close">Stäng spellistan</string>
   <string name="playlist_clear">Töm spellistan</string>
   <string name="playlist_clear_content">Detta kommer oåterkalleligen ta bort alla låtar från spellistan. Fortsätt?</string>
@@ -52,7 +50,6 @@
   <string name="download_noti_transcoding_subtitle">Var god vänta</string>
   <string name="library_download">Laddar ned bibliotek</string>
   <string name="library_optimize">Optimerar databasen</string>
-  <string name="library_please_wait">Var god vänta</string>
   <string name="library_empty">Biblioteket är tomt. Svep neråt för att ladda ner biblioteket!</string>
   <string name="library_no_search_results">Ingen låt matchar dina sökkriterier!</string>
   <string name="library_download_error">Kunde inte ladda ned bibliotek</string>
@@ -188,7 +185,6 @@
   <string name="check_ip">1) Körs Clementine?\n2) Använder du Clementine %1$s eller senare?\n3) Aktiverade du nätverksfjärrkontrollen i Clementine inställningar?\n4) Kontrollera om du angett rätt IP-adress.\n</string>
   <string name="wifi_disabled">Wifi är inaktiverat. Om du vill ansluta till Clementine via internet så se till att du kopplat portarna rätt och att du har \"Använd endast lokala ip adresser\" inaktiverat.</string>
   <string name="input_auth_code">Auktoriseringskod</string>
-  <string name="invalid_code">Ogiltig Kod</string>
   <string name="done">Klart</string>
   <string name="unknown">Okänd</string>
   <plurals name="number_items">

@@ -39,9 +39,6 @@ import de.qspool.clementineremote.backend.downloader.MediaStoreDownloadStorage
 interface SettingsActions {
     fun onBack()
 
-    /** Asks where to save downloads, before Android 10, which saves them to the Music collection. */
-    fun onChooseDownloadDir()
-
     fun onOpenUrl(url: String)
 }
 
@@ -72,7 +69,7 @@ internal fun SettingsScreen(store: PreferenceStore, actions: SettingsActions, de
         ) {
             PlayerSettings(store)
             LibrarySettings(store)
-            DownloadSettings(store, actions, defaultDownloadDir)
+            DownloadSettings(store, defaultDownloadDir)
             ConnectionSettings(store)
             AdvancedSettings(store)
             AboutSettings(actions)
@@ -121,7 +118,7 @@ private fun LibrarySettings(store: PreferenceStore) {
 }
 
 @Composable
-private fun DownloadSettings(store: PreferenceStore, actions: SettingsActions, defaultDownloadDir: () -> String) {
+private fun DownloadSettings(store: PreferenceStore, defaultDownloadDir: () -> String) {
     SettingsHeading(stringResource(R.string.pref_cat_downloads))
     BooleanSetting(store, SharedPreferencesKeys.SP_WIFI_ONLY, false, R.string.pref_dl_wifi_only_title, R.string.pref_dl_wifi_only_summary)
     // Android 10 and later save songs to the shared Music collection.
@@ -131,10 +128,17 @@ private fun DownloadSettings(store: PreferenceStore, actions: SettingsActions, d
             SharedPreferencesKeys.SP_DOWNLOAD_DIR, enabled = false,
         ) {}
     } else {
-        ActionSetting(
-            stringResource(R.string.pref_dl_dir), store.string(SharedPreferencesKeys.SP_DOWNLOAD_DIR, defaultDownloadDir()),
-            SharedPreferencesKeys.SP_DOWNLOAD_DIR, onClick = actions::onChooseDownloadDir,
-        )
+        val folder = store.string(SharedPreferencesKeys.SP_DOWNLOAD_DIR, defaultDownloadDir())
+        var choosing by rememberSaveable { mutableStateOf(false) }
+        ActionSetting(stringResource(R.string.pref_dl_dir), folder, SharedPreferencesKeys.SP_DOWNLOAD_DIR) {
+            choosing = true
+        }
+        if (choosing) {
+            DownloadFolderDialog(folder, onDismiss = { choosing = false }) {
+                choosing = false
+                store.set(SharedPreferencesKeys.SP_DOWNLOAD_DIR, it)
+            }
+        }
     }
     BooleanSetting(store, SharedPreferencesKeys.SP_DOWNLOAD_OVERRIDE, false, R.string.pref_dl_override, null)
 

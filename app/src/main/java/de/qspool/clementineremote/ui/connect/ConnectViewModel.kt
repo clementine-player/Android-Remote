@@ -35,6 +35,27 @@ class ConnectViewModel : ViewModel() {
     /** While connecting, what's happening; null otherwise. */
     val progress: StateFlow<Int?> = _progress.asStateFlow()
 
+    /** Dialogs waiting to be shown after the one showing. */
+    private val queued = ArrayDeque<ConnectDialog>()
+
+    private val _dialog = MutableStateFlow<ConnectDialog?>(null)
+
+    /** The dialog shown over the screen, if any. */
+    val dialog: StateFlow<ConnectDialog?> = _dialog.asStateFlow()
+
+    /** Shows [dialog] once any shown or waiting are dismissed, unless it's among them already. */
+    fun showDialog(dialog: ConnectDialog) {
+        when {
+            _dialog.value == null -> _dialog.value = dialog
+            _dialog.value != dialog && dialog !in queued -> queued.addLast(dialog)
+        }
+    }
+
+    /** Closes the dialog shown, for the next one waiting. */
+    fun dismissDialog() {
+        _dialog.value = queued.removeFirstOrNull()
+    }
+
     fun setHost(host: String) {
         _host.value = host
     }

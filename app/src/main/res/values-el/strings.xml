@@ -9,7 +9,6 @@
   <string name="connectdialog_ip_hint">Εισάγετε διεύθυνση IP</string>
   <string name="player_nosong">Κανένα Τραγούδι δεν παίζει τώρα</string>
   <string name="player_disconnected">Αποσυνδέθηκε</string>
-  <string name="player_download_playlists">Λήψη λίστας αναπαραγωγής</string>
   <string name="playler_volume">Ένταση</string>
   <string name="player_stop_after_current">Εναλλαγή παύσης μετά την ολοκλήρωση του τραγουδιου.</string>
   <string name="player_download_lyrics">Λήψη στίχων</string>
@@ -21,7 +20,6 @@
   <string name="playlist_empty">Η λίστα αναπαραγωγής είναι άδεια!</string>
   <string name="playlist_context_play">ένδειξη Play</string>
   <string name="playlist_context_remove">Αφαίρεση από τη λίστα αναπαραγωγής</string>
-  <string name="playlist_loading">Φόρτωση</string>
   <string name="playlist_close">Κλείσιμο λίστας αναπαραγωγής</string>
   <string name="playlist_clear">Εκκαθαριση λίστας αναπαραγωγης</string>
   <string name="downloads_empty">Οχι λήψεις!</string>
@@ -42,7 +40,6 @@
   <string name="download_noti_transcoding_subtitle">Παρακαλώ περιμένετε</string>
   <string name="library_download">Λήψη βιβλιοθήκης</string>
   <string name="library_optimize">Βελτιστοποίηση βάσης δεδομένων</string>
-  <string name="library_please_wait">Παρακαλώ περιμένετε</string>
   <string name="library_empty">Η βιβλιοθήκη ειναι κενή. Σύρετε προς τα κάτω για να κατεβάσετε την βιβλιοθήκη!</string>
   <string name="library_no_search_results">Δεν υπάρχουν τραγούδια που ταιριάζουν στα κριτήρια της αναζήτησής σας!</string>
   <string name="library_download_error">Δεν ήταν δυνατή η λήψη της βιβλιοθήκης</string>
@@ -158,7 +155,6 @@
   <string name="no_private_ip">Η Android συσκευή σας έχει μια μη τοπική διεύθυνση IP. Προσπαθήστε να την απενεργοποιήσετε \"Χρηση μόνο τοπικων διευθύνσεων IP» στις ρυθμίσεις του Clementine.</string>
   <string name="wifi_disabled">Η ασύρματη σύνδεση είναι απενεργοποιημένη. Αν θέλετε να συνδεθείτε στο Clementine μέσω διαδικτύου βεβαιωθείτε ότι έχετε διαβίβασε τις θύρες σωστά και έχετε ειδικές ανάγκες \"Χρησιμοποιείτε μόνο τοπικές διευθύνσεις IP\" \".</string>
   <string name="input_auth_code">Κωδικός πιστοποίησης</string>
-  <string name="invalid_code">Μη έγκυρος κωδικός</string>
   <string name="done">Ολοκληρώθηκε</string>
   <string name="repeat_off">Να μην γίνει επανάληψη</string>
   <string name="repeat_track">Επανάληψη τραγουδιου</string>

@@ -9,7 +9,6 @@
   <string name="connectdialog_ip_hint">Anna IP-osoite</string>
   <string name="player_nosong">Ei toistettavaa kappaletta</string>
   <string name="player_disconnected">Yhteys katkaistu</string>
-  <string name="player_download_playlists">Ladataan soittolistoja</string>
   <string name="playler_volume">Äänenvoimakkuus</string>
   <string name="player_stop_after_current">Muuta pysäytyksen tilaa kappaleen loputtua.</string>
   <string name="player_download_lyrics">Ladataan sanoituksia</string>
@@ -21,7 +20,6 @@
   <string name="playlist_empty">Soittolista on tyhjä!</string>
   <string name="playlist_context_play">Toista kohde</string>
   <string name="playlist_context_remove">Poista soittolistasta</string>
-  <string name="playlist_loading">Ladataan</string>
   <string name="playlist_close">Sulje soittolista</string>
   <string name="playlist_clear">Tyhjennä soittolista</string>
   <string name="playlist_clear_content">Tämä poistaa pysyvästi kaikki kappaleet soittolistalta. Jatketaanko?</string>
@@ -51,7 +49,6 @@
   <string name="download_noti_transcoding_subtitle">Odota hetki</string>
   <string name="library_download">Ladataan kirjastoa</string>
   <string name="library_optimize">Optimoidaan tietokantaa</string>
-  <string name="library_please_wait">Odota hetki</string>
   <string name="library_empty">Kirjaston tyhjä. Vedä alaspäin ladataksesi kirjaston!</string>
   <string name="library_no_search_results">Ei hakuehtoihisi osuvia kappaleita!</string>
   <string name="library_download_error">Kirjaston lataaminen ei onnistunut</string>
@@ -172,7 +169,6 @@
   <string name="no_private_ip">Android-laitteesi IP-osoite ei ole paikallinen. Kokeile poistaa käytöstä \"Salli yhteydet vain paikallisverkosta\" Clementinen asetuksista.</string>
   <string name="wifi_disabled">Wifi ei ole päällä. Jos haluat yhdistää Clementineen internetin kautta, varmista että olet ohjannut portit oikein ja olet poistanut käytöstä \"Salli yhteydet vain paikallisverkosta\".</string>
   <string name="input_auth_code">Tunnistuskoodi</string>
-  <string name="invalid_code">Virheellinen koodi</string>
   <string name="done">Valmis</string>
   <string name="unknown">Tuntematon</string>
   <plurals name="number_items">

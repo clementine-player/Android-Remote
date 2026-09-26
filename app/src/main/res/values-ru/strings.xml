@@ -9,7 +9,6 @@
   <string name="connectdialog_ip_hint">Введите IP адрес</string>
   <string name="player_nosong">Сейчас ничего не проигрывается</string>
   <string name="player_disconnected">Отключено</string>
-  <string name="player_download_playlists">Загрузка плейлистов</string>
   <string name="playler_volume">Громкость</string>
   <string name="player_stop_after_current">Остановить после этой композиции.</string>
   <string name="player_download_lyrics">Загрузка текста песни</string>
@@ -21,7 +20,6 @@
   <string name="playlist_empty">Плейлист пуст!</string>
   <string name="playlist_context_play">Проиграть пункт</string>
   <string name="playlist_context_remove">Удалить из плейлиста</string>
-  <string name="playlist_loading">Загрузка</string>
   <string name="playlist_close">Закрыть плейлист</string>
   <string name="playlist_clear">Очистить плейлист</string>
   <string name="playlist_clear_content">Данное действие безвозвратно удалит все песни из плейлиста. Продолжить?</string>
@@ -56,7 +54,6 @@
   <string name="download_noti_transcoding_subtitle">Пожалуйста, подождите</string>
   <string name="library_download">Загрузка фонотеки</string>
   <string name="library_optimize">Оптимизация базы данных</string>
-  <string name="library_please_wait">Пожалуйста, подождите</string>
   <string name="library_empty">Фонотека пуста. Проведите вниз для загрузки фонотеки!</string>
   <string name="library_no_search_results">По данному запросу песен не найдено!</string>
   <string name="library_download_error">Не могу загрузить фонотеку</string>
@@ -193,7 +190,6 @@
   <string name="check_ip">1) Запущен ли Clementine?\n2) У вас Clementine %1$s или выше?\n3) Задействовано ли удалённое управление в настройках Clementine?\n4) Проверьте правильность введённого адреса IP.\n</string>
   <string name="wifi_disabled">Wifi отключен. Если вы хотите подключиться к Clementine через интернет, убедитесь что вы пробросили порты и выключили опцию \"Использовать только локальный IP адрес\".</string>
   <string name="input_auth_code">Код авторизации</string>
-  <string name="invalid_code">Неверный код</string>
   <string name="done">Готово</string>
   <string name="unknown">Неизвестный</string>
   <plurals name="number_items">

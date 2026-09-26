@@ -81,6 +81,12 @@ interface ConnectActions {
 
     /** Open the settings. */
     fun onSettings()
+
+    /** Connect again, with the auth code Clementine asked for. */
+    fun onAuthCode(code: Int)
+
+    /** Ask Android for [permissions], once told why. */
+    fun onRequestPermissions(permissions: List<String>)
 }
 
 /**
@@ -93,6 +99,7 @@ fun ConnectScreen(viewModel: ConnectViewModel, actions: ConnectActions) {
     val knownHosts by viewModel.knownHosts.collectAsStateWithLifecycle()
     val servers by viewModel.servers.collectAsStateWithLifecycle()
     val progress by viewModel.progress.collectAsStateWithLifecycle()
+    val dialog by viewModel.dialog.collectAsStateWithLifecycle()
     ConnectContent(
         host = host,
         knownHosts = knownHosts,
@@ -101,6 +108,7 @@ fun ConnectScreen(viewModel: ConnectViewModel, actions: ConnectActions) {
         onHostChange = viewModel::setHost,
         actions = actions,
     )
+    ConnectDialogs(dialog, actions, viewModel::dismissDialog)
 }
 
 @Composable

@@ -10,7 +10,6 @@
   <string name="playlist_empty">Senarai main kosong!</string>
   <string name="playlist_context_play">Main item</string>
   <string name="playlist_context_remove">Buang dari senarai main</string>
-  <string name="playlist_loading">Memuatkan</string>
   <string name="playlist_close">Tutup senarai main</string>
   <string name="playlist_clear">Kosongkan senarai main</string>
   <string name="playlist_clear_content">Ini akan membuang semua lagu yang tidak boleh dikembalikan dari senarai main. Teruskan?</string>
@@ -39,7 +38,6 @@
   <string name="download_noti_transcoding_subtitle">Tunggu sebentar</string>
   <string name="library_download">Memuat turun pustaka</string>
   <string name="library_optimize">Mengoptimumkan pangkalan data</string>
-  <string name="library_please_wait">Tunggu sebentar</string>
   <string name="library_empty">Pustaka kosong. Leret ke bawah untuk muat turun pustaka!</string>
   <string name="library_no_search_results">Tiada lagu memadani kriteria gelintar anda!</string>
   <string name="library_download_error">Tidak dapat memuat turun pustaka</string>
@@ -173,7 +171,6 @@
   <string name="check_ip">1) Adakah Clementine berjalan?\n2) Anda guna Clementine %1$s atau yang terkemudian?\n3) Adakah anda benarkan jauh rangkaian dalam tetapan Clementine?\n4) Periksa sama ada anda telah masukkan alamat ip yang betul.\n</string>
   <string name="wifi_disabled">Wifi dilumpuhkan. Jika anda mahu sambung ke Clementine melalui internet pastikan anda majukan port dengan betul dan anda telah lumpuhkan \"Hanya guna alamat ip setempat\"\".</string>
   <string name="input_auth_code">Kod Pengesahihan</string>
-  <string name="invalid_code">Kod Tidak Sah</string>
   <string name="done">Selesai</string>
   <string name="unknown">Tidak diketahui</string>
   <plurals name="number_items">

@@ -9,7 +9,6 @@
   <string name="connectdialog_ip_hint">IP-Adresse eingeben</string>
   <string name="player_nosong">Es wird gerade kein Lied wiedergegeben</string>
   <string name="player_disconnected">Verbindung beendet</string>
-  <string name="player_download_playlists">Wiedergabelisten laden</string>
   <string name="playler_volume">Lautstärke</string>
   <string name="player_stop_after_current">Nach Titel anhalten ein/ausschalten.</string>
   <string name="player_download_lyrics">Liedtexte herunterladen</string>
@@ -21,7 +20,6 @@
   <string name="playlist_empty">Wiedergabeliste ist leer!</string>
   <string name="playlist_context_play">Element wiedergeben</string>
   <string name="playlist_context_remove">Aus Wiedergabeliste entfernen</string>
-  <string name="playlist_loading">Wird geladen</string>
   <string name="playlist_close">Wiedergabeliste schließen</string>
   <string name="playlist_clear">Wiedergabeliste löschen</string>
   <string name="playlist_clear_content">Das wird unwiderruflich alle Lieder aus dieser Wiedergabeliste entfernen. Fortfahren?</string>
@@ -52,7 +50,6 @@
   <string name="download_noti_transcoding_subtitle">Bitte warten</string>
   <string name="library_download">Bibliothek wird heruntergeladen</string>
   <string name="library_optimize">Datenbank wird optimiert</string>
-  <string name="library_please_wait">Bitte warten</string>
   <string name="library_empty">Bibliothek leer. Nach unten wischen, um die Bibliothek herunterzuladen!</string>
   <string name="library_no_search_results">Keine Suchergebnisse gefunden!</string>
   <string name="library_download_error">Bibliothek konnte nicht geladen werden</string>
@@ -186,7 +183,6 @@
   <string name="check_ip">1) Läuft Clementine?\n2) Benutzten Sie Clementine %1$s oder höher?\n3) Ist die Netzwerkfernsteuerung in den Clementine-Einstellungen aktiviert?\n4) Haben Sie die IP-Adresse richtig eingegeben?\n</string>
   <string name="wifi_disabled">WLAN ist deaktiviert. Wenn Sie über das Internet Clementine fern steuern möchten, dann stellen Sie sicher, dass Sie die Ports korrekt weitergeleitet haben und »Nur Verbindungen aus dem lokalen Netzwerk« deaktiviert ist.</string>
   <string name="input_auth_code">Legitimierungscode</string>
-  <string name="invalid_code">Ungültiger Code</string>
   <string name="done">Fertig</string>
   <string name="unknown">Unbekannt</string>
   <plurals name="number_items">

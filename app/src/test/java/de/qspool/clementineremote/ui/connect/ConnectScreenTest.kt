@@ -1,5 +1,6 @@
 package de.qspool.clementineremote.ui.connect
 
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -8,6 +9,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextContains
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -18,6 +20,7 @@ import androidx.compose.ui.test.performTextReplacement
 import de.qspool.clementineremote.R
 import de.qspool.clementineremote.ui.theme.ClementineTheme
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -47,30 +50,83 @@ class ConnectScreenTest {
                     servers = servers,
                     progress = progress,
                     onHostChange = { typed = it },
-                    actions = object : ConnectActions {
-                        override fun onConnect() {
-                            done += "connect $typed"
-                        }
-
-                        override fun onServer(server: Server) {
-                            done += "server ${server.host}:${server.port}"
-                        }
-
-                        override fun onCancel() {
-                            done += "cancel"
-                        }
-
-                        override fun onSearchAgain() {
-                            done += "search again"
-                        }
-
-                        override fun onSettings() {
-                            done += "settings"
-                        }
-                    },
+                    actions = actions { typed },
                 )
             }
         }
+    }
+
+    private fun actions(typed: () -> String = { "" }) = object : ConnectActions {
+        override fun onConnect() {
+            done += "connect ${typed()}"
+        }
+
+        override fun onServer(server: Server) {
+            done += "server ${server.host}:${server.port}"
+        }
+
+        override fun onCancel() {
+            done += "cancel"
+        }
+
+        override fun onSearchAgain() {
+            done += "search again"
+        }
+
+        override fun onSettings() {
+            done += "settings"
+        }
+
+        override fun onAuthCode(code: Int) {
+            done += "auth $code"
+        }
+
+        override fun onRequestPermissions(permissions: List<String>) {
+            done += "permissions $permissions"
+        }
+    }
+
+    /** Shows [viewModel]'s dialogs, as the connect screen does. */
+    private fun showDialogs(viewModel: ConnectViewModel) {
+        compose.setContent {
+            val dialog by viewModel.dialog.collectAsState()
+            ClementineTheme(dynamicColor = false) {
+                ConnectDialogs(dialog, actions(), viewModel::dismissDialog)
+            }
+        }
+    }
+
+    @Test
+    fun asksForTheAuthCodeAndConnectsWithIt() {
+        val viewModel = ConnectViewModel()
+        viewModel.showDialog(ConnectDialog.AuthCode)
+        showDialogs(viewModel)
+
+        compose.onNodeWithTag("btnAuthCodeOk").assertIsNotEnabled()
+        compose.onNodeWithTag("authCodeField").performTextReplacement("12a34")
+        compose.onNodeWithTag("btnAuthCodeOk").assertIsEnabled().performClick()
+
+        assertEquals(listOf("auth 1234"), done)
+        assertNull(viewModel.dialog.value)
+    }
+
+    @Test
+    fun dialogsQueueAndAreShownOnce() {
+        val viewModel = ConnectViewModel()
+        val first = ConnectDialog.Message("Welcome", "<b>Hello</b> there", html = true)
+        val permissions = ConnectDialog.Permissions(listOf("android.permission.READ_PHONE_STATE"))
+        viewModel.showDialog(first)
+        viewModel.showDialog(permissions)
+        // Asked again on each resume, it waits only once.
+        viewModel.showDialog(permissions)
+        showDialogs(viewModel)
+
+        compose.onNodeWithTag("messageText").assertTextEquals("Hello there")
+        compose.onNodeWithTag("btnMessageClose").performClick()
+        compose.onNodeWithTag("btnPermissionsContinue").performClick()
+
+        assertEquals(listOf("permissions [android.permission.READ_PHONE_STATE]"), done)
+        assertNull(viewModel.dialog.value)
     }
 
     @Test

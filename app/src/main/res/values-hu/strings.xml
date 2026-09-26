@@ -9,7 +9,6 @@
   <string name="connectdialog_ip_hint">Írja be az IP-címet</string>
   <string name="player_nosong">Épp nincs lejátszás</string>
   <string name="player_disconnected">Kapcsolat bontva</string>
-  <string name="player_download_playlists">Lejátszólisták letöltése</string>
   <string name="playler_volume">Hangerő</string>
   <string name="player_stop_after_current">Leállítás, amint a szám véget ér.</string>
   <string name="player_download_lyrics">Dalszöveg letöltése</string>
@@ -21,7 +20,6 @@
   <string name="playlist_empty">A lejátszólista üres!</string>
   <string name="playlist_context_play">Elem lejátszása</string>
   <string name="playlist_context_remove">Eltávolítás a lejátszólistáról</string>
-  <string name="playlist_loading">Betöltés</string>
   <string name="playlist_close">Lejátszólista bezárása</string>
   <string name="playlist_clear">Lejátszólista ürítése</string>
   <string name="playlist_clear_content">Ez végleg eltávolít minden számot a lejátszólistáról. Folytatja?</string>
@@ -52,7 +50,6 @@
   <string name="download_noti_transcoding_subtitle">Kérem várjon</string>
   <string name="library_download">Zenetár letöltése</string>
   <string name="library_optimize">Adatbázis optimalizálása</string>
-  <string name="library_please_wait">Kérem várjon</string>
   <string name="library_empty">A zenetár üres. Csúsztassa ujját lefelé a zenetár letöltéséhez.</string>
   <string name="library_no_search_results">Nincs a keresésnek megfelelő szám!</string>
   <string name="library_download_error">A zenetár letöltése nem sikerült</string>
@@ -187,7 +184,6 @@
   <string name="check_ip">1) Fut a Clementine?\n2) Clementine %1$s vagy újabbat használ?\n3) Engedélyezte a hálózati vezérlést a Clementine beállításaiban?\n4) Ellenőrizze, hogy a helyes IP-címet adta meg.\n</string>
   <string name="wifi_disabled">A WiFi ki van kapcsolva. Ha az interneten keresztül szeretne kapcsolódni, akkor ellenőrizze hogy a portok helyesen vannak továbbítva, és hogy kikapcsolta a „Csak helyi IP-címek engedélyezése” beállítást.</string>
   <string name="input_auth_code">Hitelesítési kód</string>
-  <string name="invalid_code">Érvénytelen kód</string>
   <string name="done">Kész</string>
   <string name="unknown">Ismeretlen</string>
   <plurals name="number_items">

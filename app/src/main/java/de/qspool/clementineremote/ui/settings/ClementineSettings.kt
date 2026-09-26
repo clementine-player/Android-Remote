@@ -36,10 +36,8 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.R
 import de.qspool.clementineremote.SharedPreferencesKeys
-import de.qspool.clementineremote.ui.dialogs.FileDialog
 import de.qspool.clementineremote.ui.theme.ClementineTheme
 import de.qspool.clementineremote.utils.Utilities
-import java.io.File
 
 /** The settings screen of Clementine Remote: [SettingsScreen], over the app's preferences. */
 class ClementineSettings : AppCompatActivity(), SettingsActions {
@@ -78,29 +76,4 @@ class ClementineSettings : AppCompatActivity(), SettingsActions {
 
     private fun defaultDownloadDir(): String =
         getExternalFilesDir(Environment.DIRECTORY_MUSIC)?.absolutePath ?: ""
-
-    private fun setDownloadDir(dir: String) {
-        App.getPreferences().edit().putString(SharedPreferencesKeys.SP_DOWNLOAD_DIR, dir).apply()
-    }
-
-    /** A folder of the app's, the public Music folder, or one browsed to. */
-    override fun onChooseDownloadDir() {
-        val chooser = DefaultDirChooser(this)
-        chooser.addDirectoryListener { dir ->
-            if (dir.startsWith("/")) {
-                setDownloadDir(dir)
-            } else if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
-                val current = App.getPreferences().getString(SharedPreferencesKeys.SP_DOWNLOAD_DIR, defaultDownloadDir())
-                FileDialog(this, File(current ?: defaultDownloadDir())).apply {
-                    setCheckIfWritable(true)
-                    setSelectDirectoryOption(true)
-                    addDirectoryListener { directory -> setDownloadDir(directory.absolutePath) }
-                    showDialog()
-                }
-            } else {
-                Toast.makeText(this, R.string.download_noti_not_mounted, Toast.LENGTH_SHORT).show()
-            }
-        }
-        chooser.showAvailableDirectories()
-    }
 }

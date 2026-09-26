@@ -9,7 +9,6 @@
   <string name="connectdialog_ip_hint">Upišite IP adresu</string>
   <string name="player_nosong">Trenutno se ne reproducira nijedna pjesma</string>
   <string name="player_disconnected">Odspojeno</string>
-  <string name="player_download_playlists">Preuzimanje popisa izvođenja</string>
   <string name="playler_volume">Glasnoća zvuka</string>
   <string name="player_stop_after_current">Uključi/Isključi zaustavljanje nakon završetka pjesme.</string>
   <string name="player_download_lyrics">Preuzimanje tekstova pjesama</string>
@@ -21,7 +20,6 @@
   <string name="playlist_empty">Popis izvođenja je prazan!</string>
   <string name="playlist_context_play">Reproduciraj pjesmu</string>
   <string name="playlist_context_remove">Ukloni s popisa izvođenja</string>
-  <string name="playlist_loading">Učitavanje</string>
   <string name="playlist_close">Zatvori popis izvođenja</string>
   <string name="playlist_clear">Obriši popis izvođenja</string>
   <string name="playlist_clear_content">Ovo će nepovratno ukloniti sve pjesme s popisa izvođenja. Želite li nastaviti?</string>
@@ -54,7 +52,6 @@
   <string name="download_noti_transcoding_subtitle">Molim pričekajte</string>
   <string name="library_download">Preuzimanje fonoteke</string>
   <string name="library_optimize">Optimiziranje baze podataka</string>
-  <string name="library_please_wait">Molim pričekajte</string>
   <string name="library_empty">Fonoteka prazna. Povucite dolje za preuzimanje fonoteke!</string>
   <string name="library_no_search_results">Nema pronađenih pjesama koje se podudaraju s vašim kriterijima pretraživanja</string>
   <string name="library_download_error">Nemoguće preuzimanje fonoteke</string>
@@ -191,7 +188,6 @@
   <string name="check_ip">1) Je li Clementine pokrenut?\n2) Koristite li Clementine %1$s ili noviji?\n3) Jeste li omogućili mrežno upravljanje u Clementine mogućnostima?\n4) Provjerite jeste li upisali ispravnu ip adresu.\n</string>
   <string name="wifi_disabled">WI-FI je onemogućen. Ako se želite povezati s Clementinom putem Interneta pobrinite se da ste otvorili ispravno ulaze i onemogućili \"Koristi samo lokalnu IP adresu\".</string>
   <string name="input_auth_code">Kôd autentifikacije</string>
-  <string name="invalid_code">Pogrešan kôd</string>
   <string name="done">Završeno</string>
   <string name="unknown">Nepoznato</string>
   <plurals name="number_items">

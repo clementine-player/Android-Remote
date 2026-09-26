@@ -49,10 +49,10 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType
-import de.qspool.clementineremote.ui.dialogs.DownloadChooserDialog
 import de.qspool.clementineremote.ui.settings.ClementineSettings
 import de.qspool.clementineremote.ui.shell.AppShell
 import de.qspool.clementineremote.ui.shell.Destination
+import de.qspool.clementineremote.ui.shell.DownloadWhat
 import de.qspool.clementineremote.ui.shell.ShellActions
 import de.qspool.clementineremote.ui.shell.ShellViewModel
 import de.qspool.clementineremote.ui.theme.ClementineTheme
@@ -205,29 +205,14 @@ class MainActivity : AppCompatActivity(), ShellActions {
         RemoteRepository.send(ClementineMessage.getMessage(MsgType.DISCONNECT))
     }
 
-    override fun onDownloadSong() {
-        val song = App.Clementine.currentSong
-        if (song == null) {
-            Toast.makeText(this, R.string.player_nosong, Toast.LENGTH_LONG).show()
-            return
+    override fun onDownloadSong(what: DownloadWhat) {
+        val message = when (what) {
+            DownloadWhat.SONG -> ClementineMessageFactory.buildDownloadSongsMessage(DownloadItem.CurrentItem)
+            DownloadWhat.ALBUM -> ClementineMessageFactory.buildDownloadSongsMessage(DownloadItem.ItemAlbum)
+            DownloadWhat.PLAYLIST -> ClementineMessageFactory.buildDownloadSongsMessage(
+                DownloadItem.APlaylist, App.Clementine.playlistManager.activePlaylistId)
         }
-        if (!song.isLocal) {
-            Toast.makeText(this, R.string.player_song_is_stream, Toast.LENGTH_LONG).show()
-            return
-        }
-        val chooser = DownloadChooserDialog(this)
-        chooser.setCallback { type ->
-            val message = when (type) {
-                DownloadChooserDialog.Type.SONG ->
-                    ClementineMessageFactory.buildDownloadSongsMessage(DownloadItem.CurrentItem)
-                DownloadChooserDialog.Type.ALBUM ->
-                    ClementineMessageFactory.buildDownloadSongsMessage(DownloadItem.ItemAlbum)
-                DownloadChooserDialog.Type.PLAYLIST -> ClementineMessageFactory.buildDownloadSongsMessage(
-                    DownloadItem.APlaylist, App.Clementine.playlistManager.activePlaylistId)
-            }
-            DownloadManager.getInstance().addJob(message)
-        }
-        chooser.showDialog()
+        DownloadManager.getInstance().addJob(message)
     }
 
     /** The connection ended: back to the connect screen, or out of the app. */

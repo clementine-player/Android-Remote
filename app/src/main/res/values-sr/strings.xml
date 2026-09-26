@@ -9,7 +9,6 @@
   <string name="connectdialog_ip_hint">Унесите ИП адресу</string>
   <string name="player_nosong">Тренутно ништа није пуштено</string>
   <string name="player_disconnected">Веза прекинута</string>
-  <string name="player_download_playlists">Преузимам листе нумера</string>
   <string name="playler_volume">Јачина звука</string>
   <string name="player_stop_after_current">Промењено заустављање након нумере.</string>
   <string name="player_download_lyrics">Преузимам стихове</string>
@@ -21,7 +20,6 @@
   <string name="playlist_empty">Листа нумера је празна!</string>
   <string name="playlist_context_play">Пусти ставку</string>
   <string name="playlist_context_remove">Уклони са листе</string>
-  <string name="playlist_loading">Учитавам</string>
   <string name="playlist_close">Затвори листу</string>
   <string name="playlist_clear">Очисти листу</string>
   <string name="playlist_clear_content">Ово ће неповратно да уклони све песме са листе нумера. Да наставим?</string>
@@ -54,7 +52,6 @@
   <string name="download_noti_transcoding_subtitle">Сачекајте</string>
   <string name="library_download">Преузимам библиотеку</string>
   <string name="library_optimize">Оптимизујем базу података</string>
-  <string name="library_please_wait">Сачекајте</string>
   <string name="library_empty">Библиотека је празна. Превуците на доле да преузмете библиотеку!</string>
   <string name="library_no_search_results">Ниједна песма се не поклапа са траженим изразом!</string>
   <string name="library_download_error">Не могу да преузмем библиотеку</string>
@@ -188,7 +185,6 @@
   <string name="check_ip">1) Да ли је Клементина покренута?\n2) Користите ли Клементину %1$s или новију?\n3) Да ли сте омогућили даљинско управљање преко мреже у поставкама Клементине?\n4) Проверите да ли сте унели тачну ИП адресу.\n</string>
   <string name="wifi_disabled">Бежична је искључена. Ако желите да се повежете са Клементином преко интернета проверите да ли сте исправно проследили портове и онемогућите „Дозволи само везе са локалне мреже“.</string>
   <string name="input_auth_code">Аутентификацијски код</string>
-  <string name="invalid_code">Неисправан код</string>
   <string name="done">Завршено</string>
   <string name="unknown">Непознато</string>
   <plurals name="number_items">

@@ -1,5 +1,6 @@
 package de.qspool.clementineremote.ui.shell
 
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -57,6 +58,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -104,7 +106,7 @@ class ShellViewModel : ViewModel() {
 /** What the shell asks of the activity. */
 interface ShellActions : ConnectionActions {
     /** Downloads the song playing, its album or its playlist. */
-    fun onDownloadSong()
+    fun onDownloadSong(what: DownloadWhat)
 }
 
 /**
@@ -120,6 +122,8 @@ fun AppShell(shell: ShellViewModel, actions: ShellActions) {
     var connectionOpen by rememberSaveable { mutableStateOf(false) }
     // The song details sheet, and whether it shows the lyrics; null while closed.
     var details by rememberSaveable { mutableStateOf<Boolean?>(null) }
+    var choosingDownload by rememberSaveable { mutableStateOf(false) }
+    val context = LocalContext.current
 
     val layout = NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo(currentWindowAdaptiveInfo())
     Box(Modifier.fillMaxSize()) {
@@ -181,7 +185,20 @@ fun AppShell(shell: ShellViewModel, actions: ShellActions) {
                             shell.playerOpen = false
                         }
 
-                        override fun onDownload() = actions.onDownloadSong()
+                        override fun onDownload() {
+                            // Only songs in Clementine's library can be downloaded, not streams.
+                            val song = nowPlaying.song
+                            val problem = when {
+                                song == null -> R.string.player_nosong
+                                !song.isLocal -> R.string.player_song_is_stream
+                                else -> null
+                            }
+                            if (problem == null) {
+                                choosingDownload = true
+                            } else {
+                                Toast.makeText(context, problem, Toast.LENGTH_LONG).show()
+                            }
+                        }
                     },
                     player,
                 )
@@ -194,6 +211,15 @@ fun AppShell(shell: ShellViewModel, actions: ShellActions) {
     }
     if (connectionOpen) {
         ConnectionSheet(actions, onDismiss = { connectionOpen = false })
+    }
+    if (choosingDownload) {
+        DownloadChooser(
+            onChoose = {
+                choosingDownload = false
+                actions.onDownloadSong(it)
+            },
+            onDismiss = { choosingDownload = false },
+        )
     }
 }
 

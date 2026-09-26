@@ -9,7 +9,6 @@
   <string name="connectdialog_ip_hint">Introduïu l\'adreça IP</string>
   <string name="player_nosong">No s\'està reproduint cap peça</string>
   <string name="player_disconnected">Desconnectat</string>
-  <string name="player_download_playlists">S\'estan baixant les llistes de reproducció</string>
   <string name="playler_volume">Volum</string>
   <string name="player_stop_after_current">Commuta la parada quan acaba la peça.</string>
   <string name="player_download_lyrics">S\'està descarregant la lletra</string>
@@ -21,7 +20,6 @@
   <string name="playlist_empty">La llista de reproducció és buida.</string>
   <string name="playlist_context_play">Reprodueix l\'element</string>
   <string name="playlist_context_remove">Esborra de la llista de reproducció</string>
-  <string name="playlist_loading">S’està carregant</string>
   <string name="playlist_close">Tanca la llista de reproducció</string>
   <string name="playlist_clear">Esborra la llista de reproducció</string>
   <string name="playlist_clear_content">Això eliminarà totes les peces de la llista. Voleu continuar?</string>
@@ -52,7 +50,6 @@
   <string name="download_noti_transcoding_subtitle">Espereu-vos</string>
   <string name="library_download">S’està baixant la col·lecció</string>
   <string name="library_optimize">S’està optimitzant la base de dades</string>
-  <string name="library_please_wait">Espereu-vos</string>
   <string name="library_empty">La biblioteca està buida. Feu-la lliscar cap avall per actualitzar-la!</string>
   <string name="library_no_search_results">No hi ha peces que compleixin els criteris de cerca.</string>
   <string name="library_download_error">No s\'ha pogut baixar la biblioteca</string>
@@ -188,7 +185,6 @@
   <string name="check_ip">1) S\'està executant el Clementine?\n2) Esteu usant la versió %1$s o posterior del Clementine?\n3) Heu activat el control remot per xarxa a la configuració del Clementine?\n4) Heu introduït l\'adreça ip?\n</string>
   <string name="wifi_disabled">La xarxa Wi-Fi està desactivada. Si voleu connectar-vos al Clementine via Internet, si us plau, assegureu-vos que heu desactivat «Permet només connexions provinents de la xarxa local».</string>
   <string name="input_auth_code">Codi d’autenticació</string>
-  <string name="invalid_code">El codi no és vàlid</string>
   <string name="done">Fet</string>
   <string name="unknown">Desconegut</string>
   <plurals name="number_items">

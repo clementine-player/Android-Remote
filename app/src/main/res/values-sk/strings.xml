@@ -9,7 +9,6 @@
   <string name="connectdialog_ip_hint">Zadajte IP adresu</string>
   <string name="player_nosong">Teraz sa neprehráva žiadna skladba</string>
   <string name="player_disconnected">Odpojené</string>
-  <string name="player_download_playlists">Preberajú sa zoznamy skladieb</string>
   <string name="playler_volume">Hlasitosť</string>
   <string name="player_stop_after_current">Prepína zastavenie skladby po jej prehratí.</string>
   <string name="player_download_lyrics">Preberá sa text skladby</string>
@@ -21,7 +20,6 @@
   <string name="playlist_empty">Zoznam skladieb je prázdny!</string>
   <string name="playlist_context_play">Prehrať položku</string>
   <string name="playlist_context_remove">Odstrániť zo zoznamu skladieb</string>
-  <string name="playlist_loading">Načítava sa</string>
   <string name="playlist_close">Zavrieť zoznam skladieb</string>
   <string name="playlist_clear">Vymazať zoznam skladieb</string>
   <string name="playlist_clear_content">Týmto sa nenávratne odstránia všetky skladby zo zoznamu skladieb. Pokračovať?</string>
@@ -54,7 +52,6 @@
   <string name="download_noti_transcoding_subtitle">Prosím, čakajte</string>
   <string name="library_download">Preberá sa zbierka</string>
   <string name="library_optimize">Optimalizuje sa databáza</string>
-  <string name="library_please_wait">Prosím, čakajte</string>
   <string name="library_empty">Zbierka je prázdna. Potiahnutím dole prevezmite zbierku!</string>
   <string name="library_no_search_results">Vašim kritériám vyhľadávania nevyhuvujú žiadne skladby!</string>
   <string name="library_download_error">Nepodarilo sa prebrať zbierku</string>
@@ -191,7 +188,6 @@
   <string name="check_ip">1) Je prehrávač Clementine spustený?\n2) Používate prehrávač Clementine vo verzii %1$s alebo novšej?\n3) Povolili ste diaľkové ovládanie v nastaveniach prehrávača Clementine?\n4) Skontrolujte, či ste zadali správnu IP adresu.\n</string>
   <string name="wifi_disabled">Sieť Wifi je zakázaná. Ak sa chcete pripojiť k prehrávaču Clementine cez internet, uistite sa, že máte správne nasmerované porty a zakázanú voľbu \"Povoliť spojenie iba z lokálnej siete\"\".</string>
   <string name="input_auth_code">Autorizačný kód</string>
-  <string name="invalid_code">Neplatný kód</string>
   <string name="done">Hotovo</string>
   <string name="unknown">Neznáme</string>
   <plurals name="number_items">

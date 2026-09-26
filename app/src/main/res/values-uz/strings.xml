@@ -9,7 +9,6 @@
   <string name="connectdialog_ip_hint">IP manzilni kiriting</string>
   <string name="player_nosong">Hozir ijro etadigan qo\'shiq yo\'q</string>
   <string name="player_disconnected">Ajratilgan</string>
-  <string name="player_download_playlists">Ijro ro\'yxati yuklab olinmoqda</string>
   <string name="playler_volume">Ovoz balandligi</string>
   <string name="player_download_lyrics">Qo\'shiq matni yuklab olinmoqda</string>
   <string name="player_no_lyrics">Qo\'shiq matni topilmadi.</string>
@@ -79,7 +78,6 @@
   <string name="error_versions">Mos kelmaydigan versiya</string>
   <string name="no_private_ip">Android moslamangiz mahalliy bo\'lmagan IP manzilga ega. Clementine sozlamalarida \"Faqat mahalliy IP manzillardan foydalaning\" o\'chirishga urinib ko\'ring.</string>
   <string name="input_auth_code">Haqiqiyligini tekshirish kodi</string>
-  <string name="invalid_code">Kod haqiqiy emas</string>
   <string name="repeat_off">Takrorlamaslik</string>
   <string name="repeat_track">Yo‘lakchani takrorlash</string>
   <string name="repeat_album">Albomni takrorlash</string>
