@@ -9,7 +9,6 @@
   <string name="connectdialog_ip_hint">Escriba la dirección IP</string>
   <string name="player_nosong">No hay ninguna canción en reproducción</string>
   <string name="player_disconnected">Desconectado</string>
-  <string name="player_download_playlists">Descargando listas de reproducción</string>
   <string name="playler_volume">Volumen</string>
   <string name="player_stop_after_current">Activa/desactiva la detención tras finalizar la pista.</string>
   <string name="player_download_lyrics">Descargando la letra</string>
@@ -21,7 +20,6 @@
   <string name="playlist_empty">La lista está vacía.</string>
   <string name="playlist_context_play">Reproducir elemento</string>
   <string name="playlist_context_remove">Quitar de la lista</string>
-  <string name="playlist_loading">Cargando</string>
   <string name="playlist_close">Cerrar lista</string>
   <string name="playlist_clear">Vaciar lista</string>
   <string name="playlist_clear_content">Esto quitará todas las canciones de la lista irreversiblemente. ¿Continuar?</string>
@@ -52,7 +50,6 @@
   <string name="download_noti_transcoding_subtitle">Espere</string>
   <string name="library_download">Descargando la colección</string>
   <string name="library_optimize">Optimizando la base de datos</string>
-  <string name="library_please_wait">Espere</string>
   <string name="library_empty">La colección está vacía. Deslice hacia abajo para descargarla.</string>
   <string name="library_no_search_results">Ninguna canción coincide con los criterios de búsqueda.</string>
   <string name="library_download_error">No se pudo descargar la colección</string>
@@ -189,7 +186,6 @@
   <string name="check_ip">1) ¿Clementine está en ejecución?\n2) ¿Utiliza como mínimo la versión %1$s de Clementine?\n3) ¿Activó el control remoto en la configuración de Clementine?\n4) Revise que ha proporcionado la dirección IP correcta.\n</string>
   <string name="wifi_disabled">El wifi está desactivado. Si quiere conectarse con Clementine mediante Internet, asegúrese de que redireccionó los puertos adecuadamente y de que desactivó «Solo usar direcciones IP locales».</string>
   <string name="input_auth_code">Código de autenticación</string>
-  <string name="invalid_code">Código no válido</string>
   <string name="done">Hecho</string>
   <string name="unknown">Desconocido</string>
   <plurals name="number_items">

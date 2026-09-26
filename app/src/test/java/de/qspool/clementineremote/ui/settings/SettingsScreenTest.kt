@@ -1,17 +1,22 @@
 package de.qspool.clementineremote.ui.settings
 
+import android.os.Environment
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextReplacement
+import androidx.core.content.ContextCompat
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.SharedPreferencesKeys
 import de.qspool.clementineremote.backend.downloader.MediaStoreDownloadStorage
@@ -23,6 +28,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
+import org.robolectric.shadows.ShadowEnvironment
+import java.io.File
 
 /**
  * The settings read and write the app's preferences under their old keys, with the old
@@ -41,10 +49,6 @@ class SettingsScreenTest {
     private val actions = object : SettingsActions {
         override fun onBack() {
             opened += "back"
-        }
-
-        override fun onChooseDownloadDir() {
-            opened += "dir"
         }
 
         override fun onOpenUrl(url: String) {
@@ -120,6 +124,35 @@ class SettingsScreenTest {
     }
 
     @Test
+    @Config(sdk = [28])
+    fun beforeAndroid10DownloadsGoToAFolderPicked() {
+        ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED)
+        // The app's Music folders exist by now in the app, made for the default folder shown;
+        // Robolectric can't make them off the main thread.
+        ContextCompat.getExternalFilesDirs(compose.activity, Environment.DIRECTORY_MUSIC)
+        row(SharedPreferencesKeys.SP_DOWNLOAD_DIR).assertIsEnabled()
+        compose.onNodeWithText("/music").assertExists()
+
+        // One of the folders suggested...
+        row(SharedPreferencesKeys.SP_DOWNLOAD_DIR).performClick()
+        eventually { compose.onAllNodesWithTag("folder").fetchSemanticsNodes().isNotEmpty() }
+        compose.onAllNodesWithTag("folder")[0].performClick()
+        val suggested = preferences.getString(SharedPreferencesKeys.SP_DOWNLOAD_DIR, null)!!
+        compose.onNodeWithText(suggested).assertExists()
+
+        // ...or one browsed to, starting from the folder set.
+        row(SharedPreferencesKeys.SP_DOWNLOAD_DIR).performClick()
+        eventually { compose.onAllNodesWithTag("folderOther").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithTag("folderOther").performClick()
+        // Its title is the folder browsed.
+        compose.onAllNodesWithText(suggested).assertCountEquals(2)
+        compose.onNodeWithTag("folderUp").performClick()
+        compose.onNodeWithTag("btnFolderSelect").performClick()
+        eventually { preferences.getString(SharedPreferencesKeys.SP_DOWNLOAD_DIR, null) != suggested }
+        assertEquals(File(suggested).parent, preferences.getString(SharedPreferencesKeys.SP_DOWNLOAD_DIR, null))
+    }
+
+    @Test
     fun linksAndDialogs() {
         row("pref_version").performClick()
         row("pref_clementine_website").performClick()
@@ -154,5 +187,21 @@ class SettingsScreenTest {
             ),
             licenses,
         )
+    }
+
+    /**
+     * Waits for [condition], for folders listed off the main thread: their result comes back
+     * through the main looper, on a frame.
+     */
+    private fun eventually(condition: () -> Boolean) {
+        repeat(100) {
+            compose.mainClock.advanceTimeByFrame()
+            compose.waitForIdle()
+            if (condition()) {
+                return
+            }
+            Thread.sleep(50)
+        }
+        throw AssertionError("Still not so after 5 s")
     }
 }

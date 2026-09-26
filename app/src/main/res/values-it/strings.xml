@@ -9,7 +9,6 @@
   <string name="connectdialog_ip_hint">Inserisci indirizzo IP</string>
   <string name="player_nosong">Nessuna canzone in esecuzione</string>
   <string name="player_disconnected">Disconesso</string>
-  <string name="player_download_playlists">Download Playlist</string>
   <string name="playler_volume">Volume</string>
   <string name="player_stop_after_current">Ferma dopo che la traccia è finita.</string>
   <string name="player_download_lyrics">Download testi</string>
@@ -21,7 +20,6 @@
   <string name="playlist_empty">La playlist è vuota!</string>
   <string name="playlist_context_play">Suona elemento</string>
   <string name="playlist_context_remove">Rimuovi dalla playlist</string>
-  <string name="playlist_loading">Caricamento</string>
   <string name="playlist_close">Chiudi playlist</string>
   <string name="playlist_clear">Pulisci playlist</string>
   <string name="playlist_clear_confirm">Pulisci playlist</string>
@@ -51,7 +49,6 @@
   <string name="download_noti_transcoding_subtitle">Attendere prego</string>
   <string name="library_download">Download libreria</string>
   <string name="library_optimize">Ottimizazione database</string>
-  <string name="library_please_wait">Attendere prego</string>
   <string name="library_empty">Libreria vuota. Fai uno swype verso il basso per scaricare la libreria!</string>
   <string name="library_no_search_results">Nessun brano corrisponde ai tuoi criteri di ricerca!</string>
   <string name="library_download_error">Impossibile scaricare la libreria</string>
@@ -164,7 +161,6 @@
   <string name="no_private_ip">Il tuo device Android ha un indirizzo ip non locale. Prova a disabilitare \"Usa solo indirizzo ip locale\" nelle impostazioni di Clementine.</string>
   <string name="wifi_disabled">Wifi disabilitato. Se vuoi connetterti a Clementine via internet assicurati di aver impostato le porte correttamente e di aver disabilitato \" Usa solo indirizzi ip locali\". </string>
   <string name="input_auth_code">Codice di autenticazione</string>
-  <string name="invalid_code">Codice non valido</string>
   <string name="done">Fatto</string>
   <string name="unknown">Sconosciuto</string>
   <plurals name="number_items">

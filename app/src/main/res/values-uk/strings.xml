@@ -9,7 +9,6 @@
   <string name="connectdialog_ip_hint">Вкажіть IP-адресу</string>
   <string name="player_nosong">Зараз композицій не відтворюється</string>
   <string name="player_disconnected">Роз’єднано</string>
-  <string name="player_download_playlists">Отримуємо списки відтворення</string>
   <string name="playler_volume">Гучність</string>
   <string name="player_stop_after_current">Увімкнути або вимкнути зупинку після завершення композиції.</string>
   <string name="player_download_lyrics">Отримуємо слова пісні</string>
@@ -21,7 +20,6 @@
   <string name="playlist_empty">Список відтворення порожній!</string>
   <string name="playlist_context_play">Відтворити запис</string>
   <string name="playlist_context_remove">Вилучити зі списку відтворення</string>
-  <string name="playlist_loading">Завантаження</string>
   <string name="playlist_close">Закрити список відтворення</string>
   <string name="playlist_clear">Спорожнити список відтворення</string>
   <string name="playlist_clear_content">У результаті виконання цієї дії зі списку відтворення буде вилучено усі композиції. Виконати дію?</string>
@@ -54,7 +52,6 @@
   <string name="download_noti_transcoding_subtitle">Зачекайте</string>
   <string name="library_download">Отримуємо бібліотеку даних</string>
   <string name="library_optimize">Оптимізуємо базу даних</string>
-  <string name="library_please_wait">Зачекайте</string>
   <string name="library_empty">Бібліотека порожня. Проведіть пальцем вниз, щоб отримати бібліотеку!</string>
   <string name="library_no_search_results">Вказаним вами критеріям не відповідає жодна композиція!</string>
   <string name="library_download_error">Не вдалося отримати бібліотеку</string>
@@ -189,7 +186,6 @@
   <string name="check_ip">1) Чи запущено Clementine?\n2) Чи користуєтеся ви принаймні Clementine %1$s?\n3) Чи увімкнено віддалене керування мережею у налаштуваннях Clementine?\n4) Перевірте, чи належним чином введено IP-адресу.\n</string>
   <string name="wifi_disabled">W-Fi вимкнено. Якщо ви хочете з’єднатися з Clementine за допомогою інтернету, переконайтеся, що правильно визначено переспрямування портів і що знято позначення з пункту «Використовувати лише локальні IP-адреси».</string>
   <string name="input_auth_code">Код розпізнавання</string>
-  <string name="invalid_code">Некоректний код</string>
   <string name="done">Виконано</string>
   <string name="unknown">Невідомо</string>
   <plurals name="number_items">

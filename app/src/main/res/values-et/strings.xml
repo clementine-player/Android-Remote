@@ -9,7 +9,6 @@
   <string name="connectdialog_ip_hint">Sisesta IP aadress</string>
   <string name="player_nosong">Ükski lugu ei mängi praegu</string>
   <string name="player_disconnected">Lahti ühendatud</string>
-  <string name="player_download_playlists">Esitusloendite allalaadimine</string>
   <string name="playler_volume">Helitugevus</string>
   <string name="player_stop_after_current">Tühista peatumine pärast loo lõppu.</string>
   <string name="player_download_lyrics">Laulusõnade allalaadimine</string>
@@ -58,7 +57,6 @@
   <string name="dialog_close">Sule</string>
   <string name="error_versions">Ühitamatu versioon</string>
   <string name="input_auth_code">Autentimiskood</string>
-  <string name="invalid_code">Vale kood</string>
   <string name="repeat_off">Ära korda</string>
   <string name="repeat_track">Korda lugu</string>
   <string name="repeat_album">Korda albumit</string>

@@ -9,7 +9,6 @@
   <string name="connectdialog_ip_hint">Saisissez votre adresse IP</string>
   <string name="player_nosong">Aucun morceau joué actuellement</string>
   <string name="player_disconnected">Déconnecté</string>
-  <string name="player_download_playlists">Téléchargement des listes de lecture</string>
   <string name="playler_volume">Volume</string>
   <string name="player_stop_after_current">Terminer la lecture à la fin du morceau.</string>
   <string name="player_download_lyrics">Téléchargement des paroles</string>
@@ -21,7 +20,6 @@
   <string name="playlist_empty">La liste de lecture est vide !</string>
   <string name="playlist_context_play">Jouer l\'élément</string>
   <string name="playlist_context_remove">Supprimer de la liste de lecture</string>
-  <string name="playlist_loading">Chargement</string>
   <string name="playlist_close">Fermer la liste de lecture</string>
   <string name="playlist_clear">Vider la liste de lecture</string>
   <string name="playlist_clear_content">Cela supprimera définitivement tous les titres de la liste de lecture. Confirmez-vous ?</string>
@@ -52,7 +50,6 @@
   <string name="download_noti_transcoding_subtitle">Veuillez patienter</string>
   <string name="library_download">Téléchargement de la bibliothèque</string>
   <string name="library_optimize">Optimisation de la base de données</string>
-  <string name="library_please_wait">Merci de patienter</string>
   <string name="library_empty">Bibliothèque vide. Glissez vers le bas pour télécharger la bibliothèque.</string>
   <string name="library_no_search_results">Aucun morceau ne correspond à vos critères de recherche !</string>
   <string name="library_download_error">Impossible de télécharger la bibliothèque</string>
@@ -186,7 +183,6 @@
   <string name="check_ip">1) Est-ce que Clementine est lancé ?\n2) Utilisez-vous la version %1$s ou ultérieure de Clementine ?\n3) Avez-vous activé le contrôle à distance dans les paramètres de Clementine ?\n4) Vérifiez si l\'adresse IP saisie est correcte.\n</string>
   <string name="wifi_disabled">Le Wifi est désactivé. Si vous voulez vous connecter à Clementine via Internet, vérifiez que vous avez redirigé les ports et désactivé « Utiliser seulement les adresses IP locales ».</string>
   <string name="input_auth_code">Code d\'authentification</string>
-  <string name="invalid_code">Code invalide</string>
   <string name="done">Terminé</string>
   <string name="unknown">Inconnu</string>
   <plurals name="number_items">

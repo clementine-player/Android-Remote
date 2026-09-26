@@ -9,7 +9,6 @@
   <string name="connectdialog_ip_hint">Wprowadź adres IP</string>
   <string name="player_nosong">Żadna piosenka nie jest w tej chwili odtwarzana</string>
   <string name="player_disconnected">Rozłączono</string>
-  <string name="player_download_playlists">Pobieranie list odtwarzania</string>
   <string name="playler_volume">Poziom głośności</string>
   <string name="player_stop_after_current">Włącz zatrzymywanie po zakończeniu utworu.</string>
   <string name="player_download_lyrics">Pobierz tekst</string>
@@ -21,7 +20,6 @@
   <string name="playlist_empty">Lista odtwarzania jest pusta!</string>
   <string name="playlist_context_play">Zagraj utwór</string>
   <string name="playlist_context_remove">Usuń z listy odtwarzania</string>
-  <string name="playlist_loading">Wczytywanie</string>
   <string name="playlist_close">Zamknij listę odtwarzania</string>
   <string name="playlist_clear">Wyczyść listę odtwarzania</string>
   <string name="playlist_clear_content">To nieodwracalnie usunie wszystkie piosenki z listy. Kontynuować?</string>
@@ -56,7 +54,6 @@
   <string name="download_noti_transcoding_subtitle">Proszę czekać</string>
   <string name="library_download">Pobieranie biblioteki</string>
   <string name="library_optimize">Optymalizowanie bazy danych</string>
-  <string name="library_please_wait">Proszę czekać</string>
   <string name="library_empty">Biblioteka jest pusta. Przeciągnij w dół aby pobrać bibliotekę!</string>
   <string name="library_no_search_results">Brak utworów spełniających Twoje warunki wyszukiwania</string>
   <string name="library_download_error">Nie można było pobrać biblioteki</string>
@@ -187,7 +184,6 @@
   <string name="no_private_ip">Twoje urządzenie z Androidem nie ma lokalnego adresu ip. Spróbuj wyłączyć \"Używaj tylko lokalnych adresów ip\" w opcjach Clementine.</string>
   <string name="wifi_disabled">Wifi jest wyłączone. Jeśli chcesz połączyć się z Clementine przez internet upewnij się że przekierowałeś porty poprawnie oraz wyłączyłeś opcję \"Używaj tylko lokalnych adresów ip\".</string>
   <string name="input_auth_code">Kod uwierzytelniający</string>
-  <string name="invalid_code">Nieprawidłowy kod</string>
   <string name="done">Zrobione</string>
   <string name="unknown">Nieznane</string>
   <plurals name="number_items">

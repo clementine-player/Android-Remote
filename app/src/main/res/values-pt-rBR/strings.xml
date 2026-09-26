@@ -9,7 +9,6 @@
   <string name="connectdialog_ip_hint">Entre com o endereçode IP</string>
   <string name="player_nosong">Nenhuma música tocando agora</string>
   <string name="player_disconnected">Desconectado</string>
-  <string name="player_download_playlists">Baixar lista de reprodução</string>
   <string name="playler_volume">Volume</string>
   <string name="player_stop_after_current">Habilitar parar após fim da faixa</string>
   <string name="player_download_lyrics">Baixar letra</string>
@@ -21,7 +20,6 @@
   <string name="playlist_empty">A lista de reprodução está vazia!</string>
   <string name="playlist_context_play">Reproduzir item</string>
   <string name="playlist_context_remove">Remover item da lista de reprodução</string>
-  <string name="playlist_loading">Carregando</string>
   <string name="playlist_close">Fechar lista de reprodução</string>
   <string name="playlist_clear">Limpar lista de reprodução</string>
   <string name="playlist_clear_content">Está ação irá remover todas as músicas da lista de reprodução irreversivelmente. Deseja continuar?</string>
@@ -52,7 +50,6 @@
   <string name="download_noti_transcoding_subtitle">Aguarde, por favor</string>
   <string name="library_download">Baixando biblioteca</string>
   <string name="library_optimize">Otimizando base de dados</string>
-  <string name="library_please_wait">Aguarde, por favor</string>
   <string name="library_empty">Biblioteca vazia. Arraste para baixo para baixar a biblioteca!</string>
   <string name="library_no_search_results">Não foram encontradas músicas usando seus critérios.</string>
   <string name="library_download_error">Não foi possível baixar a biblioteca</string>

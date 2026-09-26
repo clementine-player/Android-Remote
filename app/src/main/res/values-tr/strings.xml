@@ -9,7 +9,6 @@
   <string name="connectdialog_ip_hint">IP adresi girin</string>
   <string name="player_nosong">Şu an bir şarkı çalmıyor</string>
   <string name="player_disconnected">Bağlantı Kesildi</string>
-  <string name="player_download_playlists">Oynatma Listeleri İndiriliyor</string>
   <string name="playler_volume">Ses</string>
   <string name="player_stop_after_current">Parça bittiğinde durdurmayı aç/kapat.</string>
   <string name="player_download_lyrics">Sözler indiriliyor</string>
@@ -21,7 +20,6 @@
   <string name="playlist_empty">Oynatma listesi boş!</string>
   <string name="playlist_context_play">Ögeyi çal</string>
   <string name="playlist_context_remove">Oynatma listesinden kaldır</string>
-  <string name="playlist_loading">Yükleniyor</string>
   <string name="playlist_close">Çalma listesini kapat</string>
   <string name="playlist_clear">Çalma listesini temizle</string>
   <string name="downloads_empty">İndirme yok!</string>
@@ -50,7 +48,6 @@
   <string name="download_noti_transcoding_subtitle">Lütfen bekleyin</string>
   <string name="library_download">Kütüphane indiriliyor</string>
   <string name="library_optimize">Veritabanı iyileştiriliyor</string>
-  <string name="library_please_wait">Lütfen bekleyin</string>
   <string name="library_empty">Kütüphane boş. İndirmek için aşağı çekin!</string>
   <string name="library_no_search_results">Arama kriterlerinizle eşleşen parça yok!</string>
   <string name="library_download_error">Kütüphane indirilemedi</string>
@@ -177,7 +174,6 @@
   <string name="no_private_ip">Android cihazınızın yerel olmayan IP adresi var. Clementine ayarlarından \"Sadece yerel IP adreslerini kullan\" seçeneğini devre dışı bırakmayı deneyin.</string>
   <string name="wifi_disabled">Kablosuz devre dışı. Eğer Clementine\'e İnternet ile bağlanmak isterseniz bağlantı noktalarının doğru bir şekilde yönlendirilmiş olduğundan ve \"Sadece yerel IP adreslerini kullan\" seçeneğinin devre dışı olduğundan emin olun.</string>
   <string name="input_auth_code">Doğrulama Kodu</string>
-  <string name="invalid_code">Geçersiz Kod</string>
   <string name="done">Tamamlandı</string>
   <string name="repeat_off">Tekrar etme</string>
   <string name="repeat_track">Parça tekrarı</string>

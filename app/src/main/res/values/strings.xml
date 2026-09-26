@@ -22,7 +22,6 @@
 
     <string name="player_nosong">No Song playing right now</string>
     <string name="player_disconnected">Disconnected</string>
-    <string name="player_download_playlists">Downloading Playlists</string>
     <string name="playler_volume">Volume</string>
     <string name="player_stop_after_current">Toggle stopping after track finishes.</string>
     <string name="player_download_lyrics">Downloading lyrics</string>
@@ -36,7 +35,6 @@
     <string name="playlist_empty">Playlist is empty!</string>
     <string name="playlist_context_play">Play item</string>
     <string name="playlist_context_remove">Remove from playlist</string>
-    <string name="playlist_loading">Loading</string>
     <string name="playlist_close">Close playlist</string>
     <string name="playlist_clear">Clear playlist</string>
     <string name="playlist_clear_content">This will irretrievably remove all songs from the playlist. Continue?</string>
@@ -110,7 +108,6 @@
 
     <string name="library_download">Downloading library</string>
     <string name="library_optimize">Optimizing database</string>
-    <string name="library_please_wait">Please wait</string>
     <string name="library_empty">Library empty. Swipe down to download library!</string>
     <string name="library_no_search_results">No songs matching your search criteria!</string>
     <string name="library_download_error">Could not download library</string>
@@ -268,7 +265,6 @@
     <string name="wifi_disabled">Wifi is disabled. If you want to connect to Clementine via internet make sure you forwarded the ports correctly and you have disabled \"Use only local ip addresses\"".</string>
 
     <string name="input_auth_code">Authentication Code</string>
-    <string name="invalid_code">Invalid Code</string>
     <string name="done">Done</string>
     <string name="unknown">Unknown</string>
     <plurals name="number_items">

@@ -9,7 +9,6 @@
   <string name="connectdialog_ip_hint">Introduza o endereço IP</string>
   <string name="player_nosong">Nenhuma faixa em reprodução</string>
   <string name="player_disconnected">Desligado</string>
-  <string name="player_download_playlists">A descarregar listas de reprodução</string>
   <string name="playler_volume">Volume</string>
   <string name="player_stop_after_current">Parar alternação ao terminar a faixa.</string>
   <string name="player_download_lyrics">A descarregar letras</string>
@@ -21,7 +20,6 @@
   <string name="playlist_empty">Listas de reprodução vazia!</string>
   <string name="playlist_context_play">Reproduzir item</string>
   <string name="playlist_context_remove">Remover da lista de reprodução</string>
-  <string name="playlist_loading">A carregar</string>
   <string name="playlist_close">Fechar lista de reprodução</string>
   <string name="playlist_clear">Limpar lista de reprodução</string>
   <string name="playlist_clear_content">Isto irá remover rodas as faixas da sua lista de reprodução. Continuar?</string>
@@ -52,7 +50,6 @@
   <string name="download_noti_transcoding_subtitle">Por favor aguarde</string>
   <string name="library_download">A descarregar coleção</string>
   <string name="library_optimize">Otimização da base de dados</string>
-  <string name="library_please_wait">Por favor aguarde</string>
   <string name="library_empty">Coleção vazia. Deslize para baixo para descarregar a coleção!</string>
   <string name="library_no_search_results">Não existem faixas coincidentes com os critérios.</string>
   <string name="library_download_error">Não foi possível descarregar a coleção</string>
@@ -186,7 +183,6 @@
   <string name="check_ip">1) Está a executar o Clementine?\n2) Tem a versão %1$s ou superior do Clementine?\n3) Ativou a rede remota nas definições do Clementine?\n4) Verifique se o endereço IP está correto.\n</string>
   <string name="wifi_disabled">A rede sem fios está inativa. Se quiser ligar ao Clementine através da Internet, certifique-se se reencaminha as portas corretamente e que desativa a opção \"Utilizar IP de endereços local\"</string>
   <string name="input_auth_code">Código de autenticação</string>
-  <string name="invalid_code">Código inválido</string>
   <string name="done">Terminado</string>
   <string name="unknown">Desconhecido</string>
   <plurals name="number_items">

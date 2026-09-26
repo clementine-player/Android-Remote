@@ -9,7 +9,6 @@
   <string name="connectdialog_ip_hint">Zadat adresu IP</string>
   <string name="player_nosong">Nyní se nepřehrávají žádné písně</string>
   <string name="player_disconnected">Odpojeno</string>
-  <string name="player_download_playlists">Stahují se seznamy skladeb</string>
   <string name="playler_volume">Hlasitost</string>
   <string name="player_stop_after_current">Přepnout zastavení po dokončení skladby.</string>
   <string name="player_download_lyrics">Stahuje se text písně</string>
@@ -21,7 +20,6 @@
   <string name="playlist_empty">Seznam skladeb je prázdný!</string>
   <string name="playlist_context_play">Přehrát položku</string>
   <string name="playlist_context_remove">Odstranit ze seznamu skladeb</string>
-  <string name="playlist_loading">Nahrává se</string>
   <string name="playlist_close">Zavřít seznam skladeb</string>
   <string name="playlist_clear">Smazat seznam skladeb</string>
   <string name="playlist_clear_content">Tímto budou nenávratně odstraněny všechny písně ze seznamu skladeb. Pokračovat?</string>
@@ -54,7 +52,6 @@
   <string name="download_noti_transcoding_subtitle">Počkejte, prosím</string>
   <string name="library_download">Stahuje se sbírka</string>
   <string name="library_optimize">Optimalizuje se databáze</string>
-  <string name="library_please_wait">Počkejte, prosím</string>
   <string name="library_empty">Knihovna je prázdná. Švihněte dolů pro stažení knihovny!</string>
   <string name="library_no_search_results">Žádné písně neodpovídají vašim hlediskům hledání!</string>
   <string name="library_download_error">Nepopdařilo se stáhnout sbírku</string>
@@ -194,7 +191,6 @@ Pokud máte díky mé práci skutečně dobrou náladu, malý dar od vás by byl
 </string>
   <string name="wifi_disabled">Wifi je vypnuta. Pokud se chcete spojit s Clementine přes internet, ujistěte se, že jste přípojky (port) odeslali správně a že jste zakázali Použít pouze místní adresu IP.</string>
   <string name="input_auth_code">Ověřovací kód</string>
-  <string name="invalid_code">Neplatný kód</string>
   <string name="done">Hotovo</string>
   <string name="unknown">Neznámý</string>
   <plurals name="number_items">

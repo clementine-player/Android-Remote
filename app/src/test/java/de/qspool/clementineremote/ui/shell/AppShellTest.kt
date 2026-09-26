@@ -36,8 +36,8 @@ class AppShellTest {
     private val done = mutableListOf<String>()
 
     private val actions = object : ShellActions {
-        override fun onDownloadSong() {
-            done += "download"
+        override fun onDownloadSong(what: DownloadWhat) {
+            done += "download $what"
         }
 
         override fun onSwitchClementine() {
@@ -97,11 +97,12 @@ class AppShellTest {
         assertTrue(shell.playerOpen)
         compose.onNodeWithTag("tvTitle").assertTextEquals("Clair de lune")
         compose.onNodeWithTag("btnDownload").performClick()
+        compose.onNodeWithTag("downloadAlbum").performClick()
         compose.onNodeWithTag("btnQueue").performClick()
         compose.waitForIdle()
 
         assertFalse(shell.playerOpen)
-        assertEquals(listOf("download"), done)
+        assertEquals(listOf("download ALBUM"), done)
     }
 
     @Test
