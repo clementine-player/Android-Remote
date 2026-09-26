@@ -57,6 +57,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -119,12 +120,15 @@ internal fun ConnectContent(
         if (maxWidth > maxHeight) {
             // Landscape: the header down the left, the rest beside it.
             Row(Modifier.fillMaxSize()) {
-                Header(actions::onSettings, fill = true, Modifier.weight(1f).fillMaxHeight())
+                Header(actions::onSettings, fill = true, iconSize = 168.dp, Modifier.weight(1f).fillMaxHeight())
                 body(Modifier.weight(1f).fillMaxHeight().verticalScroll(rememberScrollState()).statusBarsPadding())
             }
         } else {
+            // Clementine as large as the redesign has it on a tall phone, smaller on a short one, so
+            // the rest still fits without scrolling.
+            val iconSize = (maxHeight - SPACE_BELOW_ICON).coerceIn(96.dp, 168.dp)
             Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
-                Header(actions::onSettings, fill = false, Modifier.fillMaxWidth())
+                Header(actions::onSettings, fill = false, iconSize, Modifier.fillMaxWidth())
                 body(Modifier.fillMaxWidth())
             }
         }
@@ -132,7 +136,7 @@ internal fun ConnectContent(
 }
 
 @Composable
-private fun Header(onSettings: () -> Unit, fill: Boolean, modifier: Modifier) {
+private fun Header(onSettings: () -> Unit, fill: Boolean, iconSize: Dp, modifier: Modifier) {
     Column(
         modifier
             .background(ClementineBrand.gradient)
@@ -156,7 +160,7 @@ private fun Header(onSettings: () -> Unit, fill: Boolean, modifier: Modifier) {
         Image(
             painterResource(R.drawable.icon_large),
             contentDescription = null,
-            modifier = Modifier.size(168.dp),
+            modifier = Modifier.size(iconSize),
         )
         Text(
             stringResource(R.string.app_name),
@@ -394,3 +398,6 @@ private fun Connecting(@StringRes progress: Int, onCancel: () -> Unit) {
         }
     }
 }
+
+/** About what the rest of the screen needs in portrait, with the system bars. */
+private val SPACE_BELOW_ICON = 640.dp
