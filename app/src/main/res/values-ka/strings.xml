@@ -60,11 +60,9 @@
   <string name="donate_try_again">დონაციის დამუშავება, კიდევ სცადეთ</string>
   <string name="donate_not_available">Google Play მიუწვდომელია</string>
   <string name="donate_not_available_text">გთხოვთ შეამოწმოთ თუ გაქვთ Google Play Store-ის ბოლო ვერსია და კიდევ სცადოთ!</string>
-  <string name="pref_cat_behavior">ქცევა</string>
   <string name="pref_cat_player">დამკვრელი</string>
   <string name="pref_cat_downloads">ჩამოტვირთვები</string>
   <string name="pref_cat_connection">კავშირი</string>
-  <string name="pref_cat_info">ინფორმაცია</string>
   <string name="pref_volume_title">ხმის ღილაკების გამოყენებით</string>
   <string name="pref_volume_summary">Clementine ხმის დონის მართვისთვის ტელეფონის ხმის ღილაკების გამოყენება.</string>
   <string name="pref_trackno_title">ჩანაწერის ნომრის ჩვენება</string>
@@ -76,7 +74,6 @@
   <string name="pref_call_volume_summary">ზარის ხმის მიმდინარე დონე: %s</string>
   <string name="pref_port_title">პორტი</string>
   <string name="pref_port_summary">მიმდინარე პორტი:</string>
-  <string name="pref_port_default">5500</string>
   <string name="pref_port_error">პორტი არასწორია!</string>
   <string name="pref_version_summary">პროექტის ვებგვერდზე გადასასვლელად დაწკაპეთ</string>
   <string name="pref_version_title">ვერსია</string>

@@ -252,8 +252,13 @@ public class StoreScreenshots {
         waitFor(tag("btnSwitch"));
         SystemClock.sleep(SETTLE_MILLIS);
         screenshot("5_connection");
-        mDevice.pressBack();
+        // The settings, from the sheet; for pull requests, not the store listing.
+        mDevice.findObject(tag("btnSettings")).click();
+        waitFor(tag("settingsList"));
         SystemClock.sleep(SETTLE_MILLIS);
+        screenshot("settings");
+        mDevice.pressBack();
+        waitFor(tag("navQueue"));
 
         navigateTo("navLibrary");
         // The library is downloaded from Clementine on request.
@@ -301,6 +306,13 @@ public class StoreScreenshots {
         openPlayer();
         screenshot("dark_1_player");
         closePlayer();
+
+        waitFor(tag("connectionChip")).click();
+        waitFor(tag("btnSettings")).click();
+        waitFor(tag("settingsList"));
+        SystemClock.sleep(SETTLE_MILLIS);
+        screenshot("dark_settings");
+        mDevice.pressBack();
 
         waitFor(tag("connectionChip")).click();
         waitFor(tag("btnSwitch"));

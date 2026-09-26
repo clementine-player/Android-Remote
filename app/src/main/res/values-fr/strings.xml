@@ -89,16 +89,12 @@
   <string name="donate_try_again">Traitement de la dernière donation, essayez encore</string>
   <string name="donate_not_available">Google Play indisponible</string>
   <string name="donate_not_available_text">Merci de vérifier que vous avez bien installé la dernière version de Clementine sur le Google Play Store, et essayez encore !</string>
-  <string name="pref_cat_behavior">Comportement</string>
   <string name="pref_cat_player">Lecteur</string>
   <string name="pref_cat_library">Bibliothèque</string>
   <string name="pref_cat_downloads">Téléchargements</string>
   <string name="pref_cat_advanced">Avancés</string>
-  <string name="pref_cat_network">Réseau</string>
   <string name="pref_cat_connection">Connexion</string>
-  <string name="pref_cat_info">Information</string>
   <string name="pref_cat_about">À propos</string>
-  <string name="pref_cat_license">Licences</string>
   <string name="pref_volume_title">Utiliser les touches de volume</string>
   <string name="pref_volume_summary">Utiliser les touches de volume pour contrôler le volume de Clementine.</string>
   <string name="pref_trackno_title">Afficher le numéro de la piste</string>
@@ -131,7 +127,6 @@
   <string name="pref_autoconnect_summary">Connexion automatique à Clementine au démarrage de l\'application.</string>
   <string name="pref_port_title">Port</string>
   <string name="pref_port_summary">Port actuel : </string>
-  <string name="pref_port_default">5500</string>
   <string name="pref_port_error">Port invalide !</string>
   <string name="pref_wake_lock_title">CPU toujours actif</string>
   <string name="pref_wake_lock_summary">A activer si l\'application se déconnecte de façon aléatoire lorsqu\'elle est en arrière-plan. Peut décharger la batterie plus rapidement.</string>

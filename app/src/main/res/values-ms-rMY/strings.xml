@@ -76,16 +76,12 @@
   <string name="donate_try_again">Memproses derma terakhir, cuba lagi</string>
   <string name="donate_not_available">Google Play tidak tersedia</string>
   <string name="donate_not_available_text">Sila semak jika anda sudah memasang versi Gedung Play Google terkini dan cuba lagi!</string>
-  <string name="pref_cat_behavior">Kelakuan</string>
   <string name="pref_cat_player">Pemain</string>
   <string name="pref_cat_library">Pustaka</string>
   <string name="pref_cat_downloads">Muat turun</string>
   <string name="pref_cat_advanced">Lanjutan</string>
-  <string name="pref_cat_network">Rangkaian</string>
   <string name="pref_cat_connection">Sambungan</string>
-  <string name="pref_cat_info">Maklumat</string>
   <string name="pref_cat_about">Perihal</string>
-  <string name="pref_cat_license">Lesen</string>
   <string name="pref_volume_title">Guna Kekunci Volum</string>
   <string name="pref_volume_summary">Guna kekunci volum untuk mengawal volum Clementine.</string>
   <string name="pref_trackno_title">Tunjuk nombor trek</string>
@@ -118,7 +114,6 @@
   <string name="pref_autoconnect_summary">Sambung secara automatik ke Clementine bila memulakan jauh.</string>
   <string name="pref_port_title">Port</string>
   <string name="pref_port_summary">Port Semasa:</string>
-  <string name="pref_port_default">5500</string>
   <string name="pref_port_error">Port Haram!</string>
   <string name="pref_wake_lock_title">CPU kekal hidup</string>
   <string name="pref_wake_lock_summary">Benarkan jika Apl terputus secara rawak bila berada disebalik tabir. Mungkin menyebabkan kuasa bateri cepat habis.</string>

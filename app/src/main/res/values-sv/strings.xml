@@ -89,16 +89,12 @@
   <string name="donate_try_again">Behandlar senaste donation, försök igen</string>
   <string name="donate_not_available">Google Play ej tillgängligt</string>
   <string name="donate_not_available_text">Var god och kontrollera att du har senaste versionen av Google Play Store installerat och försök igen!</string>
-  <string name="pref_cat_behavior">Uppförande</string>
   <string name="pref_cat_player">Spelare</string>
   <string name="pref_cat_library">Bibliotek</string>
   <string name="pref_cat_downloads">Nedladdningar</string>
   <string name="pref_cat_advanced">Avancerad</string>
-  <string name="pref_cat_network">Nätverk</string>
   <string name="pref_cat_connection">Anslutning</string>
-  <string name="pref_cat_info">Information</string>
   <string name="pref_cat_about">Om</string>
-  <string name="pref_cat_license">Licenser</string>
   <string name="pref_volume_title">Använd volymknappar</string>
   <string name="pref_volume_summary">Använd volymknapparna för att justera volymen på Clementine.</string>
   <string name="pref_trackno_title">Visa låtnummer</string>
@@ -132,7 +128,6 @@
     </string>
   <string name="pref_port_title">Port</string>
   <string name="pref_port_summary">Nuvarande port:</string>
-  <string name="pref_port_default">5500</string>
   <string name="pref_port_error">Olaglig Port!</string>
   <string name="pref_wake_lock_title">Håll processorn vaken</string>
   <string name="pref_wake_lock_summary">Aktivera om Appen kopplar ur sig när den körs i bakgrunden. Kan dra mera ström.

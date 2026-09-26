@@ -89,16 +89,12 @@
   <string name="donate_try_again">Legutóbbi adomány feldolgozása, próbálja újra</string>
   <string name="donate_not_available">A Google Play nem elérhető</string>
   <string name="donate_not_available_text">Kérem ellenőrizze, hogy a legfrissebb Google Play telepítve van-e, majd próbálja újra!</string>
-  <string name="pref_cat_behavior">Viselkedés</string>
   <string name="pref_cat_player">Lejátszó</string>
   <string name="pref_cat_library">Zenetár</string>
   <string name="pref_cat_downloads">Letöltések</string>
   <string name="pref_cat_advanced">Haladó</string>
-  <string name="pref_cat_network">Hálózat</string>
   <string name="pref_cat_connection">Kapcsolódás</string>
-  <string name="pref_cat_info">Információk</string>
   <string name="pref_cat_about">Névjegy</string>
-  <string name="pref_cat_license">Licencek</string>
   <string name="pref_volume_title">Hangerőgombok használata</string>
   <string name="pref_volume_summary">A hangerőgombok használata a Clementine hangerejének állítására.</string>
   <string name="pref_trackno_title">Sorszám megjelenítése</string>
@@ -132,7 +128,6 @@
 </string>
   <string name="pref_port_title">Port</string>
   <string name="pref_port_summary">Jelenlegi port:</string>
-  <string name="pref_port_default">5500</string>
   <string name="pref_port_error">Érvénytelen port!</string>
   <string name="pref_wake_lock_title">CPU ébren tartása</string>
   <string name="pref_wake_lock_summary">Kapcsolja be, ha az app véletlenszerűen bontja a kapcsolatot a háttérben. Ez hamarabb lemerítheti az akkumulátort.</string>

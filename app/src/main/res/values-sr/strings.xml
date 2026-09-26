@@ -91,16 +91,12 @@
   <string name="donate_try_again">Обрађујем претходну донацију, покушајте поново</string>
   <string name="donate_not_available">Гуглов Плеј није доступан</string>
   <string name="donate_not_available_text">Проверите да ли имате инсталирано најновије издање Гуглове Плеј продавнице и покушајте поново!</string>
-  <string name="pref_cat_behavior">Понашање</string>
   <string name="pref_cat_player">Плејер</string>
   <string name="pref_cat_library">Библиотека</string>
   <string name="pref_cat_downloads">Преузимања</string>
   <string name="pref_cat_advanced">Напредно</string>
-  <string name="pref_cat_network">Мрежа</string>
   <string name="pref_cat_connection">Веза</string>
-  <string name="pref_cat_info">Подаци</string>
   <string name="pref_cat_about">О програму</string>
-  <string name="pref_cat_license">Лиценце</string>
   <string name="pref_volume_title">Користи тастере за јачину звука</string>
   <string name="pref_volume_summary">Тастеро за јачину звука контролишу јачину звука Клементине.</string>
   <string name="pref_trackno_title">Прикажи број нумере</string>
@@ -133,7 +129,6 @@
   <string name="pref_autoconnect_summary">Аутоматски се повежи са Клементином по покретању даљинског.</string>
   <string name="pref_port_title">Порт</string>
   <string name="pref_port_summary">Порт:</string>
-  <string name="pref_port_default">5500</string>
   <string name="pref_port_error">Неисправан порт!</string>
   <string name="pref_wake_lock_title">Држи процесор будним</string>
   <string name="pref_wake_lock_summary">Омогућите ако апликација насумично губи везу када ради у позадини. Може брже да исцрпи батерију.</string>

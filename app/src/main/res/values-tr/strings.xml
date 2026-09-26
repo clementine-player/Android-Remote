@@ -87,16 +87,12 @@
   <string name="donate_try_again">Son bağış işleniyor, yeniden deneyin</string>
   <string name="donate_not_available">Google Play kullanılamıyor</string>
   <string name="donate_not_available_text">Lütfen Google Play\'in en son sürümünün kurulu olduğunu denetleyin ve yeniden deneyin!</string>
-  <string name="pref_cat_behavior">Davranış</string>
   <string name="pref_cat_player">Oynatıcı</string>
   <string name="pref_cat_library">Kütüphane</string>
   <string name="pref_cat_downloads">İndirmeler</string>
   <string name="pref_cat_advanced">Gelişmiş</string>
-  <string name="pref_cat_network">Ağ</string>
   <string name="pref_cat_connection">Bağlantı</string>
-  <string name="pref_cat_info">Bilgi</string>
   <string name="pref_cat_about">Hakkında</string>
-  <string name="pref_cat_license">Lisanslar</string>
   <string name="pref_volume_title">Ses Tuşlarını Kullan</string>
   <string name="pref_volume_summary">Clementine sesini denetlemek için ses tuşlarını kullan.</string>
   <string name="pref_trackno_title">Parça numarasını göster</string>
@@ -130,7 +126,6 @@
     </string>
   <string name="pref_port_title">Bağlantı Noktası</string>
   <string name="pref_port_summary">Geçerli Bağlantı Noktası:</string>
-  <string name="pref_port_default">5500</string>
   <string name="pref_port_error">Geçersiz Bağlantı Noktası!</string>
   <string name="pref_wake_lock_title">İşlemciyi canlı tut</string>
   <string name="pref_wake_lock_summary">Uygulama arkaplanda çalışırken bağlantı kesiliyorsa etkinleştirin. Pili hızlı bitirebilir.</string>

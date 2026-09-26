@@ -91,16 +91,12 @@
   <string name="donate_try_again">Obrada posljednje donacije, pokušajte ponovno</string>
   <string name="donate_not_available">Google trgovina nije dostupna</string>
   <string name="donate_not_available_text">Provjerite imate li instaliranu najnoviju inačicu Google Play trgovine i pokušajte ponovno!</string>
-  <string name="pref_cat_behavior">Ponašanje</string>
   <string name="pref_cat_player">Reproduktor</string>
   <string name="pref_cat_library">Fonoteka</string>
   <string name="pref_cat_downloads">Preuzimanja</string>
   <string name="pref_cat_advanced">Napredno</string>
-  <string name="pref_cat_network">Mreža</string>
   <string name="pref_cat_connection">Povezivanje</string>
-  <string name="pref_cat_info">Informacije</string>
   <string name="pref_cat_about">O aplikaciji</string>
-  <string name="pref_cat_license">Licenca</string>
   <string name="pref_volume_title">Koristi tipke glasnoće zvuka</string>
   <string name="pref_volume_summary">Koristi tipke glasnoće zvuka za upravljanje glasnoćom zvuka na Clementinu.</string>
   <string name="pref_trackno_title">Prikaži broj pjesme</string>
@@ -134,7 +130,6 @@
     </string>
   <string name="pref_port_title">Ulaz</string>
   <string name="pref_port_summary">Trenutni ulaz:</string>
-  <string name="pref_port_default">5500</string>
   <string name="pref_port_error">Nedopušten ulaz!</string>
   <string name="pref_wake_lock_title">Drži CPU aktivnim</string>
   <string name="pref_wake_lock_summary">Omogućite ako se aplikacija slučajno odspaja. Može brže prazniti bateriju.

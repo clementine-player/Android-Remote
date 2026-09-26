@@ -77,16 +77,12 @@
   <string name="donate_try_again">Επεξεργασία της τελευταίας δωρεας, δοκιμάστε ξανά</string>
   <string name="donate_not_available">Το Google Play δεν είναι διαθέσιμο</string>
   <string name="donate_not_available_text">Παρακαλώ ελέγξτε αν έχετε εγκαταστήσει την πιο πρόσφατη έκδοση του Google Play Store και δοκιμάστε ξανά!</string>
-  <string name="pref_cat_behavior">Συμπεριφορά</string>
   <string name="pref_cat_player">Player</string>
   <string name="pref_cat_library">Βιβλιοθήκη</string>
   <string name="pref_cat_downloads">Λήψεις</string>
   <string name="pref_cat_advanced">Προχωρημένα</string>
-  <string name="pref_cat_network">Δίκτυο</string>
   <string name="pref_cat_connection">Σύνδεση</string>
-  <string name="pref_cat_info">Πληροφορίες</string>
   <string name="pref_cat_about">Σχετικά με</string>
-  <string name="pref_cat_license">Αδειες</string>
   <string name="pref_volume_title">Χρηση των πλήκτρων Έντασης</string>
   <string name="pref_volume_summary">Χρηση των πλήκτρων έντασης για να ελέγξετε την ένταση του Clementine.</string>
   <string name="pref_trackno_title">Εμφάνιση αριθμού τραγουδιου</string>
@@ -107,7 +103,6 @@
   <string name="pref_autoconnect_summary">Αυτόματη σύνδεση με το Clementine κατά την εκκίνηση του τηλεχειριστηρίου.</string>
   <string name="pref_port_title">Θυρα</string>
   <string name="pref_port_summary">Τρεχον θυρα:</string>
-  <string name="pref_port_default">5500</string>
   <string name="pref_port_error">Παρανομη θυρα!</string>
   <string name="pref_wake_lock_title">Διατηρήση ζωντανή την CPU</string>
   <string name="pref_wake_lock_summary">Ενεργοποίηση αν η εφαρμογη αποσυνδέεται τυχαία στο παρασκήνιο. Μπορεί να αδειάσει η μπαταρία γρηγορότερα.</string>

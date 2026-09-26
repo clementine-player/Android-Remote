@@ -93,16 +93,12 @@ Pokud máte díky mé práci skutečně dobrou náladu, malý dar od vás by byl
   <string name="donate_try_again">Zpracovává se poslední dar. Zkuste to ještě jednou</string>
   <string name="donate_not_available">Google Play je nedostupná</string>
   <string name="donate_not_available_text">Prověřte, prosím, zda máte nainstalovánu nejnovější verzi Google Play Store a zkuste to znovu!</string>
-  <string name="pref_cat_behavior">Chování</string>
   <string name="pref_cat_player">Přehrávač</string>
   <string name="pref_cat_library">Sbírka</string>
   <string name="pref_cat_downloads">Stahování</string>
   <string name="pref_cat_advanced">Pokročilé</string>
-  <string name="pref_cat_network">Síť</string>
   <string name="pref_cat_connection">Připojení</string>
-  <string name="pref_cat_info">Informace</string>
   <string name="pref_cat_about">O programu</string>
-  <string name="pref_cat_license">Licence</string>
   <string name="pref_volume_title">Použít klávesy pro ovládání hlasitosti</string>
   <string name="pref_volume_summary">Použít klávesy pro ovládání hlasitosti Clementine.</string>
   <string name="pref_trackno_title">Ukázat číslo skladby</string>
@@ -136,7 +132,6 @@ Pokud máte díky mé práci skutečně dobrou náladu, malý dar od vás by byl
     </string>
   <string name="pref_port_title">Přípojka (port)</string>
   <string name="pref_port_summary">Nynější přípojka</string>
-  <string name="pref_port_default">5500</string>
   <string name="pref_port_error">Neplatná přípojka (port)</string>
   <string name="pref_wake_lock_title">Ponechat procesor naživu</string>
   <string name="pref_wake_lock_summary">Povolit, pokud se program odpojí náhodně, když je na pozadí. Může vést k rychlejšímu vyčerpání baterie.

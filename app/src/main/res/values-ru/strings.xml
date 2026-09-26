@@ -93,16 +93,12 @@
   <string name="donate_try_again">Обработка предыдущего пожертвования, попробуйте снова</string>
   <string name="donate_not_available">Google Play не доступен</string>
   <string name="donate_not_available_text">Пожалуйста, убедитесь, что вы установили последнюю версию из магазина Google Play, и попробуйте снова!</string>
-  <string name="pref_cat_behavior">Поведение</string>
   <string name="pref_cat_player">Плеер</string>
   <string name="pref_cat_library">Фонотека</string>
   <string name="pref_cat_downloads">Загрузки</string>
   <string name="pref_cat_advanced">Дополнительно</string>
-  <string name="pref_cat_network">Сеть</string>
   <string name="pref_cat_connection">Подключение</string>
-  <string name="pref_cat_info">Информация</string>
   <string name="pref_cat_about">О программе</string>
-  <string name="pref_cat_license">Лицензии</string>
   <string name="pref_volume_title">Использовать кнопки громкости</string>
   <string name="pref_volume_summary">Использовать кнопки громкости для контроля громкости Clementine.</string>
   <string name="pref_trackno_title">Показывать номер трека</string>
@@ -136,7 +132,6 @@
     </string>
   <string name="pref_port_title">Порт</string>
   <string name="pref_port_summary">Текущий порт:</string>
-  <string name="pref_port_default">5500</string>
   <string name="pref_port_error">Неверный порт!</string>
   <string name="pref_wake_lock_title">Держать CPU включённым</string>
   <string name="pref_wake_lock_summary">Включите если приложения постоянно отсоединяется при работе в фоне. Может вызвать больший расход батареи.
