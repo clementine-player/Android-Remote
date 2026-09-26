@@ -2,6 +2,7 @@ package de.qspool.clementineremote.backend.mediasession;
 
 import android.os.Looper;
 
+import androidx.media3.common.DeviceInfo;
 import androidx.media3.common.Player;
 
 import org.junit.After;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
@@ -55,6 +57,7 @@ public class ClementinePlayerTest {
     public void tearDown() {
         mPlayer.release();
         App.Clementine = new Clementine();
+        App.getPreferences().edit().clear().commit();
     }
 
     private static void idle() {
@@ -150,5 +153,58 @@ public class ClementinePlayerTest {
 
         assertEquals(MsgType.RATE_SONG, lastSent());
         assertEquals(0.8f, mSent.get(0).getMessage().getRequestRateSong().getRating(), 0.001f);
+    }
+
+    private int lastVolume() {
+        return mSent.get(mSent.size() - 1).getMessage().getRequestSetVolume().getVolume();
+    }
+
+    @Test
+    public void clementinesVolumeIsARemoteDevices() {
+        App.Clementine.setVolume(64);
+        mPlayer.invalidate();
+        idle();
+
+        assertEquals(DeviceInfo.PLAYBACK_TYPE_REMOTE, mPlayer.getDeviceInfo().playbackType);
+        assertEquals(0, mPlayer.getDeviceInfo().minVolume);
+        assertEquals(100, mPlayer.getDeviceInfo().maxVolume);
+        assertEquals(64, mPlayer.getDeviceVolume());
+        assertTrue(mPlayer.isCommandAvailable(Player.COMMAND_SET_DEVICE_VOLUME_WITH_FLAGS));
+        assertTrue(mPlayer.isCommandAvailable(Player.COMMAND_ADJUST_DEVICE_VOLUME_WITH_FLAGS));
+    }
+
+    @Test
+    public void volumeKeysStepClementinesVolume() {
+        App.getPreferences().edit().putString(SharedPreferencesKeys.SP_VOLUME_INC, "5").commit();
+        App.Clementine.setVolume(50);
+        mPlayer.invalidate();
+        idle();
+
+        mPlayer.increaseDeviceVolume(0);
+        idle();
+        assertEquals(MsgType.SET_VOLUME, lastSent());
+        assertEquals(55, lastVolume());
+        // Shown at once, before Clementine confirms it.
+        assertEquals(55, mPlayer.getDeviceVolume());
+
+        mPlayer.decreaseDeviceVolume(0);
+        mPlayer.decreaseDeviceVolume(0);
+        idle();
+        assertEquals(45, lastVolume());
+
+        mPlayer.setDeviceVolume(120, 0);
+        idle();
+        assertEquals(100, lastVolume());
+    }
+
+    @Test
+    public void withoutVolumeKeysTheVolumeIsThePhones() {
+        App.getPreferences().edit().putBoolean(SharedPreferencesKeys.SP_KEY_USE_VOLUMEKEYS, false).commit();
+        mPlayer.invalidate();
+        idle();
+
+        assertEquals(DeviceInfo.PLAYBACK_TYPE_LOCAL, mPlayer.getDeviceInfo().playbackType);
+        assertFalse(mPlayer.isCommandAvailable(Player.COMMAND_SET_DEVICE_VOLUME_WITH_FLAGS));
+        assertFalse(mPlayer.isCommandAvailable(Player.COMMAND_ADJUST_DEVICE_VOLUME_WITH_FLAGS));
     }
 }

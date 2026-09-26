@@ -23,6 +23,7 @@ import android.os.Message;
 import androidx.annotation.OptIn;
 import androidx.annotation.VisibleForTesting;
 import androidx.media3.common.C;
+import androidx.media3.common.DeviceInfo;
 import androidx.media3.common.ForwardingPlayer;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.MediaMetadata;
@@ -36,7 +37,9 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.Clementine;
+import de.qspool.clementineremote.backend.RemoteRepository;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
@@ -59,6 +62,16 @@ public class ClementinePlayer extends SimpleBasePlayer {
         void send(ClementineMessage message);
     }
 
+    /**
+     * Clementine plays on another computer, so its volume is a remote device's: Android's volume
+     * keys and volume panel set it, through the media session, rather than the phone's.
+     */
+    private static final DeviceInfo DEVICE_INFO =
+            new DeviceInfo.Builder(DeviceInfo.PLAYBACK_TYPE_REMOTE)
+                    .setMinVolume(0)
+                    .setMaxVolume(100)
+                    .build();
+
     private static final Commands COMMANDS_WITHOUT_SONG = new Commands.Builder()
             .addAll(COMMAND_PLAY_PAUSE, COMMAND_STOP, COMMAND_SEEK_TO_NEXT,
                     COMMAND_SEEK_TO_PREVIOUS, COMMAND_GET_TIMELINE, COMMAND_GET_METADATA,
@@ -67,6 +80,11 @@ public class ClementinePlayer extends SimpleBasePlayer {
 
     private static final Commands COMMANDS = COMMANDS_WITHOUT_SONG.buildUpon()
             .add(COMMAND_GET_CURRENT_MEDIA_ITEM)
+            .build();
+
+    private static final Commands VOLUME_COMMANDS = new Commands.Builder()
+            .addAll(COMMAND_GET_DEVICE_VOLUME, COMMAND_SET_DEVICE_VOLUME_WITH_FLAGS,
+                    COMMAND_ADJUST_DEVICE_VOLUME_WITH_FLAGS)
             .build();
 
     private final Sender mSender;
@@ -115,12 +133,16 @@ public class ClementinePlayer extends SimpleBasePlayer {
         Clementine clementine = App.Clementine;
         MySong song = clementine.getCurrentSong();
         boolean playing = clementine.getState() == Clementine.State.PLAY;
+        if (usesVolumeKeys()) {
+            state.setDeviceInfo(DEVICE_INFO)
+                    .setDeviceVolume(Math.max(0, Math.min(100, clementine.getVolume())));
+        }
         state.setPlayWhenReady(playing, PLAY_WHEN_READY_CHANGE_REASON_REMOTE)
                 .setRepeatMode(repeatMode(clementine.getRepeatMode()))
                 .setShuffleModeEnabled(clementine.getShuffleMode() != Clementine.ShuffleMode.OFF);
 
         if (song == null) {
-            return state.setAvailableCommands(COMMANDS_WITHOUT_SONG)
+            return state.setAvailableCommands(withVolume(COMMANDS_WITHOUT_SONG))
                     .setPlaybackState(STATE_IDLE)
                     .build();
         }
@@ -130,7 +152,7 @@ public class ClementinePlayer extends SimpleBasePlayer {
             commands.add(COMMAND_SEEK_IN_CURRENT_MEDIA_ITEM);
         }
         long positionMs = clementine.getSongPosition() * 1000L;
-        return state.setAvailableCommands(commands.build())
+        return state.setAvailableCommands(withVolume(commands.build()))
                 .setPlaybackState(clementine.getState() == Clementine.State.STOP
                         ? STATE_IDLE : STATE_READY)
                 .setPlaylist(ImmutableList.of(mediaItem(song)))
@@ -139,6 +161,21 @@ public class ClementinePlayer extends SimpleBasePlayer {
                         ? PositionSupplier.getExtrapolating(positionMs, 1f)
                         : PositionSupplier.getConstant(positionMs))
                 .build();
+    }
+
+    /** The commands, and setting the volume if the volume keys are to set it. */
+    private static Commands withVolume(Commands commands) {
+        return usesVolumeKeys()
+                ? commands.buildUpon().addAll(VOLUME_COMMANDS).build()
+                : commands;
+    }
+
+    /**
+     * Whether the volume keys set Clementine's volume, as the settings say. If not, the media
+     * session is a local one, and the keys set the phone's volume.
+     */
+    private static boolean usesVolumeKeys() {
+        return App.getPreferences().getBoolean(SharedPreferencesKeys.SP_KEY_USE_VOLUMEKEYS, true);
     }
 
     private static MediaItemData mediaItem(MySong song) {
@@ -232,6 +269,40 @@ public class ClementinePlayer extends SimpleBasePlayer {
         App.Clementine.setShuffleMode(shuffleModeEnabled
                 ? Clementine.ShuffleMode.ALL : Clementine.ShuffleMode.OFF);
         return send(ClementineMessageFactory.buildShuffle());
+    }
+
+    @Override
+    protected ListenableFuture<?> handleSetDeviceVolume(int deviceVolume, int flags) {
+        return setVolume(deviceVolume);
+    }
+
+    @Override
+    protected ListenableFuture<?> handleIncreaseDeviceVolume(int flags) {
+        return setVolume(App.Clementine.getVolume() + volumeStep());
+    }
+
+    @Override
+    protected ListenableFuture<?> handleDecreaseDeviceVolume(int flags) {
+        return setVolume(App.Clementine.getVolume() - volumeStep());
+    }
+
+    /** Sets Clementine's volume, shown at once rather than when Clementine confirms it. */
+    private ListenableFuture<?> setVolume(int percent) {
+        int volume = Math.max(0, Math.min(100, percent));
+        App.Clementine.setVolume(volume);
+        RemoteRepository.refresh();
+        return send(ClementineMessageFactory.buildVolumeMessage(volume));
+    }
+
+    /** How much a press of a volume key changes the volume, as the settings say. */
+    private static int volumeStep() {
+        String step = App.getPreferences().getString(SharedPreferencesKeys.SP_VOLUME_INC,
+                Clementine.DefaultVolumeInc);
+        try {
+            return Integer.parseInt(step);
+        } catch (NumberFormatException e) {
+            return Integer.parseInt(Clementine.DefaultVolumeInc);
+        }
     }
 
     /** Rates the current song, from 0 to 5 stars. */

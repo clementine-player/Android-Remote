@@ -3,7 +3,9 @@ package de.qspool.clementineremote;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.SystemClock;
+import android.view.KeyEvent;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.SdkSuppress;
@@ -27,16 +29,20 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 import de.qspool.clementineremote.backend.Clementine;
+import de.qspool.clementineremote.backend.RemoteRepository;
+import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.ui.ConnectActivity;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeNotNull;
 
 /**
  * The media session against a real Clementine: once connected, Android knows the session and
- * its song, and the system's media controls (in the notification shade) drive Clementine.
+ * its song, the system's media controls (in the notification shade) drive Clementine, and the
+ * volume keys set Clementine's volume, in the app and out of it.
  * Runs only when given the Clementine host, as .github/workflows/store-screenshots.yml does.
  */
 @RunWith(AndroidJUnit4.class)
@@ -94,14 +100,14 @@ public class MediaSessionDeviceTest {
 
         mContext.startActivity(new Intent(mContext, ConnectActivity.class)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-        // Already connected when another test connected first: the player shows straight away.
+        // Already connected when another test connected first: the app shows straight away.
         UiObject2 connect = mDevice.wait(
                 Until.findObject(By.res("btnConnect")), 10_000);
         if (connect != null) {
             connect.click();
         }
         assertNotNull("Not connected", mDevice.wait(
-                Until.findObject(By.res("btnPlaypause")), TIMEOUT));
+                Until.findObject(By.res("navQueue")), TIMEOUT));
     }
 
     @After
@@ -137,6 +143,22 @@ public class MediaSessionDeviceTest {
         return App.Clementine.getState() == state;
     }
 
+    /** Plays, with the mini player's button, unless Clementine is playing already. */
+    private void play() {
+        if (App.Clementine.getState() != Clementine.State.PLAY) {
+            mDevice.wait(Until.findObject(By.res("miniPlayPause")), TIMEOUT).click();
+            assertTrue("Clementine didn't start playing", waitForState(Clementine.State.PLAY));
+        }
+    }
+
+    private boolean waitForVolume(int volume) {
+        long end = SystemClock.uptimeMillis() + TIMEOUT;
+        while (App.Clementine.getVolume() != volume && SystemClock.uptimeMillis() < end) {
+            SystemClock.sleep(200);
+        }
+        return App.Clementine.getVolume() == volume;
+    }
+
     @Test
     public void androidKnowsTheSessionAndSong() {
         MySong song = waitForSong();
@@ -157,10 +179,7 @@ public class MediaSessionDeviceTest {
     public void systemMediaControlsDriveClementine() {
         MySong song = waitForSong();
         // Start from playing, so the controls offer Pause.
-        if (App.Clementine.getState() != Clementine.State.PLAY) {
-            mDevice.findObject(By.res("btnPlaypause")).click();
-            assertTrue("Clementine didn't start playing", waitForState(Clementine.State.PLAY));
-        }
+        play();
 
         mDevice.openNotification();
         assertNotNull("No media controls for " + song.getTitle(),
@@ -172,5 +191,33 @@ public class MediaSessionDeviceTest {
 
         mDevice.wait(Until.findObject(By.pkg(SYSTEM_UI).desc("Play")), TIMEOUT).click();
         assertTrue("Clementine didn't resume", waitForState(Clementine.State.PLAY));
+    }
+
+    @Test
+    public void volumeKeysSetClementinesVolume() {
+        waitForSong();
+        // Android hands the volume keys to a playing session.
+        play();
+        int step = Integer.parseInt(App.getPreferences().getString(
+                SharedPreferencesKeys.SP_VOLUME_INC, Clementine.DefaultVolumeInc));
+        RemoteRepository.send(ClementineMessageFactory.buildVolumeMessage(50));
+        assertTrue("Clementine's volume isn't 50", waitForVolume(50));
+        AudioManager audio = mContext.getSystemService(AudioManager.class);
+        int phoneVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
+
+        // In the app.
+        mDevice.pressKeyCode(KeyEvent.KEYCODE_VOLUME_UP);
+        assertTrue("Volume up in the app didn't reach Clementine", waitForVolume(50 + step));
+
+        // Anywhere else: the media session takes them.
+        mDevice.pressHome();
+        SystemClock.sleep(1000);
+        mDevice.pressKeyCode(KeyEvent.KEYCODE_VOLUME_DOWN);
+        assertTrue("Volume down at home didn't reach Clementine", waitForVolume(50));
+
+        assertEquals("The phone's volume changed", phoneVolume,
+                audio.getStreamVolume(AudioManager.STREAM_MUSIC));
+        // Android knows Clementine's volume as a remote one (VOLUME_TYPE_REMOTE).
+        assertTrue("The session's volume isn't remote", mediaSessions().contains("volumeType=2"));
     }
 }

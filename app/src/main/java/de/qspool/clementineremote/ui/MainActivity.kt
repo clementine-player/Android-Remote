@@ -18,6 +18,7 @@
 package de.qspool.clementineremote.ui
 
 import android.content.Intent
+import android.media.session.MediaController
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -42,6 +43,7 @@ import de.qspool.clementineremote.SharedPreferencesKeys
 import de.qspool.clementineremote.backend.Clementine
 import de.qspool.clementineremote.backend.RemoteRepository
 import de.qspool.clementineremote.backend.downloader.DownloadManager
+import de.qspool.clementineremote.backend.mediasession.MediaSessionController
 import de.qspool.clementineremote.backend.mediasession.ClementineMediaSessionNotification
 import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory
@@ -59,7 +61,7 @@ import de.qspool.clementineremote.utils.Utilities
 /**
  * The app while connected to Clementine: the Compose shell ([AppShell]). It follows the
  * connection, and finishes when it ends, back to [ConnectActivity]; the volume keys set
- * Clementine's volume.
+ * Clementine's volume, through the media session.
  */
 class MainActivity : AppCompatActivity(), ShellActions {
 
@@ -137,7 +139,15 @@ class MainActivity : AppCompatActivity(), ShellActions {
         } else {
             connection.setUiHandler(handler)
         }
+
+        // The volume keys set Clementine's volume, if the settings say so: they go to the media
+        // session, and Android shows its volume panel for Clementine.
+        val token = MediaSessionController.getPlatformToken()
+        mediaController = if (token != null && usesVolumeKeys()) MediaController(this, token) else null
     }
+
+    private fun usesVolumeKeys() =
+        App.getPreferences().getBoolean(SharedPreferencesKeys.SP_KEY_USE_VOLUMEKEYS, true)
 
     override fun onPause() {
         super.onPause()
@@ -157,13 +167,10 @@ class MainActivity : AppCompatActivity(), ShellActions {
         }
     }
 
+    /** Without a media session to hand them to, the volume keys set Clementine's volume here. */
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        val preferences = App.getPreferences()
-        if (event.action == KeyEvent.ACTION_DOWN &&
-            preferences.getBoolean(SharedPreferencesKeys.SP_KEY_USE_VOLUMEKEYS, true) &&
-            (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || keyCode == KeyEvent.KEYCODE_VOLUME_UP)
-        ) {
-            val step = preferences.getString(SharedPreferencesKeys.SP_VOLUME_INC, Clementine.DefaultVolumeInc)
+        if (mediaController == null && usesVolumeKeys() && isVolumeKey(keyCode)) {
+            val step = App.getPreferences().getString(SharedPreferencesKeys.SP_VOLUME_INC, Clementine.DefaultVolumeInc)
                 ?.toIntOrNull() ?: Clementine.DefaultVolumeInc.toInt()
             val current = App.Clementine.volume
             val volume = if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) current + step else current - step
@@ -175,13 +182,14 @@ class MainActivity : AppCompatActivity(), ShellActions {
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
-        if (App.getPreferences().getBoolean(SharedPreferencesKeys.SP_KEY_USE_VOLUMEKEYS, true) &&
-            (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || keyCode == KeyEvent.KEYCODE_VOLUME_UP)
-        ) {
+        if (mediaController == null && usesVolumeKeys() && isVolumeKey(keyCode)) {
             return true
         }
         return super.onKeyUp(keyCode, event)
     }
+
+    private fun isVolumeKey(keyCode: Int) =
+        keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || keyCode == KeyEvent.KEYCODE_VOLUME_UP
 
     override fun onSwitchClementine() {
         openConnectScreen = true
