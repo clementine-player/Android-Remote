@@ -73,6 +73,10 @@ public class MediaSessionController {
     @Nullable
     private MediaSession mSession;
 
+    /** The media session while connected, for the app's screens to hand the volume keys to. */
+    @Nullable
+    private static volatile android.media.session.MediaSession.Token sPlatformToken;
+
     /** Set when the connection was lost, so the service's "connection lost" notice stays. */
     private volatile boolean mLostConnection;
 
@@ -133,6 +137,7 @@ public class MediaSessionController {
                     case UPDATE_TRACK_POSITION:
                     case REPEAT:
                     case SHUFFLE:
+                    case SET_VOLUME:
                         mPlayer.invalidate();
                         break;
                     case FIRST_DATA_SENT_COMPLETE:
@@ -168,6 +173,7 @@ public class MediaSessionController {
                         }
                     })
                     .build();
+            sPlatformToken = mSession.getPlatformToken();
         }
         mPlayer.setConnected(true);
     }
@@ -175,12 +181,23 @@ public class MediaSessionController {
     private void stopSession(boolean keepNotification) {
         mPlayer.setConnected(false);
         if (mSession != null) {
+            sPlatformToken = null;
             mSession.release();
             mSession = null;
         }
         if (!keepNotification) {
             mNotification.cancel();
         }
+    }
+
+    /**
+     * The media session while connected to Clementine, as Android's own session token: a screen
+     * given a controller for it ({@code Activity#setMediaController}) sends the volume keys to
+     * Clementine, and Android shows its volume panel for them. Null while not connected.
+     */
+    @Nullable
+    public static android.media.session.MediaSession.Token getPlatformToken() {
+        return sPlatformToken;
     }
 
     private void updateNotification() {
