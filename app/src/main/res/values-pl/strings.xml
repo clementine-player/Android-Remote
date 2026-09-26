@@ -7,10 +7,8 @@
   <string name="connectdialog_download_data">Pobieranie danych.</string>
   <string name="connectdialog_error">Nie można osiągnąć hosta</string>
   <string name="connectdialog_ip_hint">Wprowadź adres IP</string>
-  <string name="connectdialog_services">Clementine</string>
   <string name="player_nosong">Żadna piosenka nie jest w tej chwili odtwarzana</string>
   <string name="player_disconnected">Rozłączono</string>
-  <string name="player_playlist">Lista odtwarzania</string>
   <string name="player_download_playlists">Pobieranie list odtwarzania</string>
   <string name="playler_volume">Poziom głośności</string>
   <string name="player_stop_after_current">Włącz zatrzymywanie po zakończeniu utworu.</string>
@@ -75,14 +73,12 @@
   <string name="song_info_filename">Nazwa pliku</string>
   <string name="song_info_rating">Ocena</string>
   <string name="song_info_rated">Utwór oceniony na $stars$ gwiazdek</string>
-  <string name="connection_connected_to">Połączony z:</string>
   <string name="connection_volume">Poziom głośności</string>
   <string name="connection_version">Wersja Clementine</string>
   <string name="connection_traffic">Ruch w górę / w dół (śr. / sek.)</string>
   <string name="connection_traffic_unsupported">Statystyki nie są dostępne dla tego urządzenia</string>
   <string name="menu_settings">Ustawienia</string>
   <string name="menu_search">Szukaj</string>
-  <string name="menu_love">Ulubione</string>
   <string name="menu_ban">Ignoruj</string>
   <string name="menu_download">Pobierz</string>
   <string name="menu_download_playlist">Pobierz listę odtwarzania</string>
@@ -227,9 +223,6 @@
   <string name="crash_report_title">Ups, coś poszło nie tak!</string>
   <string name="crash_report_message">Poprzednim razem Clementine Remote uległo awarii! To nie powinno się zdażyć! Proszę pomóż mi w ulepszeniu aplikacji i wyślij mi plik z logami. Dzięki!</string>
   <string name="crash_report_send">Wyślij!</string>
-  <string name="fragment_title_player">Odtwarzacz</string>
-  <string name="fragment_title_details">Szczegóły utworu</string>
   <string name="fragment_title_connection">Clementine</string>
   <string name="player_download_what">Co pobrać?</string>
-  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

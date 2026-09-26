@@ -7,10 +7,8 @@
   <string name="connectdialog_download_data">Laddar ner data</string>
   <string name="connectdialog_error">Kunde ej nå värd</string>
   <string name="connectdialog_ip_hint">Ange IP adress</string>
-  <string name="connectdialog_services">Clementines</string>
   <string name="player_nosong">Ingen Låt spelas för tillfället</string>
   <string name="player_disconnected">Ej ansluten</string>
-  <string name="player_playlist">Spellista:</string>
   <string name="player_download_playlists">Laddar ner Spellistor</string>
   <string name="playler_volume">Volym</string>
   <string name="player_stop_after_current">Gör stopp när låten är slut.</string>
@@ -71,14 +69,12 @@
   <string name="song_info_filename">Filnamn</string>
   <string name="song_info_rating">Betyg</string>
   <string name="song_info_rated">Låtbetyg $stjärnor$ stjärnor</string>
-  <string name="connection_connected_to">Ansluten till:</string>
   <string name="connection_volume">Volym</string>
   <string name="connection_version">Clementine version</string>
   <string name="connection_traffic">Trafik Upp / Ned (genomsnitt / sek)</string>
   <string name="connection_traffic_unsupported">Statistik ej tillgängligt på denna enhet</string>
   <string name="menu_settings">Inställningar</string>
   <string name="menu_search">Sök</string>
-  <string name="menu_love">Älska</string>
   <string name="menu_ban">Uteslut</string>
   <string name="menu_download">Ladda ner</string>
   <string name="menu_download_playlist">Ladda ned spellista</string>
@@ -226,8 +222,6 @@
   <string name="crash_report_title">Hoppsan, någonting gick snett!</string>
   <string name="crash_report_message">Clementine kraschade förra gången! Detta skulle ju inte hända! Snälla hjälp mig att förbättra appen och sänd mig loggfilen är du snäll. Tack!</string>
   <string name="crash_report_send">Sänd!</string>
-  <string name="fragment_title_player">Spelare</string>
-  <string name="fragment_title_details">Låtdetaljer</string>
   <string name="fragment_title_connection">Clementine</string>
   <string name="navigation_drawer_clementine_on">Clementine på %s</string>
   <string name="player_download_what">Vad ska nerladdas?</string>
@@ -235,18 +229,5 @@
     <item>Låt</item>
     <item>Album</item>
     <item>Spellista</item>
-  </string-array>
-  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
-  <string-array name="navigation_drawer_items">
-    <item>Sök</item>
-    <item>Spelare</item>
-    <item>Spellistor</item>
-    <item>Bibliotek</item>
-    <item>Nedladdningar</item>
-    <item></item>
-    <item>Inställningar</item>
-    <item>Donera</item>
-    <item></item>
-    <item>Avsluta</item>
   </string-array>
 </resources>

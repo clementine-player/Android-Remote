@@ -7,10 +7,8 @@
   <string name="connectdialog_download_data">Ma\'lumot yuklab olinmoqda</string>
   <string name="connectdialog_error">Xostga ulanib bo\'lmadi</string>
   <string name="connectdialog_ip_hint">IP manzilni kiriting</string>
-  <string name="connectdialog_services">Clementinelar</string>
   <string name="player_nosong">Hozir ijro etadigan qo\'shiq yo\'q</string>
   <string name="player_disconnected">Ajratilgan</string>
-  <string name="player_playlist">Ijro ro\'yxati:</string>
   <string name="player_download_playlists">Ijro ro\'yxati yuklab olinmoqda</string>
   <string name="playler_volume">Ovoz balandligi</string>
   <string name="player_download_lyrics">Qo\'shiq matni yuklab olinmoqda</string>
@@ -42,7 +40,6 @@
   <string name="song_info_rated">Qo\'shiq $stars$ yuklduzcha bilan baholandi</string>
   <string name="menu_settings">Sozlamalar</string>
   <string name="menu_search">Qidirish</string>
-  <string name="menu_love">Sevgi</string>
   <string name="menu_ban">Taqiq</string>
   <string name="menu_download_playlist">Ijro ro\'yxatini yuklab olish</string>
   <string name="pref_cat_behavior">Xulq-atvor</string>
@@ -100,5 +97,4 @@
   <string name="notification_disconnect_keep_alive">Aloqa yo\'qolgan. Qayta ulanish uchun tegining.</string>
   <string name="crash_report_title">Iye, nimadir noto\'g\'ri bo\'ldi!</string>
   <string name="crash_report_send">Yuborish!</string>
-  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

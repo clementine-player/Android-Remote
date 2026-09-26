@@ -9,7 +9,6 @@
     <string name="connectdialog_download_data">Downloading data</string>
     <string name="connectdialog_error">Could not reach host</string>
     <string name="connectdialog_ip_hint">Enter IP address</string>
-    <string name="connectdialog_services">Clementines</string>
     <string name="connect_intro">Pick the Clementine you want to control. It needs to be on the same Wi-Fi as this phone.</string>
     <string name="connect_on_network">On your network</string>
     <string name="connect_search_again">Search again</string>
@@ -23,7 +22,6 @@
 
     <string name="player_nosong">No Song playing right now</string>
     <string name="player_disconnected">Disconnected</string>
-    <string name="player_playlist">Playlist:</string>
     <string name="player_download_playlists">Downloading Playlists</string>
     <string name="playler_volume">Volume</string>
     <string name="player_stop_after_current">Toggle stopping after track finishes.</string>
@@ -64,6 +62,24 @@
     <string name="downloads_finished">Finished</string>
     <string name="downloads_wifi_only">Downloads only run on Wi-Fi.</string>
     <string name="downloads_change">Change</string>
+
+    <!-- The app's shell: navigation, mini player, player and sheets. -->
+    <string name="nav_queue">Queue</string>
+    <string name="shell_open_player">Open player: %s</string>
+    <string name="shell_connected_to">Connected to %s</string>
+    <string name="shell_search_close">Close search</string>
+    <string name="shell_more">More options</string>
+    <string name="player_collapse">Collapse player</string>
+    <string name="player_playing_from">Playing from</string>
+    <string name="player_love">Love on Last.fm</string>
+    <string name="player_details">Lyrics and details</string>
+    <string name="player_download_song">Download song</string>
+    <string name="details_tab">Details</string>
+    <string name="lyrics_tab">Lyrics</string>
+    <string name="connection_connected">Connected</string>
+    <string name="connection_uptime">Connected for</string>
+    <string name="connection_switch">Switch Clementine</string>
+    <string name="connection_switch_summary">Pick another computer on your network</string>
 
     <string name="download_noti_title">Starting download</string>
     <plurals name="download_noti_n_downloads">
@@ -120,7 +136,6 @@
     <string name="song_info_rated">Song rated $stars$ stars</string>
 
 
-    <string name="connection_connected_to">Connected to:</string>
     <string name="connection_volume">Volume</string>
     <string name="connection_version">Clementine version</string>
     <string name="connection_traffic">Traffic Up / Down (avg / sec)</string>
@@ -129,7 +144,6 @@
 
     <string name="menu_settings">Settings</string>
     <string name="menu_search">Search</string>
-    <string name="menu_love">Love</string>
     <string name="menu_ban">Ban</string>
     <string name="menu_download">Download</string>
     <string name="menu_download_playlist">Download playlist</string>
@@ -293,8 +307,6 @@
     <string name="notification_next">Next</string>
     <string name="notification_disconnect_keep_alive">Lost connection. Touch to reconnect.</string>
 
-    <string name="fragment_title_player">Player</string>
-    <string name="fragment_title_details">Song details</string>
     <string name="fragment_title_connection">Clementine</string>
 
     <string name="navigation_drawer_clementine_on">Clementine on %s</string>
@@ -306,16 +318,4 @@
         <item>Playlist</item>
     </string-array>
 
-    <!-- When changing this array, you must also update values/ids.xml navigation_drawer_icons! -->
-    <string-array name="navigation_drawer_items">
-        <item>Search</item>
-        <item>Player</item>
-        <item>Playlists</item>
-        <item>Library</item>
-        <item>Downloads</item>
-        <item />
-        <item>Settings</item>
-        <item />
-        <item>Quit</item>
-    </string-array>
 </resources>

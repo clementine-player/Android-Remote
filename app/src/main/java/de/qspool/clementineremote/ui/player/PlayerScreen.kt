@@ -12,41 +12,35 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Slider
-import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -67,70 +61,29 @@ import de.qspool.clementineremote.backend.RemoteRepository.NowPlaying
 import de.qspool.clementineremote.backend.player.MySong
 import de.qspool.clementineremote.utils.Utilities
 import kotlin.math.roundToInt
-import kotlinx.coroutines.launch
 
-/** The player's pages, in the order of their tabs. */
-internal val PLAYER_PAGES = listOf(
-    R.string.fragment_title_player,
-    R.string.fragment_title_details,
-    R.string.fragment_title_connection,
-)
+/** What the player's buttons do, beyond the transport controls. */
+interface PlayerActions {
+    /** Goes back to the screen the player was opened from. */
+    fun onCollapse()
 
-/**
- * The player: tabs for the player, song details and connection pages, and the controls below
- * them. [onPageChanged] hears which page is shown, starting with the first.
- */
-@Composable
-fun PlayerScreen(
-    onArtClick: () -> Unit,
-    onPageChanged: (Int) -> Unit,
-    viewModel: PlayerViewModel = viewModel(),
-) {
-    val pagerState = rememberPagerState { PLAYER_PAGES.size }
-    val scope = rememberCoroutineScope()
-    val pageChanged by rememberUpdatedState(onPageChanged)
-    LaunchedEffect(pagerState) {
-        snapshotFlow { pagerState.currentPage }.collect { pageChanged(it) }
-    }
-    Column(Modifier.fillMaxSize()) {
-        PrimaryTabRow(selectedTabIndex = pagerState.currentPage, containerColor = Color.Transparent) {
-            PLAYER_PAGES.forEachIndexed { page, title ->
-                Tab(
-                    selected = pagerState.currentPage == page,
-                    onClick = { scope.launch { pagerState.animateScrollToPage(page) } },
-                    text = { Text(stringResource(title), maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                    unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.testTag("tab$page"),
-                )
-            }
-        }
-        HorizontalPager(pagerState, Modifier.weight(1f)) { page ->
-            when (page) {
-                0 -> NowPlaying(onArtClick, viewModel)
-                1 -> SongDetails(viewModel)
-                else -> ConnectionInfo(viewModel)
-            }
-        }
-        PlayerControls(viewModel)
-    }
+    /** Opens the song's details, or its lyrics. */
+    fun onDetails(lyrics: Boolean)
+
+    /** Shows the playlist playing. */
+    fun onQueue()
+
+    /** Downloads the song, its album or its playlist. */
+    fun onDownload()
 }
 
 /**
- * The player page: the artwork, the song and the seek bar. Tapping the artwork asks for the
- * song's lyrics ([onArtClick]).
+ * The player, full screen: where Clementine plays from, the artwork, the song (and loving it on
+ * Last.fm), the seek bar, the controls and the volume, then the song's details and lyrics, the
+ * queue and downloading. Tapping the artwork shows the lyrics.
  */
 @Composable
-fun NowPlaying(onArtClick: () -> Unit, viewModel: PlayerViewModel = viewModel()) {
-    val nowPlaying by viewModel.nowPlaying.collectAsStateWithLifecycle()
-    NowPlayingContent(nowPlaying, onArtClick = onArtClick, onSeek = viewModel::seekTo)
-}
-
-/**
- * The player's controls: shuffle, previous, play/pause, next and repeat. A long press on
- * play/pause toggles stopping after the current song.
- */
-@Composable
-fun PlayerControls(viewModel: PlayerViewModel = viewModel()) {
+fun PlayerScreen(actions: PlayerActions, viewModel: PlayerViewModel = viewModel()) {
     val nowPlaying by viewModel.nowPlaying.collectAsStateWithLifecycle()
     val context = LocalContext.current
     var toast by remember { mutableStateOf<Toast?>(null) }
@@ -139,56 +92,199 @@ fun PlayerControls(viewModel: PlayerViewModel = viewModel()) {
         toast?.cancel()
         toast = Toast.makeText(context, text, Toast.LENGTH_SHORT).apply { show() }
     }
-    PlayerControlsContent(
+    val lastFm = remember { viewModel.lastFm() }
+    PlayerContent(
         nowPlaying,
-        onPlayPause = viewModel::playPause,
-        onStopAfterCurrent = {
-            viewModel.stopAfterCurrent()
-            show(R.string.player_stop_after_current)
+        playingFrom = remember(nowPlaying.song) { viewModel.playingFrom() },
+        lastFm = lastFm,
+        actions = actions,
+        onSeek = viewModel::seekTo,
+        onVolume = viewModel::setVolume,
+        onStop = viewModel::stop,
+        onLove = {
+            viewModel.love()
+            show(R.string.track_loved)
         },
-        onPrevious = viewModel::previous,
-        onNext = viewModel::next,
-        onShuffle = { show(shuffleLabel(viewModel.cycleShuffle())) },
-        onRepeat = { show(repeatLabel(viewModel.cycleRepeat())) },
+        onBan = {
+            viewModel.ban()
+            show(R.string.track_banned)
+        },
+        controls = {
+            PlayerControlsContent(
+                nowPlaying,
+                onPlayPause = viewModel::playPause,
+                onStopAfterCurrent = {
+                    viewModel.stopAfterCurrent()
+                    show(R.string.player_stop_after_current)
+                },
+                onPrevious = viewModel::previous,
+                onNext = viewModel::next,
+                onShuffle = { show(shuffleLabel(viewModel.cycleShuffle())) },
+                onRepeat = { show(repeatLabel(viewModel.cycleRepeat())) },
+            )
+        },
     )
 }
 
 @Composable
-internal fun NowPlayingContent(
+internal fun PlayerContent(
     nowPlaying: NowPlaying,
-    onArtClick: () -> Unit,
+    playingFrom: String?,
+    lastFm: Boolean,
+    actions: PlayerActions,
     onSeek: (Int) -> Unit,
+    onVolume: (Int) -> Unit,
+    onStop: () -> Unit,
+    onLove: () -> Unit,
+    onBan: () -> Unit,
+    controls: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BoxWithConstraints(modifier.fillMaxSize().padding(horizontal = 24.dp, vertical = 16.dp)) {
-        if (maxWidth > maxHeight) {
-            // Landscape: the artwork beside the song.
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(24.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Artwork(
-                    nowPlaying.song, onArtClick,
-                    Modifier.fillMaxHeight().aspectRatio(1f, matchHeightConstraintsFirst = true))
-                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                    SongInfo(nowPlaying.song, TextAlign.Start)
-                    SeekBar(nowPlaying, onSeek)
+    Column(modifier.fillMaxSize().safeDrawingPadding().testTag("player")) {
+        TopRow(playingFrom, lastFm, actions::onCollapse, onStop, onBan)
+        BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
+            val song = nowPlaying.song
+            // The artwork is whatever square is left over, so short screens keep every control.
+            val below: @Composable ColumnScope.() -> Unit = {
+                Row(
+                    Modifier.fillMaxWidth().padding(start = 24.dp, end = 12.dp),
+                    verticalAlignment = Alignment.Top,
+                ) {
+                    SongInfo(song, TextAlign.Start, Modifier.weight(1f))
+                    if (lastFm && song != null) {
+                        LoveButton(song, onLove)
+                    }
+                }
+                SeekBar(nowPlaying, onSeek, Modifier.padding(horizontal = 24.dp))
+                controls()
+                VolumeSlider(nowPlaying.volume, onVolume, Modifier.padding(horizontal = 24.dp))
+                BottomRow(actions)
+            }
+            if (maxWidth > maxHeight) {
+                // Landscape: the artwork beside the rest.
+                Row(Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
+                    Artwork(
+                        song, { actions.onDetails(lyrics = true) },
+                        Modifier.padding(start = 24.dp, top = 8.dp, bottom = 8.dp)
+                            .fillMaxHeight().aspectRatio(1f, matchHeightConstraintsFirst = true),
+                    )
+                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) { below() }
+                }
+            } else {
+                Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
+                    Artwork(
+                        song, { actions.onDetails(lyrics = true) },
+                        Modifier.padding(start = 24.dp, end = 24.dp, top = 12.dp)
+                            .weight(1f, fill = false)
+                            .aspectRatio(1f, matchHeightConstraintsFirst = true)
+                            .align(Alignment.CenterHorizontally),
+                    )
+                    Column(
+                        Modifier.fillMaxWidth().padding(top = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                    ) { below() }
                 }
             }
-        } else {
-            // As wide as the page, or smaller if the page is too short for it and the song.
-            val artworkHeight = (maxHeight - SONG_AND_SEEK_BAR_HEIGHT).coerceAtLeast(0.dp)
-            Column(
-                Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
-            ) {
-                Artwork(
-                    nowPlaying.song, onArtClick,
-                    Modifier.heightIn(max = artworkHeight).aspectRatio(1f))
-                SongInfo(nowPlaying.song, TextAlign.Center)
-                SeekBar(nowPlaying, onSeek)
+        }
+    }
+}
+
+@Composable
+private fun TopRow(
+    playingFrom: String?,
+    lastFm: Boolean,
+    onCollapse: () -> Unit,
+    onStop: () -> Unit,
+    onBan: () -> Unit,
+) {
+    Row(Modifier.fillMaxWidth().padding(4.dp), verticalAlignment = Alignment.CenterVertically) {
+        IconButton(onClick = onCollapse, modifier = Modifier.testTag("btnCollapse")) {
+            Icon(painterResource(R.drawable.ic_expand_more), stringResource(R.string.player_collapse))
+        }
+        Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
+            if (!playingFrom.isNullOrBlank()) {
+                Text(
+                    stringResource(R.string.player_playing_from),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                Text(
+                    playingFrom,
+                    style = MaterialTheme.typography.titleSmall,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.testTag("playingFrom"),
+                )
             }
+        }
+        Box {
+            var open by remember { mutableStateOf(false) }
+            IconButton(onClick = { open = true }, modifier = Modifier.testTag("btnPlayerMore")) {
+                Icon(painterResource(R.drawable.ic_more_vert), stringResource(R.string.shell_more))
+            }
+            DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
+                DropdownMenuItem(
+                    text = { Text(stringResource(R.string.tasker_stop)) },
+                    onClick = {
+                        open = false
+                        onStop()
+                    },
+                    modifier = Modifier.testTag("menuStop"),
+                )
+                if (lastFm) {
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.menu_ban)) },
+                        onClick = {
+                            open = false
+                            onBan()
+                        },
+                        modifier = Modifier.testTag("menuBan"),
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun LoveButton(song: MySong, onLove: () -> Unit) {
+    // A song can be loved only once; the song keeps whether it was.
+    var loved by remember(song) { mutableStateOf(song.isLoved) }
+    IconToggleButton(
+        checked = loved,
+        onCheckedChange = {
+            if (!loved) {
+                loved = true
+                onLove()
+            }
+        },
+        colors = IconButtonDefaults.iconToggleButtonColors(
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            checkedContentColor = MaterialTheme.colorScheme.primary,
+        ),
+        modifier = Modifier.testTag("btnLove"),
+    ) {
+        Icon(
+            painterResource(if (loved) R.drawable.ic_favorite else R.drawable.ic_favorite_border),
+            stringResource(R.string.player_love),
+        )
+    }
+}
+
+@Composable
+private fun BottomRow(actions: PlayerActions) {
+    Row(
+        Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 4.dp),
+        horizontalArrangement = Arrangement.SpaceAround,
+    ) {
+        IconButton(onClick = { actions.onDetails(lyrics = false) }, modifier = Modifier.testTag("btnDetails")) {
+            Icon(painterResource(R.drawable.ic_lyrics), stringResource(R.string.player_details))
+        }
+        IconButton(onClick = actions::onQueue, modifier = Modifier.testTag("btnQueue")) {
+            Icon(painterResource(R.drawable.ic_queue_music), stringResource(R.string.nav_queue))
+        }
+        IconButton(onClick = actions::onDownload, modifier = Modifier.testTag("btnDownload")) {
+            Icon(painterResource(R.drawable.ic_download), stringResource(R.string.player_download_song))
         }
     }
 }
@@ -204,7 +300,7 @@ private fun Artwork(song: MySong?, onClick: () -> Unit, modifier: Modifier) {
         modifier = modifier
             .clip(RoundedCornerShape(28.dp))
             .background(MaterialTheme.colorScheme.surfaceContainerHighest)
-            .clickable(onClickLabel = stringResource(R.string.player_download_lyrics), onClick = onClick)
+            .clickable(onClickLabel = stringResource(R.string.lyrics_tab), onClick = onClick)
             .testTag("imgArt"),
     ) { bitmap ->
         if (bitmap == null) {
@@ -226,11 +322,11 @@ private fun Artwork(song: MySong?, onClick: () -> Unit, modifier: Modifier) {
 }
 
 @Composable
-private fun SongInfo(song: MySong?, align: TextAlign) {
-    Column(Modifier.fillMaxWidth()) {
+private fun SongInfo(song: MySong?, align: TextAlign, modifier: Modifier = Modifier) {
+    Column(modifier) {
         Text(
             song?.title ?: stringResource(R.string.player_nosong),
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.headlineMedium,
             textAlign = align,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -257,23 +353,11 @@ private fun SongInfo(song: MySong?, align: TextAlign) {
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.fillMaxWidth().testTag("tvAlbum"),
         )
-        val details = listOf(song.genre, song.year).filter { !it.isNullOrBlank() }
-        if (details.isNotEmpty()) {
-            Text(
-                details.joinToString(" · "),
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = align,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
-            )
-        }
     }
 }
 
 @Composable
-private fun SeekBar(nowPlaying: NowPlaying, onSeek: (Int) -> Unit) {
+private fun SeekBar(nowPlaying: NowPlaying, onSeek: (Int) -> Unit, modifier: Modifier) {
     val song = nowPlaying.song
     val length = song?.length ?: 0
     val position = if (nowPlaying.state == Clementine.State.STOP) 0 else nowPlaying.positionSeconds
@@ -283,7 +367,7 @@ private fun SeekBar(nowPlaying: NowPlaying, onSeek: (Int) -> Unit) {
 
     // Positions read left to right in every language.
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-        Column(Modifier.fillMaxWidth()) {
+        Column(modifier.fillMaxWidth()) {
             Slider(
                 value = (dragging ?: position.toFloat()).coerceIn(0f, length.toFloat()),
                 onValueChange = { dragging = it },
@@ -319,6 +403,38 @@ private fun SeekBar(nowPlaying: NowPlaying, onSeek: (Int) -> Unit) {
     }
 }
 
+/** Clementine's volume; while dragging, Clementine follows the thumb. */
+@Composable
+private fun VolumeSlider(volume: Int, onVolume: (Int) -> Unit, modifier: Modifier) {
+    var dragging by remember { mutableStateOf<Float?>(null) }
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+        Row(modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                painterResource(R.drawable.ic_volume_down),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Slider(
+                value = dragging ?: volume.toFloat(),
+                onValueChange = {
+                    if (it.roundToInt() != (dragging ?: volume.toFloat()).roundToInt()) {
+                        onVolume(it.roundToInt())
+                    }
+                    dragging = it
+                },
+                onValueChangeFinished = { dragging = null },
+                valueRange = 0f..100f,
+                modifier = Modifier.weight(1f).padding(horizontal = 12.dp).testTag("volume"),
+            )
+            Icon(
+                painterResource(R.drawable.ic_volume_up),
+                contentDescription = stringResource(R.string.connection_volume),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+    }
+}
+
 @Composable
 internal fun PlayerControlsContent(
     nowPlaying: NowPlaying,
@@ -333,7 +449,7 @@ internal fun PlayerControlsContent(
     // Media controls keep their order in right-to-left languages.
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
         Row(
-            modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+            modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -439,6 +555,3 @@ internal fun repeatLabel(mode: Clementine.RepeatMode): Int = when (mode) {
 }
 
 private const val ARTWORK_FADE_MILLIS = 750
-
-/** About what the song, the seek bar and the space between them take below the artwork. */
-private val SONG_AND_SEEK_BAR_HEIGHT = 208.dp

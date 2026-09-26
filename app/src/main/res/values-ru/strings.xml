@@ -7,10 +7,8 @@
   <string name="connectdialog_download_data">Загрузка данных</string>
   <string name="connectdialog_error">Не могу подключиться</string>
   <string name="connectdialog_ip_hint">Введите IP адрес</string>
-  <string name="connectdialog_services">Clementines</string>
   <string name="player_nosong">Сейчас ничего не проигрывается</string>
   <string name="player_disconnected">Отключено</string>
-  <string name="player_playlist">Плейлист:</string>
   <string name="player_download_playlists">Загрузка плейлистов</string>
   <string name="playler_volume">Громкость</string>
   <string name="player_stop_after_current">Остановить после этой композиции.</string>
@@ -75,14 +73,12 @@
   <string name="song_info_filename">Имя файла</string>
   <string name="song_info_rating">Рейтинг</string>
   <string name="song_info_rated">Песня оценена на $stars$ звёзд</string>
-  <string name="connection_connected_to">Подключено к:</string>
   <string name="connection_volume">Громкость</string>
   <string name="connection_version">Версия Clementine</string>
   <string name="connection_traffic">Траффик Исх / Вх (сред / c)</string>
   <string name="connection_traffic_unsupported">Статистика не доступна на данном устройстве</string>
   <string name="menu_settings">Настройки</string>
   <string name="menu_search">Поиск</string>
-  <string name="menu_love">В любимые</string>
   <string name="menu_ban">Запретить</string>
   <string name="menu_download">Скачать</string>
   <string name="menu_download_playlist">Загрузить плейлист</string>
@@ -235,8 +231,6 @@
   <string name="crash_report_title">Кажется, что-то пошло не так!</string>
   <string name="crash_report_message">В последний раз Clementine Remote завершилось с ошибкой! Этого не должно было случиться! Пожалуйста, помогите мне улучшить приложение и вышлите мне лог-файл. Спасибо!</string>
   <string name="crash_report_send">Послать!</string>
-  <string name="fragment_title_player">Плеер</string>
-  <string name="fragment_title_details">Сведения о песне</string>
   <string name="fragment_title_connection">Clementine</string>
   <string name="navigation_drawer_clementine_on">Clementine на %s</string>
   <string name="player_download_what">Что скачать?</string>
@@ -244,18 +238,5 @@
     <item>Песня</item>
     <item>Альбом</item>
     <item>Плейлист</item>
-  </string-array>
-  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
-  <string-array name="navigation_drawer_items">
-    <item>Поиск</item>
-    <item>Плеер</item>
-    <item>Плейлисты</item>
-    <item>Фонотека</item>
-    <item>Загрузки</item>
-    <item></item>
-    <item>Настройки</item>
-    <item>Пожертвование</item>
-    <item></item>
-    <item>Выход</item>
   </string-array>
 </resources>

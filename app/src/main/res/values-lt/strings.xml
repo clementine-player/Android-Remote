@@ -7,10 +7,8 @@
   <string name="connectdialog_download_data">Atsiunčiami duomenys</string>
   <string name="connectdialog_error">Nepavyko pasiekti kompiuterio</string>
   <string name="connectdialog_ip_hint">Įrašykite IP adresą</string>
-  <string name="connectdialog_services">Clementinai</string>
   <string name="player_nosong">Šiuo metu negroja jokia daina</string>
   <string name="player_disconnected">Atsijungta</string>
-  <string name="player_playlist">Grojaraštis:</string>
   <string name="player_download_playlists">Atsiunčiami grojaraščiai</string>
   <string name="playler_volume">Garsumas</string>
   <string name="player_stop_after_current">Po takelio pabaigos perjungti stabdymą.</string>
@@ -73,14 +71,12 @@
   <string name="song_info_filename">Failo pavadinimas</string>
   <string name="song_info_rating">Įvertinimas</string>
   <string name="song_info_rated">Daina įvertinta $stars$ žvaigždutėmis</string>
-  <string name="connection_connected_to">Prisijungta prie:</string>
   <string name="connection_volume">Garsumas</string>
   <string name="connection_version">Clementine versija</string>
   <string name="connection_traffic">Duomenų Išsiuntimas / Atsiuntimas (vid. / sek.)</string>
   <string name="connection_traffic_unsupported">Statistika šiame įrenginyje yra neprieinama</string>
   <string name="menu_settings">Nustatymai</string>
   <string name="menu_search">Paieška</string>
-  <string name="menu_love">Patinka</string>
   <string name="menu_ban">Blokuoti</string>
   <string name="menu_download">Atsisiųsti</string>
   <string name="menu_download_playlist">Atsisiųsti grojaraštį</string>
@@ -231,8 +227,6 @@
   <string name="crash_report_title">Oi, kažkas atsitiko!</string>
   <string name="crash_report_message">Paskutinį kartą Clementine Remote užstrigo! To neturėjo įvykti! Prašau padėti man patobulinti programą ir išsiųsti man žurnalo failą. Ačiū!</string>
   <string name="crash_report_send">Siųsti!</string>
-  <string name="fragment_title_player">Grotuvas</string>
-  <string name="fragment_title_details">Išsamesnė dainos informacija</string>
   <string name="fragment_title_connection">Clementine</string>
   <string name="navigation_drawer_clementine_on">Clementine ties %s</string>
   <string name="player_download_what">Ką atsisiųsti?</string>
@@ -240,18 +234,5 @@
     <item>Daina</item>
     <item>Albumas</item>
     <item>Grojaraštis</item>
-  </string-array>
-  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
-  <string-array name="navigation_drawer_items">
-    <item>Paieška</item>
-    <item>Grotuvas</item>
-    <item>Grojaraščiai</item>
-    <item>Biblioteka</item>
-    <item>Atsiuntimai</item>
-    <item></item>
-    <item>Nustatymai</item>
-    <item>Paaukoti</item>
-    <item></item>
-    <item>Išeiti</item>
   </string-array>
 </resources>

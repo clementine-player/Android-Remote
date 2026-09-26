@@ -7,10 +7,8 @@
   <string name="connectdialog_download_data">Preberajú sa údaje</string>
   <string name="connectdialog_error">Nepodarilo sa dosiahnuť hostiteľa</string>
   <string name="connectdialog_ip_hint">Zadajte IP adresu</string>
-  <string name="connectdialog_services">Prehrávače Clementine</string>
   <string name="player_nosong">Teraz sa neprehráva žiadna skladba</string>
   <string name="player_disconnected">Odpojené</string>
-  <string name="player_playlist">Zoznam skladieb:</string>
   <string name="player_download_playlists">Preberajú sa zoznamy skladieb</string>
   <string name="playler_volume">Hlasitosť</string>
   <string name="player_stop_after_current">Prepína zastavenie skladby po jej prehratí.</string>
@@ -73,14 +71,12 @@
   <string name="song_info_filename">Názov súboru</string>
   <string name="song_info_rating">Hodnotenie</string>
   <string name="song_info_rated">Skladba je ohodnotená $stars$ hviezdičkami</string>
-  <string name="connection_connected_to">Pripojené k:</string>
   <string name="connection_volume">Hlasitosť</string>
   <string name="connection_version">Verzia prehrávača Clementine</string>
   <string name="connection_traffic">Prenos odos./prijím. (priem./sek)</string>
   <string name="connection_traffic_unsupported">Štatistiky nie sú na tomto zariadení dostupné</string>
   <string name="menu_settings">Nastavenia</string>
   <string name="menu_search">Vyhľadať</string>
-  <string name="menu_love">Obľúbená</string>
   <string name="menu_ban">zakázaná</string>
   <string name="menu_download">Prevzatie</string>
   <string name="menu_download_playlist">Prebrať zoznam skladieb</string>
@@ -231,8 +227,6 @@
   <string name="crash_report_title">Ale nie, niekde sa stala chyba!</string>
   <string name="crash_report_message">Naposledy aplikácia Clementine Remote zlyhala! Nemalo by sa to stávať! Prosím, pomôžte nám vylepšiť aplikáciu odoslaním záznamového súboru. Ďakujeme!</string>
   <string name="crash_report_send">Odoslať!</string>
-  <string name="fragment_title_player">Prehrávač</string>
-  <string name="fragment_title_details">Podrobnosti o skladbe</string>
   <string name="fragment_title_connection">Clementine</string>
   <string name="navigation_drawer_clementine_on">Clementine na %s</string>
   <string name="player_download_what">Čo sa má prevziať?</string>
@@ -240,18 +234,5 @@
     <item>Skladba</item>
     <item>Album</item>
     <item>Zoznam skladieb</item>
-  </string-array>
-  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
-  <string-array name="navigation_drawer_items">
-    <item>Vyhľadávanie</item>
-    <item>Prehrávač</item>
-    <item>Zoznamy skladieb</item>
-    <item>Zbierka</item>
-    <item>Prevzatia</item>
-    <item></item>
-    <item>Nastavenia</item>
-    <item>Prispieť</item>
-    <item></item>
-    <item>Ukončiť</item>
   </string-array>
 </resources>

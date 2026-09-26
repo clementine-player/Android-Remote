@@ -7,10 +7,8 @@
   <string name="connectdialog_download_data">Отримуємо дані</string>
   <string name="connectdialog_error">Не вдалося встановити зв’язок</string>
   <string name="connectdialog_ip_hint">Вкажіть IP-адресу</string>
-  <string name="connectdialog_services">Clementine</string>
   <string name="player_nosong">Зараз композицій не відтворюється</string>
   <string name="player_disconnected">Роз’єднано</string>
-  <string name="player_playlist">Список відтворення:</string>
   <string name="player_download_playlists">Отримуємо списки відтворення</string>
   <string name="playler_volume">Гучність</string>
   <string name="player_stop_after_current">Увімкнути або вимкнути зупинку після завершення композиції.</string>
@@ -73,14 +71,12 @@
   <string name="song_info_filename">Назва файла</string>
   <string name="song_info_rating">Оцінка</string>
   <string name="song_info_rated">Композицію оцінено у $stars$ зірок</string>
-  <string name="connection_connected_to">З’єднано з:</string>
   <string name="connection_volume">Гучність</string>
   <string name="connection_version">Версія Clementine</string>
   <string name="connection_traffic">Обмін вивант./отр. (сер./за сек.)</string>
   <string name="connection_traffic_unsupported">На цьому пристрої доступ до статистики неможливий</string>
   <string name="menu_settings">Параметри</string>
   <string name="menu_search">Пошук</string>
-  <string name="menu_love">Уподобати</string>
   <string name="menu_ban">Заблокувати</string>
   <string name="menu_download">Отримати</string>
   <string name="menu_download_playlist">Отримати список відтворення</string>
@@ -229,8 +225,6 @@
   <string name="crash_report_title">Ех, щось пішло не так!</string>
   <string name="crash_report_message">Попередній сеанс роботи Віддаленого керування Clementine завершився аварійно! Цього не повинно було статися! Допоможіть розробникові виправити проблему: надішліть йому файл журналу роботи програми. Дякуємо!</string>
   <string name="crash_report_send">Надіслати!</string>
-  <string name="fragment_title_player">Програвач</string>
-  <string name="fragment_title_details">Параметри композиції</string>
   <string name="fragment_title_connection">Clementine</string>
   <string name="navigation_drawer_clementine_on">Clementine на %s</string>
   <string name="player_download_what">Що отримати?</string>
@@ -238,18 +232,5 @@
     <item>Композицію</item>
     <item>Альбом</item>
     <item>Список композицій</item>
-  </string-array>
-  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
-  <string-array name="navigation_drawer_items">
-    <item>Пошук</item>
-    <item>Програвач</item>
-    <item>Списки</item>
-    <item>Бібліотека</item>
-    <item>Отримане</item>
-    <item></item>
-    <item>Параметри</item>
-    <item>Підтримати</item>
-    <item></item>
-    <item>Вийти</item>
   </string-array>
 </resources>

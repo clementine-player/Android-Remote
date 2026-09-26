@@ -7,10 +7,8 @@
   <string name="connectdialog_download_data">S’estan baixant les dades</string>
   <string name="connectdialog_error">No s\'ha pogut connectar amb l\'amfitrió</string>
   <string name="connectdialog_ip_hint">Introduïu l\'adreça IP</string>
-  <string name="connectdialog_services">Clementines</string>
   <string name="player_nosong">No s\'està reproduint cap peça</string>
   <string name="player_disconnected">Desconnectat</string>
-  <string name="player_playlist">Llista de reproducció:</string>
   <string name="player_download_playlists">S\'estan baixant les llistes de reproducció</string>
   <string name="playler_volume">Volum</string>
   <string name="player_stop_after_current">Commuta la parada quan acaba la peça.</string>
@@ -71,14 +69,12 @@
   <string name="song_info_filename">Nom del fitxer</string>
   <string name="song_info_rating">Valoració</string>
   <string name="song_info_rated">Nota de la peça $stars$ estrelles</string>
-  <string name="connection_connected_to">S\'està connectat a:</string>
   <string name="connection_volume">Volum</string>
   <string name="connection_version">Versió del Clementine</string>
   <string name="connection_traffic">Velocitat (per segon) de pujada/baixada</string>
   <string name="connection_traffic_unsupported">No es disposa de les estadístiques en aquest dispositiu</string>
   <string name="menu_settings">Configuració</string>
   <string name="menu_search">Cerca</string>
-  <string name="menu_love">M’encanta</string>
   <string name="menu_ban">Veta</string>
   <string name="menu_download">Baixa</string>
   <string name="menu_download_playlist">Baixa la llista</string>
@@ -226,8 +222,6 @@
   <string name="crash_report_title">S\'ha produït un problema.</string>
   <string name="crash_report_message">L\'últim cop que vau usar el control remot del Clementine, va fallar. Ajudeu-nos a millorar l\'aplicació i envieu-nos l\'informe d\'error. Gràcies!</string>
   <string name="crash_report_send">Envia</string>
-  <string name="fragment_title_player">Reproductor</string>
-  <string name="fragment_title_details">Detalls de la peça</string>
   <string name="fragment_title_connection">Clementine</string>
   <string name="navigation_drawer_clementine_on">Clementine en %s</string>
   <string name="player_download_what">Què s\'ha de baixar?</string>
@@ -235,18 +229,5 @@
     <item>Títol</item>
     <item>Àlbum</item>
     <item>Llista</item>
-  </string-array>
-  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
-  <string-array name="navigation_drawer_items">
-    <item>Cerca</item>
-    <item>Reproductor</item>
-    <item>Llistes de reproducció</item>
-    <item>Biblioteca</item>
-    <item>Baixades</item>
-    <item></item>
-    <item>Configuració</item>
-    <item>Donacions</item>
-    <item></item>
-    <item>Surt</item>
   </string-array>
 </resources>

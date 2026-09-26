@@ -7,10 +7,8 @@
   <string name="connectdialog_download_data">მონაცემების ჩამოტვირთვა</string>
   <string name="connectdialog_error">ჰოსთან დაკავშირება ვერ მოხერხდა</string>
   <string name="connectdialog_ip_hint">შეიყვანეთ IP მისამართი</string>
-  <string name="connectdialog_services">Clementines-ები</string>
   <string name="player_nosong">ამ მომენტში არაფერი არ იკვრება</string>
   <string name="player_disconnected">დასაკავშირებელი</string>
-  <string name="player_playlist">რეპერტუარი:</string>
   <string name="player_download_playlists">რეპერტუარების ჩამოწერა</string>
   <string name="playler_volume">ხმა</string>
   <string name="player_stop_after_current">გაჩერება ყოველი ჩანაწერის დაჯვრის შემდეგ.</string>
@@ -50,7 +48,6 @@
   <string name="song_info_rated">სიმღერა შეფასებულია $stars$ ვარსკვლავით</string>
   <string name="menu_settings">პარამეტრები</string>
   <string name="menu_search">ძებნა</string>
-  <string name="menu_love">შეყვარება</string>
   <string name="menu_ban">დაბლოკვა</string>
   <string name="menu_download_playlist">რეპერტუარის ჩამოტვირთვა</string>
   <string name="donate_header">დონაციები</string>
@@ -120,5 +117,4 @@
   <string name="notification_disconnect_keep_alive">კავშირი გაწყდა. შეეხეთ ხელახალი ცდისთვის.</string>
   <string name="crash_report_title">ვაი, რაღაც მოხდა!</string>
   <string name="crash_report_send">გაგზავნა!</string>
-  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

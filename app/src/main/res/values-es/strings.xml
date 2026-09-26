@@ -7,10 +7,8 @@
   <string name="connectdialog_download_data">Descargando datos</string>
   <string name="connectdialog_error">No se pudo conectar con el equipo</string>
   <string name="connectdialog_ip_hint">Escriba la dirección IP</string>
-  <string name="connectdialog_services">Instancias de Clementine</string>
   <string name="player_nosong">No hay ninguna canción en reproducción</string>
   <string name="player_disconnected">Desconectado</string>
-  <string name="player_playlist">Lista de reproducción:</string>
   <string name="player_download_playlists">Descargando listas de reproducción</string>
   <string name="playler_volume">Volumen</string>
   <string name="player_stop_after_current">Activa/desactiva la detención tras finalizar la pista.</string>
@@ -71,14 +69,12 @@
   <string name="song_info_filename">Nombre de archivo</string>
   <string name="song_info_rating">Valoración</string>
   <string name="song_info_rated">Canciones con $stars$ estrellas</string>
-  <string name="connection_connected_to">Conectado con:</string>
   <string name="connection_volume">Volumen</string>
   <string name="connection_version">Versión de Clementine</string>
   <string name="connection_traffic">Carga/descarga de tráfico (prom./s)</string>
   <string name="connection_traffic_unsupported">Las estadísticas no están disponibles en este dispositivo</string>
   <string name="menu_settings">Configuración</string>
   <string name="menu_search">Buscar</string>
-  <string name="menu_love">Me encanta</string>
   <string name="menu_ban">Vetar</string>
   <string name="menu_download">Descarga</string>
   <string name="menu_download_playlist">Descargar lista</string>
@@ -227,8 +223,6 @@
   <string name="crash_report_title">Vaya, algo ha fallado.</string>
   <string name="crash_report_message">La última vez, el Control remoto de Clementine se cerró inesperadamente. Para ayudar a que este error no se produzca de nuevo, envíe el archivo de registro al desarrollador. ¡Gracias!</string>
   <string name="crash_report_send">Enviar</string>
-  <string name="fragment_title_player">Reproductor</string>
-  <string name="fragment_title_details">Detalles de la canción</string>
   <string name="fragment_title_connection">Clementine</string>
   <string name="navigation_drawer_clementine_on">Clementine en %s</string>
   <string name="player_download_what">¿Qué descargar?</string>
@@ -236,18 +230,5 @@
     <item>Canción</item>
     <item>Álbum</item>
     <item>Lista</item>
-  </string-array>
-  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
-  <string-array name="navigation_drawer_items">
-    <item>Buscar</item>
-    <item>Reproductor</item>
-    <item>Listas</item>
-    <item>Colección</item>
-    <item>Descargas</item>
-    <item></item>
-    <item>Configuración</item>
-    <item>Donar</item>
-    <item></item>
-    <item>Salir</item>
   </string-array>
 </resources>

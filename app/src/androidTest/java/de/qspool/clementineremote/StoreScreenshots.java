@@ -49,7 +49,7 @@ public class StoreScreenshots {
 
     private static final long TIMEOUT = 30_000;
 
-    /** Long enough for the drawer to close and a screen to fade in. */
+    /** Long enough for a screen or sheet to animate in. */
     private static final long SETTLE_MILLIS = 1500;
 
     /** Downloading and indexing the library takes a while on an emulator. */
@@ -136,10 +136,6 @@ public class StoreScreenshots {
         return waitFor(selector, TIMEOUT);
     }
 
-    private BySelector id(String name) {
-        return By.res(mPackage, name);
-    }
-
     /** A Compose element, by its test tag: its resource name, without the package. */
     private static BySelector tag(String name) {
         return By.res(name);
@@ -152,43 +148,42 @@ public class StoreScreenshots {
         assertTrue(name, mDevice.takeScreenshot(new File(mDir, name + ".png")));
     }
 
-    private void openDrawer() {
-        // The drawer toggle is described by the "Connect" string (see MainActivity).
-        waitFor(By.clazz("android.widget.ImageButton")
-                .desc(mContext.getString(R.string.connectdialog_connect))).click();
-        waitFor(id("drawer_list"));
-        mDevice.waitForIdle();
-    }
-
-    /**
-     * Picks an item in the open drawer, and waits for the drawer to close and the new screen to
-     * fade in: until then, the old screen is still there to be found and tapped.
-     */
-    private void select(String item) {
-        waitFor(By.res(mPackage, "drawer_list").hasDescendant(By.text(item)))
-                .findObject(By.text(item)).click();
+    /** Shows a screen with the navigation bar, and waits for it to settle. */
+    private void navigateTo(String destination) {
+        waitFor(tag(destination)).click();
         SystemClock.sleep(SETTLE_MILLIS);
         mDevice.waitForIdle();
     }
 
-    private void navigateTo(String item) {
-        openDrawer();
-        select(item);
+    /** Opens the player full screen from the mini player. */
+    private void openPlayer() {
+        waitFor(tag("miniPlayer")).click();
+        waitFor(tag("btnCollapse"));
+        SystemClock.sleep(SETTLE_MILLIS);
+    }
+
+    /** Closes the player, back to the screen below. */
+    private void closePlayer() {
+        waitFor(tag("btnCollapse")).click();
+        SystemClock.sleep(SETTLE_MILLIS);
+        mDevice.waitForIdle();
     }
 
     /**
-     * Plays a track by tapping it in the playlist, and shows the player. Clementine sometimes
+     * Plays a track by tapping it in the queue, and opens the player. Clementine sometimes
      * starts another track instead, so this checks and tries again.
      */
     private void play(String title) {
         for (int attempt = 1; ; attempt++) {
             if (attempt > 1) {
-                navigateTo("Playlists");
+                closePlayer();
             }
-            waitFor(By.text(title));
+            // In the queue, not the mini player, which may show the same title.
+            BySelector song = By.text(title).hasAncestor(tag("queueSongs"));
+            waitFor(song);
             mDevice.waitForIdle();
-            mDevice.findObject(By.text(title)).click();
-            navigateTo("Player");
+            mDevice.findObject(song).click();
+            openPlayer();
             if (mDevice.wait(Until.hasObject(tag("tvTitle").text(title)), 10_000)) {
                 return;
             }
@@ -224,20 +219,26 @@ public class StoreScreenshots {
         screenshot("6_connect");
 
         mDevice.findObject(tag("btnConnect")).click();
-        waitFor(tag("btnPlaypause"));
+        // Connected: the queue shows.
+        waitFor(tag("navQueue"));
 
-        navigateTo("Playlists");
-        waitFor(By.text("Clair de lune"));
+        waitFor(By.text("Clair de lune").hasAncestor(tag("queueSongs")));
         screenshot("3_playlist");
         play("Clair de lune");
         // Let playback move along the seek bar.
         SystemClock.sleep(8000);
         screenshot("1_player");
+        closePlayer();
 
-        // Back would leave the player and disconnect, so move on from the open drawer.
-        openDrawer();
-        screenshot("5_navigation");
-        select("Library");
+        // The connection sheet, from the chip at the top.
+        waitFor(tag("connectionChip")).click();
+        waitFor(tag("btnSwitch"));
+        SystemClock.sleep(SETTLE_MILLIS);
+        screenshot("5_connection");
+        mDevice.pressBack();
+        SystemClock.sleep(SETTLE_MILLIS);
+
+        navigateTo("navLibrary");
         // The library is downloaded from Clementine on request.
         waitFor(tag("btnDownloadLibrary")).click();
         waitFor(By.text("Frédéric Chopin"), LIBRARY_TIMEOUT);
@@ -247,7 +248,7 @@ public class StoreScreenshots {
         waitFor(By.textStartsWith("Nocturne in"));
         screenshot("2_library_album");
 
-        navigateTo("Search");
+        navigateTo("navSearch");
         search("Gymnopédie");
         // Results are grouped by source, then artist and album: open the first entry at each
         // level down to the tracks.

@@ -7,10 +7,8 @@
   <string name="connectdialog_download_data">Data downloaden</string>
   <string name="connectdialog_error">Kan host niet vinden</string>
   <string name="connectdialog_ip_hint">Geef IP adres</string>
-  <string name="connectdialog_services">Clementines</string>
   <string name="player_nosong">Geen nummer aan het afspelen</string>
   <string name="player_disconnected">Verbinding verbroken</string>
-  <string name="player_playlist">Afspeellijst:</string>
   <string name="player_download_playlists">Afspeellijsten downloaden</string>
   <string name="playler_volume">Volume</string>
   <string name="player_stop_after_current">Stop na afspelen nummer aan/uit.</string>
@@ -71,14 +69,12 @@
   <string name="song_info_filename">Bestandsnaam</string>
   <string name="song_info_rating">Waardering</string>
   <string name="song_info_rated">Nummer gewaardeerd op $stars$ sterren</string>
-  <string name="connection_connected_to">Verbonden met:</string>
   <string name="connection_volume">Volume</string>
   <string name="connection_version">Clementine versie</string>
   <string name="connection_traffic">Verkeer Uit / In (gem / sec)</string>
   <string name="connection_traffic_unsupported">Stats niet beschikbaar op dit apparaat</string>
   <string name="menu_settings">Instellingen</string>
   <string name="menu_search">Zoeken</string>
-  <string name="menu_love">Love</string>
   <string name="menu_ban">Ban</string>
   <string name="menu_download">Download</string>
   <string name="menu_download_playlist">Afspeellijst downloaden</string>
@@ -224,8 +220,6 @@
   <string name="crash_report_title">Oeps, er is iets misgegaan!</string>
   <string name="crash_report_message">Clementine remote was onverwachts gestopt! Dit had niet mogen gebeuren! Help mij de app beter te maken en stuur me het logfile. Bedankt!</string>
   <string name="crash_report_send">Verstuur!</string>
-  <string name="fragment_title_player">Speler</string>
-  <string name="fragment_title_details">Nummer informatie</string>
   <string name="fragment_title_connection">Clementine</string>
   <string name="navigation_drawer_clementine_on">Clementine op %s</string>
   <string name="player_download_what">Wat te downloaden?</string>
@@ -233,18 +227,5 @@
     <item>Nummer</item>
     <item>Album</item>
     <item>Afspeellijst</item>
-  </string-array>
-  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
-  <string-array name="navigation_drawer_items">
-    <item>Zoeken</item>
-    <item>Speler</item>
-    <item>Afspeellijsten</item>
-    <item>Bibliotheek</item>
-    <item>Downloads</item>
-    <item></item>
-    <item>Instellingen</item>
-    <item>Doneer</item>
-    <item></item>
-    <item>Afsluiten</item>
   </string-array>
 </resources>

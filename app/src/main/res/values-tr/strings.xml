@@ -7,10 +7,8 @@
   <string name="connectdialog_download_data">Veri indiriliyor</string>
   <string name="connectdialog_error">Makineye ulaşılamadı</string>
   <string name="connectdialog_ip_hint">IP adresi girin</string>
-  <string name="connectdialog_services">Clementine\'ler</string>
   <string name="player_nosong">Şu an bir şarkı çalmıyor</string>
   <string name="player_disconnected">Bağlantı Kesildi</string>
-  <string name="player_playlist">Oynatma Listesi:</string>
   <string name="player_download_playlists">Oynatma Listeleri İndiriliyor</string>
   <string name="playler_volume">Ses</string>
   <string name="player_stop_after_current">Parça bittiğinde durdurmayı aç/kapat.</string>
@@ -69,14 +67,12 @@
   <string name="song_info_filename">Dosya adı</string>
   <string name="song_info_rating">Beğeni</string>
   <string name="song_info_rated">$stars$ yıldızla değerlendirilmiş şarkı</string>
-  <string name="connection_connected_to">Şuna bağlandı:</string>
   <string name="connection_volume">Ses</string>
   <string name="connection_version">Clementine sürümü</string>
   <string name="connection_traffic">Trafik Gönder/İndir (ort. / sn.)</string>
   <string name="connection_traffic_unsupported">Durumlar bu cihazda kullanılamıyor</string>
   <string name="menu_settings">Ayarlar</string>
   <string name="menu_search">Ara</string>
-  <string name="menu_love">Beğen</string>
   <string name="menu_ban">Engelle</string>
   <string name="menu_download">İndir</string>
   <string name="menu_download_playlist">Oynatma listesi indir</string>
@@ -209,5 +205,4 @@
     <item>Albüm</item>
     <item>Çalma Listesi</item>
   </string-array>
-  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

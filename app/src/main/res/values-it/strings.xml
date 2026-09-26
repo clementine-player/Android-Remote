@@ -7,10 +7,8 @@
   <string name="connectdialog_download_data">Download dati</string>
   <string name="connectdialog_error">Impossibile raggiungere l\'host</string>
   <string name="connectdialog_ip_hint">Inserisci indirizzo IP</string>
-  <string name="connectdialog_services">Clementine</string>
   <string name="player_nosong">Nessuna canzone in esecuzione</string>
   <string name="player_disconnected">Disconesso</string>
-  <string name="player_playlist">Playlist:</string>
   <string name="player_download_playlists">Download Playlist</string>
   <string name="playler_volume">Volume</string>
   <string name="player_stop_after_current">Ferma dopo che la traccia è finita.</string>
@@ -70,14 +68,12 @@
   <string name="song_info_filename">Nome file</string>
   <string name="song_info_rating">Punteggio</string>
   <string name="song_info_rated">Canzoni votate $stars$ stars</string>
-  <string name="connection_connected_to">Connesso a:</string>
   <string name="connection_volume">Volume</string>
   <string name="connection_version">Versione di Clementine</string>
   <string name="connection_traffic">Traffico su / Giu (media/sec)</string>
   <string name="connection_traffic_unsupported">Statistiche non disponibili su questo dispositivo</string>
   <string name="menu_settings">Impostazioni</string>
   <string name="menu_search">Cerca</string>
-  <string name="menu_love">Amore</string>
   <string name="menu_ban">Banna</string>
   <string name="menu_download">Download</string>
   <string name="menu_download_playlist">Scarica playlist</string>
@@ -200,8 +196,6 @@
   <string name="crash_report_title">Ops, qualcosa non va!</string>
   <string name="crash_report_message">L\'ultima volta Clementine Remote è andato in crash! Questo non doveva accadere! Aiutami a migliorare l\'app e inviami il file di log. Grazie!</string>
   <string name="crash_report_send">Inviato!</string>
-  <string name="fragment_title_player">Player</string>
-  <string name="fragment_title_details">Dettagli canzone</string>
   <string name="fragment_title_connection">Clementine</string>
   <string name="navigation_drawer_clementine_on">Clementine su %s</string>
   <string name="player_download_what">Cosa scaricare?</string>
@@ -209,18 +203,5 @@
     <item>Canzone</item>
     <item>Album</item>
     <item>Playlist</item>
-  </string-array>
-  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
-  <string-array name="navigation_drawer_items">
-    <item>Cerca</item>
-    <item>Player</item>
-    <item>Playlists</item>
-    <item>Libreria</item>
-    <item>Downloads</item>
-    <item></item>
-    <item>Impostazioni</item>
-    <item>Dona</item>
-    <item></item>
-    <item>Esci</item>
   </string-array>
 </resources>
