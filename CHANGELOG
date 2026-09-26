@@ -1,3 +1,7 @@
+From version 13 on, each version's changes are in
+fastlane/metadata/android/en-US/changelogs/<versionCode>.txt, which F-Droid, Google
+Play and the GitHub releases show. This file keeps the history before then.
+
 [UNRELEASED]
 Version 12
   Improvements:

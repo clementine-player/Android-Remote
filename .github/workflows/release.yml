@@ -1,0 +1,146 @@
+# Publishes a release when a version tag (v13, v13.1, ...) is pushed:
+#   - a GitHub release, with the changelog as its notes and the APK, signed with the release
+#     key in Cloud KMS (the same package and version F-Droid builds)
+#   - on Google Play, the build internal testing already has for the tagged commit (play.yml
+#     uploads every master commit) goes to the closed testing track, with the changelog
+#   - F-Droid builds the tag itself, reading the version and changelog from the repository
+#
+# As in play.yml, there are no keys or credentials here: signing goes through Cloud KMS and
+# Google Cloud is reached with Workload Identity Federation. See RELEASING.md for how to
+# release, and for the one-time setup (scripts/gcp_release_setup.sh); until each signing
+# certificate is committed, its part is skipped with a notice.
+name: release
+on:
+  push:
+    tags: ["v*"]
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write # for the GitHub release
+  id-token: write # for the OIDC token Workload Identity Federation exchanges
+
+env:
+  WORKLOAD_IDENTITY_PROVIDER: projects/611551928920/locations/global/workloadIdentityPools/github-actions/providers/android-remote-play
+  SERVICE_ACCOUNT: android-play-release@clementine-data.iam.gserviceaccount.com
+  # Signs the GitHub release's APK; created by scripts/gcp_release_setup.sh.
+  RELEASE_KMS_KEY: projects/clementine-data/locations/global/keyRings/android-signing/cryptoKeys/github-release/cryptoKeyVersions/1
+  RELEASE_CERT: app/release_cert.pem
+  # Play's upload certificate: once committed, Play has the builds this promotes (play.yml).
+  UPLOAD_CERT: app/upload_cert.pem
+  PLAY_PACKAGE: org.clementine_player.remote
+  # Pinned with its checksum since it signs releases; keep in step with play.yml.
+  KMS_SIGNER_VERSION: 2026.09.25-a3c0e5e
+  KMS_SIGNER_SHA256: 843d553610ebca4a4beee8fc9a66c0c9c7575bc614bc69ea3646eb656974798a
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # All of master's history: the Play version code is its commit count.
+          fetch-depth: 0
+
+      - name: Check the version and changelog
+        id: version
+        run: |
+          scripts/check_release.sh "$GITHUB_REF_NAME" | tee -a "$GITHUB_OUTPUT"
+          # Releases come from master, whose every commit play.yml has sent to Google Play.
+          if ! git merge-base --is-ancestor HEAD origin/master; then
+            echo "::error::$GITHUB_REF_NAME isn't on master: tag a commit on master."
+            exit 1
+          fi
+          echo "play_code=$(git rev-list --count HEAD)" | tee -a "$GITHUB_OUTPUT"
+
+      - name: Check the signing setup
+        id: setup
+        run: |
+          apk=false; play=false
+          if [ -f "$RELEASE_CERT" ]; then
+            apk=true
+          else
+            echo "::notice::The GitHub release will have no APK: $RELEASE_CERT is not committed yet (see RELEASING.md)."
+          fi
+          if [ -f "$UPLOAD_CERT" ]; then
+            play=true
+          else
+            echo "::notice::Not releasing on Google Play: $UPLOAD_CERT is not committed yet (see RELEASING.md)."
+          fi
+          {
+            echo "apk=$apk"
+            echo "play=$play"
+            echo "cloud=$([ $apk = true ] || [ $play = true ] && echo true || echo false)"
+          } >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-java@v5
+        if: steps.setup.outputs.apk == 'true'
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v5
+        if: steps.setup.outputs.apk == 'true'
+
+      - name: Build the unsigned APK
+        if: steps.setup.outputs.apk == 'true'
+        run: ./gradlew assembleFdroidRelease
+
+      - name: Get kms-signer
+        if: steps.setup.outputs.apk == 'true'
+        run: |
+          zip="kms-signer-$KMS_SIGNER_VERSION.zip"
+          curl -sSfL -o "$RUNNER_TEMP/$zip" \
+            "https://github.com/clementine-player/kms-signer/releases/download/v$KMS_SIGNER_VERSION/$zip"
+          echo "$KMS_SIGNER_SHA256  $RUNNER_TEMP/$zip" | sha256sum --check
+          unzip -q "$RUNNER_TEMP/$zip" -d "$RUNNER_TEMP"
+          echo "KMS_SIGNER=$RUNNER_TEMP/kms-signer-$KMS_SIGNER_VERSION/bin/kms-signer" >> "$GITHUB_ENV"
+
+      - uses: google-github-actions/auth@v3
+        id: auth
+        if: steps.setup.outputs.cloud == 'true'
+        with:
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+          # For the Play API; kms-signer uses the credentials file this also writes.
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/androidpublisher
+
+      - name: Sign the APK with Cloud KMS
+        id: apk
+        if: steps.setup.outputs.apk == 'true'
+        run: |
+          apk="$RUNNER_TEMP/ClementineRemote-${{ steps.version.outputs.name }}.apk"
+          "$KMS_SIGNER" sign --key "$RELEASE_KMS_KEY" --cert "$RELEASE_CERT" \
+            --in app/build/outputs/apk/fdroid/release/ClementineRemote-fdroid-release-unsigned.apk \
+            --out "$apk"
+          "$KMS_SIGNER" verify --in "$apk"
+          echo "path=$apk" >> "$GITHUB_OUTPUT"
+
+      - name: Publish the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NAME: ${{ steps.version.outputs.name }}
+          CHANGELOG: ${{ steps.version.outputs.changelog }}
+          APK: ${{ steps.apk.outputs.path }}
+        run: |
+          # Already there on a re-run, such as after Google Play failed: then just the APK again.
+          if gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
+            if [ -n "$APK" ]; then gh release upload "$GITHUB_REF_NAME" "$APK" --clobber; fi
+          else
+            gh release create "$GITHUB_REF_NAME" --verify-tag \
+              --title "Clementine Remote $NAME" --notes-file "$CHANGELOG" ${APK:+"$APK"}
+          fi
+
+      - name: Release on Google Play
+        if: steps.setup.outputs.play == 'true'
+        env:
+          PLAY_TOKEN: ${{ steps.auth.outputs.access_token }}
+        run: >
+          scripts/play_promote.sh "$PLAY_PACKAGE"
+          ${{ steps.version.outputs.play_code }}
+          "${{ steps.version.outputs.name }}"
+          "${{ vars.PLAY_RELEASE_TRACK || 'alpha' }}"
+          "${{ vars.PLAY_RELEASE_STATUS || 'completed' }}"
+          "${{ steps.version.outputs.changelog }}"
