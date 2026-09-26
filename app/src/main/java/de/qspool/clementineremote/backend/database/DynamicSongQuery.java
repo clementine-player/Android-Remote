@@ -50,8 +50,20 @@ public abstract class DynamicSongQuery {
         mDatabase = getReadableDatabase();
     }
 
+    public void closeDatabase() {
+        if (mDatabase != null) {
+            mDatabase.close();
+            mDatabase = null;
+        }
+    }
+
     public int getMaxLevels() {
         return mMaxLevels;
+    }
+
+    /** The field the items of a level are grouped by, such as "artist"; "title" for songs. */
+    public String getField(int level) {
+        return mSelectedFields[level];
     }
 
     public Cursor buildQuery(String fromTable) {
@@ -224,9 +236,19 @@ public abstract class DynamicSongQuery {
      * @return The list of items
      */
     public LinkedList<SongSelectItem> selectData() {
+        return selectData("");
+    }
+
+    /**
+     * Select the data matching a search, and returns a list of items
+     *
+     * @param match What to search for; empty for everything
+     * @return The list of items
+     */
+    public LinkedList<SongSelectItem> selectData(String match) {
         LinkedList<SongSelectItem> itemList = new LinkedList<>();
 
-        Cursor c = buildQuery();
+        Cursor c = match.isEmpty() ? buildQuery() : buildQuery(getMatchesSubQuery(match));
 
         if (c != null && c.getCount() != 0) {
             c.moveToFirst();
