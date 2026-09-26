@@ -253,6 +253,7 @@
     <string name="widget_not_connected">Not connected</string>
     <string name="widget_open_clementine">Touch to start Clementine Remote</string>
     <string name="widget_couldnt_connect">Could not connect</string>
+    <string name="widget_description">The song Clementine is playing, with play/pause and next</string>
 
     <string name="dialog_close">Close</string>
     <string name="dialog_cancel">Cancel</string>
