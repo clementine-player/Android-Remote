@@ -2,6 +2,7 @@ package de.qspool.clementineremote.ui.settings
 
 import android.os.Environment
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -16,11 +17,11 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextReplacement
-import androidx.core.content.ContextCompat
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.SharedPreferencesKeys
 import de.qspool.clementineremote.backend.downloader.MediaStoreDownloadStorage
 import de.qspool.clementineremote.ui.theme.ClementineTheme
+import kotlinx.coroutines.Dispatchers
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Before
@@ -61,7 +62,10 @@ class SettingsScreenTest {
         preferences.edit().clear().commit()
         compose.setContent {
             ClementineTheme(dynamicColor = false) {
-                SettingsScreen(rememberPreferenceStore(preferences), actions) { "/music" }
+                // Folders are read in line, so the dialog's lists are there once it's idle.
+                CompositionLocalProvider(LocalFolderDispatcher provides Dispatchers.Unconfined) {
+                    SettingsScreen(rememberPreferenceStore(preferences), actions) { "/music" }
+                }
             }
         }
     }
@@ -127,28 +131,22 @@ class SettingsScreenTest {
     @Config(sdk = [28])
     fun beforeAndroid10DownloadsGoToAFolderPicked() {
         ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED)
-        // The app's Music folders exist by now in the app, made for the default folder shown;
-        // Robolectric can't make them off the main thread.
-        ContextCompat.getExternalFilesDirs(compose.activity, Environment.DIRECTORY_MUSIC)
         row(SharedPreferencesKeys.SP_DOWNLOAD_DIR).assertIsEnabled()
         compose.onNodeWithText("/music").assertExists()
 
         // One of the folders suggested...
         row(SharedPreferencesKeys.SP_DOWNLOAD_DIR).performClick()
-        eventually { compose.onAllNodesWithTag("folder").fetchSemanticsNodes().isNotEmpty() }
         compose.onAllNodesWithTag("folder")[0].performClick()
         val suggested = preferences.getString(SharedPreferencesKeys.SP_DOWNLOAD_DIR, null)!!
         compose.onNodeWithText(suggested).assertExists()
 
         // ...or one browsed to, starting from the folder set.
         row(SharedPreferencesKeys.SP_DOWNLOAD_DIR).performClick()
-        eventually { compose.onAllNodesWithTag("folderOther").fetchSemanticsNodes().isNotEmpty() }
         compose.onNodeWithTag("folderOther").performClick()
         // Its title is the folder browsed.
         compose.onAllNodesWithText(suggested).assertCountEquals(2)
         compose.onNodeWithTag("folderUp").performClick()
         compose.onNodeWithTag("btnFolderSelect").performClick()
-        eventually { preferences.getString(SharedPreferencesKeys.SP_DOWNLOAD_DIR, null) != suggested }
         assertEquals(File(suggested).parent, preferences.getString(SharedPreferencesKeys.SP_DOWNLOAD_DIR, null))
     }
 
@@ -187,21 +185,5 @@ class SettingsScreenTest {
             ),
             licenses,
         )
-    }
-
-    /**
-     * Waits for [condition], for folders listed off the main thread: their result comes back
-     * through the main looper, on a frame.
-     */
-    private fun eventually(condition: () -> Boolean) {
-        repeat(100) {
-            compose.mainClock.advanceTimeByFrame()
-            compose.waitForIdle()
-            if (condition()) {
-                return
-            }
-            Thread.sleep(50)
-        }
-        throw AssertionError("Still not so after 5 s")
     }
 }

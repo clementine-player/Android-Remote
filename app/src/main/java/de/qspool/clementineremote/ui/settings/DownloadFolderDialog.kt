@@ -20,6 +20,7 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -28,11 +29,15 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import de.qspool.clementineremote.R
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
+
+/** Where folders are read: off the main thread, except in tests. */
+internal val LocalFolderDispatcher = staticCompositionLocalOf<CoroutineDispatcher> { Dispatchers.IO }
 
 /**
  * Where to save downloads, before Android 10 (which saves them to the Music collection): one of
@@ -54,8 +59,9 @@ internal fun DownloadFolderDialog(current: String, onDismiss: () -> Unit, onChoo
 @Composable
 private fun Suggestions(onChoose: (String) -> Unit, onBrowse: () -> Unit, onDismiss: () -> Unit) {
     val context = LocalContext.current
+    val io = LocalFolderDispatcher.current
     val suggestions by produceState<Suggested?>(null) {
-        value = withContext(Dispatchers.IO) { suggest(context) }
+        value = withContext(io) { suggest(context) }
     }
     FolderDialog(stringResource(R.string.file_dialog_set_dir), onDismiss) {
         suggestions?.let { suggested ->
@@ -70,9 +76,10 @@ private fun Suggestions(onChoose: (String) -> Unit, onBrowse: () -> Unit, onDism
 @Composable
 private fun Browser(folder: String, onOpen: (String) -> Unit, onChoose: (String) -> Unit, onDismiss: () -> Unit) {
     val scope = rememberCoroutineScope()
+    val io = LocalFolderDispatcher.current
     var notWritable by rememberSaveable(folder) { mutableStateOf(false) }
     val children by produceState<List<String>?>(null, folder) {
-        value = withContext(Dispatchers.IO) { subfolders(File(folder)) }
+        value = withContext(io) { subfolders(File(folder)) }
     }
     FolderDialog(
         folder,
@@ -81,7 +88,7 @@ private fun Browser(folder: String, onOpen: (String) -> Unit, onChoose: (String)
             TextButton(
                 onClick = {
                     scope.launch {
-                        if (withContext(Dispatchers.IO) { isWritable(File(folder)) }) {
+                        if (withContext(io) { isWritable(File(folder)) }) {
                             onChoose(folder)
                         } else {
                             notWritable = true
