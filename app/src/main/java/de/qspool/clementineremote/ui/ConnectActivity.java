@@ -17,49 +17,41 @@
 
 package de.qspool.clementineremote.ui;
 
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import android.widget.EditText;
-import de.qspool.clementineremote.ui.dialogs.ProgressDialog;
-import androidx.appcompat.app.AlertDialog;
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.Message;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.compose.ui.platform.ComposeView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
+
+import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -72,22 +64,25 @@ import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementineService;
+import de.qspool.clementineremote.backend.RemoteRepository;
 import de.qspool.clementineremote.backend.downloader.DownloadManager;
 import de.qspool.clementineremote.backend.mdns.ClementineMDnsDiscovery;
 import de.qspool.clementineremote.backend.mediasession.ClementineMediaSessionNotification;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ReasonDisconnect;
-import de.qspool.clementineremote.ui.adapter.ServiceInfoAdapter;
+import de.qspool.clementineremote.ui.connect.ConnectActions;
+import de.qspool.clementineremote.ui.connect.ConnectViewModel;
+import de.qspool.clementineremote.ui.connect.ConnectViews;
+import de.qspool.clementineremote.ui.connect.Server;
 import de.qspool.clementineremote.ui.settings.ClementineSettings;
 import de.qspool.clementineremote.utils.Utilities;
 
 /**
- * The connect dialog
+ * The connect screen, drawn in Compose ({@code ConnectScreen}). This activity finds Clementines on
+ * the network, connects to the one picked, and opens the player once connected.
  */
-public class ConnectActivity extends AppCompatActivity {
-
-    private final int ANIMATION_DURATION = 2000;
+public class ConnectActivity extends AppCompatActivity implements ConnectActions {
 
     private final int ID_PLAYER_DIALOG = 1;
 
@@ -99,35 +94,21 @@ public class ConnectActivity extends AppCompatActivity {
 
     public final static int RESULT_QUIT = 2;
 
-    private Button mBtnConnect;
-
-    private ImageButton mBtnClementine;
-
-    private AutoCompleteTextView mEtIp;
-
-    ProgressDialog mPdConnect;
-
     private SharedPreferences mSharedPref;
 
     private ConnectActivityHandler mHandler = new ConnectActivityHandler(this);
 
+    private ConnectViewModel mState;
+
     private int mAuthCode = 0;
 
     private ClementineMDnsDiscovery mClementineMDns;
-
-    private AlphaAnimation mAlphaDown;
-
-    private AlphaAnimation mAlphaUp;
-
-    private boolean mAnimationCancel;
 
     private Intent mServiceIntent;
 
     private boolean doAutoConnect = true;
 
     private Set<String> mKnownIps;
-
-    private AlertDialog mServiceInfoDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -137,11 +118,23 @@ public class ConnectActivity extends AppCompatActivity {
 
         EdgeToEdge.apply(this);
 
-        mSharedPref = App.getPreferences();
-        mKnownIps = mSharedPref
-                .getStringSet(SharedPreferencesKeys.SP_KNOWN_IP, new LinkedHashSet<String>());
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
-        initializeUi();
+        mSharedPref = App.getPreferences();
+        // A copy: the set the preferences return must not be changed.
+        mKnownIps = new LinkedHashSet<>(mSharedPref
+                .getStringSet(SharedPreferencesKeys.SP_KNOWN_IP, new LinkedHashSet<String>()));
+
+        mState = new ViewModelProvider(this).get(ConnectViewModel.class);
+        if (savedInstanceState == null) {
+            mState.setHost(mSharedPref.getString(SharedPreferencesKeys.SP_KEY_IP, ""));
+        }
+        mState.setKnownHosts(mKnownIps);
+
+        // Get the last auth code
+        mAuthCode = mSharedPref.getInt(SharedPreferencesKeys.SP_LAST_AUTH_CODE, 0);
+
+        ConnectViews.showConnect((ComposeView) findViewById(R.id.connect_content), mState, this);
     }
 
     @Override
@@ -149,7 +142,7 @@ public class ConnectActivity extends AppCompatActivity {
         super.onResume();
 
         // Check if we are currently connected, then open the player dialog
-        if ((mPdConnect == null || !mPdConnect.isShowing())
+        if (!mState.isConnecting()
                 && App.ClementineConnection != null
                 && App.ClementineConnection.isConnected()) {
             showPlayerDialog();
@@ -186,17 +179,7 @@ public class ConnectActivity extends AppCompatActivity {
         super.onPause();
         if (mClementineMDns != null) {
             mClementineMDns.stopServiceDiscovery();
-            mBtnClementine.clearAnimation();
         }
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        setContentView(R.layout.activity_connectdialog);
-        EdgeToEdge.apply(this);
-
-        initializeUi();
     }
 
     @Override
@@ -276,109 +259,35 @@ public class ConnectActivity extends AppCompatActivity {
         return missing.toArray(new String[0]);
     }
 
-    private void initializeUi() {
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-
-        // Get the Layoutelements
-        mBtnConnect = (Button) findViewById(R.id.btnConnect);
-        mBtnConnect.setOnClickListener(oclConnect);
-        mBtnConnect.requestFocus();
-
-        mBtnClementine = (ImageButton) findViewById(R.id.btnClementineIcon);
-        mBtnClementine.setOnClickListener(oclClementine);
-
-        // Setup the animation for the Clementine icon
-        mAlphaDown = new AlphaAnimation(1.0f, 0.3f);
-        mAlphaUp = new AlphaAnimation(0.3f, 1.0f);
-        mAlphaDown.setDuration(ANIMATION_DURATION);
-        mAlphaUp.setDuration(ANIMATION_DURATION);
-        mAlphaDown.setFillAfter(true);
-        mAlphaUp.setFillAfter(true);
-        mAlphaUp.setAnimationListener(mAnimationListener);
-        mAlphaDown.setAnimationListener(mAnimationListener);
-        mAnimationCancel = false;
-
-        // Ip and Autoconnect
-        mEtIp = (AutoCompleteTextView) findViewById(R.id.etIp);
-        mEtIp.setRawInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-        mEtIp.setThreshold(3);
-
-        // Get old ip and auto-connect from shared prefences
-        mEtIp.setText(mSharedPref.getString(SharedPreferencesKeys.SP_KEY_IP, ""));
-        mEtIp.setSelection(mEtIp.length());
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.select_dialog_item, mKnownIps.toArray(new String[0]));
-        mEtIp.setAdapter(adapter);
-
-        // Get the last auth code
-        mAuthCode = mSharedPref.getInt(SharedPreferencesKeys.SP_LAST_AUTH_CODE, 0);
+    @Override
+    public void onConnect() {
+        connect();
     }
 
-    private OnClickListener oclConnect = new OnClickListener() {
+    @Override
+    public void onServer(@NonNull Server server) {
+        mState.setHost(server.getHost());
+        mSharedPref.edit()
+                .putString(SharedPreferencesKeys.SP_KEY_PORT, String.valueOf(server.getPort()))
+                .apply();
+        connect();
+    }
 
-        @Override
-        public void onClick(View v) {
-            // And connect
-            connect();
-        }
-    };
+    @Override
+    public void onCancel() {
+        RemoteRepository.send(ClementineMessage.getMessage(MsgType.DISCONNECT));
+        mState.hideProgress();
+    }
 
-    private OnClickListener oclClementine = new OnClickListener() {
+    /** Shows how far connecting has got. */
+    void showProgress(@StringRes int progress) {
+        mState.showProgress(progress);
+    }
 
-        @Override
-        public void onClick(View v) {
-            // Only when we have Jelly Bean or higher
-            if (!mClementineMDns.getServices().isEmpty()) {
-                mAnimationCancel = true;
-                final AlertDialog.Builder builder = new AlertDialog.Builder(
-                        ConnectActivity.this);
-
-                builder.setTitle(R.string.connectdialog_services);
-                ServiceInfoAdapter adapter = new ServiceInfoAdapter(mClementineMDns.getServices());
-                adapter.setListener(new ServiceInfoAdapter.ItemClickListener() {
-                    @Override
-                    public void onItemClick(ServiceInfo serviceInfo) {
-                        if (mServiceInfoDialog != null && mServiceInfoDialog.isShowing()) {
-                            mServiceInfoDialog.dismiss();
-                        }
-                        // Insert the host
-                        String ip = serviceInfo.getInet4Addresses()[0].toString().split("/")[1];
-                        mEtIp.setText(ip);
-
-                        // Update the port
-                        SharedPreferences.Editor editor = mSharedPref.edit();
-                        editor.putString(SharedPreferencesKeys.SP_KEY_PORT,
-                                String.valueOf(serviceInfo.getPort()));
-                        editor.apply();
-                        connect();
-                    }
-                });
-                RecyclerView services = new RecyclerView(ConnectActivity.this);
-                services.setLayoutManager(new LinearLayoutManager(ConnectActivity.this));
-                services.setAdapter(adapter);
-                builder.setView(services);
-                builder.setNegativeButton(R.string.dialog_close, null);
-                mServiceInfoDialog = builder.show();
-            }
-        }
-    };
-
-    private OnCancelListener oclProgressDialog = new OnCancelListener() {
-        @Override
-        public void onCancel(DialogInterface dialog) {
-            if (App.ClementineConnection != null &&
-                    App.ClementineConnection.mHandler != null) {
-                // Move the request to the message
-                Message msg = Message.obtain();
-                msg.obj = ClementineMessage.getMessage(MsgType.DISCONNECT);
-
-                // Send the request to the thread
-                App.ClementineConnection.mHandler.sendMessage(msg);
-            }
-        }
-
-    };
+    /** Connecting has ended, whether connected or not. */
+    void connectionEnded() {
+        mState.hideProgress();
+    }
 
     /**
      * Connect to clementine
@@ -389,11 +298,10 @@ public class ConnectActivity extends AppCompatActivity {
             return;
         }
 
-        if (!mKnownIps.contains(mEtIp.getText().toString())) {
-            mKnownIps.add(mEtIp.getText().toString());
-        }
+        final String ip = mState.getHost().getValue();
 
-        final String ip = mEtIp.getText().toString();
+        mKnownIps.add(ip);
+        mState.setKnownHosts(mKnownIps);
 
         // Save the data
         SharedPreferences.Editor editor = mSharedPref.edit();
@@ -403,9 +311,7 @@ public class ConnectActivity extends AppCompatActivity {
 
         editor.apply();
 
-        // Create a progress dialog
-        mPdConnect = ProgressDialog.showIndeterminate(this, 0,
-                R.string.connectdialog_connecting, true, oclProgressDialog);
+        mState.showProgress(R.string.connectdialog_connecting);
 
         // Start the service so it won't be stopped on unbindService
         Intent serviceIntent = new Intent(this, ClementineService.class);
@@ -580,39 +486,17 @@ public class ConnectActivity extends AppCompatActivity {
     }
 
     /**
-     * A service was found. Now show a toast and animate the icon
+     * The Clementines found on the network changed.
      */
     void serviceFound() {
-        if (mClementineMDns.getServices().isEmpty()) {
-            mBtnClementine.clearAnimation();
-        } else {
-            // Start the animation
-            mBtnClementine.startAnimation(mAlphaDown);
-        }
-    }
-
-    private AnimationListener mAnimationListener = new AnimationListener() {
-        @Override
-        public void onAnimationEnd(Animation animation) {
-            if (!mAnimationCancel) {
-                if (animation.equals(mAlphaDown)) {
-                    mBtnClementine.startAnimation(mAlphaUp);
-                } else {
-                    mBtnClementine.startAnimation(mAlphaDown);
-                }
-            } else {
-                mBtnClementine.clearAnimation();
-                mAnimationCancel = false;
+        List<Server> servers = new ArrayList<>();
+        for (ServiceInfo service : mClementineMDns.getServices()) {
+            Inet4Address[] addresses = service.getInet4Addresses();
+            if (addresses.length > 0) {
+                servers.add(new Server(service.getName(), addresses[0].getHostAddress(),
+                        service.getPort()));
             }
         }
-
-        @Override
-        public void onAnimationRepeat(Animation animation) {
-        }
-
-        @Override
-        public void onAnimationStart(Animation animation) {
-        }
-
-    };
+        mState.setServers(servers);
+    }
 }

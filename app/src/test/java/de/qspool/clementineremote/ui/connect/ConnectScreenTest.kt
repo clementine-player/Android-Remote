@@ -1,0 +1,126 @@
+package de.qspool.clementineremote.ui.connect
+
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assertTextContains
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performImeAction
+import androidx.compose.ui.test.performTextReplacement
+import de.qspool.clementineremote.R
+import de.qspool.clementineremote.ui.theme.ClementineTheme
+import org.junit.Assert.assertEquals
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+
+/** The connect screen offers the Clementines found, takes an address, and shows connecting. */
+@RunWith(RobolectricTestRunner::class)
+class ConnectScreenTest {
+
+    @get:Rule
+    val compose = createComposeRule()
+
+    private val done = mutableListOf<String>()
+
+    private fun show(
+        host: String = "",
+        servers: List<Server> = emptyList(),
+        progress: Int? = null,
+        knownHosts: List<String> = emptyList(),
+    ) {
+        compose.setContent {
+            var typed by remember { mutableStateOf(host) }
+            ClementineTheme(dynamicColor = false) {
+                ConnectContent(
+                    host = typed,
+                    knownHosts = knownHosts,
+                    servers = servers,
+                    progress = progress,
+                    onHostChange = { typed = it },
+                    onConnect = { done += "connect $typed" },
+                    onServer = { done += "server ${it.host}:${it.port}" },
+                    onCancel = { done += "cancel" },
+                )
+            }
+        }
+    }
+
+    @Test
+    fun withNothingFoundExplainsHowToFindClementine() {
+        show()
+
+        compose.onNodeWithTag("searching").assertIsDisplayed()
+        compose.onNodeWithText("same Wi-Fi network", substring = true).assertIsDisplayed()
+        // Nothing to connect to yet.
+        compose.onNodeWithTag("btnConnect").assertIsNotEnabled()
+    }
+
+    @Test
+    fun connectsToAClementineFound() {
+        show(servers = listOf(
+            Server("Living room", "192.168.1.20", 5500),
+            Server("Study", "192.168.1.21", 5501),
+        ))
+
+        compose.onNodeWithTag("searching").assertDoesNotExist()
+        compose.onNodeWithText("Study").assertIsDisplayed()
+        compose.onNodeWithText("192.168.1.21:5501").performClick()
+
+        assertEquals(listOf("server 192.168.1.21:5501"), done)
+    }
+
+    @Test
+    fun connectsToTheAddressTypedIn() {
+        show()
+
+        compose.onNodeWithTag("etIp").performTextReplacement(" 10.0.2.2 ")
+        compose.onNodeWithTag("btnConnect").assertIsEnabled().performClick()
+        compose.onNodeWithTag("etIp").performImeAction()
+
+        assertEquals(listOf("connect 10.0.2.2", "connect 10.0.2.2"), done)
+    }
+
+    @Test
+    fun suggestsAddressesConnectedToBefore() {
+        show(knownHosts = listOf("192.168.1.20", "10.0.2.2"))
+
+        compose.onNodeWithTag("etIp").performTextReplacement("192")
+        compose.onNodeWithText("192.168.1.20").performClick()
+
+        compose.onNodeWithTag("etIp").assertTextContains("192.168.1.20")
+    }
+
+    @Test
+    fun whileConnectingShowsProgressAndCanCancel() {
+        show(host = "10.0.2.2", progress = R.string.connectdialog_download_data)
+
+        compose.onNodeWithTag("btnConnect").assertDoesNotExist()
+        compose.onNodeWithText("Downloading data").assertIsDisplayed()
+        compose.onNodeWithTag("etIp").assertIsNotEnabled()
+        compose.onNodeWithTag("btnCancel").performClick()
+
+        assertEquals(listOf("cancel"), done)
+    }
+
+    @Test
+    fun viewModelKeepsTheActivitysState() {
+        val state = ConnectViewModel()
+
+        state.setKnownHosts(listOf("", "10.0.2.2"))
+        state.showProgress(R.string.connectdialog_connecting)
+
+        assertEquals(listOf("10.0.2.2"), state.knownHosts.value)
+        assertEquals(true, state.isConnecting)
+        state.hideProgress()
+        assertEquals(false, state.isConnecting)
+    }
+}

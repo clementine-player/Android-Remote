@@ -220,10 +220,10 @@ public class StoreScreenshots {
     public void takeScreenshots() {
         mContext.startActivity(new Intent(mContext, ConnectActivity.class)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-        waitFor(id("btnConnect"));
+        waitFor(tag("btnConnect"));
         screenshot("6_connect");
 
-        mDevice.findObject(id("btnConnect")).click();
+        mDevice.findObject(tag("btnConnect")).click();
         waitFor(tag("btnPlaypause"));
 
         navigateTo("Playlists");
