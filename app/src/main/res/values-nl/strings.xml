@@ -89,16 +89,12 @@
   <string name="donate_try_again">Laatste donatie aan het verwerken, probeer het opnieuw</string>
   <string name="donate_not_available">Google Play is niet beschikbaar</string>
   <string name="donate_not_available_text">Controleer of je de nieuwste versie van Google Play Store hebt en probeer het opnieuw!</string>
-  <string name="pref_cat_behavior">Gedrag</string>
   <string name="pref_cat_player">Speler</string>
   <string name="pref_cat_library">Bibliotheek</string>
   <string name="pref_cat_downloads">Downloads</string>
   <string name="pref_cat_advanced">Geavanceerd</string>
-  <string name="pref_cat_network">Netwerk</string>
   <string name="pref_cat_connection">Verbinding</string>
-  <string name="pref_cat_info">Informatie</string>
   <string name="pref_cat_about">Over</string>
-  <string name="pref_cat_license">Licenties</string>
   <string name="pref_volume_title">Gebruik volume knopen</string>
   <string name="pref_volume_summary">Gebruik de volume knoppen voor het vlume van Clementine.</string>
   <string name="pref_trackno_title">Toon volgnummer</string>
@@ -131,7 +127,6 @@
   <string name="pref_autoconnect_summary">Automatisch connectie maken met Clementine bij opstarten remote. </string>
   <string name="pref_port_title">Poort</string>
   <string name="pref_port_summary">Huidige Poort:</string>
-  <string name="pref_port_default">5500</string>
   <string name="pref_port_error">Ongeldige Poort!</string>
   <string name="pref_wake_lock_title">Houd CPU actief</string>
   <string name="pref_wake_lock_summary">Aanzetten als de App willekeurig connectie verliest in de achtergrond. Battery verbruik kan hoger zijn.</string>

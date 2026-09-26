@@ -91,16 +91,12 @@
   <string name="donate_try_again">Spracováva sa posledný príspevok, skúste to znovu</string>
   <string name="donate_not_available">Obchod Play nie je dostupný</string>
   <string name="donate_not_available_text">Prosím, skontrolujte, či máte nainštalovanú najnovšiu verziu Obchodu Play a skúste to znovu!</string>
-  <string name="pref_cat_behavior">Správanie</string>
   <string name="pref_cat_player">Prehrávač</string>
   <string name="pref_cat_library">Zbierka</string>
   <string name="pref_cat_downloads">Preberania</string>
   <string name="pref_cat_advanced">Pokročilé</string>
-  <string name="pref_cat_network">Sieť</string>
   <string name="pref_cat_connection">Pripojenie</string>
-  <string name="pref_cat_info">Informácie</string>
   <string name="pref_cat_about">O programe</string>
-  <string name="pref_cat_license">Licencie</string>
   <string name="pref_volume_title">Použiť tlačidlá hlasitosti</string>
   <string name="pref_volume_summary">Použiť tlačidlá hlasitosti na ovládanie hlasitosti prehrávača Clementine.</string>
   <string name="pref_trackno_title">Zobraziť číslo stopy</string>
@@ -134,7 +130,6 @@
 </string>
   <string name="pref_port_title">Port</string>
   <string name="pref_port_summary">Aktuálny Port:</string>
-  <string name="pref_port_default">5500</string>
   <string name="pref_port_error">Neplatný port!</string>
   <string name="pref_wake_lock_title">Udržiavať procesor nažive</string>
   <string name="pref_wake_lock_summary">Povoľte ak sa aplikácia náhodne odpája pri spustení na pozadí. Môže rýchlejšie vybíjať batériu.

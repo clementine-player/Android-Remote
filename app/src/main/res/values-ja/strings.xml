@@ -87,16 +87,12 @@
   <string name="donate_try_again">前回の寄付を処理中です。もう一度実行してください</string>
   <string name="donate_not_available">Google Play が利用できません</string>
   <string name="donate_not_available_text">最新の Google Play ストアバージョンがインストールされているか確認して、もう一度実行してください!</string>
-  <string name="pref_cat_behavior">動作</string>
   <string name="pref_cat_player">プレイヤー</string>
   <string name="pref_cat_library">ライブラリー</string>
   <string name="pref_cat_downloads">ダウンロード</string>
   <string name="pref_cat_advanced">高度</string>
-  <string name="pref_cat_network">ネットワーク</string>
   <string name="pref_cat_connection">接続</string>
-  <string name="pref_cat_info">情報</string>
   <string name="pref_cat_about">アプリについて</string>
-  <string name="pref_cat_license">ライセンス</string>
   <string name="pref_volume_title">音量キーを使用する</string>
   <string name="pref_volume_summary">Clementine の音量を調整するために、音量キーを使用します。</string>
   <string name="pref_trackno_title">トラック番号を表示</string>
@@ -129,7 +125,6 @@
   <string name="pref_autoconnect_summary">リモートの起動時に自動的に Clementine に接続します。</string>
   <string name="pref_port_title">ポート</string>
   <string name="pref_port_summary">現在のポート:</string>
-  <string name="pref_port_default">5500</string>
   <string name="pref_port_error">ポートが正しくありません!</string>
   <string name="pref_wake_lock_title">CPU をアクティブのままにする</string>
   <string name="pref_wake_lock_summary">アプリがバックグラウンドで不定期に切断された場合に、有効にします。バッテリーの消耗が早くなります。</string>

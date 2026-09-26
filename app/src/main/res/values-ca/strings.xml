@@ -89,16 +89,12 @@
   <string name="donate_try_again">Encara hi ha una donació en procés. Proveu-ho d\'aquí un moment.</string>
   <string name="donate_not_available">El Google Play no està disponible.</string>
   <string name="donate_not_available_text">Si us plau, comproveu si teniu instal·lada l\'última versió de la Google Play Store i proveu-ho un altre cop.</string>
-  <string name="pref_cat_behavior">Comportament</string>
   <string name="pref_cat_player">Reproductor</string>
   <string name="pref_cat_library">Col·lecció</string>
   <string name="pref_cat_downloads">Baixades</string>
   <string name="pref_cat_advanced">Avançats</string>
-  <string name="pref_cat_network">Xarxa</string>
   <string name="pref_cat_connection">Connexió</string>
-  <string name="pref_cat_info">Informació</string>
   <string name="pref_cat_about">Quant a</string>
-  <string name="pref_cat_license">Llicències</string>
   <string name="pref_volume_title">Feu servir les tecles del volum</string>
   <string name="pref_volume_summary">Empreu les tecles de volum per controlar el volum del Clementine.</string>
   <string name="pref_trackno_title">Mostra el número de peça</string>
@@ -132,7 +128,6 @@
 </string>
   <string name="pref_port_title">Port</string>
   <string name="pref_port_summary">Port actual:</string>
-  <string name="pref_port_default">5500</string>
   <string name="pref_port_error">Port no vàlid!</string>
   <string name="pref_wake_lock_title">Manté actiu el processador</string>
   <string name="pref_wake_lock_summary">Activeu-ho si l\'aplicació es desconnecta quan està en segon pla. Pot augmentar el consum de bateria.

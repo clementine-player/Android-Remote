@@ -91,16 +91,12 @@
   <string name="donate_try_again">Обробляємо дані попереднього переказу, повторіть спробу</string>
   <string name="donate_not_available">Google Play недоступний</string>
   <string name="donate_not_available_text">Будь ласка, перевірте, чи встановлено найсвіжішу версію Google Play Store, і повторіть спробу!</string>
-  <string name="pref_cat_behavior">Поведінка</string>
   <string name="pref_cat_player">Програвач</string>
   <string name="pref_cat_library">Фонотека</string>
   <string name="pref_cat_downloads">Отримання даних</string>
   <string name="pref_cat_advanced">Додатково</string>
-  <string name="pref_cat_network">Мережа</string>
   <string name="pref_cat_connection">З’єднання</string>
-  <string name="pref_cat_info">Відомості</string>
   <string name="pref_cat_about">Про програму</string>
-  <string name="pref_cat_license">Ліцензування</string>
   <string name="pref_volume_title">Використовувати клавіші гучності</string>
   <string name="pref_volume_summary">Використовувати клавіші гучності для керування гучністю відтворення у Clementine.</string>
   <string name="pref_trackno_title">Показувати номер композиції</string>
@@ -134,7 +130,6 @@
     </string>
   <string name="pref_port_title">Порт</string>
   <string name="pref_port_summary">Поточний порт:</string>
-  <string name="pref_port_default">5500</string>
   <string name="pref_port_error">Некоректний порт!</string>
   <string name="pref_wake_lock_title">Не призупиняти роботу процесора</string>
   <string name="pref_wake_lock_summary">Позначте, якщо програма потерпає від випадкових від’єднань, коли працює у фоновому режимі. Може призвести до швидшого розряджання акумулятора.</string>

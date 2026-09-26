@@ -12,13 +12,10 @@
   <string name="playlist_search_hint">တေးသံလမ်းကြောရှာဖွေ</string>
   <string name="menu_settings">ချိန်ညှိချက်</string>
   <string name="menu_search">ရှာဖွေ</string>
-  <string name="pref_cat_behavior">လုပ်ဆောင်ပုံ</string>
-  <string name="pref_cat_info">အချက်အလက်</string>
   <string name="pref_volume_title">အသံပမာဏသော့များအသုံးပြု</string>
   <string name="pref_volume_summary">ကလီမန်တိုင်းအသံပမာဏကိုထိန်းချုပ်ရန်အသံပမာဏကီးများသံုးပါ။</string>
   <string name="pref_port_title">နံပါတ်ပေါက်</string>
   <string name="pref_port_summary">လက်ရှိနံပါတ်ပေါက်:</string>
-  <string name="pref_port_default">၅၅၀၀</string>
   <string name="pref_port_error">နံပါတ်ပေါက်တရားမဝင်!</string>
   <string name="pref_version_summary">ပရောဂျက်ဝက်ဘ်ဆိုက်သို့အလည်သွားရန်ကလစ်နှိပ်</string>
   <string name="pref_version_title">ပံုစံ</string>

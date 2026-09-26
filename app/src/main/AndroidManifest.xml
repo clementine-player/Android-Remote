@@ -63,6 +63,8 @@
                   android:exported="false"
                   android:launchMode="singleTop" />
         <activity android:name=".ui.settings.ClementineSettings"
+                  android:enableOnBackInvokedCallback="true"
+                  tools:targetApi="34"
                   android:exported="false"
                   android:theme="@style/AppTheme.PreferenceTheme"/>
         <activity android:name=".ui.TaskerSettings"

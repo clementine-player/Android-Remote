@@ -91,16 +91,12 @@
   <string name="donate_try_again">Vykdomas paskiausias paaukojimas, bandykite vėl</string>
   <string name="donate_not_available">Google Play neprieinama</string>
   <string name="donate_not_available_text">Prašome patikrinti ar turite įdiegtą naujausią \"Google Play\" parduotuvės versiją ir bandyti vėl!</string>
-  <string name="pref_cat_behavior">Elgsena</string>
   <string name="pref_cat_player">Grotuvas</string>
   <string name="pref_cat_library">Biblioteka</string>
   <string name="pref_cat_downloads">Atsiuntimai</string>
   <string name="pref_cat_advanced">Išplėstiniai</string>
-  <string name="pref_cat_network">Tinklas</string>
   <string name="pref_cat_connection">Ryšys</string>
-  <string name="pref_cat_info">Informacija</string>
   <string name="pref_cat_about">Apie</string>
-  <string name="pref_cat_license">Licencijos</string>
   <string name="pref_volume_title">Naudoti garsumo klavišus</string>
   <string name="pref_volume_summary">Naudoti garsumo klavišus, kad būtų valdomas Clementine garsumas.</string>
   <string name="pref_trackno_title">Rodyti takelio numerį</string>
@@ -134,7 +130,6 @@
     </string>
   <string name="pref_port_title">Prievadas</string>
   <string name="pref_port_summary">Esamas prievadas:</string>
-  <string name="pref_port_default">5500</string>
   <string name="pref_port_error">Neleistinas prievadas!</string>
   <string name="pref_wake_lock_title">Išlaikyti kompiuterį prijungtą</string>
   <string name="pref_wake_lock_summary">Įjunkite, jeigu programa, būdama fone, atsitiktinai atsijungia. Tai gali išnaudoti daugiau baterijos energijos.

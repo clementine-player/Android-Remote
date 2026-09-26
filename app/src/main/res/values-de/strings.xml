@@ -89,16 +89,12 @@
   <string name="donate_try_again">Letzte Spende wird bearbeitet, bitte erneut versuchen</string>
   <string name="donate_not_available">Google Play nicht verfügbar</string>
   <string name="donate_not_available_text">Bitte überprüfen Sie, ob Sie die neueste Google-Play-Store-Version installiert haben und versuchen Sie es erneut!</string>
-  <string name="pref_cat_behavior">Verhalten</string>
   <string name="pref_cat_player">Musikspieler</string>
   <string name="pref_cat_library">Bibliothek</string>
   <string name="pref_cat_downloads">Übertragungen</string>
   <string name="pref_cat_advanced">Erweitert</string>
-  <string name="pref_cat_network">Netzwerk</string>
   <string name="pref_cat_connection">Verbindung</string>
-  <string name="pref_cat_info">Informationen</string>
   <string name="pref_cat_about">Über</string>
-  <string name="pref_cat_license">Lizenzen</string>
   <string name="pref_volume_title">Lautstärketasten benutzen</string>
   <string name="pref_volume_summary">Die Lautstärketasten benutzen, um die Lautstärke von Clementine zu ändern.</string>
   <string name="pref_trackno_title">Titelnummer zeigen</string>
@@ -131,7 +127,6 @@
   <string name="pref_autoconnect_summary">Automatisch mit Clementine verbinden wenn die Anwendung gestartet wird.</string>
   <string name="pref_port_title">Port</string>
   <string name="pref_port_summary">Aktueller Port:</string>
-  <string name="pref_port_default">5500</string>
   <string name="pref_port_error">Unzulässiger Port!</string>
   <string name="pref_wake_lock_title">CPU aktiv lassen</string>
   <string name="pref_wake_lock_summary">Aktivieren, wenn die Anwendung unerwartet die Verbindung verliert. Könnte erhöhten Akkuverbrauch zur Folge haben.</string>

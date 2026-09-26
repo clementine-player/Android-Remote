@@ -26,7 +26,6 @@ import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.testing.StrictModeRule;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementineService;
-import de.qspool.clementineremote.ui.settings.ClementineSettings;
 import de.qspool.clementineremote.utils.Utilities;
 
 import static org.junit.Assert.assertEquals;
@@ -53,7 +52,7 @@ public class PlatformComplianceTest {
 
     @Test
     public void toolbarGrowsUnderTheStatusBarAndContentClearsTheNavigationBar() {
-        ClementineSettings activity = Robolectric.buildActivity(ClementineSettings.class)
+        TaskerSettings activity = Robolectric.buildActivity(TaskerSettings.class)
                 .setup().get();
         View toolbar = activity.findViewById(R.id.toolbar);
         View content = activity.findViewById(android.R.id.content);

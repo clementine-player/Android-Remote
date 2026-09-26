@@ -42,11 +42,9 @@
   <string name="menu_search">Qidirish</string>
   <string name="menu_ban">Taqiq</string>
   <string name="menu_download_playlist">Ijro ro\'yxatini yuklab olish</string>
-  <string name="pref_cat_behavior">Xulq-atvor</string>
   <string name="pref_cat_player">Pleyer</string>
   <string name="pref_cat_downloads">Yuklanishlar</string>
   <string name="pref_cat_connection">Ulanish</string>
-  <string name="pref_cat_info">Ma\'lumot</string>
   <string name="pref_volume_title">Ovoz tugmalaridan foydalaning</string>
   <string name="pref_volume_summary">Clementine ovozini boshqarish uchun ovoz tugmalaridan foydalaning.</string>
   <string name="pref_trackno_title">Yo\'lakcha raqamini ko\'rsatish</string>
@@ -58,7 +56,6 @@
   <string name="pref_call_volume_summary">Joriy qo\'ng\'iroq ovoz darajasi: %s</string>
   <string name="pref_port_title">Port</string>
   <string name="pref_port_summary">Joriy port:</string>
-  <string name="pref_port_default">5500</string>
   <string name="pref_port_error">Noto\'g\'ri port!</string>
   <string name="pref_version_summary">Loyiha veb-sahifasiga o\'tish uchun bosing</string>
   <string name="pref_version_title">Versiya</string>

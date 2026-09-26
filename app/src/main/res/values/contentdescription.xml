@@ -4,7 +4,6 @@
     <string name="cd_clementine_icon">Clementine Icon</string>
     <string name="cd_playpause_button">Play or pause song</string>
     <string name="cd_next_button">Play next song</string>
-    <string name="cd_pref_icon">Icon describing a preference</string>
     <string name="cd_cancel_download">Cancel the download</string>
     <plurals name="song_info_stars">
         <item quantity="one">%d star</item>

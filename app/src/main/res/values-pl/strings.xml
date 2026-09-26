@@ -93,16 +93,12 @@
   <string name="donate_try_again">Trwa przetwarzanie ostatniej darowizny, spróbuj ponownie</string>
   <string name="donate_not_available">Google Play nie jest dostępne</string>
   <string name="donate_not_available_text">Proszę sprawdź czy zainstalowałeś najnowszą wersję Sklepu Google Play i spróbuj ponownie!</string>
-  <string name="pref_cat_behavior">Zachowanie</string>
   <string name="pref_cat_player">Odtwarzacz</string>
   <string name="pref_cat_library">Biblioteka</string>
   <string name="pref_cat_downloads">Pobrane</string>
   <string name="pref_cat_advanced">Zaawansowane</string>
-  <string name="pref_cat_network">Sieć</string>
   <string name="pref_cat_connection">Połączenie</string>
-  <string name="pref_cat_info">Informacje</string>
   <string name="pref_cat_about">O programie</string>
-  <string name="pref_cat_license">Licencje</string>
   <string name="pref_volume_title">Używaj klawiszy regulacji głośności</string>
   <string name="pref_volume_summary">Używaj przycisków regulacji głośności by kontrolować poziom głośności Clementine.</string>
   <string name="pref_trackno_title">Pokaż numer utworu</string>
@@ -136,7 +132,6 @@
 </string>
   <string name="pref_port_title">Port</string>
   <string name="pref_port_summary">Aktualny port:</string>
-  <string name="pref_port_default">5500</string>
   <string name="pref_port_error">Nieprawidłowy port!</string>
   <string name="pref_wake_lock_title">Podtrzymuj CPU uruchomione.</string>
   <string name="pref_wake_lock_summary">Włącz jeśli aplikacja rozłącza się losowo będąc w tle. Może zużywać szybciej baterię.

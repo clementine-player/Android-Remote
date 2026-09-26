@@ -81,16 +81,12 @@
   <string name="donate_thanks">Obrigado pelo seu suporte! :-)</string>
   <string name="donate_complete">Doação completa, obrigado! :-)</string>
   <string name="donate_not_available">Google Play não disponível</string>
-  <string name="pref_cat_behavior">Comportamento</string>
   <string name="pref_cat_player">Player</string>
   <string name="pref_cat_library">Biblioteca</string>
   <string name="pref_cat_downloads">Downloads</string>
   <string name="pref_cat_advanced">Avançado</string>
-  <string name="pref_cat_network">Rede</string>
   <string name="pref_cat_connection">Conexão</string>
-  <string name="pref_cat_info">Informação</string>
   <string name="pref_cat_about">Sobre</string>
-  <string name="pref_cat_license">Licença</string>
   <string name="pref_volume_title">Usar teclas de volume</string>
   <string name="pref_volume_summary">Usar teclas de volume para controlar o volume do Clementine.</string>
   <string name="pref_trackno_title">Exibir número da faixa</string>

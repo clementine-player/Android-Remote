@@ -60,11 +60,9 @@
   <string name="donate_try_again">최근 기부가 진행중 입ㄴ다, 다시 시도해주세요</string>
   <string name="donate_not_available">Google Play를 이용할 수 없음</string>
   <string name="donate_not_available_text">최신 Google Play Store 버전이 설치되었는지 확인하시고 다시 시도해주세요!</string>
-  <string name="pref_cat_behavior">행동</string>
   <string name="pref_cat_player">플레이어</string>
   <string name="pref_cat_downloads">다운로드</string>
   <string name="pref_cat_connection">연결</string>
-  <string name="pref_cat_info">정보</string>
   <string name="pref_volume_title">볼륨키 사용</string>
   <string name="pref_volume_summary">Clementine의 볼륨을 조절하기 위해 볼륨 키를 사용</string>
   <string name="pref_trackno_title">트랙 번호 보기</string>
@@ -78,7 +76,6 @@
   <string name="pref_volume_inc_summary">현재 볼륨 단계: %s</string>
   <string name="pref_port_title">포트</string>
   <string name="pref_port_summary">현재 포트:</string>
-  <string name="pref_port_default">5500</string>
   <string name="pref_port_error">불법 포트!</string>
   <string name="pref_version_summary">프로젝트 웹사이트에 방문하려면 클릭하세요</string>
   <string name="pref_version_title">버전</string>
