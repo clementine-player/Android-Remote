@@ -3,11 +3,7 @@ package de.qspool.clementineremote.ui;
 import android.Manifest;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.view.View;
-import android.view.WindowInsets;
 
-import androidx.core.graphics.Insets;
-import androidx.core.view.WindowInsetsCompat;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -22,13 +18,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.qspool.clementineremote.App;
-import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.testing.StrictModeRule;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementineService;
 import de.qspool.clementineremote.utils.Utilities;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -48,28 +42,6 @@ public class PlatformComplianceTest {
     public void setUp() {
         App.Clementine = new Clementine();
         App.ClementineConnection = null;
-    }
-
-    @Test
-    public void toolbarGrowsUnderTheStatusBarAndContentClearsTheNavigationBar() {
-        TaskerSettings activity = Robolectric.buildActivity(TaskerSettings.class)
-                .setup().get();
-        View toolbar = activity.findViewById(R.id.toolbar);
-        View content = activity.findViewById(android.R.id.content);
-        int toolbarPadding = toolbar.getPaddingTop();
-        int toolbarMinHeight = toolbar.getMinimumHeight();
-
-        WindowInsets insets = new WindowInsetsCompat.Builder()
-                .setInsets(WindowInsetsCompat.Type.statusBars(), Insets.of(0, 60, 0, 0))
-                .setInsets(WindowInsetsCompat.Type.navigationBars(), Insets.of(0, 0, 0, 40))
-                .build()
-                .toWindowInsets();
-        content.dispatchApplyWindowInsets(insets);
-
-        assertEquals(toolbarPadding + 60, toolbar.getPaddingTop());
-        assertEquals(toolbarMinHeight + 60, toolbar.getMinimumHeight());
-        assertEquals(0, content.getPaddingTop());
-        assertEquals(40, content.getPaddingBottom());
     }
 
     private static List<String> missingPermissions() {

@@ -33,7 +33,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -69,7 +69,7 @@ import de.qspool.clementineremote.utils.Utilities
  * The connect screen, drawn in Compose ([ConnectScreen]). This activity finds Clementines on the
  * network, connects to the one picked, and opens the player once connected.
  */
-class ConnectActivity : AppCompatActivity(), ConnectActions {
+class ConnectActivity : ComponentActivity(), ConnectActions {
 
     private lateinit var preferences: SharedPreferences
 

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ClementineTheme's dark surface. -->
+    <color name="window_background">#FF1B110D</color>
+</resources>

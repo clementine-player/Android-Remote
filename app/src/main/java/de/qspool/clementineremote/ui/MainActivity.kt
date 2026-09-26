@@ -29,7 +29,7 @@ import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -63,7 +63,7 @@ import de.qspool.clementineremote.utils.Utilities
  * connection, and finishes when it ends, back to [ConnectActivity]; the volume keys set
  * Clementine's volume, through the media session.
  */
-class MainActivity : AppCompatActivity(), ShellActions {
+class MainActivity : ComponentActivity(), ShellActions {
 
     private val shell: ShellViewModel by viewModels()
 

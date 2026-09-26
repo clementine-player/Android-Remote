@@ -69,6 +69,7 @@
     <string name="shell_more">More options</string>
     <string name="player_collapse">Collapse player</string>
     <string name="player_playing_from">Playing from</string>
+    <string name="queue_playing">Playing</string>
     <string name="player_love">Love on Last.fm</string>
     <string name="player_details">Lyrics and details</string>
     <string name="player_download_song">Download song</string>

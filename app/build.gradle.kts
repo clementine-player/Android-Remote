@@ -144,12 +144,6 @@ protobuf {
 }
 
 dependencies {
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.recyclerview)
-    implementation(libs.androidx.drawerlayout)
-    implementation(libs.androidx.swiperefreshlayout)
-    implementation(libs.androidx.viewpager)
-    implementation(libs.androidx.fragment)
     implementation(libs.media3.session)
     implementation(libs.protobuf.javalite)
 
@@ -169,6 +163,7 @@ dependencies {
     testImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(composeBom)
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4.accessibility)
     implementation(libs.jmdns)
 
     testImplementation(libs.junit)
