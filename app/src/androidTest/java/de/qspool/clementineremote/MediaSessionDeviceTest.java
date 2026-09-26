@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.media.session.MediaController;
 import android.os.SystemClock;
 import android.view.KeyEvent;
 
@@ -30,6 +31,7 @@ import java.nio.file.Files;
 
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.RemoteRepository;
+import de.qspool.clementineremote.backend.mediasession.MediaSessionController;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
@@ -229,7 +231,12 @@ public class MediaSessionDeviceTest {
 
         assertEquals("The phone's volume changed", phoneVolume,
                 audio.getStreamVolume(AudioManager.STREAM_MUSIC));
-        // Android knows Clementine's volume as a remote one (VOLUME_TYPE_REMOTE).
-        assertTrue("The session's volume isn't remote", mediaSessions().contains("volumeType=2"));
+        // Android knows Clementine's volume as a remote device's.
+        MediaController controller = new MediaController(mContext,
+                MediaSessionController.getPlatformToken());
+        assertEquals("The session's volume isn't remote",
+                MediaController.PlaybackInfo.PLAYBACK_TYPE_REMOTE,
+                controller.getPlaybackInfo().getPlaybackType());
+        assertEquals(100, controller.getPlaybackInfo().getMaxVolume());
     }
 }
