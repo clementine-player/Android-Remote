@@ -59,7 +59,6 @@
   <string name="library_download_error">Kütüphane indirilemedi</string>
   <string name="global_search_empty">Bilgisayarınızdaki ve internetteki müzikleri bulmak için yukarıya arama terimi girin</string>
   <string name="global_search_search">Herhangi bir şey ara</string>
-  <string name="global_search_query">Sorgu: %s</string>
   <string name="song_info_album">Albüm</string>
   <string name="song_info_genre">Tarz</string>
   <string name="song_info_year">Yıl</string>

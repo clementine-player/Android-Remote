@@ -60,7 +60,6 @@
   <string name="library_download_error">Impossibile scaricare la libreria</string>
   <string name="global_search_empty">Inserisci i termini di ricerca per trovare la musica sul tuo computer e su internet</string>
   <string name="global_search_search">Cerca qualsiasi cosa</string>
-  <string name="global_search_query">Ricerca: %s</string>
   <string name="song_info_album">Album</string>
   <string name="song_info_genre">Genere</string>
   <string name="song_info_year">Anno</string>
@@ -186,7 +185,6 @@
     <item quantity="one">%d canzone aggiunta alla playlist corrente</item>
     <item quantity="other">%d canzoni aggiunta alla playlist corrente</item>
   </plurals>
-  <string name="context_add_to_playlist">Aggiungi elemento alla playlist corrente</string>
   <string name="repeat_off">Non ripetere</string>
   <string name="repeat_track">Ripeti traccia</string>
   <string name="repeat_album">Ripeti album</string>

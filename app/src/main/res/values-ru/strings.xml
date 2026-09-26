@@ -65,7 +65,6 @@
   <string name="library_download_error">Не могу загрузить фонотеку</string>
   <string name="global_search_empty">Введите ключевое слово выше, чтобы найти музыку на вашем компьютере или в интернет</string>
   <string name="global_search_search">Искать что угодно</string>
-  <string name="global_search_query">Очередь: %s</string>
   <string name="song_info_album">Альбом</string>
   <string name="song_info_genre">Жанр</string>
   <string name="song_info_year">Год</string>
@@ -219,7 +218,6 @@
     <item quantity="many">%d песен добавлено в текущий плейлист</item>
     <item quantity="other">%d песен добавлено в текущий плейлист</item>
   </plurals>
-  <string name="context_add_to_playlist">Добавить пункт в текущий плейлист</string>
   <string name="repeat_off">Не повторять</string>
   <string name="repeat_track">Повторять композицию</string>
   <string name="repeat_album">Повторять альбом</string>

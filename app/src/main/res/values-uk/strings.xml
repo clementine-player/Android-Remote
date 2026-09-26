@@ -63,7 +63,6 @@
   <string name="library_download_error">Не вдалося отримати бібліотеку</string>
   <string name="global_search_empty">Вище можна ввести ключі пошуку музики на вашому комп’ютері та у інтернеті</string>
   <string name="global_search_search">Шукати будь-що</string>
-  <string name="global_search_query">Запит: %s</string>
   <string name="song_info_album">Альбом</string>
   <string name="song_info_genre">Жанр</string>
   <string name="song_info_year">Рік</string>
@@ -213,7 +212,6 @@
     <item quantity="few">До поточного списку відтворення додано %d композиції</item>
     <item quantity="other">До поточного списку відтворення додано %d композицій</item>
   </plurals>
-  <string name="context_add_to_playlist">Додати запис до поточного списку відтворення</string>
   <string name="repeat_off">Не повторювати</string>
   <string name="repeat_track">Повторити композицію</string>
   <string name="repeat_album">Повторити альбом</string>

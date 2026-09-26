@@ -61,7 +61,6 @@
   <string name="library_download_error">A zenetár letöltése nem sikerült</string>
   <string name="global_search_empty">Írja be a keresési kifejezéseit a számítógépén és az interneten található zenék kereséséhez</string>
   <string name="global_search_search">Keresés bármire</string>
-  <string name="global_search_query">Keresés: %s</string>
   <string name="song_info_album">Album</string>
   <string name="song_info_genre">Műfaj</string>
   <string name="song_info_year">Év</string>
@@ -209,7 +208,6 @@
     <item quantity="one">%d szám hozzáadva a lejátszólistához</item>
     <item quantity="other">%d szám hozzáadva a lejátszólistához</item>
   </plurals>
-  <string name="context_add_to_playlist">Elem hozzáadása a lejátszólistához</string>
   <string name="repeat_off">Nincs ismétlés</string>
   <string name="repeat_track">Szám ismétlése</string>
   <string name="repeat_album">Album ismétlése</string>

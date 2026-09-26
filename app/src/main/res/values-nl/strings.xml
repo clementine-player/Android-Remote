@@ -61,7 +61,6 @@
   <string name="library_download_error">Kon bibliotheek niet downloaden</string>
   <string name="global_search_empty">Voer zoektermen hierboven in om muziek te zoeken op je computer en het internet.</string>
   <string name="global_search_search">Zoek naar alles</string>
-  <string name="global_search_query">Zoekterm: %s</string>
   <string name="song_info_album">Album</string>
   <string name="song_info_genre">Genre</string>
   <string name="song_info_year">Jaar</string>
@@ -208,7 +207,6 @@
     <item quantity="one">%d nummers toegevoegd aan huidige afspeellijst</item>
     <item quantity="other">%d nummers aan huidige afspeellijst toegevoegd</item>
   </plurals>
-  <string name="context_add_to_playlist">Voeg item aan huidige afspeellijst toe</string>
   <string name="repeat_off">Niet herhalen</string>
   <string name="repeat_track">Nummer herhalen</string>
   <string name="repeat_album">Album herhalen</string>

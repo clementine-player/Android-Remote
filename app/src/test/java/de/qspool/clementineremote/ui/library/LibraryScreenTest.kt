@@ -18,6 +18,8 @@ import de.qspool.clementineremote.backend.database.DynamicSongQuery
 import de.qspool.clementineremote.backend.database.SongSelectItem
 import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType
+import de.qspool.clementineremote.ui.browse.BrowseLevel
+import de.qspool.clementineremote.ui.browse.ItemKind
 import de.qspool.clementineremote.ui.theme.ClementineTheme
 import kotlinx.coroutines.Dispatchers
 import org.junit.Assert.assertEquals
@@ -162,7 +164,7 @@ class LibraryScreenTest {
         compose.setContent {
             ClementineTheme(dynamicColor = false) {
                 LibraryContent(
-                    LibraryState(LibraryStatus.Ready, listOf(LibraryLevel(album, ItemKind.SONG, songs))),
+                    LibraryState(LibraryStatus.Ready, listOf(BrowseLevel(album, ItemKind.SONG, songs))),
                     onOpen = { done += "open ${it.listTitle}" },
                     onBack = { done += "back" },
                     onDownloadLibrary = {},

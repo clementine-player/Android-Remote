@@ -63,7 +63,6 @@
   <string name="library_download_error">Не могу да преузмем библиотеку</string>
   <string name="global_search_empty">Унесите изнад термине за претрагу да бисте пронашли музику на вашем рачунару и на интернету</string>
   <string name="global_search_search">Тражите било шта</string>
-  <string name="global_search_query">Упит: %s</string>
   <string name="song_info_album">Албум</string>
   <string name="song_info_genre">Жанр</string>
   <string name="song_info_year">Година</string>
@@ -212,7 +211,6 @@
     <item quantity="few">%d песме додате у текућу листу нумера</item>
     <item quantity="other">%d песама додато у текућу листу нумера</item>
   </plurals>
-  <string name="context_add_to_playlist">Додај ставку у текућу листу нумера</string>
   <string name="repeat_off">Не понављај</string>
   <string name="repeat_track">Понављај нумеру</string>
   <string name="repeat_album">Понављај албум</string>

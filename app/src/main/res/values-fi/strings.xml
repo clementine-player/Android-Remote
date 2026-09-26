@@ -193,7 +193,6 @@
     <item quantity="one">%d kappale lisätty nykyiselle soittolistalle</item>
     <item quantity="other">%d kappaletta lisätty nykyiselle soittolistalle</item>
   </plurals>
-  <string name="context_add_to_playlist">Lisää kohde nykyiselle soittolistalle</string>
   <string name="repeat_off">Älä kertaa</string>
   <string name="repeat_track">Kertaa kappaletta</string>
   <string name="repeat_album">Kertaa albumi</string>
