@@ -7,12 +7,6 @@ coroutines = "1.9.0"
 agp = "9.4.1"
 protobuf = "4.36.2"
 protobufPlugin = "0.10.0"
-appcompat = "1.8.0"
-recyclerview = "1.4.0"
-drawerlayout = "1.2.0"
-swiperefreshlayout = "1.2.0"
-viewpager = "1.1.0"
-fragment = "1.9.1"
 jmdns = "3.5.4"
 junit = "4.13.2"
 robolectric = "4.17"
@@ -22,12 +16,6 @@ uiautomator = "2.3.0"
 media3 = "1.11.1"
 
 [libraries]
-androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
-androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
-androidx-drawerlayout = { module = "androidx.drawerlayout:drawerlayout", version.ref = "drawerlayout" }
-androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
-androidx-viewpager = { module = "androidx.viewpager:viewpager", version.ref = "viewpager" }
-androidx-fragment = { module = "androidx.fragment:fragment", version.ref = "fragment" }
 media3-session = { module = "androidx.media3:media3-session", version.ref = "media3" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
@@ -36,6 +24,7 @@ androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+androidx-compose-ui-test-junit4-accessibility = { module = "androidx.compose.ui:ui-test-junit4-accessibility" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }

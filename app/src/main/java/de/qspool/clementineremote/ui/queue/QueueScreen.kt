@@ -235,9 +235,10 @@ private fun Songs(
                 headlineContent = {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         if (playing) {
+                            // Read out with the song, which is otherwise marked only by colour.
                             Icon(
                                 painterResource(R.drawable.ic_equalizer),
-                                contentDescription = null,
+                                contentDescription = stringResource(R.string.queue_playing),
                                 tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(16.dp),
                             )

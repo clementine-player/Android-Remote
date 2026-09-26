@@ -25,7 +25,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -40,7 +40,7 @@ import de.qspool.clementineremote.ui.theme.ClementineTheme
 import de.qspool.clementineremote.utils.Utilities
 
 /** The settings screen of Clementine Remote: [SettingsScreen], over the app's preferences. */
-class ClementineSettings : AppCompatActivity(), SettingsActions {
+class ClementineSettings : ComponentActivity(), SettingsActions {
 
     @OptIn(ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
