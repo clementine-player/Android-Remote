@@ -56,14 +56,12 @@
   <string name="song_info_filename">Nama fail</string>
   <string name="song_info_rating">Penarafan</string>
   <string name="song_info_rated">Lagu ditaraf $stars$ bintang</string>
-  <string name="connection_connected_to">Bersambung dengan:</string>
   <string name="connection_volume">Volum</string>
   <string name="connection_version">Versi Clementine</string>
   <string name="connection_traffic">Naik / Turun Trafik (pur / s)</string>
   <string name="connection_traffic_unsupported">Stat tidak tersedia pada peranti ini</string>
   <string name="menu_settings">Tetapan</string>
   <string name="menu_search">Gelintar</string>
-  <string name="menu_love">Suka</string>
   <string name="menu_ban">Larang</string>
   <string name="menu_download">Muat Turun</string>
   <string name="menu_download_playlist">Muat turun senarai main</string>
@@ -207,8 +205,6 @@
   <string name="crash_report_title">Alamak, ada masalah berlaku!</string>
   <string name="crash_report_message">Kali terakhir Clementine Remote mengalami kerosakan! Ia tidak sepatutnya berlaku! Sila bantu kami menambanbaik apl ini dan hantar kepada kami log fail. Terima kasih!</string>
   <string name="crash_report_send">Hantar!</string>
-  <string name="fragment_title_player">Pemain</string>
-  <string name="fragment_title_details">Perincian lagu</string>
   <string name="fragment_title_connection">Clementine</string>
   <string name="navigation_drawer_clementine_on">Clementine dalam %s</string>
   <string name="player_download_what">Apa yang hendak dimuat turun?</string>
@@ -216,18 +212,5 @@
     <item>Lagu</item>
     <item>Album</item>
     <item>Senarai Mai</item>
-  </string-array>
-  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
-  <string-array name="navigation_drawer_items">
-    <item>Gelintar</item>
-    <item>Pemain</item>
-    <item>Senarai Main</item>
-    <item>Pustaka</item>
-    <item>Muat Turun</item>
-    <item></item>
-    <item>Tetapan</item>
-    <item>Derma</item>
-    <item></item>
-    <item>Keluar</item>
   </string-array>
 </resources>

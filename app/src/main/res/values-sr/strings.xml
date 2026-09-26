@@ -7,10 +7,8 @@
   <string name="connectdialog_download_data">Преузимам податке</string>
   <string name="connectdialog_error">Не могу да досегнем домаћина</string>
   <string name="connectdialog_ip_hint">Унесите ИП адресу</string>
-  <string name="connectdialog_services">Клементинин</string>
   <string name="player_nosong">Тренутно ништа није пуштено</string>
   <string name="player_disconnected">Веза прекинута</string>
-  <string name="player_playlist">Листа нумера::</string>
   <string name="player_download_playlists">Преузимам листе нумера</string>
   <string name="playler_volume">Јачина звука</string>
   <string name="player_stop_after_current">Промењено заустављање након нумере.</string>
@@ -73,14 +71,12 @@
   <string name="song_info_filename">Име фајла</string>
   <string name="song_info_rating">Оцена</string>
   <string name="song_info_rated">Песма оцењена са $stars$ звезда</string>
-  <string name="connection_connected_to">Повезан са:</string>
   <string name="connection_volume">Јачина звука</string>
   <string name="connection_version">Издање Клементине</string>
   <string name="connection_traffic">Саобраћај на/са (просек/сек)</string>
   <string name="connection_traffic_unsupported">Статистика није доступна на овом уређају</string>
   <string name="menu_settings">Поставке</string>
   <string name="menu_search">Тражи</string>
-  <string name="menu_love">Воли</string>
   <string name="menu_ban">Забрани</string>
   <string name="menu_download">Преузми</string>
   <string name="menu_download_playlist">Преузми листу нумера</string>
@@ -228,8 +224,6 @@
   <string name="crash_report_title">Опс, нешто није у реду!</string>
   <string name="crash_report_message">Даљински за Клементину се срушио прошли пут! Ово не би смело да се догоди! Помозите ми да побољшам апликацију и пошаљите ми фајл дневника. Хвала!</string>
   <string name="crash_report_send">Пошаљи!</string>
-  <string name="fragment_title_player">Плејер</string>
-  <string name="fragment_title_details">Детаљи песме</string>
   <string name="fragment_title_connection">Клементина</string>
   <string name="navigation_drawer_clementine_on">Клементина на %s</string>
   <string name="player_download_what">Шта да преузмем?</string>
@@ -237,18 +231,5 @@
     <item>Песма</item>
     <item>Албум</item>
     <item>Листа нумера</item>
-  </string-array>
-  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
-  <string-array name="navigation_drawer_items">
-    <item>Претрага</item>
-    <item>Плејер</item>
-    <item>Листа нумера</item>
-    <item>Библиотека</item>
-    <item>Преузимања</item>
-    <item></item>
-    <item>Поставке</item>
-    <item>Донација</item>
-    <item></item>
-    <item>Напусти</item>
   </string-array>
 </resources>

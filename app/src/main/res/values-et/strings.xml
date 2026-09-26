@@ -7,10 +7,8 @@
   <string name="connectdialog_download_data">Andmete allalaadimine</string>
   <string name="connectdialog_error">Ei leidnud hosti</string>
   <string name="connectdialog_ip_hint">Sisesta IP aadress</string>
-  <string name="connectdialog_services">Clementine\'id</string>
   <string name="player_nosong">Ükski lugu ei mängi praegu</string>
   <string name="player_disconnected">Lahti ühendatud</string>
-  <string name="player_playlist">Esitusloend:</string>
   <string name="player_download_playlists">Esitusloendite allalaadimine</string>
   <string name="playler_volume">Helitugevus</string>
   <string name="player_stop_after_current">Tühista peatumine pärast loo lõppu.</string>
@@ -75,5 +73,4 @@
   <string name="crash_report_title">Pagan, midagi läks valesti!</string>
   <string name="crash_report_message">Clementine Remote crash\'is eelmisel korral! Seda poleks tohtinud juhtuda! Palun aidake mul seda appi parandada ja saatke logifail. Aitäh!</string>
   <string name="crash_report_send">Saada!</string>
-  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

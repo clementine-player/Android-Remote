@@ -7,10 +7,8 @@
   <string name="connectdialog_download_data">Téléchargement des données</string>
   <string name="connectdialog_error">Impossible de se connecter</string>
   <string name="connectdialog_ip_hint">Saisissez votre adresse IP</string>
-  <string name="connectdialog_services">Clementines</string>
   <string name="player_nosong">Aucun morceau joué actuellement</string>
   <string name="player_disconnected">Déconnecté</string>
-  <string name="player_playlist">Liste de lecture :</string>
   <string name="player_download_playlists">Téléchargement des listes de lecture</string>
   <string name="playler_volume">Volume</string>
   <string name="player_stop_after_current">Terminer la lecture à la fin du morceau.</string>
@@ -71,14 +69,12 @@
   <string name="song_info_filename">Nom du fichier</string>
   <string name="song_info_rating">Note</string>
   <string name="song_info_rated">Morceau noté $stars$ étoiles</string>
-  <string name="connection_connected_to">Connecter à :</string>
   <string name="connection_volume">Volume</string>
   <string name="connection_version">Version de Clementine</string>
   <string name="connection_traffic">Trafic Montant / Descendant (moy / sec)</string>
   <string name="connection_traffic_unsupported">Les statistiques ne sont pas disponibles sur cet appareil</string>
   <string name="menu_settings">Préférences</string>
   <string name="menu_search">Recherche</string>
-  <string name="menu_love">J\'aime</string>
   <string name="menu_ban">Je déteste</string>
   <string name="menu_download">Téléchargement</string>
   <string name="menu_download_playlist">Télécharger la liste de lecture</string>
@@ -224,8 +220,6 @@
   <string name="crash_report_title">Oups, une erreur s\'est produite !</string>
   <string name="crash_report_message">« Clementine À Distance » a planté lors de la dernière utilisation : ceci ne devrait pas arriver. Aidez-moi à l\'améliorer en m\'envoyant le rapport d\'erreur. Merci !</string>
   <string name="crash_report_send">Envoyé !</string>
-  <string name="fragment_title_player">Lecteur</string>
-  <string name="fragment_title_details">Détails du titre</string>
   <string name="fragment_title_connection">Clementine</string>
   <string name="navigation_drawer_clementine_on">Clementine sur %s</string>
   <string name="player_download_what">Que télécharger ?</string>
@@ -234,5 +228,4 @@
     <item>Album</item>
     <item>Liste de lecture</item>
   </string-array>
-  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

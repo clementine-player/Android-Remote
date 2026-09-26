@@ -7,10 +7,8 @@
   <string name="connectdialog_download_data">Preuzimanje podataka</string>
   <string name="connectdialog_error">Udaljeno računalo nije u dosegu</string>
   <string name="connectdialog_ip_hint">Upišite IP adresu</string>
-  <string name="connectdialog_services">Clementine</string>
   <string name="player_nosong">Trenutno se ne reproducira nijedna pjesma</string>
   <string name="player_disconnected">Odspojeno</string>
-  <string name="player_playlist">Popis izvođenja:</string>
   <string name="player_download_playlists">Preuzimanje popisa izvođenja</string>
   <string name="playler_volume">Glasnoća zvuka</string>
   <string name="player_stop_after_current">Uključi/Isključi zaustavljanje nakon završetka pjesme.</string>
@@ -73,14 +71,12 @@
   <string name="song_info_filename">Naziv datoteke</string>
   <string name="song_info_rating">Ocjena</string>
   <string name="song_info_rated">Ocjena pjesme $stars$ zvjejzdica</string>
-  <string name="connection_connected_to">Povezano s:</string>
   <string name="connection_volume">Glasnoća zvuka</string>
   <string name="connection_version">Clementine inačica</string>
   <string name="connection_traffic">Promet Poslano / Preuzeto (pros / sek)</string>
   <string name="connection_traffic_unsupported">Status nije dostupan na ovom uređaju</string>
   <string name="menu_settings">Postavke</string>
   <string name="menu_search">Traži</string>
-  <string name="menu_love">Sviđa mi se</string>
   <string name="menu_ban">Zabrana</string>
   <string name="menu_download">Preuzmi</string>
   <string name="menu_download_playlist">Preuzmi popis izvođenja</string>
@@ -231,8 +227,6 @@
   <string name="crash_report_title">Ups, nešto je pošlo po krivu!</string>
   <string name="crash_report_message">Prošli puta Clementine daljinski upravljač se srušio! To se nebi trebalo događati! Molim vas da mi pomognete poboljšati aplikaciju i pošaljite mi datoteku zapisa. Hvala vam!</string>
   <string name="crash_report_send">Pošalji!</string>
-  <string name="fragment_title_player">Reproduktor</string>
-  <string name="fragment_title_details">Pojedinosti pjesme</string>
   <string name="fragment_title_connection">Clementine</string>
   <string name="navigation_drawer_clementine_on">Clementine na %s</string>
   <string name="player_download_what">Što preuzeti?</string>
@@ -240,18 +234,5 @@
     <item>Pjesmu</item>
     <item>Album</item>
     <item>Popis izvođenja</item>
-  </string-array>
-  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
-  <string-array name="navigation_drawer_items">
-    <item>Pretraži</item>
-    <item>Reproduktor</item>
-    <item>Popis izvođenja</item>
-    <item>Fonoteka</item>
-    <item>Preuzimanja</item>
-    <item></item>
-    <item>Postavke</item>
-    <item>Doniraj</item>
-    <item></item>
-    <item>Zatvori</item>
   </string-array>
 </resources>

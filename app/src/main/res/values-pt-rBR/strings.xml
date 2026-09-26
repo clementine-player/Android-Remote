@@ -7,10 +7,8 @@
   <string name="connectdialog_download_data">Baixando dados</string>
   <string name="connectdialog_error">Não foi possível acessar o destino</string>
   <string name="connectdialog_ip_hint">Entre com o endereçode IP</string>
-  <string name="connectdialog_services">Clementines</string>
   <string name="player_nosong">Nenhuma música tocando agora</string>
   <string name="player_disconnected">Desconectado</string>
-  <string name="player_playlist">Lista de reprodução:</string>
   <string name="player_download_playlists">Baixar lista de reprodução</string>
   <string name="playler_volume">Volume</string>
   <string name="player_stop_after_current">Habilitar parar após fim da faixa</string>
@@ -68,12 +66,10 @@
   <string name="song_info_size">Tamanho</string>
   <string name="song_info_filename">Nome do arquivo</string>
   <string name="song_info_rating">Avaliação</string>
-  <string name="connection_connected_to">Conectado a:</string>
   <string name="connection_volume">Volume</string>
   <string name="connection_version">Versão do Clementine:</string>
   <string name="menu_settings">Configurações</string>
   <string name="menu_search">Pesquisar</string>
-  <string name="menu_love">Gostei</string>
   <string name="menu_ban">Não gostei</string>
   <string name="menu_download">Baixar</string>
   <string name="menu_download_playlist">Baixar lista de reprodução</string>
@@ -105,5 +101,4 @@
   <string name="pref_lower_volume_summary">Reduzir volume ao receber / realizar chamadas</string>
   <string name="pref_call_volume_title">Volume de chamada</string>
   <string name="pref_call_volume_summary">Volume de chamada atual: %s</string>
-  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

@@ -7,10 +7,8 @@
   <string name="connectdialog_download_data">Λήψη δεδομένων</string>
   <string name="connectdialog_error">Αδυναμία επικοινωνίας με το host</string>
   <string name="connectdialog_ip_hint">Εισάγετε διεύθυνση IP</string>
-  <string name="connectdialog_services">Clementines</string>
   <string name="player_nosong">Κανένα Τραγούδι δεν παίζει τώρα</string>
   <string name="player_disconnected">Αποσυνδέθηκε</string>
-  <string name="player_playlist">Λίστα αναπαραγωγής:</string>
   <string name="player_download_playlists">Λήψη λίστας αναπαραγωγής</string>
   <string name="playler_volume">Ένταση</string>
   <string name="player_stop_after_current">Εναλλαγή παύσης μετά την ολοκλήρωση του τραγουδιου.</string>
@@ -59,14 +57,12 @@
   <string name="song_info_filename">Όνομα αρχείου</string>
   <string name="song_info_rating">Αξιολόγηση</string>
   <string name="song_info_rated">Τραγούδι βαθμολογία $αστέρια$ αστέρια</string>
-  <string name="connection_connected_to">Συνδεδεμένο με:</string>
   <string name="connection_volume">Ένταση</string>
   <string name="connection_version">Clementine έκδοση</string>
   <string name="connection_traffic">Κυκλοφορία Πάνω / Κάτω (μέσος όρος / δευτ)</string>
   <string name="connection_traffic_unsupported">Στατιστικά δεν διατίθεται σε αυτή τη συσκευή</string>
   <string name="menu_settings">Ρυθμίσεις</string>
   <string name="menu_search">Αναζήτηση </string>
-  <string name="menu_love">Aγάπη</string>
   <string name="menu_ban">Aπαγόρευση</string>
   <string name="menu_download">Λήψη </string>
   <string name="menu_download_playlist">Λήψη λίστας αναπαραγωγής</string>
@@ -184,10 +180,7 @@
   <string name="crash_report_title">Ωχ, κάτι πήγε στραβά!</string>
   <string name="crash_report_message">Τελευταία φορά το Clementine Remote συνετρίβη! Αυτό δεν έπρεπε να συμβεί! Παρακαλώ βοηθήστε με να βελτιωθεί η εφαρμογή και στείλτε μου το αρχείο καταγραφής. Ευχαριστώ!</string>
   <string name="crash_report_send">Αποστολή!</string>
-  <string name="fragment_title_player">Player</string>
-  <string name="fragment_title_details">Λεπτομέρειες τραγουδιού</string>
   <string name="fragment_title_connection">Clementine</string>
   <string name="navigation_drawer_clementine_on">Clementine σε %s</string>
   <string name="player_download_what">Τι να κατεβάσω;</string>
-  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

@@ -8,5 +8,4 @@
   <string name="connectdialog_error">Δεν βρέθηκε host</string>
   <string name="connectdialog_ip_hint">Δώστε διεύθυνση IP</string>
   <string name="player_nosong">Δεν παίζει τραγούδι τώρα</string>
-  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
 </resources>

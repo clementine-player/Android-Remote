@@ -7,10 +7,8 @@
   <string name="connectdialog_download_data">Adatok letöltése</string>
   <string name="connectdialog_error">A kiszolgáló nem elérhető</string>
   <string name="connectdialog_ip_hint">Írja be az IP-címet</string>
-  <string name="connectdialog_services">Clementine példányok</string>
   <string name="player_nosong">Épp nincs lejátszás</string>
   <string name="player_disconnected">Kapcsolat bontva</string>
-  <string name="player_playlist">Lejátszólista:</string>
   <string name="player_download_playlists">Lejátszólisták letöltése</string>
   <string name="playler_volume">Hangerő</string>
   <string name="player_stop_after_current">Leállítás, amint a szám véget ér.</string>
@@ -71,14 +69,12 @@
   <string name="song_info_filename">Fájlnév</string>
   <string name="song_info_rating">Értékelés</string>
   <string name="song_info_rated">A szám értékelése $stars$ csillag</string>
-  <string name="connection_connected_to">Kapcsolódva ide:</string>
   <string name="connection_volume">Hangerő</string>
   <string name="connection_version">Clementine verzió</string>
   <string name="connection_traffic">Forgalom fel / le (átlag / mp)</string>
   <string name="connection_traffic_unsupported">Statisztika nem elérhető ezen az eszközön</string>
   <string name="menu_settings">Beállítások</string>
   <string name="menu_search">Keresés</string>
-  <string name="menu_love">Kedvelés</string>
   <string name="menu_ban">Tiltás</string>
   <string name="menu_download">Letöltés</string>
   <string name="menu_download_playlist">Lejátszólista letöltése</string>
@@ -225,8 +221,6 @@
   <string name="crash_report_title">Hupsz, valami rossz történt!</string>
   <string name="crash_report_message">Legutóbb a Clementine távvezérlő összeomlott! Ennek nem kellett volna megtörténnie! Kérem segítsen az alkalmazás javításában, és küldje el nekem a naplófájlokat. Köszönöm!</string>
   <string name="crash_report_send">Küldés!</string>
-  <string name="fragment_title_player">Lejátszó</string>
-  <string name="fragment_title_details">Szám részletei</string>
   <string name="fragment_title_connection">Clementine</string>
   <string name="navigation_drawer_clementine_on">Clementine itt: %s</string>
   <string name="player_download_what">Mit töltsön le?</string>
@@ -234,18 +228,5 @@
     <item>Szám</item>
     <item>Album</item>
     <item>Lejátszólista</item>
-  </string-array>
-  <!--When changing this array, you must also update values/ids.xml navigation_drawer_icons!-->
-  <string-array name="navigation_drawer_items">
-    <item>Keresés</item>
-    <item>Lejátszó</item>
-    <item>Lejátszólista</item>
-    <item>Zenetár</item>
-    <item>Letöltések</item>
-    <item></item>
-    <item>Beállítások</item>
-    <item>Adományozás</item>
-    <item></item>
-    <item>Kilépés</item>
   </string-array>
 </resources>

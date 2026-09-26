@@ -1,5 +1,9 @@
 package de.qspool.clementineremote.ui.player
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
@@ -29,7 +33,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
-/** The player's pages and controls show Clementine's state, and hand on what the user does. */
+/** The player and the song details sheet show Clementine's state, and hand on what the user does. */
 @RunWith(RobolectricTestRunner::class)
 class PlayerScreenTest {
 
@@ -54,36 +58,72 @@ class PlayerScreenTest {
         repeat: Clementine.RepeatMode = Clementine.RepeatMode.OFF,
     ) = NowPlaying(song, state, positionSeconds = 90, volume = 50, shuffle, repeat)
 
-    @Test
-    fun showsTheSong() {
-        compose.setContent {
-            ClementineTheme(dynamicColor = false) {
-                NowPlayingContent(nowPlaying(), onArtClick = {}, onSeek = {})
-            }
+    private val done = mutableListOf<String>()
+
+    private val actions = object : PlayerActions {
+        override fun onCollapse() {
+            done += "collapse"
         }
 
+        override fun onDetails(lyrics: Boolean) {
+            done += if (lyrics) "lyrics" else "details"
+        }
+
+        override fun onQueue() {
+            done += "queue"
+        }
+
+        override fun onDownload() {
+            done += "download"
+        }
+    }
+
+    private fun showPlayer(nowPlaying: NowPlaying = nowPlaying(), playingFrom: String? = "Playlist 1", lastFm: Boolean = true) {
+        compose.setContent {
+            ClementineTheme(dynamicColor = false) {
+                PlayerContent(
+                    nowPlaying,
+                    playingFrom = playingFrom,
+                    lastFm = lastFm,
+                    actions = actions,
+                    onSeek = { done += "seek $it" },
+                    onVolume = { done += "volume $it" },
+                    onStop = { done += "stop" },
+                    onLove = { done += "love" },
+                    onBan = { done += "ban" },
+                    controls = {},
+                )
+            }
+        }
+    }
+
+    @Test
+    fun showsTheSong() {
+        showPlayer()
+
+        compose.onNodeWithTag("playingFrom").assertTextEquals("Playlist 1")
         compose.onNodeWithTag("tvTitle").assertTextEquals("Clair de lune")
         compose.onNodeWithTag("tvArtist").assertTextEquals("Claude Debussy")
         compose.onNodeWithTag("tvAlbum").assertTextEquals("Suite bergamasque")
-        compose.onNodeWithText("Classical · 1905").assertIsDisplayed()
         compose.onNodeWithTag("tvPosition").assertTextEquals("1:30")
         compose.onNodeWithTag("tvLength").assertTextEquals("5:00")
         compose.onNodeWithTag("sbPosition").assertIsEnabled()
             .assert(SemanticsMatcher.expectValue(
                 SemanticsProperties.ProgressBarRangeInfo,
                 androidx.compose.ui.semantics.ProgressBarRangeInfo(90f, 0f..300f)))
+        compose.onNodeWithTag("volume")
+            .assert(SemanticsMatcher.expectValue(
+                SemanticsProperties.ProgressBarRangeInfo,
+                androidx.compose.ui.semantics.ProgressBarRangeInfo(50f, 0f..100f)))
     }
 
     @Test
     fun withoutASongSaysSo() {
-        compose.setContent {
-            ClementineTheme(dynamicColor = false) {
-                NowPlayingContent(nowPlaying(song = null), onArtClick = {}, onSeek = {})
-            }
-        }
+        showPlayer(nowPlaying(song = null))
 
         compose.onNodeWithTag("tvTitle").assertTextEquals("No Song playing right now")
         compose.onNodeWithTag("sbPosition").assertIsNotEnabled()
+        compose.onNodeWithTag("btnLove").assertDoesNotExist()
     }
 
     @Test
@@ -93,28 +133,43 @@ class PlayerScreenTest {
             length = 0
             isLocal = false
         }
-        compose.setContent {
-            ClementineTheme(dynamicColor = false) {
-                NowPlayingContent(nowPlaying(song = stream), onArtClick = {}, onSeek = {})
-            }
-        }
+        showPlayer(nowPlaying(song = stream))
 
         compose.onNodeWithTag("sbPosition").assertIsNotEnabled()
         compose.onNodeWithTag("tvPosition").assertTextEquals("[S] 1:30")
     }
 
     @Test
-    fun tappingTheArtworkAsksForLyrics() {
-        var asked = 0
-        compose.setContent {
-            ClementineTheme(dynamicColor = false) {
-                NowPlayingContent(nowPlaying(), onArtClick = { asked++ }, onSeek = {})
-            }
-        }
+    fun buttonsHandOnWhatTheUserDoes() {
+        showPlayer()
 
         compose.onNodeWithTag("imgArt").performClick()
+        compose.onNodeWithTag("btnDetails").performClick()
+        compose.onNodeWithTag("btnQueue").performClick()
+        compose.onNodeWithTag("btnDownload").performClick()
+        compose.onNodeWithTag("volume").performSemanticsAction(SemanticsActions.SetProgress) { it(80f) }
+        compose.onNodeWithTag("btnLove").performClick()
+        // Loved once only.
+        compose.onNodeWithTag("btnLove").assertIsOn().performClick()
+        compose.onNodeWithTag("btnPlayerMore").performClick()
+        compose.onNodeWithTag("menuStop").performClick()
+        compose.onNodeWithTag("btnPlayerMore").performClick()
+        compose.onNodeWithTag("menuBan").performClick()
+        compose.onNodeWithTag("btnCollapse").performClick()
 
-        assertEquals(1, asked)
+        assertEquals(
+            listOf("lyrics", "details", "queue", "download", "volume 80", "love", "stop", "ban", "collapse"),
+            done)
+    }
+
+    @Test
+    fun withoutLastFmNeitherLovesNorBans() {
+        showPlayer(lastFm = false)
+
+        compose.onNodeWithTag("btnLove").assertDoesNotExist()
+        compose.onNodeWithTag("btnPlayerMore").performClick()
+        compose.onNodeWithTag("menuStop").assertIsDisplayed()
+        compose.onNodeWithTag("menuBan").assertDoesNotExist()
     }
 
     @Test
@@ -167,6 +222,22 @@ class PlayerScreenTest {
         compose.onNodeWithContentDescription("Don't repeat").assertIsDisplayed()
     }
 
+    private fun showDetails(song: MySong?, lyrics: Lyrics = Lyrics.NotAsked, lyricsShown: Boolean = false, onRate: (Int) -> Unit = {}) {
+        compose.setContent {
+            ClementineTheme(dynamicColor = false) {
+                var shown by remember { mutableStateOf(lyricsShown) }
+                SongDetailsContent(
+                    song,
+                    lyrics,
+                    lyricsShown = shown,
+                    onShowLyrics = { shown = it },
+                    onRequestLyrics = { done += "request lyrics" },
+                    onRate = onRate,
+                )
+            }
+        }
+    }
+
     @Test
     fun songDetailsShowWhatClementineKnows() {
         val rated = mutableListOf<Int>()
@@ -174,14 +245,10 @@ class PlayerScreenTest {
         song.disc = 0
         song.playcount = 12
         song.rating = 0.7f
-        compose.setContent {
-            ClementineTheme(dynamicColor = false) {
-                SongDetailsContent(song, onRate = { rated += it })
-            }
-        }
+        showDetails(song, onRate = { rated += it })
 
         compose.onNodeWithTag("siTitle").assertTextEquals("Clair de lune")
-        compose.onNodeWithText("Suite bergamasque").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("Claude Debussy · Suite bergamasque").assertIsDisplayed()
         compose.onNodeWithText("Classical").performScrollTo().assertIsDisplayed()
         compose.onNodeWithText("1905").performScrollTo().assertIsDisplayed()
         compose.onNodeWithText("3").performScrollTo().assertIsDisplayed()
@@ -189,66 +256,42 @@ class PlayerScreenTest {
         // No disc number from Clementine, so no disc row.
         compose.onNodeWithText("Disc").assertDoesNotExist()
 
-        compose.onNodeWithTag("siStar4").performClick()
+        compose.onNodeWithTag("siStar4").performScrollTo().performClick()
         assertEquals(listOf(4), rated)
     }
 
     @Test
     fun songDetailsWithoutASongSaySo() {
-        compose.setContent {
-            ClementineTheme(dynamicColor = false) {
-                SongDetailsContent(null, onRate = {})
-            }
-        }
+        showDetails(null)
 
         compose.onNodeWithTag("siTitle").assertTextEquals("No Song playing right now")
         compose.onNodeWithTag("siRating").assertDoesNotExist()
     }
 
     @Test
-    fun connectionInfoShowsTheConnectionAndSetsTheVolume() {
-        val volumes = mutableListOf<Int>()
-        compose.setContent {
-            ClementineTheme(dynamicColor = false) {
-                ConnectionInfoContent(
-                    ConnectionStats("10.0.2.2:5500", "Clementine 1.4.1", "00:01:05", null),
-                    volume = 50,
-                    onVolume = { volumes += it },
-                )
-            }
-        }
+    fun lyricsAreAskedForWhenFirstShown() {
+        showDetails(song)
 
-        compose.onNodeWithTag("cnAddress").assertTextEquals("10.0.2.2:5500")
-        compose.onNodeWithTag("cnTime").assertTextEquals("00:01:05")
-        compose.onNodeWithTag("cnVersion").assertTextEquals("Clementine 1.4.1")
-        compose.onNodeWithTag("cnTraffic").assertTextEquals("Stats not available on this device")
-        compose.onNodeWithTag("cnVolume")
-            .assert(SemanticsMatcher.expectValue(
-                SemanticsProperties.ProgressBarRangeInfo,
-                androidx.compose.ui.semantics.ProgressBarRangeInfo(50f, 0f..100f)))
-            .performSemanticsAction(SemanticsActions.SetProgress) { it(80f) }
+        compose.onNodeWithTag("siLyricsTab").performClick()
 
-        assertEquals(listOf(80), volumes)
+        compose.onNodeWithTag("lyricsLoading").assertIsDisplayed()
+        assertEquals(listOf("request lyrics"), done)
     }
 
     @Test
-    fun tabsSwitchPages() {
-        val pages = mutableListOf<Int>()
-        val viewModel = PlayerViewModel(send = {})
-        compose.setContent {
-            ClementineTheme(dynamicColor = false) {
-                PlayerScreen(onArtClick = {}, onPageChanged = { pages += it }, viewModel)
-            }
-        }
+    fun showsTheLyricsFound() {
+        showDetails(song, Lyrics.Found("lyrics.wikia.com", "La la la"), lyricsShown = true)
 
-        compose.onNodeWithTag("tvTitle").assertIsDisplayed()
-        compose.onNodeWithTag("tab1").performClick()
-        compose.onNodeWithTag("siTitle").assertIsDisplayed()
-        compose.onNodeWithTag("tab2").performClick()
-        compose.onNodeWithTag("cnVolume").performScrollTo().assertIsDisplayed()
-        // The controls stay on every page.
-        compose.onNodeWithTag("btnPlaypause").assertIsDisplayed()
+        compose.onNodeWithTag("lyrics").assertTextEquals("La la la")
+        compose.onNodeWithTag("siDetailsTab").performClick()
+        compose.onNodeWithTag("siRating").performScrollTo().assertIsDisplayed()
+        assertEquals(emptyList<String>(), done)
+    }
 
-        assertEquals(listOf(0, 1, 2), pages)
+    @Test
+    fun saysWhenNoLyricsWereFound() {
+        showDetails(song, Lyrics.None, lyricsShown = true)
+
+        compose.onNodeWithTag("lyricsNone").assertTextEquals("No lyrics found.")
     }
 }
