@@ -10,6 +10,62 @@ The app is built in two flavors that differ only in their application ID:
 Google Play keeps `de.qspool.clementineremote` reserved for the original author's account,
 so the Play build needs its own ID. F-Droid keeps the original so existing installs upgrade.
 
+## Releasing a version
+
+A version tag publishes the release everywhere (`.github/workflows/release.yml`):
+
+- a **GitHub release**, with the changelog as its notes and the APK attached, signed with the
+  release key in Cloud KMS;
+- on **Google Play**, the build internal testing already has for the tagged commit goes to the
+  closed testing track (`alpha`, or the repository variable `PLAY_RELEASE_TRACK`), with the
+  changelog as its release notes;
+- **F-Droid** builds the tag itself, reading the version from `app/build.gradle.kts` and the
+  changelog from `fastlane/`.
+
+To release, for example, version 13:
+
+1. In `app/build.gradle.kts`, set `versionName = "13"` and raise `versionCode` (say to `801`).
+2. Write the changelog, at most 500 characters, as
+   `fastlane/metadata/android/en-US/changelogs/801.txt`. It is what F-Droid, Google Play and
+   the GitHub release show, so it is for users: what's new, not how it was done.
+3. Check both with `scripts/check_release.sh v13`, and merge them to `master` in a pull request.
+4. Once the *play* workflow has run for that commit, tag it and push the tag:
+
+   ```sh
+   git tag v13 <commit> && git push origin v13
+   ```
+
+   The release fails without changing anything if the tag doesn't match `versionName`, the
+   changelog is missing or too long, or the commit isn't on `master`.
+5. Set `versionName = "14-dev"` for what comes next, keeping `versionCode`.
+
+### One-time setup for releases
+
+1. **Google Cloud.** Review [scripts/gcp_release_setup.sh](scripts/gcp_release_setup.sh) and
+   run it, after `gcp_play_setup.sh`, as an admin of `clementine-data`. It creates the release
+   key (a second key, not Play's upload key), lets the service account sign with it, and lets
+   release tags through the provider as well as `master`.
+2. **Make the release certificate** and commit it as `app/release_cert.pem`, as for the
+   upload certificate below. Every GitHub release must be signed with it, so this is done
+   once:
+
+   ```sh
+   $signer gencert \
+     --key projects/clementine-data/locations/global/keyRings/android-signing/cryptoKeys/github-release/cryptoKeyVersions/1 \
+     --subject "CN=Clementine Remote,O=Clementine" --out app/release_cert.pem
+   ```
+
+3. **Protect the tags:** a repository ruleset for `v*` tags that only maintainers can create,
+   update or delete, since a tag now releases the app.
+4. **Google Play:** create the closed testing track's testers list in Play Console (*Testing →
+   Closed testing*). The service account's *Release apps to testing tracks* permission
+   covers it; releasing to production needs *Release to production* too, and
+   `PLAY_RELEASE_TRACK` set to `production`.
+
+Until each certificate is committed, the release skips its part with a notice: without
+`release_cert.pem` the GitHub release has no APK, and without `upload_cert.pem` nothing goes
+to Google Play.
+
 ## Google Play internal testing
 
 Every push to `master` builds the Play bundle and uploads it to the **internal testing**

@@ -8,7 +8,8 @@
 #   - An upload key in Cloud KMS that cannot be exported: releases are signed by sending it
 #     digests (clementine-player/kms-signer), so no key file ever exists
 #   - A dedicated service account, the only identity that can sign with that key
-#   - A provider in the existing pool that admits only this repository's master branch, and
+#   - A provider in the existing pool that admits only this repository's master branch (and,
+#     after gcp_release_setup.sh, its release tags), and
 #     lets it impersonate that service account
 #   - Impersonation rights for named maintainers, so local signing (the certificate and the
 #     first upload) uses the same service-account identity as CI
