@@ -27,7 +27,6 @@
   <string name="playlist_close">Κλείσιμο λίστας αναπαραγωγής</string>
   <string name="playlist_clear">Εκκαθαριση λίστας αναπαραγωγης</string>
   <string name="downloads_empty">Οχι λήψεις!</string>
-  <string name="download_freespace">Ελεύθερος χώρος</string>
   <string name="downloaded_songs">Κατεβάσμενα τραγούδια - κάντε κλικ για να αναπαραχθουν</string>
   <string name="download_noti_title">Έναρξη λήψης </string>
   <string name="download_noti_n_progress">Συνολική πρόοδος: %d %</string>

@@ -24,7 +24,6 @@
   <string name="playlist_context_play">მონიშნულის დაკვრა</string>
   <string name="playlist_context_remove">რეპერტუარიდან ამოღება</string>
   <string name="downloads_empty">ჩამოტვირთვები არაა!</string>
-  <string name="download_freespace">თავისუფალი ადგილი</string>
   <string name="download_noti_title">ჩამოტვირთვის დაწყება</string>
   <string name="download_noti_title_album">[ალბომი]</string>
   <string name="download_noti_title_playlist">[რეპერტუარი]</string>

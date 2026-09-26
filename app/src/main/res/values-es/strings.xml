@@ -29,7 +29,6 @@
   <string name="playlist_clear_content">Esto quitará todas las canciones de la lista irreversiblemente. ¿Continuar?</string>
   <string name="playlist_clear_confirm">Vaciar lista</string>
   <string name="downloads_empty">No hay descargas.</string>
-  <string name="download_freespace">Espacio libre</string>
   <string name="downloaded_songs">Canciones descargadas. Toque para reproducirlas</string>
   <string name="download_noti_title">Iniciando la descarga</string>
   <plurals name="download_noti_n_downloads">

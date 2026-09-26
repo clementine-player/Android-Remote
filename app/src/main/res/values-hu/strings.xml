@@ -29,7 +29,6 @@
   <string name="playlist_clear_content">Ez végleg eltávolít minden számot a lejátszólistáról. Folytatja?</string>
   <string name="playlist_clear_confirm">Lejátszólista ürítése</string>
   <string name="downloads_empty">Nincsenek letöltések</string>
-  <string name="download_freespace">Szabad terület</string>
   <string name="downloaded_songs">Letöltött számok - kattintson a lejátszáshoz</string>
   <string name="download_noti_title">Letöltés elkezdése</string>
   <plurals name="download_noti_n_downloads">

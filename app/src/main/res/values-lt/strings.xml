@@ -29,7 +29,6 @@
   <string name="playlist_clear_content">Tai neatitaisomai pašalins visas dainas iš grojaraščio. Tęsti?</string>
   <string name="playlist_clear_confirm">Išvalyti grojaraštį</string>
   <string name="downloads_empty">Atsiuntimų nėra!</string>
-  <string name="download_freespace">Laisva vieta</string>
   <string name="downloaded_songs">Dainos atsiųstos - spustelėkite, norėdami groti</string>
   <string name="download_noti_title">Pradedamas atsiuntimas</string>
   <plurals name="download_noti_n_downloads">

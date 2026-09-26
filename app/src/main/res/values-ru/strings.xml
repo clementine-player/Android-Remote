@@ -29,7 +29,6 @@
   <string name="playlist_clear_content">Данное действие безвозвратно удалит все песни из плейлиста. Продолжить?</string>
   <string name="playlist_clear_confirm">Очистить плейлист</string>
   <string name="downloads_empty">Нет загрузок!</string>
-  <string name="download_freespace">Свободное место</string>
   <string name="downloaded_songs">Загруженные песни - нажмите для воспроизведения</string>
   <string name="download_noti_title">Загрузка начата</string>
   <plurals name="download_noti_n_downloads">

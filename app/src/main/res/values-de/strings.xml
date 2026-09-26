@@ -29,7 +29,6 @@
   <string name="playlist_clear_content">Das wird unwiderruflich alle Lieder aus dieser Wiedergabeliste entfernen. Fortfahren?</string>
   <string name="playlist_clear_confirm">Wiedergabeliste leeren</string>
   <string name="downloads_empty">Nichts heruntergeladen!</string>
-  <string name="download_freespace">Freier Speicher</string>
   <string name="downloaded_songs">Heruntergeladene Lieder - zum Wiedergeben klicken</string>
   <string name="download_noti_title">Übertragung wird gestartet</string>
   <plurals name="download_noti_n_downloads">

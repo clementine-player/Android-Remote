@@ -17,237 +17,59 @@
 
 package de.qspool.clementineremote.ui.fragments;
 
-import android.content.DialogInterface;
-import androidx.appcompat.app.AlertDialog;
-
-import androidx.fragment.app.Fragment;
-import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
-import android.widget.Toast;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.compose.ui.platform.ComposeView;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
-import de.qspool.clementineremote.App;
-import de.qspool.clementineremote.R;
-import de.qspool.clementineremote.backend.downloader.ClementineSongDownloader;
-import de.qspool.clementineremote.backend.downloader.DownloadManager;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
-import de.qspool.clementineremote.backend.player.MySong;
-import de.qspool.clementineremote.ui.adapter.DownloaderAdapter;
+import de.qspool.clementineremote.ui.downloads.DownloadsViewModel;
+import de.qspool.clementineremote.ui.downloads.DownloadsViews;
 import de.qspool.clementineremote.ui.interfaces.BackPressHandleable;
 import de.qspool.clementineremote.ui.interfaces.RemoteDataReceiver;
-import de.qspool.clementineremote.utils.Utilities;
 
+/** The downloads, drawn in Compose ({@code DownloadsScreen}). */
 public class DownloadsFragment extends Fragment implements BackPressHandleable, RemoteDataReceiver {
 
-    private ActionBar mActionBar;
-
-    private ListView mList;
-
-    private DownloaderAdapter mAdapter;
-
-    private Timer mUpdateTimer;
-
-    private View mEmptyDownloads;
+    private DownloadsViewModel mViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Get the actionbar
-        mActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        mViewModel = new ViewModelProvider(this).get(DownloadsViewModel.class);
         setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        // Check if we are still connected
-        if (App.ClementineConnection == null
-                || App.Clementine == null
-                || !App.ClementineConnection.isConnected()) {
-        } else {
-            //RequestPlaylistSongs();
-            setActionBarTitle();
-            mUpdateTimer = new Timer();
-            mUpdateTimer.scheduleAtFixedRate(getTimerTask(), 250, 250);
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        if (mUpdateTimer != null) {
-            mUpdateTimer.cancel();
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_downloads,
-                container, false);
+        ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
+        actionBar.setTitle("");
+        actionBar.setSubtitle("");
 
-        mList = (ListView) view.findViewById(R.id.downloads);
-        mEmptyDownloads = view.findViewById(R.id.downloads_empty);
-
-        // Create the adapter
-        mAdapter = new DownloaderAdapter(getActivity(), R.layout.item_download,
-                DownloadManager.getInstance().getAllDownloaders());
-
-        mList.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final ClementineSongDownloader downloader = (ClementineSongDownloader) mList.getAdapter()
-                        .getItem(position);
-                if (downloader.getStatus() == AsyncTask.Status.FINISHED) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-                    builder.setTitle(R.string.downloaded_songs);
-                    String[] songs = new String[downloader.getDownloadedSongs().size()];
-                    for (int i=0;i<songs.length;i++) {
-                        ClementineSongDownloader.DownloadedSong ds = downloader.getDownloadedSongs().get(i);
-                        songs[i] = ds.song.getArtist() + " - " + ds.song.getTitle();
-                    }
-                    builder.setItems(songs, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int i) {
-                            playFile(downloader.getDownloadedSongs().get(i).uri);
-                        }
-                    });
-
-                    builder.setNegativeButton(R.string.dialog_close, null);
-                    builder.show();
-                }
-            }
-        });
-        mList.setAdapter(mAdapter);
-
-        mActionBar.setTitle("");
-        mActionBar.setSubtitle("");
-
-        setHasOptionsMenu(true);
-
+        ComposeView view = new ComposeView(requireContext());
+        DownloadsViews.showDownloads(view, mViewModel);
         return view;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-
         super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    private void setActionBarTitle() {
-        MySong currentSong = App.Clementine.getCurrentSong();
-        if (currentSong == null) {
-            mActionBar.setTitle(getString(R.string.player_nosong));
-        } else {
-            mActionBar.setTitle(currentSong.getArtist() + " / " + currentSong.getTitle());
-        }
-    }
-
-    @Override
-    public void onViewCreated(final View view, final Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mList.setFastScrollEnabled(true);
-        mList.setTextFilterEnabled(true);
-        mList.setSelector(new ColorDrawable(
-                ContextCompat.getColor(getActivity(), android.R.color.transparent)));
-        mList.setDivider(null);
-        mList.setDividerHeight(0);
     }
 
     @Override
     public void MessageFromClementine(ClementineMessage clementineMessage) {
-        switch (clementineMessage.getMessageType()) {
-            case CURRENT_METAINFO:
-                setActionBarTitle();
-                break;
-            default:
-                break;
-        }
-    }
-
-    private void playFile(Uri file) {
-        Intent mediaIntent = new Intent();
-        mediaIntent.setAction(Intent.ACTION_VIEW);
-        mediaIntent.setDataAndType(file, "audio/*");
-        mediaIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP
-                | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-        if (mediaIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            startActivity(mediaIntent);
-        } else {
-            Toast.makeText(getActivity(), R.string.app_not_available, Toast.LENGTH_LONG)
-                    .show();
-        }
-    }
-
-    /**
-     * Creates a timer task for refeshing the download list
-     *
-     * @return Task to update download list
-     */
-    private TimerTask getTimerTask() {
-        return new TimerTask() {
-
-            @Override
-            public void run() {
-                if (mAdapter != null && getActivity() != null) {
-                    getActivity().runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            if (getActivity() == null) {
-                                return;
-                            }
-
-                            mAdapter.notifyDataSetChanged();
-                            if (DownloadManager.getInstance().getAllDownloaders().isEmpty()) {
-                                mList.setEmptyView(mEmptyDownloads);
-                            }
-
-                            StringBuilder sb = new StringBuilder();
-                            sb.append(getActivity().getString(R.string.download_freespace));
-                            sb.append(": ");
-                            sb.append(Utilities
-                                    .humanReadableBytes((long) Utilities.getFreeSpaceExternal(),
-                                            true));
-                            mActionBar.setSubtitle(sb.toString());
-                        }
-
-                    });
-                }
-            }
-
-        };
+        // The downloads follow the download manager through the view model.
     }
 
     @Override

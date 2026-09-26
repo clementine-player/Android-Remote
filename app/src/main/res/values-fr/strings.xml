@@ -29,7 +29,6 @@
   <string name="playlist_clear_content">Cela supprimera définitivement tous les titres de la liste de lecture. Confirmez-vous ?</string>
   <string name="playlist_clear_confirm">Effacer la liste de lecture</string>
   <string name="downloads_empty">Pas de téléchargements !</string>
-  <string name="download_freespace">Espace disponible</string>
   <string name="downloaded_songs">Titres téléchargés - cliquer pour écouter</string>
   <string name="download_noti_title">Démarrage du téléchargement</string>
   <plurals name="download_noti_n_downloads">

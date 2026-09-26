@@ -29,7 +29,6 @@
   <string name="playlist_clear_content">Está ação irá remover todas as músicas da lista de reprodução irreversivelmente. Deseja continuar?</string>
   <string name="playlist_clear_confirm">Limpar lista de reprodução</string>
   <string name="downloads_empty">Sem downloads!</string>
-  <string name="download_freespace">Espaço livre</string>
   <string name="downloaded_songs">Baixar músicas - clique para tocar</string>
   <string name="download_noti_title">Iniciando download</string>
   <plurals name="download_noti_n_downloads">

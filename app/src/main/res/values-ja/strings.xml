@@ -29,7 +29,6 @@
   <string name="playlist_clear_content">プレイリストから回復できないほどすべての曲が削除されます。 続行しますか?</string>
   <string name="playlist_clear_confirm">プレイリストをクリア</string>
   <string name="downloads_empty">ダウンロードはありません!</string>
-  <string name="download_freespace">空き容量</string>
   <string name="downloaded_songs">ダウンロードした曲 - クリックで再生</string>
   <string name="download_noti_title">ダウンロードの開始中</string>
   <plurals name="download_noti_n_downloads">

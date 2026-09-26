@@ -29,7 +29,6 @@
   <string name="playlist_clear_content">Alle nummers zullen van de playlist verwijderd worden, dit is onomkeerbaar. doorgaan?</string>
   <string name="playlist_clear_confirm">Afspeellijst legen</string>
   <string name="downloads_empty">Geen downloads!</string>
-  <string name="download_freespace">Vrije ruimte</string>
   <string name="downloaded_songs">Gedownloade nummers - klik om te spelen</string>
   <string name="download_noti_title">Download start</string>
   <plurals name="download_noti_n_downloads">
