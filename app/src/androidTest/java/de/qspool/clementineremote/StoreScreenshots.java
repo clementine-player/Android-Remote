@@ -11,7 +11,6 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.GrantPermissionRule;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.BySelector;
-import androidx.test.uiautomator.Direction;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.Until;
@@ -238,8 +237,8 @@ public class StoreScreenshots {
         openDrawer();
         screenshot("5_navigation");
         select("Library");
-        // The library is downloaded from Clementine by pulling down on the empty list.
-        waitFor(id("library_refresh_empty_layout")).swipe(Direction.DOWN, 0.8f);
+        // The library is downloaded from Clementine on request.
+        waitFor(tag("btnDownloadLibrary")).click();
         waitFor(By.text("Frédéric Chopin"), LIBRARY_TIMEOUT);
         screenshot("2_library");
         mDevice.findObject(By.text("Frédéric Chopin")).click();
