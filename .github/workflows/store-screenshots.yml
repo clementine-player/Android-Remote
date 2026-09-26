@@ -116,7 +116,7 @@ jobs:
         if: always()
         run: |
           find app/build/outputs/androidTest-results -name '*.xml' -print0 \
-            | xargs -0 -r grep -ho '<testcase [^>]*>\|<skipped\|<failure message="[^"]*' \
+            | xargs -0 -r grep -ho '<testcase [^>]*>\|<skipped\|<failure[^>]*>[^<]\{0,300\}' \
             || echo "No device test results"
 
       - name: Post the screenshots on the pull request
