@@ -1,5 +1,6 @@
 package de.qspool.clementineremote.ui.player
 
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
@@ -15,6 +16,8 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTouchInput
 import de.qspool.clementineremote.backend.Clementine
 import de.qspool.clementineremote.backend.RemoteRepository.NowPlaying
@@ -26,7 +29,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
-/** The player page and controls show Clementine's state, and hand on what the user does. */
+/** The player's pages and controls show Clementine's state, and hand on what the user does. */
 @RunWith(RobolectricTestRunner::class)
 class PlayerScreenTest {
 
@@ -162,5 +165,90 @@ class PlayerScreenTest {
         compose.onNodeWithContentDescription("Shuffle albums").assertIsDisplayed()
         compose.onNodeWithTag("btnRepeat").assertIsOff()
         compose.onNodeWithContentDescription("Don't repeat").assertIsDisplayed()
+    }
+
+    @Test
+    fun songDetailsShowWhatClementineKnows() {
+        val rated = mutableListOf<Int>()
+        song.track = 3
+        song.disc = 0
+        song.playcount = 12
+        song.rating = 0.7f
+        compose.setContent {
+            ClementineTheme(dynamicColor = false) {
+                SongDetailsContent(song, onRate = { rated += it })
+            }
+        }
+
+        compose.onNodeWithTag("siTitle").assertTextEquals("Clair de lune")
+        compose.onNodeWithText("Suite bergamasque").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("Classical").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("1905").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("3").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("12").performScrollTo().assertIsDisplayed()
+        // No disc number from Clementine, so no disc row.
+        compose.onNodeWithText("Disc").assertDoesNotExist()
+
+        compose.onNodeWithTag("siStar4").performClick()
+        assertEquals(listOf(4), rated)
+    }
+
+    @Test
+    fun songDetailsWithoutASongSaySo() {
+        compose.setContent {
+            ClementineTheme(dynamicColor = false) {
+                SongDetailsContent(null, onRate = {})
+            }
+        }
+
+        compose.onNodeWithTag("siTitle").assertTextEquals("No Song playing right now")
+        compose.onNodeWithTag("siRating").assertDoesNotExist()
+    }
+
+    @Test
+    fun connectionInfoShowsTheConnectionAndSetsTheVolume() {
+        val volumes = mutableListOf<Int>()
+        compose.setContent {
+            ClementineTheme(dynamicColor = false) {
+                ConnectionInfoContent(
+                    ConnectionStats("10.0.2.2:5500", "Clementine 1.4.1", "00:01:05", null),
+                    volume = 50,
+                    onVolume = { volumes += it },
+                )
+            }
+        }
+
+        compose.onNodeWithTag("cnAddress").assertTextEquals("10.0.2.2:5500")
+        compose.onNodeWithTag("cnTime").assertTextEquals("00:01:05")
+        compose.onNodeWithTag("cnVersion").assertTextEquals("Clementine 1.4.1")
+        compose.onNodeWithTag("cnTraffic").assertTextEquals("Stats not available on this device")
+        compose.onNodeWithTag("cnVolume")
+            .assert(SemanticsMatcher.expectValue(
+                SemanticsProperties.ProgressBarRangeInfo,
+                androidx.compose.ui.semantics.ProgressBarRangeInfo(50f, 0f..100f)))
+            .performSemanticsAction(SemanticsActions.SetProgress) { it(80f) }
+
+        assertEquals(listOf(80), volumes)
+    }
+
+    @Test
+    fun tabsSwitchPages() {
+        val pages = mutableListOf<Int>()
+        val viewModel = PlayerViewModel(send = {})
+        compose.setContent {
+            ClementineTheme(dynamicColor = false) {
+                PlayerScreen(onArtClick = {}, onPageChanged = { pages += it }, viewModel)
+            }
+        }
+
+        compose.onNodeWithTag("tvTitle").assertIsDisplayed()
+        compose.onNodeWithTag("tab1").performClick()
+        compose.onNodeWithTag("siTitle").assertIsDisplayed()
+        compose.onNodeWithTag("tab2").performClick()
+        compose.onNodeWithTag("cnVolume").performScrollTo().assertIsDisplayed()
+        // The controls stay on every page.
+        compose.onNodeWithTag("btnPlaypause").assertIsDisplayed()
+
+        assertEquals(listOf(0, 1, 2), pages)
     }
 }

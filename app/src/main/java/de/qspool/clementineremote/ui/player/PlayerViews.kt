@@ -13,21 +13,23 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import de.qspool.clementineremote.ui.theme.ClementineTheme
 
 /**
- * The player's Compose parts, shown in the View fragments that host them until the whole player
- * moves to Compose.
+ * The player, in Compose, for the View-based fragment that hosts it until the app's shell moves
+ * to Compose.
  */
 object PlayerViews {
 
-    /** Shows the player page in [view]. Tapping the artwork runs [onArtClick]. */
-    @JvmStatic
-    fun showNowPlaying(view: ComposeView, onArtClick: Runnable) = show(view) {
-        NowPlaying(onArtClick = onArtClick::run)
+    /** Hears which of the player's pages is shown. */
+    fun interface PageListener {
+        fun onPageChanged(page: Int)
     }
 
-    /** Shows the player's controls in [view]. */
+    /**
+     * Shows the player in [view]. Tapping the artwork runs [onArtClick]; [onPageChanged] hears
+     * which page is shown.
+     */
     @JvmStatic
-    fun showControls(view: ComposeView) = show(view) {
-        PlayerControls()
+    fun showPlayer(view: ComposeView, onArtClick: Runnable, onPageChanged: PageListener) = show(view) {
+        PlayerScreen(onArtClick = onArtClick::run, onPageChanged = onPageChanged::onPageChanged)
     }
 
     @OptIn(ExperimentalComposeUiApi::class)
