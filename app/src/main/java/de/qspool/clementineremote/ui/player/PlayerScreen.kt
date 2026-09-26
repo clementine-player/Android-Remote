@@ -79,7 +79,7 @@ interface PlayerActions {
 
 /**
  * The player, full screen: where Clementine plays from, the artwork, the song (and loving it on
- * Last.fm), the seek bar, the controls and the volume, then the song's details and lyrics, the
+ * Last.fm), the seek bar and the controls, then the song's details and lyrics, the volume, the
  * queue and downloading. Tapping the artwork shows the lyrics.
  */
 @Composable
@@ -157,8 +157,7 @@ internal fun PlayerContent(
                 }
                 SeekBar(nowPlaying, onSeek, Modifier.padding(horizontal = 24.dp))
                 controls()
-                VolumeSlider(nowPlaying.volume, onVolume, Modifier.padding(horizontal = 24.dp))
-                BottomRow(actions)
+                BottomRow(actions, nowPlaying.volume, onVolume)
             }
             if (maxWidth > maxHeight) {
                 // Landscape: the artwork beside the rest.
@@ -272,14 +271,16 @@ private fun LoveButton(song: MySong, onLove: () -> Unit) {
 }
 
 @Composable
-private fun BottomRow(actions: PlayerActions) {
+private fun BottomRow(actions: PlayerActions, volume: Int, onVolume: (Int) -> Unit) {
     Row(
         Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         IconButton(onClick = { actions.onDetails(lyrics = false) }, modifier = Modifier.testTag("btnDetails")) {
             Icon(painterResource(R.drawable.ic_lyrics), stringResource(R.string.player_details))
         }
+        VolumeButton(volume, onVolume)
         IconButton(onClick = actions::onQueue, modifier = Modifier.testTag("btnQueue")) {
             Icon(painterResource(R.drawable.ic_queue_music), stringResource(R.string.nav_queue))
         }
@@ -399,38 +400,6 @@ private fun SeekBar(nowPlaying: NowPlaying, onSeek: (Int) -> Unit, modifier: Mod
                     }
                 }
             }
-        }
-    }
-}
-
-/** Clementine's volume; while dragging, Clementine follows the thumb. */
-@Composable
-private fun VolumeSlider(volume: Int, onVolume: (Int) -> Unit, modifier: Modifier) {
-    var dragging by remember { mutableStateOf<Float?>(null) }
-    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-        Row(modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                painterResource(R.drawable.ic_volume_down),
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            Slider(
-                value = dragging ?: volume.toFloat(),
-                onValueChange = {
-                    if (it.roundToInt() != (dragging ?: volume.toFloat()).roundToInt()) {
-                        onVolume(it.roundToInt())
-                    }
-                    dragging = it
-                },
-                onValueChangeFinished = { dragging = null },
-                valueRange = 0f..100f,
-                modifier = Modifier.weight(1f).padding(horizontal = 12.dp).testTag("volume"),
-            )
-            Icon(
-                painterResource(R.drawable.ic_volume_up),
-                contentDescription = stringResource(R.string.connection_volume),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
         }
     }
 }
