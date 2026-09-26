@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -37,6 +38,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.R
@@ -75,7 +77,7 @@ interface ConnectionActions {
  * address and version, how long and how much has been sent, and switching to another
  * Clementine, the settings and disconnecting.
  */
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun ConnectionSheet(actions: ConnectionActions, onDismiss: () -> Unit) {
     val context = LocalContext.current
@@ -89,6 +91,8 @@ fun ConnectionSheet(actions: ConnectionActions, onDismiss: () -> Unit) {
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        // The sheet is a window of its own: its test tags are resource IDs too, for UI Automator.
+        modifier = Modifier.semantics { testTagsAsResourceId = true },
     ) {
         ConnectionSheetContent(stats, object : ConnectionActions {
             override fun onSwitchClementine() {

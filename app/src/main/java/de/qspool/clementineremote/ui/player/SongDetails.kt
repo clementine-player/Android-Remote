@@ -27,12 +27,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -45,7 +48,7 @@ import de.qspool.clementineremote.utils.Utilities
  * The song details, in a sheet over the player: what Clementine says about the song and its
  * rating, or its lyrics, which Clementine looks up when they're first shown.
  */
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun SongDetailsSheet(showLyrics: Boolean, onDismiss: () -> Unit, viewModel: PlayerViewModel = viewModel()) {
     val nowPlaying by viewModel.nowPlaying.collectAsStateWithLifecycle()
@@ -56,6 +59,8 @@ fun SongDetailsSheet(showLyrics: Boolean, onDismiss: () -> Unit, viewModel: Play
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        // The sheet is a window of its own: its test tags are resource IDs too, for UI Automator.
+        modifier = Modifier.semantics { testTagsAsResourceId = true },
     ) {
         SongDetailsContent(
             nowPlaying.song,
