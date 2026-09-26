@@ -65,6 +65,24 @@
     <string name="downloads_wifi_only">Downloads only run on Wi-Fi.</string>
     <string name="downloads_change">Change</string>
 
+    <!-- The app's shell: navigation, mini player, player and sheets. -->
+    <string name="nav_queue">Queue</string>
+    <string name="shell_open_player">Open player: %s</string>
+    <string name="shell_connected_to">Connected to %s</string>
+    <string name="shell_search_close">Close search</string>
+    <string name="shell_more">More options</string>
+    <string name="player_collapse">Collapse player</string>
+    <string name="player_playing_from">Playing from</string>
+    <string name="player_love">Love on Last.fm</string>
+    <string name="player_details">Lyrics and details</string>
+    <string name="player_download_song">Download song</string>
+    <string name="details_tab">Details</string>
+    <string name="lyrics_tab">Lyrics</string>
+    <string name="connection_connected">Connected</string>
+    <string name="connection_uptime">Connected for</string>
+    <string name="connection_switch">Switch Clementine</string>
+    <string name="connection_switch_summary">Pick another computer on your network</string>
+
     <string name="download_noti_title">Starting download</string>
     <plurals name="download_noti_n_downloads">
         <item quantity="one">%d active download</item>

@@ -47,6 +47,15 @@ object RemoteRepository {
     @JvmStatic
     val nowPlaying: StateFlow<NowPlaying> = _nowPlaying.asStateFlow()
 
+    private val _lyricsAnswers = MutableStateFlow(0)
+
+    /**
+     * How many times Clementine has answered a request for lyrics. The lyrics themselves are
+     * added to the song they're for ([MySong.getLyricsProvider]); none may have been found.
+     */
+    @JvmStatic
+    val lyricsAnswers: StateFlow<Int> = _lyricsAnswers.asStateFlow()
+
     /** Follows a new connection: its status, and the messages that change what's playing. */
     @JvmStatic
     fun attach(connection: ClementinePlayerConnection) {
@@ -77,6 +86,7 @@ object RemoteRepository {
             MsgType.SHUFFLE,
             MsgType.REPEAT,
             MsgType.FIRST_DATA_SENT_COMPLETE -> refresh()
+            MsgType.LYRICS -> _lyricsAnswers.value++
             else -> {}
         }
     }
