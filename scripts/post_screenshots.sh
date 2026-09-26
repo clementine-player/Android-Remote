@@ -50,33 +50,42 @@ run="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
   echo
   echo "| Screen | master | This PR | This PR, dark |"
   echo "| --- | --- | --- | --- |"
+  # The store's screens first (numbered), then the others the run took, which the store
+  # listing doesn't show (such as the settings).
   i=0
-  for shot in "${shots[@]}"; do
-    name=$(basename "$shot" .png)
-    case $name in
-      [0-9]_*)
-        i=$((i + 1))
-        if [ "$compare" = yes ]; then
-          before="<img src=\"$store/$i.png\" width=\"240\">"
-        else
-          before="–"
-        fi
-        # The same screen in the dark theme, when the run took it (dark_<name>.png).
-        if [ -f "$dir/dark_$name.png" ]; then
-          dark="<img src=\"$base/dark_$name.png\" width=\"240\">"
-        else
-          dark="–"
-        fi
-        echo "| \`$name\` | $before | <img src=\"$base/$name.png\" width=\"240\"> | $dark |"
-        ;;
-    esac
-  done
   failures=()
-  for shot in "${shots[@]}"; do
-    case $(basename "$shot") in
-      [0-9]_* | dark_[0-9]_*) ;;
-      *) failures+=("$shot") ;;
-    esac
+  for pass in store other; do
+    for shot in "${shots[@]}"; do
+      name=$(basename "$shot" .png)
+      case $name in
+        dark_*) continue ;;
+        # What a failing test left: the screen at the failure, the media session's state.
+        failure* | media-*)
+          [ $pass = store ] && failures+=("$shot")
+          continue
+          ;;
+        [0-9]_*)
+          [ $pass = store ] || continue
+          i=$((i + 1))
+          if [ "$compare" = yes ]; then
+            before="<img src=\"$store/$i.png\" width=\"240\">"
+          else
+            before="–"
+          fi
+          ;;
+        *)
+          [ $pass = other ] || continue
+          before="–"
+          ;;
+      esac
+      # The same screen in the dark theme, when the run took it (dark_<name>.png).
+      if [ -f "$dir/dark_$name.png" ]; then
+        dark="<img src=\"$base/dark_$name.png\" width=\"240\">"
+      else
+        dark="–"
+      fi
+      echo "| \`$name\` | $before | <img src=\"$base/$name.png\" width=\"240\"> | $dark |"
+    done
   done
   if [ ${#failures[@]} -gt 0 ]; then
     echo
