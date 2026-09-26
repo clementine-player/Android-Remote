@@ -9,7 +9,7 @@ object ConnectViews {
     /** Shows the connect screen in [view], for [viewModel]'s state, telling [actions] what the user does. */
     @JvmStatic
     fun showConnect(view: ComposeView, viewModel: ConnectViewModel, actions: ConnectActions) =
-        ComposeViews.show(view) {
+        ComposeViews.show(view, followsSystemTheme = true) {
             ConnectScreen(viewModel, actions)
         }
 }

@@ -9,6 +9,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
@@ -18,6 +19,22 @@ import androidx.compose.ui.platform.LocalContext
  * (#db6835) as the source colour, keeping its intensity, and the purple of its gradient
  * (#af597d) as the tertiary colour. The connect screen's gradient uses the same two colours.
  */
+
+/** Clementine's own colours, outside the Material schemes: its logo's orange and plum. */
+object ClementineBrand {
+    val Orange = Color(0xFFDB6835)
+
+    /** The orange for fills under white text: white holds 4.61:1 on it. */
+    val OrangeUi = Color(0xFFC05422)
+
+    val Plum = Color(0xFFAF597D)
+
+    val OnBrand = Color.White
+
+    /** The gradient behind white text, plum to orange, as on Clementine's website and icon. */
+    val gradient: Brush
+        get() = Brush.horizontalGradient(listOf(Plum, OrangeUi))
+}
 
 val ClementineLightColors: ColorScheme = lightColorScheme(
     primary = Color(0xFF9F3C09),

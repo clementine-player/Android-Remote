@@ -27,25 +27,23 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.text.InputType;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.SystemBarStyle;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.compose.ui.platform.ComposeView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -116,9 +114,9 @@ public class ConnectActivity extends AppCompatActivity implements ConnectActions
 
         setContentView(R.layout.activity_connectdialog);
 
-        EdgeToEdge.apply(this);
-
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        // Drawn wholly in Compose, which keeps clear of the system bars and the keyboard itself.
+        // The status bar sits on Clementine's gradient, so its icons are light.
+        androidx.activity.EdgeToEdge.enable(this, SystemBarStyle.dark(Color.TRANSPARENT));
 
         mSharedPref = App.getPreferences();
         // A copy: the set the preferences return must not be changed.
@@ -180,29 +178,6 @@ public class ConnectActivity extends AppCompatActivity implements ConnectActions
         if (mClementineMDns != null) {
             mClementineMDns.stopServiceDiscovery();
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        final int id = item.getItemId();
-        if (id == R.id.settings) {
-            Intent settingsIntent = new Intent(this, ClementineSettings.class);
-            startActivity(settingsIntent);
-            doAutoConnect = false;
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menu.clear();
-
-        MenuInflater inf = getMenuInflater();
-        inf.inflate(R.menu.connectdialog_menu, menu);
-
-        return true;
     }
 
     @Override
@@ -271,6 +246,22 @@ public class ConnectActivity extends AppCompatActivity implements ConnectActions
                 .putString(SharedPreferencesKeys.SP_KEY_PORT, String.valueOf(server.getPort()))
                 .apply();
         connect();
+    }
+
+    @Override
+    public void onSearchAgain() {
+        if (mClementineMDns != null) {
+            mClementineMDns.stopServiceDiscovery();
+        }
+        mState.setServers(new ArrayList<Server>());
+        mClementineMDns = new ClementineMDnsDiscovery(mHandler);
+        mClementineMDns.discoverServices();
+    }
+
+    @Override
+    public void onSettings() {
+        startActivity(new Intent(this, ClementineSettings.class));
+        doAutoConnect = false;
     }
 
     @Override
