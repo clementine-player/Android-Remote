@@ -59,6 +59,7 @@ import de.qspool.clementineremote.R
 import de.qspool.clementineremote.backend.Clementine
 import de.qspool.clementineremote.backend.RemoteRepository
 import de.qspool.clementineremote.backend.RemoteRepository.NowPlaying
+import de.qspool.clementineremote.ui.shell.outputIcon
 import de.qspool.clementineremote.backend.player.MySong
 import de.qspool.clementineremote.utils.Utilities
 import kotlin.math.roundToInt
@@ -96,7 +97,7 @@ fun PlayerScreen(actions: PlayerActions, viewModel: PlayerViewModel = viewModel(
     val lastFm = remember { viewModel.lastFm() }
     val outputs by RemoteRepository.outputs.collectAsStateWithLifecycle()
     // Only said when it isn't Clementine's own computer.
-    val playingOn = outputs.active?.takeIf { it.id != RemoteRepository.LOCAL_OUTPUT }?.name
+    val playingOn = outputs.active?.takeIf { it.id != RemoteRepository.LOCAL_OUTPUT }
     // Playing on this phone, the volume is the phone's own, as with the volume keys.
     val playingHere = outputs.active?.isThisPhone == true
     val phoneVolume by rememberPhoneVolume()
@@ -153,7 +154,7 @@ internal fun PlayerContent(
     controls: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     /** The device Clementine plays on, when it isn't its own computer. */
-    playingOn: String? = null,
+    playingOn: RemoteRepository.Output? = null,
     /** What the volume button shows and sets: Clementine's, or this phone's when playing here. */
     volume: Int = nowPlaying.volume,
 ) {
@@ -208,7 +209,7 @@ internal fun PlayerContent(
 @Composable
 private fun TopRow(
     playingFrom: String?,
-    playingOn: String?,
+    playingOn: RemoteRepository.Output?,
     lastFm: Boolean,
     onCollapse: () -> Unit,
     onStop: () -> Unit,
@@ -236,13 +237,13 @@ private fun TopRow(
             if (playingOn != null) {
                 Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        painterResource(R.drawable.ic_speaker),
+                        painterResource(outputIcon(playingOn)),
                         null,
                         tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(16.dp),
                     )
                     Text(
-                        stringResource(R.string.output_playing_on, playingOn),
+                        stringResource(R.string.output_playing_on, playingOn.name),
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.primary,
                         maxLines = 1,
