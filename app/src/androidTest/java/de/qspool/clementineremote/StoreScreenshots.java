@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 
 import de.qspool.clementineremote.ui.ConnectActivity;
+import de.qspool.clementineremote.ui.hints.Hints;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -125,6 +126,8 @@ public class StoreScreenshots {
                 .putString(SharedPreferencesKeys.SP_KEY_IP, host)
                 .putString(SharedPreferencesKeys.SP_KEY_PORT, "5500")
                 .commit();
+        // No first-use hints over the screens.
+        Hints.seenAll();
     }
 
     /** Back to the light theme, which the tests after this one expect. */
