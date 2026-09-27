@@ -41,6 +41,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -345,8 +346,15 @@ private fun BottomRow(actions: PlayerActions, volume: Int, onVolume: (Int) -> Un
 
 @Composable
 private fun Artwork(song: MySong?, onClick: () -> Unit, modifier: Modifier) {
-    // Decoded once per cover, and faded over when the cover changes.
-    val art = remember(song == null, song?.artData) { song?.art?.asImageBitmap() }
+    // Decoded once per cover, and faded over when the cover changes. A song without a cover gets
+    // a placeholder here, not MySong's "no cover" image, which isn't square and would be cropped.
+    val art = remember(song == null, song?.artData) {
+        when {
+            song == null -> Artwork.Nothing
+            song.artData == null -> Artwork.NoCover
+            else -> Artwork.Cover(song.art.asImageBitmap())
+        }
+    }
     Crossfade(
         targetState = art,
         animationSpec = tween(ARTWORK_FADE_MILLIS),
@@ -356,23 +364,40 @@ private fun Artwork(song: MySong?, onClick: () -> Unit, modifier: Modifier) {
             .background(MaterialTheme.colorScheme.surfaceContainerHighest)
             .clickable(onClickLabel = stringResource(R.string.lyrics_tab), onClick = onClick)
             .testTag("imgArt"),
-    ) { bitmap ->
-        if (bitmap == null) {
-            Image(
+    ) { artwork ->
+        when (artwork) {
+            Artwork.Nothing -> Image(
                 painterResource(R.drawable.icon_large),
                 contentDescription = stringResource(R.string.cd_cover_image),
                 contentScale = ContentScale.Fit,
                 modifier = Modifier.fillMaxSize().padding(32.dp),
             )
-        } else {
-            Image(
-                bitmap,
+            // As the mini player shows a song without a cover.
+            Artwork.NoCover -> Box(Modifier.fillMaxSize().testTag("noCover"), contentAlignment = Alignment.Center) {
+                Icon(
+                    painterResource(R.drawable.ic_music_note),
+                    contentDescription = stringResource(R.string.cd_cover_image),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.fillMaxSize(0.4f),
+                )
+            }
+            is Artwork.Cover -> Image(
+                artwork.bitmap,
                 contentDescription = stringResource(R.string.cd_cover_image),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize(),
             )
         }
     }
+}
+
+/** What the artwork shows: nothing playing, a song without a cover, or its cover. */
+private sealed interface Artwork {
+    data object Nothing : Artwork
+
+    data object NoCover : Artwork
+
+    data class Cover(val bitmap: ImageBitmap) : Artwork
 }
 
 @Composable

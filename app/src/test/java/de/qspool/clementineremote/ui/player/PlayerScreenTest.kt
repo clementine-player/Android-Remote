@@ -117,6 +117,13 @@ class PlayerScreenTest {
     }
 
     @Test
+    fun aSongWithoutACoverShowsAPlaceholderNotTheCroppedNoCoverImage() {
+        showPlayer()
+
+        compose.onNodeWithTag("noCover", useUnmergedTree = true).assertIsDisplayed()
+    }
+
+    @Test
     fun withoutASongSaysSo() {
         showPlayer(nowPlaying(song = null))
 
