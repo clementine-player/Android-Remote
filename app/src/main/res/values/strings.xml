@@ -89,8 +89,8 @@
     <string name="output_playing_on">Playing on %1$s</string>
     <string name="output_choose">Choose where to play</string>
     <string name="hint_done">Got it</string>
-    <string name="hint_outputs_title">Play on this phone</string>
-    <string name="hint_outputs">Hear Clementine on this phone, or switch back to the computer, with this button.</string>
+    <string name="hint_outputs_title">Play on this device</string>
+    <string name="hint_outputs">Listen to Clementine on this device, or switch back to your computer, with this button.</string>
     <string name="pref_hints_reset">Show tips again</string>
     <string name="pref_hints_reset_summary">Point out features again, as on first use</string>
     <string name="pref_hints_reset_done">Tips will show again</string>
