@@ -8,6 +8,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import de.qspool.clementineremote.R
 import de.qspool.clementineremote.backend.RemoteRepository
 import de.qspool.clementineremote.backend.streaming.ThisRenderer
 import de.qspool.clementineremote.ui.theme.ClementineTheme
@@ -67,5 +68,14 @@ class ConnectionSheetTest {
         show(RemoteRepository.Outputs(supported = false))
 
         compose.onNodeWithText("Play on").assertDoesNotExist()
+    }
+
+    @Test
+    fun showsWhatKindOfDeviceEachOutputIs() {
+        fun output(id: String) = RemoteRepository.Output(id, "", active = false, activating = false)
+
+        assertEquals(R.drawable.ic_computer, outputIcon(output(RemoteRepository.LOCAL_OUTPUT)))
+        assertEquals(R.drawable.ic_smartphone, outputIcon(output(ThisRenderer.id())))
+        assertEquals(R.drawable.ic_speaker, outputIcon(output("kitchen")))
     }
 }

@@ -2,6 +2,7 @@ package de.qspool.clementineremote.ui.shell
 
 import android.content.Context
 import android.net.TrafficStats
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -206,11 +207,7 @@ private fun Outputs(outputs: RemoteRepository.Outputs, onOutput: (String) -> Uni
             output.isThisPhone -> stringResource(R.string.output_this_phone, output.name)
             else -> output.name
         }
-        val icon = when {
-            output.id == RemoteRepository.LOCAL_OUTPUT -> R.drawable.ic_computer
-            output.isThisPhone -> R.drawable.ic_smartphone
-            else -> R.drawable.ic_speaker
-        }
+        val icon = outputIcon(output)
         ListItem(
             headlineContent = { Text(name) },
             supportingContent = if (output.activating) {
@@ -227,6 +224,17 @@ private fun Outputs(outputs: RemoteRepository.Outputs, onOutput: (String) -> Uni
                 .testTag("output_" + output.id),
         )
     }
+}
+
+/**
+ * What an output is, as an icon: Clementine's computer, this phone, or another device. Clementine
+ * doesn't say what kind of device the others are, so they're shown as speakers.
+ */
+@DrawableRes
+internal fun outputIcon(output: RemoteRepository.Output): Int = when {
+    output.id == RemoteRepository.LOCAL_OUTPUT -> R.drawable.ic_computer
+    output.isThisPhone -> R.drawable.ic_smartphone
+    else -> R.drawable.ic_speaker
 }
 
 @Composable
