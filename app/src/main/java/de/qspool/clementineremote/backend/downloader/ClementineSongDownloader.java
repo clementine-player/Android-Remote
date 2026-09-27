@@ -18,7 +18,6 @@
 package de.qspool.clementineremote.backend.downloader;
 
 import android.net.Uri;
-import android.os.AsyncTask;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -36,10 +35,11 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Resp
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.utils.DownloadSpeedCalculator;
 import de.qspool.clementineremote.utils.IDownloadCalculatorSource;
+import de.qspool.clementineremote.backend.BackgroundTask;
 import de.qspool.clementineremote.utils.Utilities;
 
 public class ClementineSongDownloader extends
-        AsyncTask<ClementineMessage, DownloadStatus, DownloaderResult> {
+        BackgroundTask<ClementineMessage, DownloadStatus, DownloaderResult> {
 
     public static class DownloadedSong {
         public MySong song;
@@ -98,11 +98,11 @@ public class ClementineSongDownloader extends
         }
         mItem = message.getMessage().getRequestDownloadSongs().getDownloadItem();
 
-        this.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
+        execute(message);
     }
 
     @Override
-    protected DownloaderResult doInBackground(ClementineMessage... params) {
+    protected DownloaderResult doInBackground(ClementineMessage message) {
         publishProgress(new DownloadStatus(mId).setState(
                 DownloadStatus.DownloaderState.IDLE));
 
@@ -123,12 +123,12 @@ public class ClementineSongDownloader extends
         });
 
         // Start the download
-        return startDownloading(params[0]);
+        return startDownloading(message);
     }
 
     @Override
-    protected void onProgressUpdate(DownloadStatus... progress) {
-        mDownloadStatus = progress[0];
+    protected void onProgressUpdate(DownloadStatus progress) {
+        mDownloadStatus = progress;
         mSongDownloaderListener.onProgress(mDownloadStatus);
     }
 
