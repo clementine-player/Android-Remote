@@ -69,7 +69,7 @@ class HintsTest {
     fun pointsOutTheOutputButtonUntilClosed() {
         show()
         compose.onNodeWithTag("hint_outputs").assertExists()
-        compose.onNodeWithText("Play on this phone").assertExists()
+        compose.onNodeWithText("Play on this device").assertExists()
 
         compose.onNodeWithTag("hintDone").performClick()
 
