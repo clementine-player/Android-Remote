@@ -156,7 +156,7 @@ fun AppShell(shell: ShellViewModel, actions: ShellActions) {
             }
             Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing.only(sides))) {
                 Box(Modifier.weight(1f).fillMaxWidth()) {
-                    Destinations(shell, onConnection = { connectionOpen = true })
+                    Destinations(shell, onConnection = { connectionOpen = true }, onSettings = actions::onSettings)
                 }
                 if (nowPlaying.song != null) {
                     MiniPlayer(
@@ -248,7 +248,7 @@ fun AppShell(shell: ShellViewModel, actions: ShellActions) {
 
 /** The screen [ShellViewModel.destination] names, with its top bar; back goes up, then home. */
 @Composable
-private fun Destinations(shell: ShellViewModel, onConnection: () -> Unit) {
+private fun Destinations(shell: ShellViewModel, onConnection: () -> Unit, onSettings: () -> Unit) {
     val queue: QueueViewModel = viewModel()
     val library: LibraryViewModel = viewModel()
     val search: SearchViewModel = viewModel()
@@ -275,7 +275,7 @@ private fun Destinations(shell: ShellViewModel, onConnection: () -> Unit) {
                     onPauseOrDispose {}
                 }
                 var clearing by remember { mutableStateOf(false) }
-                FilterableTopBar(host, onConnection, queue::setFilter) {
+                FilterableTopBar(host, onConnection, onSettings, queue::setFilter) {
                     Box {
                         var open by remember { mutableStateOf(false) }
                         IconButton(onClick = { open = true }, modifier = Modifier.testTag("btnQueueMore")) {
@@ -325,30 +325,42 @@ private fun Destinations(shell: ShellViewModel, onConnection: () -> Unit) {
                 }
             }
             Destination.LIBRARY -> {
-                FilterableTopBar(host, onConnection, library::setFilter)
+                FilterableTopBar(host, onConnection, onSettings, library::setFilter)
                 LibraryScreen(library)
             }
             Destination.SEARCH -> {
-                TopBar(host, onConnection)
+                TopBar(host, onConnection, onSettings)
                 SearchScreen(search)
             }
             Destination.DOWNLOADS -> {
-                TopBar(host, onConnection)
+                TopBar(host, onConnection, onSettings)
                 DownloadsScreen(downloads)
             }
         }
     }
 }
 
-/** The top bar: the connection chip, and the screen's actions. */
+/**
+ * The top bar: the connection chip and the settings at the start, where every screen has them in
+ * the same place, and the screen's actions at the end.
+ */
 @Composable
-private fun TopBar(host: String?, onConnection: () -> Unit, actions: @Composable RowScope.() -> Unit = {}) {
+private fun TopBar(
+    host: String?,
+    onConnection: () -> Unit,
+    onSettings: () -> Unit,
+    actions: @Composable RowScope.() -> Unit = {},
+) {
     Row(
-        Modifier.fillMaxWidth().height(64.dp).padding(horizontal = 4.dp),
+        Modifier.fillMaxWidth().height(64.dp).padding(start = 16.dp, end = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        // Shrinks for a long host name, rather than pushing the buttons off.
+        ConnectionChip(host, onConnection, Modifier.weight(1f, fill = false))
+        IconButton(onClick = onSettings, modifier = Modifier.testTag("btnTopSettings")) {
+            Icon(painterResource(R.drawable.ic_settings), stringResource(R.string.menu_settings))
+        }
         Spacer(Modifier.weight(1f))
-        ConnectionChip(host, onConnection, Modifier.padding(end = 4.dp))
         actions()
     }
 }
@@ -361,6 +373,7 @@ private fun TopBar(host: String?, onConnection: () -> Unit, actions: @Composable
 private fun FilterableTopBar(
     host: String?,
     onConnection: () -> Unit,
+    onSettings: () -> Unit,
     onFilter: (String) -> Unit,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
@@ -372,7 +385,7 @@ private fun FilterableTopBar(
     BackHandler(filter != null) { close() }
     val text = filter
     if (text == null) {
-        TopBar(host, onConnection) {
+        TopBar(host, onConnection, onSettings) {
             IconButton(onClick = { filter = "" }, modifier = Modifier.testTag("btnFilter")) {
                 Icon(painterResource(R.drawable.ic_search), stringResource(R.string.menu_search))
             }

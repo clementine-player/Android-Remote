@@ -3,6 +3,7 @@ package de.qspool.clementineremote.ui.shell
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.getBoundsInRoot
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -116,6 +117,20 @@ class AppShellTest {
 
         assertEquals(listOf("settings"), done)
         compose.onNodeWithTag("cnHost").assertDoesNotExist()
+    }
+
+    @Test
+    fun theChipAndSettingsStayPutAcrossScreens() {
+        val places = listOf("navQueue", "navLibrary", "navSearch", "navDownloads").map { destination ->
+            compose.onNodeWithTag(destination).performClick()
+            val place = compose.onNodeWithTag("connectionChip").getBoundsInRoot() to
+                compose.onNodeWithTag("btnTopSettings").getBoundsInRoot()
+            compose.onNodeWithTag("btnTopSettings").performClick()
+            place
+        }
+
+        assertEquals(List(4) { "settings" }, done)
+        assertEquals(1, places.toSet().size)
     }
 
     @Test
