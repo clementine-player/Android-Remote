@@ -236,11 +236,11 @@ private fun Songs(
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         if (playing) {
                             // Read out with the song, which is otherwise marked only by colour.
-                            Icon(
-                                painterResource(R.drawable.ic_equalizer),
-                                contentDescription = stringResource(R.string.queue_playing),
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(16.dp),
+                            PlayingBars(
+                                playing = state.isPlaying,
+                                color = MaterialTheme.colorScheme.primary,
+                                description = stringResource(R.string.queue_playing),
+                                modifier = Modifier.size(16.dp).testTag("playingBars"),
                             )
                         }
                         Text(

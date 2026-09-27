@@ -33,6 +33,8 @@ data class QueueState(
     val lengthSeconds: Int = 0,
     /** The index of the song playing, when it's in the shown playlist. */
     val playingIndex: Int? = null,
+    /** Whether Clementine is playing it, rather than paused or stopped. */
+    val isPlaying: Boolean = false,
     /** While playlists download: how many of how many are in. */
     val loading: Pair<Int, Int>? = null,
     val filter: String = "",
@@ -90,10 +92,16 @@ class QueueViewModel(
 
     val state: StateFlow<QueueState> =
         combine(changes, shownId, filter, loading, RemoteRepository.nowPlaying) { _, shown, filter, loading, nowPlaying ->
-            snapshot(shown, filter, loading, nowPlaying.song)
+            snapshot(shown, filter, loading, nowPlaying.song, nowPlaying.isPlaying)
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), QueueState())
 
-    private fun snapshot(shownId: Int?, filter: String, loading: Pair<Int, Int>?, playing: MySong?): QueueState {
+    private fun snapshot(
+        shownId: Int?,
+        filter: String,
+        loading: Pair<Int, Int>?,
+        playing: MySong?,
+        isPlaying: Boolean,
+    ): QueueState {
         val all = playlists.allPlaylists
         val shown = shownPlaylist(shownId)
         // A copy: Clementine's messages change the playlist on the connection's thread.
@@ -115,6 +123,7 @@ class QueueViewModel(
             songCount = songs.size,
             lengthSeconds = songs.sumOf { it.length.coerceAtLeast(0) },
             playingIndex = if (playingHere) playing?.index else null,
+            isPlaying = isPlaying,
             loading = loading,
             filter = filter,
         )
