@@ -133,7 +133,7 @@ public class ClementinePlayer extends SimpleBasePlayer {
         Clementine clementine = App.Clementine;
         MySong song = clementine.getCurrentSong();
         boolean playing = clementine.getState() == Clementine.State.PLAY;
-        if (usesVolumeKeys()) {
+        if (setsClementinesVolume()) {
             state.setDeviceInfo(DEVICE_INFO)
                     .setDeviceVolume(Math.max(0, Math.min(100, clementine.getVolume())));
         }
@@ -165,17 +165,20 @@ public class ClementinePlayer extends SimpleBasePlayer {
 
     /** The commands, and setting the volume if the volume keys are to set it. */
     private static Commands withVolume(Commands commands) {
-        return usesVolumeKeys()
+        return setsClementinesVolume()
                 ? commands.buildUpon().addAll(VOLUME_COMMANDS).build()
                 : commands;
     }
 
     /**
-     * Whether the volume keys set Clementine's volume, as the settings say. If not, the media
-     * session is a local one, and the keys set the phone's volume.
+     * Whether the volume keys set Clementine's volume, as the settings say, unless Clementine
+     * plays on this phone. If not, the media session is a local one, and the keys set the phone's
+     * volume.
      */
-    private static boolean usesVolumeKeys() {
-        return App.getPreferences().getBoolean(SharedPreferencesKeys.SP_KEY_USE_VOLUMEKEYS, true);
+    private static boolean setsClementinesVolume() {
+        return App.getPreferences().getBoolean(SharedPreferencesKeys.SP_KEY_USE_VOLUMEKEYS, true)
+                // Playing on this phone, the phone's own volume is the one to set.
+                && !RemoteRepository.isPlayingHere();
     }
 
     private static MediaItemData mediaItem(MySong song) {

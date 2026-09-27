@@ -97,6 +97,9 @@ fun PlayerScreen(actions: PlayerActions, viewModel: PlayerViewModel = viewModel(
     val outputs by RemoteRepository.outputs.collectAsStateWithLifecycle()
     // Only said when it isn't Clementine's own computer.
     val playingOn = outputs.active?.takeIf { it.id != RemoteRepository.LOCAL_OUTPUT }?.name
+    // Playing on this phone, the volume is the phone's own, as with the volume keys.
+    val playingHere = outputs.active?.isThisPhone == true
+    val phoneVolume by rememberPhoneVolume()
     PlayerContent(
         nowPlaying,
         playingFrom = remember(nowPlaying.song) { viewModel.playingFrom() },
@@ -104,7 +107,12 @@ fun PlayerScreen(actions: PlayerActions, viewModel: PlayerViewModel = viewModel(
         lastFm = lastFm,
         actions = actions,
         onSeek = viewModel::seekTo,
-        onVolume = viewModel::setVolume,
+        onVolume = if (playingHere) {
+            { PhoneVolume.set(context, it) }
+        } else {
+            viewModel::setVolume
+        },
+        volume = if (playingHere) phoneVolume else nowPlaying.volume,
         onStop = viewModel::stop,
         onLove = {
             viewModel.love()
@@ -146,6 +154,8 @@ internal fun PlayerContent(
     modifier: Modifier = Modifier,
     /** The device Clementine plays on, when it isn't its own computer. */
     playingOn: String? = null,
+    /** What the volume button shows and sets: Clementine's, or this phone's when playing here. */
+    volume: Int = nowPlaying.volume,
 ) {
     Column(modifier.fillMaxSize().safeDrawingPadding().testTag("player")) {
         TopRow(playingFrom, playingOn, lastFm, actions::onCollapse, onStop, onBan)
@@ -164,7 +174,7 @@ internal fun PlayerContent(
                 }
                 SeekBar(nowPlaying, onSeek, Modifier.padding(horizontal = 24.dp))
                 controls()
-                BottomRow(actions, nowPlaying.volume, onVolume)
+                BottomRow(actions, volume, onVolume)
             }
             if (maxWidth > maxHeight) {
                 // Landscape: the artwork beside the rest.
