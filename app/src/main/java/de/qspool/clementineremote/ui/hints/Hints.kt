@@ -8,12 +8,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RichTooltip
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
@@ -147,7 +148,15 @@ fun HintBox(
                         }
                     },
                     action = {
-                        TextButton(onClick = { Hints.seen(hint) }, modifier = Modifier.testTag("hintDone")) {
+                        // Filled, as a text button in the inverse primary is faint on the inverse surface.
+                        Button(
+                            onClick = { Hints.seen(hint) },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.inversePrimary,
+                                contentColor = MaterialTheme.colorScheme.inverseSurface,
+                            ),
+                            modifier = Modifier.testTag("hintDone"),
+                        ) {
                             Text(stringResource(R.string.hint_done))
                         }
                     },
