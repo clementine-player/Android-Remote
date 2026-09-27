@@ -15,6 +15,7 @@ import java.net.InetAddress
 import java.net.ServerSocket
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
@@ -34,7 +35,8 @@ class ExoPlaybackDeviceTest {
     @Before
     fun startServer() {
         val wav = silence(millis = 500)
-        server = ServerSocket(0, 8, InetAddress.getLoopbackAddress())
+        // An IPv4 address, as in the urls: Android's loopback address can be ::1.
+        server = ServerSocket(0, 8, InetAddress.getByAddress(byteArrayOf(127, 0, 0, 1)))
         thread(isDaemon = true) {
             while (!server.isClosed) {
                 val socket = runCatching { server.accept() }.getOrNull() ?: break
@@ -71,7 +73,8 @@ class ExoPlaybackDeviceTest {
         val playing = CountDownLatch(1)
         val advanced = CountDownLatch(1)
         val ended = CountDownLatch(1)
-        val errors = mutableListOf<String>()
+        // Filled on the main thread, read on the test's.
+        val errors = CopyOnWriteArrayList<String>()
         main.post {
             playback.listener = object : Playback.Listener {
                 override fun onStateChanged() {
@@ -84,16 +87,21 @@ class ExoPlaybackDeviceTest {
 
                 override fun onError(message: String, transient: Boolean) {
                     errors += message
+                    // Stop waiting: the error is the answer.
+                    playing.countDown()
+                    advanced.countDown()
+                    ended.countDown()
                 }
             }
             playback.load(url(1), 0, playing = true)
             playback.queue(url(2))
         }
 
-        assertTrue("Never played; errors: $errors", playing.await(10, TimeUnit.SECONDS))
-        assertTrue("Didn't move on to the queued item; errors: $errors", advanced.await(10, TimeUnit.SECONDS))
-        assertTrue("Didn't end; errors: $errors", ended.await(10, TimeUnit.SECONDS))
-        assertEquals(emptyList<String>(), errors)
+        assertTrue("Never played", playing.await(10, TimeUnit.SECONDS))
+        assertEquals(emptyList<String>(), errors.toList())
+        assertTrue("Didn't move on to the queued item", advanced.await(10, TimeUnit.SECONDS))
+        assertTrue("Didn't end", ended.await(10, TimeUnit.SECONDS))
+        assertEquals(emptyList<String>(), errors.toList())
     }
 
     /** A mono 16-bit 44.1 kHz WAV file of silence. */
