@@ -5,7 +5,8 @@
 #                                       predictable tags. Tests rely on these
 #                                       exact values.
 #   generate-music.sh --showcase [dir]  the library in showcase-library.tsv, for
-#                                       the store screenshots.
+#                                       the store screenshots, with the album
+#                                       covers in covers/.
 set -eu
 
 tone() { # tone <n> <seconds> <file> <ffmpeg metadata args...>
@@ -32,6 +33,9 @@ if [ "${1:-}" = "--showcase" ]; then
       -metadata artist="$artist" -metadata albumartist="$artist" -metadata composer="$artist" \
       -metadata album="$album" -metadata title="$title" -metadata track="$t" \
       -metadata date="$year" -metadata genre=Classical
+    # The album's cover, where Clementine looks for one: an image in its folder.
+    cover="$(dirname "$0")/covers/$album.jpg"
+    if [ -f "$cover" ]; then cp "$cover" "$out/$artist/$album/cover.jpg"; fi
   done
   ls -R "$out"
   exit 0
