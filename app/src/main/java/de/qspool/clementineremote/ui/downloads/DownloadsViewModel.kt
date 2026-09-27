@@ -2,11 +2,11 @@ package de.qspool.clementineremote.ui.downloads
 
 import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
-import android.os.AsyncTask
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.SharedPreferencesKeys
+import de.qspool.clementineremote.backend.BackgroundTask
 import de.qspool.clementineremote.backend.downloader.ClementineSongDownloader
 import de.qspool.clementineremote.backend.downloader.DownloadManager
 import de.qspool.clementineremote.backend.library.LibraryDatabaseHelper
@@ -91,10 +91,10 @@ class DownloadsViewModel(
 
     private fun download(downloader: ClementineSongDownloader): Download {
         val manager = DownloadManager.getInstance(App.getApp())
-        val running = downloader.status != AsyncTask.Status.FINISHED
+        val running = downloader.status != BackgroundTask.Status.FINISHED
         var size = Utilities.humanReadableBytes(downloader.totalDownloaded.toLong(), true) + " / " +
             Utilities.humanReadableBytes(downloader.totalFileSize.toLong(), true)
-        if (downloader.status == AsyncTask.Status.RUNNING) {
+        if (downloader.status == BackgroundTask.Status.RUNNING) {
             size += " (" + Utilities.humanReadableBytes(downloader.downloadSpeedPerSecond.toLong(), true) + "/s)"
         }
         return Download(
@@ -112,7 +112,7 @@ class DownloadsViewModel(
     /** Stops a running download, or forgets a finished one. Returns whether it was running. */
     fun cancel(id: Int): Boolean {
         val downloader = downloads().firstOrNull { it.id == id } ?: return false
-        return if (downloader.status == AsyncTask.Status.RUNNING) {
+        return if (downloader.status == BackgroundTask.Status.RUNNING) {
             downloader.cancel(false)
             true
         } else {

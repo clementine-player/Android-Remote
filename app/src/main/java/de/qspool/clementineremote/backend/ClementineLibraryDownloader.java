@@ -20,7 +20,6 @@ package de.qspool.clementineremote.backend;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteException;
-import android.os.AsyncTask;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -40,7 +39,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Resp
 import de.qspool.clementineremote.utils.Utilities;
 
 public class ClementineLibraryDownloader extends
-        AsyncTask<ClementineMessage, Long, DownloaderResult> {
+        BackgroundTask<ClementineMessage, Long, DownloaderResult> {
 
     private final String TAG = "ClementineLibraryDownloader";
 
@@ -79,11 +78,11 @@ public class ClementineLibraryDownloader extends
     }
 
     public void startDownload(ClementineMessage message) {
-        this.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
+        execute(message);
     }
 
     @Override
-    protected DownloaderResult doInBackground(ClementineMessage... params) {
+    protected DownloaderResult doInBackground(ClementineMessage message) {
         if (mSharedPref.getBoolean(SharedPreferencesKeys.SP_WIFI_ONLY, false)
                 && !Utilities.onWifi()) {
             return new DownloaderResult(0, DownloaderResult.DownloadResult.ONLY_WIFI);
@@ -95,20 +94,20 @@ public class ClementineLibraryDownloader extends
         }
 
         // Start the download
-        return startDownloading(params[0]);
+        return startDownloading(message);
     }
 
     @Override
-    protected void onProgressUpdate(Long... progress) {
-        fireOnProgressUpdateListener(progress[0]);
+    protected void onProgressUpdate(Long progress) {
+        fireOnProgressUpdateListener(progress);
 
-        if (progress[0] == mTotalSize) {
+        if (progress == mTotalSize) {
             fireOnOptimizeLibraryListener();
         }
     }
 
     @Override
-    protected void onCancelled() {
+    protected void onCancelled(DownloaderResult result) {
         fireOnLibraryDownloadFinishedListener(new DownloaderResult(0,
                 DownloaderResult.DownloadResult.CANCELLED));
     }
