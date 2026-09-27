@@ -48,11 +48,8 @@
   <string name="download_noti_only_wifi">Downloaden alleen toegestaan via wifi.</string>
   <string name="download_noti_transcoding">Bestanden transcoderen</string>
   <string name="download_noti_transcoding_subtitle">Even geduld</string>
-  <string name="library_download">Bibliotheek aan het downloaden</string>
   <string name="library_optimize">Database aan het optimaliseren</string>
-  <string name="library_empty">Bibliotheek leeg. Sleep naar beneden om bibliotheek te downloaden!</string>
   <string name="library_no_search_results">Geen nummers komen overeen met je zoekcriteria!</string>
-  <string name="library_download_error">Kon bibliotheek niet downloaden</string>
   <string name="global_search_empty">Voer zoektermen hierboven in om muziek te zoeken op je computer en het internet.</string>
   <string name="global_search_search">Zoek naar alles</string>
   <string name="song_info_album">Album</string>

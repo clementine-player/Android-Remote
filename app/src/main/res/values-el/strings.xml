@@ -38,11 +38,8 @@
   <string name="download_noti_only_wifi">Λήψη μόνο στο WiFi επιτρέπεται.</string>
   <string name="download_noti_transcoding">Ανακωδικοποίηση αρχείων</string>
   <string name="download_noti_transcoding_subtitle">Παρακαλώ περιμένετε</string>
-  <string name="library_download">Λήψη βιβλιοθήκης</string>
   <string name="library_optimize">Βελτιστοποίηση βάσης δεδομένων</string>
-  <string name="library_empty">Η βιβλιοθήκη ειναι κενή. Σύρετε προς τα κάτω για να κατεβάσετε την βιβλιοθήκη!</string>
   <string name="library_no_search_results">Δεν υπάρχουν τραγούδια που ταιριάζουν στα κριτήρια της αναζήτησής σας!</string>
-  <string name="library_download_error">Δεν ήταν δυνατή η λήψη της βιβλιοθήκης</string>
   <string name="song_info_album">Αλμπουμ</string>
   <string name="song_info_genre">Είδος μουσικής</string>
   <string name="song_info_year">Χρονολογία</string>

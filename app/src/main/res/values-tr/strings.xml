@@ -46,11 +46,8 @@
   <string name="download_noti_only_wifi">Sadece kablosuz üzerinden indirmeye izin verilir.</string>
   <string name="download_noti_transcoding">Dosyalar dönüştürülüyor</string>
   <string name="download_noti_transcoding_subtitle">Lütfen bekleyin</string>
-  <string name="library_download">Kütüphane indiriliyor</string>
   <string name="library_optimize">Veritabanı iyileştiriliyor</string>
-  <string name="library_empty">Kütüphane boş. İndirmek için aşağı çekin!</string>
   <string name="library_no_search_results">Arama kriterlerinizle eşleşen parça yok!</string>
-  <string name="library_download_error">Kütüphane indirilemedi</string>
   <string name="global_search_empty">Bilgisayarınızdaki ve internetteki müzikleri bulmak için yukarıya arama terimi girin</string>
   <string name="global_search_search">Herhangi bir şey ara</string>
   <string name="song_info_album">Albüm</string>

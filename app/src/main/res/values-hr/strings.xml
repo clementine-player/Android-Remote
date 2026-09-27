@@ -50,11 +50,8 @@
   <string name="download_noti_only_wifi">Preuzimanje je samo dopušteno putem WI-FI-a.</string>
   <string name="download_noti_transcoding">Datoteke enkôdiranja</string>
   <string name="download_noti_transcoding_subtitle">Molim pričekajte</string>
-  <string name="library_download">Preuzimanje fonoteke</string>
   <string name="library_optimize">Optimiziranje baze podataka</string>
-  <string name="library_empty">Fonoteka prazna. Povucite dolje za preuzimanje fonoteke!</string>
   <string name="library_no_search_results">Nema pronađenih pjesama koje se podudaraju s vašim kriterijima pretraživanja</string>
-  <string name="library_download_error">Nemoguće preuzimanje fonoteke</string>
   <string name="global_search_empty">Upišite izraz pretrage iznad za pronalazak glazbe na vašem računalu i Internetu</string>
   <string name="global_search_search">Pretraži bilo što</string>
   <string name="song_info_album">Album</string>

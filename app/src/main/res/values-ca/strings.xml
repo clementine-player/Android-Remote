@@ -48,11 +48,8 @@
   <string name="download_noti_only_wifi">Baixa només amb connexió Wi-Fi.</string>
   <string name="download_noti_transcoding">S\'estan convertint els arxius</string>
   <string name="download_noti_transcoding_subtitle">Espereu-vos</string>
-  <string name="library_download">S’està baixant la col·lecció</string>
   <string name="library_optimize">S’està optimitzant la base de dades</string>
-  <string name="library_empty">La biblioteca està buida. Feu-la lliscar cap avall per actualitzar-la!</string>
   <string name="library_no_search_results">No hi ha peces que compleixin els criteris de cerca.</string>
-  <string name="library_download_error">No s\'ha pogut baixar la biblioteca</string>
   <string name="global_search_empty">Escriviu els termes de cerca per trobar peces al vostre ordinador o en Internet</string>
   <string name="global_search_search">Cerca</string>
   <string name="song_info_album">Àlbum</string>

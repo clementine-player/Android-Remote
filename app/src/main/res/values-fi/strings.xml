@@ -47,11 +47,8 @@
   <string name="download_noti_only_wifi">Lataus on sallittu vain wifi-yhteydellä.</string>
   <string name="download_noti_transcoding">Muunnetaan tiedostoja</string>
   <string name="download_noti_transcoding_subtitle">Odota hetki</string>
-  <string name="library_download">Ladataan kirjastoa</string>
   <string name="library_optimize">Optimoidaan tietokantaa</string>
-  <string name="library_empty">Kirjaston tyhjä. Vedä alaspäin ladataksesi kirjaston!</string>
   <string name="library_no_search_results">Ei hakuehtoihisi osuvia kappaleita!</string>
-  <string name="library_download_error">Kirjaston lataaminen ei onnistunut</string>
   <string name="global_search_empty">Anna hakuehdot yläpuolella löytääksesi musiikkia tietokoneeltasi ja internetistä</string>
   <string name="global_search_search">Etsi mitä tahansa</string>
   <string name="song_info_album">Albumi</string>

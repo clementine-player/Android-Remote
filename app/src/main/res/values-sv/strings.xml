@@ -48,11 +48,8 @@
   <string name="download_noti_only_wifi">Nedladdning tillåts endast med wifi anslutning.</string>
   <string name="download_noti_transcoding">Konverterar filer</string>
   <string name="download_noti_transcoding_subtitle">Var god vänta</string>
-  <string name="library_download">Laddar ned bibliotek</string>
   <string name="library_optimize">Optimerar databasen</string>
-  <string name="library_empty">Biblioteket är tomt. Svep neråt för att ladda ner biblioteket!</string>
   <string name="library_no_search_results">Ingen låt matchar dina sökkriterier!</string>
-  <string name="library_download_error">Kunde inte ladda ned bibliotek</string>
   <string name="global_search_empty">Ange söktermer ovan för att hitta musik på din dator och på nätet</string>
   <string name="global_search_search">Sök efter någonting</string>
   <string name="song_info_album">Album</string>

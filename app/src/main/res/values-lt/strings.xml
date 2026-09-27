@@ -50,11 +50,8 @@
   <string name="download_noti_only_wifi">Atsiuntimas leidžiamas tik naudojantis belaidžiu (wifi) tinklu.</string>
   <string name="download_noti_transcoding">Perkoduojami failai</string>
   <string name="download_noti_transcoding_subtitle">Prašome palaukti</string>
-  <string name="library_download">Atsiunčiama biblioteka</string>
   <string name="library_optimize">Optimizuojama duomenų bazė</string>
-  <string name="library_empty">Biblioteka tuščia. Perbraukite žemyn, kad atsisiųstumėte biblioteką!</string>
   <string name="library_no_search_results">Nėra dainų, atitinkančių jūsų paieškos kriterijų!</string>
-  <string name="library_download_error">Nepavyko atsisiųsti bibliotekos</string>
   <string name="global_search_empty">Įrašykite paieškos žodžius, kad rastumėte muziką savo kompiuteryje ar internete</string>
   <string name="global_search_search">Ieškokite ko nors</string>
   <string name="song_info_album">Albumas</string>

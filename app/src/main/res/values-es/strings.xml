@@ -48,11 +48,8 @@
   <string name="download_noti_only_wifi">Solo se permiten las descargas al usar wifi.</string>
   <string name="download_noti_transcoding">Convirtiendo archivos</string>
   <string name="download_noti_transcoding_subtitle">Espere</string>
-  <string name="library_download">Descargando la colección</string>
   <string name="library_optimize">Optimizando la base de datos</string>
-  <string name="library_empty">La colección está vacía. Deslice hacia abajo para descargarla.</string>
   <string name="library_no_search_results">Ninguna canción coincide con los criterios de búsqueda.</string>
-  <string name="library_download_error">No se pudo descargar la colección</string>
   <string name="global_search_empty">Escriba términos de búsqueda más arriba para encontrar música en el equipo y en la Internet</string>
   <string name="global_search_search">Busque lo que quiera</string>
   <string name="song_info_album">Álbum</string>

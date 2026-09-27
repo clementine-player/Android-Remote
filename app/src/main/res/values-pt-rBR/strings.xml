@@ -48,11 +48,8 @@
   <string name="download_noti_only_wifi">Download somente via wifi autorizado.</string>
   <string name="download_noti_transcoding">Transcodificando arquivos</string>
   <string name="download_noti_transcoding_subtitle">Aguarde, por favor</string>
-  <string name="library_download">Baixando biblioteca</string>
   <string name="library_optimize">Otimizando base de dados</string>
-  <string name="library_empty">Biblioteca vazia. Arraste para baixo para baixar a biblioteca!</string>
   <string name="library_no_search_results">Não foram encontradas músicas usando seus critérios.</string>
-  <string name="library_download_error">Não foi possível baixar a biblioteca</string>
   <string name="song_info_album">Álbum</string>
   <string name="song_info_genre">Gênero</string>
   <string name="song_info_year">Ano</string>

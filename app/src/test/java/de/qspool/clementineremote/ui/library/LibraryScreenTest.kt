@@ -20,6 +20,8 @@ import de.qspool.clementineremote.App
 import de.qspool.clementineremote.backend.Clementine
 import de.qspool.clementineremote.backend.database.DynamicSongQuery
 import de.qspool.clementineremote.backend.database.SongSelectItem
+import de.qspool.clementineremote.backend.elements.DownloaderResult
+import de.qspool.clementineremote.backend.listener.OnLibraryDownloadListener
 import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType
 import de.qspool.clementineremote.ui.browse.BrowseLevel
@@ -148,7 +150,7 @@ class LibraryScreenTest {
                 LibraryContent(state, {}, {}, { downloads++ }, {}, {})
             }
         }
-        compose.onNodeWithTag("btnDownloadLibrary").performClick()
+        compose.onNodeWithTag("btnSyncLibrary").performClick()
 
         assertEquals(1, downloads)
     }
@@ -171,7 +173,7 @@ class LibraryScreenTest {
                     LibraryState(LibraryStatus.Ready, listOf(BrowseLevel(album, ItemKind.SONG, songs))),
                     onOpen = { done += "open ${it.listTitle}" },
                     onBack = { done += "back" },
-                    onDownloadLibrary = {},
+                    onSyncLibrary = {},
                     onAdd = { items -> done += "add " + items.joinToString { it.listTitle } },
                     onDownload = { items -> done += "download " + items.joinToString { it.listTitle } },
                 )
@@ -194,6 +196,64 @@ class LibraryScreenTest {
                 "back",
             ),
             done)
+    }
+
+    @Test
+    fun syncsTheLibraryWhenConnectedKeepingTheOldOneMeanwhile() {
+        var listener: OnLibraryDownloadListener? = null
+        val library = LibraryViewModel(
+            send = {},
+            newQuery = { TestQuery() },
+            io = Dispatchers.Unconfined,
+            startSync = { listener = it; null },
+            connected = { true },
+            libraryExists = { true },
+        )
+        idle()
+
+        // Syncing straight away, with the library on the phone still there to browse.
+        assertTrue(library.state.value.status is LibraryStatus.Syncing)
+        assertEquals(listOf("Erik Satie", "Frédéric Chopin"), library.state.value.shown!!.items.map { it.listTitle })
+
+        listener!!.OnLibraryDownloadFinished(DownloaderResult(0, DownloaderResult.DownloadResult.SUCCESSFUL))
+        idle()
+        assertEquals(LibraryStatus.Ready, library.state.value.status)
+        assertEquals(2, library.state.value.shown!!.items.size)
+    }
+
+    @Test
+    fun aFailedFirstSyncLeavesTheLibraryMissing() {
+        var listener: OnLibraryDownloadListener? = null
+        val library = LibraryViewModel(
+            send = {},
+            newQuery = { TestQuery() },
+            io = Dispatchers.Unconfined,
+            startSync = { listener = it; null },
+            connected = { true },
+            libraryExists = { false },
+        )
+        idle()
+        assertTrue(library.state.value.status is LibraryStatus.Syncing)
+
+        listener!!.OnLibraryDownloadFinished(DownloaderResult(0, DownloaderResult.DownloadResult.CONNECTION_ERROR))
+        idle()
+        assertEquals(LibraryStatus.Missing, library.state.value.status)
+    }
+
+    @Test
+    fun doesntSyncWhileNotConnected() {
+        var started = false
+        LibraryViewModel(
+            send = {},
+            newQuery = { TestQuery() },
+            io = Dispatchers.Unconfined,
+            startSync = { started = true; null },
+            connected = { false },
+            libraryExists = { true },
+        )
+        idle()
+
+        assertFalse(started)
     }
 
     @Test

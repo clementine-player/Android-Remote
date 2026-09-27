@@ -50,11 +50,8 @@
   <string name="download_noti_only_wifi">Preberanie je povolené iba počas pripojenia cez wifi.</string>
   <string name="download_noti_transcoding">Prekódovávajú sa súbory</string>
   <string name="download_noti_transcoding_subtitle">Prosím, čakajte</string>
-  <string name="library_download">Preberá sa zbierka</string>
   <string name="library_optimize">Optimalizuje sa databáza</string>
-  <string name="library_empty">Zbierka je prázdna. Potiahnutím dole prevezmite zbierku!</string>
   <string name="library_no_search_results">Vašim kritériám vyhľadávania nevyhuvujú žiadne skladby!</string>
-  <string name="library_download_error">Nepodarilo sa prebrať zbierku</string>
   <string name="global_search_empty">Vyššie zadajte hľadané frázy na nájdenie hudby vo vašom počítači a na internete</string>
   <string name="global_search_search">Vyhľadať čokoľvek</string>
   <string name="song_info_album">Album</string>

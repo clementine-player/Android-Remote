@@ -36,11 +36,8 @@
   <string name="download_noti_only_wifi">Hanya muat turun dengan wifi dibenarkan.</string>
   <string name="download_noti_transcoding">Mentranskod fail</string>
   <string name="download_noti_transcoding_subtitle">Tunggu sebentar</string>
-  <string name="library_download">Memuat turun pustaka</string>
   <string name="library_optimize">Mengoptimumkan pangkalan data</string>
-  <string name="library_empty">Pustaka kosong. Leret ke bawah untuk muat turun pustaka!</string>
   <string name="library_no_search_results">Tiada lagu memadani kriteria gelintar anda!</string>
-  <string name="library_download_error">Tidak dapat memuat turun pustaka</string>
   <string name="global_search_empty">Masukkan terma gelintar di atas untuk mencari muzik dalam komputer anda dan juga di internet</string>
   <string name="global_search_search">Gelintar segalanya</string>
   <string name="song_info_album">Album</string>

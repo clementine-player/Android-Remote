@@ -203,10 +203,9 @@ public class ClementineLibraryDownloader extends
                                 DownloadResult.INSUFFIANT_SPACE);
                         break;
                     }
-                    f = mLibrary.getLibraryDb();
-
-                    // User wants to override files, so delete it here!
-                    // The check was already done in processSongOffer()
+                    // Written beside the library on the phone, which stays
+                    // usable until this one is complete.
+                    f = mLibrary.getPartialLibraryDb();
                     if (f.exists()) {
                         f.delete();
                     }
@@ -240,17 +239,24 @@ public class ClementineLibraryDownloader extends
         // Disconnect at the end
         mClient.disconnect(ClementineMessage.getMessage(MsgType.DISCONNECT));
 
-        // Optimize library table
-        if (result.getResult() == DownloadResult.SUCCESSFUL &&
-                mLibrary.getLibraryDb().exists()) {
+        // Optimize the library received, then put it in place of the old one
+        File partial = mLibrary.getPartialLibraryDb();
+        if (result.getResult() == DownloadResult.SUCCESSFUL && partial.exists()) {
             try {
-                mLibrary.optimizeTable();
+                mLibrary.optimizeTable(partial);
+                File library = mLibrary.getLibraryDb();
+                if (!partial.renameTo(library)) {
+                    library.delete();
+                    if (!partial.renameTo(library)) {
+                        result = new DownloaderResult(0, DownloadResult.ERROR);
+                    }
+                }
             } catch (SQLiteException e) {
-                // Database is damaged, delete it
-                mLibrary.getLibraryDb().delete();
+                // Database is damaged
                 result = new DownloaderResult(0, DownloadResult.ERROR);
             }
         }
+        partial.delete();
 
         return result;
     }

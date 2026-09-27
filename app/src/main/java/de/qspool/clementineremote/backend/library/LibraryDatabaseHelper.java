@@ -45,8 +45,11 @@ public class LibraryDatabaseHelper {
     private SQLiteDatabase db;
 
     public SQLiteDatabase openDatabase(int flags) {
-        db = SQLiteDatabase.openDatabase(getLibraryDb().getAbsolutePath(),
-                null, flags);
+        return openDatabase(getLibraryDb(), flags);
+    }
+
+    private SQLiteDatabase openDatabase(File file, int flags) {
+        db = SQLiteDatabase.openDatabase(file.getAbsolutePath(), null, flags);
 
         return db;
     }
@@ -93,6 +96,15 @@ public class LibraryDatabaseHelper {
     }
 
     /**
+     * Where a library being synced is written, until it's complete and replaces
+     * {@link #getLibraryDb()}. Until then, the library on the phone stays usable.
+     */
+    public File getPartialLibraryDb() {
+        return new File(App.getApp().getExternalFilesDir(null),
+                LIBRARY_DB_FILE_NAME + ".part");
+    }
+
+    /**
      * Check if the library file is from the currenly connected system. If not, we obviously cannot
      * add songs from this db to Clementine. So here we delete the wrong library file.
      *
@@ -123,7 +135,12 @@ public class LibraryDatabaseHelper {
      * album, title)
      */
     public void optimizeTable() {
-        openDatabase(SQLiteDatabase.OPEN_READWRITE);
+        optimizeTable(getLibraryDb());
+    }
+
+    /** Prepares a library just received in {@code file} for browsing and searching. */
+    public void optimizeTable(File file) {
+        openDatabase(file, SQLiteDatabase.OPEN_READWRITE);
 
         // Remove unavailable songs
         db.execSQL("DELETE from SONGS where unavailable <> 0");
