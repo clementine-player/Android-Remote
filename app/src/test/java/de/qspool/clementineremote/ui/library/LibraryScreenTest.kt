@@ -28,6 +28,8 @@ import de.qspool.clementineremote.ui.browse.BrowseLevel
 import de.qspool.clementineremote.ui.browse.ItemKind
 import de.qspool.clementineremote.ui.theme.ClementineTheme
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlin.coroutines.CoroutineContext
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -222,6 +224,37 @@ class LibraryScreenTest {
     }
 
     @Test
+    fun whatsOpenedWhileASyncFinishesStaysOpen() {
+        var listener: OnLibraryDownloadListener? = null
+        // Reads of the library run when this says, to interleave them as they can on a phone.
+        val io = QueuedDispatcher()
+        val library = LibraryViewModel(
+            send = {},
+            newQuery = { TestQuery() },
+            io = io,
+            startSync = { listener = it; null },
+            connected = { true },
+            libraryExists = { true },
+        )
+        fun settle() {
+            repeat(3) {
+                io.runAll()
+                idle()
+            }
+        }
+        settle()
+
+        // Chopin is tapped just as the sync finishes: the refresh starts reading before Chopin's
+        // albums are shown, and finishes after.
+        library.open(library.state.value.shown!!.items.single { it.listTitle == "Frédéric Chopin" })
+        listener!!.OnLibraryDownloadFinished(DownloaderResult(0, DownloaderResult.DownloadResult.SUCCESSFUL))
+        settle()
+
+        assertEquals(LibraryStatus.Ready, library.state.value.status)
+        assertEquals("Frédéric Chopin", library.state.value.shown!!.opened?.listTitle)
+    }
+
+    @Test
     fun aFailedFirstSyncLeavesTheLibraryMissing() {
         var listener: OnLibraryDownloadListener? = null
         val library = LibraryViewModel(
@@ -277,5 +310,18 @@ class LibraryScreenTest {
         state = state.copy(levels = state.levels.dropLast(1))
         compose.onNodeWithText("Artist 46").assertIsDisplayed()
         compose.onNodeWithText("Artist 1").assertDoesNotExist()
+    }
+}
+
+/** Runs what's dispatched to it only when told, in order. */
+private class QueuedDispatcher : CoroutineDispatcher() {
+    private val queue = ArrayDeque<Runnable>()
+
+    override fun dispatch(context: CoroutineContext, block: Runnable) {
+        queue += block
+    }
+
+    fun runAll() {
+        while (queue.isNotEmpty()) queue.removeFirst().run()
     }
 }

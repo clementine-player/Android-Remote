@@ -193,18 +193,27 @@ class LibraryViewModel(
      */
     private fun refresh() {
         viewModelScope.launch {
-            val opened = _state.value.levels.map { it.opened }
-            val levels = withContext(io) {
-                if (!libraryExists()) {
-                    emptyList()
-                } else {
-                    val filter = _state.value.filter
-                    opened.map { level(it, filter) }.takeIf { it.isNotEmpty() && it.last().items.isNotEmpty() }
-                        ?: listOf(level(null, filter))
+            while (true) {
+                val opened = _state.value.levels.map { it.opened }
+                val filter = _state.value.filter
+                val levels = withContext(io) {
+                    if (!libraryExists()) {
+                        emptyList()
+                    } else {
+                        opened.map { level(it, filter) }.takeIf { it.isNotEmpty() && it.last().items.isNotEmpty() }
+                            ?: listOf(level(null, filter))
+                    }
                 }
-            }
-            _state.update {
-                it.copy(status = if (levels.isEmpty()) LibraryStatus.Missing else LibraryStatus.Ready, levels = levels)
+                // A level was opened or closed, or the filter changed, while reading: read what's
+                // shown now instead, rather than undo it.
+                val now = _state.value
+                if (now.levels.map { it.opened } != opened || now.filter != filter) {
+                    continue
+                }
+                _state.update {
+                    it.copy(status = if (levels.isEmpty()) LibraryStatus.Missing else LibraryStatus.Ready, levels = levels)
+                }
+                return@launch
             }
         }
     }
