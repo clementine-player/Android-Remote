@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,9 +23,11 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
@@ -36,6 +39,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
@@ -43,6 +47,8 @@ import androidx.compose.ui.unit.dp
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.R
 import de.qspool.clementineremote.SharedPreferencesKeys
+import de.qspool.clementineremote.backend.RemoteRepository
+import de.qspool.clementineremote.backend.pb.ClementineMessageFactory
 import de.qspool.clementineremote.utils.Utilities
 import kotlinx.coroutines.delay
 import java.util.Locale
@@ -88,13 +94,16 @@ fun ConnectionSheet(actions: ConnectionActions, onDismiss: () -> Unit) {
             value = readConnectionStats(context)
         }
     }
+    val outputs by RemoteRepository.outputs.collectAsState()
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         // The sheet is a window of its own: its test tags are resource IDs too, for UI Automator.
         modifier = Modifier.semantics { testTagsAsResourceId = true },
     ) {
-        ConnectionSheetContent(stats, object : ConnectionActions {
+        ConnectionSheetContent(stats, outputs = outputs, onOutput = {
+            RemoteRepository.send(ClementineMessageFactory.buildSetOutput(it))
+        }, actions = object : ConnectionActions {
             override fun onSwitchClementine() {
                 onDismiss()
                 actions.onSwitchClementine()
@@ -114,7 +123,13 @@ fun ConnectionSheet(actions: ConnectionActions, onDismiss: () -> Unit) {
 }
 
 @Composable
-internal fun ConnectionSheetContent(stats: ConnectionStats, actions: ConnectionActions, modifier: Modifier = Modifier) {
+internal fun ConnectionSheetContent(
+    stats: ConnectionStats,
+    actions: ConnectionActions,
+    modifier: Modifier = Modifier,
+    outputs: RemoteRepository.Outputs = RemoteRepository.Outputs(),
+    onOutput: (String) -> Unit = {},
+) {
     Column(modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(bottom = 24.dp)) {
         Row(
             Modifier.padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 16.dp),
@@ -164,10 +179,53 @@ internal fun ConnectionSheetContent(stats: ConnectionStats, actions: ConnectionA
             )
         }
 
+        if (outputs.supported && outputs.outputs.isNotEmpty()) {
+            HorizontalDivider(Modifier.padding(top = 8.dp), color = MaterialTheme.colorScheme.outlineVariant)
+            Outputs(outputs, onOutput)
+        }
+
         HorizontalDivider(Modifier.padding(top = 8.dp), color = MaterialTheme.colorScheme.outlineVariant)
         Item(R.drawable.ic_computer, R.string.connection_switch, R.string.connection_switch_summary, "btnSwitch", actions::onSwitchClementine)
         Item(R.drawable.ic_settings, R.string.menu_settings, null, "btnSettings", actions::onSettings)
         Item(R.drawable.ic_logout, R.string.tasker_disconnect, null, "btnDisconnect", actions::onDisconnect)
+    }
+}
+
+/** Where Clementine plays: its own computer, this phone, or another device (remote streaming). */
+@Composable
+private fun Outputs(outputs: RemoteRepository.Outputs, onOutput: (String) -> Unit) {
+    Text(
+        stringResource(R.string.output_title),
+        style = MaterialTheme.typography.titleSmall,
+        color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 16.dp, bottom = 4.dp).semantics { heading() },
+    )
+    for (output in outputs.outputs) {
+        val name = when {
+            output.id == RemoteRepository.LOCAL_OUTPUT -> stringResource(R.string.output_this_computer)
+            output.isThisPhone -> stringResource(R.string.output_this_phone, output.name)
+            else -> output.name
+        }
+        val icon = when {
+            output.id == RemoteRepository.LOCAL_OUTPUT -> R.drawable.ic_computer
+            output.isThisPhone -> R.drawable.ic_smartphone
+            else -> R.drawable.ic_speaker
+        }
+        ListItem(
+            headlineContent = { Text(name) },
+            supportingContent = if (output.activating) {
+                { Text(stringResource(R.string.output_switching)) }
+            } else {
+                null
+            },
+            leadingContent = { Icon(painterResource(icon), null) },
+            // The row is the radio button, so it's read once.
+            trailingContent = { RadioButton(selected = output.active, onClick = null) },
+            colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+            modifier = Modifier
+                .selectable(selected = output.active, role = Role.RadioButton) { onOutput(output.id) }
+                .testTag("output_" + output.id),
+        )
     }
 }
 

@@ -33,6 +33,7 @@ import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message.Builder;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ReasonDisconnect;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestConnect;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseDisconnect;
 
 /**
@@ -118,11 +119,14 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 
             // Until we get a new connection request from ui,
             // don't request the first data a second time
+            RequestConnect requestConnect = message.getMessage().getRequestConnect();
             mRequestConnect = ClementineMessageFactory
                     .buildConnectMessage(message.getIp(), message.getPort(),
-                            message.getMessage().getRequestConnect().getAuthCode(),
+                            requestConnect.getAuthCode(),
                             false,
-                            message.getMessage().getRequestConnect().getDownloader());
+                            requestConnect.getDownloader(),
+                            // Still an output after reconnecting.
+                            requestConnect.hasRenderer() ? requestConnect.getRenderer() : null);
 
             // Save started transmitted bytes
             int uid = App.getApp().getApplicationInfo().uid;

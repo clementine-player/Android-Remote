@@ -48,6 +48,7 @@ ENV QT_QPA_PLATFORM=offscreen
 RUN entrypoint.sh --seed
 
 ENV AUTH_CODE=""
+ENV STREAMING=""
 EXPOSE 5500
 HEALTHCHECK --interval=2s --timeout=2s --start-period=120s CMD test -f /tmp/clementine-ready
 ENTRYPOINT ["entrypoint.sh"]

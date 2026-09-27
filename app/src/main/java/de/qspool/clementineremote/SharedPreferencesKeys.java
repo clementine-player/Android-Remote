@@ -68,4 +68,10 @@ public class SharedPreferencesKeys {
     public final static String SP_LIBRARY_IP = "library_ip";
 
     public final static String SP_KNOWN_IP = "known_ips";
+
+    /** Whether Clementine may play on this phone (remote streaming). */
+    public final static String SP_RENDERER = "pref_renderer";
+
+    /** This install's renderer id, so Clementine recognises the phone when it reconnects. */
+    public final static String SP_RENDERER_ID = "renderer_id";
 }

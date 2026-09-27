@@ -5,11 +5,14 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.LinkedList;
 
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.AudioFormat;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RendererCapabilities;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -38,6 +41,30 @@ public class ClementineMessageFactoryTest {
         assertEquals(12345, parsed.getRequestConnect().getAuthCode());
         assertTrue(parsed.getRequestConnect().getSendPlaylistSongs());
         assertEquals(false, parsed.getRequestConnect().getDownloader());
+    }
+
+    @Test
+    public void connectOffersThisPhoneAsAnOutput() throws Exception {
+        RendererCapabilities renderer = RendererCapabilities.newBuilder()
+                .setRendererId("id")
+                .setDisplayName("Pixel")
+                .addFormats(AudioFormat.newBuilder().setMimeType("audio/flac"))
+                .build();
+        Message parsed = roundTrip(ClementineMessageFactory
+                .buildConnectMessage("192.0.2.1", 5500, 0, true, false, renderer));
+        assertEquals(renderer, parsed.getRequestConnect().getRenderer());
+
+        // Without one, nothing is offered.
+        parsed = roundTrip(ClementineMessageFactory
+                .buildConnectMessage("192.0.2.1", 5500, 0, true, false));
+        assertFalse(parsed.getRequestConnect().hasRenderer());
+    }
+
+    @Test
+    public void setOutput() throws Exception {
+        Message parsed = roundTrip(ClementineMessageFactory.buildSetOutput("local"));
+        assertEquals(MsgType.SET_OUTPUT, parsed.getType());
+        assertEquals("local", parsed.getRequestSetOutput().getOutputId());
     }
 
     @Test

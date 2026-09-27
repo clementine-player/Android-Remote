@@ -212,6 +212,8 @@ private fun AdvancedSettings(store: PreferenceStore) {
     // On unless turned off, as the player and settings have always read it.
     BooleanSetting(store, SharedPreferencesKeys.SP_KEEP_SCREEN_ON, true, R.string.pref_keep_screen_on_title, R.string.pref_keep_screen_on_summary)
     BooleanSetting(store, SharedPreferencesKeys.SP_WAKE_LOCK, false, R.string.pref_wake_lock_title, R.string.pref_wake_lock_summary)
+    // Offered to Clementine when connecting, so a change applies from the next connection.
+    BooleanSetting(store, SharedPreferencesKeys.SP_RENDERER, true, R.string.pref_renderer, R.string.pref_renderer_summary)
 }
 
 @Composable

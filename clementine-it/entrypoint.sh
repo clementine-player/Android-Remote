@@ -6,7 +6,8 @@
 #   entrypoint.sh           run Clementine in the foreground
 #   entrypoint.sh --seed    image build step: create the database, add /music
 #
-# Environment: AUTH_CODE (enables the remote's auth code when set).
+# Environment: AUTH_CODE (enables the remote's auth code when set), STREAMING (set to 1 to let
+# Clementine play on remotes, which is still experimental).
 set -euo pipefail
 
 CONFIG_DIR="$HOME/.config/Clementine"
@@ -25,6 +26,7 @@ use_auth_code=$use_auth
 auth_code=${AUTH_CODE:-0}
 allow_downloads=true
 convert_lossless=false
+allow_streaming=${STREAMING:+true}
 
 [GstEngine]
 sink=pulsesink
@@ -82,7 +84,9 @@ if [ "${1:-}" = "--seed" ]; then
   exit 0
 fi
 
-dbus-run-session -- clementine --verbose &
+streaming=()
+[ "${STREAMING:-}" = 1 ] && streaming=(--experimental-remote-streaming)
+dbus-run-session -- clementine --verbose "${streaming[@]}" &
 pid=$!
 trap 'kill $pid 2>/dev/null' TERM INT
 
