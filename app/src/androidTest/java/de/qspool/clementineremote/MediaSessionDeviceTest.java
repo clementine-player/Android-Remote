@@ -17,10 +17,11 @@ import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.Until;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExternalResource;
+import org.junit.rules.RuleChain;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
@@ -37,6 +38,7 @@ import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.ui.ConnectActivity;
+import de.qspool.clementineremote.ui.hints.Hints;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -63,9 +65,11 @@ public class MediaSessionDeviceTest {
     public final GrantPermissionRule mPermissions = GrantPermissionRule.grant(
             Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.READ_PHONE_STATE);
 
-    /** On failure, keeps what the screen showed and the media sessions Android knew. */
-    @Rule
-    public final TestWatcher mOnFailure = new TestWatcher() {
+    /**
+     * On failure, keeps what the screen showed and the media sessions Android knew. It runs
+     * inside {@link #mRules}'s disconnecting, so it records the failure, not the home screen after.
+     */
+    private final TestWatcher mOnFailure = new TestWatcher() {
         @Override
         protected void failed(Throwable e, Description description) {
             if (mDevice == null) {
@@ -103,6 +107,8 @@ public class MediaSessionDeviceTest {
                 .putString(SharedPreferencesKeys.SP_KEY_IP, host)
                 .putString(SharedPreferencesKeys.SP_KEY_PORT, "5500")
                 .commit();
+        // No first-use hints over the controls.
+        Hints.seenAll();
 
         mContext.startActivity(new Intent(mContext, ConnectActivity.class)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
@@ -116,9 +122,17 @@ public class MediaSessionDeviceTest {
                 Until.findObject(By.res("navQueue")), TIMEOUT));
     }
 
+    /** Disconnects after each test, and after {@link #mOnFailure} has recorded a failure. */
+    @Rule
+    public final RuleChain mRules = RuleChain.outerRule(new ExternalResource() {
+        @Override
+        protected void after() {
+            tearDown();
+        }
+    }).around(mOnFailure);
+
     /** Disconnects, so the next test (of any class) connects from the connect screen. */
-    @After
-    public void tearDown() {
+    private void tearDown() {
         if (mDevice == null) {
             return;
         }
@@ -195,16 +209,55 @@ public class MediaSessionDeviceTest {
         // Start from playing, so the controls offer Pause.
         play();
 
-        mDevice.openNotification();
-        assertNotNull("No media controls for " + song.getTitle(),
-                mDevice.wait(Until.findObject(By.text(song.getTitle())), TIMEOUT));
+        // System UI shows the controls once Android has the session playing.
+        assertTrue("Android doesn't have the session playing", waitForSessionPlaying());
 
-        // System UI's buttons: the app's own player has buttons with the same descriptions.
-        mDevice.wait(Until.findObject(By.pkg(SYSTEM_UI).desc("Pause")), TIMEOUT).click();
+        systemUiButton("Pause").click();
         assertTrue("Clementine didn't pause", waitForState(Clementine.State.PAUSE));
+        assertNotNull("The media controls don't show " + song.getTitle(), mDevice.wait(
+                Until.findObject(By.pkg(SYSTEM_UI).text(App.Clementine.getCurrentSong().getTitle())), TIMEOUT));
 
-        mDevice.wait(Until.findObject(By.pkg(SYSTEM_UI).desc("Play")), TIMEOUT).click();
+        systemUiButton("Play").click();
         assertTrue("Clementine didn't resume", waitForState(Clementine.State.PLAY));
+    }
+
+    /** Whether Android has the app's media session playing, as System UI's controls follow it. */
+    private boolean waitForSessionPlaying() {
+        long end = SystemClock.uptimeMillis() + TIMEOUT;
+        do {
+            String sessions = mediaSessions();
+            int session = sessions.indexOf("package=" + mContext.getPackageName());
+            if (session >= 0) {
+                // Only this session's record, up to the next session's.
+                int next = sessions.indexOf("package=", session + 1);
+                String record = sessions.substring(session, next < 0 ? sessions.length() : next);
+                if (record.contains("state=PLAYING")) {
+                    return true;
+                }
+            }
+            SystemClock.sleep(500);
+        } while (SystemClock.uptimeMillis() < end);
+        return false;
+    }
+
+    /**
+     * The button with [description] in System UI's media controls, in the notification shade. The
+     * shade can show before System UI has laid out the controls, or with another session's (such
+     * as one a test before left) in front, so it's opened again until the button shows. The app's
+     * own player has buttons with the same descriptions, so only System UI's count.
+     */
+    private UiObject2 systemUiButton(String description) {
+        long end = SystemClock.uptimeMillis() + TIMEOUT;
+        do {
+            mDevice.openNotification();
+            UiObject2 button = mDevice.wait(Until.findObject(By.pkg(SYSTEM_UI).desc(description)), 5_000);
+            if (button != null) {
+                return button;
+            }
+            mDevice.pressBack();
+            SystemClock.sleep(1_000);
+        } while (SystemClock.uptimeMillis() < end);
+        throw new AssertionError("No \"" + description + "\" in the system media controls");
     }
 
     @Test
