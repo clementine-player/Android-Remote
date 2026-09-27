@@ -13,7 +13,7 @@
 #   release  true, or false when there's nothing to release
 #   name     the version name: master's versionName without "-dev" (13), then 13.1, 13.2, ...
 #   code     the version code: twice master's commit count, plus one. Google Play's internal
-#            builds (play.yml) take twice the count, so the two never collide and both rise.
+#            builds (dev.yml) take twice the count, so the two never collide and both rise.
 #   last     the previous release's tag
 # and writes, into the notes directory (default: a new temporary one, printed as notes=):
 #   changelog.txt  the notes for Google Play and F-Droid, cut to Play's 500 characters

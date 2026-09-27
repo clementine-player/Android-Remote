@@ -14,7 +14,7 @@
 # Run it by hand (Actions → release → Run workflow) to release now rather than on Monday, or,
 # with a tag, to publish an existing release again after a failure.
 #
-# As in play.yml, there are no keys or credentials here: signing goes through Cloud KMS, and
+# As in dev.yml, there are no keys or credentials here: signing goes through Cloud KMS, and
 # Google Cloud is reached with Workload Identity Federation. Until each signing certificate is
 # committed its part is skipped with a notice, and with neither, nothing is released. See
 # RELEASING.md.
@@ -28,7 +28,7 @@ on:
         description: "Publish this existing release again (such as v13.1), instead of a new one"
         required: false
 
-# With play.yml: one Google Play upload at a time.
+# With dev.yml: one Google Play upload at a time.
 concurrency:
   group: play
   cancel-in-progress: false
@@ -43,10 +43,10 @@ env:
   # Signs the GitHub release's APK; created by scripts/gcp_release_setup.sh.
   RELEASE_KMS_KEY: projects/clementine-data/locations/global/keyRings/android-signing/cryptoKeys/github-release/cryptoKeyVersions/1
   RELEASE_CERT: app/release_cert.pem
-  # Play's upload key, as in play.yml.
+  # Play's upload key, as in dev.yml.
   UPLOAD_KMS_KEY: projects/clementine-data/locations/global/keyRings/android-signing/cryptoKeys/play-upload/cryptoKeyVersions/1
   UPLOAD_CERT: app/upload_cert.pem
-  # Pinned with its checksum since it signs releases; keep in step with play.yml.
+  # Pinned with its checksum since it signs releases; keep in step with dev.yml.
   KMS_SIGNER_VERSION: 2026.09.25-a3c0e5e
   KMS_SIGNER_SHA256: 843d553610ebca4a4beee8fc9a66c0c9c7575bc614bc69ea3646eb656974798a
 
@@ -144,8 +144,8 @@ jobs:
         if: steps.setup.outputs.cloud == 'true'
         run: >
           ./gradlew assembleFdroidRelease bundlePlayRelease
-          -PplayVersionCode=${{ steps.plan.outputs.code }}
-          -PplayVersionName=${{ steps.plan.outputs.name }}
+          -PversionCodeOverride=${{ steps.plan.outputs.code }}
+          -PversionNameOverride=${{ steps.plan.outputs.name }}
 
       - name: Get kms-signer
         if: steps.setup.outputs.cloud == 'true'

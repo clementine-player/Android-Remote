@@ -42,7 +42,7 @@ nothing. With some, it releases:
 
 **Versions.** Releases are named after `master`'s `versionName` without `-dev`: 13, then
 13.1, 13.2 and so on. For a major version, change `master` to `14-dev`. Version codes come
-from `master`'s commit count: twice it for the internal testing builds (`play.yml`), and one
+from `master`'s commit count: twice it for the internal testing builds (`dev.yml`), and one
 more for a release, so every build's code is higher than the one before on both Play and
 F-Droid.
 
@@ -76,19 +76,28 @@ Until each certificate is committed, the release skips its part with a notice: w
 `release_cert.pem` the GitHub release has no APK, and without `upload_cert.pem` nothing goes
 to Google Play. With neither, nothing is released at all, not even the tag.
 
-## Google Play internal testing
+## Development builds
 
-Every push to `master` builds the Play bundle and uploads it to the **internal testing**
-track (`.github/workflows/play.yml`): a private channel for up to 100 testers, with no
-review. The version code is twice the number of commits on `master` (releases take the odd
-codes), and the version name is `versionName` plus the commit, such as `13-dev+6ece743`.
+Every push to `master` that changes the app (not only its tests, docs, CI or store listing)
+makes a development build (`.github/workflows/dev.yml`):
+
+- on Google Play's **internal testing** track: a private channel for up to 100 testers, with
+  no review;
+- as the GitHub pre-release **dev**, replaced by each build: the APK, with the same package
+  and signature as the releases, so it updates to the next release and from the last one.
+  It needs the release certificate (see *One-time setup for releases*).
+
+The version code is twice the number of commits on `master` (releases take the odd codes),
+and the version name is `versionName` plus the commit, such as `13-dev+6ece743`.
+
+The rest of this section sets up Google Play.
 
 There are no keys or credentials in the repository or its secrets:
 
 - The **upload key** is a Cloud KMS key in the `clementine-data` project that cannot be
   exported. The bundle is built unsigned and signed by
   [kms-signer](https://github.com/clementine-player/kms-signer), which sends only digests to KMS.
-  `play.yml` pins a kms-signer release by version and checksum. Play
+  `dev.yml` pins a kms-signer release by version and checksum. Play
   re-signs the app with its own app signing key (Play App Signing).
 - GitHub Actions authenticates to Google Cloud with **Workload Identity Federation**, through
   the `github-actions` pool Clementine's macOS signing already uses. This repository has its
@@ -104,7 +113,7 @@ Until `app/upload_cert.pem` is committed, the workflow only builds the unsigned 
    `MAINTAINER_EMAILS`, and run it as an admin of `clementine-data`. It creates the upload key
    (RSA 3072, in an HSM), the service account, and the provider, and lets the listed
    maintainers impersonate the service account for local signing. The identifiers it creates
-   are the ones `.github/workflows/play.yml` already uses.
+   are the ones `.github/workflows/dev.yml` already uses.
 
 2. **Make the signing certificate** and commit it as `app/upload_cert.pem`. Every release must
    be signed with the same certificate, so this is done once, as the service account:
@@ -125,7 +134,7 @@ Until `app/upload_cert.pem` is committed, the workflow only builds the unsigned 
    and upload it by hand:
 
    ```sh
-   ./gradlew bundlePlayRelease -PplayVersionCode=$(git rev-list --count HEAD)
+   ./gradlew bundlePlayRelease -PversionCodeOverride=$(( 2 * $(git rev-list --count HEAD) ))
    $signer sign \
      --key projects/clementine-data/locations/global/keyRings/android-signing/cryptoKeys/play-upload/cryptoKeyVersions/1 \
      --cert app/upload_cert.pem --min-sdk 23 \
@@ -141,7 +150,7 @@ Until `app/upload_cert.pem` is committed, the workflow only builds the unsigned 
    users*, invite `android-play-release@clementine-data.iam.gserviceaccount.com` with
    *Release apps to testing tracks* for this app.
 
-5. Run the *play* workflow (*Actions → play → Run workflow*, on `master`) to check it.
+5. Run the *dev* workflow (*Actions → dev → Run workflow*, on `master`) to check it.
 
 If Play rejects uploads with "Only releases with status draft may be created on draft app",
 the first release has not been rolled out yet (step 3): either do that, or set the repository
