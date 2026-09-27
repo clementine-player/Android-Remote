@@ -59,7 +59,9 @@ import de.qspool.clementineremote.R
 import de.qspool.clementineremote.backend.Clementine
 import de.qspool.clementineremote.backend.RemoteRepository
 import de.qspool.clementineremote.backend.RemoteRepository.NowPlaying
+import de.qspool.clementineremote.ui.shell.OutputButton
 import de.qspool.clementineremote.ui.shell.outputIcon
+import de.qspool.clementineremote.ui.shell.switchable
 import de.qspool.clementineremote.backend.player.MySong
 import de.qspool.clementineremote.utils.Utilities
 import kotlin.math.roundToInt
@@ -77,6 +79,9 @@ interface PlayerActions {
 
     /** Downloads the song, its album or its playlist. */
     fun onDownload()
+
+    /** Chooses where Clementine plays. */
+    fun onOutputs() {}
 }
 
 /**
@@ -105,6 +110,7 @@ fun PlayerScreen(actions: PlayerActions, viewModel: PlayerViewModel = viewModel(
         nowPlaying,
         playingFrom = remember(nowPlaying.song) { viewModel.playingFrom() },
         playingOn = playingOn,
+        outputs = outputs,
         lastFm = lastFm,
         actions = actions,
         onSeek = viewModel::seekTo,
@@ -157,9 +163,11 @@ internal fun PlayerContent(
     playingOn: RemoteRepository.Output? = null,
     /** What the volume button shows and sets: Clementine's, or this phone's when playing here. */
     volume: Int = nowPlaying.volume,
+    /** Where Clementine can play, for the output button. */
+    outputs: RemoteRepository.Outputs = RemoteRepository.Outputs(),
 ) {
     Column(modifier.fillMaxSize().safeDrawingPadding().testTag("player")) {
-        TopRow(playingFrom, playingOn, lastFm, actions::onCollapse, onStop, onBan)
+        TopRow(playingFrom, playingOn, lastFm, actions::onCollapse, actions::onOutputs, onStop, onBan)
         BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
             val song = nowPlaying.song
             // The artwork is whatever square is left over, so short screens keep every control.
@@ -175,7 +183,7 @@ internal fun PlayerContent(
                 }
                 SeekBar(nowPlaying, onSeek, Modifier.padding(horizontal = 24.dp))
                 controls()
-                BottomRow(actions, volume, onVolume)
+                BottomRow(actions, volume, onVolume, outputs)
             }
             if (maxWidth > maxHeight) {
                 // Landscape: the artwork beside the rest.
@@ -212,6 +220,7 @@ private fun TopRow(
     playingOn: RemoteRepository.Output?,
     lastFm: Boolean,
     onCollapse: () -> Unit,
+    onOutputs: () -> Unit,
     onStop: () -> Unit,
     onBan: () -> Unit,
 ) {
@@ -235,7 +244,11 @@ private fun TopRow(
                 )
             }
             if (playingOn != null) {
-                Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    Modifier.clickable(onClick = onOutputs),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
                     Icon(
                         painterResource(outputIcon(playingOn)),
                         null,
@@ -308,7 +321,7 @@ private fun LoveButton(song: MySong, onLove: () -> Unit) {
 }
 
 @Composable
-private fun BottomRow(actions: PlayerActions, volume: Int, onVolume: (Int) -> Unit) {
+private fun BottomRow(actions: PlayerActions, volume: Int, onVolume: (Int) -> Unit, outputs: RemoteRepository.Outputs) {
     Row(
         Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceAround,
@@ -316,6 +329,9 @@ private fun BottomRow(actions: PlayerActions, volume: Int, onVolume: (Int) -> Un
     ) {
         IconButton(onClick = { actions.onDetails(lyrics = false) }, modifier = Modifier.testTag("btnDetails")) {
             Icon(painterResource(R.drawable.ic_lyrics), stringResource(R.string.player_details))
+        }
+        if (outputs.switchable) {
+            OutputButton(outputs, actions::onOutputs)
         }
         VolumeButton(volume, onVolume)
         IconButton(onClick = actions::onQueue, modifier = Modifier.testTag("btnQueue")) {

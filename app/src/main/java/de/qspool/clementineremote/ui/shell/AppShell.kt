@@ -75,7 +75,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.R
 import de.qspool.clementineremote.SharedPreferencesKeys
+import de.qspool.clementineremote.backend.RemoteRepository
 import de.qspool.clementineremote.backend.RemoteRepository.NowPlaying
+import de.qspool.clementineremote.backend.pb.ClementineMessageFactory
+import de.qspool.clementineremote.ui.hints.Hint
+import de.qspool.clementineremote.ui.hints.HintBox
 import de.qspool.clementineremote.ui.downloads.DownloadsScreen
 import de.qspool.clementineremote.ui.downloads.DownloadsViewModel
 import de.qspool.clementineremote.ui.library.LibraryScreen
@@ -124,6 +128,8 @@ fun AppShell(shell: ShellViewModel, actions: ShellActions) {
     // The song details sheet, and whether it shows the lyrics; null while closed.
     var details by rememberSaveable { mutableStateOf<Boolean?>(null) }
     var choosingDownload by rememberSaveable { mutableStateOf(false) }
+    var outputsOpen by rememberSaveable { mutableStateOf(false) }
+    val outputs by RemoteRepository.outputs.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
     val layout = NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo(currentWindowAdaptiveInfo())
@@ -159,6 +165,11 @@ fun AppShell(shell: ShellViewModel, actions: ShellActions) {
                         onPlayPause = player::playPause,
                         onNext = player::next,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
+                        outputs = outputs,
+                        onOutputs = { outputsOpen = true },
+                        // Only while it's in sight, with nothing over it.
+                        hints = !shell.playerOpen && !connectionOpen && !outputsOpen &&
+                            details == null && !choosingDownload,
                     )
                 }
             }
@@ -184,6 +195,10 @@ fun AppShell(shell: ShellViewModel, actions: ShellActions) {
                         override fun onQueue() {
                             shell.destination = Destination.QUEUE
                             shell.playerOpen = false
+                        }
+
+                        override fun onOutputs() {
+                            outputsOpen = true
                         }
 
                         override fun onDownload() {
@@ -212,6 +227,13 @@ fun AppShell(shell: ShellViewModel, actions: ShellActions) {
     }
     if (connectionOpen) {
         ConnectionSheet(actions, onDismiss = { connectionOpen = false })
+    }
+    if (outputsOpen) {
+        OutputSheet(
+            outputs,
+            onOutput = { RemoteRepository.send(ClementineMessageFactory.buildSetOutput(it)) },
+            onDismiss = { outputsOpen = false },
+        )
     }
     if (choosingDownload) {
         DownloadChooser(
@@ -425,7 +447,10 @@ internal fun ConnectionChip(host: String?, onClick: () -> Unit, modifier: Modifi
     }
 }
 
-/** The song playing, above the navigation bar: opens the player, plays or pauses, skips. */
+/**
+ * The song playing, above the navigation bar: opens the player, chooses where Clementine plays
+ * (when it can play elsewhere), plays or pauses, skips.
+ */
 @Composable
 internal fun MiniPlayer(
     nowPlaying: NowPlaying,
@@ -433,6 +458,10 @@ internal fun MiniPlayer(
     onPlayPause: () -> Unit,
     onNext: () -> Unit,
     modifier: Modifier = Modifier,
+    outputs: RemoteRepository.Outputs = RemoteRepository.Outputs(),
+    onOutputs: () -> Unit = {},
+    /** Whether its hints may show: false while something covers it. */
+    hints: Boolean = true,
 ) {
     val song = nowPlaying.song ?: return
     val openLabel = stringResource(R.string.shell_open_player, song.title.orEmpty())
@@ -485,6 +514,17 @@ internal fun MiniPlayer(
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )
+                    }
+                }
+                if (outputs.switchable) {
+                    HintBox(
+                        Hint.OUTPUTS,
+                        stringResource(R.string.hint_outputs_title),
+                        stringResource(R.string.hint_outputs),
+                        icon = R.drawable.ic_devices,
+                        enabled = hints,
+                    ) {
+                        OutputButton(outputs, onOutputs)
                     }
                 }
                 Surface(

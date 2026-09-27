@@ -1,6 +1,7 @@
 package de.qspool.clementineremote.ui.settings
 
 import android.os.Build
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -34,6 +35,7 @@ import de.qspool.clementineremote.R
 import de.qspool.clementineremote.SharedPreferencesKeys
 import de.qspool.clementineremote.backend.Clementine
 import de.qspool.clementineremote.backend.downloader.MediaStoreDownloadStorage
+import de.qspool.clementineremote.ui.hints.Hints
 
 /** What the settings do outside themselves. */
 interface SettingsActions {
@@ -214,6 +216,11 @@ private fun AdvancedSettings(store: PreferenceStore) {
     BooleanSetting(store, SharedPreferencesKeys.SP_WAKE_LOCK, false, R.string.pref_wake_lock_title, R.string.pref_wake_lock_summary)
     // Offered to Clementine when connecting, so a change applies from the next connection.
     BooleanSetting(store, SharedPreferencesKeys.SP_RENDERER, true, R.string.pref_renderer, R.string.pref_renderer_summary)
+    val context = LocalContext.current
+    ActionSetting(stringResource(R.string.pref_hints_reset), stringResource(R.string.pref_hints_reset_summary), "prefHintsReset") {
+        Hints.reset()
+        Toast.makeText(context, R.string.pref_hints_reset_done, Toast.LENGTH_SHORT).show()
+    }
 }
 
 @Composable
