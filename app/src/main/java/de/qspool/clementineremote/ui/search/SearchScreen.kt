@@ -48,6 +48,7 @@ import de.qspool.clementineremote.R
 import de.qspool.clementineremote.backend.database.SongSelectItem
 import de.qspool.clementineremote.ui.browse.BrowseItems
 import de.qspool.clementineremote.ui.browse.BrowseSelectionBar
+import de.qspool.clementineremote.ui.browse.rememberLevelListState
 
 /**
  * Search: a search bar that asks Clementine to search its library and internet services, and the
@@ -85,6 +86,8 @@ internal fun SearchContent(
 ) {
     val shown = state.shown
     var selection by remember(state.levels.size, shown?.opened) { mutableStateOf(emptySet<Int>()) }
+    // Held here, so a level keeps its place while another branch shows (no results, say).
+    val listState = rememberLevelListState(state.levels.size)
     val selected = shown?.items?.filterIndexed { index, _ -> index in selection }.orEmpty()
     val opened = shown?.opened
 
@@ -153,6 +156,7 @@ internal fun SearchContent(
                 },
                 onLongClick = { index -> selection = if (index in selection) selection - index else selection + index },
                 tag = "global_search",
+                listState = listState,
             )
             shown != null -> Message(R.string.library_no_search_results, "searchNoResults")
             !state.searching -> Message(R.string.global_search_empty, "searchEmpty")

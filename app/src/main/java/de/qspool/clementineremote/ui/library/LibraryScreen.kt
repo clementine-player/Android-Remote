@@ -59,6 +59,7 @@ import de.qspool.clementineremote.ui.browse.BrowseItems
 import de.qspool.clementineremote.ui.browse.BrowseLevel
 import de.qspool.clementineremote.ui.browse.BrowseSelectionBar
 import de.qspool.clementineremote.ui.browse.ItemKind
+import de.qspool.clementineremote.ui.browse.rememberLevelListState
 
 /**
  * The library: Clementine's library, browsed level by level (artists, their albums, their songs).
@@ -106,6 +107,8 @@ internal fun LibraryContent(
     val shown = state.shown
     // Selected items, by their position in the level shown; cleared when another level shows.
     var selection by remember(state.levels.size, shown?.opened) { mutableStateOf(emptySet<Int>()) }
+    // Held here, so a level keeps its place while another branch shows (no results, say).
+    val listState = rememberLevelListState(state.levels.size)
     val selected = shown?.items?.filterIndexed { index, _ -> index in selection }.orEmpty()
 
     Column(modifier.fillMaxSize()) {
@@ -151,6 +154,7 @@ internal fun LibraryContent(
                     },
                     onLongClick = { index -> selection = selection.toggle(index) },
                     tag = "library",
+                    listState = listState,
                 )
             }
         }

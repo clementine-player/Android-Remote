@@ -3,6 +3,9 @@ package de.qspool.clementineremote.ui.library
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.os.Looper
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -10,6 +13,7 @@ import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTouchInput
 import androidx.test.core.app.ApplicationProvider
 import de.qspool.clementineremote.App
@@ -190,5 +194,28 @@ class LibraryScreenTest {
                 "back",
             ),
             done)
+    }
+
+    @Test
+    fun goingBackShowsTheListWhereItWasLeft() {
+        val artists = (1..60).map { item("Artist $it", 0) }
+        val albums = listOf(item("Album", 1))
+        var state by mutableStateOf(LibraryState(LibraryStatus.Ready, listOf(BrowseLevel(null, ItemKind.ARTIST, artists))))
+        compose.setContent {
+            ClementineTheme(dynamicColor = false) {
+                LibraryContent(state, {}, {}, {}, {}, {})
+            }
+        }
+        compose.onNodeWithTag("library").performScrollToIndex(45)
+        compose.onNodeWithText("Artist 46").assertIsDisplayed()
+
+        // An artist opened starts at the top of its albums...
+        state = state.copy(levels = state.levels + BrowseLevel(artists[45], ItemKind.ALBUM, albums))
+        compose.onNodeWithText("Album").assertIsDisplayed()
+
+        // ...and going back returns to the artists where they were left.
+        state = state.copy(levels = state.levels.dropLast(1))
+        compose.onNodeWithText("Artist 46").assertIsDisplayed()
+        compose.onNodeWithText("Artist 1").assertDoesNotExist()
     }
 }

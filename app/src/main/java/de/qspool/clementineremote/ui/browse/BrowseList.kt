@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,6 +25,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,6 +44,27 @@ import de.qspool.clementineremote.R
 import de.qspool.clementineremote.backend.database.SongSelectItem
 
 /**
+ * Where each open level is scrolled to, the top level first, so going back shows the level where
+ * it was left. A level just opened starts at the top.
+ *
+ * @param depth how many levels are open
+ */
+@Composable
+internal fun rememberLevelListState(depth: Int): LazyListState {
+    val states = rememberSaveable(saver = LevelListStatesSaver) { mutableListOf<LazyListState>() }
+    // Levels closed since are forgotten; levels opened start afresh.
+    while (states.size > maxOf(depth, 1)) states.removeAt(states.lastIndex)
+    while (states.size < maxOf(depth, 1)) states.add(LazyListState())
+    return states.last()
+}
+
+/** Keeps each level's first visible item and its offset, across a configuration change. */
+private val LevelListStatesSaver = listSaver<MutableList<LazyListState>, Int>(
+    save = { states -> states.flatMap { listOf(it.firstVisibleItemIndex, it.firstVisibleItemScrollOffset) } },
+    restore = { saved -> saved.chunked(2).map { LazyListState(it[0], it[1]) }.toMutableList() },
+)
+
+/**
  * The items of a level: tapping one runs [onClick], a long press [onLongClick]. The list is
  * tagged [tag], for tests.
  */
@@ -51,8 +76,9 @@ internal fun BrowseItems(
     onClick: (Int, SongSelectItem) -> Unit,
     onLongClick: (Int) -> Unit,
     tag: String,
+    listState: LazyListState = rememberLazyListState(),
 ) {
-    LazyColumn(Modifier.fillMaxSize().testTag(tag)) {
+    LazyColumn(Modifier.fillMaxSize().testTag(tag), state = listState) {
         itemsIndexed(shown.items) { index, item ->
             val isSelected = index in selection
             ListItem(
