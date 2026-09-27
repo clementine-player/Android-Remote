@@ -89,6 +89,10 @@ object RemoteRepository {
     @JvmStatic
     val outputs: StateFlow<Outputs> = _outputs.asStateFlow()
 
+    /** Whether Clementine plays on this phone (remote streaming). */
+    @JvmStatic
+    fun isPlayingHere(): Boolean = _outputs.value.active?.isThisPhone == true
+
     /** Follows a new connection: its status, and the messages that change what's playing. */
     @JvmStatic
     fun attach(connection: ClementinePlayerConnection) {

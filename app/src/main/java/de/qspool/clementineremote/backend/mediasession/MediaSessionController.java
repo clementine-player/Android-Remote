@@ -133,6 +133,8 @@ public class MediaSessionController {
                     case REPEAT:
                     case SHUFFLE:
                     case SET_VOLUME:
+                    // Playing on this phone or not decides whose volume the keys set.
+                    case OUTPUTS:
                         mPlayer.invalidate();
                         break;
                     case FIRST_DATA_SENT_COMPLETE:
