@@ -21,6 +21,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 COPY generate-music.sh showcase-library.tsv /usr/local/bin/
+COPY covers /usr/local/bin/covers
 RUN if [ "$LIBRARY" = showcase ]; then generate-music.sh --showcase /music; \
     else generate-music.sh /music; fi
 
