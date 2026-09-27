@@ -119,6 +119,16 @@ class AppShellTest {
     }
 
     @Test
+    fun theSettingsAreBesideTheChip() {
+        for (destination in listOf("navQueue", "navLibrary", "navSearch", "navDownloads")) {
+            compose.onNodeWithTag(destination).performClick()
+            compose.onNodeWithTag("btnTopSettings").performClick()
+        }
+
+        assertEquals(List(4) { "settings" }, done)
+    }
+
+    @Test
     fun theConnectionSheetShowsTheConnection() {
         compose.onNodeWithTag("connectionChip").performClick()
         compose.waitForIdle()
