@@ -252,6 +252,7 @@ public class ClementinePbParser {
             myPlaylist.setActive(playlist.getActive());
             myPlaylist.setItemCount(playlist.getItemCount());
             myPlaylist.setClosed(playlist.getClosed());
+            myPlaylist.setFavorite(playlist.getFavorite());
 
             mPlaylistManager.addPlaylist(myPlaylist);
         }

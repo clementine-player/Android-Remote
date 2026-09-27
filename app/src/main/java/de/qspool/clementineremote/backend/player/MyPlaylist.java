@@ -37,6 +37,8 @@ public class MyPlaylist {
 
     private boolean mClosed;
 
+    private boolean mFavorite;
+
     public MyPlaylist() {
     }
 
@@ -97,5 +99,14 @@ public class MyPlaylist {
 
     public void setClosed(boolean mClosed) {
         this.mClosed = mClosed;
+    }
+
+    /** Whether it's one of Clementine's favourite (starred) playlists. */
+    public boolean isFavorite() {
+        return mFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.mFavorite = favorite;
     }
 }

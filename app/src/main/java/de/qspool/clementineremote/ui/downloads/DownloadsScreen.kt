@@ -28,6 +28,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,26 +40,36 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.qspool.clementineremote.R
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem
 import de.qspool.clementineremote.ui.settings.ClementineSettings
+import de.qspool.clementineremote.utils.Utilities
 
 /**
  * Downloads: those running, with their progress, and those finished, whose songs can be played.
- * Cancelling a running download stops it; on a finished one, it forgets it.
+ * Cancelling a running download stops it; on a finished one, it forgets it. With no downloads,
+ * suggests some: the albums played most in Clementine, and its playlists.
  */
 @Composable
 fun DownloadsScreen(viewModel: DownloadsViewModel) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val suggestions by viewModel.suggestions.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    // Each time the screen shows: the library may have synced since.
+    LaunchedEffect(viewModel) { viewModel.loadSuggestions() }
     DownloadsContent(
         state,
+        suggestions = suggestions,
+        onDownloadAlbum = viewModel::download,
+        onDownloadPlaylist = viewModel::download,
         onCancel = { download ->
             if (viewModel.cancel(download.id)) {
                 Toast.makeText(context, R.string.download_noti_canceled, Toast.LENGTH_SHORT).show()
@@ -85,6 +96,9 @@ internal fun DownloadsContent(
     onPlay: (DownloadedSong) -> Unit,
     onChangeSettings: () -> Unit,
     modifier: Modifier = Modifier,
+    suggestions: Suggestions = Suggestions(),
+    onDownloadAlbum: (AlbumSuggestion) -> Unit = {},
+    onDownloadPlaylist: (PlaylistSuggestion) -> Unit = {},
 ) {
     // The finished download whose songs are being picked from.
     var picking by remember { mutableStateOf<Download?>(null) }
@@ -110,7 +124,8 @@ internal fun DownloadsContent(
         }
 
         if (state.running.isEmpty() && state.finished.isEmpty()) {
-            item { Empty() }
+            item { Empty(suggestions.isEmpty) }
+            suggestions(suggestions, onDownloadAlbum, onDownloadPlaylist)
         }
         section(R.string.downloads_running, state.running, onCancel) {}
         section(R.string.downloads_finished, state.finished, onCancel) { picking = it }
@@ -232,11 +247,11 @@ private fun WifiOnly(onChange: () -> Unit) {
 }
 
 @Composable
-private fun Empty() {
+private fun Empty(howTo: Boolean) {
     Column(
-        Modifier.fillMaxWidth().padding(32.dp),
+        Modifier.fillMaxWidth().padding(horizontal = 32.dp, vertical = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Icon(
             painterResource(R.drawable.ic_download),
@@ -246,9 +261,99 @@ private fun Empty() {
         )
         Text(
             stringResource(R.string.downloads_empty),
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.testTag("downloadsEmpty"),
         )
+        Text(
+            stringResource(R.string.downloads_empty_summary),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+        )
+        if (howTo) {
+            // Nothing to suggest, so where downloads start from.
+            Text(
+                stringResource(R.string.downloads_empty_how),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.testTag("downloadsHowTo"),
+            )
+        }
     }
+}
+
+/** Albums and playlists to download, each with its download button. */
+private fun LazyListScope.suggestions(
+    suggestions: Suggestions,
+    onAlbum: (AlbumSuggestion) -> Unit,
+    onPlaylist: (PlaylistSuggestion) -> Unit,
+) {
+    if (suggestions.albums.isNotEmpty()) {
+        item {
+            Heading(if (suggestions.mostPlayed) R.string.downloads_suggest_most_played else R.string.downloads_suggest_recent)
+        }
+        items(suggestions.albums, key = { "album/${it.artist}/${it.album}" }) { album ->
+            val details = listOfNotNull(
+                album.artist.takeIf { it.isNotBlank() },
+                if (suggestions.mostPlayed) {
+                    pluralStringResource(R.plurals.downloads_plays, album.plays, album.plays)
+                } else {
+                    pluralStringResource(R.plurals.queue_songs, album.songs, album.songs)
+                },
+                album.bytes.takeIf { it > 0 }?.let { Utilities.humanReadableBytes(it, true) },
+            )
+            SuggestionRow(R.drawable.ic_album, album.album, details.joinToString(" · "), "suggestAlbum") { onAlbum(album) }
+        }
+    }
+    if (suggestions.playlists.isNotEmpty()) {
+        item { Heading(R.string.downloads_suggest_playlists) }
+        items(suggestions.playlists, key = { "playlist/${it.id}" }) { playlist ->
+            val details = listOfNotNull(
+                pluralStringResource(R.plurals.queue_songs, playlist.songs, playlist.songs),
+                when {
+                    playlist.playing -> stringResource(R.string.downloads_playlist_playing)
+                    playlist.favorite -> stringResource(R.string.downloads_playlist_favorite)
+                    else -> null
+                },
+            )
+            SuggestionRow(R.drawable.ic_queue_music, playlist.name, details.joinToString(" · "), "suggestPlaylist") {
+                onPlaylist(playlist)
+            }
+        }
+    }
+}
+
+@Composable
+private fun Heading(title: Int) {
+    Text(
+        stringResource(title),
+        style = MaterialTheme.typography.titleSmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 4.dp).semantics { heading() },
+    )
+}
+
+@Composable
+private fun SuggestionRow(icon: Int, title: String, details: String, tag: String, onDownload: () -> Unit) {
+    ListItem(
+        headlineContent = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+        supportingContent = { Text(details, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+        leadingContent = {
+            Box(
+                Modifier.size(40.dp).clip(RoundedCornerShape(8.dp)).background(MaterialTheme.colorScheme.secondaryContainer),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(painterResource(icon), contentDescription = null, tint = MaterialTheme.colorScheme.onSecondaryContainer)
+            }
+        },
+        trailingContent = {
+            IconButton(onClick = onDownload, modifier = Modifier.testTag(tag + "Download")) {
+                Icon(painterResource(R.drawable.ic_download), stringResource(R.string.downloads_download, title))
+            }
+        },
+        colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+        // The whole row downloads too, as it's what the row is for.
+        modifier = Modifier.clickable(onClick = onDownload).testTag(tag),
+    )
 }

@@ -52,7 +52,19 @@
     <string name="queue_clear_selection">Clear selection</string>
 
 
-    <string name="downloads_empty">No downloads!</string>
+    <string name="downloads_empty">Nothing downloaded yet</string>
+    <string name="downloads_empty_summary">Download music to this phone to listen to it away from Clementine.</string>
+    <string name="downloads_empty_how">Download a song from the player, an album from the library, or a playlist from its menu.</string>
+    <string name="downloads_suggest_most_played">Your most played albums</string>
+    <string name="downloads_suggest_recent">Recently added albums</string>
+    <string name="downloads_suggest_playlists">Playlists</string>
+    <plurals name="downloads_plays">
+        <item quantity="one">%d play</item>
+        <item quantity="other">%d plays</item>
+    </plurals>
+    <string name="downloads_playlist_playing">Playing now</string>
+    <string name="downloads_playlist_favorite">Favourite</string>
+    <string name="downloads_download">Download %1$s</string>
     <string name="downloaded_songs">Downloaded songs - click to play</string>
     <string name="downloads_title">Downloads</string>
     <string name="downloads_free_space">%s free on this phone</string>
