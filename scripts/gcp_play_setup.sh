@@ -106,7 +106,7 @@ fi
 
 cat <<EOT
 
-==> Done. .github/workflows/play.yml already uses:
+==> Done. .github/workflows/dev.yml already uses:
     workload_identity_provider: projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${WIF_POOL_ID}/providers/${WIF_PROVIDER_ID}
     service_account: ${SERVICE_ACCOUNT_EMAIL}
     key: projects/${PROJECT_ID}/locations/${KEY_LOCATION}/keyRings/${KEY_RING}/cryptoKeys/${KEY}/cryptoKeyVersions/1

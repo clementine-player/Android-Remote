@@ -117,13 +117,13 @@ base {
     archivesName.set("ClementineRemote")
 }
 
-// Every build uploaded to Google Play needs a higher version code than the last, so the Play
-// workflow passes one in (see .github/workflows/play.yml). The versions above stay the ones
-// F-Droid reads.
+// Development builds and releases take their version from CI, which passes it in: every build
+// uploaded needs a higher version code than the last (see .github/workflows/dev.yml and
+// release.yml). The versions above are master's and, in a release commit, F-Droid's.
 androidComponents {
-    onVariants(selector().withFlavor("store" to "play")) { variant ->
-        val code = project.findProperty("playVersionCode")?.toString()?.toInt()
-        val name = project.findProperty("playVersionName")?.toString()
+    onVariants { variant ->
+        val code = project.findProperty("versionCodeOverride")?.toString()?.toInt()
+        val name = project.findProperty("versionNameOverride")?.toString()
         variant.outputs.forEach { output ->
             code?.let { output.versionCode.set(it) }
             name?.let { output.versionName.set(it) }
