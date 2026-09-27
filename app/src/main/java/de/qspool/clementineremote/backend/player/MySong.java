@@ -139,11 +139,30 @@ public class MySong {
         song.setRating(songMetadata.getRating());
         song.setUrl(songMetadata.getUrl());
 
-        if (songMetadata.hasArt()) {
+        if (songMetadata.hasArt() && hasCover(songMetadata)) {
             song.setArt(songMetadata.getArt());
         }
 
         return song;
+    }
+
+    /** Clementine's art_manual for a cover the user removed. */
+    private static final String MANUALLY_UNSET_COVER = "(unset)";
+
+    /**
+     * Whether the art Clementine sent is the song's cover. For a song without one, Clementine
+     * sends its own "no cover" picture instead, which its cover fields give away: none set, or
+     * the cover removed by hand. A Clementine that doesn't send those fields sends only covers.
+     */
+    private static boolean hasCover(SongMetadata songMetadata) {
+        if (!songMetadata.hasArtAutomatic() && !songMetadata.hasArtManual()) {
+            return true;
+        }
+        String manual = songMetadata.getArtManual();
+        if (MANUALLY_UNSET_COVER.equals(manual)) {
+            return false;
+        }
+        return !manual.isEmpty() || !songMetadata.getArtAutomatic().isEmpty();
     }
 
     public int getId() {

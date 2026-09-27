@@ -11,9 +11,12 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.io.ByteArrayOutputStream;
 
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
@@ -67,5 +70,30 @@ public class MySongArtTest {
     public void undecodableArtFallsBackToTheNoCoverImage() {
         MySong song = songWithArt(ByteString.copyFromUtf8("not an image"));
         assertNotNull(song.getArt());
+    }
+
+    private static MySong fromClementine(Boolean coverFields, String automatic, String manual) {
+        SongMetadata.Builder metadata = SongMetadata.newBuilder().setTitle("Clair de lune").setArt(png(Color.GRAY));
+        if (coverFields) {
+            metadata.setArtAutomatic(automatic).setArtManual(manual);
+        }
+        return MySong.fromProtocolBuffer(metadata.build());
+    }
+
+    @Test
+    public void clementinesNoCoverPictureIsNotTakenForTheCover() {
+        // Clementine sends its "no cover" picture for a song whose cover fields are empty,
+        // or whose cover was removed by hand.
+        assertNull(fromClementine(true, "", "").getArtData());
+        assertNull(fromClementine(true, "/music/cover.jpg", "(unset)").getArtData());
+    }
+
+    @Test
+    public void aCoverFromAnyWhereIsKept() {
+        assertNotNull(fromClementine(true, "/music/Suite bergamasque/cover.jpg", "").getArtData());
+        assertNotNull(fromClementine(true, "(embedded)", "").getArtData());
+        assertNotNull(fromClementine(true, "", "/home/me/covers/debussy.jpg").getArtData());
+        // Without the cover fields, there's no telling: the art is kept.
+        assertNotNull(fromClementine(false, null, null).getArtData());
     }
 }
