@@ -48,11 +48,8 @@
   <string name="download_noti_only_wifi">A letöltés csak WiFi-n engedélyezett.</string>
   <string name="download_noti_transcoding">Fájlok átkódolása</string>
   <string name="download_noti_transcoding_subtitle">Kérem várjon</string>
-  <string name="library_download">Zenetár letöltése</string>
   <string name="library_optimize">Adatbázis optimalizálása</string>
-  <string name="library_empty">A zenetár üres. Csúsztassa ujját lefelé a zenetár letöltéséhez.</string>
   <string name="library_no_search_results">Nincs a keresésnek megfelelő szám!</string>
-  <string name="library_download_error">A zenetár letöltése nem sikerült</string>
   <string name="global_search_empty">Írja be a keresési kifejezéseit a számítógépén és az interneten található zenék kereséséhez</string>
   <string name="global_search_search">Keresés bármire</string>
   <string name="song_info_album">Album</string>

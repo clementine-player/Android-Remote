@@ -50,11 +50,8 @@
   <string name="download_noti_only_wifi">Преузимање дозвољено само на бежичној мрежи.</string>
   <string name="download_noti_transcoding">Прекодирам фајлове</string>
   <string name="download_noti_transcoding_subtitle">Сачекајте</string>
-  <string name="library_download">Преузимам библиотеку</string>
   <string name="library_optimize">Оптимизујем базу података</string>
-  <string name="library_empty">Библиотека је празна. Превуците на доле да преузмете библиотеку!</string>
   <string name="library_no_search_results">Ниједна песма се не поклапа са траженим изразом!</string>
-  <string name="library_download_error">Не могу да преузмем библиотеку</string>
   <string name="global_search_empty">Унесите изнад термине за претрагу да бисте пронашли музику на вашем рачунару и на интернету</string>
   <string name="global_search_search">Тражите било шта</string>
   <string name="song_info_album">Албум</string>

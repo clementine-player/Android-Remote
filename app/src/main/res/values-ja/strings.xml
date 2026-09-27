@@ -46,11 +46,8 @@
   <string name="download_noti_only_wifi">WiFi でのみダウンロード可能です。</string>
   <string name="download_noti_transcoding">ファイルのトランスコード中</string>
   <string name="download_noti_transcoding_subtitle">しばらくお待ちください</string>
-  <string name="library_download">ライブラリーのダウンロード中</string>
   <string name="library_optimize">データベースの最適化中</string>
-  <string name="library_empty">ライブラリーは空です。下にスワイプすると、ライブラリーをダウンロードします!</string>
   <string name="library_no_search_results">検索条件に一致する曲はありません!</string>
-  <string name="library_download_error">ライブラリーをダウンロードできません</string>
   <string name="global_search_empty">お使いのコンピュータからインターネット上の音楽を見つけるために、上に検索する言葉を入力してください</string>
   <string name="global_search_search">何でも検索</string>
   <string name="song_info_album">アルバム</string>

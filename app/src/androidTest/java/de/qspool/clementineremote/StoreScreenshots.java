@@ -54,7 +54,7 @@ public class StoreScreenshots {
     /** Long enough for a screen or sheet to animate in. */
     private static final long SETTLE_MILLIS = 1500;
 
-    /** Downloading and indexing the library takes a while on an emulator. */
+    /** Syncing and indexing the library takes a while on an emulator. */
     private static final long LIBRARY_TIMEOUT = 120_000;
 
     @Rule
@@ -261,8 +261,7 @@ public class StoreScreenshots {
         waitFor(tag("navQueue"));
 
         navigateTo("navLibrary");
-        // The library is downloaded from Clementine on request.
-        waitFor(tag("btnDownloadLibrary")).click();
+        // The library syncs from Clementine by itself once connected.
         waitFor(By.text("Frédéric Chopin"), LIBRARY_TIMEOUT);
         screenshot("2_library");
         mDevice.findObject(By.text("Frédéric Chopin")).click();

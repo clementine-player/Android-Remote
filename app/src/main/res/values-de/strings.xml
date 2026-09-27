@@ -48,11 +48,8 @@
   <string name="download_noti_only_wifi">Herunterladen nur über WLAN erlaubt.</string>
   <string name="download_noti_transcoding">Dateien werden umgewandelt</string>
   <string name="download_noti_transcoding_subtitle">Bitte warten</string>
-  <string name="library_download">Bibliothek wird heruntergeladen</string>
   <string name="library_optimize">Datenbank wird optimiert</string>
-  <string name="library_empty">Bibliothek leer. Nach unten wischen, um die Bibliothek herunterzuladen!</string>
   <string name="library_no_search_results">Keine Suchergebnisse gefunden!</string>
-  <string name="library_download_error">Bibliothek konnte nicht geladen werden</string>
   <string name="global_search_empty">Oben Suchbegriffe eingeben, um Musik auf Ihrem Rechner oder im Internet zu finden</string>
   <string name="global_search_search">Nach etwas suchen</string>
   <string name="song_info_album">Album</string>

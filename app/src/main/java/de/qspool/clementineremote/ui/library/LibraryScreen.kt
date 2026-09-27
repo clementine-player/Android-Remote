@@ -76,8 +76,8 @@ fun LibraryScreen(viewModel: LibraryViewModel) {
             val text = when (message) {
                 is LibraryViewModel.Message.Added ->
                     resources.getQuantityString(R.plurals.songs_added, message.count, message.count)
-                is LibraryViewModel.Message.DownloadFailed ->
-                    resources.getString(R.string.library_download_error) + ": " +
+                is LibraryViewModel.Message.SyncFailed ->
+                    resources.getString(R.string.library_sync_error) + ": " +
                         resources.getString(message.reason)
             }
             Toast.makeText(context, text, Toast.LENGTH_LONG).show()
@@ -87,7 +87,7 @@ fun LibraryScreen(viewModel: LibraryViewModel) {
         state,
         onOpen = viewModel::open,
         onBack = { viewModel.back() },
-        onDownloadLibrary = viewModel::download,
+        onSyncLibrary = viewModel::sync,
         onAdd = viewModel::addToPlaylist,
         onDownload = viewModel::downloadSongs,
     )
@@ -99,7 +99,7 @@ internal fun LibraryContent(
     state: LibraryState,
     onOpen: (SongSelectItem) -> Unit,
     onBack: () -> Unit,
-    onDownloadLibrary: () -> Unit,
+    onSyncLibrary: () -> Unit,
     onAdd: (List<SongSelectItem>) -> Unit,
     onDownload: (List<SongSelectItem>) -> Unit,
     modifier: Modifier = Modifier,
@@ -132,13 +132,13 @@ internal fun LibraryContent(
         }
 
         PullToRefreshBox(
-            // Progress shows above, so the pull only starts the download.
+            // Progress shows above, so the pull only starts the sync.
             isRefreshing = false,
-            onRefresh = onDownloadLibrary,
+            onRefresh = onSyncLibrary,
             modifier = Modifier.weight(1f).fillMaxWidth().testTag("libraryRefresh"),
         ) {
             if (state.status == LibraryStatus.Missing) {
-                Missing(onDownloadLibrary)
+                Missing(onSyncLibrary)
             } else if (shown != null && shown.items.isEmpty() && state.filter.isNotBlank()) {
                 NoResults()
             } else if (shown != null) {
@@ -166,12 +166,12 @@ private fun Set<Int>.toggle(index: Int) = if (index in this) this - index else t
 @Composable
 private fun Progress(status: LibraryStatus) {
     val text = when (status) {
-        is LibraryStatus.Downloading -> R.string.library_download
+        is LibraryStatus.Syncing -> R.string.library_syncing
         LibraryStatus.Optimizing -> R.string.library_optimize
         else -> return
     }
     Column(Modifier.fillMaxWidth().testTag("libraryProgress")) {
-        if (status is LibraryStatus.Downloading && status.total > 0) {
+        if (status is LibraryStatus.Syncing && status.total > 0) {
             LinearProgressIndicator(
                 progress = { (status.bytes.toFloat() / status.total).coerceIn(0f, 1f) },
                 modifier = Modifier.fillMaxWidth(),
@@ -252,7 +252,7 @@ private fun Opened(
 
 /** No library on this phone yet. Scrollable, so pulling down downloads it too. */
 @Composable
-private fun Missing(onDownload: () -> Unit) {
+private fun Missing(onSync: () -> Unit) {
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -270,8 +270,8 @@ private fun Missing(onDownload: () -> Unit) {
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
         )
-        Button(onClick = onDownload, modifier = Modifier.testTag("btnDownloadLibrary")) {
-            Text(stringResource(R.string.library_download_action))
+        Button(onClick = onSync, modifier = Modifier.testTag("btnSyncLibrary")) {
+            Text(stringResource(R.string.library_sync_action))
         }
     }
 }

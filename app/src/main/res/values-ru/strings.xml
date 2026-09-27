@@ -52,11 +52,8 @@
   <string name="download_noti_only_wifi">Загрузка разрешена только через WiFi.</string>
   <string name="download_noti_transcoding">Конвертация файлов</string>
   <string name="download_noti_transcoding_subtitle">Пожалуйста, подождите</string>
-  <string name="library_download">Загрузка фонотеки</string>
   <string name="library_optimize">Оптимизация базы данных</string>
-  <string name="library_empty">Фонотека пуста. Проведите вниз для загрузки фонотеки!</string>
   <string name="library_no_search_results">По данному запросу песен не найдено!</string>
-  <string name="library_download_error">Не могу загрузить фонотеку</string>
   <string name="global_search_empty">Введите ключевое слово выше, чтобы найти музыку на вашем компьютере или в интернет</string>
   <string name="global_search_search">Искать что угодно</string>
   <string name="song_info_album">Альбом</string>

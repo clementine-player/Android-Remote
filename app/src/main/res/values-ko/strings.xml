@@ -30,7 +30,6 @@
   <string name="download_noti_forbidden">다운로드 금지됨. Clementine 설정에서 활성화</string>
   <string name="download_noti_not_mounted">저장 장치를 찾지 못했습니다!</string>
   <string name="download_noti_only_wifi">다운로드는 Wifi에서만 가능</string>
-  <string name="library_download">라이브러리 다운로드 중</string>
   <string name="library_optimize">데이터베이스 최적화 중</string>
   <string name="song_info_album">앨범</string>
   <string name="song_info_genre">장르</string>

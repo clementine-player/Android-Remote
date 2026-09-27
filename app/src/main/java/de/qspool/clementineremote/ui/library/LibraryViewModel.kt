@@ -40,10 +40,13 @@ sealed interface LibraryStatus {
     /** Not on this phone yet. */
     data object Missing : LibraryStatus
 
-    /** Downloading from Clementine: bytes so far of the total, when known. */
-    data class Downloading(val bytes: Long, val total: Int) : LibraryStatus
+    /**
+     * Syncing from Clementine: bytes so far of the total, when known. The library already on
+     * the phone, if any, can be browsed meanwhile.
+     */
+    data class Syncing(val bytes: Long, val total: Int) : LibraryStatus
 
-    /** Downloaded, and being indexed for searching. */
+    /** Received, and being indexed for searching. */
     data object Optimizing : LibraryStatus
 
     data object Ready : LibraryStatus
@@ -60,13 +63,22 @@ data class LibraryState(
 
 /**
  * The library Clementine sends, browsed level by level as its grouping setting says (artist,
- * album, song by default). The database is queried off the main thread; the library itself is
- * downloaded from Clementine on request.
+ * album, song by default). The database is queried off the main thread. The library itself is
+ * synced from Clementine when connected, and again on request.
  */
 class LibraryViewModel(
     private val send: (ClementineMessage) -> Unit = RemoteRepository::send,
     private val newQuery: () -> DynamicSongQuery = { LibraryQuery(App.getApp()) },
     private val io: CoroutineDispatcher = Dispatchers.IO,
+    /** Starts syncing the library from Clementine, telling [OnLibraryDownloadListener] how it goes. */
+    private val startSync: (OnLibraryDownloadListener) -> ClementineLibraryDownloader? = { listener ->
+        ClementineLibraryDownloader(App.getApp()).apply {
+            addOnLibraryDownloadListener(listener)
+            startDownload(ClementineMessage.getMessage(MsgType.GET_LIBRARY))
+        }
+    },
+    /** Whether connected to Clementine, so there's a library to sync. */
+    private val connected: () -> Boolean = { App.ClementineConnection?.isConnected == true },
     /** Whether this Clementine's library is on the phone, removing another Clementine's. */
     private val libraryExists: () -> Boolean = {
         LibraryDatabaseHelper().run {
@@ -92,15 +104,17 @@ class LibraryViewModel(
         /** Some songs were added to the playlist. */
         data class Added(val count: Int) : Message
 
-        /** The library couldn't be downloaded, for [reason]. */
-        data class DownloadFailed(@StringRes val reason: Int) : Message
+        /** The library couldn't be synced, for [reason]. */
+        data class SyncFailed(@StringRes val reason: Int) : Message
     }
+
+    private var syncing = false
 
     private var downloader: ClementineLibraryDownloader? = null
 
-    private val downloadListener = object : OnLibraryDownloadListener {
+    private val syncListener = object : OnLibraryDownloadListener {
         override fun OnProgressUpdate(progress: Long, total: Int) {
-            _state.update { it.copy(status = LibraryStatus.Downloading(progress, total)) }
+            _state.update { it.copy(status = LibraryStatus.Syncing(progress, total)) }
         }
 
         override fun OnOptimizeLibrary() {
@@ -108,12 +122,13 @@ class LibraryViewModel(
         }
 
         override fun OnLibraryDownloadFinished(result: DownloaderResult) {
+            syncing = false
             downloader = null
-            if (result.result == DownloaderResult.DownloadResult.SUCCESSFUL) {
-                reload()
-            } else {
-                _state.update { it.copy(status = LibraryStatus.Missing) }
-                _messages.trySend(Message.DownloadFailed(result.messageStringId))
+            val succeeded = result.result == DownloaderResult.DownloadResult.SUCCESSFUL
+            // A failed sync leaves the library that was on the phone, if there was one.
+            refresh()
+            if (!succeeded) {
+                _messages.trySend(Message.SyncFailed(result.messageStringId))
             }
         }
     }
@@ -128,11 +143,15 @@ class LibraryViewModel(
     init {
         App.getPreferences().registerOnSharedPreferenceChangeListener(settingsListener)
         reload()
+        // The library is cheap to fetch, so it's kept up to date without being asked.
+        if (connected()) {
+            sync()
+        }
     }
 
     override fun onCleared() {
         App.getPreferences().unregisterOnSharedPreferenceChangeListener(settingsListener)
-        downloader?.removeOnLibraryDownloadListener(downloadListener)
+        downloader?.removeOnLibraryDownloadListener(syncListener)
     }
 
     /** Shows the top level again, from the database on this phone if there is one. */
@@ -143,22 +162,50 @@ class LibraryViewModel(
             }
             _state.update {
                 it.copy(
-                    status = if (top == null) LibraryStatus.Missing else LibraryStatus.Ready,
+                    status = when {
+                        // Still syncing: its progress stays shown.
+                        syncing -> it.status
+                        top == null -> LibraryStatus.Missing
+                        else -> LibraryStatus.Ready
+                    },
                     levels = listOfNotNull(top),
                 )
             }
         }
     }
 
-    /** Downloads the library from Clementine, replacing the one on this phone. */
-    fun download() {
-        if (downloader != null) {
+    /**
+     * Syncs the library from Clementine, replacing the one on this phone once it's complete; until
+     * then, the one on the phone can still be browsed.
+     */
+    fun sync() {
+        if (syncing) {
             return
         }
-        _state.update { it.copy(status = LibraryStatus.Downloading(0, 0), levels = emptyList()) }
-        downloader = ClementineLibraryDownloader(App.getApp()).apply {
-            addOnLibraryDownloadListener(downloadListener)
-            startDownload(ClementineMessage.getMessage(MsgType.GET_LIBRARY))
+        syncing = true
+        _state.update { it.copy(status = LibraryStatus.Syncing(0, 0)) }
+        downloader = startSync(syncListener)
+    }
+
+    /**
+     * Shows the library on the phone again, after a sync: the levels open stay open, re-read
+     * from the new library, or the top level shows if they're gone.
+     */
+    private fun refresh() {
+        viewModelScope.launch {
+            val opened = _state.value.levels.map { it.opened }
+            val levels = withContext(io) {
+                if (!libraryExists()) {
+                    emptyList()
+                } else {
+                    val filter = _state.value.filter
+                    opened.map { level(it, filter) }.takeIf { it.isNotEmpty() && it.last().items.isNotEmpty() }
+                        ?: listOf(level(null, filter))
+                }
+            }
+            _state.update {
+                it.copy(status = if (levels.isEmpty()) LibraryStatus.Missing else LibraryStatus.Ready, levels = levels)
+            }
         }
     }
 

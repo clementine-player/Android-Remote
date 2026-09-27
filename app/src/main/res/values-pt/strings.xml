@@ -48,11 +48,8 @@
   <string name="download_noti_only_wifi">Apenas descarregar por Wi-Fi.</string>
   <string name="download_noti_transcoding">Conversão de ficheiros</string>
   <string name="download_noti_transcoding_subtitle">Por favor aguarde</string>
-  <string name="library_download">A descarregar coleção</string>
   <string name="library_optimize">Otimização da base de dados</string>
-  <string name="library_empty">Coleção vazia. Deslize para baixo para descarregar a coleção!</string>
   <string name="library_no_search_results">Não existem faixas coincidentes com os critérios.</string>
-  <string name="library_download_error">Não foi possível descarregar a coleção</string>
   <string name="global_search_empty">Introduza os termos da pesquisa para procurar músicas no seu computador e na Internet</string>
   <string name="global_search_search">Pesquisar por algo</string>
   <string name="song_info_album">Álbum</string>
