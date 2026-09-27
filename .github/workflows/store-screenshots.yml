@@ -66,9 +66,11 @@ jobs:
           cache-from: type=gha,scope=clementine-it-showcase
           cache-to: type=gha,scope=clementine-it-showcase,mode=max
 
+      # STREAMING: remote streaming (--experimental-remote-streaming), so the screenshots show
+      # what the app offers with it: choosing where Clementine plays.
       - name: Start Clementine
         run: |
-          docker run -d --name clementine -p 5500:5500 clementine-it
+          docker run -d --name clementine -p 5500:5500 -e STREAMING=1 clementine-it
           for i in $(seq 90); do
             status=$(docker inspect -f '{{.State.Health.Status}}' clementine)
             [ "$status" = healthy ] && exit 0
