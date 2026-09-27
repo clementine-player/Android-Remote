@@ -9,6 +9,7 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage.ErrorMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RendererCapabilities;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -32,10 +33,19 @@ class ClementineSession implements AutoCloseable {
     /** Every message received so far, in order. */
     final List<Message> received = new ArrayList<>();
 
+    /** Told of every message received, such as a renderer handling its commands. */
+    Listener listener = message -> { };
+
     static ClementineSession connect(int authCode, boolean downloader) {
+        return connect(authCode, downloader, null);
+    }
+
+    /** Connects, offering Clementine an output when [renderer] isn't null. */
+    static ClementineSession connect(int authCode, boolean downloader,
+            RendererCapabilities renderer) {
         ClementineSession session = new ClementineSession();
         ClementineMessage connect = ClementineMessageFactory
-                .buildConnectMessage(HOST, PORT, authCode, false, downloader);
+                .buildConnectMessage(HOST, PORT, authCode, false, downloader, renderer);
         assertTrue("Could not connect to Clementine at " + HOST + ":" + PORT,
                 session.mConnection.createConnection(connect));
         return session;
@@ -75,6 +85,7 @@ class ClementineSession implements AutoCloseable {
                         + message.getErrorMessage());
             }
             received.add(message.getMessage());
+            listener.onMessage(message.getMessage());
             if (message.getMessageType() == type && matcher.matches(message.getMessage())) {
                 return message.getMessage();
             }
@@ -98,5 +109,9 @@ class ClementineSession implements AutoCloseable {
 
     interface Matcher {
         boolean matches(Message message);
+    }
+
+    interface Listener {
+        void onMessage(Message message);
     }
 }

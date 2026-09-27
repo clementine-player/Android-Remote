@@ -49,6 +49,8 @@ import de.qspool.clementineremote.backend.mediasession.MediaSessionController;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
+import de.qspool.clementineremote.backend.streaming.Renderer;
+import de.qspool.clementineremote.backend.streaming.ThisRenderer;
 import de.qspool.clementineremote.utils.Utilities;
 
 public class ClementineService extends Service {
@@ -157,6 +159,7 @@ public class ClementineService extends Service {
                     MediaSessionController mediaSessionController = new MediaSessionController(this,
                             App.ClementineConnection);
                     mediaSessionController.registerMediaSession();
+                    Renderer.attach(this, App.ClementineConnection);
 
                     GlobalSearchManager.getInstance().reset();
 
@@ -338,7 +341,8 @@ public class ClementineService extends Service {
 
             Message msg = Message.obtain();
             msg.obj = ClementineMessageFactory
-                    .buildConnectMessage(ip, port, auth, true, false);
+                    .buildConnectMessage(ip, port, auth, true, false,
+                            ThisRenderer.capabilitiesIfEnabled());
             App.ClementineConnection.mHandler.sendMessage(msg);
         }
     }

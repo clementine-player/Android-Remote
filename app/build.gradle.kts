@@ -146,6 +146,8 @@ protobuf {
 
 dependencies {
     implementation(libs.media3.session)
+    // Plays what Clementine streams, when this phone is its speaker.
+    implementation(libs.media3.exoplayer)
     implementation(libs.protobuf.javalite)
 
     // The UI moves to Jetpack Compose one screen at a time (see the plan's Phase 5).

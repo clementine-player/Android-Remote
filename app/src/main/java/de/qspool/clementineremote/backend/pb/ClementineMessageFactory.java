@@ -26,6 +26,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgT
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Repeat;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestChangeSong;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestConnect;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RendererCapabilities;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestDownloadSongs;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestInsertUrls;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestPlaylistSongs;
@@ -36,6 +37,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Requ
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongOffer;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuffle;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ShuffleMode;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestSetOutput;
 import de.qspool.clementineremote.backend.player.MySong;
 
 /**
@@ -114,6 +116,17 @@ public class ClementineMessageFactory {
      */
     public static ClementineMessage buildConnectMessage(String ip, int port, int authCode,
             boolean getPlaylistSongs, boolean isDownloader) {
+        return buildConnectMessage(ip, port, authCode, getPlaylistSongs, isDownloader, null);
+    }
+
+    /**
+     * Create the connect message of a connection that also offers this phone as an output
+     *
+     * @param renderer what this phone can play (remote streaming), or null. Servers without
+     *                 remote streaming ignore it.
+     */
+    public static ClementineMessage buildConnectMessage(String ip, int port, int authCode,
+            boolean getPlaylistSongs, boolean isDownloader, RendererCapabilities renderer) {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.CONNECT);
 
         RequestConnect.Builder requestConnect = RequestConnect.newBuilder();
@@ -121,6 +134,9 @@ public class ClementineMessageFactory {
         requestConnect.setAuthCode(authCode);
         requestConnect.setSendPlaylistSongs(getPlaylistSongs);
         requestConnect.setDownloader(isDownloader);
+        if (renderer != null) {
+            requestConnect.setRenderer(renderer);
+        }
 
         msg.setRequestConnect(requestConnect);
 
@@ -338,6 +354,15 @@ public class ClementineMessageFactory {
 
         msg.setRequestGlobalSearch(requestGlobalSearch);
 
+        return new ClementineMessage(msg);
+    }
+
+    /**
+     * Asks Clementine to play on another output: this computer ("local") or a renderer.
+     */
+    public static ClementineMessage buildSetOutput(String outputId) {
+        Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.SET_OUTPUT);
+        msg.setRequestSetOutput(RequestSetOutput.newBuilder().setOutputId(outputId));
         return new ClementineMessage(msg);
     }
 }

@@ -82,6 +82,13 @@
     <string name="connection_uptime">Connected for</string>
     <string name="connection_switch">Switch Clementine</string>
     <string name="connection_switch_summary">Pick another computer on your network</string>
+    <string name="output_title">Play on</string>
+    <string name="output_this_computer">This computer</string>
+    <string name="output_this_phone">%1$s (this phone)</string>
+    <string name="output_switching">Switching…</string>
+    <string name="output_playing_on">Playing on %1$s</string>
+    <string name="pref_renderer">Let Clementine play on this phone</string>
+    <string name="pref_renderer_summary">Clementine can send its music here, when it plays on other devices (experimental)</string>
 
     <string name="download_noti_title">Starting download</string>
     <plurals name="download_noti_n_downloads">

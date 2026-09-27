@@ -15,8 +15,10 @@
    limitations under the License.
 */
 
-// Note: this file is licensed under the Apache License instead of GPL, so 
+// Note: this file is licensed under the Apache License instead of GPL, so
 // 3rd party applications or libraries can use another license besides GPL.
+
+syntax = "proto2";
 
 package pb.remote;
 
@@ -25,379 +27,695 @@ option java_outer_classname = "ClementineRemoteProtocolBuffer";
 
 // The supported message types
 enum MsgType {
-    UNKNOWN = 0;
-    // Messages generally send from client to server
-    CONNECT = 1;
-    REQUEST_PLAYLISTS = 3;
-    REQUEST_PLAYLIST_SONGS = 4;
-    CHANGE_SONG = 5;
-    SET_VOLUME = 6;
-    SET_TRACK_POSITION = 7;
-    INSERT_URLS = 8;
-    REMOVE_SONGS = 9;
-    OPEN_PLAYLIST = 10;
-    CLOSE_PLAYLIST = 11;
-    GET_LYRICS = 14;
-    DOWNLOAD_SONGS = 15;
-    SONG_OFFER_RESPONSE = 16;
-    // Lastfm
-    LOVE = 12;
-    BAN = 13;
-    STOP_AFTER = 17;
-    GET_LIBRARY = 18;
-    RATE_SONG = 19;
-    GLOBAL_SEARCH = 100;
+  UNKNOWN = 0;
+  // Messages generally send from client to server
+  CONNECT = 1;
+  REQUEST_PLAYLISTS = 3;
+  REQUEST_PLAYLIST_SONGS = 4;
+  CHANGE_SONG = 5;
+  SET_VOLUME = 6;
+  SET_TRACK_POSITION = 7;
+  INSERT_URLS = 8;
+  REMOVE_SONGS = 9;
+  OPEN_PLAYLIST = 10;
+  CLOSE_PLAYLIST = 11;
+  UPDATE_PLAYLIST = 60;
+  GET_LYRICS = 14;
+  DOWNLOAD_SONGS = 15;
+  SONG_OFFER_RESPONSE = 16;
+  // Lastfm
+  LOVE = 12;
+  BAN = 13;
+  STOP_AFTER = 17;
+  GET_LIBRARY = 18;
+  RATE_SONG = 19;
+  GLOBAL_SEARCH = 100;
+  REQUEST_SAVED_RADIOS = 110;
+  // access Files from remote control
+  REQUEST_FILES = 200;
+  APPEND_FILES = 201;
 
-    // Messages send by both
-    DISCONNECT = 2;
-    PLAY = 20;
-    PLAYPAUSE = 21;
-    PAUSE = 22;
-    STOP = 23;
-    NEXT = 24;
-    PREVIOUS = 25;
-    SHUFFLE_PLAYLIST = 26;
-    // Messages that contain the repeat or random mode
-    // Either set by client or clementine
-    REPEAT = 27;
-    SHUFFLE = 28;
+  // Messages send by both
+  DISCONNECT = 2;
+  PLAY = 20;
+  PLAYPAUSE = 21;
+  PAUSE = 22;
+  STOP = 23;
+  NEXT = 24;
+  PREVIOUS = 25;
+  SHUFFLE_PLAYLIST = 26;
+  // Messages that contain the repeat or random mode
+  // Either set by client or clementine
+  REPEAT = 27;
+  SHUFFLE = 28;
 
-    // Messages send from server to client
-    INFO = 40;
-    CURRENT_METAINFO = 41;
-    PLAYLISTS = 42;
-    PLAYLIST_SONGS = 43;
-    ENGINE_STATE_CHANGED = 44;
-    KEEP_ALIVE = 45;
-    UPDATE_TRACK_POSITION = 46;
-    ACTIVE_PLAYLIST_CHANGED = 47;
-    FIRST_DATA_SENT_COMPLETE = 48;
-    LYRICS = 49;
-    SONG_FILE_CHUNK = 50;
-    DOWNLOAD_QUEUE_EMPTY = 51;
-    LIBRARY_CHUNK = 52;
-    DOWNLOAD_TOTAL_SIZE = 53;
-    GLOBAL_SEARCH_RESULT = 54;
-    TRANSCODING_FILES = 55;
-    GLOBAL_SEARCH_STATUS = 56;
+  // Messages send from server to client
+  INFO = 40;
+  CURRENT_METAINFO = 41;
+  PLAYLISTS = 42;
+  PLAYLIST_SONGS = 43;
+  ENGINE_STATE_CHANGED = 44;
+  KEEP_ALIVE = 45;
+  UPDATE_TRACK_POSITION = 46;
+  ACTIVE_PLAYLIST_CHANGED = 47;
+  FIRST_DATA_SENT_COMPLETE = 48;
+  LYRICS = 49;
+  SONG_FILE_CHUNK = 50;
+  DOWNLOAD_QUEUE_EMPTY = 51;
+  LIBRARY_CHUNK = 52;
+  DOWNLOAD_TOTAL_SIZE = 53;
+  GLOBAL_SEARCH_RESULT = 54;
+  TRANSCODING_FILES = 55;
+  GLOBAL_SEARCH_STATUS = 56;
+  // access Files from remote control
+  LIST_FILES = 202;
+
+  // Remote playback: a client acting as Clementine's audio output.
+  // Renderer -> server
+  RENDERER_STATUS = 302;
+  RENDERER_TRACK_ENDED = 303;
+  RENDERER_ERROR = 304;
+  // Controller -> server
+  REQUEST_OUTPUTS = 305;
+  SET_OUTPUT = 306;
+  // Server -> renderer
+  RENDER_LOAD = 320;
+  RENDER_PRELOAD = 321;
+  RENDER_PLAY = 322;
+  RENDER_PAUSE = 323;
+  RENDER_STOP = 324;
+  RENDER_SEEK = 325;
+  RENDER_SET_VOLUME = 326;
+  // Server -> all clients
+  OUTPUTS = 340;
 }
 
 // Valid Engine states
 enum EngineState {
-    Empty = 0;
-    Idle = 1;
-    Playing = 2;
-    Paused = 3;
+  Empty = 0;
+  Idle = 1;
+  Playing = 2;
+  Paused = 3;
 }
 
 // Song Metadata
 message SongMetadata {
-    enum Type {
-        UNKNOWN = 0;
-        ASF = 1;
-        FLAC = 2;
-        MP4 = 3;
-        MPC = 4;
-        MPEG = 5;
-        OGGFLAC = 6;
-        OGGSPEEX = 7;
-        OGGVORBIS = 8;
-        AIFF = 9;
-        WAV = 10;
-        TRUEAUDIO = 11;
-        CDDA = 12;
-        OGGOPUS = 13;
-        STREAM = 99;
-    }
+  enum Type {
+    UNKNOWN = 0;
+    ASF = 1;
+    FLAC = 2;
+    MP4 = 3;
+    MPC = 4;
+    MPEG = 5;
+    OGGFLAC = 6;
+    OGGSPEEX = 7;
+    OGGVORBIS = 8;
+    AIFF = 9;
+    WAV = 10;
+    TRUEAUDIO = 11;
+    CDDA = 12;
+    OGGOPUS = 13;
+    WAVPACK = 14;
+    SPC = 15;
+    VGM = 16;
+    APE = 17;
+    STREAM = 99;
+  }
 
-    optional int32 id = 1; // unique id of the song
-    optional int32 index = 2; // Index of the current row of the active playlist
-    optional string title = 3;
-    optional string album = 4;
-    optional string artist = 5;
-    optional string albumartist = 6;
-    optional int32 track = 7;
-    optional int32 disc = 8;
-    optional string pretty_year = 9;
-    optional string genre = 10;
-    optional int32 playcount = 11;
-    optional string pretty_length = 12;
-    optional bytes art = 13;
-    optional int32 length = 14;
-    optional bool is_local = 15;
-    optional string filename = 16;
-    optional int32 file_size = 17;
-    optional float rating = 18; // 0 (0 stars) to 1 (5 stars)
-    optional string url = 19;
-    optional string art_automatic = 20;
-    optional string art_manual = 21;
-    optional Type type = 22;
+  optional int32 id = 1;     // unique id of the song
+  optional int32 index = 2;  // Index of the current row of the active playlist
+  optional string title = 3;
+  optional string album = 4;
+  optional string artist = 5;
+  optional string albumartist = 6;
+  optional int32 track = 7;
+  optional int32 disc = 8;
+  optional string pretty_year = 9;
+  optional string genre = 10;
+  optional int32 playcount = 11;
+  optional string pretty_length = 12;
+  optional bytes art = 13;
+  optional int32 length = 14;
+  optional bool is_local = 15;
+  optional string filename = 16;
+  optional int32 file_size = 17;
+  optional float rating = 18;  // 0 (0 stars) to 1 (5 stars)
+  optional string url = 19;
+  optional string art_automatic = 20;
+  optional string art_manual = 21;
+  optional Type type = 22;
 }
 
-// Playlist informations
+// Playlist information
 message Playlist {
-    optional int32 id = 1;
-    optional string name = 2;
-    optional int32 item_count = 3;
-    optional bool active = 4;
-    optional bool closed = 5;
+  optional int32 id = 1;
+  optional string name = 2;
+  optional int32 item_count = 3;
+  optional bool active = 4;
+  optional bool closed = 5;
+  optional bool favorite = 6;
 }
 
 // Valid Repeatmodes
 enum RepeatMode {
-    Repeat_Off = 0;
-    Repeat_Track = 1;
-    Repeat_Album = 2;
-    Repeat_Playlist = 3;
+  Repeat_Off = 0;
+  Repeat_Track = 1;
+  Repeat_Album = 2;
+  Repeat_Playlist = 3;
+  Repeat_OneByOne = 4;
+  Repeat_Intro = 5;
 }
 
 // Valid Shuffle modes
 enum ShuffleMode {
-    Shuffle_Off = 0;
-    Shuffle_All = 1;
-    Shuffle_InsideAlbum = 2;
-    Shuffle_Albums = 3;
+  Shuffle_Off = 0;
+  Shuffle_All = 1;
+  Shuffle_InsideAlbum = 2;
+  Shuffle_Albums = 3;
 }
 
 message RequestPlaylists {
-    optional bool include_closed = 1;
+  optional bool include_closed = 1;
 }
 
 // A Client requests songs from a specific playlist
 message RequestPlaylistSongs {
-    optional int32 id = 1;
+  optional int32 id = 1;
 }
 
 // Client want to change track
 message RequestChangeSong {
-    // In which playlist is the song?
-    optional int32 playlist_id = 1;
-    // And on which position?
-    optional int32 song_index = 2;
+  // In which playlist is the song?
+  optional int32 playlist_id = 1;
+  // And on which position?
+  optional int32 song_index = 2;
 }
 
 // Set the volume
 message RequestSetVolume {
-    optional int32 volume = 1;
+  optional int32 volume = 1;
 }
 
 // Repeat and Random messages
 message Repeat {
-    optional RepeatMode repeat_mode = 1;
+  optional RepeatMode repeat_mode = 1;
 }
 
 message Shuffle {
-    optional ShuffleMode shuffle_mode = 1;
+  optional ShuffleMode shuffle_mode = 1;
 }
 
 // Response from server
 // General info
 message ResponseClementineInfo {
-    optional string version = 1;
-    optional EngineState state = 2;
+  optional string version = 1;
+  optional EngineState state = 2;
+
+  optional bool allow_downloads = 3;
+
+  // allowed extensions for REQUEST_FILES and LIST_FILES
+  repeated string files_music_extensions = 4;
+
+  // Optional abilities of the server. Unknown values are ignored by clients.
+  repeated ServerFeature features = 5;
 }
 
 // The current song played
 message ResponseCurrentMetadata {
-    optional SongMetadata song_metadata = 1;
+  optional SongMetadata song_metadata = 1;
 }
 
 // The playlists in clementine
 message ResponsePlaylists {
-    repeated Playlist playlist = 1;
+  repeated Playlist playlist = 1;
+  optional bool include_closed = 2;
 }
 
 // A list of songs in a playlist
 message ResponsePlaylistSongs {
-    optional Playlist requested_playlist = 1;
+  optional Playlist requested_playlist = 1;
 
-    // The songs that are in the playlist
-    repeated SongMetadata songs = 2;
+  // The songs that are in the playlist
+  repeated SongMetadata songs = 2;
 }
 
 // The current state of the play engine
 message ResponseEngineStateChanged {
-    optional EngineState state = 1;
+  optional EngineState state = 1;
 }
 
 // Sends the current position of the track
 message ResponseUpdateTrackPosition {
-    optional int32 position = 1;
+  optional int32 position = 1;
 }
 
 // The connect message containing the authentication code
 message RequestConnect {
-    optional int32 auth_code = 1;
-    optional bool send_playlist_songs = 2;
-    optional bool downloader = 3;
+  optional int32 auth_code = 1;
+  optional bool send_playlist_songs = 2;
+  optional bool downloader = 3;
+  // Present when the client also wants to act as a renderer.
+  optional RendererCapabilities renderer = 4;
 }
 
 // Respone, why the connection was closed
 enum ReasonDisconnect {
-    Server_Shutdown = 1;
-    Wrong_Auth_Code = 2;
-    Not_Authenticated = 3;
-    Download_Forbidden = 4;
+  Server_Shutdown = 1;
+  Wrong_Auth_Code = 2;
+  Not_Authenticated = 3;
+  Download_Forbidden = 4;
 }
 message ResponseDisconnect {
-    optional ReasonDisconnect reason_disconnect = 1;
+  optional ReasonDisconnect reason_disconnect = 1;
 }
 
 message ResponseActiveChanged {
-    optional int32 id = 1;
+  optional int32 id = 1;
 }
 
 // A client requests a new track position
 // position in seconds!
 message RequestSetTrackPosition {
-    optional int32 position = 1;
+  optional int32 position = 1;
 }
 
 message RequestInsertUrls {
-    // In which playlist should the urls be inserted?
-    optional int32 playlist_id = 1;
-    repeated string urls = 2;
-    optional int32 position = 3 [default=-1];
-    optional bool play_now = 4 [default=false];
-    optional bool enqueue = 5 [default=false];
-    repeated SongMetadata songs = 6;
+  // In which playlist should the urls be inserted?
+  optional int32 playlist_id = 1;
+  repeated string urls = 2;
+  optional int32 position = 3 [default = -1];
+  optional bool play_now = 4 [default = false];
+  optional bool enqueue = 5 [default = false];
+  repeated SongMetadata songs = 6;
+  // if we wish to create a new playlist
+  optional string new_playlist_name = 7;
 }
 
 // Client want to change track
 message RequestRemoveSongs {
-    // In which playlist is the songs?
-    optional int32 playlist_id = 1;
-    // And on which position?
-    repeated int32 songs = 2;
+  // In which playlist is the songs?
+  optional int32 playlist_id = 1;
+  // And on which position?
+  repeated int32 songs = 2;
 }
 
 // Messages for opening / closing playlists
 message RequestOpenPlaylist {
-    optional int32 playlist_id = 1;
+  optional int32 playlist_id = 1;
 }
 message RequestClosePlaylist {
-    optional int32 playlist_id = 1;
+  optional int32 playlist_id = 1;
+}
+message RequestUpdatePlaylist {
+  optional int32 playlist_id = 1;
+  optional string new_playlist_name = 2;
+  optional bool favorite = 3;
+  optional bool create_new_playlist = 4;
+  optional bool clear_playlist = 5;
 }
 
 // Message containing lyrics
 message ResponseLyrics {
-    repeated Lyric lyrics = 1;
+  repeated Lyric lyrics = 1;
 }
 message Lyric {
-    optional string id = 1;
-    optional string title = 2;
-    optional string content = 3;
+  optional string id = 1;
+  optional string title = 2;
+  optional string content = 3;
 }
 
 // Message request for downloading songs
 enum DownloadItem {
-    CurrentItem = 1;
-    ItemAlbum = 2;
-    APlaylist = 3;
-    Urls = 4;
+  CurrentItem = 1;
+  ItemAlbum = 2;
+  APlaylist = 3;
+  Urls = 4;
 }
 message RequestDownloadSongs {
-    optional DownloadItem download_item = 1;
-    optional int32 playlist_id = 2;
-    repeated string urls = 3;
+  optional DownloadItem download_item = 1;
+  optional int32 playlist_id = 2;
+  repeated string urls = 3;
+
+  // within a Playlist, download only requested songs
+  repeated int32 songs_ids = 4;
+
+  // download from the FileSystem remotely
+  // using the defined root directory and the urls (filenames)
+  optional string relative_path = 5;
 }
 
 message ResponseSongFileChunk {
-    optional int32 chunk_number = 1;
-    optional int32 chunk_count = 2;
-    optional int32 file_number = 3;
-    optional int32 file_count = 4;
-    optional SongMetadata song_metadata = 6; // only sent with first chunk!
-    optional bytes data = 7;
-    optional int32 size = 8;
-    optional bytes file_hash = 9;
+  optional int32 chunk_number = 1;
+  optional int32 chunk_count = 2;
+  optional int32 file_number = 3;
+  optional int32 file_count = 4;
+  optional SongMetadata song_metadata = 6;  // only sent with first chunk!
+  optional bytes data = 7;
+  optional int32 size = 8;
+  optional bytes file_hash = 9;
 }
 
 message ResponseLibraryChunk {
-    optional int32 chunk_number = 1;
-    optional int32 chunk_count = 2;
-    optional bytes data = 3;
-    optional int32 size = 4;
-    optional bytes file_hash = 5;
+  optional int32 chunk_number = 1;
+  optional int32 chunk_count = 2;
+  optional bytes data = 3;
+  optional int32 size = 4;
+  optional bytes file_hash = 5;
 }
 
 message ResponseSongOffer {
-    optional bool accepted = 1; // true = client wants to download item
+  optional bool accepted = 1;  // true = client wants to download item
 }
 
 message RequestRateSong {
-    optional float rating = 1; // 0 to 1
+  optional float rating = 1;  // 0 to 1
 }
 
 message ResponseDownloadTotalSize {
-    optional int32 total_size = 1;
-    optional int32 file_count = 2;
+  optional int32 total_size = 1;
+  optional int32 file_count = 2;
 }
 
 message RequestGlobalSearch {
-    optional string query = 1;
+  optional string query = 1;
 }
 
 message ResponseGlobalSearch {
-    optional int32 id = 1;
-    optional string query = 2;
-    optional string search_provider = 3;
-    repeated SongMetadata song_metadata = 4;
-    optional bytes search_provider_icon = 5;
+  optional int32 id = 1;
+  optional string query = 2;
+  optional string search_provider = 3;
+  repeated SongMetadata song_metadata = 4;
+  optional bytes search_provider_icon = 5;
 }
 
 message ResponseTranscoderStatus {
-    optional int32 processed = 1;
-    optional int32 total = 2;
+  optional int32 processed = 1;
+  optional int32 total = 2;
 }
 
 enum GlobalSearchStatus {
-    GlobalSearchStarted = 1;
-    GlobalSearchFinished = 2;
+  GlobalSearchStarted = 1;
+  GlobalSearchFinished = 2;
 }
 
 message ResponseGlobalSearchStatus {
-    optional int32 id = 1;
-    optional string query = 2;
-    optional GlobalSearchStatus status = 3;
+  optional int32 id = 1;
+  optional string query = 2;
+  optional GlobalSearchStatus status = 3;
+}
+
+// access the FileSystem remotely from a defined root directory
+message RequestListFiles {
+  optional string relative_path = 1;
+}
+
+message FileMetadata {
+  optional string filename = 1;
+  optional bool is_dir = 2;
+}
+
+message ResponseListFiles {
+  enum Error {
+    NONE = 0;
+    ROOT_DIR_NOT_SET = 1;
+    DIR_NOT_ACCESSIBLE = 2;
+    DIR_NOT_EXIST = 3;
+    UNKNOWN = 4;
+  }
+  optional string relative_path = 1;
+  repeated FileMetadata files = 2;
+  optional Error error = 3;
+}
+
+message RequestAppendFiles {
+  // where to append the files
+  optional int32 playlist_id = 1;
+  // or we create a new playlist
+  optional string new_playlist_name = 2;
+
+  optional string relative_path = 3;
+  repeated string files = 4;
+
+  optional bool play_now = 5;
+  optional bool clear_first = 6;
+}
+
+message Stream {
+  optional string name = 1;
+  optional string url = 2;
+  optional string url_logo = 3;
+}
+message ResponseSavedRadios {
+  repeated Stream streams = 1;
+}
+
+// Remote playback. New definitions below follow buf's STANDARD lint rules:
+// every enum starts with <ENUM_NAME>_UNSPECIFIED = 0 and prefixes its values
+// with its own name, and enums are preferred over bools.
+
+// Optional abilities of the server, sent in ResponseClementineInfo.
+enum ServerFeature {
+  SERVER_FEATURE_UNSPECIFIED = 0;
+  // The server can send playback to renderers (streaming is enabled).
+  SERVER_FEATURE_RENDERING = 1;
+}
+
+// Optional abilities of a renderer, beyond decoding its formats.
+enum RendererFeature {
+  RENDERER_FEATURE_UNSPECIFIED = 0;
+  // Can queue a RENDER_PRELOAD item and start it without a gap.
+  RENDERER_FEATURE_GAPLESS = 1;
+  // Sends HTTP Range requests, so it can seek in Direct streams itself.
+  RENDERER_FEATURE_HTTP_RANGE = 2;
+}
+
+// One format a renderer can decode, with its limits.
+message AudioFormat {
+  // "audio/flac", "audio/ogg; codecs=opus", "audio/mpeg". Without codecs=,
+  // any codec in that container.
+  optional string mime_type = 1;
+  // The sample rates it plays. Empty: any rate the format allows.
+  repeated int32 sample_rates_hz = 2;
+  // Unset or 0: as many channels as the format allows.
+  optional int32 max_channels = 3;
+}
+
+// What a renderer can play. Sent in RequestConnect.
+message RendererCapabilities {
+  // Stable per install (a UUID), so a renderer is recognised after
+  // reconnecting.
+  optional string renderer_id = 1;
+  // Shown in output pickers: "Pixel 9", "Kitchen tablet".
+  optional string display_name = 2;
+  // The formats it can decode, in no particular order.
+  repeated AudioFormat formats = 3;
+  // Unknown values are ignored by the server.
+  repeated RendererFeature features = 4;
+  // Upper limit the renderer wants, for example on mobile data. Unset or 0
+  // means no limit.
+  optional int32 max_bitrate_kbps = 5;
+}
+
+// Whether an output can be used right now.
+enum OutputState {
+  OUTPUT_STATE_UNSPECIFIED = 0;
+  // Connected and can be chosen.
+  OUTPUT_STATE_AVAILABLE = 1;
+  // Playback is being handed over to it.
+  OUTPUT_STATE_ACTIVATING = 2;
+  // The current output.
+  OUTPUT_STATE_ACTIVE = 3;
+}
+
+// One place playback can go: this computer or a renderer.
+message Output {
+  // "local" for this computer, otherwise the renderer_id.
+  optional string output_id = 1;
+  optional string display_name = 2;
+  optional OutputState state = 3;
+}
+
+// Every output, sent with OUTPUTS.
+message ResponseOutputs {
+  repeated Output outputs = 1;
+}
+
+// A controller asks for playback to move to another output.
+message RequestSetOutput {
+  optional string output_id = 1;
+}
+
+// How the server delivers an item. Informational for the renderer; how to
+// seek is given separately by SeekMethod.
+enum StreamMode {
+  STREAM_MODE_UNSPECIFIED = 0;
+  // The original file, byte for byte.
+  STREAM_MODE_DIRECT = 1;
+  // Output of a GStreamer pipeline, remuxed or encoded.
+  STREAM_MODE_PIPELINE = 2;
+}
+
+// How a renderer seeks within an item.
+enum SeekMethod {
+  // Treat as SEEK_METHOD_NONE.
+  SEEK_METHOD_UNSPECIFIED = 0;
+  // Not seekable, for example live radio.
+  SEEK_METHOD_NONE = 1;
+  // Seek within the current URL using HTTP Range requests.
+  SEEK_METHOD_BYTE_RANGE = 2;
+  // Load the url given in RequestRenderSeek.
+  SEEK_METHOD_NEW_URL = 3;
+}
+
+// One track, as the renderer should fetch and present it.
+message RenderItem {
+  optional int32 item_id = 1;
+  // http://host:port/s/<token>/<item_id>
+  optional string url = 2;
+  optional string mime_type = 3;
+  optional StreamMode mode = 4;
+  // Unset for items with no known length, such as radio.
+  optional int64 length_ms = 5;
+  optional SeekMethod seek_method = 6;
+  // For the lock screen and notification UI.
+  optional SongMetadata song = 7;
+}
+
+// What a renderer does once an item has loaded.
+enum LoadStartState {
+  // Treat as LOAD_START_STATE_PAUSED.
+  LOAD_START_STATE_UNSPECIFIED = 0;
+  LOAD_START_STATE_PAUSED = 1;
+  LOAD_START_STATE_PLAYING = 2;
+}
+
+// Load an item now, replacing whatever is playing.
+message RequestRenderLoad {
+  optional RenderItem item = 1;
+  // Where to start. For SEEK_METHOD_NEW_URL items, item.url already starts
+  // there; for SEEK_METHOD_BYTE_RANGE items the renderer seeks to it.
+  optional int64 start_ms = 2;
+  optional LoadStartState start_state = 3;
+}
+
+// Queue the item that follows the current one.
+message RequestRenderPreload {
+  optional RenderItem item = 1;
+}
+
+// Seek within the current item.
+message RequestRenderSeek {
+  optional int32 item_id = 1;
+  optional int64 position_ms = 2;
+  // Set when the item's seek_method is SEEK_METHOD_NEW_URL.
+  optional string url = 3;
+}
+
+// Set the renderer's volume.
+message RequestRenderVolume {
+  // 0..100
+  optional int32 volume = 1;
+}
+
+// A renderer's playback state. Separate from EngineState because a renderer
+// has states the local engine doesn't report, such as buffering.
+enum RendererState {
+  RENDERER_STATE_UNSPECIFIED = 0;
+  RENDERER_STATE_IDLE = 1;
+  RENDERER_STATE_LOADING = 2;
+  RENDERER_STATE_BUFFERING = 3;
+  RENDERER_STATE_PLAYING = 4;
+  RENDERER_STATE_PAUSED = 5;
+}
+
+// Sent at 1 Hz while playing, and whenever the state changes.
+message RendererStatus {
+  optional int32 item_id = 1;
+  optional RendererState state = 2;
+  optional int64 position_ms = 3;
+  optional int32 buffered_percent = 4;
+}
+
+// The item finished playing to its end.
+message RendererTrackEnded {
+  optional int32 item_id = 1;
+}
+
+// What an error affects, and so what the server does about it.
+enum RendererErrorScope {
+  // Treat as RENDERER_ERROR_SCOPE_ITEM.
+  RENDERER_ERROR_SCOPE_UNSPECIFIED = 0;
+  // This item can't be played. Retry through the pipeline or skip it.
+  RENDERER_ERROR_SCOPE_ITEM = 1;
+  // A temporary problem, such as a network drop. Reload at the last
+  // position.
+  RENDERER_ERROR_SCOPE_TRANSIENT = 2;
+  // The renderer can't continue. Fall back to local output.
+  RENDERER_ERROR_SCOPE_RENDERER = 3;
+}
+
+// Something went wrong on the renderer.
+message RendererError {
+  optional int32 item_id = 1;
+  optional string message = 2;
+  optional RendererErrorScope scope = 3;
 }
 
 // The message itself
 message Message {
-    optional int32 version = 1 [default=21];
-    optional MsgType type = 2 [default=UNKNOWN]; // What data is in the message?
+  // The app keeps 21, the version of the Clementine releases it supports:
+  // it turns away servers older than its own version.
+  optional int32 version = 1 [default = 21];
+  optional MsgType type = 2
+      [default = UNKNOWN];  // What data is in the message?
 
-    optional RequestConnect request_connect = 21;
-    optional RequestPlaylists request_playlists = 27;
-    optional RequestPlaylistSongs request_playlist_songs = 10;
-    optional RequestChangeSong request_change_song = 11;
-    optional RequestSetVolume request_set_volume = 12;
-    optional RequestSetTrackPosition request_set_track_position = 23;
-    optional RequestInsertUrls request_insert_urls = 25;
-    optional RequestRemoveSongs request_remove_songs = 26;
-    optional RequestOpenPlaylist request_open_playlist = 28;
-    optional RequestClosePlaylist request_close_playlist = 29;
-    optional RequestDownloadSongs request_download_songs = 31;
-    optional RequestRateSong request_rate_song = 35;
-    optional RequestGlobalSearch request_global_search = 37;
+  optional RequestConnect request_connect = 21;
+  optional RequestPlaylists request_playlists = 27;
+  optional RequestPlaylistSongs request_playlist_songs = 10;
+  optional RequestChangeSong request_change_song = 11;
+  optional RequestSetVolume request_set_volume = 12;
+  optional RequestSetTrackPosition request_set_track_position = 23;
+  optional RequestInsertUrls request_insert_urls = 25;
+  optional RequestRemoveSongs request_remove_songs = 26;
+  optional RequestOpenPlaylist request_open_playlist = 28;
+  optional RequestClosePlaylist request_close_playlist = 29;
+  optional RequestUpdatePlaylist request_update_playlist = 53;
+  optional RequestDownloadSongs request_download_songs = 31;
+  optional RequestRateSong request_rate_song = 35;
+  optional RequestGlobalSearch request_global_search = 37;
+  optional RequestListFiles request_list_files = 50;
+  optional RequestAppendFiles request_append_files = 51;
 
-    optional Repeat repeat = 13;
-    optional Shuffle shuffle = 14;
+  optional Repeat repeat = 13;
+  optional Shuffle shuffle = 14;
 
-    optional ResponseClementineInfo response_clementine_info = 15;
-    optional ResponseCurrentMetadata response_current_metadata = 16;
-    optional ResponsePlaylists response_playlists = 17;
-    optional ResponsePlaylistSongs response_playlist_songs = 18;
-    optional ResponseEngineStateChanged response_engine_state_changed = 19;
-    optional ResponseUpdateTrackPosition response_update_track_position = 20;
-    optional ResponseDisconnect response_disconnect = 22;
-    optional ResponseActiveChanged response_active_changed = 24;
-    optional ResponseLyrics response_lyrics = 30;
-    optional ResponseSongFileChunk response_song_file_chunk = 32;
-    optional ResponseSongOffer response_song_offer = 33;
-    optional ResponseLibraryChunk response_library_chunk = 34;
-    optional ResponseDownloadTotalSize response_download_total_size = 36;
-    optional ResponseGlobalSearch response_global_search = 38;
-    optional ResponseTranscoderStatus response_transcoder_status = 39;
-    optional ResponseGlobalSearchStatus response_global_search_status = 40;
+  optional ResponseClementineInfo response_clementine_info = 15;
+  optional ResponseCurrentMetadata response_current_metadata = 16;
+  optional ResponsePlaylists response_playlists = 17;
+  optional ResponsePlaylistSongs response_playlist_songs = 18;
+  optional ResponseEngineStateChanged response_engine_state_changed = 19;
+  optional ResponseUpdateTrackPosition response_update_track_position = 20;
+  optional ResponseDisconnect response_disconnect = 22;
+  optional ResponseActiveChanged response_active_changed = 24;
+  optional ResponseLyrics response_lyrics = 30;
+  optional ResponseSongFileChunk response_song_file_chunk = 32;
+  optional ResponseSongOffer response_song_offer = 33;
+  optional ResponseLibraryChunk response_library_chunk = 34;
+  optional ResponseDownloadTotalSize response_download_total_size = 36;
+  optional ResponseGlobalSearch response_global_search = 38;
+  optional ResponseTranscoderStatus response_transcoder_status = 39;
+  optional ResponseGlobalSearchStatus response_global_search_status = 40;
+  optional ResponseListFiles response_list_files = 52;
+  optional ResponseSavedRadios response_saved_radios = 54;
+
+  // Remote playback
+  optional ResponseOutputs response_outputs = 61;
+  optional RequestSetOutput request_set_output = 62;
+  optional RequestRenderLoad request_render_load = 63;
+  optional RequestRenderPreload request_render_preload = 64;
+  optional RequestRenderSeek request_render_seek = 65;
+  optional RequestRenderVolume request_render_volume = 66;
+  optional RendererStatus renderer_status = 67;
+  optional RendererError renderer_error = 68;
+  optional RendererTrackEnded renderer_track_ended = 69;
 }

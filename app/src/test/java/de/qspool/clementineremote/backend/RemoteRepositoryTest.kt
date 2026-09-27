@@ -5,6 +5,12 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementinePbParser
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Output
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.OutputState
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseClementineInfo
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseOutputs
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ServerFeature
+import de.qspool.clementineremote.backend.streaming.ThisRenderer
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseCurrentMetadata
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseUpdateTrackPosition
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuffle
@@ -154,5 +160,27 @@ class RemoteRepositoryTest {
         player.rate(4f)
 
         assertEquals(0.8f, player.nowPlaying.value.song!!.rating, 0.001f)
+    }
+
+    @Test
+    fun followsWhereClementinePlays() {
+        receive(message(MsgType.INFO).setResponseClementineInfo(
+            ResponseClementineInfo.newBuilder().setVersion("1.5").addFeatures(ServerFeature.SERVER_FEATURE_RENDERING)))
+        assertTrue(RemoteRepository.outputs.value.supported)
+
+        receive(message(MsgType.OUTPUTS).setResponseOutputs(ResponseOutputs.newBuilder()
+            .addOutputs(Output.newBuilder().setOutputId("local").setDisplayName("This computer")
+                .setState(OutputState.OUTPUT_STATE_AVAILABLE))
+            .addOutputs(Output.newBuilder().setOutputId(ThisRenderer.id()).setDisplayName("Pixel")
+                .setState(OutputState.OUTPUT_STATE_ACTIVE))))
+
+        val outputs = RemoteRepository.outputs.value
+        assertEquals(listOf("local", ThisRenderer.id()), outputs.outputs.map { it.id })
+        assertEquals("Pixel", outputs.active?.name)
+        assertTrue(outputs.active!!.isThisPhone)
+
+        // A Clementine without remote streaming.
+        receive(message(MsgType.INFO).setResponseClementineInfo(ResponseClementineInfo.newBuilder().setVersion("1.4")))
+        assertFalse(RemoteRepository.outputs.value.supported)
     }
 }

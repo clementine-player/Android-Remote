@@ -57,6 +57,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.qspool.clementineremote.R
 import de.qspool.clementineremote.backend.Clementine
+import de.qspool.clementineremote.backend.RemoteRepository
 import de.qspool.clementineremote.backend.RemoteRepository.NowPlaying
 import de.qspool.clementineremote.backend.player.MySong
 import de.qspool.clementineremote.utils.Utilities
@@ -93,9 +94,13 @@ fun PlayerScreen(actions: PlayerActions, viewModel: PlayerViewModel = viewModel(
         toast = Toast.makeText(context, text, Toast.LENGTH_SHORT).apply { show() }
     }
     val lastFm = remember { viewModel.lastFm() }
+    val outputs by RemoteRepository.outputs.collectAsStateWithLifecycle()
+    // Only said when it isn't Clementine's own computer.
+    val playingOn = outputs.active?.takeIf { it.id != RemoteRepository.LOCAL_OUTPUT }?.name
     PlayerContent(
         nowPlaying,
         playingFrom = remember(nowPlaying.song) { viewModel.playingFrom() },
+        playingOn = playingOn,
         lastFm = lastFm,
         actions = actions,
         onSeek = viewModel::seekTo,
@@ -139,9 +144,11 @@ internal fun PlayerContent(
     onBan: () -> Unit,
     controls: @Composable () -> Unit,
     modifier: Modifier = Modifier,
+    /** The device Clementine plays on, when it isn't its own computer. */
+    playingOn: String? = null,
 ) {
     Column(modifier.fillMaxSize().safeDrawingPadding().testTag("player")) {
-        TopRow(playingFrom, lastFm, actions::onCollapse, onStop, onBan)
+        TopRow(playingFrom, playingOn, lastFm, actions::onCollapse, onStop, onBan)
         BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
             val song = nowPlaying.song
             // The artwork is whatever square is left over, so short screens keep every control.
@@ -191,6 +198,7 @@ internal fun PlayerContent(
 @Composable
 private fun TopRow(
     playingFrom: String?,
+    playingOn: String?,
     lastFm: Boolean,
     onCollapse: () -> Unit,
     onStop: () -> Unit,
@@ -214,6 +222,24 @@ private fun TopRow(
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.testTag("playingFrom"),
                 )
+            }
+            if (playingOn != null) {
+                Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        painterResource(R.drawable.ic_speaker),
+                        null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(16.dp),
+                    )
+                    Text(
+                        stringResource(R.string.output_playing_on, playingOn),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.testTag("playingOn"),
+                    )
+                }
             }
         }
         Box {

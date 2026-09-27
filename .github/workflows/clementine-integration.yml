@@ -84,7 +84,9 @@ jobs:
 
       - name: Start Clementine
         run: |
-          docker run -d --name clementine -p 5500:5500 -e AUTH_CODE="$AUTH_CODE" clementine-it
+          # STREAMING: remote streaming, which RemoteStreamingIntegrationTest needs; releases without it
+          # skip that test.
+          docker run -d --name clementine -p 5500:5500 -e AUTH_CODE="$AUTH_CODE" -e STREAMING=1 clementine-it
           for i in $(seq 90); do
             status=$(docker inspect -f '{{.State.Health.Status}}' clementine)
             [ "$status" = healthy ] && exit 0

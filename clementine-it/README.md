@@ -25,11 +25,13 @@ A normal `./gradlew test` skips them.
 gh release download --repo clementine-player/Clementine \
     --pattern '*resolute_amd64.deb' --dir clementine-it
 docker build -t clementine-it clementine-it
-docker run --rm -d --name clementine -p 5500:5500 -e AUTH_CODE=12345 clementine-it
+docker run --rm -d --name clementine -p 5500:5500 -e AUTH_CODE=12345 -e STREAMING=1 clementine-it
 # wait until `docker inspect -f '{{.State.Health.Status}}' clementine` says healthy
 ./gradlew testFdroidDebugUnitTest --tests 'de.qspool.clementineremote.integration.*' \
     -Pclementine.host=localhost -Pclementine.authCode=12345
 ```
+
+`STREAMING=1` starts Clementine with remote streaming (`--experimental-remote-streaming` and *Allow playing on remote devices*), so it can play on the app's renderer; without it, `RemoteStreamingIntegrationTest` is skipped.
 
 CI uses Clementine's latest release by default. You can choose a different release tag when starting the workflow by hand.
 

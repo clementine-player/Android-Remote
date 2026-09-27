@@ -7,6 +7,9 @@ import de.qspool.clementineremote.backend.ClementinePlayerConnection.ConnectionS
 import de.qspool.clementineremote.backend.listener.PlayerConnectionListener
 import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.OutputState
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ServerFeature
+import de.qspool.clementineremote.backend.streaming.ThisRenderer
 import de.qspool.clementineremote.backend.player.MySong
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,6 +39,30 @@ object RemoteRepository {
         val isPlaying: Boolean get() = state == Clementine.State.PLAY
     }
 
+    /** Somewhere Clementine can play: its own computer, or a renderer such as this phone. */
+    data class Output(
+        /** [LOCAL_OUTPUT] for Clementine's computer. */
+        val id: String,
+        val name: String,
+        val active: Boolean,
+        /** Playback is moving to it. */
+        val activating: Boolean,
+    ) {
+        val isThisPhone: Boolean get() = id == ThisRenderer.id()
+    }
+
+    /** Where Clementine can play. */
+    data class Outputs(
+        /** Whether this Clementine can play elsewhere than on its own computer. */
+        val supported: Boolean = false,
+        val outputs: List<Output> = emptyList(),
+    ) {
+        val active: Output? get() = outputs.firstOrNull { it.active }
+    }
+
+    /** The output id of Clementine's own computer. */
+    const val LOCAL_OUTPUT = "local"
+
     private val _connection = MutableStateFlow(ConnectionStatus.IDLE)
 
     /** The connection to Clementine. */
@@ -56,12 +83,21 @@ object RemoteRepository {
     @JvmStatic
     val lyricsAnswers: StateFlow<Int> = _lyricsAnswers.asStateFlow()
 
+    private val _outputs = MutableStateFlow(Outputs())
+
+    /** Where Clementine can play (remote streaming), and where it plays now. */
+    @JvmStatic
+    val outputs: StateFlow<Outputs> = _outputs.asStateFlow()
+
     /** Follows a new connection: its status, and the messages that change what's playing. */
     @JvmStatic
     fun attach(connection: ClementinePlayerConnection) {
         connection.addPlayerConnectionListener(object : PlayerConnectionListener {
             override fun onConnectionStatusChanged(status: ConnectionStatus) {
                 _connection.value = status
+                if (status == ConnectionStatus.DISCONNECTED) {
+                    _outputs.value = Outputs()
+                }
             }
 
             override fun onClementineMessageReceived(message: ClementineMessage) {
@@ -76,7 +112,25 @@ object RemoteRepository {
             return
         }
         when (message.messageType) {
-            MsgType.INFO,
+            MsgType.INFO -> {
+                val supported = ServerFeature.SERVER_FEATURE_RENDERING in
+                    message.message.responseClementineInfo.featuresList
+                _outputs.value = _outputs.value.copy(supported = supported)
+                if (supported) {
+                    send(ClementineMessage.getMessage(MsgType.REQUEST_OUTPUTS))
+                }
+                refresh()
+            }
+            MsgType.OUTPUTS -> _outputs.value = _outputs.value.copy(
+                outputs = message.message.responseOutputs.outputsList.map {
+                    Output(
+                        id = it.outputId,
+                        name = it.displayName,
+                        active = it.state == OutputState.OUTPUT_STATE_ACTIVE,
+                        activating = it.state == OutputState.OUTPUT_STATE_ACTIVATING,
+                    )
+                },
+            )
             MsgType.CURRENT_METAINFO,
             MsgType.PLAY,
             MsgType.PAUSE,
