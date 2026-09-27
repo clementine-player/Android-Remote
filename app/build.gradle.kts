@@ -25,7 +25,8 @@ android {
         applicationId = "de.qspool.clementineremote"
         minSdk = 23
         targetSdk = 36
-        // Bump both on every release; F-Droid reads them from here.
+        // master keeps the next version with -dev. Each release commit sets both (see
+        // .github/workflows/release.yml), and F-Droid reads them from its tag.
         versionCode = 800
         versionName = "13-dev"
 
