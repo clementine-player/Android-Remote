@@ -10,41 +10,51 @@ The app is built in two flavors that differ only in their application ID:
 Google Play keeps `de.qspool.clementineremote` reserved for the original author's account,
 so the Play build needs its own ID. F-Droid keeps the original so existing installs upgrade.
 
-## Releasing a version
+## Releases
 
-A version tag publishes the release everywhere (`.github/workflows/release.yml`):
+Releases are automatic, and only come when there is something to tell users
+(`.github/workflows/release.yml`).
 
-- a **GitHub release**, with the changelog as its notes and the APK attached, signed with the
-  release key in Cloud KMS;
-- on **Google Play**, the build internal testing already has for the tagged commit goes to the
-  closed testing track (`alpha`, or the repository variable `PLAY_RELEASE_TRACK`), with the
-  changelog as its release notes;
-- **F-Droid** builds the tag itself, reading the version from `app/build.gradle.kts` and the
-  changelog from `fastlane/`.
+**Release notes live in commit messages.** A commit that changes something users notice ends
+with a `Release-note:` trailer: one line, written for users (what's new, not how it was done):
 
-To release, for example, version 13:
+```
+Show the song's lyrics in the player
 
-1. In `app/build.gradle.kts`, set `versionName = "13"` and raise `versionCode` (say to `801`).
-2. Write the changelog, at most 500 characters, as
-   `fastlane/metadata/android/en-US/changelogs/801.txt`. It is what F-Droid, Google Play and
-   the GitHub release show, so it is for users: what's new, not how it was done.
-3. Check both with `scripts/check_release.sh v13`, and merge them to `master` in a pull request.
-4. Once the *play* workflow has run for that commit, tag it and push the tag:
+Release-note: The player shows the song's lyrics, when Clementine finds them.
+```
 
-   ```sh
-   git tag v13 <commit> && git push origin v13
-   ```
+Commits without one (refactoring, tests, CI, docs) never make a release. With rebase merges,
+each commit keeps its trailer on `master`.
 
-   The release fails without changing anything if the tag doesn't match `versionName`, the
-   changelog is missing or too long, or the commit isn't on `master`.
-5. Set `versionName = "14-dev"` for what comes next, keeping `versionCode`.
+**Every Monday** the release workflow collects the notes since the last release
+(`scripts/plan_release.sh`; run it to see what the next release would be). With none, it does
+nothing. With some, it releases:
+
+- It makes a **release commit** on top of `master` that sets the version and writes the notes
+  as the fastlane changelog, and pushes it as the tag `v<version>`. Nothing is pushed to
+  `master`, which keeps its `-dev` version.
+- **F-Droid** builds that tag, reading the version and changelog from it.
+- A **GitHub release** gets every note, and the APK, signed with the release key in Cloud KMS.
+- **Google Play** gets the bundle on the closed testing track (`alpha`, or the repository
+  variable `PLAY_RELEASE_TRACK`), with the notes as its release notes: at most 500
+  characters, so a long list ends with "And more fixes and improvements."
+
+**Versions.** Releases are named after `master`'s `versionName` without `-dev`: 13, then
+13.1, 13.2 and so on. For a major version, change `master` to `14-dev`. Version codes come
+from `master`'s commit count: twice it for the internal testing builds (`play.yml`), and one
+more for a release, so every build's code is higher than the one before on both Play and
+F-Droid.
+
+To release before Monday, run the workflow by hand (*Actions → release → Run workflow*). If a
+release failed after its tag was pushed (Google Play refused the upload, say), run it with
+that tag to publish it again.
 
 ### One-time setup for releases
 
 1. **Google Cloud.** Review [scripts/gcp_release_setup.sh](scripts/gcp_release_setup.sh) and
    run it, after `gcp_play_setup.sh`, as an admin of `clementine-data`. It creates the release
-   key (a second key, not Play's upload key), lets the service account sign with it, and lets
-   release tags through the provider as well as `master`.
+   key (a second key, not Play's upload key) and lets the service account sign with it.
 2. **Make the release certificate** and commit it as `app/release_cert.pem`, as for the
    upload certificate below. Every GitHub release must be signed with it, so this is done
    once:
@@ -55,23 +65,23 @@ To release, for example, version 13:
      --subject "CN=Clementine Remote,O=Clementine" --out app/release_cert.pem
    ```
 
-3. **Protect the tags:** a repository ruleset for `v*` tags that only maintainers can create,
-   update or delete, since a tag now releases the app.
-4. **Google Play:** create the closed testing track's testers list in Play Console (*Testing →
+3. **Google Play:** create the closed testing track's testers list in Play Console (*Testing →
    Closed testing*). The service account's *Release apps to testing tracks* permission
    covers it; releasing to production needs *Release to production* too, and
    `PLAY_RELEASE_TRACK` set to `production`.
+4. If `v*` tags get a repository ruleset, let GitHub Actions bypass it: the workflow pushes
+   the tags.
 
 Until each certificate is committed, the release skips its part with a notice: without
 `release_cert.pem` the GitHub release has no APK, and without `upload_cert.pem` nothing goes
-to Google Play.
+to Google Play. With neither, nothing is released at all, not even the tag.
 
 ## Google Play internal testing
 
 Every push to `master` builds the Play bundle and uploads it to the **internal testing**
 track (`.github/workflows/play.yml`): a private channel for up to 100 testers, with no
-review. The version code is the number of commits on `master`, and the version name is
-`versionName` plus the commit, such as `13-dev+6ece743`.
+review. The version code is twice the number of commits on `master` (releases take the odd
+codes), and the version name is `versionName` plus the commit, such as `13-dev+6ece743`.
 
 There are no keys or credentials in the repository or its secrets:
 

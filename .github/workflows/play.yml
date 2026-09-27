@@ -40,7 +40,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         with:
-          # The version code is the number of commits on the branch.
+          # The version code comes from the number of commits on the branch.
           fetch-depth: 0
       - uses: actions/setup-java@v5
         with:
@@ -51,12 +51,16 @@ jobs:
       - name: Version
         id: version
         run: |
-          code=$(git rev-list --count HEAD)
+          # Twice the commit count: releases (release.yml) take the odd code after it, so
+          # the two never collide and every upload's code is higher than the last.
+          code=$(( 2 * $(git rev-list --count HEAD) ))
           name="$(sed -n 's/^ *versionName = "\(.*\)"/\1/p' app/build.gradle.kts)+$(git rev-parse --short HEAD)"
           min_sdk=$(sed -n 's/^ *minSdk = \([0-9]*\)/\1/p' app/build.gradle.kts)
-          echo "code=$code" >> "$GITHUB_OUTPUT"
-          echo "name=$name" >> "$GITHUB_OUTPUT"
-          echo "min_sdk=$min_sdk" >> "$GITHUB_OUTPUT"
+          {
+            echo "code=$code"
+            echo "name=$name"
+            echo "min_sdk=$min_sdk"
+          } >> "$GITHUB_OUTPUT"
           echo "Building $name ($code)"
 
       - name: Build the unsigned bundle
