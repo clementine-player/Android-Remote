@@ -318,7 +318,10 @@ private fun Destinations(shell: ShellViewModel, onConnection: () -> Unit, onSett
     }
 }
 
-/** The top bar: the connection chip, the settings, and the screen's actions. */
+/**
+ * The top bar: the connection chip and the settings at the start, where every screen has them in
+ * the same place, and the screen's actions at the end.
+ */
 @Composable
 private fun TopBar(
     host: String?,
@@ -327,14 +330,15 @@ private fun TopBar(
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     Row(
-        Modifier.fillMaxWidth().height(64.dp).padding(horizontal = 4.dp),
+        Modifier.fillMaxWidth().height(64.dp).padding(start = 16.dp, end = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Spacer(Modifier.weight(1f))
-        ConnectionChip(host, onConnection)
+        // Shrinks for a long host name, rather than pushing the buttons off.
+        ConnectionChip(host, onConnection, Modifier.weight(1f, fill = false))
         IconButton(onClick = onSettings, modifier = Modifier.testTag("btnTopSettings")) {
             Icon(painterResource(R.drawable.ic_settings), stringResource(R.string.menu_settings))
         }
+        Spacer(Modifier.weight(1f))
         actions()
     }
 }
