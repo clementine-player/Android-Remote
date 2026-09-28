@@ -7,7 +7,8 @@
 #
 # A release is due when commits since the last release (the newest v* tag) carry release
 # notes: a "Release-note:" trailer in the commit message, one line for users. Commits without
-# one (refactoring, tests, CI) don't make a release.
+# one (refactoring, tests, CI) don't make a release, unless ALWAYS is set (a release run by hand):
+# then any commit since the last release makes one, with a general note if none has its own.
 #
 # Prints key=value lines (for $GITHUB_OUTPUT):
 #   release  true, or false when there's nothing to release
@@ -31,6 +32,9 @@ echo "last=$last"
 # The notes of every commit since then, oldest first.
 notes=$(git log --reverse --format='%(trailers:key=Release-note,valueonly,separator=%x0A)' \
   ${last:+"$last.."}"$master" | sed '/^[[:space:]]*$/d')
+if [ -z "$notes" ] && [ -n "${ALWAYS:-}" ] && [ -n "$(git rev-list ${last:+"$last.."}"$master")" ]; then
+  notes="Fixes and improvements."
+fi
 if [ -z "$notes" ]; then
   echo "release=false"
   exit 0

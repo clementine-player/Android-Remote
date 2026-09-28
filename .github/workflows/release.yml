@@ -12,7 +12,8 @@
 #     with the notes as its release notes
 #
 # Run it by hand (Actions → release → Run workflow) to release now rather than on Monday, or,
-# with a tag, to publish an existing release again after a failure.
+# with a tag, to publish an existing release again after a failure. Run by hand, it releases
+# any change since the last release, noting "Fixes and improvements." if none has a note.
 #
 # As in dev.yml, there are no keys or credentials here: signing goes through Cloud KMS, and
 # Google Cloud is reached with Workload Identity Federation. Until each signing certificate is
@@ -65,6 +66,7 @@ jobs:
         id: plan
         env:
           TAG: ${{ inputs.tag }}
+          ALWAYS: ${{ github.event_name == 'workflow_dispatch' && '1' || '' }}
         run: |
           notes="$RUNNER_TEMP/notes"
           if [ -z "$TAG" ]; then
