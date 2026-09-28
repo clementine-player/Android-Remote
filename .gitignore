@@ -39,3 +39,6 @@ key.properties
 # Misc
 .DS_Store
 *.jks
+
+# Worktrees of Claude Code sessions working alongside each other
+.claude/worktrees/
