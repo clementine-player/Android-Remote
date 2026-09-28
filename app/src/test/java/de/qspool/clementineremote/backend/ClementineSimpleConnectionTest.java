@@ -22,6 +22,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgT
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseClementineInfo;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -116,5 +117,32 @@ public class ClementineSimpleConnectionTest {
         ClementineMessage message = connectMessage(0);
         mServer.close();
         assertEquals(false, mConnection.createConnection(message));
+    }
+
+    @Test
+    public void abortConnectingGivesUpAtOnce() throws Exception {
+        // Unroutable, so connecting waits for its 3 s timeout unless given up on.
+        final ClementineMessage message = ClementineMessageFactory.buildConnectMessage(
+                "10.255.255.1", 5500, 0, false, false);
+        final boolean[] connected = {true};
+        Thread attempt = new Thread(() -> connected[0] = mConnection.createConnection(message));
+        long start = System.nanoTime();
+        attempt.start();
+        Thread.sleep(200);
+        mConnection.abortConnecting();
+        attempt.join(2000);
+
+        assertFalse(attempt.isAlive());
+        assertFalse(connected[0]);
+        assertTrue(System.nanoTime() - start < 2_000_000_000L);
+    }
+
+    @Test
+    public void abortConnectingLeavesAConnectionAlone() throws Exception {
+        assertTrue(mConnection.createConnection(connectMessage(0)));
+        try (Socket client = mServer.accept()) {
+            mConnection.abortConnecting();
+            assertTrue(mConnection.isConnected());
+        }
     }
 }
