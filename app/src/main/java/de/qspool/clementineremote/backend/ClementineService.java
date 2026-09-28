@@ -33,7 +33,9 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
+import android.service.notification.StatusBarNotification;
 import android.util.Log;
+import androidx.annotation.VisibleForTesting;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.ServiceCompat;
 import androidx.core.content.ContextCompat;
@@ -82,6 +84,9 @@ public class ClementineService extends Service {
     private ClementineServiceBinder mClementineServiceBinder = new ClementineServiceBinder();
 
     private boolean mInForeground = false;
+
+    /** Whether Clementine is playing its music on this phone (remote streaming). */
+    private boolean mPlayingHere = false;
 
     /**
      * Starts the service to connect to Clementine. Works from the background too (widget,
@@ -159,7 +164,7 @@ public class ClementineService extends Service {
                     MediaSessionController mediaSessionController = new MediaSessionController(this,
                             App.ClementineConnection);
                     mediaSessionController.registerMediaSession();
-                    Renderer.attach(this, App.ClementineConnection);
+                    Renderer.attach(this, App.ClementineConnection, this::setPlayingHere);
 
                     GlobalSearchManager.getInstance().reset();
 
@@ -255,8 +260,39 @@ public class ClementineService extends Service {
                 .setContentIntent(Utilities.getClementineRemotePendingIntent(this))
                 .build();
         ServiceCompat.startForeground(this, ClementineMediaSessionNotification.NOTIFIFCATION_ID,
-                notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE);
+                notification, foregroundServiceTypes());
         mInForeground = true;
+    }
+
+    /** Connected to Clementine, and playing media too while Clementine plays on this phone. */
+    private int foregroundServiceTypes() {
+        return mPlayingHere
+                ? ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE
+                        | ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
+                : ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE;
+    }
+
+    /**
+     * Updates the foreground service's types as Clementine starts and stops playing on this
+     * phone, keeping the notification showing.
+     */
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public synchronized void setPlayingHere(boolean playingHere) {
+        if (playingHere == mPlayingHere) {
+            return;
+        }
+        mPlayingHere = playingHere;
+        if (!mInForeground) {
+            return;
+        }
+        NotificationManager notifications = getSystemService(NotificationManager.class);
+        for (StatusBarNotification shown : notifications.getActiveNotifications()) {
+            if (shown.getId() == ClementineMediaSessionNotification.NOTIFIFCATION_ID) {
+                ServiceCompat.startForeground(this, shown.getId(), shown.getNotification(),
+                        foregroundServiceTypes());
+                return;
+            }
+        }
     }
 
     /**

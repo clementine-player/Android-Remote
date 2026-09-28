@@ -3,6 +3,7 @@ package de.qspool.clementineremote.ui;
 import android.Manifest;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.pm.ServiceInfo;
 
 
 import org.junit.Before;
@@ -23,6 +24,7 @@ import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementineService;
 import de.qspool.clementineremote.utils.Utilities;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -77,6 +79,28 @@ public class PlatformComplianceTest {
 
         controller.destroy();
         assertTrue(shadowOf(controller.get()).isForegroundStopped());
+    }
+
+    @Test
+    public void playingOnThisPhoneAddsMediaPlaybackToTheForegroundService() {
+        Intent connect = new Intent().putExtra(ClementineService.EXTRA_STRING_IP, "192.0.2.1");
+        ServiceController<ClementineService> controller =
+                Robolectric.buildService(ClementineService.class, connect).create()
+                        .startCommand(0, 1);
+        ClementineService service = controller.get();
+        assertEquals(ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE,
+                service.getForegroundServiceType());
+
+        service.setPlayingHere(true);
+        assertEquals(ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE
+                        | ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK,
+                service.getForegroundServiceType());
+        assertFalse(shadowOf(service).isForegroundStopped());
+
+        service.setPlayingHere(false);
+        assertEquals(ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE,
+                service.getForegroundServiceType());
+        controller.destroy();
     }
 
     @Test

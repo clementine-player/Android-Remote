@@ -107,7 +107,7 @@
     <string name="pref_hints_reset_summary">Point out features again, as on first use</string>
     <string name="pref_hints_reset_done">Tips will show again</string>
     <string name="pref_renderer">Let Clementine play on this phone</string>
-    <string name="pref_renderer_summary">Clementine can send its music here, when it plays on other devices (experimental)</string>
+    <string name="pref_renderer_summary">Clementine can send its music here, when it plays on other devices</string>
 
     <string name="download_noti_title">Starting download</string>
     <plurals name="download_noti_n_downloads">
