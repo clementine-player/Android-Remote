@@ -60,11 +60,14 @@ import de.qspool.clementineremote.ui.browse.BrowseLevel
 import de.qspool.clementineremote.ui.browse.BrowseSelectionBar
 import de.qspool.clementineremote.ui.browse.ItemKind
 import de.qspool.clementineremote.ui.browse.rememberLevelListState
+import de.qspool.clementineremote.ui.search.SearchResultsContent
+import de.qspool.clementineremote.ui.search.SearchSection
 
 /**
  * The library: Clementine's library, browsed level by level (artists, their albums, their songs).
  * Tapping a song adds it to the playlist; a long press starts selecting items to add or download.
- * Pulling down downloads the library from Clementine again.
+ * Searching it shows what matched in sections, as the Search screen does. Pulling down downloads
+ * the library from Clementine again.
  */
 @Composable
 fun LibraryScreen(viewModel: LibraryViewModel) {
@@ -90,8 +93,24 @@ fun LibraryScreen(viewModel: LibraryViewModel) {
         onSyncLibrary = viewModel::sync,
         onAdd = viewModel::addToPlaylist,
         onDownload = viewModel::downloadSongs,
+        results = ResultActions(
+            onOpen = viewModel::openResult,
+            onSeeAll = viewModel::seeAll,
+            onBack = { viewModel.backInResults() },
+            onAdd = viewModel::addResults,
+            onDownload = viewModel::downloadResults,
+        ),
     )
 }
+
+/** What's done with the library's search results. */
+internal class ResultActions(
+    val onOpen: (SongSelectItem) -> Unit = {},
+    val onSeeAll: (SearchSection) -> Unit = {},
+    val onBack: () -> Unit = {},
+    val onAdd: (List<SongSelectItem>) -> Unit = {},
+    val onDownload: (List<SongSelectItem>) -> Unit = {},
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -103,8 +122,10 @@ internal fun LibraryContent(
     onAdd: (List<SongSelectItem>) -> Unit,
     onDownload: (List<SongSelectItem>) -> Unit,
     modifier: Modifier = Modifier,
+    results: ResultActions = ResultActions(),
 ) {
     val shown = state.shown
+    val search = state.search
     // Selected items, by their position in the level shown; cleared when another level shows.
     var selection by remember(state.levels.size, shown?.opened) { mutableStateOf(emptySet<Int>()) }
     // Held here, so a level keeps its place while another branch shows (no results, say).
@@ -114,6 +135,7 @@ internal fun LibraryContent(
     Column(modifier.fillMaxSize()) {
         Progress(state.status)
         when {
+            search != null -> if (search.pages.isEmpty()) Top(null)
             selection.isNotEmpty() -> BrowseSelectionBar(
                 count = selected.size,
                 onClear = { selection = emptySet() },
@@ -139,8 +161,19 @@ internal fun LibraryContent(
         ) {
             if (state.status == LibraryStatus.Missing) {
                 Missing(onSyncLibrary)
-            } else if (shown != null && shown.items.isEmpty() && state.filter.isNotBlank()) {
+            } else if (search != null && search.sections.isEmpty && search.pages.isEmpty()) {
                 NoResults()
+            } else if (search != null) {
+                SearchResultsContent(
+                    search,
+                    icon = { null },
+                    onOpen = results.onOpen,
+                    onSeeAll = results.onSeeAll,
+                    onBack = results.onBack,
+                    onAdd = results.onAdd,
+                    onDownload = results.onDownload,
+                    tag = "library",
+                )
             } else if (shown != null) {
                 BrowseItems(
                     shown,
@@ -276,7 +309,7 @@ private fun Missing(onSync: () -> Unit) {
     }
 }
 
-/** Nothing at this level matches the search. Scrollable, so pulling down still works. */
+/** Nothing in the library matches the search. Scrollable, so pulling down still works. */
 @Composable
 private fun NoResults() {
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(32.dp)) {

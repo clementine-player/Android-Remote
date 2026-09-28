@@ -1,6 +1,7 @@
 package de.qspool.clementineremote.ui.library
 
 import android.content.SharedPreferences
+import android.database.sqlite.SQLiteDatabase
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,6 +16,7 @@ import de.qspool.clementineremote.backend.downloader.DownloadManager
 import de.qspool.clementineremote.backend.elements.DownloaderResult
 import de.qspool.clementineremote.backend.library.LibraryDatabaseHelper
 import de.qspool.clementineremote.backend.library.LibraryQuery
+import de.qspool.clementineremote.backend.library.LibrarySearchQuery
 import de.qspool.clementineremote.backend.listener.OnLibraryDownloadListener
 import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory
@@ -23,9 +25,16 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgT
 import de.qspool.clementineremote.ui.browse.BrowseLevel
 import de.qspool.clementineremote.ui.browse.ItemKind
 import de.qspool.clementineremote.ui.browse.SongBrowser
+import de.qspool.clementineremote.ui.search.SearchCandidate
+import de.qspool.clementineremote.ui.search.SearchResults
+import de.qspool.clementineremote.ui.search.SearchSection
+import de.qspool.clementineremote.ui.search.SearchSections
+import de.qspool.clementineremote.ui.search.librarySearchCandidates
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -57,14 +66,18 @@ data class LibraryState(
     val status: LibraryStatus = LibraryStatus.Missing,
     /** The levels opened, from the top down; the last is shown. */
     val levels: List<BrowseLevel> = emptyList(),
+    /** What's searched for; empty when not searching. */
     val filter: String = "",
+    /** While searching, what was found, and the pages opened from it. */
+    val search: SearchResults? = null,
 ) {
     val shown: BrowseLevel? get() = levels.lastOrNull()
 }
 
 /**
  * The library Clementine sends, browsed level by level as its grouping setting says (artist,
- * album, song by default). The database is queried off the main thread. The library itself is
+ * album, song by default). Searching it shows what matched in sections, as the Search screen
+ * shows Clementine's results. The database is queried off the main thread. The library itself is
  * synced from Clementine when connected, and again on request.
  */
 class LibraryViewModel(
@@ -87,9 +100,21 @@ class LibraryViewModel(
             databaseExists()
         }
     },
+    /** Browses the library as its search results open: album artist, album, song. */
+    newSearchQuery: () -> DynamicSongQuery = { LibrarySearchQuery(App.getApp()) },
+    /** The songs of the library matching a search. */
+    private val searchLibrary: (String) -> List<SearchCandidate> = { text ->
+        LibraryDatabaseHelper().openDatabase(SQLiteDatabase.OPEN_READONLY).use { librarySearchCandidates(it, text) }
+    },
+    /** How long typing must pause before searching, in milliseconds. */
+    private val searchDelay: Long = 150,
 ) : ViewModel() {
 
     private val browser = SongBrowser(newQuery)
+
+    private val searchBrowser = SongBrowser(newSearchQuery)
+
+    private var searching: Job? = null
 
     private val _state = MutableStateFlow(LibraryState())
 
@@ -159,7 +184,7 @@ class LibraryViewModel(
     fun reload() {
         viewModelScope.launch {
             val top = withContext(io) {
-                if (libraryExists()) level(null, _state.value.filter) else null
+                if (libraryExists()) browser.level(null) else null
             }
             _state.update {
                 it.copy(
@@ -196,24 +221,24 @@ class LibraryViewModel(
         viewModelScope.launch {
             while (true) {
                 val opened = _state.value.levels.map { it.opened }
-                val filter = _state.value.filter
                 val levels = withContext(io) {
                     if (!libraryExists()) {
                         emptyList()
                     } else {
-                        opened.map { level(it, filter) }.takeIf { it.isNotEmpty() && it.last().items.isNotEmpty() }
-                            ?: listOf(level(null, filter))
+                        opened.map { browser.level(it) }.takeIf { it.isNotEmpty() && it.last().items.isNotEmpty() }
+                            ?: listOf(browser.level(null))
                     }
                 }
-                // A level was opened or closed, or the filter changed, while reading: read what's
-                // shown now instead, rather than undo it.
-                val now = _state.value
-                if (now.levels.map { it.opened } != opened || now.filter != filter) {
+                // A level was opened or closed while reading: read what's shown now instead,
+                // rather than undo it.
+                if (_state.value.levels.map { it.opened } != opened) {
                     continue
                 }
                 _state.update {
                     it.copy(status = if (levels.isEmpty()) LibraryStatus.Missing else LibraryStatus.Ready, levels = levels)
                 }
+                // What's searched for is searched for again, in the new library.
+                search(_state.value.filter, wait = false)
                 return@launch
             }
         }
@@ -230,7 +255,7 @@ class LibraryViewModel(
             return
         }
         viewModelScope.launch {
-            val below = withContext(io) { level(item, _state.value.filter) }
+            val below = withContext(io) { browser.level(item) }
             _state.update { it.copy(levels = it.levels + below) }
         }
     }
@@ -244,23 +269,77 @@ class LibraryViewModel(
         return true
     }
 
-    /** Shows only items matching [text], at the level shown. */
+    /**
+     * Searches the whole library for [text], as it's typed, showing what matched in sections; an
+     * empty [text] shows the library again.
+     */
     fun setFilter(text: String) {
         _state.update { it.copy(filter = text) }
-        val shown = _state.value.shown ?: return
-        viewModelScope.launch {
-            val filtered = withContext(io) { level(shown.opened, text) }
-            _state.update { it.copy(levels = it.levels.dropLast(1) + filtered) }
+        search(text, wait = true)
+    }
+
+    private fun search(text: String, wait: Boolean) {
+        searching?.cancel()
+        if (text.isBlank()) {
+            _state.update { it.copy(search = null) }
+            return
+        }
+        searching = viewModelScope.launch {
+            if (wait && searchDelay > 0) {
+                delay(searchDelay)
+            }
+            val sections = withContext(io) {
+                // No library, or a search the index can't take, finds nothing.
+                val found = runCatching { if (libraryExists()) searchLibrary(text) else emptyList() }
+                SearchSections.of(text, found.getOrDefault(emptyList()))
+            }
+            _state.update { it.copy(search = SearchResults(sections)) }
         }
     }
+
+    /**
+     * Opens a search result: the level below an artist or album, or for a song, adds it to the
+     * playlist, and plays it if Clementine isn't playing, as [open] does.
+     */
+    fun openResult(item: SongSelectItem) {
+        if (item.level == SEARCH_SONG_LEVEL) {
+            addResults(listOf(item), playIfStopped = true)
+            return
+        }
+        viewModelScope.launch {
+            val below = withContext(io) { searchBrowser.level(item) }
+            _state.update { it.copy(search = it.search?.opened(below)) }
+        }
+    }
+
+    /** Shows all of a [section] of the search results. */
+    fun seeAll(section: SearchSection) {
+        _state.update { it.copy(search = it.search?.seeAll(section)) }
+    }
+
+    /** Closes the search results' page shown; false at their sections. */
+    fun backInResults(): Boolean {
+        val search = _state.value.search?.back() ?: return false
+        _state.update { it.copy(search = search) }
+        return true
+    }
+
+    /** Adds the songs of search results [items] to the playlist playing, as [addToPlaylist] does. */
+    fun addResults(items: List<SongSelectItem>, playIfStopped: Boolean = false) =
+        add(playIfStopped) { searchBrowser.songs(items).mapNotNull { it.url } }
+
+    /** Downloads the songs of search results [items] to this phone. */
+    fun downloadResults(items: List<SongSelectItem>) = download { searchBrowser.songs(items).mapNotNull { it.url } }
 
     /**
      * Adds the songs of [items] (songs, or whatever groups them) to the playlist playing. With
      * [playIfStopped], Clementine plays them unless it's playing already.
      */
-    fun addToPlaylist(items: List<SongSelectItem>, playIfStopped: Boolean = false) {
+    fun addToPlaylist(items: List<SongSelectItem>, playIfStopped: Boolean = false) = add(playIfStopped) { songUrls(items) }
+
+    private fun add(playIfStopped: Boolean, urls: () -> List<String>) {
         viewModelScope.launch {
-            val urls = withContext(io) { songUrls(items) }
+            val urls = withContext(io) { urls() }
             if (urls.isEmpty()) {
                 return@launch
             }
@@ -272,9 +351,11 @@ class LibraryViewModel(
     }
 
     /** Downloads the songs of [items] to this phone. */
-    fun downloadSongs(items: List<SongSelectItem>) {
+    fun downloadSongs(items: List<SongSelectItem>) = download { songUrls(items) }
+
+    private fun download(urls: () -> List<String>) {
         viewModelScope.launch {
-            val urls = withContext(io) { songUrls(items) }
+            val urls = withContext(io) { urls() }
             if (urls.isNotEmpty()) {
                 DownloadManager.getInstance().addJob(
                     ClementineMessageFactory.buildDownloadSongsMessage(DownloadItem.Urls, LinkedList(urls)))
@@ -282,7 +363,10 @@ class LibraryViewModel(
         }
     }
 
-    private fun level(opened: SongSelectItem?, filter: String) = browser.level(opened, filter)
-
     private fun songUrls(items: List<SongSelectItem>) = browser.songs(items).mapNotNull { it.url }
+
+    private companion object {
+        /** Search results are browsed by album artist, album and title. */
+        const val SEARCH_SONG_LEVEL = 2
+    }
 }

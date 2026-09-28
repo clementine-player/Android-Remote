@@ -66,21 +66,4 @@ public class LibraryQuery extends DynamicSongQuery {
     public SQLiteDatabase getReadableDatabase() {
         return new LibraryDatabaseHelper().openDatabase(SQLiteDatabase.OPEN_READONLY);
     }
-
-    @Override
-    public String getMatchesSubQuery(String match) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("(SELECT * FROM ");
-        sb.append(LibraryDatabaseHelper.SONGS_FTS);
-        sb.append(" WHERE ");
-        sb.append(LibraryDatabaseHelper.SONGS_FTS);
-        sb.append(" MATCH \"");
-        sb.append(match);
-        sb.append("*");
-
-        sb.append("\" ) ");
-
-        return sb.toString();
-    }
 }

@@ -224,7 +224,7 @@ public class StoreScreenshots {
             mDevice.waitForIdle();
             mDevice.pressEnter();
             if (mDevice.wait(Until.hasObject(tag("searchProgress")), 5000)
-                    || mDevice.hasObject(tag("global_search"))) {
+                    || mDevice.hasObject(tag("searchSections"))) {
                 return;
             }
             assertTrue("Could not submit the search", attempt < 3);
@@ -275,14 +275,10 @@ public class StoreScreenshots {
 
         navigateTo("navSearch");
         search("Gymnopédie");
-        // Results are grouped by source, then artist and album: open the first entry at each
-        // level down to the tracks.
+        // Songs matched by title are listed straight away.
         BySelector tracks = By.textStartsWith("Gymnopédie No.");
-        for (int level = 0; level < 4 && !mDevice.wait(Until.hasObject(tracks), 5000); level++) {
-            waitFor(tag("global_search")).getChildren().get(0).click();
-            SystemClock.sleep(SETTLE_MILLIS);
-        }
         waitFor(tracks);
+        SystemClock.sleep(SETTLE_MILLIS);
         screenshot("4_search");
 
         // The same screens in the dark theme, for pull requests; the store listing takes only
