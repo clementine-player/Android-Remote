@@ -59,8 +59,8 @@ android {
 
     buildTypes {
         release {
-            val release = signingConfigs.getByName("release")
-            if (release.storeFile != null) signingConfig = release
+            // F-Droid removes the signingConfigs block before building, and signs with its own key.
+            signingConfigs.findByName("release")?.takeIf { it.storeFile != null }?.let { signingConfig = it }
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
