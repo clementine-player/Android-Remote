@@ -26,12 +26,22 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType
 import de.qspool.clementineremote.ui.browse.BrowseLevel
 import de.qspool.clementineremote.ui.browse.ItemKind
+import de.qspool.clementineremote.ui.search.GROUP_ARTIST
+import de.qspool.clementineremote.ui.search.SearchCandidate
+import de.qspool.clementineremote.ui.search.SearchItem
+import de.qspool.clementineremote.ui.search.SearchPage
+import de.qspool.clementineremote.ui.search.SearchResults
+import de.qspool.clementineremote.ui.search.SearchSection
+import de.qspool.clementineremote.ui.search.SearchSections
+import de.qspool.clementineremote.ui.search.librarySearchCandidates
+import de.qspool.clementineremote.ui.search.toSongSelectItem
 import de.qspool.clementineremote.ui.theme.ClementineTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlin.coroutines.CoroutineContext
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
@@ -57,20 +67,31 @@ class LibraryScreenTest {
         override fun getSelectedFields() = arrayOf("artist", "album", "title")
         override fun getSorting() = "ASC"
         override fun getTable() = "songs"
-        override fun getReadableDatabase(): SQLiteDatabase = SQLiteDatabase.openDatabase(database.path, null, SQLiteDatabase.OPEN_READONLY)
-        override fun getMatchesSubQuery(match: String) =
-            "(SELECT * FROM songs WHERE title LIKE '%$match%' OR artist LIKE '%$match%' OR album LIKE '%$match%')"
+        override fun getReadableDatabase(): SQLiteDatabase = open()
     }
+
+    /** The library as its search results open: by album artist, album and song. */
+    inner class TestSearchQuery : DynamicSongQuery(context) {
+        override fun getSelectedFields() = arrayOf(GROUP_ARTIST, "album", "title")
+        override fun getSorting() = "ASC"
+        override fun getTable() = "songs"
+        override fun getReadableDatabase(): SQLiteDatabase = open()
+    }
+
+    private fun open() = SQLiteDatabase.openDatabase(database.path, null, SQLiteDatabase.OPEN_READONLY)
 
     @Before
     fun setUp() {
         App.Clementine = Clementine()
         database = File(context.cacheDir, "library-test.db").apply { delete() }
         SQLiteDatabase.openOrCreateDatabase(database, null).use { db ->
-            db.execSQL("CREATE TABLE songs (artist TEXT, album TEXT, title TEXT, filename TEXT, disc INTEGER, track INTEGER)")
-            db.execSQL("INSERT INTO songs VALUES ('Frédéric Chopin', 'Nocturnes, Op. 9', 'Nocturne in B-flat minor', 'file:///chopin/1.ogg', 1, 1)")
-            db.execSQL("INSERT INTO songs VALUES ('Frédéric Chopin', 'Nocturnes, Op. 9', 'Nocturne in E-flat major', 'file:///chopin/2.ogg', 1, 2)")
-            db.execSQL("INSERT INTO songs VALUES ('Erik Satie', 'Gymnopédies', 'Gymnopédie No. 1', 'file:///satie/1.ogg', 1, 1)")
+            db.execSQL("CREATE TABLE songs (artist TEXT, albumartist TEXT, album TEXT, title TEXT, filename TEXT, disc INTEGER, track INTEGER)")
+            db.execSQL("INSERT INTO songs VALUES ('Frédéric Chopin', '', 'Nocturnes, Op. 9', 'Nocturne in B-flat minor', 'file:///chopin/1.ogg', 1, 1)")
+            db.execSQL("INSERT INTO songs VALUES ('Frédéric Chopin', '', 'Nocturnes, Op. 9', 'Nocturne in E-flat major', 'file:///chopin/2.ogg', 1, 2)")
+            db.execSQL("INSERT INTO songs VALUES ('Erik Satie', '', 'Gymnopédies', 'Gymnopédie No. 1', 'file:///satie/1.ogg', 1, 1)")
+            // Indexed for searching, as the library is once it's synced.
+            db.execSQL("CREATE VIRTUAL TABLE songs_fts USING fts3(artist, albumartist, album, title, filename, disc, track)")
+            db.execSQL("INSERT INTO songs_fts SELECT * FROM songs")
         }
     }
 
@@ -81,6 +102,9 @@ class LibraryScreenTest {
         newQuery = { TestQuery() },
         io = Dispatchers.Unconfined,
         libraryExists = { exists },
+        newSearchQuery = { TestSearchQuery() },
+        searchLibrary = { text -> open().use { librarySearchCandidates(it, text) } },
+        searchDelay = 0,
     ).also { idle() }
 
     @Test
@@ -154,13 +178,92 @@ class LibraryScreenTest {
     }
 
     @Test
-    fun filtersTheLevelShown() {
-        val library = viewModel(mutableListOf())
-
-        library.setFilter("Satie")
+    fun searchesTheWholeLibraryInSections() {
+        val sent = mutableListOf<ClementineMessage>()
+        val library = viewModel(sent)
+        // Searching from inside an artist still searches everything.
+        library.open(library.state.value.shown!!.items.first { it.listTitle == "Erik Satie" })
         idle()
 
-        assertEquals(listOf("Erik Satie"), library.state.value.shown!!.items.map { it.listTitle })
+        library.setFilter("chopin")
+        idle()
+        val sections = library.state.value.search!!.sections
+        assertEquals(listOf("Frédéric Chopin"), sections.artists.map { it.name })
+        assertEquals(listOf("Nocturnes, Op. 9"), sections.albums.map { it.name })
+        assertTrue(sections.songs.isEmpty())
+        assertEquals(ItemKind.ARTIST, sections.top?.kind)
+
+        // The artist opens to its albums, and adds all its songs.
+        val chopin = sections.artists.single().toSongSelectItem(context.resources, SearchSection.ARTISTS, icon = { null })
+        library.openResult(chopin)
+        idle()
+        val page = library.state.value.search!!.pages.single() as SearchPage.Opened
+        assertEquals(ItemKind.ALBUM, page.level.kind)
+        assertEquals(listOf("Nocturnes, Op. 9"), page.level.items.map { it.listTitle })
+        library.addResults(listOf(chopin))
+        idle()
+        assertEquals(listOf("file:///chopin/1.ogg", "file:///chopin/2.ogg"), sent.single().message.requestInsertUrls.urlsList)
+
+        assertTrue(library.backInResults())
+        assertFalse(library.backInResults())
+
+        // Clearing the search shows the library where it was.
+        library.setFilter("")
+        idle()
+        assertNull(library.state.value.search)
+        assertEquals("Erik Satie", library.state.value.shown!!.opened?.listTitle)
+    }
+
+    @Test
+    fun aSearchedSongOpenedPlaysUnlessClementineIsPlaying() {
+        val sent = mutableListOf<ClementineMessage>()
+        val library = viewModel(sent)
+        library.setFilter("nocturne b")
+        idle()
+        val song = library.state.value.search!!.sections.songs.single()
+            .toSongSelectItem(context.resources, SearchSection.SONGS, icon = { null })
+
+        App.Clementine.state = Clementine.State.STOP
+        library.openResult(song)
+        App.Clementine.state = Clementine.State.PLAY
+        library.openResult(song)
+        // Adding without opening never plays.
+        App.Clementine.state = Clementine.State.STOP
+        library.addResults(listOf(song))
+        idle()
+
+        assertEquals(listOf(true, false, false), sent.map { it.message.requestInsertUrls.playNow })
+        assertEquals(listOf("file:///chopin/1.ogg"), sent.first().message.requestInsertUrls.urlsList)
+    }
+
+    @Test
+    fun everyWordOfASearchIsAPrefix() {
+        val library = viewModel(mutableListOf())
+
+        library.setFilter("noct b-fl")
+        idle()
+
+        assertEquals(listOf("Nocturne in B-flat minor"), library.state.value.search!!.sections.songs.map { it.name })
+    }
+
+    @Test
+    fun showsTheSearchResultsAndWhenThereAreNone() {
+        var state by mutableStateOf(LibraryState(status = LibraryStatus.Ready, filter = "chopin", search = SearchResults(
+            SearchSections.of("chopin", listOf(SearchCandidate(SearchItem(
+                ItemKind.SONG, listOf("Frédéric Chopin", "Nocturnes, Op. 9", "Nocturne in B-flat minor"),
+                "file:///chopin/1.ogg", "Frédéric Chopin", "Nocturnes, Op. 9",
+            )))),
+        )))
+        compose.setContent {
+            ClementineTheme(dynamicColor = false) {
+                LibraryContent(state, onOpen = {}, onBack = {}, onSyncLibrary = {}, onAdd = {}, onDownload = {})
+            }
+        }
+        compose.onNodeWithTag("librarySections").assertIsDisplayed()
+        compose.onNodeWithText("Artist").assertIsDisplayed()
+
+        state = state.copy(filter = "nothing", search = SearchResults())
+        compose.onNodeWithTag("libraryNoResults").assertIsDisplayed()
     }
 
     @Test

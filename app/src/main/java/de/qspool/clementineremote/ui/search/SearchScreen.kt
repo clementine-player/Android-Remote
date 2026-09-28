@@ -1,5 +1,6 @@
 package de.qspool.clementineremote.ui.search
 
+import android.graphics.Bitmap
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,7 +14,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -24,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -35,25 +34,18 @@ import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.heading
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.qspool.clementineremote.R
 import de.qspool.clementineremote.backend.database.SongSelectItem
-import de.qspool.clementineremote.ui.browse.BrowseItems
-import de.qspool.clementineremote.ui.browse.BrowseSelectionBar
-import de.qspool.clementineremote.ui.browse.rememberLevelListState
 
 /**
  * Search: a search bar that asks Clementine to search its library and internet services, and the
- * results, browsed level by level. Tapping a song adds it to the playlist; a long press starts
- * selecting items to add.
+ * results in sections by what matched: the best match, songs, artists, albums, radio stations and
+ * the rest. Tapping a song adds it to the playlist; an artist or album opens.
  */
 @Composable
 fun SearchScreen(viewModel: SearchViewModel) {
@@ -68,8 +60,10 @@ fun SearchScreen(viewModel: SearchViewModel) {
     }
     SearchContent(
         state,
+        icon = viewModel.icon,
         onSearch = viewModel::search,
         onOpen = viewModel::open,
+        onSeeAll = viewModel::seeAll,
         onBack = { viewModel.back() },
         onAdd = viewModel::addToPlaylist,
     )
@@ -80,17 +74,13 @@ internal fun SearchContent(
     state: SearchState,
     onSearch: (String) -> Unit,
     onOpen: (SongSelectItem) -> Unit,
+    onSeeAll: (SearchSection) -> Unit,
     onBack: () -> Unit,
     onAdd: (List<SongSelectItem>) -> Unit,
     modifier: Modifier = Modifier,
+    icon: (String) -> Bitmap? = { null },
 ) {
-    val shown = state.shown
-    var selection by remember(state.levels.size, shown?.opened) { mutableStateOf(emptySet<Int>()) }
-    // Held here, so a level keeps its place while another branch shows (no results, say).
-    val listState = rememberLevelListState(state.levels.size)
-    val selected = shown?.items?.filterIndexed { index, _ -> index in selection }.orEmpty()
-    val opened = shown?.opened
-
+    val results = state.results
     Column(modifier.fillMaxSize()) {
         SearchField(state.searchedFor.orEmpty(), onSearch, Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 8.dp))
 
@@ -106,60 +96,20 @@ internal fun SearchContent(
             }
         }
 
-        if (selection.isNotEmpty()) {
-            BrowseSelectionBar(
-                count = selected.size,
-                onClear = { selection = emptySet() },
-                onAdd = {
-                    onAdd(selected)
-                    selection = emptySet()
-                },
+        when {
+            results != null && (!results.sections.isEmpty || results.pages.isNotEmpty()) -> SearchResultsContent(
+                results,
+                icon,
+                onOpen = onOpen,
+                onSeeAll = onSeeAll,
+                onBack = onBack,
+                onAdd = onAdd,
                 onDownload = null,
                 tag = "search",
             )
-        } else if (opened != null) {
-            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(start = 4.dp, end = 16.dp)) {
-                IconButton(onClick = onBack, modifier = Modifier.testTag("searchBack")) {
-                    Icon(painterResource(R.drawable.ic_arrow_back), stringResource(R.string.library_back))
-                }
-                Column(Modifier.weight(1f).padding(start = 4.dp, top = 4.dp, bottom = 4.dp)) {
-                    Text(
-                        opened.listTitle,
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.semantics { heading() }.testTag("searchTitle"),
-                    )
-                    Text(
-                        pluralStringResource(R.plurals.number_items, shown.items.size, shown.items.size),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-                Button(onClick = { onAdd(listOf(opened)) }, modifier = Modifier.testTag("searchAddAll")) {
-                    Text(stringResource(R.string.library_add_to_playlist))
-                }
-            }
-        }
-
-        when {
-            shown != null && shown.items.isNotEmpty() -> BrowseItems(
-                shown,
-                selection,
-                onClick = { index, item ->
-                    if (selection.isEmpty()) {
-                        onOpen(item)
-                    } else {
-                        selection = if (index in selection) selection - index else selection + index
-                    }
-                },
-                onLongClick = { index -> selection = if (index in selection) selection - index else selection + index },
-                tag = "global_search",
-                listState = listState,
-            )
-            shown != null -> Message(R.string.library_no_search_results, "searchNoResults")
-            !state.searching -> Message(R.string.global_search_empty, "searchEmpty")
+            state.searching -> {}
+            state.searchedFor != null -> Message(R.string.library_no_search_results, "searchNoResults")
+            else -> Message(R.string.global_search_empty, "searchEmpty")
         }
     }
 }

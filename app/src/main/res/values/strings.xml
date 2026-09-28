@@ -148,6 +148,24 @@
     <string name="global_search_search">Search for anything</string>
     <string name="search_searching">Searching for “%s”…</string>
     <string name="search_clear">Clear search</string>
+    <string name="search_top_result">Top result</string>
+    <string name="search_songs">Songs</string>
+    <string name="search_artists">Artists</string>
+    <string name="search_albums">Albums</string>
+    <string name="search_stations">Stations</string>
+    <string name="search_other_matches">Other matches</string>
+    <string name="search_see_all">See all</string>
+    <!-- The See all button's description for accessibility, with the section's name. -->
+    <string name="search_see_all_of">See all %s</string>
+    <!-- The top result's second line: what it is, and whose. -->
+    <string name="search_top_song">Song • %s</string>
+    <string name="search_top_artist">Artist</string>
+    <string name="search_top_album">Album • %s</string>
+    <string name="search_top_station">Station • %s</string>
+    <plurals name="search_number_albums">
+        <item quantity="one">%d album</item>
+        <item quantity="other">%d albums</item>
+    </plurals>
 
 
     <string name="song_info_album">Album</string>

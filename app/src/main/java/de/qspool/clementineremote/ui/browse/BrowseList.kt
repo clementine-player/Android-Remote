@@ -80,20 +80,32 @@ internal fun BrowseItems(
 ) {
     LazyColumn(Modifier.fillMaxSize().testTag(tag), state = listState) {
         itemsIndexed(shown.items) { index, item ->
-            val isSelected = index in selection
-            ListItem(
-                headlineContent = { Text(item.listTitle, maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                supportingContent = { Text(item.listSubtitle.orEmpty(), maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                leadingContent = { Leading(shown.kind, item) },
-                colors = ListItemDefaults.colors(
-                    containerColor = if (isSelected) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent,
-                ),
-                modifier = Modifier
-                    .combinedClickable(onClick = { onClick(index, item) }, onLongClick = { onLongClick(index) })
-                    .semantics { selected = isSelected },
-            )
+            BrowseRow(shown.kind, item, index in selection, onClick = { onClick(index, item) }, onLongClick = { onLongClick(index) })
         }
     }
+}
+
+/** An item of a level, of [kind]: tapping it runs [onClick], a long press [onLongClick]. */
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+internal fun BrowseRow(
+    kind: ItemKind,
+    item: SongSelectItem,
+    isSelected: Boolean = false,
+    onClick: () -> Unit,
+    onLongClick: (() -> Unit)? = null,
+) {
+    ListItem(
+        headlineContent = { Text(item.listTitle, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+        supportingContent = { Text(item.listSubtitle.orEmpty(), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+        leadingContent = { Leading(kind, item) },
+        colors = ListItemDefaults.colors(
+            containerColor = if (isSelected) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent,
+        ),
+        modifier = Modifier
+            .combinedClickable(onClick = onClick, onLongClick = onLongClick)
+            .semantics { selected = isSelected },
+    )
 }
 
 /** A tile for what an item groups; a search source shows its own icon, if Clementine sent one. */

@@ -254,7 +254,6 @@ private fun Destinations(shell: ShellViewModel, onConnection: () -> Unit, onSett
     val search: SearchViewModel = viewModel()
     val downloads: DownloadsViewModel = viewModel()
     val libraryState by library.state.collectAsStateWithLifecycle()
-    val searchState by search.state.collectAsStateWithLifecycle()
     // Clementine's computer, or its address if it doesn't say.
     val host = remember {
         App.Clementine.hostname?.takeIf { it.isNotBlank() }
@@ -264,7 +263,6 @@ private fun Destinations(shell: ShellViewModel, onConnection: () -> Unit, onSett
     // Back leaves search results, then the screen, for the queue.
     BackHandler(shell.destination != Destination.QUEUE) { shell.destination = Destination.QUEUE }
     BackHandler(shell.destination == Destination.LIBRARY && libraryState.levels.size > 1) { library.back() }
-    BackHandler(shell.destination == Destination.SEARCH && searchState.levels.size > 1) { search.back() }
 
     Column(Modifier.fillMaxSize()) {
         when (shell.destination) {

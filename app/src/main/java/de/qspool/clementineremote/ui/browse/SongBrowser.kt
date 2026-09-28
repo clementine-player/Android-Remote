@@ -20,13 +20,13 @@ data class BrowseLevel(
  */
 class SongBrowser(private val newQuery: () -> DynamicSongQuery) {
 
-    /** The items under [opened] (the top level for null), matching [filter]. */
-    fun level(opened: SongSelectItem?, filter: String = ""): BrowseLevel {
+    /** The items under [opened] (the top level for null). */
+    fun level(opened: SongSelectItem?): BrowseLevel {
         val depth = opened?.let { it.level + 1 } ?: 0
         return query { query ->
             query.level = depth
             query.selection = opened?.selection ?: emptyArray()
-            BrowseLevel(opened, kind(query, depth), query.selectData(filter))
+            BrowseLevel(opened, kind(query, depth), query.selectData())
         }
     }
 

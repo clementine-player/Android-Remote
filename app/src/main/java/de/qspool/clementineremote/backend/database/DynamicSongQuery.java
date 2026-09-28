@@ -30,7 +30,6 @@ public abstract class DynamicSongQuery {
     abstract protected String getSorting();
     abstract protected String getTable();
     abstract protected SQLiteDatabase getReadableDatabase();
-    abstract public String getMatchesSubQuery(String match);
     protected String getHiddenWhere() { return ""; }
 
     public DynamicSongQuery(Context context) {
@@ -222,19 +221,9 @@ public abstract class DynamicSongQuery {
      * @return The list of items
      */
     public LinkedList<SongSelectItem> selectData() {
-        return selectData("");
-    }
-
-    /**
-     * Select the data matching a search, and returns a list of items
-     *
-     * @param match What to search for; empty for everything
-     * @return The list of items
-     */
-    public LinkedList<SongSelectItem> selectData(String match) {
         LinkedList<SongSelectItem> itemList = new LinkedList<>();
 
-        Cursor c = match.isEmpty() ? buildQuery() : buildQuery(getMatchesSubQuery(match));
+        Cursor c = buildQuery();
 
         if (c != null && c.getCount() != 0) {
             c.moveToFirst();
