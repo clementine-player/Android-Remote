@@ -32,6 +32,11 @@ class Renderer(
     private val send: (ClementineMessage) -> Unit,
 ) : Playback.Listener {
 
+    /** Told, on the main thread, when the phone starts and stops having something to play. */
+    fun interface ActiveListener {
+        fun onActiveChanged(active: Boolean)
+    }
+
     private val handler = Handler(Looper.getMainLooper())
 
     /** What's playing, as Clementine described it; null when idle. */
@@ -50,6 +55,11 @@ class Renderer(
     private var playing = false
 
     private var reported: RendererState? = null
+
+    var activeListener: ActiveListener? = null
+
+    /** Whether [activeListener] was last told there's something to play. */
+    private var active = false
 
     private val statusTick = object : Runnable {
         override fun run() {
@@ -77,6 +87,7 @@ class Renderer(
             next = null
             playback.listener = null
             playback.release()
+            setActive(false)
         }
     }
 
@@ -175,6 +186,13 @@ class Renderer(
         if (state != reported) {
             sendStatus()
         }
+        setActive(current != null)
+    }
+
+    private fun setActive(active: Boolean) {
+        if (active == this.active) return
+        this.active = active
+        activeListener?.onActiveChanged(active)
     }
 
     override fun onAdvanced() {
@@ -249,8 +267,9 @@ class Renderer(
          * only sends it when this phone registered as a renderer ([ThisRenderer]).
          */
         @JvmStatic
-        fun attach(context: Context, connection: ClementinePlayerConnection) {
+        fun attach(context: Context, connection: ClementinePlayerConnection, activeListener: ActiveListener) {
             val renderer = Renderer(ExoPlayback(context.applicationContext), RemoteRepository::send)
+            renderer.activeListener = activeListener
             connection.addPlayerConnectionListener(object : PlayerConnectionListener {
                 override fun onConnectionStatusChanged(status: ConnectionStatus) {
                     if (status == ConnectionStatus.DISCONNECTED) {

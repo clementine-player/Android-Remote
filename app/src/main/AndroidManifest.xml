@@ -12,9 +12,11 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
                      android:maxSdkVersion="28" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <!-- The service stays in the foreground while connected to Clementine. -->
+    <!-- The service stays in the foreground while connected to Clementine, and while Clementine
+         plays its music on this phone (remote streaming). -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
 
     <!-- Apps the remote hands off to: a music player for downloads, a browser for links. -->
     <queries>
@@ -74,7 +76,7 @@
         </activity>
         <service android:name=".backend.ClementineService"
                  android:exported="false"
-                 android:foregroundServiceType="connectedDevice" />
+                 android:foregroundServiceType="connectedDevice|mediaPlayback" />
         <receiver android:name=".backend.receivers.ClementinePhoneStateCheck"
                   android:exported="true">
             <intent-filter>

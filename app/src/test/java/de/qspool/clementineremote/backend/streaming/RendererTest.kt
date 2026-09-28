@@ -30,11 +30,13 @@ class RendererTest {
 
     private val playback = FakePlayback()
     private val sent = mutableListOf<Message>()
+    private val active = mutableListOf<Boolean>()
     private lateinit var renderer: Renderer
 
     @Before
     fun setUp() {
         renderer = Renderer(playback) { sent += it.message }
+        renderer.activeListener = Renderer.ActiveListener { active += it }
     }
 
     private fun receive(message: Message.Builder) {
@@ -144,6 +146,22 @@ class RendererTest {
 
         assertEquals(1, sent.single { it.type == MsgType.RENDERER_TRACK_ENDED }.rendererTrackEnded.itemId)
         assertEquals(RendererState.RENDERER_STATE_IDLE, statuses().last().state)
+    }
+
+    @Test
+    fun saysWhileItHasSomethingToPlay() {
+        load(item(1))
+        playback.become(Playback.State.PLAYING)
+        receive(ClementineMessage.getMessageBuilder(MsgType.RENDER_PAUSE))
+        assertEquals(listOf(true), active)
+
+        receive(ClementineMessage.getMessageBuilder(MsgType.RENDER_STOP))
+        assertEquals(listOf(true, false), active)
+
+        load(item(2))
+        renderer.release()
+        shadowOf(Looper.getMainLooper()).idle()
+        assertEquals(listOf(true, false, true, false), active)
     }
 
     @Test
