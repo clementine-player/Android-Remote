@@ -24,8 +24,8 @@ Show the song's lyrics in the player
 Release-note: The player shows the song's lyrics, when Clementine finds them.
 ```
 
-Commits without one (refactoring, tests, CI, docs) never make a release. With rebase merges,
-each commit keeps its trailer on `master`.
+Commits without one (refactoring, tests, CI, docs) never make a release on their own. With
+rebase merges, each commit keeps its trailer on `master`.
 
 **Every Monday** the release workflow collects the notes since the last release
 (`scripts/plan_release.sh`; run it to see what the next release would be). With none, it does
@@ -46,9 +46,10 @@ from `master`'s commit count: twice it for the internal testing builds (`dev.yml
 more for a release, so every build's code is higher than the one before on both Play and
 F-Droid.
 
-To release before Monday, run the workflow by hand (*Actions → release → Run workflow*). If a
-release failed after its tag was pushed (Google Play refused the upload, say), run it with
-that tag to publish it again.
+To release before Monday, run the workflow by hand (*Actions → release → Run workflow*). Run
+by hand, it releases any change since the last release: when no commit has a note, the release
+notes just say "Fixes and improvements." If a release failed after its tag was pushed (Google
+Play refused the upload, say), run it with that tag to publish it again.
 
 ### One-time setup for releases
 
