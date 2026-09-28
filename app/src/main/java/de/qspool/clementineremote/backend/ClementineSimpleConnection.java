@@ -32,8 +32,8 @@ import de.qspool.clementineremote.backend.pb.ClementinePbParser;
 
 public class ClementineSimpleConnection {
 
-    // Socket, input and output streams
-    protected Socket mSocket;
+    // Socket, input and output streams. Volatile, for abortConnecting from another thread.
+    protected volatile Socket mSocket;
 
     protected DataInputStream mIn;
 
@@ -62,6 +62,20 @@ public class ClementineSimpleConnection {
         }
 
         return true;
+    }
+
+    /**
+     * Gives up on a connection attempt still under way, from another thread: createConnection
+     * then fails at once instead of waiting for its timeout. Does nothing once connected.
+     */
+    public void abortConnecting() {
+        Socket socket = mSocket;
+        if (socket != null && !socket.isConnected()) {
+            try {
+                socket.close();
+            } catch (IOException e) {
+            }
+        }
     }
 
     /**

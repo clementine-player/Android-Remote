@@ -388,15 +388,22 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
 
     /**
      * While auto-connecting, connects to the last Clementine at its new address if it's among
-     * [servers]. Not while its saved address is being tried: that can't be interrupted, so this
-     * waits for it to fail.
+     * [servers]. If its saved address is still being tried, gives up on that rather than waiting
+     * for it to time out; [noConnection] then connects to the new address.
      */
     private fun autoConnect(servers: List<Server>) {
         val name = autoConnectName ?: return
-        if (isFinishing || state.isConnecting || App.ClementineConnection?.isConnected == true) {
+        val server = servers.firstOrNull { it.name == name } ?: return
+        if (isFinishing || App.ClementineConnection?.isConnected == true) {
             return
         }
-        servers.firstOrNull { it.name == name }?.let(::onServer)
+        if (state.isConnecting) {
+            if (server.host != state.host.value) {
+                App.ClementineConnection?.abortConnecting()
+            }
+            return
+        }
+        onServer(server)
     }
 
     companion object {
