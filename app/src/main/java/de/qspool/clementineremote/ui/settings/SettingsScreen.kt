@@ -162,7 +162,7 @@ private fun DownloadSettings(store: PreferenceStore, defaultDownloadDir: () -> S
 @Composable
 private fun ConnectionSettings(store: PreferenceStore) {
     SettingsHeading(stringResource(R.string.pref_cat_connection))
-    BooleanSetting(store, SharedPreferencesKeys.SP_KEY_AC, false, R.string.pref_autoconnect_title, R.string.pref_autoconnect_summary)
+    BooleanSetting(store, SharedPreferencesKeys.SP_KEY_AC, true, R.string.pref_autoconnect_title, R.string.pref_autoconnect_summary)
 
     val port = store.string(SharedPreferencesKeys.SP_KEY_PORT, Clementine.DefaultPort.toString())
     var editing by rememberSaveable { mutableStateOf(false) }

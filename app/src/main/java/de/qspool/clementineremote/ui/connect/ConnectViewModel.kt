@@ -10,6 +10,14 @@ import kotlinx.coroutines.flow.asStateFlow
 data class Server(val name: String, val host: String, val port: Int)
 
 /**
+ * The Clementine last connected to among [servers]: the one called [name], whatever its address
+ * is now, or else the one at [host].
+ */
+fun lastServer(servers: List<Server>, name: String?, host: String?): Server? =
+    servers.firstOrNull { !name.isNullOrEmpty() && it.name == name }
+        ?: servers.firstOrNull { !host.isNullOrEmpty() && it.host == host }
+
+/**
  * The connect screen's state. [de.qspool.clementineremote.ui.ConnectActivity] still does the
  * connecting and discovery, and sets this state as they go.
  */

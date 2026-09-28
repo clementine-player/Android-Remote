@@ -23,6 +23,9 @@ public class SharedPreferencesKeys {
 
     public final static String SP_KEY_IP = "save_clementine_ip";
 
+    /** The network name of the Clementine last connected to, if it was picked from the network. */
+    public final static String SP_KEY_NAME = "last_server_name";
+
     public final static String SP_KEY_AC = "pref_autoconnect";
 
     public final static String SP_KEY_USE_VOLUMEKEYS = "pref_volumekey";
