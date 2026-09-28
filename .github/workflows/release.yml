@@ -128,8 +128,10 @@ jobs:
           mkdir -p "$(dirname "$changelog")"
           cp "$NOTES/changelog.txt" "$changelog"
           git add app/build.gradle.kts "$changelog"
-          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
-            commit -q -m "Release $NAME" -m "$(cat "$NOTES/notes.md")"
+          # Who makes the release commit, and the tag after it.
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -q -m "Release $NAME" -m "$(cat "$NOTES/notes.md")"
           git show --stat HEAD
 
       - uses: actions/setup-java@v5
