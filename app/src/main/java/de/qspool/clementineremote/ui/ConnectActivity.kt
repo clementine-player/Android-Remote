@@ -130,10 +130,19 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
             return
         }
 
-        // Auto-connecting waits for the last Clementine to show up on the network (see
-        // serviceFound), so it finds it by name even if its address has changed.
+        // Auto-connecting to a Clementine picked from the network waits for it to show up there
+        // again (see serviceFound), so it finds it by name even if its address has changed.
         autoConnectPending = preferences.getBoolean(SharedPreferencesKeys.SP_KEY_AC, true) && doAutoConnect
         doAutoConnect = true
+        if (autoConnectPending
+            && preferences.getString(SharedPreferencesKeys.SP_KEY_NAME, null).isNullOrEmpty()
+            && !preferences.getString(SharedPreferencesKeys.SP_KEY_IP, null).isNullOrEmpty()
+        ) {
+            // An address typed in may never show up on the network, so connect to it straight
+            // away. Delayed, so the service has time to start.
+            autoConnectPending = false
+            handler.postDelayed({ onConnect() }, AUTO_CONNECT_DELAY_MILLIS)
+        }
         discovery = ClementineMDnsDiscovery(handler).also { it.discoverServices() }
 
         // Remove notifications still shown.
@@ -351,8 +360,8 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
     }
 
     /**
-     * With auto-connect on, connects to the last Clementine if it's among [servers]: by its name,
-     * whatever its address is now, or else by its address.
+     * With auto-connect on, connects to the last Clementine picked from the network if it's among
+     * [servers]: by its name, whatever its address is now, or else by its address.
      */
     private fun autoConnect(servers: List<Server>) {
         if (!autoConnectPending || state.isConnecting || App.ClementineConnection?.isConnected == true) {
@@ -370,5 +379,6 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
         const val RESULT_QUIT = 2
         private const val ID_PLAYER_DIALOG = 1
         private const val ID_PERMISSION_REQUEST = 3
+        private const val AUTO_CONNECT_DELAY_MILLIS = 250L
     }
 }
