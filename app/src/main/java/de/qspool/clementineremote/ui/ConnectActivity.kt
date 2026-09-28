@@ -89,6 +89,9 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
      */
     private var autoConnectName: String? = null
 
+    /** Whether connecting was canceled: what the attempt says afterwards isn't shown. */
+    private var canceled = false
+
     /** The network name of the Clementine being connected to, if it was picked from the network. */
     private var serverName: String? = null
 
@@ -225,6 +228,10 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
 
     override fun onCancel() {
         autoConnectName = null
+        canceled = true
+        // An attempt still under way blocks the connection thread until it times out: give up on
+        // it now. Once connected, disconnecting does it.
+        App.ClementineConnection?.abortConnecting()
         RemoteRepository.send(ClementineMessage.getMessage(MsgType.DISCONNECT))
         state.hideProgress()
     }
@@ -235,7 +242,11 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
     }
 
     /** Shows how far connecting has got. */
-    fun showProgress(@StringRes progress: Int) = state.showProgress(progress)
+    fun showProgress(@StringRes progress: Int) {
+        if (!canceled) {
+            state.showProgress(progress)
+        }
+    }
 
     /** Connecting has ended, whether connected or not. */
     fun connectionEnded() = state.hideProgress()
@@ -248,6 +259,7 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
         }
 
         autoConnectName = null
+        canceled = false
         val ip = state.host.value
         knownIps.add(ip)
         state.setKnownHosts(knownIps)
@@ -299,7 +311,7 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
 
     /** Couldn't connect to Clementine: say what's likely wrong. */
     fun noConnection() {
-        if (isFinishing) {
+        if (isFinishing || canceled) {
             return
         }
         if (autoConnectName != null) {
