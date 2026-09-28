@@ -83,9 +83,11 @@ makes a development build (`.github/workflows/dev.yml`):
 
 - on Google Play's **internal testing** track: a private channel for up to 100 testers, with
   no review;
-- as the GitHub pre-release **dev**, replaced by each build: the APK, with the same package
-  and signature as the releases, so it updates to the next release and from the last one.
-  It needs the release certificate (see *One-time setup for releases*).
+- as a GitHub pre-release, `dev-<version code>`, which replaces the last one: the APK, with
+  the same package and signature as the releases, so it updates to the next release and from
+  the last one. It needs the release certificate (see *One-time setup for releases*).
+  Releases are immutable, so each build is a pre-release of its own: link to the
+  [releases](https://github.com/clementine-player/Android-Remote/releases) rather than to one.
 
 The version code is twice the number of commits on `master` (releases take the odd codes),
 and the version name is `versionName` plus the commit, such as `13-dev+6ece743`.
