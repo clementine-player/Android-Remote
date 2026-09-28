@@ -27,8 +27,8 @@ android {
         targetSdk = 36
         // master keeps the next version with -dev. Each release commit sets both (see
         // .github/workflows/release.yml), and F-Droid reads them from its tag.
-        versionCode = 800
-        versionName = "13-dev"
+        versionCode = 1773
+        versionName = "13"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

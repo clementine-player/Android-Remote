@@ -1,0 +1,6 @@
+- A new look in Material 3, with a dark theme that follows the system.
+- A new player, with lyrics and song details; the phone's volume buttons set Clementine's volume.
+- Faster library, search and downloads, redesigned throughout.
+- A new home-screen widget.
+- Media controls on the lock screen, in notifications and over Bluetooth.
+- Tapping a song plays it if Clementine isn't playing, as double-clicking it in Clementine does.
