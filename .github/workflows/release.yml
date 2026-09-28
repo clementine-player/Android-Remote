@@ -206,9 +206,13 @@ jobs:
           NOTES: ${{ steps.plan.outputs.notes }}
           APK: ${{ steps.apk.outputs.path }}
         run: |
-          # Already there when publishing again: then just the APK again.
+          # Already there when publishing again. Releases are immutable once published, so it
+          # gets the APK only if it went out without one.
           if gh release view "$TAG" > /dev/null 2>&1; then
-            if [ -n "$APK" ]; then gh release upload "$TAG" "$APK" --clobber; fi
+            if [ -n "$APK" ] && ! gh release view "$TAG" --json assets --jq '.assets[].name' | grep -qx "$(basename "$APK")"; then
+              gh release upload "$TAG" "$APK" ||
+                echo "::warning::Couldn't add the APK to $TAG: an immutable release can't be changed."
+            fi
           else
             gh release create "$TAG" --verify-tag --title "Clementine Remote $NAME" \
               --notes-file "$NOTES/notes.md" ${APK:+"$APK"}
