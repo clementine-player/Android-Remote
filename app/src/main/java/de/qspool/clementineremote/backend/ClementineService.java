@@ -264,7 +264,11 @@ public class ClementineService extends Service {
         mInForeground = true;
     }
 
-    /** Connected to Clementine, and playing media too while Clementine plays on this phone. */
+    /**
+     * Connected to Clementine, and playing media too while Clementine plays on this phone.
+     * ServiceCompat ignores the types before Android 10, which introduced them.
+     */
+    @SuppressLint("InlinedApi")
     private int foregroundServiceTypes() {
         return mPlayingHere
                 ? ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE
