@@ -61,6 +61,7 @@ import de.qspool.clementineremote.ui.connect.ConnectDialog
 import de.qspool.clementineremote.ui.connect.ConnectScreen
 import de.qspool.clementineremote.ui.connect.ConnectViewModel
 import de.qspool.clementineremote.ui.connect.Server
+import de.qspool.clementineremote.ui.connect.lastServer
 import de.qspool.clementineremote.ui.settings.ClementineSettings
 import de.qspool.clementineremote.ui.theme.ClementineTheme
 import de.qspool.clementineremote.utils.Utilities
@@ -82,6 +83,12 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
     private var discovery: ClementineMDnsDiscovery? = null
 
     private var doAutoConnect = true
+
+    /** Whether to connect to the last Clementine as soon as it's found on the network. */
+    private var autoConnectPending = false
+
+    /** The network name of the Clementine being connected to, if it was picked from the network. */
+    private var serverName: String? = null
 
     private lateinit var knownIps: MutableSet<String>
 
@@ -123,15 +130,11 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
             return
         }
 
-        // mDNS discovery runs even when auto-connecting, so that if the saved address no longer
-        // works, the Clementines on the network are there to pick from.
-        discovery = ClementineMDnsDiscovery(handler).also { it.discoverServices() }
-
-        if (preferences.getBoolean(SharedPreferencesKeys.SP_KEY_AC, false) && doAutoConnect) {
-            // Delayed, so the service has time to start.
-            handler.postDelayed({ connect() }, AUTO_CONNECT_DELAY_MILLIS)
-        }
+        // Auto-connecting waits for the last Clementine to show up on the network (see
+        // serviceFound), so it finds it by name even if its address has changed.
+        autoConnectPending = preferences.getBoolean(SharedPreferencesKeys.SP_KEY_AC, true) && doAutoConnect
         doAutoConnect = true
+        discovery = ClementineMDnsDiscovery(handler).also { it.discoverServices() }
 
         // Remove notifications still shown.
         val notifications = getSystemService(NotificationManager::class.java)
@@ -189,10 +192,14 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
         ActivityCompat.requestPermissions(this, permissions.toTypedArray(), ID_PERMISSION_REQUEST)
     }
 
-    override fun onConnect() = connect()
+    override fun onConnect() {
+        serverName = null
+        connect()
+    }
 
     override fun onServer(server: Server) {
         state.setHost(server.host)
+        serverName = server.name
         preferences.edit { putString(SharedPreferencesKeys.SP_KEY_PORT, server.port.toString()) }
         connect()
     }
@@ -231,11 +238,13 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
             return
         }
 
+        autoConnectPending = false
         val ip = state.host.value
         knownIps.add(ip)
         state.setKnownHosts(knownIps)
         preferences.edit {
             putString(SharedPreferencesKeys.SP_KEY_IP, ip)
+            putString(SharedPreferencesKeys.SP_KEY_NAME, serverName.orEmpty())
             putInt(SharedPreferencesKeys.SP_LAST_AUTH_CODE, authCode)
             putStringSet(SharedPreferencesKeys.SP_KNOWN_IP, knownIps)
         }
@@ -334,11 +343,26 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
 
     /** The Clementines found on the network changed. */
     fun serviceFound() {
-        state.setServers(
-            discovery?.services.orEmpty().mapNotNull { service ->
-                service.inet4Addresses.firstOrNull()?.let { Server(service.name, it.hostAddress.orEmpty(), service.port) }
-            },
-        )
+        val servers = discovery?.services.orEmpty().mapNotNull { service ->
+            service.inet4Addresses.firstOrNull()?.let { Server(service.name, it.hostAddress.orEmpty(), service.port) }
+        }
+        state.setServers(servers)
+        autoConnect(servers)
+    }
+
+    /**
+     * With auto-connect on, connects to the last Clementine if it's among [servers]: by its name,
+     * whatever its address is now, or else by its address.
+     */
+    private fun autoConnect(servers: List<Server>) {
+        if (!autoConnectPending || state.isConnecting || App.ClementineConnection?.isConnected == true) {
+            return
+        }
+        lastServer(
+            servers,
+            preferences.getString(SharedPreferencesKeys.SP_KEY_NAME, null),
+            preferences.getString(SharedPreferencesKeys.SP_KEY_IP, null),
+        )?.let(::onServer)
     }
 
     companion object {
@@ -346,6 +370,5 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
         const val RESULT_QUIT = 2
         private const val ID_PLAYER_DIALOG = 1
         private const val ID_PERMISSION_REQUEST = 3
-        private const val AUTO_CONNECT_DELAY_MILLIS = 250L
     }
 }

@@ -120,9 +120,10 @@ public class StoreScreenshots {
             shell(command);
         }
 
-        // Skip the first-run message and fill in Clementine's address.
+        // Skip the first-run message, stay on the connect screen, and fill in Clementine's address.
         App.getPreferences().edit()
                 .putBoolean(SharedPreferencesKeys.SP_FIRST_CALL, false)
+                .putBoolean(SharedPreferencesKeys.SP_KEY_AC, false)
                 .putString(SharedPreferencesKeys.SP_KEY_IP, host)
                 .putString(SharedPreferencesKeys.SP_KEY_PORT, "5500")
                 .commit();

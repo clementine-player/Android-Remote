@@ -104,6 +104,7 @@ public class MediaSessionDeviceTest {
 
         App.getPreferences().edit()
                 .putBoolean(SharedPreferencesKeys.SP_FIRST_CALL, false)
+                .putBoolean(SharedPreferencesKeys.SP_KEY_AC, false)
                 .putString(SharedPreferencesKeys.SP_KEY_IP, host)
                 .putString(SharedPreferencesKeys.SP_KEY_PORT, "5500")
                 .commit();
