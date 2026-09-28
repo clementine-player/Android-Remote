@@ -281,10 +281,24 @@ public class ClementineMessageFactory {
      * @return the Clementine Message
      */
     public static ClementineMessage buildInsertUrl(int playistId, LinkedList<String> urls) {
+        return buildInsertUrl(playistId, urls, false);
+    }
+
+    /**
+     * Inserts songs into given playlist
+     *
+     * @param playistId The id of the playlist
+     * @param urls      The urls to the items
+     * @param playNow   Whether Clementine plays the first of them
+     * @return the Clementine Message
+     */
+    public static ClementineMessage buildInsertUrl(int playistId, LinkedList<String> urls,
+            boolean playNow) {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.INSERT_URLS);
 
         RequestInsertUrls.Builder insertUrls = RequestInsertUrls.newBuilder();
         insertUrls.setPlaylistId(playistId);
+        insertUrls.setPlayNow(playNow);
         for (String url : urls) {
             insertUrls.addUrls(url);
         }
@@ -296,10 +310,17 @@ public class ClementineMessageFactory {
 
     public static ClementineMessage buildInsertSongs(int playistId,
             LinkedList<ClementineRemoteProtocolBuffer.SongMetadata> songs) {
+        return buildInsertSongs(playistId, songs, false);
+    }
+
+    /** Inserts songs, described in full, into given playlist; with playNow, plays the first. */
+    public static ClementineMessage buildInsertSongs(int playistId,
+            LinkedList<ClementineRemoteProtocolBuffer.SongMetadata> songs, boolean playNow) {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.INSERT_URLS);
 
         RequestInsertUrls.Builder insertSongs = RequestInsertUrls.newBuilder();
         insertSongs.setPlaylistId(playistId);
+        insertSongs.setPlayNow(playNow);
         insertSongs.addAllSongs(songs);
 
         msg.setRequestInsertUrls(insertSongs);

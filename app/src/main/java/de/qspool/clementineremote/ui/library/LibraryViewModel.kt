@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.SharedPreferencesKeys
+import de.qspool.clementineremote.backend.Clementine
 import de.qspool.clementineremote.backend.ClementineLibraryDownloader
 import de.qspool.clementineremote.backend.RemoteRepository
 import de.qspool.clementineremote.backend.database.DynamicSongQuery
@@ -218,11 +219,14 @@ class LibraryViewModel(
         }
     }
 
-    /** Opens an item: the level below it, or for a song, adds it to the playlist. */
+    /**
+     * Opens an item: the level below it, or for a song, adds it to the playlist, and plays it if
+     * Clementine isn't playing, as double-clicking a song in Clementine does.
+     */
     fun open(item: SongSelectItem) {
         val shown = _state.value.shown ?: return
         if (shown.kind == ItemKind.SONG) {
-            addToPlaylist(listOf(item))
+            addToPlaylist(listOf(item), playIfStopped = true)
             return
         }
         viewModelScope.launch {
@@ -250,15 +254,19 @@ class LibraryViewModel(
         }
     }
 
-    /** Adds the songs of [items] (songs, or whatever groups them) to the playlist playing. */
-    fun addToPlaylist(items: List<SongSelectItem>) {
+    /**
+     * Adds the songs of [items] (songs, or whatever groups them) to the playlist playing. With
+     * [playIfStopped], Clementine plays them unless it's playing already.
+     */
+    fun addToPlaylist(items: List<SongSelectItem>, playIfStopped: Boolean = false) {
         viewModelScope.launch {
             val urls = withContext(io) { songUrls(items) }
             if (urls.isEmpty()) {
                 return@launch
             }
+            val playNow = playIfStopped && App.Clementine.state != Clementine.State.PLAY
             send(ClementineMessageFactory.buildInsertUrl(
-                App.Clementine.playlistManager.activePlaylistId, LinkedList(urls)))
+                App.Clementine.playlistManager.activePlaylistId, LinkedList(urls), playNow))
             _messages.trySend(Message.Added(urls.size))
         }
     }

@@ -110,6 +110,10 @@ public class ClementineMessageFactoryTest {
         assertEquals(MsgType.INSERT_URLS, parsed.getType());
         assertEquals(2, parsed.getRequestInsertUrls().getPlaylistId());
         assertEquals(urls, parsed.getRequestInsertUrls().getUrlsList());
+        assertFalse(parsed.getRequestInsertUrls().getPlayNow());
+
+        parsed = roundTrip(ClementineMessageFactory.buildInsertUrl(2, urls, true));
+        assertTrue(parsed.getRequestInsertUrls().getPlayNow());
     }
 
     @Test
