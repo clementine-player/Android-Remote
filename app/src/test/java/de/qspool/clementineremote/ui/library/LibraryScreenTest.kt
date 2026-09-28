@@ -117,6 +117,29 @@ class LibraryScreenTest {
     }
 
     @Test
+    fun aSongOpenedPlaysUnlessClementineIsPlaying() {
+        val sent = mutableListOf<ClementineMessage>()
+        val library = viewModel(sent)
+        library.open(library.state.value.shown!!.items.first { it.listTitle == "Frédéric Chopin" })
+        idle()
+        library.open(library.state.value.shown!!.items.single())
+        idle()
+        val song = library.state.value.shown!!.items[0]
+
+        library.open(song)
+        App.Clementine.state = Clementine.State.PAUSE
+        library.open(song)
+        App.Clementine.state = Clementine.State.PLAY
+        library.open(song)
+        // Adding without opening never plays.
+        App.Clementine.state = Clementine.State.STOP
+        library.addToPlaylist(listOf(song))
+        idle()
+
+        assertEquals(listOf(true, true, false, false), sent.map { it.message.requestInsertUrls.playNow })
+    }
+
+    @Test
     fun addsEverySongOfAnArtist() {
         val sent = mutableListOf<ClementineMessage>()
         val library = viewModel(sent)

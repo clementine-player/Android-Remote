@@ -116,6 +116,32 @@ class SearchScreenTest {
     }
 
     @Test
+    fun aSongOpenedPlaysUnlessClementineIsPlaying() {
+        val sent = mutableListOf<ClementineMessage>()
+        val search = viewModel(sent)
+        search.finished(7)
+        idle()
+        search.open(search.state.value.shown!!.items.first { it.listTitle == "Library" })
+        idle()
+        search.open(search.state.value.shown!!.items.single())
+        idle()
+        val song = search.state.value.shown!!.items[0]
+        sent.clear()
+
+        search.open(song)
+        App.Clementine.state = Clementine.State.PAUSE
+        search.open(song)
+        App.Clementine.state = Clementine.State.PLAY
+        search.open(song)
+        // Adding without opening never plays.
+        App.Clementine.state = Clementine.State.STOP
+        search.addToPlaylist(listOf(song))
+        idle()
+
+        assertEquals(listOf(true, true, false, false), sent.map { it.message.requestInsertUrls.playNow })
+    }
+
+    @Test
     fun addsEverySongOfASource() {
         val sent = mutableListOf<ClementineMessage>()
         val search = viewModel(sent)
