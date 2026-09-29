@@ -161,22 +161,21 @@ public class StoreScreenshots {
         return waitFor(selector, TIMEOUT);
     }
 
-    /** Scrolls the list tagged [list] down until [selector] shows, and returns that. */
+    /**
+     * Scrolls the list tagged [list] down until [selector] shows, and returns that. Whether a
+     * Compose list can scroll further isn't reported reliably, so it just scrolls until then.
+     */
     private UiObject2 scrollTo(String list, BySelector selector) {
-        UiObject2 scrollable = waitFor(tag(list));
-        for (int i = 0; i < 20 && !mDevice.hasObject(selector); i++) {
-            if (!scrollable.scroll(Direction.DOWN, 0.8f)) {
-                break;
-            }
+        for (int i = 0; i < 15 && !mDevice.hasObject(selector); i++) {
+            waitFor(tag(list)).scroll(Direction.DOWN, 0.5f);
         }
         return waitFor(selector);
     }
 
     /** Scrolls the list tagged [list] back to its top. */
     private void scrollToTop(String list) {
-        UiObject2 scrollable = waitFor(tag(list));
-        for (int i = 0; i < 20 && scrollable.scroll(Direction.UP, 1f); i++) {
-            // Until it can't scroll any further.
+        for (int i = 0; i < 3; i++) {
+            waitFor(tag(list)).fling(Direction.UP);
         }
     }
 
