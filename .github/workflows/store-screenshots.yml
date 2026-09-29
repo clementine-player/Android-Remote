@@ -66,7 +66,7 @@ jobs:
           cache-from: type=gha,scope=clementine-it-showcase
           cache-to: type=gha,scope=clementine-it-showcase,mode=max
 
-      # STREAMING: remote streaming (--experimental-remote-streaming), so the screenshots show
+      # STREAMING: remote streaming (see clementine-it/entrypoint.sh), so the screenshots show
       # what the app offers with it: choosing where Clementine plays.
       - name: Start Clementine
         run: |
