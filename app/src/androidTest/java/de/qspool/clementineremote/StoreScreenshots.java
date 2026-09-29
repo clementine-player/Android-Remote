@@ -11,6 +11,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.GrantPermissionRule;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.BySelector;
+import androidx.test.uiautomator.Direction;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.Until;
@@ -160,6 +161,25 @@ public class StoreScreenshots {
         return waitFor(selector, TIMEOUT);
     }
 
+    /** Scrolls the list tagged [list] down until [selector] shows, and returns that. */
+    private UiObject2 scrollTo(String list, BySelector selector) {
+        UiObject2 scrollable = waitFor(tag(list));
+        for (int i = 0; i < 20 && !mDevice.hasObject(selector); i++) {
+            if (!scrollable.scroll(Direction.DOWN, 0.8f)) {
+                break;
+            }
+        }
+        return waitFor(selector);
+    }
+
+    /** Scrolls the list tagged [list] back to its top. */
+    private void scrollToTop(String list) {
+        UiObject2 scrollable = waitFor(tag(list));
+        for (int i = 0; i < 20 && scrollable.scroll(Direction.UP, 1f); i++) {
+            // Until it can't scroll any further.
+        }
+    }
+
     /** A Compose element, by its test tag: its resource name, without the package. */
     private static BySelector tag(String name) {
         return By.res(name);
@@ -282,13 +302,14 @@ public class StoreScreenshots {
         waitFor(tag("internetNode"));
         SystemClock.sleep(SETTLE_MILLIS);
         screenshot("10_internet");
-        waitFor(By.text(RADIO_STREAMS)).click();
+        // The last of the services.
+        scrollTo("internetNodes", By.text(RADIO_STREAMS)).click();
         waitFor(By.text("Groove Salad"));
         SystemClock.sleep(SETTLE_MILLIS);
         screenshot("11_internet_radio");
         // Back up to the services, where the dark screenshots start.
         mDevice.pressBack();
-        waitFor(By.text(RADIO_STREAMS));
+        waitFor(tag("internetNode"));
 
         navigateTo("navSearch");
         search("Gymnopédie");
@@ -318,14 +339,15 @@ public class StoreScreenshots {
 
         navigateTo("navInternet");
         waitFor(tag("internetNode"));
+        scrollToTop("internetNodes");
         SystemClock.sleep(SETTLE_MILLIS);
         screenshot("dark_10_internet");
-        waitFor(By.text(RADIO_STREAMS)).click();
+        scrollTo("internetNodes", By.text(RADIO_STREAMS)).click();
         waitFor(By.text("Groove Salad"));
         SystemClock.sleep(SETTLE_MILLIS);
         screenshot("dark_11_internet_radio");
         mDevice.pressBack();
-        waitFor(By.text(RADIO_STREAMS));
+        waitFor(tag("internetNode"));
 
         navigateTo("navQueue");
         waitFor(By.text("Clair de lune").hasAncestor(tag("queueSongs")));
