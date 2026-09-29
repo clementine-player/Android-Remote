@@ -19,6 +19,7 @@ __All Features:__
 * Control player
 * Download songs from Clementine to your phone
 * Browse your library
+* Browse Clementine's internet services (radio stations, Jamendo, Subsonic, ...) and play from them
 * Search for songs
 * Displays the cover art
 * Read the lyrics

@@ -273,6 +273,12 @@ public class StoreScreenshots {
         waitFor(By.textStartsWith("Nocturne in"));
         screenshot("2_library_album");
 
+        // Clementine's internet services, at the top level.
+        navigateTo("navInternet");
+        waitFor(tag("internetNode"));
+        SystemClock.sleep(SETTLE_MILLIS);
+        screenshot("10_internet");
+
         navigateTo("navSearch");
         search("Gymnopédie");
         // Songs matched by title are listed straight away.
@@ -298,6 +304,11 @@ public class StoreScreenshots {
         waitFor(By.text("Frédéric Chopin"));
         SystemClock.sleep(SETTLE_MILLIS);
         screenshot("dark_2_library");
+
+        navigateTo("navInternet");
+        waitFor(tag("internetNode"));
+        SystemClock.sleep(SETTLE_MILLIS);
+        screenshot("dark_10_internet");
 
         navigateTo("navQueue");
         waitFor(By.text("Clair de lune").hasAncestor(tag("queueSongs")));

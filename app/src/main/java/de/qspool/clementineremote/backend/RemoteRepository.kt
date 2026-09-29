@@ -8,11 +8,17 @@ import de.qspool.clementineremote.backend.listener.PlayerConnectionListener
 import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.OutputState
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseBrowse
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseBrowseAdd
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ServerFeature
 import de.qspool.clementineremote.backend.streaming.ThisRenderer
 import de.qspool.clementineremote.backend.player.MySong
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 /**
@@ -60,6 +66,28 @@ object RemoteRepository {
         val active: Output? get() = outputs.firstOrNull { it.active }
     }
 
+    /** Whether Clementine's Internet sidebar can be browsed, on which connection. */
+    data class Browsing(
+        /** Whether this Clementine can be browsed (REQUEST_BROWSE). */
+        val supported: Boolean = false,
+        /**
+         * Counts connections (Clementine's INFO, sent on each). Node ids are valid only on the
+         * connection that gave them.
+         */
+        val connection: Int = 0,
+    )
+
+    /** An answer to browsing Clementine's Internet sidebar, and the connection it came on. */
+    sealed interface BrowseMessage {
+        val connection: Int
+
+        /** A node's children, asked for or changed. */
+        data class Browse(override val connection: Int, val response: ResponseBrowse) : BrowseMessage
+
+        /** How putting nodes on the playlist went. */
+        data class AddResult(override val connection: Int, val response: ResponseBrowseAdd) : BrowseMessage
+    }
+
     /** The output id of Clementine's own computer. */
     const val LOCAL_OUTPUT = "local"
 
@@ -88,6 +116,21 @@ object RemoteRepository {
     /** Where Clementine can play (remote streaming), and where it plays now. */
     @JvmStatic
     val outputs: StateFlow<Outputs> = _outputs.asStateFlow()
+
+    private val _browsing = MutableStateFlow(Browsing())
+
+    /** Whether Clementine's Internet sidebar can be browsed; a new connection each INFO. */
+    @JvmStatic
+    val browsing: StateFlow<Browsing> = _browsing.asStateFlow()
+
+    private val _browseMessages = MutableSharedFlow<BrowseMessage>(
+        extraBufferCapacity = 64,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST,
+    )
+
+    /** Clementine's answers to browsing its Internet sidebar, in the order they came. */
+    @JvmStatic
+    val browseMessages: SharedFlow<BrowseMessage> = _browseMessages.asSharedFlow()
 
     /** Whether Clementine plays on this phone (remote streaming). */
     @JvmStatic
@@ -123,8 +166,17 @@ object RemoteRepository {
                 if (supported) {
                     send(ClementineMessage.getMessage(MsgType.REQUEST_OUTPUTS))
                 }
+                _browsing.value = Browsing(
+                    supported = ServerFeature.SERVER_FEATURE_BROWSE in
+                        message.message.responseClementineInfo.featuresList,
+                    connection = _browsing.value.connection + 1,
+                )
                 refresh()
             }
+            MsgType.BROWSE -> _browseMessages.tryEmit(
+                BrowseMessage.Browse(_browsing.value.connection, message.message.responseBrowse))
+            MsgType.BROWSE_ADD_RESULT -> _browseMessages.tryEmit(
+                BrowseMessage.AddResult(_browsing.value.connection, message.message.responseBrowseAdd))
             MsgType.OUTPUTS -> _outputs.value = _outputs.value.copy(
                 outputs = message.message.responseOutputs.outputsList.map {
                     Output(

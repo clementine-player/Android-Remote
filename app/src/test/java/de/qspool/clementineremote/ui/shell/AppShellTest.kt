@@ -13,6 +13,10 @@ import androidx.compose.ui.test.performScrollTo
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.backend.Clementine
 import de.qspool.clementineremote.backend.RemoteRepository
+import de.qspool.clementineremote.backend.pb.ClementineMessage
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseClementineInfo
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ServerFeature
 import de.qspool.clementineremote.backend.player.MySong
 import de.qspool.clementineremote.ui.theme.ClementineTheme
 import org.junit.Assert.assertEquals
@@ -87,6 +91,39 @@ class AppShellTest {
         compose.runOnUiThread { compose.activity.onBackPressedDispatcher.onBackPressed() }
         compose.waitForIdle()
         assertEquals(Destination.QUEUE, shell.destination)
+    }
+
+    /** Clementine's INFO, as on connecting: it can be browsed, or not. */
+    private fun connect(browse: Boolean) {
+        val info = ResponseClementineInfo.newBuilder().setVersion("1.4")
+        if (browse) {
+            info.addFeatures(ServerFeature.SERVER_FEATURE_BROWSE)
+        }
+        compose.runOnUiThread {
+            RemoteRepository.onMessage(ClementineMessage(
+                ClementineMessage.getMessageBuilder(MsgType.INFO).setResponseClementineInfo(info)))
+        }
+        compose.waitForIdle()
+    }
+
+    @Test
+    fun theInternetScreenIsThereOnlyWhenClementineCanBeBrowsed() {
+        try {
+            connect(browse = false)
+            compose.onNodeWithTag("navInternet").assertDoesNotExist()
+
+            connect(browse = true)
+            compose.onNodeWithTag("navInternet").performClick()
+            compose.onNodeWithTag("internetRefresh").assertIsDisplayed()
+            assertEquals(Destination.INTERNET, shell.destination)
+
+            // Connected to a Clementine that can't be browsed, while it shows: the queue shows.
+            connect(browse = false)
+            compose.onNodeWithTag("navInternet").assertDoesNotExist()
+            assertEquals(Destination.QUEUE, shell.destination)
+        } finally {
+            connect(browse = false)
+        }
     }
 
     @Test

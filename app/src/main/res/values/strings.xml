@@ -143,6 +143,20 @@
     <string name="library_add_to_playlist">Add to playlist</string>
     <string name="library_back">Back</string>
 
+    <!-- Browsing Clementine's internet services: its Internet sidebar. -->
+    <string name="internet_title">Internet</string>
+    <string name="internet_loading">Loading…</string>
+    <string name="internet_needs_setup">Set up in Clementine</string>
+    <string name="internet_empty">Nothing here</string>
+    <string name="internet_play">Play</string>
+    <string name="internet_play_now">Play now</string>
+    <string name="internet_play_next">Play next</string>
+    <string name="internet_replace_playlist">Replace playlist</string>
+    <string name="internet_added">Added to the playlist</string>
+    <string name="internet_playing_next">Playing next</string>
+    <string name="internet_not_playable">Clementine can\'t add that to the playlist</string>
+    <string name="internet_gone">That\'s no longer in Clementine</string>
+
 
     <string name="global_search_empty">Enter search terms above to find music on your computer and on the internet</string>
     <string name="global_search_search">Search for anything</string>

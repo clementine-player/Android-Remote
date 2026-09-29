@@ -3,10 +3,13 @@ package de.qspool.clementineremote.backend
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementinePbParser
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.BrowseAddResult
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Output
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.OutputState
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseBrowse
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseBrowseAdd
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseClementineInfo
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseOutputs
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ServerFeature
@@ -18,6 +21,9 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuf
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata
 import de.qspool.clementineremote.backend.player.MySong
 import de.qspool.clementineremote.ui.player.PlayerViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -182,5 +188,35 @@ class RemoteRepositoryTest {
         // A Clementine without remote streaming.
         receive(message(MsgType.INFO).setResponseClementineInfo(ResponseClementineInfo.newBuilder().setVersion("1.4")))
         assertFalse(RemoteRepository.outputs.value.supported)
+    }
+
+    @Test
+    fun followsWhetherClementineCanBeBrowsed() {
+        val before = RemoteRepository.browsing.value.connection
+        val received = mutableListOf<RemoteRepository.BrowseMessage>()
+        val collecting = CoroutineScope(Dispatchers.Unconfined).launch {
+            RemoteRepository.browseMessages.collect { received += it }
+        }
+        try {
+            receive(message(MsgType.INFO).setResponseClementineInfo(
+                ResponseClementineInfo.newBuilder().setVersion("1.5").addFeatures(ServerFeature.SERVER_FEATURE_BROWSE)))
+            assertTrue(RemoteRepository.browsing.value.supported)
+            assertEquals(before + 1, RemoteRepository.browsing.value.connection)
+
+            // Clementine's answers are handed on, with the connection they came on.
+            receive(message(MsgType.BROWSE).setResponseBrowse(ResponseBrowse.newBuilder().setNodeId("n1")))
+            receive(message(MsgType.BROWSE_ADD_RESULT).setResponseBrowseAdd(ResponseBrowseAdd.newBuilder()
+                .addNodeIds("n2").setResult(BrowseAddResult.BROWSE_ADD_RESULT_ADDED)))
+            assertEquals(listOf(before + 1, before + 1), received.map { it.connection })
+            assertEquals("n1", (received[0] as RemoteRepository.BrowseMessage.Browse).response.nodeId)
+            assertEquals(listOf("n2"), (received[1] as RemoteRepository.BrowseMessage.AddResult).response.nodeIdsList)
+
+            // Each connection is a new one; this Clementine can't be browsed.
+            receive(message(MsgType.INFO).setResponseClementineInfo(ResponseClementineInfo.newBuilder().setVersion("1.4")))
+            assertFalse(RemoteRepository.browsing.value.supported)
+            assertEquals(before + 2, RemoteRepository.browsing.value.connection)
+        } finally {
+            collecting.cancel()
+        }
     }
 }

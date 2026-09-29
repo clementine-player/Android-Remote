@@ -47,6 +47,7 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -82,6 +83,8 @@ import de.qspool.clementineremote.ui.hints.Hint
 import de.qspool.clementineremote.ui.hints.HintBox
 import de.qspool.clementineremote.ui.downloads.DownloadsScreen
 import de.qspool.clementineremote.ui.downloads.DownloadsViewModel
+import de.qspool.clementineremote.ui.internet.InternetScreen
+import de.qspool.clementineremote.ui.internet.InternetViewModel
 import de.qspool.clementineremote.ui.library.LibraryScreen
 import de.qspool.clementineremote.ui.library.LibraryViewModel
 import de.qspool.clementineremote.ui.player.PlayerActions
@@ -97,6 +100,8 @@ import de.qspool.clementineremote.ui.search.SearchViewModel
 enum class Destination(@StringRes val label: Int, @DrawableRes val icon: Int, val tag: String) {
     QUEUE(R.string.nav_queue, R.drawable.ic_queue_music, "navQueue"),
     LIBRARY(R.string.library_title, R.drawable.ic_library_music, "navLibrary"),
+    /** Only when Clementine can be browsed (see [RemoteRepository.browsing]). */
+    INTERNET(R.string.internet_title, R.drawable.ic_public, "navInternet"),
     SEARCH(R.string.menu_search, R.drawable.ic_search, "navSearch"),
     DOWNLOADS(R.string.downloads_title, R.drawable.ic_download, "navDownloads"),
 }
@@ -115,10 +120,11 @@ interface ShellActions : ConnectionActions {
 }
 
 /**
- * The app once connected: the queue, library, search and downloads, switched between with the
- * navigation bar (a rail on wide screens), the connection chip at the top, and the mini player
- * at the bottom, which opens the player full screen. The chip opens the connection sheet; the
- * player opens the song details sheet.
+ * The app once connected: the queue, library, internet services (when Clementine can browse
+ * them), search and downloads, switched between with the navigation bar (a rail on wide
+ * screens), the connection chip at the top, and the mini player at the bottom, which opens the
+ * player full screen. The chip opens the connection sheet; the player opens the song details
+ * sheet.
  */
 @Composable
 fun AppShell(shell: ShellViewModel, actions: ShellActions) {
@@ -130,14 +136,21 @@ fun AppShell(shell: ShellViewModel, actions: ShellActions) {
     var choosingDownload by rememberSaveable { mutableStateOf(false) }
     var outputsOpen by rememberSaveable { mutableStateOf(false) }
     val outputs by RemoteRepository.outputs.collectAsStateWithLifecycle()
+    val browsing by RemoteRepository.browsing.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    // A Clementine that can't be browsed has no Internet screen: showing it, go to the queue.
+    LaunchedEffect(browsing.supported) {
+        if (!browsing.supported && shell.destination == Destination.INTERNET) {
+            shell.destination = Destination.QUEUE
+        }
+    }
 
     val layout = NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo(currentWindowAdaptiveInfo())
     Box(Modifier.fillMaxSize()) {
         NavigationSuiteScaffold(
             layoutType = layout,
             navigationSuiteItems = {
-                Destination.entries.forEach { destination ->
+                Destination.entries.filter { it != Destination.INTERNET || browsing.supported }.forEach { destination ->
                     item(
                         selected = shell.destination == destination,
                         onClick = { shell.destination = destination },
@@ -253,7 +266,9 @@ private fun Destinations(shell: ShellViewModel, onConnection: () -> Unit, onSett
     val library: LibraryViewModel = viewModel()
     val search: SearchViewModel = viewModel()
     val downloads: DownloadsViewModel = viewModel()
+    val internet: InternetViewModel = viewModel()
     val libraryState by library.state.collectAsStateWithLifecycle()
+    val internetState by internet.state.collectAsStateWithLifecycle()
     // Clementine's computer, or its address if it doesn't say.
     val host = remember {
         App.Clementine.hostname?.takeIf { it.isNotBlank() }
@@ -263,6 +278,7 @@ private fun Destinations(shell: ShellViewModel, onConnection: () -> Unit, onSett
     // Back leaves search results, then the screen, for the queue.
     BackHandler(shell.destination != Destination.QUEUE) { shell.destination = Destination.QUEUE }
     BackHandler(shell.destination == Destination.LIBRARY && libraryState.levels.size > 1) { library.back() }
+    BackHandler(shell.destination == Destination.INTERNET && internetState.levels.size > 1) { internet.back() }
 
     Column(Modifier.fillMaxSize()) {
         when (shell.destination) {
@@ -325,6 +341,15 @@ private fun Destinations(shell: ShellViewModel, onConnection: () -> Unit, onSett
             Destination.LIBRARY -> {
                 FilterableTopBar(host, onConnection, onSettings, library::setFilter)
                 LibraryScreen(library)
+            }
+            Destination.INTERNET -> {
+                // Ask for the level shown again, so Clementine keeps it up to date.
+                LifecycleResumeEffect(internet) {
+                    internet.refresh()
+                    onPauseOrDispose {}
+                }
+                TopBar(host, onConnection, onSettings)
+                InternetScreen(internet)
             }
             Destination.SEARCH -> {
                 TopBar(host, onConnection, onSettings)
