@@ -6,6 +6,7 @@ This directory builds a Docker image that runs Clementine headless. It installs 
 - PulseAudio's null sink provides audio output, so playback runs in real time.
 - The network remote is enabled on port 5500.
 - The library holds ten generated test tracks (see `generate-music.sh`). They are also loaded as the active playlist.
+- Three radio streams are saved in it (SomaFM's Groove Salad, Drone Zone and Secret Agent), so its Internet sidebar has *Your radio streams* to browse.
 
 The tests are in `app/src/test/java/de/qspool/clementineremote/integration/`. They drive the app's own connection, message factory and parser code against that Clementine. They cover:
 

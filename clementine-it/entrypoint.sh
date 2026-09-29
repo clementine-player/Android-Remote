@@ -37,6 +37,16 @@ doubleclick_playlist_addmode=1
 
 [General]
 startupbehaviour=1
+
+# Radio streams of its own, for browsing its internet services ("Your radio streams").
+[SavedRadio]
+streams\\1\\name=Groove Salad
+streams\\1\\url=http://ice1.somafm.com/groovesalad-128-mp3
+streams\\2\\name=Drone Zone
+streams\\2\\url=http://ice1.somafm.com/dronezone-128-mp3
+streams\\3\\name=Secret Agent
+streams\\3\\url=http://ice1.somafm.com/secretagent-128-mp3
+streams\\size=3
 CONF
 }
 
