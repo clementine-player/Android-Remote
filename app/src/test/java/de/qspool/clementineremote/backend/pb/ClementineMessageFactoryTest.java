@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.AudioFormat;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.BrowseAddAction;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
@@ -146,5 +147,29 @@ public class ClementineMessageFactoryTest {
         Message parsed = roundTrip(ClementineMessageFactory.buildGlobalSearch("beatles"));
         assertEquals(MsgType.GLOBAL_SEARCH, parsed.getType());
         assertEquals("beatles", parsed.getRequestGlobalSearch().getQuery());
+    }
+
+    @Test
+    public void browse() throws Exception {
+        // The services: no node, from the first, as many as Clementine sends.
+        Message parsed = roundTrip(ClementineMessageFactory.buildBrowse("", 0));
+        assertEquals(MsgType.REQUEST_BROWSE, parsed.getType());
+        assertFalse(parsed.getRequestBrowse().hasNodeId());
+        assertFalse(parsed.getRequestBrowse().hasOffset());
+        assertFalse(parsed.getRequestBrowse().hasLimit());
+
+        parsed = roundTrip(ClementineMessageFactory.buildBrowse("n7", 500));
+        assertEquals("n7", parsed.getRequestBrowse().getNodeId());
+        assertEquals(500, parsed.getRequestBrowse().getOffset());
+        assertFalse(parsed.getRequestBrowse().hasLimit());
+    }
+
+    @Test
+    public void browseAdd() throws Exception {
+        Message parsed = roundTrip(ClementineMessageFactory.buildBrowseAdd(
+                Arrays.asList("n3"), BrowseAddAction.BROWSE_ADD_ACTION_PLAY_NEXT));
+        assertEquals(MsgType.REQUEST_BROWSE_ADD, parsed.getType());
+        assertEquals(Arrays.asList("n3"), parsed.getRequestBrowseAdd().getNodeIdsList());
+        assertEquals(BrowseAddAction.BROWSE_ADD_ACTION_PLAY_NEXT, parsed.getRequestBrowseAdd().getAction());
     }
 }

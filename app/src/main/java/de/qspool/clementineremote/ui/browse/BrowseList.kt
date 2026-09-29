@@ -1,5 +1,6 @@
 package de.qspool.clementineremote.ui.browse
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -31,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -112,23 +114,32 @@ internal fun BrowseRow(
 @Composable
 private fun Leading(kind: ItemKind, item: SongSelectItem) {
     val icon = remember(item) { item.icon?.asImageBitmap() }
-    val shape = if (kind == ItemKind.SONG) RoundedCornerShape(8.dp) else CircleShape
-    val size = if (kind == ItemKind.SONG) 48.dp else 40.dp
-    val background = if (kind == ItemKind.SONG) {
+    val drawable = when (kind) {
+        ItemKind.ARTIST -> R.drawable.ic_person
+        ItemKind.ALBUM, ItemKind.YEAR -> R.drawable.ic_album
+        ItemKind.SOURCE, ItemKind.GENRE, ItemKind.SONG -> R.drawable.ic_music_note
+    }
+    BrowseTile(drawable, playable = kind == ItemKind.SONG, image = icon)
+}
+
+/**
+ * A row's tile: a rounded square for something that plays (a song), a circle for what groups
+ * others. It shows [image], if there is one, or else [icon].
+ */
+@Composable
+internal fun BrowseTile(@DrawableRes icon: Int, playable: Boolean, image: ImageBitmap? = null) {
+    val shape = if (playable) RoundedCornerShape(8.dp) else CircleShape
+    val size = if (playable) 48.dp else 40.dp
+    val background = if (playable) {
         MaterialTheme.colorScheme.surfaceContainerHighest
     } else {
         MaterialTheme.colorScheme.secondaryContainer
     }
     Box(Modifier.size(size).clip(shape).background(background), contentAlignment = Alignment.Center) {
-        if (icon != null) {
-            Image(icon, contentDescription = null, modifier = Modifier.size(24.dp))
+        if (image != null) {
+            Image(image, contentDescription = null, modifier = Modifier.size(24.dp))
         } else {
-            val drawable = when (kind) {
-                ItemKind.ARTIST -> R.drawable.ic_person
-                ItemKind.ALBUM, ItemKind.YEAR -> R.drawable.ic_album
-                ItemKind.SOURCE, ItemKind.GENRE, ItemKind.SONG -> R.drawable.ic_music_note
-            }
-            Icon(painterResource(drawable), contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+            Icon(painterResource(icon), contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }

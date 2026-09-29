@@ -18,12 +18,16 @@
 package de.qspool.clementineremote.backend.pb;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.BrowseAddAction;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Repeat;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestBrowse;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestBrowseAdd;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestChangeSong;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestConnect;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RendererCapabilities;
@@ -384,6 +388,36 @@ public class ClementineMessageFactory {
     public static ClementineMessage buildSetOutput(String outputId) {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.SET_OUTPUT);
         msg.setRequestSetOutput(RequestSetOutput.newBuilder().setOutputId(outputId));
+        return new ClementineMessage(msg);
+    }
+
+    /**
+     * Asks for the children of a node of Clementine's Internet sidebar, from offset on, as many
+     * as Clementine sends at once. Clementine keeps sending them as they change, until another
+     * node is asked for.
+     *
+     * @param nodeId the node, or empty for the services
+     */
+    public static ClementineMessage buildBrowse(String nodeId, int offset) {
+        Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.REQUEST_BROWSE);
+        RequestBrowse.Builder request = RequestBrowse.newBuilder();
+        if (nodeId != null && !nodeId.isEmpty()) {
+            request.setNodeId(nodeId);
+        }
+        if (offset > 0) {
+            request.setOffset(offset);
+        }
+        msg.setRequestBrowse(request);
+        return new ClementineMessage(msg);
+    }
+
+    /**
+     * Puts nodes of Clementine's Internet sidebar on its current playlist, as dragging them there
+     * does: appended, played, queued to play next, or replacing the playlist.
+     */
+    public static ClementineMessage buildBrowseAdd(List<String> nodeIds, BrowseAddAction action) {
+        Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.REQUEST_BROWSE_ADD);
+        msg.setRequestBrowseAdd(RequestBrowseAdd.newBuilder().addAllNodeIds(nodeIds).setAction(action));
         return new ClementineMessage(msg);
     }
 }
