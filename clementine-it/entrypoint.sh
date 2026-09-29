@@ -7,7 +7,7 @@
 #   entrypoint.sh --seed    image build step: create the database, add /music
 #
 # Environment: AUTH_CODE (enables the remote's auth code when set), STREAMING (set to 1 to let
-# Clementine play on remotes, which is still experimental).
+# Clementine play on remotes).
 set -euo pipefail
 
 CONFIG_DIR="$HOME/.config/Clementine"
@@ -84,8 +84,12 @@ if [ "${1:-}" = "--seed" ]; then
   exit 0
 fi
 
+# Releases before 1.4.1-238 play on remotes only with --experimental-remote-streaming; later ones
+# do by default and refuse the flag. The binary names its long options without the dashes.
 streaming=()
-[ "${STREAMING:-}" = 1 ] && streaming=(--experimental-remote-streaming)
+if [ "${STREAMING:-}" = 1 ] && grep -q -a experimental-remote-streaming "$(command -v clementine)"; then
+  streaming=(--experimental-remote-streaming)
+fi
 dbus-run-session -- clementine --verbose "${streaming[@]}" &
 pid=$!
 trap 'kill $pid 2>/dev/null' TERM INT
