@@ -58,6 +58,9 @@ public class StoreScreenshots {
     /** Syncing and indexing the library takes a while on an emulator. */
     private static final long LIBRARY_TIMEOUT = 120_000;
 
+    /** Clementine's service for the radio streams saved in it. */
+    private static final String RADIO_STREAMS = "Your radio streams";
+
     @Rule
     public final GrantPermissionRule mPermissions = GrantPermissionRule.grant(
             Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.READ_PHONE_STATE);
@@ -273,11 +276,19 @@ public class StoreScreenshots {
         waitFor(By.textStartsWith("Nocturne in"));
         screenshot("2_library_album");
 
-        // Clementine's internet services, at the top level.
+        // Clementine's internet services, at the top level, then the radio streams saved in it
+        // (clementine-it/entrypoint.sh).
         navigateTo("navInternet");
         waitFor(tag("internetNode"));
         SystemClock.sleep(SETTLE_MILLIS);
         screenshot("10_internet");
+        waitFor(By.text(RADIO_STREAMS)).click();
+        waitFor(By.text("Groove Salad"));
+        SystemClock.sleep(SETTLE_MILLIS);
+        screenshot("11_internet_radio");
+        // Back up to the services, where the dark screenshots start.
+        mDevice.pressBack();
+        waitFor(By.text(RADIO_STREAMS));
 
         navigateTo("navSearch");
         search("Gymnopédie");
@@ -309,6 +320,12 @@ public class StoreScreenshots {
         waitFor(tag("internetNode"));
         SystemClock.sleep(SETTLE_MILLIS);
         screenshot("dark_10_internet");
+        waitFor(By.text(RADIO_STREAMS)).click();
+        waitFor(By.text("Groove Salad"));
+        SystemClock.sleep(SETTLE_MILLIS);
+        screenshot("dark_11_internet_radio");
+        mDevice.pressBack();
+        waitFor(By.text(RADIO_STREAMS));
 
         navigateTo("navQueue");
         waitFor(By.text("Clair de lune").hasAncestor(tag("queueSongs")));
