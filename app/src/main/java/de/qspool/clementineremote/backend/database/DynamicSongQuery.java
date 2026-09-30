@@ -100,18 +100,18 @@ public abstract class DynamicSongQuery {
 
         // Names in order for the phone's language, whatever their case or accents: Android's
         // SQLite collates LOCALIZED with ICU. Plain SQLite would order them by their bytes, putting
-        // "abba" after "ZZ Top", and "Émile" after both.
+        // "abba" after "ZZ Top", and "Émile" after both. LOCALIZED finds names differing only in
+        // case equal, so their bytes then put them in a fixed order: "Apple" before "apple".
         if (isTitleLevel()) {
             query.append(" ORDER BY ");
-            query.append(" album COLLATE LOCALIZED, disc, track ");
+            query.append(" album COLLATE LOCALIZED, album, disc, track ");
             query.append(mSort);
         } else {
+            String field = mSelectedFields[mLevel];
             query.append(" GROUP BY ");
-            query.append(mSelectedFields[mLevel]);
+            query.append(field);
             query.append(" ORDER BY ");
-            query.append(mSelectedFields[mLevel]);
-            query.append(" COLLATE LOCALIZED ");
-            query.append(mSort);
+            query.append(field + " COLLATE LOCALIZED " + mSort + ", " + field + " " + mSort);
         }
 
         try {

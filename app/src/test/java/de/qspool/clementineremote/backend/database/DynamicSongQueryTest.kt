@@ -41,9 +41,11 @@ class DynamicSongQueryTest {
                 db.execSQL("INSERT INTO songs VALUES (?, ?, 'Song', 'file:///song', 1, 1)", arrayOf(artist, album))
             }
             db.execSQL("INSERT INTO songs VALUES ('Various', 'zebra', 'Song', 'file:///song', 1, 1)")
-            db.execSQL("INSERT INTO songs VALUES ('Various', 'Apple', 'Song', 'file:///song', 1, 1)")
-            db.execSQL("INSERT INTO songs VALUES ('Various', 'Été', 'Song', 'file:///song', 1, 3)")
+            // Names differing only in case, the lower-case one first, so their order doesn't come
+            // from the rows'.
             db.execSQL("INSERT INTO songs VALUES ('Various', 'apple', 'Song', 'file:///song', 1, 1)")
+            db.execSQL("INSERT INTO songs VALUES ('Various', 'Été', 'Song', 'file:///song', 1, 3)")
+            db.execSQL("INSERT INTO songs VALUES ('Various', 'Apple', 'Song', 'file:///song', 1, 1)")
             // An album's songs, in disc and track order whatever their names.
             db.execSQL("INSERT INTO songs VALUES ('Various', 'Été', 'b second', 'file:///song', 1, 2)")
             db.execSQL("INSERT INTO songs VALUES ('Various', 'Été', 'A first', 'file:///song', 1, 1)")
@@ -92,5 +94,10 @@ class DynamicSongQueryTest {
     fun sortsBackwardsIgnoringCase() {
         order = "DESC"
         assertEquals(listOf("ZZ Top", "Various", "Érik Satie", "Blondie", "abba"), names(Query()))
+        val albums = Query().apply {
+            level = 1
+            selection = arrayOf("Various")
+        }
+        assertEquals(listOf("zebra", "Été", "apple", "Apple"), names(albums))
     }
 }
