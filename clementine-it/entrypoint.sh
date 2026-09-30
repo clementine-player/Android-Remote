@@ -94,13 +94,7 @@ if [ "${1:-}" = "--seed" ]; then
   exit 0
 fi
 
-# Releases before 1.4.1-238 play on remotes only with --experimental-remote-streaming; later ones
-# do by default and refuse the flag. The binary names its long options without the dashes.
-streaming=()
-if [ "${STREAMING:-}" = 1 ] && grep -q -a experimental-remote-streaming "$(command -v clementine)"; then
-  streaming=(--experimental-remote-streaming)
-fi
-dbus-run-session -- clementine --verbose "${streaming[@]}" &
+dbus-run-session -- clementine --verbose &
 pid=$!
 trap 'kill $pid 2>/dev/null' TERM INT
 

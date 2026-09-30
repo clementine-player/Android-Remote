@@ -32,7 +32,7 @@ docker run --rm -d --name clementine -p 5500:5500 -e AUTH_CODE=12345 -e STREAMIN
     -Pclementine.host=localhost -Pclementine.authCode=12345
 ```
 
-`STREAMING=1` starts Clementine with remote streaming (*Allow playing on remote devices*, and `--experimental-remote-streaming` for releases before 1.4.1-238, which need it), so it can play on the app's renderer; without it, `RemoteStreamingIntegrationTest` is skipped.
+`STREAMING=1` starts Clementine with remote streaming (*Allow playing on remote devices*), so it can play on the app's renderer; without it, `RemoteStreamingIntegrationTest` is skipped.
 
 CI uses Clementine's latest release by default. You can choose a different release tag when starting the workflow by hand.
 
