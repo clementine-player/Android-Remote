@@ -319,7 +319,7 @@ public class StoreScreenshots {
         screenshot("4_search");
 
         // The same screens in the dark theme: the store listing takes the numbered ones, and the
-        // light theme's player after them (scripts/store_graphics.py). The activity is recreated
+        // light theme's player after them (scripts/store_screenshots.py). The activity is recreated
         // in the dark, keeping where it was.
         shell("cmd uimode night yes");
         SystemClock.sleep(SETTLE_MILLIS);

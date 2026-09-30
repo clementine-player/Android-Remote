@@ -3,13 +3,16 @@
 # Commits that change something users notice carry a "Release-note:" trailer: one line for
 # users. Every Monday this collects the notes since the last release (scripts/plan_release.sh);
 # with none, it does nothing, so refactoring, tests and CI never make a release. With some, it:
-#   - makes a release commit on top of master, setting the version and writing the notes as
-#     the fastlane changelog, and pushes it as the tag v<version>. Nothing is pushed to master,
-#     which keeps its -dev version. F-Droid builds the tag.
+#   - takes the store screenshots: the app on an emulator against a real Clementine
+#     (store-screenshots.yml)
+#   - makes a release commit on top of master, setting the version, writing the notes as the
+#     fastlane changelog and adding the screenshots, and pushes it as the tag v<version>.
+#     Nothing is pushed to master, which keeps its -dev version. F-Droid builds the tag.
 #   - publishes a GitHub release with every note and the APK, signed with the release key in
 #     Cloud KMS
 #   - uploads the Play bundle to the closed and open testing tracks (PLAY_RELEASE_TRACK,
-#     default alpha,beta), with the notes as its release notes
+#     default alpha,beta), with the notes as its release notes, and sends Play the store
+#     listing with the new screenshots (scripts/play_listing.py)
 #
 # Run it by hand (Actions → release → Run workflow) to release now rather than on Monday, or,
 # with a tag, to publish an existing release again after a failure. Run by hand, it releases
@@ -29,11 +32,6 @@ on:
         description: "Publish this existing release again (such as v13.1), instead of a new one"
         required: false
 
-# With dev.yml: one Google Play upload at a time.
-concurrency:
-  group: play
-  cancel-in-progress: false
-
 permissions:
   contents: write # for the tag and the GitHub release
   id-token: write # for the OIDC token Workload Identity Federation exchanges
@@ -52,10 +50,51 @@ env:
   KMS_SIGNER_SHA256: 843d553610ebca4a4beee8fc9a66c0c9c7575bc614bc69ea3646eb656974798a
 
 jobs:
-  release:
-    # Workload Identity Federation admits master alone.
+  # Whether there's a release to make, so the screenshots are only taken for one. The release
+  # job plans it again, in full.
+  plan:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      release: ${{ steps.plan.outputs.release }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Plan the release
+        id: plan
+        env:
+          TAG: ${{ inputs.tag }}
+          ALWAYS: ${{ github.event_name == 'workflow_dispatch' && '1' || '' }}
+        run: |
+          # Publishing a release again: it has its screenshots.
+          if [ -n "$TAG" ]; then
+            echo "release=false" >> "$GITHUB_OUTPUT"
+          else
+            scripts/plan_release.sh | grep '^release=' | tee -a "$GITHUB_OUTPUT"
+          fi
+
+  screenshots:
+    needs: plan
+    if: needs.plan.outputs.release == 'true'
+    uses: ./.github/workflows/store-screenshots.yml
+    # What store-screenshots.yml asks for; it only comments on pull requests.
+    permissions:
+      contents: read
+      pull-requests: write
+
+  release:
+    needs: [plan, screenshots]
+    # Also without screenshots: when they failed, the release keeps the last release's.
+    # Workload Identity Federation admits master alone.
+    if: ${{ !cancelled() && github.ref == 'refs/heads/master' }}
+    runs-on: ubuntu-latest
+    # With dev.yml and play-listing.yml: one Google Play upload at a time.
+    concurrency:
+      group: play
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v5
         with:
@@ -117,6 +156,40 @@ jobs:
             echo "::warning::Releases aren't set up yet, so nothing was released (see RELEASING.md)."
           fi
 
+      - name: Download the screenshots
+        if: >
+          steps.setup.outputs.cloud == 'true' && steps.plan.outputs.again != 'true'
+          && needs.screenshots.result == 'success'
+        uses: actions/download-artifact@v8
+        with:
+          name: store-screenshots
+          path: ${{ runner.temp }}/taken
+
+      - uses: actions/setup-python@v7
+        if: steps.setup.outputs.cloud == 'true'
+        with:
+          python-version: "3.13"
+      - run: pip install google-api-python-client google-auth pillow
+        if: steps.setup.outputs.cloud == 'true'
+
+      # From the last release's, so a screen that looks the same stays the same file, and when
+      # the screenshots failed, the release keeps them.
+      - name: The store screenshots
+        if: steps.setup.outputs.cloud == 'true' && steps.plan.outputs.again != 'true'
+        env:
+          LAST: ${{ steps.plan.outputs.last }}
+          TAKEN: ${{ needs.screenshots.result == 'success' && format('{0}/taken/screenshots', runner.temp) || '' }}
+        run: |
+          shots=fastlane/metadata/android/en-US/images/phoneScreenshots
+          if [ -n "$LAST" ] && git cat-file -e "$LAST:$shots" 2> /dev/null; then
+            git checkout "$LAST" -- "$shots"
+          fi
+          if [ -n "$TAKEN" ]; then
+            scripts/store_screenshots.py "$TAKEN"
+          else
+            echo "::warning::The screenshots weren't taken, so this release keeps ${LAST:-no release}'s."
+          fi
+
       - name: Make the release commit
         if: steps.setup.outputs.cloud == 'true' && steps.plan.outputs.again != 'true'
         env:
@@ -130,6 +203,7 @@ jobs:
           mkdir -p "$(dirname "$changelog")"
           cp "$NOTES/changelog.txt" "$changelog"
           git add app/build.gradle.kts "$changelog"
+          git add -A fastlane/metadata/android/en-US/images
           # Who makes the release commit, and the tag after it.
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -238,3 +312,8 @@ jobs:
           tracks: ${{ vars.PLAY_RELEASE_TRACK || 'alpha,beta' }}
           status: ${{ vars.PLAY_RELEASE_STATUS || 'completed' }}
           whatsNewDirectory: ${{ runner.temp }}/whatsnew
+
+      # The listing as released: its text and images, with this release's screenshots.
+      - name: Send the store listing to Google Play
+        if: steps.setup.outputs.cloud == 'true'
+        run: scripts/play_listing.py

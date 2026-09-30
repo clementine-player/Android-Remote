@@ -1,11 +1,12 @@
 # Takes the Google Play screenshots: the app on an emulator, connected to a real headless
 # Clementine (clementine-it) playing the showcase library. The screenshots are uploaded as
-# an artifact; scripts/store_graphics.py turns them into the store listing images.
+# an artifact. Each release runs this (release.yml) and puts them in its store listing, with
+# scripts/store_screenshots.py.
 #
 # Also checks the media session against that Clementine (MediaSessionDeviceTest): Android
 # sees the session and its song, and the system media controls drive Clementine.
 #
-# On pull requests, the screenshots are also posted as a comment next to the store listing's
+# On pull requests, the screenshots are also posted as a comment next to the latest release's
 # (scripts/post_screenshots.sh). They're hosted in a Cloudflare R2 bucket, which charges
 # nothing for bandwidth, with a token that can only read and write that bucket:
 #   secrets R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY;
@@ -14,6 +15,7 @@
 name: store-screenshots
 on:
   workflow_dispatch:
+  workflow_call:
   pull_request:
     paths:
       - .github/workflows/store-screenshots.yml

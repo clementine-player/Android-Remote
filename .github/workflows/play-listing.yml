@@ -1,7 +1,8 @@
 # Keeps the Google Play store listing the same as fastlane/metadata/android/en-US/, which
-# F-Droid reads too: its title and descriptions, icon, feature graphic and phone screenshots
+# F-Droid reads too: its title and descriptions, icon and feature graphic
 # (scripts/play_listing.py). Only what differs is changed, so the listing only goes to review
-# when it has changed. The release notes aren't part of it: releases send those.
+# when it has changed. The phone screenshots and release notes aren't part of it: each
+# release takes its own screenshots and sends them, with its notes (release.yml).
 #
 # On pull requests it only checks the listing against Play's limits. On master it updates Play,
 # signed in as dev.yml and release.yml are (Workload Identity Federation, no keys), once the
