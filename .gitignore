@@ -42,3 +42,5 @@ key.properties
 
 # Worktrees of Claude Code sessions working alongside each other
 .claude/worktrees/
+# Kotlin 2 compiler caches
+.kotlin/

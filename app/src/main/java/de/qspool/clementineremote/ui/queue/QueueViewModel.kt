@@ -122,7 +122,7 @@ class QueueViewModel(
             songs = filtered,
             songCount = songs.size,
             lengthSeconds = songs.sumOf { it.length.coerceAtLeast(0) },
-            playingIndex = if (playingHere) playing?.index else null,
+            playingIndex = if (playingHere) playing.index else null,
             isPlaying = isPlaying,
             loading = loading,
             filter = filter,

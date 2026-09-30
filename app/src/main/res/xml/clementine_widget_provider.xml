@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- The home-screen widget, drawn by Glance (ClementineWidget). It is updated as Clementine's
      state changes, not on a timer. -->
+<!-- targetCellWidth and targetCellHeight size the widget from Android 12, which older versions
+     ignore, sizing it from minWidth and minHeight. -->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="UnusedAttribute"
     android:description="@string/widget_description"
     android:initialLayout="@layout/glance_default_loading_layout"
     android:minWidth="160dp"

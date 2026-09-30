@@ -176,6 +176,9 @@ public class Utilities {
      * the first address of any interface can well be a VPN's, such as Tailscale's.
      */
     @Nullable
+    // getAllNetworks() is deprecated for NetworkCallback, but that reports networks as they come
+    // and go; this needs the ones there now, including Wi-Fi under a VPN, which the default isn't.
+    @SuppressWarnings("deprecation")
     public static Inet4Address getLocalNetworkIp4Address(Context context) {
         ConnectivityManager connectivity = context.getSystemService(ConnectivityManager.class);
         if (connectivity == null) {

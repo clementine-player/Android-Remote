@@ -18,6 +18,7 @@
 package de.qspool.clementineremote.ui;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 
 import java.lang.ref.WeakReference;
@@ -35,6 +36,7 @@ public class ConnectActivityHandler extends Handler {
     WeakReference<ConnectActivity> mDialog;
 
     ConnectActivityHandler(ConnectActivity connectActivity) {
+        super(Looper.getMainLooper());
         mDialog = new WeakReference<>(connectActivity);
     }
 
