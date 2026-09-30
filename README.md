@@ -43,8 +43,11 @@ Get Clementine Android-Remote:
 
 <a href="https://f-droid.org/packages/de.qspool.clementineremote/" target="_blank">
 <img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="80"/></a>
-<a href="https://play.google.com/store/apps/details?id=de.qspool.clementineremote" target="_blank">
+<a href="https://play.google.com/apps/testing/org.clementine_player.remote" target="_blank">
 <img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" alt="Get it on Google Play" height="80"/></a>
+
+On Google Play, the app is in open testing for now: the link lets you join it, and install
+the app.
 
 This application is licensed under the GNU GPLv3.
 
