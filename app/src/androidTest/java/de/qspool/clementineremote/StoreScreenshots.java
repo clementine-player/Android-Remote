@@ -318,8 +318,9 @@ public class StoreScreenshots {
         SystemClock.sleep(SETTLE_MILLIS);
         screenshot("4_search");
 
-        // The same screens in the dark theme, for pull requests; the store listing takes only
-        // the numbered ones. The activity is recreated in the dark, keeping where it was.
+        // The same screens in the dark theme: the store listing takes the numbered ones, and the
+        // light theme's player after them (scripts/store_graphics.py). The activity is recreated
+        // in the dark, keeping where it was.
         shell("cmd uimode night yes");
         SystemClock.sleep(SETTLE_MILLIS);
         waitFor(tracks);

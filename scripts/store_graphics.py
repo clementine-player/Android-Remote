@@ -10,7 +10,8 @@
   (the connect screen's background, res/drawable/activity_background.xml) with the app's
   name, set in Liberation Sans.
 - phoneScreenshots/: the emulator screenshots from the store-screenshots workflow, if a
-  directory of them is given, copied as they are.
+  directory of them is given, copied as they are: the numbered screens in the dark theme,
+  which most people use, then the player in the light theme, to show there's one.
 
 Everything is drawn from these sources; nothing is generated.
 """
@@ -110,7 +111,12 @@ def main():
         shots = OUT / "phoneScreenshots"
         shutil.rmtree(shots, ignore_errors=True)
         shots.mkdir()
-        for i, source in enumerate(sorted(Path(sys.argv[1]).glob("[0-9]_*.png")), 1):
+        taken = Path(sys.argv[1])
+        dark = sorted(taken.glob("dark_[0-9]_*.png"))
+        if not dark:
+            sys.exit(f"No dark screenshots (dark_<n>_<screen>.png) in {taken}")
+        # Play shows at most eight.
+        for i, source in enumerate(dark + sorted(taken.glob("1_*.png")), 1):
             with Image.open(source) as image:
                 image.convert("RGB").save(shots / f"{i}.png", optimize=True)
 
