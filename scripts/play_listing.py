@@ -10,6 +10,9 @@ Run by .github/workflows/play-listing.yml. It signs in with Application Default 
 there, the Workload Identity Federation credentials google-github-actions/auth writes; locally,
 gcloud auth application-default login --impersonate-service-account=<the Play service account>.
 
+The listing goes to the app's default language on Play, whichever that is (it's set in Play
+Console); fastlane/ has the one listing, in en-US.
+
 Only what differs from Play's listing is changed: text as it is, images by their SHA-256, so
 merging something else doesn't send the listing for review again. With nothing to change,
 the edit is thrown away.
@@ -22,9 +25,8 @@ from pathlib import Path
 from PIL import Image
 
 PACKAGE = "org.clementine_player.remote"
-LANGUAGE = "en-US"
 ROOT = Path(__file__).resolve().parent.parent
-LISTING = ROOT / "fastlane" / "metadata" / "android" / LANGUAGE
+LISTING = ROOT / "fastlane" / "metadata" / "android" / "en-US"
 IMAGES = LISTING / "images"
 
 # Play's limits, from Play Console's store listing page.
@@ -95,17 +97,26 @@ def sha256(path):
 def publish(fields, files):
     import google.auth
     from googleapiclient.discovery import build
+    from googleapiclient.errors import HttpError
     from googleapiclient.http import MediaFileUpload
 
     credentials, _ = google.auth.default(scopes=["https://www.googleapis.com/auth/androidpublisher"])
     edits = build("androidpublisher", "v3", credentials=credentials, cache_discovery=False).edits()
     edit = edits.insert(packageName=PACKAGE, body={}).execute()["id"]
-    where = dict(packageName=PACKAGE, editId=edit, language=LANGUAGE)
     changed = []
     try:
-        current = edits.listings().get(**where).execute()
+        language = edits.details().get(packageName=PACKAGE, editId=edit).execute()["defaultLanguage"]
+        where = dict(packageName=PACKAGE, editId=edit, language=language)
+        try:
+            current = edits.listings().get(**where).execute()
+        except HttpError as error:
+            if error.status_code != 404:
+                raise
+            current = {}
         if any(current.get(field) != value for field, value in fields.items()):
-            edits.listings().patch(**where, body=fields).execute()
+            # Patched, keeping what isn't ours (the video); made, when there's none yet.
+            (edits.listings().patch if current else edits.listings().update)(
+                **where, body=fields).execute()
             changed.append("text")
 
         for kind, paths in files.items():
@@ -121,10 +132,10 @@ def publish(fields, files):
 
         if changed:
             edits.commit(packageName=PACKAGE, editId=edit).execute()
-            print(f"Updated Play's listing: {', '.join(changed)}")
+            print(f"Updated Play's listing ({language}): {', '.join(changed)}")
         else:
             edits.delete(packageName=PACKAGE, editId=edit).execute()
-            print("Play's listing already matches")
+            print(f"Play's listing ({language}) already matches")
     except BaseException:
         # Not left open, so the next run's edit isn't refused; the error is the one to report.
         try:

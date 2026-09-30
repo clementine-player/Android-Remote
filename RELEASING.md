@@ -186,8 +186,8 @@ New personal developer accounts must also run a closed test with at least 12 tes
 and the phone screenshots). F-Droid reads it from each release tag.
 
 Google Play gets it from `.github/workflows/play-listing.yml`, whenever it changes on `master`,
-or when the workflow is run by hand (`scripts/play_listing.py`). Only what differs from Play's
-listing is changed, so the listing goes to review only when it has changed. On pull requests,
+or when the workflow is run by hand (`scripts/play_listing.py`). It goes to the app's default
+language in Play Console, whichever that is. Only what differs from Play's listing is changed, so the listing goes to review only when it has changed. On pull requests,
 the workflow checks the listing against Play's limits instead: text lengths, image sizes, and
 two to eight screenshots.
 
