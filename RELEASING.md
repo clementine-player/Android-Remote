@@ -72,7 +72,9 @@ Play refused the upload, say), run it with that tag to publish it again.
    Closed testing*), and set up open testing (*Testing → Open testing*: the countries it's
    available in). The service account's *Release apps to testing tracks* permission covers
    both; releasing to production needs *Release to production* too, and `PLAY_RELEASE_TRACK`
-   set to include `production`.
+   set to include `production`. Then point README.md's Google Play badge at the store page,
+   `https://play.google.com/store/apps/details?id=org.clementine_player.remote`, instead of
+   open testing's.
 4. If `v*` tags get a repository ruleset, let GitHub Actions bypass it: the workflow pushes
    the tags.
 
