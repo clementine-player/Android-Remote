@@ -1,0 +1,2 @@
+- Browse Clementine's internet services, such as radio stations, Jamendo and Subsonic, and play from them.
+- The library lists artists and albums in alphabetical order, whatever their case or accents.
