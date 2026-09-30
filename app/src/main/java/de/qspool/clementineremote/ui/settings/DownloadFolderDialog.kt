@@ -27,7 +27,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import de.qspool.clementineremote.R
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -145,7 +144,7 @@ private class Suggested(val folders: List<String>, val canBrowse: Boolean)
 
 /** The app's own Music folders, the shared one if it can be written to, and whether to browse. */
 private fun suggest(context: Context): Suggested {
-    val folders = ContextCompat.getExternalFilesDirs(context, Environment.DIRECTORY_MUSIC).filterNotNull()
+    val folders = context.getExternalFilesDirs(Environment.DIRECTORY_MUSIC).filterNotNull()
         .map { it.path }
         .toMutableList()
     @Suppress("DEPRECATION")

@@ -182,3 +182,9 @@ dependencies {
     androidTestImplementation(libs.androidx.test.rules)
     androidTestImplementation(libs.androidx.test.uiautomator)
 }
+
+// Name each use of a deprecated Java API, as Kotlin's compiler does, rather than a note that some
+// file uses one.
+tasks.withType<JavaCompile>().configureEach {
+    options.compilerArgs.add("-Xlint:deprecation")
+}

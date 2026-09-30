@@ -46,6 +46,8 @@ public class LocalNetworkAddressTest {
         shadowOf(mConnectivity).clearAllNetworks();
     }
 
+    // Robolectric's addNetwork still takes the deprecated NetworkInfo.
+    @SuppressWarnings("deprecation")
     private void addNetwork(String address, int... transports) throws Exception {
         Network network = ShadowNetwork.newInstance(mNextId++);
         NetworkInfo info = ShadowNetworkInfo.newInstance(NetworkInfo.DetailedState.CONNECTED,

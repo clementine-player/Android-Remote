@@ -14,7 +14,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -75,7 +75,7 @@ internal fun LicenseDialog(onDismiss: () -> Unit) {
 /** The licences of the open source software in the remote, from `res/raw/opensource.html`. */
 @Composable
 internal fun OpenSourceDialog(onDismiss: () -> Unit) {
-    val resources = LocalContext.current.resources
+    val resources = LocalResources.current
     val licenses = remember(resources) {
         resources.openRawResource(R.raw.opensource).bufferedReader().use { parseLicenses(it.readText()) }
     }

@@ -82,10 +82,10 @@ internal fun SettingsScreen(store: PreferenceStore, actions: SettingsActions, de
 @Composable
 private fun PlayerSettings(store: PreferenceStore) {
     SettingsHeading(stringResource(R.string.pref_cat_player))
-    BooleanSetting(store, SharedPreferencesKeys.SP_KEY_USE_VOLUMEKEYS, true, R.string.pref_volume_title, R.string.pref_volume_summary)
-    BooleanSetting(store, SharedPreferencesKeys.SP_SHOW_TRACKNO, true, R.string.pref_trackno_title, R.string.pref_trackno_summary)
-    BooleanSetting(store, SharedPreferencesKeys.SP_LASTFM, true, R.string.pref_lastfm_title, R.string.pref_lastfm_summary)
-    val lowerVolume = BooleanSetting(
+    booleanSetting(store, SharedPreferencesKeys.SP_KEY_USE_VOLUMEKEYS, true, R.string.pref_volume_title, R.string.pref_volume_summary)
+    booleanSetting(store, SharedPreferencesKeys.SP_SHOW_TRACKNO, true, R.string.pref_trackno_title, R.string.pref_trackno_summary)
+    booleanSetting(store, SharedPreferencesKeys.SP_LASTFM, true, R.string.pref_lastfm_title, R.string.pref_lastfm_summary)
+    val lowerVolume = booleanSetting(
         store, SharedPreferencesKeys.SP_LOWER_VOLUME, true, R.string.pref_lower_volume_title, R.string.pref_lower_volume_summary,
     )
 
@@ -122,7 +122,7 @@ private fun LibrarySettings(store: PreferenceStore) {
 @Composable
 private fun DownloadSettings(store: PreferenceStore, defaultDownloadDir: () -> String) {
     SettingsHeading(stringResource(R.string.pref_cat_downloads))
-    BooleanSetting(store, SharedPreferencesKeys.SP_WIFI_ONLY, false, R.string.pref_dl_wifi_only_title, R.string.pref_dl_wifi_only_summary)
+    booleanSetting(store, SharedPreferencesKeys.SP_WIFI_ONLY, false, R.string.pref_dl_wifi_only_title, R.string.pref_dl_wifi_only_summary)
     // Android 10 and later save songs to the shared Music collection.
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         ActionSetting(
@@ -142,18 +142,18 @@ private fun DownloadSettings(store: PreferenceStore, defaultDownloadDir: () -> S
             }
         }
     }
-    BooleanSetting(store, SharedPreferencesKeys.SP_DOWNLOAD_OVERRIDE, false, R.string.pref_dl_override, null)
+    booleanSetting(store, SharedPreferencesKeys.SP_DOWNLOAD_OVERRIDE, false, R.string.pref_dl_override, null)
 
     SettingsHeading(stringResource(R.string.pref_dl_cat_folders))
-    BooleanSetting(
+    booleanSetting(
         store, SharedPreferencesKeys.SP_DOWNLOAD_SAVE_OWN_DIR, false, R.string.pref_dl_pl_save_own_dir_title,
         R.string.pref_dl_pl_save_own_dir_summary,
     )
-    val artistDir = BooleanSetting(
+    val artistDir = booleanSetting(
         store, SharedPreferencesKeys.SP_DOWNLOAD_PLAYLIST_CRT_ARTIST_DIR, true, R.string.pref_dl_pl_artist_dir_title,
         R.string.pref_dl_pl_artist_dir_summary,
     )
-    BooleanSetting(
+    booleanSetting(
         store, SharedPreferencesKeys.SP_DOWNLOAD_PLAYLIST_CRT_ALBUM_DIR, true, R.string.pref_dl_pl_album_dir_title,
         R.string.pref_dl_pl_album_dir_summary, enabled = artistDir,
     )
@@ -162,7 +162,7 @@ private fun DownloadSettings(store: PreferenceStore, defaultDownloadDir: () -> S
 @Composable
 private fun ConnectionSettings(store: PreferenceStore) {
     SettingsHeading(stringResource(R.string.pref_cat_connection))
-    BooleanSetting(store, SharedPreferencesKeys.SP_KEY_AC, true, R.string.pref_autoconnect_title, R.string.pref_autoconnect_summary)
+    booleanSetting(store, SharedPreferencesKeys.SP_KEY_AC, true, R.string.pref_autoconnect_title, R.string.pref_autoconnect_summary)
 
     val port = store.string(SharedPreferencesKeys.SP_KEY_PORT, Clementine.DefaultPort.toString())
     var editing by rememberSaveable { mutableStateOf(false) }
@@ -212,10 +212,10 @@ private fun PortDialog(port: String, onDismiss: () -> Unit, onPort: (String) -> 
 private fun AdvancedSettings(store: PreferenceStore) {
     SettingsHeading(stringResource(R.string.pref_cat_advanced))
     // On unless turned off, as the player and settings have always read it.
-    BooleanSetting(store, SharedPreferencesKeys.SP_KEEP_SCREEN_ON, true, R.string.pref_keep_screen_on_title, R.string.pref_keep_screen_on_summary)
-    BooleanSetting(store, SharedPreferencesKeys.SP_WAKE_LOCK, false, R.string.pref_wake_lock_title, R.string.pref_wake_lock_summary)
+    booleanSetting(store, SharedPreferencesKeys.SP_KEEP_SCREEN_ON, true, R.string.pref_keep_screen_on_title, R.string.pref_keep_screen_on_summary)
+    booleanSetting(store, SharedPreferencesKeys.SP_WAKE_LOCK, false, R.string.pref_wake_lock_title, R.string.pref_wake_lock_summary)
     // Offered to Clementine when connecting, so a change applies from the next connection.
-    BooleanSetting(store, SharedPreferencesKeys.SP_RENDERER, true, R.string.pref_renderer, R.string.pref_renderer_summary)
+    booleanSetting(store, SharedPreferencesKeys.SP_RENDERER, true, R.string.pref_renderer, R.string.pref_renderer_summary)
     val context = LocalContext.current
     ActionSetting(stringResource(R.string.pref_hints_reset), stringResource(R.string.pref_hints_reset_summary), "prefHintsReset") {
         Hints.reset()
@@ -257,7 +257,7 @@ private fun AboutSettings(actions: SettingsActions) {
 
 /** A setting that's on or off; returns whether it's on. */
 @Composable
-private fun BooleanSetting(
+private fun booleanSetting(
     store: PreferenceStore,
     key: String,
     default: Boolean,

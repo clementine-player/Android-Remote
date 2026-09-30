@@ -18,6 +18,7 @@
 package de.qspool.clementineremote.backend;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 
 import java.lang.ref.WeakReference;
@@ -31,7 +32,9 @@ public class ClementineConnectionHandler extends Handler {
 
     WeakReference<ClementinePlayerConnection> mClementineConnection;
 
+    /** On the connection's thread, once it has a looper. */
     public ClementineConnectionHandler(ClementinePlayerConnection c) {
+        super(Looper.myLooper());
         mClementineConnection = new WeakReference<>(c);
     }
 

@@ -14,6 +14,7 @@ package de.qspool.clementineremote.utils.bundle;
 
 import android.content.Context;
 
+import androidx.core.content.pm.PackageInfoCompat;
 import de.qspool.clementineremote.BuildConfig;
 
 /**
@@ -60,7 +61,8 @@ public final class Constants
 
         try
         {
-            return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
+            return (int) PackageInfoCompat.getLongVersionCode(
+                    context.getPackageManager().getPackageInfo(context.getPackageName(), 0));
         }
         catch (final UnsupportedOperationException e)
         {

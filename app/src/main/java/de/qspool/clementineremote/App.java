@@ -23,7 +23,6 @@ import android.app.NotificationManager;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.StrictMode;
-import android.preference.PreferenceManager;
 
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementinePlayerConnection;
@@ -89,7 +88,8 @@ public class App extends Application {
         // The one deliberate settings read on the main thread: before any screen needs them.
         StrictMode.ThreadPolicy policy = StrictMode.allowThreadDiskWrites();
         try {
-            sPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            // What android.preference.PreferenceManager.getDefaultSharedPreferences opened.
+            sPreferences = getSharedPreferences(getPackageName() + "_preferences", MODE_PRIVATE);
             // Wait for the file to be parsed, so later reads never block on it.
             sPreferences.getAll();
         } finally {

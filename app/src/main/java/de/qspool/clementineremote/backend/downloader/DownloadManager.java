@@ -160,7 +160,7 @@ public class DownloadManager {
                         mFinishedDownloads.size(),
                         mFinishedDownloads.size());
                 NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(
-                        mContext)
+                        mContext, App.notificationChannel)
                         .setContentTitle(title)
                         .setContentText(mContext.getString(result.getMessageStringId()))
                         .setSmallIcon(R.drawable.ic_launcher)
