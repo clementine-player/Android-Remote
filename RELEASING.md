@@ -31,16 +31,19 @@ rebase merges, each commit keeps its trailer on `master`.
 (`scripts/plan_release.sh`; run it to see what the next release would be). With none, it does
 nothing. With some, it releases:
 
-- It makes a **release commit** on top of `master` that sets the version and writes the notes
-  as the fastlane changelog, and pushes it as the tag `v<version>`. Nothing is pushed to
-  `master`, which keeps its `-dev` version.
+- It takes the **store screenshots**: the app on an emulator, against a real Clementine
+  (`.github/workflows/store-screenshots.yml`).
+- It makes a **release commit** on top of `master` that sets the version, writes the notes
+  as the fastlane changelog and adds the screenshots, and pushes it as the tag `v<version>`.
+  Nothing is pushed to `master`, which keeps its `-dev` version.
 - **F-Droid** builds that tag, reading the version and changelog from it.
 - A **GitHub release** gets every note, and the APK, signed with the release key in Cloud KMS.
 - **Google Play** gets the bundle on the closed and open testing tracks (`alpha,beta`, or the
   repository variable `PLAY_RELEASE_TRACK`, which takes one track or several separated by
   commas), with the notes as its release notes: at most 500 characters, so a long list ends
   with "And more fixes and improvements." Closed testing also gets every development build,
-  so there a release is soon followed by newer builds; open testing gets only releases.
+  so there a release is soon followed by newer builds; open testing gets only releases. Play's
+  store listing gets the release's screenshots.
 
 **Versions.** Releases are named after `master`'s `versionName` without `-dev`: 13, then
 13.1, 13.2 and so on. For a major version, change `master` to `14-dev`. Version codes come
@@ -182,18 +185,26 @@ New personal developer accounts must also run a closed test with at least 12 tes
 ## Store listing
 
 `fastlane/metadata/android/en-US/` is the store listing for both stores: `title.txt`,
-`short_description.txt`, `full_description.txt`, and `images/` (the icon, the feature graphic
-and the phone screenshots). F-Droid reads it from each release tag.
+`short_description.txt`, `full_description.txt`, and `images/` (the icon and the feature
+graphic, which `scripts/store_graphics.py` draws). F-Droid reads it from each release tag.
 
-Google Play gets it from `.github/workflows/play-listing.yml`, whenever it changes on `master`,
-or when the workflow is run by hand (`scripts/play_listing.py`). It goes to the app's default
-language in Play Console, whichever that is. Only what differs from Play's listing is changed, so the listing goes to review only when it has changed. On pull requests,
-the workflow checks the listing against Play's limits instead: text lengths, image sizes, and
-two to eight screenshots.
+The **phone screenshots** are each release's own, so they're only on release tags, not on
+`master`: every release takes them, and puts them in its release commit
+(`scripts/store_screenshots.py`), so the listing always shows the app as released. They're
+the main screens in the dark theme, which most people use, then the player in the light
+theme. A screen that looks the same as in the last release stays the same file. If taking
+them fails, the release goes ahead with the last release's, with a warning.
 
-To refresh the images: run the *store-screenshots* workflow (on pull requests that change the
-UI, it runs by itself), download its `store-screenshots` artifact, run
-`scripts/store_graphics.py <its screenshots dir>`, and open a pull request with the result.
+Google Play gets the text, icon and feature graphic from `.github/workflows/play-listing.yml`,
+whenever they change on `master` or when the workflow is run by hand, and the whole listing,
+screenshots too, from each release (`scripts/play_listing.py`). It goes to the app's default
+language in Play Console, whichever that is. Only what differs from Play's listing is
+changed, so the listing goes to review only when it has changed. On pull requests, the
+workflow checks the listing against Play's limits instead: text lengths and image sizes.
+
+Pull requests that change the UI get the *store-screenshots* workflow's screenshots as a
+comment, next to the latest release's, so a change to how the listing will look is seen in
+review.
 
 **One-time setup:** in Play Console, *Users and permissions*, give
 `android-play-release@clementine-data.iam.gserviceaccount.com` *Edit store listing, pricing

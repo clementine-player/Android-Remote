@@ -13,6 +13,9 @@ gcloud auth application-default login --impersonate-service-account=<the Play se
 The listing goes to the app's default language on Play, whichever that is (it's set in Play
 Console); fastlane/ has the one listing, in en-US.
 
+The phone screenshots are each release's own (release.yml takes them), so they're in the
+listing only on release tags: without them, Play's are left as they are.
+
 Only what differs from Play's listing is changed: text as it is, images by their SHA-256, so
 merging something else doesn't send the listing for review again. With nothing to change,
 the edit is thrown away.
@@ -53,15 +56,17 @@ def text():
 
 def images():
     """Each image type's files, in the listing's order."""
-    screenshots = sorted(IMAGES.glob("phoneScreenshots/*.png"), key=lambda p: int(p.stem))
-    if not MIN_SCREENSHOTS <= len(screenshots) <= MAX_SCREENSHOTS:
-        sys.exit(f"{len(screenshots)} phone screenshots; Play takes {MIN_SCREENSHOTS} to "
-                 f"{MAX_SCREENSHOTS}")
-    return {
+    files = {
         "icon": [IMAGES / "icon.png"],
         "featureGraphic": [IMAGES / "featureGraphic.png"],
-        "phoneScreenshots": screenshots,
     }
+    screenshots = sorted(IMAGES.glob("phoneScreenshots/*.png"), key=lambda p: int(p.stem))
+    if screenshots:
+        if not MIN_SCREENSHOTS <= len(screenshots) <= MAX_SCREENSHOTS:
+            sys.exit(f"{len(screenshots)} phone screenshots; Play takes {MIN_SCREENSHOTS} to "
+                     f"{MAX_SCREENSHOTS}")
+        files["phoneScreenshots"] = screenshots
+    return files
 
 
 def check_image(kind, path):
@@ -157,7 +162,7 @@ def main():
         for path in paths:
             check_image(kind, path)
     print(f"Listing: {', '.join(f'{f} {len(v)} characters' for f, v in fields.items())}; "
-          f"{len(files['phoneScreenshots'])} phone screenshots")
+          f"{len(files.get('phoneScreenshots', [])) or 'no'} phone screenshots")
 
     if not args.check:
         publish(fields, files)

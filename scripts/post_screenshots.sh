@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Uploads a store-screenshots run's screenshots to the R2 bucket and posts them on the pull
-# request, next to the store listing's current screenshots from master. Run by
+# request, next to the latest release's store screenshots. Run by
 # .github/workflows/store-screenshots.yml; one comment per pull request, updated in place.
 #
 # Usage: post_screenshots.sh <screenshots dir> <pull request number>
@@ -9,7 +9,7 @@
 # (the bucket-scoped R2 token), GITHUB_REPOSITORY, GITHUB_RUN_ID, GITHUB_RUN_ATTEMPT,
 # GITHUB_SERVER_URL, GH_TOKEN, and the AWS and GitHub CLIs.
 set -euo pipefail
-# Name order as scripts/store_graphics.py sorts them (by code point).
+# Name order as scripts/store_screenshots.py sorts them (by code point).
 export LC_ALL=C
 
 dir=$1
@@ -34,22 +34,29 @@ AWS_RESPONSE_CHECKSUM_VALIDATION=when_required \
     --endpoint-url "https://$R2_ACCOUNT_ID.r2.cloudflarestorage.com" --only-show-errors
 base="${R2_PUBLIC_URL%/}/$prefix"
 
-# The store screenshots on master, in the order scripts/store_graphics.py numbers them: the
-# numbered screens in the dark theme, then the light theme's player. Compared only when this
-# run took all of them: after a failure the numbers don't line up.
+# The latest release's store screenshots (each release takes its own, in release.yml), in the
+# order scripts/store_screenshots.py numbers them: the numbered screens in the dark theme, then
+# the light theme's player. Compared only when this run took all of them: after a failure the
+# numbers don't line up.
+listing=fastlane/metadata/android/en-US/images/phoneScreenshots
 numbered=("$dir"/dark_[0-9]_*.png "$dir"/1_*.png)
-listed=(fastlane/metadata/android/en-US/images/phoneScreenshots/*.png)
-compare=$([ ${#numbered[@]} -eq ${#listed[@]} ] && echo yes || echo no)
-store="https://raw.githubusercontent.com/$GITHUB_REPOSITORY/master/fastlane/metadata/android/en-US/images/phoneScreenshots"
+release=$(gh api "repos/$GITHUB_REPOSITORY/releases/latest" --jq .tag_name 2> /dev/null || true)
+listed=0
+if [ -n "$release" ]; then
+  listed=$(gh api "repos/$GITHUB_REPOSITORY/contents/$listing?ref=$release" --jq length \
+    2> /dev/null || echo 0)
+fi
+compare=$([ "$listed" -gt 0 ] && [ ${#numbered[@]} -eq "$listed" ] && echo yes || echo no)
+store="https://raw.githubusercontent.com/$GITHUB_REPOSITORY/$release/$listing"
 run="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
 
 {
   echo "$marker"
   echo "### Store screenshots"
   echo
-  echo "From [run $GITHUB_RUN_ID]($run), against clementine-it. Left: the store listing on master, which shows the dark theme. Right: this pull request, dark and light."
+  echo "From [run $GITHUB_RUN_ID]($run), against clementine-it. Left: the store listing of the latest release${release:+, $release}, which shows the dark theme. Right: this pull request, dark and light."
   echo
-  echo "| Screen | master | This PR, dark | This PR |"
+  echo "| Screen | ${release:-Released} | This PR, dark | This PR |"
   echo "| --- | --- | --- | --- |"
   # The store's screens first (numbered), then the others the run took, which the store
   # listing doesn't show (such as the settings).

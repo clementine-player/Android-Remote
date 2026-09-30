@@ -2,22 +2,18 @@
 """Builds the Google Play listing graphics from the project's own artwork.
 
     pip install pillow cairosvg
-    scripts/store_graphics.py [screenshots dir]
+    scripts/store_graphics.py
 
 - icon.png (512x512): Clementine's logo, store/clementine-icon.svg, copied from
   clementine-player/Clementine's data/icon.svg.
 - featureGraphic.png (1024x500): the logo on the app's own purple-to-orange gradient
   (the connect screen's background, res/drawable/activity_background.xml) with the app's
   name, set in Liberation Sans.
-- phoneScreenshots/: the emulator screenshots from the store-screenshots workflow, if a
-  directory of them is given, copied as they are: the numbered screens in the dark theme,
-  which most people use, then the player in the light theme, to show there's one.
 
-Everything is drawn from these sources; nothing is generated.
+Everything is drawn from these sources; nothing is generated. The phone screenshots are each
+release's own (scripts/store_screenshots.py).
 """
 import io
-import shutil
-import sys
 from pathlib import Path
 
 import cairosvg
@@ -107,20 +103,7 @@ def main():
     icon().save(OUT / "icon.png", optimize=True)
     feature_graphic().save(OUT / "featureGraphic.png", optimize=True)
 
-    if len(sys.argv) > 1:
-        shots = OUT / "phoneScreenshots"
-        shutil.rmtree(shots, ignore_errors=True)
-        shots.mkdir()
-        taken = Path(sys.argv[1])
-        dark = sorted(taken.glob("dark_[0-9]_*.png"))
-        if not dark:
-            sys.exit(f"No dark screenshots (dark_<n>_<screen>.png) in {taken}")
-        # Play shows at most eight.
-        for i, source in enumerate(dark + sorted(taken.glob("1_*.png")), 1):
-            with Image.open(source) as image:
-                image.convert("RGB").save(shots / f"{i}.png", optimize=True)
-
-    for path in sorted(OUT.rglob("*.png")):
+    for path in sorted(OUT.glob("*.png")):
         with Image.open(path) as image:
             print(f"{path.relative_to(ROOT)}: {image.size[0]}x{image.size[1]} {image.mode}")
 
