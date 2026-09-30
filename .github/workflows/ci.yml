@@ -20,14 +20,14 @@ jobs:
           java-version: 21
       - uses: gradle/actions/setup-gradle@v5
       - run: ./gradlew lintFdroidDebug testFdroidDebugUnitTest assembleFdroidDebug bundlePlayRelease
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: reports
           path: |
             app/build/reports/
             app/build/test-results/
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v7
         with:
           name: apk-debug
           path: app/build/outputs/apk/fdroid/debug/*.apk
@@ -54,9 +54,12 @@ jobs:
           api-level: 36
           target: google_apis
           arch: x86_64
+          # The runner's defaults, and -no-metrics: without a choice about sending usage data, the
+          # emulator warns, and is to ask before starting in later releases.
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -no-metrics
           disable-animations: true
           script: ./gradlew connectedFdroidDebugAndroidTest
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: device-test-reports

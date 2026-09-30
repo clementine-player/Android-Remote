@@ -100,11 +100,14 @@ jobs:
           target: google_apis
           arch: x86_64
           profile: pixel_2
+          # The runner's defaults, and -no-metrics: without a choice about sending usage data, the
+          # emulator warns, and is to ask before starting in later releases.
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -no-metrics
           disable-animations: true
           script: |
             status=0; ./gradlew connectedFdroidDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=de.qspool.clementineremote.NeedsClementine -Pandroid.testInstrumentationRunnerArguments.clementineHost=10.0.2.2 -Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true || status=$?; adb pull /sdcard/Android/data/de.qspool.clementineremote/files/screenshots screenshots; exit $status
 
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: store-screenshots
