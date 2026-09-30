@@ -34,9 +34,10 @@ AWS_RESPONSE_CHECKSUM_VALIDATION=when_required \
     --endpoint-url "https://$R2_ACCOUNT_ID.r2.cloudflarestorage.com" --only-show-errors
 base="${R2_PUBLIC_URL%/}/$prefix"
 
-# The store screenshots on master, in the order scripts/store_graphics.py numbers them.
-# Compared only when this run took all of them: after a failure the numbers don't line up.
-numbered=("$dir"/[0-9]_*.png)
+# The store screenshots on master, in the order scripts/store_graphics.py numbers them: the
+# numbered screens in the dark theme, then the light theme's player. Compared only when this
+# run took all of them: after a failure the numbers don't line up.
+numbered=("$dir"/dark_[0-9]_*.png "$dir"/1_*.png)
 listed=(fastlane/metadata/android/en-US/images/phoneScreenshots/*.png)
 compare=$([ ${#numbered[@]} -eq ${#listed[@]} ] && echo yes || echo no)
 store="https://raw.githubusercontent.com/$GITHUB_REPOSITORY/master/fastlane/metadata/android/en-US/images/phoneScreenshots"
@@ -46,9 +47,9 @@ run="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
   echo "$marker"
   echo "### Store screenshots"
   echo
-  echo "From [run $GITHUB_RUN_ID]($run), against clementine-it. Left: the store listing on master. Right: this pull request, light and dark."
+  echo "From [run $GITHUB_RUN_ID]($run), against clementine-it. Left: the store listing on master, which shows the dark theme. Right: this pull request, dark and light."
   echo
-  echo "| Screen | master | This PR | This PR, dark |"
+  echo "| Screen | master | This PR, dark | This PR |"
   echo "| --- | --- | --- | --- |"
   # The store's screens first (numbered), then the others the run took, which the store
   # listing doesn't show (such as the settings).
@@ -84,7 +85,7 @@ run="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
       else
         dark="–"
       fi
-      echo "| \`$name\` | $before | <img src=\"$base/$name.png\" width=\"240\"> | $dark |"
+      echo "| \`$name\` | $before | $dark | <img src=\"$base/$name.png\" width=\"240\"> |"
     done
   done
   if [ ${#failures[@]} -gt 0 ]; then
