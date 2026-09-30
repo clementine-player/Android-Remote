@@ -1,0 +1,62 @@
+# Keeps the Google Play store listing the same as fastlane/metadata/android/en-US/, which
+# F-Droid reads too: its title and descriptions, icon, feature graphic and phone screenshots
+# (scripts/play_listing.py). Only what differs is changed, so the listing only goes to review
+# when it has changed. The release notes aren't part of it: releases send those.
+#
+# On pull requests it only checks the listing against Play's limits. On master it updates Play,
+# signed in as dev.yml and release.yml are (Workload Identity Federation, no keys), once the
+# service account may edit the store listing (see RELEASING.md).
+name: play-listing
+on:
+  push:
+    branches: [master]
+    paths:
+      - fastlane/metadata/android/en-US/*.txt
+      - fastlane/metadata/android/en-US/images/**
+      - scripts/play_listing.py
+      - .github/workflows/play-listing.yml
+  pull_request:
+    paths:
+      - fastlane/metadata/android/en-US/*.txt
+      - fastlane/metadata/android/en-US/images/**
+      - scripts/play_listing.py
+      - .github/workflows/play-listing.yml
+  workflow_dispatch:
+
+# On master, one Play edit at a time, with dev.yml and release.yml.
+concurrency:
+  group: ${{ github.event_name == 'pull_request' && format('play-listing-{0}', github.ref) || 'play' }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  id-token: write # for the OIDC token Workload Identity Federation exchanges
+
+# Created by scripts/gcp_play_setup.sh.
+env:
+  WORKLOAD_IDENTITY_PROVIDER: projects/611551928920/locations/global/workloadIdentityPools/github-actions/providers/android-remote-play
+  SERVICE_ACCOUNT: android-play-release@clementine-data.iam.gserviceaccount.com
+
+jobs:
+  listing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+      - run: pip install google-api-python-client google-auth pillow
+
+      - name: Check the listing
+        run: scripts/play_listing.py --check
+
+      - uses: google-github-actions/auth@v3
+        # Workload Identity Federation admits master alone.
+        if: github.ref == 'refs/heads/master'
+        with:
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+
+      - name: Update the listing on Google Play
+        if: github.ref == 'refs/heads/master'
+        run: scripts/play_listing.py

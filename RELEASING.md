@@ -171,9 +171,30 @@ section of Play Console completed:
 
 - **Privacy policy:** link to [PRIVACY.md](PRIVACY.md).
 - **Data safety:** no data collected or shared.
-- **Foreground service:** the service uses the `connectedDevice` type to stay connected to
-  Clementine while music plays; Play asks for a description and a short video of it.
+- **Foreground services:** the service uses the `connectedDevice` type to stay connected to
+  Clementine while music plays, and `mediaPlayback` while Clementine plays on the phone; Play
+  asks for a description and a short video of each.
 - **Phone state:** `READ_PHONE_STATE` is used to lower the volume during calls.
 
 New personal developer accounts must also run a closed test with at least 12 testers for
 14 days before production access is granted.
+
+## Store listing
+
+`fastlane/metadata/android/en-US/` is the store listing for both stores: `title.txt`,
+`short_description.txt`, `full_description.txt`, and `images/` (the icon, the feature graphic
+and the phone screenshots). F-Droid reads it from each release tag.
+
+Google Play gets it from `.github/workflows/play-listing.yml`, whenever it changes on `master`,
+or when the workflow is run by hand (`scripts/play_listing.py`). Only what differs from Play's
+listing is changed, so the listing goes to review only when it has changed. On pull requests,
+the workflow checks the listing against Play's limits instead: text lengths, image sizes, and
+two to eight screenshots.
+
+To refresh the images: run the *store-screenshots* workflow (on pull requests that change the
+UI, it runs by itself), download its `store-screenshots` artifact, run
+`scripts/store_graphics.py <its screenshots dir>`, and open a pull request with the result.
+
+**One-time setup:** in Play Console, *Users and permissions*, give
+`android-play-release@clementine-data.iam.gserviceaccount.com` *Edit store listing, pricing
+& distribution* for this app, as well as *Release apps to testing tracks*.
