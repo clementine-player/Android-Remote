@@ -36,9 +36,11 @@ nothing. With some, it releases:
   `master`, which keeps its `-dev` version.
 - **F-Droid** builds that tag, reading the version and changelog from it.
 - A **GitHub release** gets every note, and the APK, signed with the release key in Cloud KMS.
-- **Google Play** gets the bundle on the closed testing track (`alpha`, or the repository
-  variable `PLAY_RELEASE_TRACK`), with the notes as its release notes: at most 500
-  characters, so a long list ends with "And more fixes and improvements."
+- **Google Play** gets the bundle on the closed and open testing tracks (`alpha,beta`, or the
+  repository variable `PLAY_RELEASE_TRACK`, which takes one track or several separated by
+  commas), with the notes as its release notes: at most 500 characters, so a long list ends
+  with "And more fixes and improvements." Closed testing also gets every development build,
+  so there a release is soon followed by newer builds; open testing gets only releases.
 
 **Versions.** Releases are named after `master`'s `versionName` without `-dev`: 13, then
 13.1, 13.2 and so on. For a major version, change `master` to `14-dev`. Version codes come
@@ -67,9 +69,10 @@ Play refused the upload, say), run it with that tag to publish it again.
    ```
 
 3. **Google Play:** create the closed testing track's testers list in Play Console (*Testing →
-   Closed testing*). The service account's *Release apps to testing tracks* permission
-   covers it; releasing to production needs *Release to production* too, and
-   `PLAY_RELEASE_TRACK` set to `production`.
+   Closed testing*), and set up open testing (*Testing → Open testing*: the countries it's
+   available in). The service account's *Release apps to testing tracks* permission covers
+   both; releasing to production needs *Release to production* too, and `PLAY_RELEASE_TRACK`
+   set to include `production`.
 4. If `v*` tags get a repository ruleset, let GitHub Actions bypass it: the workflow pushes
    the tags.
 
@@ -84,6 +87,8 @@ makes a development build (`.github/workflows/dev.yml`):
 
 - on Google Play's **internal testing** track: a private channel for up to 100 testers, with
   no review;
+- on its **closed testing** track, for the testers on its list. Unlike internal testing, each
+  build there goes through Google's review first, which is usually quick for testing tracks;
 - as a GitHub pre-release, `dev-<version code>`, which replaces the last one: the APK, with
   the same package and signature as the releases, so it updates to the next release and from
   the last one. It needs the release certificate (see *One-time setup for releases*).
