@@ -98,16 +98,19 @@ public abstract class DynamicSongQuery {
             query.append(hiddenWhere);
         }
 
+        // Names in order for the phone's language, whatever their case or accents: Android's
+        // SQLite collates LOCALIZED with ICU. Plain SQLite would order them by their bytes, putting
+        // "abba" after "ZZ Top", and "Émile" after both.
         if (isTitleLevel()) {
             query.append(" ORDER BY ");
-            query.append(" album, disc, track ");
+            query.append(" album COLLATE LOCALIZED, disc, track ");
             query.append(mSort);
         } else {
             query.append(" GROUP BY ");
             query.append(mSelectedFields[mLevel]);
             query.append(" ORDER BY ");
             query.append(mSelectedFields[mLevel]);
-            query.append(" ");
+            query.append(" COLLATE LOCALIZED ");
             query.append(mSort);
         }
 
