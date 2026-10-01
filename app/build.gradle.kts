@@ -22,7 +22,7 @@ android {
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "de.qspool.clementineremote"
+        applicationId = "org.clementine_player.remote"
         minSdk = 23
         targetSdk = 36
         // master keeps the next version with -dev. Each release commit sets both (see
@@ -33,9 +33,10 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    // The builds differ only in their application ID. Google Play reserves
-    // de.qspool.clementineremote for the original author's account, so the Play build has its
-    // own; F-Droid and GitHub Releases keep the original, so existing installs upgrade.
+    // Where each build goes: F-Droid and GitHub Releases, or Google Play. They're the same app,
+    // org.clementine_player.remote, signed by each with its own key. (The original app,
+    // de.qspool.clementineremote, belongs to its author's signing key, which Android's
+    // developer verification requires for that name.)
     flavorDimensions += "store"
     productFlavors {
         create("fdroid") {
@@ -44,7 +45,6 @@ android {
         }
         create("play") {
             dimension = "store"
-            applicationId = "org.clementine_player.remote"
         }
     }
 
