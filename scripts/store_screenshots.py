@@ -7,7 +7,9 @@
 
 They're the numbered screens in the dark theme, which most people use, then the player in
 the light theme, to show there's one: Play shows at most eight. They go in
-fastlane/metadata/android/en-US/images/phoneScreenshots/, as 1.png, 2.png, ...
+fastlane/metadata/android/en-US/images/phoneScreenshots/, as 1.png, 2.png, ..., in the
+order of their numbers (StoreScreenshots.java), so 1.png is always the player and 2.png
+the library: clementine-player.org shows those two on its home page.
 
 A screenshot whose pixels are the same as the one already there is left as it is, so a
 release that doesn't change a screen doesn't store it again.
@@ -22,11 +24,17 @@ SHOTS = ROOT / "fastlane" / "metadata" / "android" / "en-US" / "images" / "phone
 MOST = 8
 
 
+def screen_order(path):
+    _, number, name = path.stem.split("_", 2)
+    return int(number), name
+
+
 def main():
     if len(sys.argv) != 2:
         sys.exit(__doc__)
     taken = Path(sys.argv[1])
-    dark = sorted(taken.glob("dark_[0-9]_*.png"))
+    # By the screen's number, then its name: 2_library before 2_library_album.
+    dark = sorted(taken.glob("dark_[0-9]_*.png"), key=screen_order)
     if not dark:
         sys.exit(f"No dark screenshots (dark_<n>_<screen>.png) in {taken}")
     sources = dark + sorted(taken.glob("1_*.png"))
