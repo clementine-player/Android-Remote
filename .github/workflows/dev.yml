@@ -176,6 +176,8 @@ jobs:
           packageName: org.clementine_player.remote
           releaseFiles: ${{ runner.temp }}/ClementineRemote-play-release.aab
           releaseName: ${{ steps.version.outputs.name }}
+          # R8's map of the names it shortened, so Play shows readable stack traces.
+          mappingFile: app/build/outputs/mapping/playRelease/mapping.txt
           tracks: internal,alpha,beta
           # "draft" until the app's first release has been rolled out in Play Console.
           status: ${{ vars.PLAY_RELEASE_STATUS || 'completed' }}

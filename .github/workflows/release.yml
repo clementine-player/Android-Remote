@@ -309,6 +309,8 @@ jobs:
           packageName: org.clementine_player.remote
           releaseFiles: ${{ steps.bundle.outputs.path }}
           releaseName: ${{ steps.plan.outputs.name }}
+          # R8's map of the names it shortened, so Play shows readable stack traces.
+          mappingFile: app/build/outputs/mapping/playRelease/mapping.txt
           tracks: ${{ vars.PLAY_RELEASE_TRACK || 'production' }}
           status: ${{ vars.PLAY_RELEASE_STATUS || 'completed' }}
           whatsNewDirectory: ${{ runner.temp }}/whatsnew

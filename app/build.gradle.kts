@@ -61,6 +61,8 @@ android {
         release {
             // F-Droid removes the signingConfigs block before building, and signs with its own key.
             signingConfigs.findByName("release")?.takeIf { it.storeFile != null }?.let { signingConfig = it }
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }

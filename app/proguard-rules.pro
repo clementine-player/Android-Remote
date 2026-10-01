@@ -1,20 +1,9 @@
-# To enable ProGuard in your project, edit project.properties
-# to define the proguard.config property as described in that file.
-#
-# Add project specific ProGuard rules here.
-# By default, the flags in this file are appended to flags specified
-# in ${sdk.dir}/tools/proguard/proguard-android.txt
-# You can edit the include path and order by changing the ProGuard
-# include property in project.properties.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# R8 rules for release builds, on top of the ones the libraries bring.
 
-# Add any project specific keep options here:
+# jmdns logs through slf4j, which looks for a logging backend the app doesn't ship (it then
+# logs nothing).
+-dontwarn org.slf4j.impl.StaticLoggerBinder
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# protobuf-lite reads each message's fields by name, through reflection (title_ for title),
+# and R8 would otherwise rename or drop them. The library doesn't bring this rule itself.
+-keep class * extends com.google.protobuf.GeneratedMessageLite { <fields>; }
