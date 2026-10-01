@@ -10,9 +10,9 @@
 #     Nothing is pushed to master, which keeps its -dev version. F-Droid builds the tag.
 #   - publishes a GitHub release with every note and the APK, signed with the release key in
 #     Cloud KMS
-#   - uploads the Play bundle to the closed and open testing tracks (PLAY_RELEASE_TRACK,
-#     default alpha,beta), with the notes as its release notes, and sends Play the store
-#     listing with the new screenshots (scripts/play_listing.py)
+#   - uploads the Play bundle to production (PLAY_RELEASE_TRACK, default production; the
+#     testing tracks get every development build), with the notes as its release notes, and
+#     sends Play the store listing with the new screenshots (scripts/play_listing.py)
 #
 # Run it by hand (Actions → release → Run workflow) to release now rather than on Monday, or,
 # with a tag, to publish an existing release again after a failure. Run by hand, it releases
@@ -309,7 +309,7 @@ jobs:
           packageName: org.clementine_player.remote
           releaseFiles: ${{ steps.bundle.outputs.path }}
           releaseName: ${{ steps.plan.outputs.name }}
-          tracks: ${{ vars.PLAY_RELEASE_TRACK || 'alpha,beta' }}
+          tracks: ${{ vars.PLAY_RELEASE_TRACK || 'production' }}
           status: ${{ vars.PLAY_RELEASE_STATUS || 'completed' }}
           whatsNewDirectory: ${{ runner.temp }}/whatsnew
 
