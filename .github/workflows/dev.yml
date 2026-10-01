@@ -1,6 +1,7 @@
 # Publishes every change to the app on master as a development build:
-#   - on Google Play's internal testing track, a private channel for up to 100 testers, and
-#     its closed testing track, for the testers on its list
+#   - on Google Play's internal testing track, a private channel for up to 100 testers, its
+#     closed testing track, for the testers on its list, and its open testing track, the beta
+#     anyone can join from the store page. Releases go to production (release.yml).
 #   - as a GitHub pre-release, dev-<version code>, which replaces the last one: the APK, with
 #     the same package and signature as releases, so it updates to and from them
 # Changes that don't reach the app (tests, docs, CI, store listings) don't make one.
@@ -166,7 +167,7 @@ jobs:
             git log --format='- %s' --no-merges ${last:+"$last.."}HEAD | head -n 50
           } > "$RUNNER_TEMP/dev-notes.md"
 
-      - name: Upload to the internal and closed testing tracks
+      - name: Upload to the testing tracks
         if: steps.setup.outputs.play == 'true'
         uses: r0adkll/upload-google-play@v1
         with:
@@ -175,7 +176,7 @@ jobs:
           packageName: org.clementine_player.remote
           releaseFiles: ${{ runner.temp }}/ClementineRemote-play-release.aab
           releaseName: ${{ steps.version.outputs.name }}
-          tracks: internal,alpha
+          tracks: internal,alpha,beta
           # "draft" until the app's first release has been rolled out in Play Console.
           status: ${{ vars.PLAY_RELEASE_STATUS || 'completed' }}
           whatsNewDirectory: whatsnew
