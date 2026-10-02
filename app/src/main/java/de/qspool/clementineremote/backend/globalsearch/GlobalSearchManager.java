@@ -19,6 +19,9 @@ package de.qspool.clementineremote.backend.globalsearch;
 
 import java.util.LinkedList;
 
+import androidx.annotation.AnyThread;
+import androidx.annotation.WorkerThread;
+
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.listener.OnGlobalSearchResponseListener;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
@@ -57,11 +60,13 @@ public class GlobalSearchManager {
      * to disk on the thread connecting, and nothing reads them, as every query asks for the
      * results of one search by its id.
      */
+    @AnyThread
     public void reset() {
         mRequest = null;
         mCurrentId = -1;
     }
 
+    @WorkerThread
     public void parseClementineMessage(ClementineMessage clementineMessage) {
         if (clementineMessage.isErrorMessage())
             return;
@@ -79,6 +84,7 @@ public class GlobalSearchManager {
 
     }
 
+    @WorkerThread
     private void parseGlobalSearchResult(
             ClementineRemoteProtocolBuffer.ResponseGlobalSearch responseGlobalSearch) {
         int id = responseGlobalSearch.getId();
@@ -97,6 +103,7 @@ public class GlobalSearchManager {
         fireOnResultsReceived(id);
     }
 
+    @WorkerThread
     private void parseGlobalSearchStatus(
             ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus responseGlobalSearchStatus) {
         int id = responseGlobalSearchStatus.getId();
