@@ -40,6 +40,7 @@ class ConnectScreenTest {
     private fun show(
         host: String = "",
         servers: List<Server> = emptyList(),
+        searching: Boolean = true,
         progress: Int? = null,
         knownHosts: List<String> = emptyList(),
     ) {
@@ -50,6 +51,7 @@ class ConnectScreenTest {
                     host = typed,
                     knownHosts = knownHosts,
                     servers = servers,
+                    searching = searching,
                     progress = progress,
                     onHostChange = { typed = it },
                     actions = actions { typed },
@@ -159,16 +161,14 @@ class ConnectScreenTest {
     }
 
     @Test
-    fun refusedLocalNetworkOffersTheAppSettings() {
-        val viewModel = ConnectViewModel()
-        viewModel.showDialog(ConnectDialog.LocalNetworkDenied)
-        showDialogs(viewModel)
+    fun notSearchingSaysSoAndOffersTheAppSettings() {
+        show(searching = false)
 
-        compose.onNodeWithText(string(R.string.local_network_denied_text)).assertIsDisplayed()
-        compose.onNodeWithTag("btnOpenSettings").performClick()
+        compose.onNodeWithTag("notSearching").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText(string(R.string.connect_not_searching)).assertIsDisplayed()
+        compose.onNodeWithTag("openSettings").performScrollTo().performClick()
 
         assertEquals(listOf("app settings"), done)
-        assertNull(viewModel.dialog.value)
     }
 
     @Test

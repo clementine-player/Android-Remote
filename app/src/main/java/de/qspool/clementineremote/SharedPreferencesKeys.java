@@ -21,6 +21,12 @@ public class SharedPreferencesKeys {
 
     public final static String SP_FIRST_CALL = "first_call";
 
+    /**
+     * Whether the runtime permissions have been asked for. Android stops showing its prompt once
+     * one is refused, so the app asks once and leaves it to the connect screen after that.
+     */
+    public final static String SP_PERMISSIONS_ASKED = "permissions_asked";
+
     public final static String SP_KEY_IP = "save_clementine_ip";
 
     /** The network name of the Clementine last connected to, if it was picked from the network. */

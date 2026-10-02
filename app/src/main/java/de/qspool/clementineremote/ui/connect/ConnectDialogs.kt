@@ -39,12 +39,6 @@ sealed interface ConnectDialog {
 
     /** Why the app asks for [permissions], before Android asks. */
     data class Permissions(val permissions: List<String>) : ConnectDialog
-
-    /**
-     * Android 17's local network permission was refused, without which the app can't reach
-     * Clementine: it can be allowed in the app's settings.
-     */
-    data object LocalNetworkDenied : ConnectDialog
 }
 
 /** Shows [dialog]; [onDismiss] closes it. */
@@ -77,23 +71,6 @@ internal fun ConnectDialogs(dialog: ConnectDialog?, actions: ConnectActions, onD
                     },
                     modifier = Modifier.testTag("btnPermissionsContinue"),
                 ) { Text(stringResource(R.string.dialog_continue)) }
-            },
-        )
-        ConnectDialog.LocalNetworkDenied -> AlertDialog(
-            onDismissRequest = onDismiss,
-            title = { Text(stringResource(R.string.local_network_denied_title)) },
-            text = { Text(stringResource(R.string.local_network_denied_text)) },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        onDismiss()
-                        actions.onOpenAppSettings()
-                    },
-                    modifier = Modifier.testTag("btnOpenSettings"),
-                ) { Text(stringResource(R.string.open_settings)) }
-            },
-            dismissButton = {
-                TextButton(onClick = onDismiss) { Text(stringResource(R.string.dialog_close)) }
             },
         )
     }

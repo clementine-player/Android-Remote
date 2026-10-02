@@ -15,6 +15,8 @@
     <string name="connect_searching">Looking for Clementine…</string>
     <string name="connect_searching_help">Not showing up? Check that its network remote is turned on, or enter its address below.</string>
     <string name="connect_server_address">%1$s · port %2$d</string>
+    <string name="connect_not_searching">Not looking on this network</string>
+    <string name="connect_not_searching_help">Without the Nearby devices permission, Clementine Remote can\'t find Clementine on your network. Enter its address below, or turn the permission on.</string>
     <string name="connect_enter_address">Or enter its address</string>
     <string name="connect_address">Address</string>
     <string name="connect_requirements">Needs Clementine %1$s or later, with Tools → Preferences → Network Remote turned on.</string>
@@ -358,8 +360,7 @@
     <string name="permission_notifications">Notifications: for the player\'s controls, and your downloads\' progress.</string>
     <string name="permission_phone">Phone: to lower Clementine\'s volume during calls.</string>
     <string name="permission_storage">Storage: to save the songs you download.</string>
-    <string name="local_network_denied_title">Clementine Remote can\'t reach Clementine</string>
-    <string name="local_network_denied_text">Clementine Remote finds and talks to Clementine on your local network, which Android only allows with the Nearby devices permission. You can allow it in the app\'s settings.</string>
+    <string name="local_network_on_link">That address is on the network this phone is connected to, which Android only lets Clementine Remote reach with the Nearby devices permission. You can allow it in the app\'s settings.</string>
     <string name="open_settings">Open settings</string>
 
     <string name="notification_previous">Previous</string>
