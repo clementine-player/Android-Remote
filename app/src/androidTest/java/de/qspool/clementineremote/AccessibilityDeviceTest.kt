@@ -107,6 +107,7 @@ class AccessibilityDeviceTest {
             host = "192.168.1.20",
             knownHosts = emptyList(),
             servers = listOf(Server("Living room", "192.168.1.20", 5500)),
+            searching = true,
             progress = null,
             onHostChange = {},
             actions = connectActions,
