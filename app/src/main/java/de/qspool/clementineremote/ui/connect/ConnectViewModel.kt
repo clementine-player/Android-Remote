@@ -30,6 +30,14 @@ class ConnectViewModel : ViewModel() {
     /** The Clementines found on the network. */
     val servers: StateFlow<List<Server>> = _servers.asStateFlow()
 
+    private val _searching = MutableStateFlow(true)
+
+    /**
+     * Whether the app is looking on the network. False once the local network permission is
+     * refused, where there is nothing to look with.
+     */
+    val searching: StateFlow<Boolean> = _searching.asStateFlow()
+
     private val _progress = MutableStateFlow<Int?>(null)
 
     /** While connecting, what's happening; null otherwise. */
@@ -62,6 +70,10 @@ class ConnectViewModel : ViewModel() {
 
     fun setKnownHosts(hosts: Collection<String>) {
         _knownHosts.value = hosts.filter { it.isNotBlank() }
+    }
+
+    fun setSearching(searching: Boolean) {
+        _searching.value = searching
     }
 
     fun setServers(servers: List<Server>) {

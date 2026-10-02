@@ -25,6 +25,8 @@ import android.content.ServiceConnection
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.InetAddresses
 import android.net.Uri
 import android.net.wifi.WifiManager
 import android.os.Build
@@ -67,6 +69,7 @@ import de.qspool.clementineremote.ui.connect.Server
 import de.qspool.clementineremote.ui.settings.ClementineSettings
 import de.qspool.clementineremote.ui.theme.ClementineTheme
 import de.qspool.clementineremote.utils.Utilities
+import java.net.InetAddress
 
 /**
  * The connect screen, drawn in Compose ([ConnectScreen]). This activity finds Clementines on the
@@ -95,11 +98,6 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
     /** Whether connecting was canceled: what the attempt says afterwards isn't shown. */
     private var canceled = false
 
-    /** The permissions were asked for since the activity started, so it doesn't ask on each resume. */
-    private var permissionsAsked = false
-
-    /** Connect was tapped before the local network permission was granted: connect once it is. */
-    private var connectOnceAllowed = false
 
     /** The network name of the Clementine being connected to, if it was picked from the network. */
     private var serverName: String? = null
@@ -144,20 +142,22 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
             return
         }
 
-        // Nothing on the network until Android 17's local network permission is granted: it's
-        // asked for in onPostResume, and once granted the activity resumes here again.
+        // Discovery is multicast on the network this phone is on, which Android 17 only allows
+        // with the local network permission. Auto-connecting isn't: a saved address may be one
+        // Android doesn't count as local, over a VPN say, and it's for Android to refuse it.
         if (hasLocalNetwork()) {
             // mDNS discovery runs even when auto-connecting, so that if the saved address no
             // longer works, the Clementines on the network are there to pick from, and the last
             // one can be found there by name.
             discovery = ClementineMDnsDiscovery(handler).also { it.discoverServices() }
-
-            if (preferences.getBoolean(SharedPreferencesKeys.SP_KEY_AC, true) && doAutoConnect) {
-                // Delayed, so the service has time to start.
-                handler.postDelayed({ autoConnect() }, AUTO_CONNECT_DELAY_MILLIS)
-            }
-            doAutoConnect = true
         }
+        state.setSearching(hasLocalNetwork())
+
+        if (preferences.getBoolean(SharedPreferencesKeys.SP_KEY_AC, true) && doAutoConnect) {
+            // Delayed, so the service has time to start.
+            handler.postDelayed({ autoConnect() }, AUTO_CONNECT_DELAY_MILLIS)
+        }
+        doAutoConnect = true
 
         // Remove notifications still shown.
         val notifications = getSystemService(NotificationManager::class.java)
@@ -186,8 +186,10 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
             )
         }
 
+        // Once per install: Android stops showing its prompt after a refusal, so asking again
+        // only denies it again. After that the connect screen says what's missing instead.
         val missing = missingPermissions()
-        if (missing.isNotEmpty() && !permissionsAsked) {
+        if (missing.isNotEmpty() && !preferences.getBoolean(SharedPreferencesKeys.SP_PERMISSIONS_ASKED, false)) {
             state.showDialog(ConnectDialog.Permissions(missing.toList()))
         }
     }
@@ -216,7 +218,7 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
     }
 
     override fun onRequestPermissions(permissions: List<String>) {
-        permissionsAsked = true
+        preferences.edit { putBoolean(SharedPreferencesKeys.SP_PERMISSIONS_ASKED, true) }
         ActivityCompat.requestPermissions(this, permissions.toTypedArray(), ID_PERMISSION_REQUEST)
     }
 
@@ -228,17 +230,8 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
         if (requestCode != ID_PERMISSION_REQUEST || localNetwork < 0) {
             return
         }
-        val connect = connectOnceAllowed
-        connectOnceAllowed = false
-        if (grantResults.getOrNull(localNetwork) == PackageManager.PERMISSION_GRANTED) {
-            // onResume, which comes next, starts looking on the network.
-            if (connect) {
-                doAutoConnect = false
-                connect()
-            }
-        } else {
-            state.showDialog(ConnectDialog.LocalNetworkDenied)
-        }
+        // onResume comes next either way, and starts looking on the network if it can.
+        state.setSearching(grantResults.getOrNull(localNetwork) == PackageManager.PERMISSION_GRANTED)
     }
 
     override fun onOpenAppSettings() {
@@ -258,6 +251,24 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
             PackageManager.PERMISSION_GRANTED
 
     /**
+     * Whether Android refused to reach [host] for want of the local network permission: it only
+     * stops the app reaching the network this phone is on, so an address beyond it, over a VPN
+     * say, needs nothing. Only addresses written as numbers are checked, which keeps a name's
+     * lookup off this thread; a name that did need the permission fails as it did before.
+     */
+    private fun isLocalNetworkBlocked(host: String): Boolean {
+        if (hasLocalNetwork() || !InetAddresses.isNumericAddress(host)) {
+            return false
+        }
+        val connectivity = getSystemService(ConnectivityManager::class.java)
+        val network = connectivity.activeNetwork ?: return false
+        val address = InetAddress.getByName(host)
+        return connectivity.getLinkProperties(network)?.routes.orEmpty().any {
+            !it.hasGateway() && it.matches(address)
+        }
+    }
+
+    /**
      * Asks for the local network permission, which Android asks for again or refuses at once.
      * Only on Android 17 and later, where [hasLocalNetwork] can be false.
      */
@@ -268,24 +279,14 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
 
     override fun onConnect() {
         serverName = null
-        connectWhenAllowed()
+        connect()
     }
 
     override fun onServer(server: Server) {
         state.setHost(server.host)
         serverName = server.name
         preferences.edit { putString(SharedPreferencesKeys.SP_KEY_PORT, server.port.toString()) }
-        connectWhenAllowed()
-    }
-
-    /** Connects, or first asks for the local network permission and connects once it's granted. */
-    private fun connectWhenAllowed() {
-        if (hasLocalNetwork()) {
-            connect()
-        } else {
-            connectOnceAllowed = true
-            requestLocalNetwork()
-        }
+        connect()
     }
 
     override fun onSearchAgain() {
@@ -316,7 +317,7 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
 
     override fun onAuthCode(code: Int) {
         authCode = code
-        connectWhenAllowed()
+        connect()
     }
 
     /** Shows how far connecting has got. */
@@ -401,6 +402,8 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
         @Suppress("DEPRECATION")
         val ip = applicationContext.getSystemService(WifiManager::class.java).connectionInfo.ipAddress
         val message = when {
+            // Android drops this silently, so nothing else says why the attempt went nowhere.
+            isLocalNetworkBlocked(state.host.value) -> getString(R.string.local_network_on_link)
             !Utilities.onWifi() -> getString(R.string.wifi_disabled)
             !Utilities.ToInetAddress(ip).isSiteLocalAddress -> getString(R.string.no_private_ip)
             else -> getString(R.string.check_ip, getString(R.string.clementine_version))

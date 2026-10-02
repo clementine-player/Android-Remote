@@ -101,12 +101,14 @@ fun ConnectScreen(viewModel: ConnectViewModel, actions: ConnectActions) {
     val host by viewModel.host.collectAsStateWithLifecycle()
     val knownHosts by viewModel.knownHosts.collectAsStateWithLifecycle()
     val servers by viewModel.servers.collectAsStateWithLifecycle()
+    val searching by viewModel.searching.collectAsStateWithLifecycle()
     val progress by viewModel.progress.collectAsStateWithLifecycle()
     val dialog by viewModel.dialog.collectAsStateWithLifecycle()
     ConnectContent(
         host = host,
         knownHosts = knownHosts,
         servers = servers,
+        searching = searching,
         progress = progress,
         onHostChange = viewModel::setHost,
         actions = actions,
@@ -119,13 +121,14 @@ internal fun ConnectContent(
     host: String,
     knownHosts: List<String>,
     servers: List<Server>,
+    searching: Boolean,
     @StringRes progress: Int?,
     onHostChange: (String) -> Unit,
     actions: ConnectActions,
     modifier: Modifier = Modifier,
 ) {
     val body = @Composable { bodyModifier: Modifier ->
-        Body(host, knownHosts, servers, progress, onHostChange, actions, bodyModifier)
+        Body(host, knownHosts, servers, searching, progress, onHostChange, actions, bodyModifier)
     }
     BoxWithConstraints(modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface)) {
         if (maxWidth > maxHeight) {
@@ -192,6 +195,7 @@ private fun Body(
     host: String,
     knownHosts: List<String>,
     servers: List<Server>,
+    searching: Boolean,
     @StringRes progress: Int?,
     onHostChange: (String) -> Unit,
     actions: ConnectActions,
@@ -236,7 +240,7 @@ private fun Body(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 if (servers.isEmpty()) {
-                    Searching()
+                    if (searching) Searching() else NotSearching(actions::onOpenAppSettings)
                 } else {
                     Column {
                         servers.forEachIndexed { index, server ->
@@ -311,6 +315,24 @@ private fun ServerItem(server: Server, enabled: Boolean, onClick: () -> Unit, in
         colors = ListItemDefaults.colors(containerColor = Color.Transparent),
         modifier = Modifier.clickable(enabled = enabled, onClick = onClick).testTag("server$index"),
     )
+}
+
+@Composable
+private fun NotSearching(onOpenSettings: () -> Unit) {
+    Column(
+        Modifier.padding(16.dp).testTag("notSearching"),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        Text(stringResource(R.string.connect_not_searching), style = MaterialTheme.typography.bodyLarge)
+        Text(
+            stringResource(R.string.connect_not_searching_help),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        TextButton(onOpenSettings, Modifier.testTag("openSettings")) {
+            Text(stringResource(R.string.open_settings))
+        }
+    }
 }
 
 @Composable
