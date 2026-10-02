@@ -17,6 +17,8 @@
 
 package de.qspool.clementineremote.backend.listener;
 
+import androidx.annotation.WorkerThread;
+
 import de.qspool.clementineremote.backend.ClementinePlayerConnection;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 
@@ -24,5 +26,7 @@ public interface PlayerConnectionListener {
 
     void onConnectionStatusChanged(ClementinePlayerConnection.ConnectionStatus status);
 
+    /** On the thread reading from Clementine, so what it calls must not want the main one. */
+    @WorkerThread
     void onClementineMessageReceived(ClementineMessage clementineMessage);
 }

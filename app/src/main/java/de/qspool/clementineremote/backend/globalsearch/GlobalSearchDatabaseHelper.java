@@ -21,6 +21,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import androidx.annotation.WorkerThread;
+
 public class GlobalSearchDatabaseHelper extends SQLiteOpenHelper {
 
     public final static String TABLE_NAME = "GlobalSearchResults";
@@ -67,6 +69,7 @@ public class GlobalSearchDatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    @WorkerThread
     public void deleteAll() {
         getWritableDatabase().execSQL("DELETE FROM " + TABLE_NAME);
     }
