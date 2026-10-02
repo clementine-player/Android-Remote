@@ -436,6 +436,10 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
             val reason = clementineMessage.message.responseDisconnect.reasonDisconnect
             if (reason == ReasonDisconnect.Wrong_Auth_Code || reason == ReasonDisconnect.Not_Authenticated) {
                 state.showDialog(ConnectDialog.AuthCode)
+            } else if (reason == ReasonDisconnect.Not_Local_Network) {
+                state.showDialog(
+                    ConnectDialog.Message(getString(R.string.not_local_network_title), getString(R.string.not_local_network)),
+                )
             }
         }
     }
