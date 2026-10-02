@@ -205,7 +205,6 @@
   <string name="track_loved">Peça favorita &lt;3</string>
   <string name="track_banned">Peça vetada :-(</string>
   <string name="permissions_required_title">Permisos necessaris</string>
-  <string name="permissions_required_text">El control remot del Clementine necessita accedir als dispositius d\'emmagatzematge per baixar arxius de música i accedir a l\'estat del telèfon per silenciar el Clementine durant les trucades. Cliqueu «Continua» per permetre al Clementine aquestes operacions.</string>
   <string name="notification_disconnect_keep_alive">S\'ha perdut la connexió. Toqueu per reconnectar.</string>
   <string name="crash_report_title">S\'ha produït un problema.</string>
   <string name="crash_report_message">L\'últim cop que vau usar el control remot del Clementine, va fallar. Ajudeu-nos a millorar l\'aplicació i envieu-nos l\'informe d\'error. Gràcies!</string>

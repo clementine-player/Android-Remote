@@ -24,7 +24,7 @@ android {
     defaultConfig {
         applicationId = "de.qspool.clementineremote"
         minSdk = 23
-        targetSdk = 36
+        targetSdk = 37
         // master keeps the next version with -dev. Each release commit sets both (see
         // .github/workflows/release.yml), and F-Droid reads them from its tag.
         versionCode = 800
@@ -183,6 +183,10 @@ dependencies {
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.rules)
     androidTestImplementation(libs.androidx.test.uiautomator)
+    // Compose's test library brings Espresso 3.5, whose ViewActions reflect on
+    // InputManager.getInstance(), which Android 17 removed: every Compose test fails with
+    // NoSuchMethodException. 3.7 uses the public API.
+    androidTestImplementation(libs.androidx.test.espresso.core)
 }
 
 // Name each use of a deprecated Java API, as Kotlin's compiler does, rather than a note that some

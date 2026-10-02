@@ -35,8 +35,31 @@ jobs:
   # Instrumented tests on an emulator. Only a real Android runtime detects StrictMode thread
   # violations (disk or network on the main thread); see StrictModeDeviceTest.
   device:
+    # The current Android keeps the check's name, "device", which branch protection may require.
+    name: ${{ matrix.api-level == 36 && 'device' || 'device (Android 17)' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        # The current Android, and the newest, which the app targets: Android 17's latest release,
+        # 37.2, which only comes with 16 KB pages. It boots much more slowly with the software GPU,
+        # so it gets the runner's four cores, more memory and longer to boot (it was still offline
+        # after the default 10 minutes on two cores), and a bigger data partition: its own apps
+        # leave too little room to install the app and its tests.
+        include:
+          - api-level: 36
+            target: google_apis
+            cores: 2
+            ram-size: ""
+            disk-size: ""
+            boot-timeout: 600
+          - api-level: "37.2"
+            target: google_apis_ps16k
+            cores: 4
+            ram-size: 4096M
+            disk-size: 8G
+            boot-timeout: 1200
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-java@v5
@@ -49,20 +72,66 @@ jobs:
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
+      # Built before the emulator starts, so the build doesn't starve it of the runner's CPU.
+      - name: Build the app and its tests
+        run: ./gradlew assembleFdroidDebug assembleFdroidDebugAndroidTest
+      # Android 17's releases are the first whose package name carries a minor version, which the
+      # runner's command-line tools (12.0) don't understand: they write "target=android-0" into
+      # the AVD. The emulator then misconfigures its graphics, and Android 17's gralloc mapper
+      # aborts every process that reads the screen back ("Assertion failed:
+      # !rcEnc->featureInfo()->hasReadColorBufferDma") -- surfaceflinger sampling the screen's
+      # brightness, the system server saving a task snapshot -- which restarts the system server,
+      # and the install ("Can't find service: package") or the test running (DeadSystemException)
+      # dies with it. Tools that write the target an AVD asked for boot an emulator that doesn't.
+      # Only the emulator's step puts the tools on the path, and it uses those in
+      # cmdline-tools/latest. Installed by the tools they replace, new ones land beside them, in
+      # latest-2, so they're moved into latest's place.
+      - name: Install current command-line tools
+        run: |
+          tools="$ANDROID_HOME/cmdline-tools"
+          yes | "$tools/latest/bin/sdkmanager" --install "cmdline-tools;latest" > /dev/null
+          if [ -d "$tools/latest-2" ]; then rm -rf "$tools/latest" && mv "$tools/latest-2" "$tools/latest"; fi
+          grep '^Pkg.Revision=' "$tools/latest/source.properties"
       - uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 36
-          target: google_apis
+          api-level: ${{ matrix.api-level }}
+          target: ${{ matrix.target }}
           arch: x86_64
+          cores: ${{ matrix.cores }}
+          ram-size: ${{ matrix.ram-size }}
+          disk-size: ${{ matrix.disk-size }}
+          emulator-boot-timeout: ${{ matrix.boot-timeout }}
           # The runner's defaults, and -no-metrics: without a choice about sending usage data, the
           # emulator warns, and is to ask before starting in later releases.
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -no-metrics
           disable-animations: true
-          script: ./gradlew connectedFdroidDebugAndroidTest
+          # An AVD whose target the tools got wrong (see above) still boots, so the tests check
+          # it before trusting a run on it.
+          pre-emulator-launch-script: |
+            grep -H '^target=' "$ANDROID_AVD_HOME/test.ini" "$ANDROID_AVD_HOME/test.avd/config.ini"
+            grep -q '^target=android-${{ matrix.api-level }}$' "$ANDROID_AVD_HOME/test.avd/config.ini"
+          # Each line runs on its own. Booted isn't ready: the tests wait for the package manager
+          # and the current user. The emulator's log goes in the reports, pass or fail.
+          script: |
+            timeout 600 adb wait-for-device shell 'until pm path android > /dev/null 2>&1 && am get-current-user > /dev/null 2>&1; do sleep 2; done'
+            ./gradlew connectedFdroidDebugAndroidTest; status=$?; mkdir -p app/build/reports/androidTests && adb logcat -d > app/build/reports/androidTests/logcat.txt; exit $status
+      # The Gradle task passes when the app won't install (on a full emulator, say), having run
+      # nothing, so the job checks the tests did run.
+      - name: Check the tests ran
+        run: |
+          # The results are named after the device, "TEST-test(AVD) - 16.xml", spaces and all.
+          tests=$(find app/build/outputs/androidTest-results -name 'TEST-*.xml' -exec cat {} + \
+            | grep -o '<testsuite [^>]*tests="[0-9]*"' | grep -o 'tests="[0-9]*"' \
+            | tr -dc '0-9\n' | awk '{ n += $1 } END { print n + 0 }')
+          echo "$tests tests ran"
+          if [ "$tests" -eq 0 ]; then
+            echo "::error::No tests ran on the emulator"
+            exit 1
+          fi
       - uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: device-test-reports
+          name: device-test-reports-${{ matrix.api-level }}
           path: |
             app/build/reports/androidTests/
             app/build/outputs/androidTest-results/

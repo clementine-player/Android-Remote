@@ -210,7 +210,6 @@
   <string name="track_loved">Takelis pažymėtas kaip patinkantis &lt;3</string>
   <string name="track_banned">Takelis užblokuotas :-(</string>
   <string name="permissions_required_title">Reikia leidimų</string>
-  <string name="permissions_required_text">Clementine Remote reikalauja prieigos prie įrenginio kaupiklio, kad galėtų atsisiųsti dainas ir prieigos prie telefono būsenos, kad, esant skambučiui, galėtų nutildyti Clementine. Spustelėkite tęsti, kad suteiktumėte Clementine Remote šiuos leidimus.</string>
   <string name="notification_disconnect_keep_alive">Ryšys prarastas. Prilieskite, kad būtų jungiamasi iš naujo.</string>
   <string name="crash_report_title">Oi, kažkas atsitiko!</string>
   <string name="crash_report_message">Paskutinį kartą Clementine Remote užstrigo! To neturėjo įvykti! Prašau padėti man patobulinti programą ir išsiųsti man žurnalo failą. Ačiū!</string>

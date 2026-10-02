@@ -353,7 +353,14 @@
     <string name="track_loved">Track loved &lt;3</string>
     <string name="track_banned">Track banned :-(</string>
     <string name="permissions_required_title">Permissions required</string>
-    <string name="permissions_required_text">Clementine Remote requires access to the device\'s storage for song downloads and phone state to silence Clementine on calls. Click continue to grant Clementine Remote the permissions.</string>
+    <string name="permissions_intro">Android will ask for:</string>
+    <string name="permission_local_network">Nearby devices: Clementine Remote finds and talks to Clementine on your local network.</string>
+    <string name="permission_notifications">Notifications: for the player\'s controls, and your downloads\' progress.</string>
+    <string name="permission_phone">Phone: to lower Clementine\'s volume during calls.</string>
+    <string name="permission_storage">Storage: to save the songs you download.</string>
+    <string name="local_network_denied_title">Clementine Remote can\'t reach Clementine</string>
+    <string name="local_network_denied_text">Clementine Remote finds and talks to Clementine on your local network, which Android only allows with the Nearby devices permission. You can allow it in the app\'s settings.</string>
+    <string name="open_settings">Open settings</string>
 
     <string name="notification_previous">Previous</string>
     <string name="notification_play">Play</string>

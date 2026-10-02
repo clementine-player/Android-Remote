@@ -203,7 +203,6 @@
   <string name="track_loved">Nummer ge-loved &lt;3</string>
   <string name="track_banned">Nummer ge-banned :-(</string>
   <string name="permissions_required_title">Machtiging vereist</string>
-  <string name="permissions_required_text">Clementine Remote heeft toegang nodig tot de opslag van uw apparaat om nummers te downloaden en tot telefoon staat om Clementine te dempen bij oproepen. Klik doorgaan om Clementine toegang te geven.</string>
   <string name="notification_disconnect_keep_alive">Verbinding verbroken. Raak aan om opnieuw te verbinden.</string>
   <string name="crash_report_title">Oeps, er is iets misgegaan!</string>
   <string name="crash_report_message">Clementine remote was onverwachts gestopt! Dit had niet mogen gebeuren! Help mij de app beter te maken en stuur me het logfile. Bedankt!</string>

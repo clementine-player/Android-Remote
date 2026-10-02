@@ -1,5 +1,8 @@
 package de.qspool.clementineremote.ui.connect
 
+import android.Manifest
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -22,6 +25,7 @@ import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.dp
 import de.qspool.clementineremote.R
 
 /** A dialog over the connect screen. */
@@ -35,6 +39,12 @@ sealed interface ConnectDialog {
 
     /** Why the app asks for [permissions], before Android asks. */
     data class Permissions(val permissions: List<String>) : ConnectDialog
+
+    /**
+     * Android 17's local network permission was refused, without which the app can't reach
+     * Clementine: it can be allowed in the app's settings.
+     */
+    data object LocalNetworkDenied : ConnectDialog
 }
 
 /** Shows [dialog]; [onDismiss] closes it. */
@@ -50,7 +60,15 @@ internal fun ConnectDialogs(dialog: ConnectDialog?, actions: ConnectActions, onD
         is ConnectDialog.Permissions -> AlertDialog(
             onDismissRequest = onDismiss,
             title = { Text(stringResource(R.string.permissions_required_title)) },
-            text = { Text(stringResource(R.string.permissions_required_text)) },
+            text = {
+                Column(
+                    Modifier.verticalScroll(rememberScrollState()).testTag("permissionsText"),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    Text(stringResource(R.string.permissions_intro))
+                    dialog.permissions.mapNotNull(::permissionReason).forEach { Text(stringResource(it)) }
+                }
+            },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -61,7 +79,33 @@ internal fun ConnectDialogs(dialog: ConnectDialog?, actions: ConnectActions, onD
                 ) { Text(stringResource(R.string.dialog_continue)) }
             },
         )
+        ConnectDialog.LocalNetworkDenied -> AlertDialog(
+            onDismissRequest = onDismiss,
+            title = { Text(stringResource(R.string.local_network_denied_title)) },
+            text = { Text(stringResource(R.string.local_network_denied_text)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        onDismiss()
+                        actions.onOpenAppSettings()
+                    },
+                    modifier = Modifier.testTag("btnOpenSettings"),
+                ) { Text(stringResource(R.string.open_settings)) }
+            },
+            dismissButton = {
+                TextButton(onClick = onDismiss) { Text(stringResource(R.string.dialog_close)) }
+            },
+        )
     }
+}
+
+/** What [permission] is for, in the words the app asks for it with. */
+private fun permissionReason(permission: String): Int? = when (permission) {
+    Manifest.permission.ACCESS_LOCAL_NETWORK -> R.string.permission_local_network
+    Manifest.permission.POST_NOTIFICATIONS -> R.string.permission_notifications
+    Manifest.permission.READ_PHONE_STATE -> R.string.permission_phone
+    Manifest.permission.WRITE_EXTERNAL_STORAGE -> R.string.permission_storage
+    else -> null
 }
 
 @Composable
