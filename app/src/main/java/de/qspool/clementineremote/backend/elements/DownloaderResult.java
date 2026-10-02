@@ -18,10 +18,12 @@
 package de.qspool.clementineremote.backend.elements;
 
 import de.qspool.clementineremote.R;
+import de.qspool.clementineremote.backend.pb.ClementineMessage;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ReasonDisconnect;
 
 public class DownloaderResult extends ClementineElement {
 
-    public enum DownloadResult {SUCCESSFUL, INSUFFIANT_SPACE, NOT_MOUNTED, CONNECTION_ERROR, FOBIDDEN, ONLY_WIFI, CANCELLED, ERROR}
+    public enum DownloadResult {SUCCESSFUL, INSUFFIANT_SPACE, NOT_MOUNTED, CONNECTION_ERROR, FOBIDDEN, NOT_LOCAL_NETWORK, ONLY_WIFI, CANCELLED, ERROR}
 
     private DownloadResult mResult;
 
@@ -30,6 +32,18 @@ public class DownloaderResult extends ClementineElement {
     public DownloaderResult(int id, DownloadResult result) {
         mId = id;
         mResult = result;
+    }
+
+    /**
+     * Why Clementine closed a download with [disconnect]: it isn't on Clementine's local network,
+     * or else downloads aren't allowed.
+     */
+    public static DownloadResult refusal(ClementineMessage disconnect) {
+        if (disconnect.getMessage().getResponseDisconnect().getReasonDisconnect()
+                == ReasonDisconnect.Not_Local_Network) {
+            return DownloadResult.NOT_LOCAL_NETWORK;
+        }
+        return DownloadResult.FOBIDDEN;
     }
 
     public DownloadResult getResult() {
@@ -52,6 +66,8 @@ public class DownloaderResult extends ClementineElement {
                 return R.string.download_noti_canceled;
             case FOBIDDEN:
                 return R.string.download_noti_forbidden;
+            case NOT_LOCAL_NETWORK:
+                return R.string.download_noti_not_local_network;
             case INSUFFIANT_SPACE:
                 return R.string.download_noti_insufficient_space;
             case NOT_MOUNTED:

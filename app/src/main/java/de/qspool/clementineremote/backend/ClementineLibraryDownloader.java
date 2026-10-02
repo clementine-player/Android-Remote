@@ -179,7 +179,7 @@ public class ClementineLibraryDownloader extends
 
             // Is the download forbidden?
             if (message.getMessageType() == MsgType.DISCONNECT) {
-                result = new DownloaderResult(0, DownloadResult.FOBIDDEN);
+                result = new DownloaderResult(0, DownloaderResult.refusal(message));
                 break;
             }
 
