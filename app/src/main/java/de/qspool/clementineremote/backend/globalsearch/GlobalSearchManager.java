@@ -51,11 +51,15 @@ public class GlobalSearchManager {
         reset();
     }
 
+    /**
+     * Forgets the search showing, when connecting to a Clementine. The results of the last one
+     * stay in the database until the next search clears them: emptying it here would be a write
+     * to disk on the thread connecting, and nothing reads them, as every query asks for the
+     * results of one search by its id.
+     */
     public void reset() {
         mRequest = null;
         mCurrentId = -1;
-
-        mGlobalSearchDatabaseHelper.deleteAll();
     }
 
     public void parseClementineMessage(ClementineMessage clementineMessage) {
@@ -99,6 +103,8 @@ public class GlobalSearchManager {
 
         switch (responseGlobalSearchStatus.getStatus()) {
             case GlobalSearchStarted:
+                // On the thread reading from Clementine, which the results are written on too.
+                mGlobalSearchDatabaseHelper.deleteAll();
                 mRequest = new GlobalSearchRequest(id, mGlobalSearchDatabaseHelper);
                 mCurrentId = id;
                 break;
