@@ -83,15 +83,22 @@ jobs:
       # brightness, the system server saving a task snapshot -- which restarts the system server,
       # and the install ("Can't find service: package") or the test running (DeadSystemException)
       # dies with it. Tools that write the target an AVD asked for boot an emulator that doesn't.
-      # Only the emulator's step puts the tools on the path, and it uses those in
-      # cmdline-tools/latest. Installed by the tools they replace, new ones land beside them, in
-      # latest-2, so they're moved into latest's place.
+      # The tools come from Google's own download, checked against the checksum their repository
+      # lists, rather than through sdkmanager: it's deprecated in favour of the android command,
+      # which the runner's tools are too old to have. They go where the emulator's step looks,
+      # cmdline-tools/latest. Bump both lines together, from
+      # https://dl.google.com/android/repository/repository2-3.xml.
       - name: Install current command-line tools
+        env:
+          ZIP: commandlinetools-linux-16111833_latest.zip
+          SHA1: e025545c62a8e64c7559119566a569fb1dec5f60
         run: |
-          tools="$ANDROID_HOME/cmdline-tools"
-          yes | "$tools/latest/bin/sdkmanager" --install "cmdline-tools;latest" > /dev/null
-          if [ -d "$tools/latest-2" ]; then rm -rf "$tools/latest" && mv "$tools/latest-2" "$tools/latest"; fi
-          grep '^Pkg.Revision=' "$tools/latest/source.properties"
+          curl -sSLo "$RUNNER_TEMP/$ZIP" "https://dl.google.com/android/repository/$ZIP"
+          echo "$SHA1  $RUNNER_TEMP/$ZIP" | sha1sum -c -
+          unzip -q "$RUNNER_TEMP/$ZIP" -d "$RUNNER_TEMP/tools"
+          rm -rf "$ANDROID_HOME/cmdline-tools/latest"
+          mv "$RUNNER_TEMP/tools/cmdline-tools" "$ANDROID_HOME/cmdline-tools/latest"
+          grep '^Pkg.Revision=' "$ANDROID_HOME/cmdline-tools/latest/source.properties"
       - uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
