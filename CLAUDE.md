@@ -18,3 +18,8 @@ When you're asked to add a feature or change how something behaves, and the user
 only for this client, ask them whether they want it in both clients before you start. If they do and
 the other client's repository isn't in the session, ask them to add it (for example with
 `/add-dir`), so both changes are made together.
+
+## Release Notes
+
+Add a "Release-note:" trailer to commits that make user-facing changes so that the changes are mentioned in
+the next production release.
