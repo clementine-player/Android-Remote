@@ -97,6 +97,8 @@ class AccessibilityDeviceTest {
         override fun onSettings() {}
         override fun onAuthCode(code: Int) {}
         override fun onRequestPermissions(permissions: List<String>) {}
+
+        override fun onOpenAppSettings() {}
     }
 
     @Test

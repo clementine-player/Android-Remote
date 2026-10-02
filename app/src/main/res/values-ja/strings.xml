@@ -199,7 +199,6 @@
   <string name="track_loved">好きなトラック &lt;3</string>
   <string name="track_banned">トラックを禁止 :-(</string>
   <string name="permissions_required_title">アクセス許可が必要</string>
-  <string name="permissions_required_text">Clementine リモートは、曲をダウンロードするためにデバイスのストレージと、着信時に Clementine をサイレントするために電話の状態にアクセスする必要があります。Clementine リモートにアクセス許可を付与するために、続行をクリックしてください。</string>
   <string name="notification_disconnect_keep_alive">接続が失われました。タッチすると再接続します。</string>
   <string name="crash_report_title">申し訳ありません、何か問題が発生しました!</string>
   <string name="crash_report_message">前回 Clementine リモートはクラッシュしました! これは起きてはいけないことです! アプリを改善するためにご協力ください。私にログファイルをお送りください。ありがとうございます!</string>

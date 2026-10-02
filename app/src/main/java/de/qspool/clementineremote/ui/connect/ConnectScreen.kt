@@ -87,6 +87,9 @@ interface ConnectActions {
 
     /** Ask Android for [permissions], once told why. */
     fun onRequestPermissions(permissions: List<String>)
+
+    /** Open the app's page in Android's settings, to allow a permission refused for good. */
+    fun onOpenAppSettings()
 }
 
 /**

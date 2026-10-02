@@ -17,6 +17,7 @@
 package de.qspool.clementineremote.ui
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.content.ComponentName
 import android.content.Intent
@@ -24,10 +25,12 @@ import android.content.ServiceConnection
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.net.Uri
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
+import android.provider.Settings
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -92,6 +95,12 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
     /** Whether connecting was canceled: what the attempt says afterwards isn't shown. */
     private var canceled = false
 
+    /** The permissions were asked for since the activity started, so it doesn't ask on each resume. */
+    private var permissionsAsked = false
+
+    /** Connect was tapped before the local network permission was granted: connect once it is. */
+    private var connectOnceAllowed = false
+
     /** The network name of the Clementine being connected to, if it was picked from the network. */
     private var serverName: String? = null
 
@@ -135,16 +144,20 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
             return
         }
 
-        // mDNS discovery runs even when auto-connecting, so that if the saved address no longer
-        // works, the Clementines on the network are there to pick from, and the last one can be
-        // found there by name.
-        discovery = ClementineMDnsDiscovery(handler).also { it.discoverServices() }
+        // Nothing on the network until Android 17's local network permission is granted: it's
+        // asked for in onPostResume, and once granted the activity resumes here again.
+        if (hasLocalNetwork()) {
+            // mDNS discovery runs even when auto-connecting, so that if the saved address no
+            // longer works, the Clementines on the network are there to pick from, and the last
+            // one can be found there by name.
+            discovery = ClementineMDnsDiscovery(handler).also { it.discoverServices() }
 
-        if (preferences.getBoolean(SharedPreferencesKeys.SP_KEY_AC, true) && doAutoConnect) {
-            // Delayed, so the service has time to start.
-            handler.postDelayed({ autoConnect() }, AUTO_CONNECT_DELAY_MILLIS)
+            if (preferences.getBoolean(SharedPreferencesKeys.SP_KEY_AC, true) && doAutoConnect) {
+                // Delayed, so the service has time to start.
+                handler.postDelayed({ autoConnect() }, AUTO_CONNECT_DELAY_MILLIS)
+            }
+            doAutoConnect = true
         }
-        doAutoConnect = true
 
         // Remove notifications still shown.
         val notifications = getSystemService(NotificationManager::class.java)
@@ -174,7 +187,7 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
         }
 
         val missing = missingPermissions()
-        if (missing.isNotEmpty()) {
+        if (missing.isNotEmpty() && !permissionsAsked) {
             state.showDialog(ConnectDialog.Permissions(missing.toList()))
         }
     }
@@ -182,6 +195,10 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
     /** The runtime permissions the app uses that have not been granted yet. */
     fun missingPermissions(): Array<String> {
         val wanted = buildList {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CINNAMON_BUN) {
+                // Finding and talking to Clementine at all.
+                add(Manifest.permission.ACCESS_LOCAL_NETWORK)
+            }
             // Lowers Clementine's volume during calls.
             add(Manifest.permission.READ_PHONE_STATE)
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
@@ -199,22 +216,83 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
     }
 
     override fun onRequestPermissions(permissions: List<String>) {
+        permissionsAsked = true
         ActivityCompat.requestPermissions(this, permissions.toTypedArray(), ID_PERMISSION_REQUEST)
+    }
+
+    // Only Android 17 and later have the local network permission among the results.
+    @SuppressLint("InlinedApi")
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        val localNetwork = permissions.indexOf(Manifest.permission.ACCESS_LOCAL_NETWORK)
+        if (requestCode != ID_PERMISSION_REQUEST || localNetwork < 0) {
+            return
+        }
+        val connect = connectOnceAllowed
+        connectOnceAllowed = false
+        if (grantResults.getOrNull(localNetwork) == PackageManager.PERMISSION_GRANTED) {
+            // onResume, which comes next, starts looking on the network.
+            if (connect) {
+                doAutoConnect = false
+                connect()
+            }
+        } else {
+            state.showDialog(ConnectDialog.LocalNetworkDenied)
+        }
+    }
+
+    override fun onOpenAppSettings() {
+        startActivity(
+            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                .setData(Uri.fromParts("package", packageName, null)),
+        )
+    }
+
+    /**
+     * Android 17 lets apps targeting it reach the local network, Clementine included, only with
+     * the local network permission. Before, the INTERNET permission covers it.
+     */
+    private fun hasLocalNetwork(): Boolean =
+        Build.VERSION.SDK_INT < Build.VERSION_CODES.CINNAMON_BUN ||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_LOCAL_NETWORK) ==
+            PackageManager.PERMISSION_GRANTED
+
+    /**
+     * Asks for the local network permission, which Android asks for again or refuses at once.
+     * Only on Android 17 and later, where [hasLocalNetwork] can be false.
+     */
+    @SuppressLint("InlinedApi")
+    private fun requestLocalNetwork() {
+        onRequestPermissions(listOf(Manifest.permission.ACCESS_LOCAL_NETWORK))
     }
 
     override fun onConnect() {
         serverName = null
-        connect()
+        connectWhenAllowed()
     }
 
     override fun onServer(server: Server) {
         state.setHost(server.host)
         serverName = server.name
         preferences.edit { putString(SharedPreferencesKeys.SP_KEY_PORT, server.port.toString()) }
-        connect()
+        connectWhenAllowed()
+    }
+
+    /** Connects, or first asks for the local network permission and connects once it's granted. */
+    private fun connectWhenAllowed() {
+        if (hasLocalNetwork()) {
+            connect()
+        } else {
+            connectOnceAllowed = true
+            requestLocalNetwork()
+        }
     }
 
     override fun onSearchAgain() {
+        if (!hasLocalNetwork()) {
+            requestLocalNetwork()
+            return
+        }
         discovery?.stopServiceDiscovery()
         state.setServers(emptyList())
         discovery = ClementineMDnsDiscovery(handler).also { it.discoverServices() }
@@ -238,7 +316,7 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
 
     override fun onAuthCode(code: Int) {
         authCode = code
-        connect()
+        connectWhenAllowed()
     }
 
     /** Shows how far connecting has got. */

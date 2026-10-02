@@ -1,6 +1,5 @@
 package de.qspool.clementineremote;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -62,8 +61,7 @@ public class MediaSessionDeviceTest {
     private static final String SYSTEM_UI = "com.android.systemui";
 
     @Rule
-    public final GrantPermissionRule mPermissions = GrantPermissionRule.grant(
-            Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.READ_PHONE_STATE);
+    public final GrantPermissionRule mPermissions = AppPermissions.granted();
 
     /**
      * On failure, keeps what the screen showed and the media sessions Android knew. It runs

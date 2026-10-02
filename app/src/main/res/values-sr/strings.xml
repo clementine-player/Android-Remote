@@ -207,7 +207,6 @@
   <string name="track_loved">Нумера вољена &lt;3</string>
   <string name="track_banned">Нумера забрањена :-(</string>
   <string name="permissions_required_title">Потребне дозволе</string>
-  <string name="permissions_required_text">Даљински за клементину захтева приступ складишту уређаја да би преузимао песме и стању телефона да би утишао Клементину по позивима. Тапните „Настави“ за давање ових дозвола Даљинском.</string>
   <string name="notification_disconnect_keep_alive">Веза прекинута. Додирните за поновно повезивање.</string>
   <string name="crash_report_title">Опс, нешто није у реду!</string>
   <string name="crash_report_message">Даљински за Клементину се срушио прошли пут! Ово не би смело да се догоди! Помозите ми да побољшам апликацију и пошаљите ми фајл дневника. Хвала!</string>

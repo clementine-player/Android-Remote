@@ -1,6 +1,5 @@
 package de.qspool.clementineremote;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
@@ -63,8 +62,7 @@ public class StoreScreenshots {
     private static final String RADIO_STREAMS = "Your radio streams";
 
     @Rule
-    public final GrantPermissionRule mPermissions = GrantPermissionRule.grant(
-            Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.READ_PHONE_STATE);
+    public final GrantPermissionRule mPermissions = AppPermissions.granted();
 
     /** On failure, keeps what the screen showed, to see why. */
     @Rule

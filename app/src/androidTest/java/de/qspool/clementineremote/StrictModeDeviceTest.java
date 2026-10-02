@@ -8,9 +8,11 @@ import android.util.Log;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -42,6 +44,10 @@ import static org.junit.Assert.fail;
  */
 @RunWith(AndroidJUnit4.class)
 public class StrictModeDeviceTest {
+
+    /** On Android 17, so the connect screen looks on the network, as it does before. */
+    @Rule
+    public final GrantPermissionRule mPermissions = AppPermissions.localNetwork();
 
     private static final String TAG = "StrictModeDeviceTest";
 

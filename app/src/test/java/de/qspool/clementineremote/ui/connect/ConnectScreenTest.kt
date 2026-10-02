@@ -1,5 +1,6 @@
 package de.qspool.clementineremote.ui.connect
 
+import android.content.Context
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,6 +18,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextReplacement
+import androidx.test.core.app.ApplicationProvider
 import de.qspool.clementineremote.R
 import de.qspool.clementineremote.ui.theme.ClementineTheme
 import org.junit.Assert.assertEquals
@@ -84,6 +86,10 @@ class ConnectScreenTest {
         override fun onRequestPermissions(permissions: List<String>) {
             done += "permissions $permissions"
         }
+
+        override fun onOpenAppSettings() {
+            done += "app settings"
+        }
     }
 
     /** Shows [viewModel]'s dialogs, as the connect screen does. */
@@ -126,6 +132,42 @@ class ConnectScreenTest {
         compose.onNodeWithTag("btnPermissionsContinue").performClick()
 
         assertEquals(listOf("permissions [android.permission.READ_PHONE_STATE]"), done)
+        assertNull(viewModel.dialog.value)
+    }
+
+    private fun string(id: Int): String = ApplicationProvider.getApplicationContext<Context>().getString(id)
+
+    @Test
+    fun permissionsDialogSaysWhatEachPermissionIsFor() {
+        val viewModel = ConnectViewModel()
+        viewModel.showDialog(
+            ConnectDialog.Permissions(
+                listOf("android.permission.ACCESS_LOCAL_NETWORK", "android.permission.READ_PHONE_STATE"),
+            ),
+        )
+        showDialogs(viewModel)
+
+        compose.onNodeWithText(string(R.string.permission_local_network)).assertIsDisplayed()
+        compose.onNodeWithText(string(R.string.permission_phone)).assertIsDisplayed()
+        compose.onNodeWithText(string(R.string.permission_notifications)).assertDoesNotExist()
+        compose.onNodeWithTag("btnPermissionsContinue").performClick()
+
+        assertEquals(
+            listOf("permissions [android.permission.ACCESS_LOCAL_NETWORK, android.permission.READ_PHONE_STATE]"),
+            done,
+        )
+    }
+
+    @Test
+    fun refusedLocalNetworkOffersTheAppSettings() {
+        val viewModel = ConnectViewModel()
+        viewModel.showDialog(ConnectDialog.LocalNetworkDenied)
+        showDialogs(viewModel)
+
+        compose.onNodeWithText(string(R.string.local_network_denied_text)).assertIsDisplayed()
+        compose.onNodeWithTag("btnOpenSettings").performClick()
+
+        assertEquals(listOf("app settings"), done)
         assertNull(viewModel.dialog.value)
     }
 
