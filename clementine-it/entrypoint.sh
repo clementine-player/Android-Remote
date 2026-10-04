@@ -7,7 +7,8 @@
 #   entrypoint.sh --seed    image build step: create the database, add /music
 #
 # Environment: AUTH_CODE (enables the remote's auth code when set), STREAMING (set to 1 to let
-# Clementine play on remotes).
+# Clementine play on remotes), SAVED_RADIO (set to 0 for no saved radio streams: the public demo
+# Clementine has none, as it would relay SomaFM's stations to anyone).
 set -euo pipefail
 
 CONFIG_DIR="$HOME/.config/Clementine"
@@ -37,6 +38,9 @@ doubleclick_playlist_addmode=1
 
 [General]
 startupbehaviour=1
+CONF
+  [ "${SAVED_RADIO:-1}" = 0 ] && return
+  cat >> "$CONFIG_DIR/Clementine.conf" <<CONF
 
 # Radio streams of its own, for browsing its internet services ("Your radio streams").
 [SavedRadio]
