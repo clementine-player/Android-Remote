@@ -24,7 +24,11 @@ class ThisRendererTest {
         // ExoPlayer plays WAV without a decoder, so it's always there.
         assertTrue(capabilities.formatsList.any { it.mimeType == "audio/wav" })
         assertEquals(
-            listOf(RendererFeature.RENDERER_FEATURE_GAPLESS, RendererFeature.RENDERER_FEATURE_HTTP_RANGE),
+            listOf(
+                RendererFeature.RENDERER_FEATURE_GAPLESS,
+                RendererFeature.RENDERER_FEATURE_HTTP_RANGE,
+                RendererFeature.RENDERER_FEATURE_RELATIVE_URLS,
+            ),
             capabilities.featuresList,
         )
     }

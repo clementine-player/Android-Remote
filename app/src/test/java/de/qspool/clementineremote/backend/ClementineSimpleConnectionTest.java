@@ -9,6 +9,7 @@ import org.robolectric.RobolectricTestRunner;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -20,6 +21,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Engi
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseClementineInfo;
+import de.qspool.clementineremote.backend.streaming.Renderer;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -90,6 +92,20 @@ public class ClementineSimpleConnectionTest {
             assertEquals(MsgType.INFO, reply.getMessageType());
             assertEquals("Clementine test", App.Clementine.getVersion());
             assertEquals(Clementine.State.PAUSE, App.Clementine.getState());
+        }
+    }
+
+    @Test
+    public void knowsWhereItReachedClementine() throws Exception {
+        assertEquals(null, mConnection.getServerAddress());
+        assertTrue(mConnection.createConnection(connectMessage(0)));
+        try (Socket ignored = mServer.accept()) {
+            InetSocketAddress server = mConnection.getServerAddress();
+            assertEquals(mServer.getInetAddress(), server.getAddress());
+            assertEquals(mServer.getLocalPort(), server.getPort());
+            // So the renderer fetches Clementine's paths from there.
+            assertEquals("http://127.0.0.1:" + mServer.getLocalPort() + "/s/token/1",
+                    Renderer.resolve("/s/token/1", server));
         }
     }
 

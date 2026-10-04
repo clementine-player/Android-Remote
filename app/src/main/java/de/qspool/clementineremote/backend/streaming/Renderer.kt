@@ -18,6 +18,9 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Rend
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RendererStatus
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RendererTrackEnded
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SeekMethod
+import java.net.InetSocketAddress
+import java.net.URI
+import java.net.URISyntaxException
 
 /**
  * This phone as Clementine's audio output: plays the items Clementine sends (`RENDER_*`) with
@@ -25,10 +28,12 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Seek
  * follows. Clementine stays in charge: it decides what plays, and when to skip or stop.
  *
  * Messages come from the connection's thread ([onMessage]); everything else runs on the main
- * thread.
+ * thread. [server] is where this phone connected to Clementine, which serves the tracks on the
+ * same host and port.
  */
 class Renderer(
     private val playback: Playback,
+    private val server: () -> InetSocketAddress?,
     private val send: (ClementineMessage) -> Unit,
 ) : Playback.Listener {
 
@@ -100,7 +105,7 @@ class Renderer(
             }
             MsgType.RENDER_PRELOAD -> {
                 next = message.requestRenderPreload.item
-                if (current != null) playback.queue(next?.url)
+                if (current != null) playback.queue(next?.let { resolve(it.url, server()) })
             }
             MsgType.RENDER_PLAY -> if (current != null) {
                 playing = true
@@ -131,20 +136,25 @@ class Renderer(
         current = item
         next = null
         reported = null
+        val url = resolve(item.url, server())
+        if (url == null) {
+            onError("Not a URL: ${item.url}", transient = false)
+            return
+        }
         when (item.seekMethod) {
             // The url already starts there.
             SeekMethod.SEEK_METHOD_NEW_URL -> {
                 offsetMs = startMs
-                playback.load(item.url, 0, playing)
+                playback.load(url, 0, playing)
             }
             SeekMethod.SEEK_METHOD_BYTE_RANGE -> {
                 offsetMs = 0
-                playback.load(item.url, startMs, playing)
+                playback.load(url, startMs, playing)
             }
             // Live, such as radio: it plays from wherever it is now.
             else -> {
                 offsetMs = 0
-                playback.load(item.url, 0, playing)
+                playback.load(url, 0, playing)
             }
         }
         onStateChanged()
@@ -154,11 +164,12 @@ class Renderer(
         val item = current ?: return
         // A seek meant for an item that has since changed.
         if (itemId != item.itemId) return
+        val target = if (url.isEmpty()) null else resolve(url, server())
         when {
-            url.isNotEmpty() -> {
+            target != null -> {
                 offsetMs = positionMs
-                playback.load(url, 0, playing)
-                playback.queue(next?.url)
+                playback.load(target, 0, playing)
+                playback.queue(next?.let { resolve(it.url, server()) })
             }
             item.seekMethod == SeekMethod.SEEK_METHOD_BYTE_RANGE -> {
                 offsetMs = 0
@@ -268,7 +279,9 @@ class Renderer(
          */
         @JvmStatic
         fun attach(context: Context, connection: ClementinePlayerConnection, activeListener: ActiveListener) {
-            val renderer = Renderer(ExoPlayback(context.applicationContext), RemoteRepository::send)
+            val renderer = Renderer(
+                ExoPlayback(context.applicationContext), connection::getServerAddress, RemoteRepository::send,
+            )
             renderer.activeListener = activeListener
             connection.addPlayerConnectionListener(object : PlayerConnectionListener {
                 override fun onConnectionStatusChanged(status: ConnectionStatus) {
@@ -283,6 +296,29 @@ class Renderer(
                     }
                 }
             })
+        }
+
+        /**
+         * Where to fetch [url], as Clementine sent it: a URL with a scheme from exactly there, and
+         * anything else, usually a path, relative to [server]'s host and port. Through NAT or a
+         * port forward, Clementine doesn't know the address this phone reached it at, so it sends
+         * paths. Null when there's nowhere to fetch it from.
+         */
+        @JvmStatic
+        fun resolve(url: String, server: InetSocketAddress?): String? {
+            val uri = try {
+                URI(url)
+            } catch (e: URISyntaxException) {
+                return null
+            }
+            if (uri.isAbsolute) return url
+            if (server == null) return null
+            val host = server.address?.hostAddress ?: server.hostString
+            return try {
+                URI("http", null, host, server.port, "/", null, null).resolve(uri).toString()
+            } catch (e: URISyntaxException) {
+                null
+            }
         }
 
         /** How often to report the position while playing, as Clementine expects. */

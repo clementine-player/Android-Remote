@@ -15,6 +15,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Requ
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRenderVolume
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SeekMethod
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -22,6 +23,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
+import java.net.InetAddress
+import java.net.InetSocketAddress
 import java.time.Duration
 
 /** The renderer turns Clementine's `RENDER_*` commands into playback, and reports back. */
@@ -33,9 +36,14 @@ class RendererTest {
     private val active = mutableListOf<Boolean>()
     private lateinit var renderer: Renderer
 
+    /** Where the phone connected to Clementine. */
+    private var server: InetSocketAddress? = address("192.0.2.5", 5500)
+
+    private fun address(ip: String, port: Int) = InetSocketAddress(InetAddress.getByName(ip), port)
+
     @Before
     fun setUp() {
-        renderer = Renderer(playback) { sent += it.message }
+        renderer = Renderer(playback, { server }) { sent += it.message }
         renderer.activeListener = Renderer.ActiveListener { active += it }
     }
 
@@ -202,5 +210,52 @@ class RendererTest {
     fun ignoresOtherMessages() {
         receive(ClementineMessage.getMessageBuilder(MsgType.PLAY))
         assertTrue(sent.isEmpty())
+    }
+
+    @Test
+    fun fetchesAPathFromWhereItConnected() {
+        load(item(3, SeekMethod.SEEK_METHOD_NEW_URL).setUrl("/s/token/3"))
+        assertEquals("http://192.0.2.5:5500/s/token/3", playback.url)
+
+        receive(ClementineMessage.getMessageBuilder(MsgType.RENDER_SEEK).setRequestRenderSeek(
+            RequestRenderSeek.newBuilder().setItemId(3).setPositionMs(60_000).setUrl("/s/token/3?t=60000"),
+        ))
+        assertEquals("http://192.0.2.5:5500/s/token/3?t=60000", playback.url)
+    }
+
+    @Test
+    fun queuesAPathFromWhereItConnected() {
+        load(item(1))
+        receive(ClementineMessage.getMessageBuilder(MsgType.RENDER_PRELOAD).setRequestRenderPreload(
+            RequestRenderPreload.newBuilder().setItem(item(2).setUrl("/s/token/2")),
+        ))
+        assertEquals("http://192.0.2.5:5500/s/token/2", playback.queued)
+    }
+
+    @Test
+    fun resolvesUrlsAsClementineMeansThem() {
+        val server = address("203.0.113.7", 5500)
+        // A full URL is fetched from exactly there.
+        assertEquals("http://radio.example/stream", Renderer.resolve("http://radio.example/stream", server))
+        assertEquals("http://203.0.113.7:5500/s/t/1?t=5", Renderer.resolve("/s/t/1?t=5", server))
+        assertEquals("http://[2001:db8:0:0:0:0:0:1]:443/s/t/1",
+            Renderer.resolve("/s/t/1", address("2001:db8::1", 443)))
+        assertEquals("http://clementine.example.org:5500/s/t/1",
+            Renderer.resolve("/s/t/1", InetSocketAddress.createUnresolved("clementine.example.org", 5500)))
+        // Not connected anywhere: nowhere to fetch a path from.
+        assertNull(Renderer.resolve("/s/t/1", null))
+        assertNull(Renderer.resolve("not a url", server))
+    }
+
+    @Test
+    fun reportsAPathItCantPlaceAsAnError() {
+        server = null
+        load(item(4).setUrl("/s/token/4"))
+
+        assertNull(playback.url)
+        val error = sent.last { it.type == MsgType.RENDERER_ERROR }.rendererError
+        assertEquals(4, error.itemId)
+        assertEquals(RendererErrorScope.RENDERER_ERROR_SCOPE_ITEM, error.scope)
+        assertFalse(statuses().any { it.state == RendererState.RENDERER_STATE_PLAYING })
     }
 }
