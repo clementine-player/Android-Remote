@@ -23,3 +23,11 @@ the other client's repository isn't in the session, ask them to add it (for exam
 
 Add a "Release-note:" trailer to commits that make user-facing changes so that the changes are mentioned in
 the next production release.
+
+## Release notes
+
+A commit that changes something users notice ends with a `Release-note:` trailer: one line,
+written for users (what's new, not how it was done). Releases collect them as their notes on
+Google Play, F-Droid and GitHub, and a week with none makes no release (see
+[RELEASING.md](RELEASING.md)). Commits that don't change what users see (refactoring, tests, CI,
+docs) have none. When a change goes into both clients, give it the same note in both.
