@@ -1,0 +1,60 @@
+#cloud-config
+# The demo Clementine's VM (scripts/gcp_demo_setup.sh): Container-Optimized OS, running the
+# clementine-it image with the showcase library on port 5500. Container-Optimized OS resets /etc
+# on every boot and runs this again.
+#
+# - clementine-demo.service runs the container with host networking, so Clementine sees the
+#   address remotes dial and can put it in its streaming URLs. The auth code comes from the
+#   instance's metadata (clementine-auth-code), never from this file.
+# - clementine-demo-reset.timer replaces the container every night with a fresh one from the
+#   newest image: whatever a visitor changed is gone, and new Clementine releases come in.
+# - Container-Optimized OS's own firewall only lets SSH in, so the service opens port 5500.
+
+write_files:
+  - path: /etc/systemd/system/clementine-demo.service
+    permissions: "0644"
+    content: |
+      [Unit]
+      Description=Demo Clementine for the remotes' store reviewers
+      Wants=network-online.target docker.service
+      After=network-online.target docker.service
+
+      [Service]
+      Environment=IMAGE=ghcr.io/clementine-player/clementine-demo:latest
+      ExecStartPre=/bin/sh -c 'iptables -w -C INPUT -p tcp --dport 5500 -j ACCEPT 2>/dev/null || iptables -w -A INPUT -p tcp --dport 5500 -j ACCEPT'
+      ExecStartPre=/bin/sh -c 'ip6tables -w -C INPUT -p tcp --dport 5500 -j ACCEPT 2>/dev/null || ip6tables -w -A INPUT -p tcp --dport 5500 -j ACCEPT'
+      ExecStartPre=/bin/sh -c 'printf "AUTH_CODE=%%s\n" "$$(curl -sf -H Metadata-Flavor:Google http://metadata.google.internal/computeMetadata/v1/instance/attributes/clementine-auth-code)" > /run/clementine-demo.env'
+      ExecStartPre=-/usr/bin/docker rm -f clementine
+      ExecStartPre=/usr/bin/docker pull ${IMAGE}
+      ExecStart=/usr/bin/docker run --rm --name clementine --network host \
+        --env-file /run/clementine-demo.env -e STREAMING=1 -e SAVED_RADIO=0 ${IMAGE}
+      ExecStop=/usr/bin/docker stop clementine
+      ExecStopPost=-/usr/bin/docker image prune -f
+      Restart=always
+      RestartSec=10
+
+  - path: /etc/systemd/system/clementine-demo-reset.service
+    permissions: "0644"
+    content: |
+      [Unit]
+      Description=Replace the demo Clementine with a fresh one
+
+      [Service]
+      Type=oneshot
+      ExecStart=/bin/systemctl restart clementine-demo.service
+
+  - path: /etc/systemd/system/clementine-demo-reset.timer
+    permissions: "0644"
+    content: |
+      [Unit]
+      Description=Replace the demo Clementine with a fresh one every night
+
+      [Timer]
+      OnCalendar=*-*-* 04:00:00 UTC
+
+      [Install]
+      WantedBy=timers.target
+
+runcmd:
+  - systemctl daemon-reload
+  - systemctl start clementine-demo.service clementine-demo-reset.timer
