@@ -1,5 +1,6 @@
 package de.qspool.clementineremote.integration;
 
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +57,11 @@ class ClementineSession implements AutoCloseable {
         ClementineSession session = connect(AUTH_CODE, false);
         session.await(MsgType.FIRST_DATA_SENT_COMPLETE);
         return session;
+    }
+
+    /** Where this connection reached Clementine. */
+    InetSocketAddress serverAddress() {
+        return mConnection.getServerAddress();
     }
 
     void send(ClementineMessage message) {

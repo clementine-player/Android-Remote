@@ -43,6 +43,18 @@ public class ClementineSimpleConnection {
     private ClementinePbParser mClementinePbParser = new ClementinePbParser();
 
     /**
+     * Where this connection reached Clementine, or null before it has. Clementine serves its
+     * media there too.
+     */
+    public InetSocketAddress getServerAddress() {
+        Socket socket = mSocket;
+        if (socket == null || !socket.isConnected()) {
+            return null;
+        }
+        return (InetSocketAddress) socket.getRemoteSocketAddress();
+    }
+
+    /**
      * Try to connect to Clementine
      *
      * @param message The Request Object. Stores the ip to connect to.

@@ -70,9 +70,11 @@ object ThisRenderer {
         val builder = RendererCapabilities.newBuilder()
             .setRendererId(id())
             .setDisplayName(displayName(context))
-            // ExoPlayer plays a queued item without a gap, and seeks with Range requests.
+            // ExoPlayer plays a queued item without a gap, and seeks with Range requests. Tracks
+            // can come as paths on the address the phone connected to.
             .addFeatures(RendererFeature.RENDERER_FEATURE_GAPLESS)
             .addFeatures(RendererFeature.RENDERER_FEATURE_HTTP_RANGE)
+            .addFeatures(RendererFeature.RENDERER_FEATURE_RELATIVE_URLS)
         for ((decoder, mimeTypes) in FORMATS) {
             // ExoPlayer reads WAV itself, and plays PCM without a decoder.
             if (decoder != MediaFormat.MIMETYPE_AUDIO_RAW && decoder !in decoders) continue

@@ -63,6 +63,7 @@ class RemoteStreamingIntegrationTest {
         .setDisplayName("Integration test")
         .addFormats(AudioFormat.newBuilder().setMimeType("audio/ogg; codecs=vorbis"))
         .addFeatures(RendererFeature.RENDERER_FEATURE_HTTP_RANGE)
+        .addFeatures(RendererFeature.RENDERER_FEATURE_RELATIVE_URLS)
         .build()
 
     private fun idle() = shadowOf(Looper.getMainLooper()).idle()
@@ -80,7 +81,7 @@ class RemoteStreamingIntegrationTest {
                 ServerFeature.SERVER_FEATURE_RENDERING in info.responseClementineInfo.featuresList,
             )
             session.await(MsgType.FIRST_DATA_SENT_COMPLETE)
-            val renderer = Renderer(playback) { session.send(it) }
+            val renderer = Renderer(playback, session::serverAddress) { session.send(it) }
             session.listener = ClementineSession.Listener {
                 renderer.onMessage(it)
                 RemoteRepository.onMessage(ClementineMessage(it))
@@ -100,10 +101,13 @@ class RemoteStreamingIntegrationTest {
             val first = session.next(MsgType.RENDER_LOAD).requestRenderLoad.item
             assertEquals(StreamMode.STREAM_MODE_DIRECT, first.mode)
             assertEquals(SeekMethod.SEEK_METHOD_BYTE_RANGE, first.seekMethod)
-            assertEquals(first.url, playback.url)
+            // From where the phone connected, which is all that works through Docker's port
+            // mapping, as through any NAT. A Clementine before relative URLs sends its own address.
+            val firstUrl = Renderer.resolve(first.url, session.serverAddress())
+            assertEquals(firstUrl, playback.url)
 
             // Clementine serves the file itself, with Range support.
-            val http = URL(first.url).openConnection() as HttpURLConnection
+            val http = URL(firstUrl).openConnection() as HttpURLConnection
             http.setRequestProperty("Range", "bytes=0-3")
             assertEquals(206, http.responseCode)
             assertEquals("OggS", http.inputStream.use { String(it.readBytes(), Charsets.US_ASCII) })
@@ -125,7 +129,7 @@ class RemoteStreamingIntegrationTest {
             session.next(MsgType.CURRENT_METAINFO) {
                 it.responseCurrentMetadata.songMetadata.title == "Track 02"
             }
-            assertNotEquals(first.url, playback.url)
+            assertNotEquals(firstUrl, playback.url)
 
             // Back to Clementine's own computer.
             session.send(ClementineMessageFactory.buildSetOutput(RemoteRepository.LOCAL_OUTPUT))
