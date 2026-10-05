@@ -9,7 +9,8 @@
 #   docker run --rm -p 5500:5500 clementine-it
 #
 # --build-arg LIBRARY=showcase builds it with the library the store screenshots
-# show (showcase-library.tsv) instead of the test library.
+# show (showcase-library.tsv) instead of the test library, and LIBRARY=demo with
+# real recordings of those works (demo-library.tsv), for the demo Clementine.
 
 ARG UBUNTU=ubuntu:resolute
 
@@ -18,12 +19,15 @@ ARG UBUNTU=ubuntu:resolute
 FROM ${UBUNTU} AS music
 ARG LIBRARY=test
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg \
+RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg curl ca-certificates \
     && rm -rf /var/lib/apt/lists/*
-COPY generate-music.sh showcase-library.tsv /usr/local/bin/
+COPY generate-music.sh showcase-library.tsv demo-library.tsv /usr/local/bin/
 COPY covers /usr/local/bin/covers
-RUN if [ "$LIBRARY" = showcase ]; then generate-music.sh --showcase /music; \
-    else generate-music.sh /music; fi
+RUN case "$LIBRARY" in \
+      showcase) generate-music.sh --showcase /music ;; \
+      demo) generate-music.sh --demo /music ;; \
+      *) generate-music.sh /music ;; \
+    esac
 
 FROM ${UBUNTU}
 ENV DEBIAN_FRONTEND=noninteractive
