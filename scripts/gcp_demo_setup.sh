@@ -6,7 +6,8 @@
 #
 #   BILLING_ACCOUNT=<billing account ID> scripts/gcp_demo_setup.sh
 #
-# Creates, in a project of its own (nothing else in it, so a compromised VM reaches nothing):
+# Creates, in a project of its own (nothing else in it, so a compromised VM reaches nothing, and
+# without Compute Engine's default network, whose firewall lets anyone in by SSH):
 #   - an e2-micro VM in us-central1, which Compute Engine's free tier covers, running
 #     Container-Optimized OS with no service account, so it holds no credentials. It runs the
 #     clementine-demo image (.github/workflows/demo-image.yml) as scripts/demo-cloud-init.yaml
@@ -66,6 +67,16 @@ fi
 if ! exists gc compute networks subnets describe "$SUBNET" --region="$REGION"; then
   gc compute networks subnets create "$SUBNET" --network="$NETWORK" --region="$REGION" \
     --range=10.0.0.0/24 --stack-type=IPV4_IPV6 --ipv6-access-type=EXTERNAL
+fi
+
+# Compute Engine makes a "default" network in a new project, with SSH and RDP open to the whole
+# internet. Nothing here uses it, so it goes: anything put on it by mistake would be exposed.
+if exists gc compute networks describe default; then
+  echo "==> Deleting the default network"
+  rules=$(gc compute firewall-rules list --filter=network:default --format='value(name)')
+  # shellcheck disable=SC2086 # one name per word
+  [ -z "$rules" ] || gc compute firewall-rules delete $rules
+  gc compute networks delete default
 fi
 
 echo "==> Firewall"
