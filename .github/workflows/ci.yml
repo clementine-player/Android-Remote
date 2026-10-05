@@ -123,11 +123,14 @@ jobs:
           # LocalNetworkPermissionDeviceTest answers Android 17's local network prompt, so it
           # runs first, on its own, while the app is freshly installed: the other tests grant the
           # permission, and it can't be taken back without killing the tests. Gradle clears the
-          # results of a run before the next, so its results are kept elsewhere.
+          # results of a run before the next, so its results are kept elsewhere. Between the two,
+          # the emulator can show as offline for a few seconds, as when adb's server first starts,
+          # so the second waits for it again: otherwise it can't install the app and runs nothing.
           script: |
             timeout 600 adb wait-for-device shell 'until pm path android > /dev/null 2>&1 && am get-current-user > /dev/null 2>&1; do sleep 2; done'
             scripts/smoke_test_release.sh app/build/outputs/apk/play/release/*.apk
             ./gradlew connectedFdroidDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=de.qspool.clementineremote.LocalNetworkPermissionDeviceTest; status=$?; mkdir -p app/build/localNetworkPermission && cp -r app/build/outputs/androidTest-results app/build/reports/androidTests app/build/localNetworkPermission/; adb logcat -d > app/build/localNetworkPermission/logcat.txt; exit $status
+            timeout 600 adb wait-for-device shell 'until pm path android > /dev/null 2>&1 && am get-current-user > /dev/null 2>&1; do sleep 2; done'
             ./gradlew connectedFdroidDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.notClass=de.qspool.clementineremote.LocalNetworkPermissionDeviceTest; status=$?; mkdir -p app/build/reports/androidTests && adb logcat -d > app/build/reports/androidTests/logcat.txt; exit $status
       # The Gradle task passes when the app won't install (on a full emulator, say), having run
       # nothing, so the job checks the tests did run.
