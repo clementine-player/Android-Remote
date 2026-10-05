@@ -1,0 +1,5 @@
+- The app is much smaller to download and install.
+- Says when Clementine only accepts connections from its local network, and how to change that.
+- Playing on your phone now works when Clementine is reached over the internet or through a port forward.
+- Says when Clementine won't check an auth code for a while after too many wrong ones, and how long to wait.
+- Opens straight onto the connect screen, without a welcome message the first time.
