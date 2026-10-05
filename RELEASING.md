@@ -221,12 +221,14 @@ review.
 ## Demo Clementine for store reviewers
 
 The remotes are no use without a Clementine, so store reviewers get one on the internet:
-`demo.clementine-player.org`, port 5500, playing the showcase library (`clementine-it`, the
-library the store screenshots show). The iOS remote's App Store reviewers use it too, so its
+`demo.clementine-player.org`, port 5500, playing the showcase library's works (the store
+screenshots' library) in real recordings: the public-domain and CC0 recordings from Wikimedia
+Commons in `clementine-it/demo-library.tsv`, downloaded and checked when the image is built. The
+screenshots keep their generated tones. The iOS remote's App Store reviewers use it too, so its
 address and auth code are in both stores' review notes.
 
-- `.github/workflows/demo-image.yml` builds the image, `clementine-it` with the showcase library
-  and Clementine's latest release, and pushes it to
+- `.github/workflows/demo-image.yml` builds the image, `clementine-it` with the demo library
+  (`LIBRARY=demo`) and Clementine's latest release, and pushes it to
   `ghcr.io/clementine-player/clementine-demo`. It runs when `clementine-it` changes, and weekly
   for new Clementine releases.
 - It runs on an e2-micro VM in the Google Cloud project `clementine-remote-demo`, which

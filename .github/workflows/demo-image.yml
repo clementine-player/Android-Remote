@@ -1,8 +1,9 @@
-# Builds the demo Clementine's image: clementine-it with the showcase library and Clementine's
-# latest release, pushed to ghcr.io/clementine-player/clementine-demo. The demo VM
-# (scripts/gcp_demo_setup.sh) pulls the newest every night. Rebuilt when clementine-it changes,
-# and weekly for new Clementine releases. The package must be made public once, in its settings
-# on GitHub, so the VM can pull it without credentials. See RELEASING.md.
+# Builds the demo Clementine's image: clementine-it with the demo library (real recordings of the
+# showcase works, clementine-it/demo-library.tsv) and Clementine's latest release, pushed to
+# ghcr.io/clementine-player/clementine-demo. The demo VM (scripts/gcp_demo_setup.sh) pulls the
+# newest every night. Rebuilt when clementine-it changes, and weekly for new Clementine releases.
+# The package must be made public once, in its settings on GitHub, so the VM can pull it without
+# credentials. See RELEASING.md.
 name: demo-image
 on:
   push:
@@ -52,11 +53,11 @@ jobs:
       - uses: docker/build-push-action@v6
         with:
           context: clementine-it
-          build-args: LIBRARY=showcase
+          build-args: LIBRARY=demo
           push: true
           tags: |
             ${{ env.IMAGE }}:latest
             ${{ env.IMAGE }}:${{ steps.clementine.outputs.tag }}
           labels: org.opencontainers.image.source=https://github.com/${{ github.repository }}
-          cache-from: type=gha,scope=clementine-it-showcase
-          cache-to: type=gha,scope=clementine-it-showcase,mode=max
+          cache-from: type=gha,scope=clementine-it-demo
+          cache-to: type=gha,scope=clementine-it-demo,mode=max

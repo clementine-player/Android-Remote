@@ -7,7 +7,17 @@
 #   generate-music.sh --showcase [dir]  the library in showcase-library.tsv, for
 #                                       the store screenshots, with the album
 #                                       covers in covers/.
+#   generate-music.sh --demo [dir]      real recordings of the showcase works, for
+#                                       the demo Clementine: demo-library.tsv's,
+#                                       downloaded from Wikimedia Commons (needs
+#                                       curl), with the same covers.
 set -eu
+
+# cover <album> <dir>: the album's cover, where Clementine looks for one: an image in its folder.
+cover() {
+  cover="$(dirname "$0")/covers/$1.jpg"
+  if [ -f "$cover" ]; then cp "$cover" "$2/cover.jpg"; fi
+}
 
 tone() { # tone <n> <seconds> <file> <ffmpeg metadata args...>
   n=$1 seconds=$2 file=$3
@@ -33,10 +43,37 @@ if [ "${1:-}" = "--showcase" ]; then
       -metadata artist="$artist" -metadata albumartist="$artist" -metadata composer="$artist" \
       -metadata album="$album" -metadata title="$title" -metadata track="$t" \
       -metadata date="$year" -metadata genre=Classical
-    # The album's cover, where Clementine looks for one: an image in its folder.
-    cover="$(dirname "$0")/covers/$album.jpg"
-    if [ -f "$cover" ]; then cp "$cover" "$out/$artist/$album/cover.jpg"; fi
+    cover "$album" "$out/$artist/$album"
   done
+  ls -R "$out"
+  exit 0
+fi
+
+if [ "${1:-}" = "--demo" ]; then
+  out=${2:-/music}
+  download=$(mktemp -d)
+  grep -v '^#' "$(dirname "$0")/demo-library.tsv" |
+  while IFS="$(printf '\t')" read -r artist album year track title performer licence sha1 file; do
+    url="https://commons.wikimedia.org/wiki/Special:FilePath/$(printf %s "$file" | sed 's/ /_/g')"
+    # Wikimedia asks for a User-Agent that says who's asking.
+    curl -fsSL --retry 3 -A "clementine-it/1.0 (https://github.com/clementine-player/Android-Remote)" \
+      -o "$download/track" "$url"
+    if ! echo "$sha1  $download/track" | sha1sum -c --status; then
+      echo "$file isn't the recording demo-library.tsv names (SHA-1 $sha1)" >&2
+      exit 1
+    fi
+    dir="$out/$artist/$album"
+    mkdir -p "$dir"
+    ffmpeg -nostdin -loglevel error -i "$download/track" -map 0:a -map_metadata -1 \
+      -c:a libvorbis -q:a 5 \
+      -metadata artist="$artist" -metadata albumartist="$artist" -metadata composer="$artist" \
+      -metadata performer="$performer" -metadata album="$album" -metadata title="$title" \
+      -metadata track="$track" -metadata date="$year" -metadata genre=Classical \
+      -metadata comment="$performer. $licence, from Wikimedia Commons: $file" \
+      "$dir/$(printf %02d "$track") $title.ogg"
+    cover "$album" "$dir"
+  done
+  rm -rf "$download"
   ls -R "$out"
   exit 0
 fi

@@ -1,0 +1,19 @@
+# The demo Clementine's library (LIBRARY=demo): real recordings of the showcase library's
+# works, for app store reviewers to listen to. Each is public domain or CC0 on Wikimedia Commons,
+# so the demo may play them to anyone. generate-music.sh downloads them when the image is built, checks
+# their SHA-1, and makes Ogg Vorbis of them with these tags.
+#
+# Only these recordings are free: the Gymnopédies are in Michael Laucke's arrangement for
+# guitar, and only Clair de lune of the Suite bergamasque has one.
+#
+# artist <TAB> album <TAB> year <TAB> track <TAB> title <TAB> performer <TAB> licence <TAB> SHA-1 <TAB> Commons file
+Erik Satie	Gymnopédies	1888	1	Gymnopédie No. 1	Michael Laucke (guitar)	Public domain	090f87e4f5eea9491188eecf003b62ea2a93a36e	Satie Gymnopedie No 1 performed by Michael Laucke.flac
+Erik Satie	Gymnopédies	1888	2	Gymnopédie No. 2	Michael Laucke (guitar)	Public domain	6a03288f061dda2e76fe348c71756558fba5cffd	Satie Gymnopedie No 2 performed by Michael Laucke.flac
+Erik Satie	Gymnopédies	1888	3	Gymnopédie No. 3	Michael Laucke (guitar)	Public domain	8c2b9edde40215a62cd798e621aacd9f27437052	Satie Gymnopedie No 3 performed by Michael Laucke.flac
+Claude Debussy	Suite bergamasque	1905	3	Clair de lune	Laurens Goedhart	Public domain	50d152ad99294c8dd3783b6ddde30b1dfaef19c3	Clair de lune (Claude Debussy) Suite bergamasque.ogg
+Frédéric Chopin	Nocturnes, Op. 9	1832	1	Nocturne in B-flat minor, Op. 9 No. 1	Olga Gurevich	Public domain	5caba320105b4e1d02a77052a66811e618efc1ee	Chopin - Nocturne No. 1 in B-flat minor, Op. 9 No. 1 (Olga Gurevich).flac
+Frédéric Chopin	Nocturnes, Op. 9	1832	2	Nocturne in E-flat major, Op. 9 No. 2	Frank Lévy	Public domain	c10c1175bb0955df8083bc1d67c8897114e9baf0	Chopin - Nocturne No. 2 in E-flat major, Op. 9 No. 2 (Frank Levy).flac
+Frédéric Chopin	Nocturnes, Op. 9	1832	3	Nocturne in B major, Op. 9 No. 3	Xuan He	Public domain	0b9357584f895a885bea47d2a7be57e506acef37	Chopin - Nocturne No. 3 in B major, Op. 9 No. 3 (Xuan He).flac
+Johann Sebastian Bach	Goldberg Variations	1741	1	Aria	Kimiko Ishizaka	Public domain	7955e74a97024b64c3ab2e4733e4d72db3654f4a	Goldberg Variations 01 Aria.ogg
+Johann Sebastian Bach	Goldberg Variations	1741	2	Variatio 1	Kimiko Ishizaka	CC0	eb8e14a725f317e1be93dd22b8c5a77b780442e1	Goldberg Variations 02 Variatio 1 a 1 Clav.ogg
+Johann Sebastian Bach	Goldberg Variations	1741	3	Variatio 2	Kimiko Ishizaka	CC0	b0db32ae3a625d7a0015c0c5e0c5b84fedeeee25	Goldberg Variations 03 Variatio 2 a 1 Clav.ogg
