@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -99,7 +100,10 @@ internal fun OutputSheetContent(outputs: RemoteRepository.Outputs, onOutput: (St
             val name = when {
                 output.id == RemoteRepository.LOCAL_OUTPUT ->
                     output.name.ifBlank { stringResource(R.string.fragment_title_connection) }
-                output.isThisPhone -> stringResource(R.string.output_this_phone, output.name)
+                output.isThisPhone -> stringResource(
+                    if (isTablet()) R.string.output_this_tablet else R.string.output_this_phone,
+                    output.name,
+                )
                 else -> output.name
             }
             ListItem(
@@ -122,12 +126,17 @@ internal fun OutputSheetContent(outputs: RemoteRepository.Outputs, onOutput: (St
 }
 
 /**
- * What an output is, as an icon: Clementine's computer, this phone, or another device. Clementine
- * doesn't say what kind of device the others are, so they're shown as speakers.
+ * What an output is, as an icon: Clementine's computer, this phone or tablet, or another device.
+ * Clementine doesn't say what kind of device the others are, so they're shown as speakers.
  */
 @DrawableRes
+@Composable
 internal fun outputIcon(output: RemoteRepository.Output): Int = when {
     output.id == RemoteRepository.LOCAL_OUTPUT -> R.drawable.ic_computer
-    output.isThisPhone -> R.drawable.ic_smartphone
+    output.isThisPhone -> if (isTablet()) R.drawable.ic_tablet else R.drawable.ic_smartphone
     else -> R.drawable.ic_speaker
 }
+
+/** Whether this device is a tablet: at least 600dp wide whichever way it's held. */
+@Composable
+private fun isTablet(): Boolean = LocalConfiguration.current.smallestScreenWidthDp >= 600
