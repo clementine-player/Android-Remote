@@ -40,7 +40,7 @@ env:
 
 jobs:
   listing:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v7
