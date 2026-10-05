@@ -197,7 +197,7 @@ public class ClementineSongDownloader extends
 
             // Is the download forbidden?
             if (message.getMessageType() == MsgType.DISCONNECT) {
-                result = new DownloaderResult(mId, DownloaderResult.refusal(message));
+                result = new DownloaderResult(mId, message);
                 break;
             }
 

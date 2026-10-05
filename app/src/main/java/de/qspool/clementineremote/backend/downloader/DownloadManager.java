@@ -162,7 +162,7 @@ public class DownloadManager {
                 NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(
                         mContext, App.notificationChannel)
                         .setContentTitle(title)
-                        .setContentText(mContext.getString(result.getMessageStringId()))
+                        .setContentText(result.getMessage(mContext))
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setPriority(NotificationCompat.PRIORITY_MIN)
                         .setAutoCancel(true)
@@ -328,8 +328,7 @@ public class DownloadManager {
                 sb.append("/");
                 sb.append(status.getTotalFiles());
                 sb.append(") ");
-                sb.append(
-                        mContext.getString(downloader.getDownloaderResult().getMessageStringId()));
+                sb.append(downloader.getDownloaderResult().getMessage(mContext));
                 break;
         }
         return sb.toString();

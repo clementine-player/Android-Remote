@@ -53,11 +53,12 @@ class RefusedConnectionTest {
         controller?.pause()?.stop()?.destroy()
     }
 
-    private fun disconnect(reason: ReasonDisconnect): ConnectViewModel {
+    private fun disconnect(reason: ReasonDisconnect, retryAfterSeconds: Int? = null): ConnectViewModel {
         val controller = Robolectric.buildActivity(ConnectActivity::class.java).setup()
         this.controller = controller
-        val builder = ClementineMessage.getMessageBuilder(MsgType.DISCONNECT)
-            .setResponseDisconnect(ResponseDisconnect.newBuilder().setReasonDisconnect(reason))
+        val response = ResponseDisconnect.newBuilder().setReasonDisconnect(reason)
+        retryAfterSeconds?.let { response.setRetryAfterSeconds(it) }
+        val builder = ClementineMessage.getMessageBuilder(MsgType.DISCONNECT).setResponseDisconnect(response)
         controller.get().disconnected(ClementineMessage(builder))
         shadowOf(Looper.getMainLooper()).idleFor(Duration.ofSeconds(1))
         return ViewModelProvider(controller.get())[ConnectViewModel::class.java]
@@ -79,5 +80,18 @@ class RefusedConnectionTest {
     @Test
     fun asksForTheAuthCode() {
         assertEquals(ConnectDialog.AuthCode, disconnect(ReasonDisconnect.Wrong_Auth_Code).dialog.value)
+    }
+
+    @Test
+    fun saysToWaitAfterTooManyWrongAuthCodes() {
+        val dialog = disconnect(ReasonDisconnect.Too_Many_Wrong_Auth_Codes, retryAfterSeconds = 20).dialog.value
+        assertEquals(
+            ConnectDialog.Message(
+                "Too many wrong auth codes",
+                "Clementine won't check another auth code from this phone for 20 seconds. " +
+                    "Then enter the code shown in its Network Remote settings.",
+            ),
+            dialog,
+        )
     }
 }

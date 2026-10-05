@@ -26,6 +26,12 @@ public class DownloadRefusalTest {
     }
 
     @Test
+    public void tooManyWrongAuthCodes() {
+        assertEquals(DownloadResult.TOO_MANY_WRONG_AUTH_CODES,
+                DownloaderResult.refusal(disconnect(ReasonDisconnect.Too_Many_Wrong_Auth_Codes)));
+    }
+
+    @Test
     public void downloadsNotAllowed() {
         assertEquals(DownloadResult.FOBIDDEN,
                 DownloaderResult.refusal(disconnect(ReasonDisconnect.Download_Forbidden)));

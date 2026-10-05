@@ -130,6 +130,7 @@
     <string name="download_noti_insufficient_space">Insufficient space, aborting download.</string>
     <string name="download_noti_forbidden">Download forbidden. Activate in Clementine settings.</string>
     <string name="download_noti_not_local_network">Clementine only accepts connections from its local network.</string>
+    <string name="download_noti_too_many_wrong_auth_codes">Too many wrong auth codes. Clementine won\'t check another from this phone for %s.</string>
     <string name="download_noti_not_mounted">No storage device found!</string>
     <string name="download_noti_only_wifi">Download only on wifi allowed.</string>
     <string name="download_noti_transcoding">Transcoding files</string>
@@ -363,6 +364,22 @@
     <string name="permission_storage">Storage: to save the songs you download.</string>
     <string name="not_local_network_title">Clementine refused the connection</string>
     <string name="not_local_network">Clementine only accepts connections from its local network. To connect from elsewhere, turn off \"Only allow connections from the local network\" in its Network Remote settings.</string>
+    <string name="too_many_wrong_auth_codes_title">Too many wrong auth codes</string>
+    <string name="too_many_wrong_auth_codes">Clementine won\'t check another auth code from this phone for %s. Then enter the code shown in its Network Remote settings.</string>
+    <!-- How long Clementine said to wait, in "for %s" above. -->
+    <plurals name="wait_seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
+    <plurals name="wait_minutes">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+    <plurals name="wait_hours">
+        <item quantity="one">%d hour</item>
+        <item quantity="other">%d hours</item>
+    </plurals>
+    <string name="wait_a_while">a while</string>
     <string name="local_network_on_link">That address is on the network this phone is connected to, which Android only lets Clementine Remote reach with the Nearby devices permission. You can allow it in the app\'s settings.</string>
     <string name="open_settings">Open settings</string>
 
