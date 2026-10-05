@@ -1,0 +1,1 @@
+- Fixed playlists with songs Clementine can't read (a missing file, say), which could crash the app or play the wrong song.
