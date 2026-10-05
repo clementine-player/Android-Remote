@@ -21,6 +21,8 @@
 # Running it again changes nothing that's there, except that it applies the VM's startup config
 # again (scripts/demo-cloud-init.yaml); reset the VM to use it. Review before running.
 set -euo pipefail
+# gcloud never asks anything: a question would wait unseen where exists() hides the output.
+export CLOUDSDK_CORE_DISABLE_PROMPTS=1
 
 PROJECT_ID="clementine-remote-demo"
 REGION="us-central1"
@@ -45,6 +47,13 @@ fi
 gcloud billing projects link "$PROJECT_ID" --billing-account="$BILLING_ACCOUNT"
 gcloud services enable compute.googleapis.com billingbudgets.googleapis.com --project="$PROJECT_ID"
 gc() { gcloud --project="$PROJECT_ID" "$@"; }
+# A newly enabled Compute Engine API can take a few minutes to answer.
+for i in $(seq 30); do
+  exists gc compute regions describe "$REGION" && break
+  [ "$i" = 30 ] && { echo "Compute Engine isn't answering; run this again later." >&2; exit 1; }
+  echo "Waiting for Compute Engine..."
+  sleep 10
+done
 
 echo "==> Network, with IPv6"
 if ! exists gc compute networks describe "$NETWORK"; then
