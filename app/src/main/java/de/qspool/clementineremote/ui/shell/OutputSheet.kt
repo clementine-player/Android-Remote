@@ -83,7 +83,10 @@ fun OutputSheet(outputs: RemoteRepository.Outputs, onOutput: (String) -> Unit, o
     }
 }
 
-/** Where Clementine plays: its own computer, this phone, or another device (remote streaming). */
+/**
+ * Where Clementine plays: its own computer, by the name Clementine gives it, this phone, or another
+ * device (remote streaming).
+ */
 @Composable
 internal fun OutputSheetContent(outputs: RemoteRepository.Outputs, onOutput: (String) -> Unit, modifier: Modifier = Modifier) {
     Column(modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(bottom = 24.dp)) {
@@ -94,7 +97,8 @@ internal fun OutputSheetContent(outputs: RemoteRepository.Outputs, onOutput: (St
         )
         for (output in outputs.outputs) {
             val name = when {
-                output.id == RemoteRepository.LOCAL_OUTPUT -> stringResource(R.string.output_this_computer)
+                output.id == RemoteRepository.LOCAL_OUTPUT ->
+                    output.name.ifBlank { stringResource(R.string.fragment_title_connection) }
                 output.isThisPhone -> stringResource(R.string.output_this_phone, output.name)
                 else -> output.name
             }

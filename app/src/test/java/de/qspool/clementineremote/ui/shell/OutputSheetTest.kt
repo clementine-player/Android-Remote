@@ -47,12 +47,24 @@ class OutputSheetTest {
         }
 
         compose.onNodeWithText("Play on").assertExists()
-        compose.onNodeWithText("This computer").assertExists()
+        compose.onNodeWithText("studio").assertExists()
         compose.onNodeWithText("Pixel 9 (this phone)").assertExists()
         compose.onNodeWithTag("output_local").assertIsSelected()
         compose.onNodeWithTag("output_" + ThisRenderer.id()).assertIsNotSelected().performClick()
 
         assertEquals(listOf(ThisRenderer.id()), picked)
+    }
+
+    @Test
+    fun clementinesComputerIsCalledClementineWhenItHasNoName() {
+        val unnamed = RemoteRepository.Output(RemoteRepository.LOCAL_OUTPUT, "", active = true, activating = false)
+        compose.setContent {
+            ClementineTheme(dynamicColor = false) {
+                OutputSheetContent(RemoteRepository.Outputs(supported = true, outputs = listOf(unnamed)), onOutput = {})
+            }
+        }
+
+        compose.onNodeWithText("Clementine").assertExists()
     }
 
     @Test
