@@ -143,6 +143,9 @@ jobs:
             --out "$RUNNER_TEMP/ClementineRemote-dev.apk"
           "$KMS_SIGNER" verify --in "$RUNNER_TEMP/ClementineRemote-dev.apk"
 
+      # With R8's mappings, which turn a crash's stack trace from this build back into the
+      # code's names (retrace, in the SDK's command-line tools). Google Play gets the Play
+      # build's own, but a trace from logcat or the F-Droid APK needs these.
       - uses: actions/upload-artifact@v7
         with:
           name: dev-builds
@@ -151,6 +154,7 @@ jobs:
             ${{ runner.temp }}/ClementineRemote-dev.apk
             app/build/outputs/bundle/playRelease/*.aab
             app/build/outputs/apk/fdroid/release/*.apk
+            app/build/outputs/mapping/
 
       - name: Release notes
         run: |

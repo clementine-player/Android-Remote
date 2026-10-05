@@ -8,8 +8,8 @@
 #   - makes a release commit on top of master, setting the version, writing the notes as the
 #     fastlane changelog and adding the screenshots, and pushes it as the tag v<version>.
 #     Nothing is pushed to master, which keeps its -dev version. F-Droid builds the tag.
-#   - publishes a GitHub release with every note and the APK, signed with the release key in
-#     Cloud KMS
+#   - publishes a GitHub release with every note, the APK, signed with the release key in
+#     Cloud KMS, and R8's mappings
 #   - uploads the Play bundle to production (PLAY_RELEASE_TRACK, default production; the
 #     testing tracks get every development build), with the notes as its release notes, and
 #     sends Play the store listing with the new screenshots (scripts/play_listing.py)
@@ -290,8 +290,15 @@ jobs:
                 echo "::warning::Couldn't add the APK to $TAG: an immutable release can't be changed."
             fi
           else
+            # With R8's mappings, which turn a crash's stack trace from this release back into
+            # the code's names (retrace, in the SDK's command-line tools). Google Play gets the
+            # Play build's own, but a trace from logcat or the F-Droid APK needs these.
+            for flavor in play fdroid; do
+              cp "app/build/outputs/mapping/${flavor}Release/mapping.txt" \
+                "$RUNNER_TEMP/ClementineRemote-$NAME-$flavor-mapping.txt"
+            done
             gh release create "$TAG" --verify-tag --title "Clementine Remote $NAME" \
-              --notes-file "$NOTES/notes.md" ${APK:+"$APK"}
+              --notes-file "$NOTES/notes.md" ${APK:+"$APK"} "$RUNNER_TEMP"/ClementineRemote-"$NAME"-*-mapping.txt
           fi
 
       - name: Release notes for Google Play
