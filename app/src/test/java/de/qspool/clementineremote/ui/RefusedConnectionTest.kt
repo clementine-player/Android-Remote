@@ -3,11 +3,9 @@ package de.qspool.clementineremote.ui
 import android.Manifest
 import android.content.ComponentName
 import android.os.Looper
-import androidx.core.content.edit
 import androidx.lifecycle.ViewModelProvider
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.R
-import de.qspool.clementineremote.SharedPreferencesKeys
 import de.qspool.clementineremote.backend.Clementine
 import de.qspool.clementineremote.backend.ClementineService
 import de.qspool.clementineremote.backend.pb.ClementineMessage
@@ -45,7 +43,6 @@ class RefusedConnectionTest {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.POST_NOTIFICATIONS,
         )
-        App.getPreferences().edit(commit = true) { putBoolean(SharedPreferencesKeys.SP_FIRST_CALL, false) }
     }
 
     @After

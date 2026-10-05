@@ -57,7 +57,6 @@ class AutoConnectTest {
 
     private fun start(name: String): ConnectViewModel {
         App.getPreferences().edit(commit = true) {
-            putBoolean(SharedPreferencesKeys.SP_FIRST_CALL, false)
             putString(SharedPreferencesKeys.SP_KEY_IP, "10.0.0.5")
             putString(SharedPreferencesKeys.SP_KEY_NAME, name)
         }

@@ -184,8 +184,6 @@
   <string name="shuffle_all">Kocok semua</string>
   <string name="shuffle_inside_album">Kocok trek dalam album ini</string>
   <string name="shuffle_albums">Kocok album</string>
-  <string name="first_time_title">Selamat datang</string>
-  <string name="first_time_text">Terima kasih kerana menggunakan Clementine Remote!\nSaya harap apl ini menjadi berguna kepada anda.&lt;br&gt;&lt;br&gt;Untuk menggunakan apl jauh ini, anda perlu muat turun dan pasang Clementine %1$s atau versi yang terkemudian menerusi &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;disini&lt;/a&gt;.</string>
   <string name="track_loved">Trek disukai &lt;3</string>
   <string name="track_banned">Trek dilarang :-(</string>
   <string name="permissions_required_title">Kebenaran diperlukan</string>

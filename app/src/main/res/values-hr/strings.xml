@@ -205,8 +205,6 @@
   <string name="shuffle_all">Sviraj naizmjenično sve</string>
   <string name="shuffle_inside_album">Sviraj naizmjenično pjesme u ovom albumu</string>
   <string name="shuffle_albums">Sviraj naizmjenično albume</string>
-  <string name="first_time_title">Dobrodošli</string>
-  <string name="first_time_text">Hvala vam na korištenju Clementine daljinskog upravljača!\nNadam se da vam je ova aplikacija korisna.&lt;br&gt;&lt;br&gt;Kako bi mogli koristiti ovu aplikaciju daljinskog upravljanja morate preuzeti i instalirati Clementine %1$s ili noviji s &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;.</string>
   <string name="track_loved">Sviđa mi se pjesma &lt;3</string>
   <string name="track_banned">Pjesma zabranjena :-(</string>
   <string name="permissions_required_title">Potrebna je dozvola</string>

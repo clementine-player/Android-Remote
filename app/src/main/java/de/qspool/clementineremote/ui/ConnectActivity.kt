@@ -175,18 +175,6 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
     override fun onPostResume() {
         super.onPostResume()
 
-        // The first time: say what the app needs from Clementine.
-        if (preferences.getBoolean(SharedPreferencesKeys.SP_FIRST_CALL, true)) {
-            preferences.edit { putBoolean(SharedPreferencesKeys.SP_FIRST_CALL, false) }
-            state.showDialog(
-                ConnectDialog.Message(
-                    getString(R.string.first_time_title),
-                    getString(R.string.first_time_text, getString(R.string.clementine_version)),
-                    html = true,
-                ),
-            )
-        }
-
         // Once per install: Android stops showing its prompt after a refusal, so asking again
         // only denies it again. After that the connect screen says what's missing instead.
         val missing = missingPermissions()

@@ -205,8 +205,6 @@
   <string name="shuffle_all">Maišyti viską</string>
   <string name="shuffle_inside_album">Maišyti takelius šiame albume</string>
   <string name="shuffle_albums">Maišyti albumus</string>
-  <string name="first_time_title">Sveiki</string>
-  <string name="first_time_text">Ačiū, kad naudojatės Clementine Remote!\nTikiuosi, kad ši programa bus jums naudinga.&lt;br&gt;&lt;br&gt;Norėdami naudotis šia nuotoline programa, jūs turite atsisiųsti ir įsidiegti Clementine %1$s arba vėlesnę versiją iš &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;čia&lt;/a&gt;.</string>
   <string name="track_loved">Takelis pažymėtas kaip patinkantis &lt;3</string>
   <string name="track_banned">Takelis užblokuotas :-(</string>
   <string name="permissions_required_title">Reikia leidimų</string>

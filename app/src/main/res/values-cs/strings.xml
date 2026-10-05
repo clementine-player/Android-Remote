@@ -208,8 +208,6 @@ Pokud máte díky mé práci skutečně dobrou náladu, malý dar od vás by byl
   <string name="shuffle_all">Zamíchat vše</string>
   <string name="shuffle_inside_album">Zamíchat skladby v tomto albu</string>
   <string name="shuffle_albums">Zamíchat alba</string>
-  <string name="first_time_title">Vítejte</string>
-  <string name="first_time_text">Děkujeme vám, že používáte Clementine Remote!\nDoufáme, že pro vás tato aplikace bude užitečná.&lt;br&gt;&lt;br&gt;Abyste tento program mohli využívat, musíte stáhnout a nainstalovat Clementine %1$s nebo vyšší z &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;.</string>
   <string name="track_loved">Skladba je oblíbená &lt;3</string>
   <string name="track_banned">Skladba je zakázaná :-(</string>
   <string name="permissions_required_title">Požadována oprávnění</string>

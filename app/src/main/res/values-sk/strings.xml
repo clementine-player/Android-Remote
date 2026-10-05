@@ -205,8 +205,6 @@
   <string name="shuffle_all">Zamiešať všetko</string>
   <string name="shuffle_inside_album">Zamišať skladby tohoto albumu</string>
   <string name="shuffle_albums">Zamiešať albumy</string>
-  <string name="first_time_title">Vitajte</string>
-  <string name="first_time_text">Ďakujeme za to, že používate aplikáciu Clementine Remote!\nDúfame, že táto aplikácia bude pre vás užitočná.&lt;br&gt;&lt;br&gt;Ak chcete používať tuúto aplikáciu diaľkového ovládania, musíte nainštalovať prehrávač Clementine vo verzii %1$s alebo novšej z &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;tejto adresy&lt;/a&gt;.</string>
   <string name="track_loved">Skladba je obľúbená &lt;3</string>
   <string name="track_banned">Skladba bola zakázaná :-(</string>
   <string name="permissions_required_title">Vyžadujú sa oprávnenia</string>

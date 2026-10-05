@@ -161,7 +161,6 @@
   <string name="shuffle_all">Τυχαία αναπαραγωγή ολων</string>
   <string name="shuffle_inside_album">Τυχαία αναπαραγωγή τραγουδιων σε αυτό το άλμπουμ</string>
   <string name="shuffle_albums">Τυχαία αναπαραγωγή άλμπουμ</string>
-  <string name="first_time_title">Καλώς ήλθατε</string>
   <string name="track_loved">Αγαπημενο τραγουδι &lt;3</string>
   <string name="track_banned">Το τραγουδι αφαιρεθηκε :-(</string>
   <string name="notification_disconnect_keep_alive">Χάθηκε η σύνδεση. Αγγίξτε για επανασύνδεση.</string>

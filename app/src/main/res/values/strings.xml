@@ -352,8 +352,6 @@
     <string name="shuffle_albums">Shuffle albums</string>
 
 
-    <string name="first_time_title">Welcome</string>
-    <string name="first_time_text">Thank you for using Clementine Remote!\nI hope this app will be useful for you.&lt;br>&lt;br>In order to use this remote app you have to download and install Clementine %1$s or later from &lt;a href=\"http://www.clementine-player.org/downloads\">here&lt;/a>.</string>
     <string name="track_loved">Track loved &lt;3</string>
     <string name="track_banned">Track banned :-(</string>
     <string name="permissions_required_title">Permissions required</string>

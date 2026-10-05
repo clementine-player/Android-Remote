@@ -194,8 +194,6 @@
   <string name="shuffle_all">すべてシャッフル</string>
   <string name="shuffle_inside_album">このアルバムのトラックをシャッフル</string>
   <string name="shuffle_albums">アルバムをシャッフル</string>
-  <string name="first_time_title">ようこそ</string>
-  <string name="first_time_text">Clementine リモートをご利用いただきありがとうございます!\nこのアプリがあなたの役に立つことを願っています。&lt;br&gt;&lt;br&gt;このリモートアプリを使用するには、&lt;a href=\"http://www.clementine-player.org/downloads\"&gt;ここ&lt;/a&gt; から Clementine %1$s 以降をダウンロードおよびインストールする必要があります。</string>
   <string name="track_loved">好きなトラック &lt;3</string>
   <string name="track_banned">トラックを禁止 :-(</string>
   <string name="permissions_required_title">アクセス許可が必要</string>

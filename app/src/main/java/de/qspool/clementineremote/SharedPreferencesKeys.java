@@ -19,7 +19,6 @@ package de.qspool.clementineremote;
 
 public class SharedPreferencesKeys {
 
-    public final static String SP_FIRST_CALL = "first_call";
 
     /**
      * Whether the runtime permissions have been asked for. Android stops showing its prompt once

@@ -202,8 +202,6 @@
   <string name="shuffle_all">Насумично све</string>
   <string name="shuffle_inside_album">Насумично нумере у овом албуму</string>
   <string name="shuffle_albums">Насумично албуми</string>
-  <string name="first_time_title">Добро дошли</string>
-  <string name="first_time_text">Хвала вам што користите Даљински за Клементину!\nНадам се да ће вам ова апликација бити корисна.&lt;br&gt;&lt;br&gt;Да бисте користили ову апликацију преузмите и инсталирајте Клементину %1$s или новију &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;овде&lt;/a&gt;.</string>
   <string name="track_loved">Нумера вољена &lt;3</string>
   <string name="track_banned">Нумера забрањена :-(</string>
   <string name="permissions_required_title">Потребне дозволе</string>

@@ -198,8 +198,6 @@
   <string name="shuffle_all">Aléatoire : tout</string>
   <string name="shuffle_inside_album">Aléatoire : pistes de cet album</string>
   <string name="shuffle_albums">Aléatoire : albums</string>
-  <string name="first_time_title">Bienvenue</string>
-  <string name="first_time_text">Merci d\'utiliser Clementine À Distance !\nI Nous espérons que cette application vous est utile.&lt;br&gt;&lt;br&gt;Afin d\'utiliser cette application, il est nécessaire de télécharger et d\'installer Clementine %1$s ou supérieure depuis &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;.</string>
   <string name="track_loved">Piste aimée &lt;3</string>
   <string name="track_banned">Piste détestée :-(</string>
   <string name="permissions_required_title">Permissions nécessaires</string>
