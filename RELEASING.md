@@ -217,3 +217,54 @@ review.
 **One-time setup:** in Play Console, *Users and permissions*, give
 `android-play-release@clementine-data.iam.gserviceaccount.com` *Edit store listing, pricing
 & distribution* for this app, as well as *Release apps to testing tracks*.
+
+## Demo Clementine for store reviewers
+
+The remotes are no use without a Clementine, so store reviewers get one on the internet:
+`demo.clementine-player.org`, port 5500, playing the showcase library (`clementine-it`, the
+library the store screenshots show). The iOS remote's App Store reviewers use it too, so its
+address and auth code are in both stores' review notes.
+
+- `.github/workflows/demo-image.yml` builds the image, `clementine-it` with the showcase library
+  and Clementine's latest release, and pushes it to
+  `ghcr.io/clementine-player/clementine-demo`. It runs when `clementine-it` changes, and weekly
+  for new Clementine releases.
+- It runs on an e2-micro VM in the Google Cloud project `clementine-remote-demo`, which
+  Compute Engine's free tier covers. The project has nothing else in it, and the VM no service
+  account, so it holds no credentials. `scripts/demo-cloud-init.yaml` runs the container, with
+  host networking, and replaces it with a fresh one from the newest image every night, so
+  whatever a visitor changed is gone.
+- Clementine's auth code is the only thing keeping strangers out, so it's random, kept in the
+  VM's metadata (`clementine-auth-code`), and never committed. The demo has no saved radio
+  streams (`SAVED_RADIO=0`): it would relay SomaFM's stations to anyone.
+- A budget alerts at half and all of $5 a month: the free tier only covers 1 GB of traffic
+  out a month.
+
+To look at it: `gcloud compute ssh clementine-demo --project clementine-remote-demo --zone
+us-central1-a --tunnel-through-iap`, then `docker logs clementine`. To replace the container
+now: `sudo systemctl restart clementine-demo`.
+
+### One-time setup for the demo
+
+1. Run the *demo-image* workflow (*Actions → demo-image → Run workflow*), then make the
+   `clementine-demo` package public in its settings on GitHub, so the VM can pull it without
+   credentials.
+2. Review [scripts/gcp_demo_setup.sh](scripts/gcp_demo_setup.sh) and run it, with the ID of
+   Clementine's billing account (`gcloud billing accounts list`):
+
+   ```sh
+   BILLING_ACCOUNT=<billing account ID> scripts/gcp_demo_setup.sh
+   ```
+
+   It prints the VM's addresses and its auth code.
+3. In Cloudflare's DNS for `clementine-player.org`, add `A` and `AAAA` records for `demo` with
+   those addresses, with the proxy off (*DNS only*): Cloudflare's proxy doesn't pass the
+   remote's port.
+4. Give reviewers the address and the auth code: in Play Console, *App content → App access*;
+   for the iOS remote, its repository's `DEMO_AUTH_CODE` secret, which its release adds to
+   the App Review notes.
+5. Check it from a phone on mobile data: connect, browse the library, download a song, and play
+   on the phone.
+
+Playing on the phone needs Clementine to send stream URLs the phone can reach from outside
+Clementine's network: the VM's address is behind Google Cloud's NAT.
