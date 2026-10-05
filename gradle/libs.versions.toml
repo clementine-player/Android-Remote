@@ -5,6 +5,7 @@ activityCompose = "1.13.0"
 lifecycle = "2.11.0"
 coroutines = "1.11.0"
 glance = "1.2.0"
+work = "2.11.2"
 agp = "9.4.1"
 protobuf = "4.36.2"
 protobufPlugin = "0.10.0"
@@ -34,6 +35,7 @@ androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-ru
 androidx-glance-appwidget = { module = "androidx.glance:glance-appwidget", version.ref = "glance" }
 androidx-glance-material3 = { module = "androidx.glance:glance-material3", version.ref = "glance" }
 androidx-glance-appwidget-testing = { module = "androidx.glance:glance-appwidget-testing", version.ref = "glance" }
+androidx-work-runtime = { module = "androidx.work:work-runtime", version.ref = "work" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 protobuf-javalite = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobuf" }
 protoc = { module = "com.google.protobuf:protoc", version.ref = "protobuf" }
