@@ -199,8 +199,6 @@
   <string name="shuffle_all">Minden szám véletlenszerűen</string>
   <string name="shuffle_inside_album">Az album számai véletlenszerűen</string>
   <string name="shuffle_albums">Albumok véletlenszerűen</string>
-  <string name="first_time_title">Üdvözöljük</string>
-  <string name="first_time_text">Köszönöm hogy a Clementine távvezérlőt használja!\nRemélem ez az app hasznos lesz Önnek&lt;br&gt;&lt;br&gt;Az alkalmazás használatához le kell töltenie és fel kell telepítenie a Clementine %1$s vagy újabb verzióját &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;innen&lt;/a&gt;.</string>
   <string name="track_loved">Szám kedvelve &lt;3</string>
   <string name="track_banned">Szám letiltva :-(</string>
   <string name="permissions_required_title">Jogosultságok szükségesek</string>

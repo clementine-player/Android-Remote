@@ -201,8 +201,6 @@
   <string name="shuffle_all">Mezclar todo</string>
   <string name="shuffle_inside_album">Mezclar pistas en este álbum</string>
   <string name="shuffle_albums">Mezclar álbumes</string>
-  <string name="first_time_title">Bienvenido/a</string>
-  <string name="first_time_text">¡Gracias por utilizar el Control remoto de Clementine!\nEsperamos que la aplicación le resulte útil.&lt;br&gt;&lt;br&gt;Para utilizarla descargue Clementine %1$s o posterior &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;aquí&lt;/a&gt;.</string>
   <string name="track_loved">Le encanta esta pista &lt;3</string>
   <string name="track_banned">Ha vetado esta pista :-(</string>
   <string name="permissions_required_title">Se necesitan permisos</string>

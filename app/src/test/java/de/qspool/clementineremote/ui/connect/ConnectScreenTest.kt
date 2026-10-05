@@ -121,7 +121,7 @@ class ConnectScreenTest {
     @Test
     fun dialogsQueueAndAreShownOnce() {
         val viewModel = ConnectViewModel()
-        val first = ConnectDialog.Message("Welcome", "<b>Hello</b> there", html = true)
+        val first = ConnectDialog.Message("Could not reach host", "Check the address.")
         val permissions = ConnectDialog.Permissions(listOf("android.permission.READ_PHONE_STATE"))
         viewModel.showDialog(first)
         viewModel.showDialog(permissions)
@@ -129,7 +129,7 @@ class ConnectScreenTest {
         viewModel.showDialog(permissions)
         showDialogs(viewModel)
 
-        compose.onNodeWithTag("messageText").assertTextEquals("Hello there")
+        compose.onNodeWithTag("messageText").assertTextEquals("Check the address.")
         compose.onNodeWithTag("btnMessageClose").performClick()
         compose.onNodeWithTag("btnPermissionsContinue").performClick()
 

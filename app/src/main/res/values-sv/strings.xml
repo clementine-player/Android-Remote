@@ -200,8 +200,6 @@
   <string name="shuffle_all">Blanda allt</string>
   <string name="shuffle_inside_album">Blanda låtarna i detta album</string>
   <string name="shuffle_albums">Blanda album</string>
-  <string name="first_time_title">Välkommen</string>
-  <string name="first_time_text">Tack för att du använder Clementine Remote!\nI hoppas denna app kommer att vara användbart för dig.&lt;br&gt;&lt;br&gt;För att kunna använda denna fjärrkontroll app måste du ladda ner och installera Clementine %1$s eller senare från &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;.</string>
   <string name="track_loved">Låt älskad &lt;3</string>
   <string name="track_banned">Låt utesluten :-(</string>
   <string name="permissions_required_title">Behörigheter krävs</string>

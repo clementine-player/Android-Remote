@@ -7,7 +7,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -19,20 +18,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextLinkStyles
-import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import de.qspool.clementineremote.R
 
 /** A dialog over the connect screen. */
 sealed interface ConnectDialog {
 
-    /** Something to tell the user, such as why connecting failed; [html] if [text] is marked up. */
-    data class Message(val title: String, val text: String, val html: Boolean = false) : ConnectDialog
+    /** Something to tell the user, such as why connecting failed. */
+    data class Message(val title: String, val text: String) : ConnectDialog
 
     /** Clementine wants the auth code shown in its network remote settings. */
     data object AuthCode : ConnectDialog
@@ -87,15 +81,12 @@ private fun permissionReason(permission: String): Int? = when (permission) {
 
 @Composable
 private fun MessageDialog(message: ConnectDialog.Message, onDismiss: () -> Unit) {
-    val links = TextLinkStyles(
-        SpanStyle(color = MaterialTheme.colorScheme.primary, textDecoration = TextDecoration.Underline),
-    )
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(message.title) },
         text = {
             Text(
-                if (message.html) AnnotatedString.fromHtml(message.text, links) else AnnotatedString(message.text),
+                message.text,
                 modifier = Modifier.verticalScroll(rememberScrollState()).testTag("messageText"),
             )
         },

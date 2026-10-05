@@ -198,8 +198,6 @@
   <string name="shuffle_all">Baralhar tudo</string>
   <string name="shuffle_inside_album">Baralhar faixas deste álbum</string>
   <string name="shuffle_albums">Baralhar álbuns</string>
-  <string name="first_time_title">Bem-vindo</string>
-  <string name="first_time_text">Obrigado por utilizar o Clementine Remote!\nEsperamos que esta aplicação lhe seja útil.&lt;br&gt;&lt;br&gt;Para poder utilizar esta aplicação, tem que descarregar e instalar o Clementine, versão %1$s ou mais recente, disponível &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;aqui&lt;/a&gt;.</string>
   <string name="track_loved">Gosto da faixa &lt;3</string>
   <string name="track_banned">Faixa banida :-(</string>
   <string name="permissions_required_title">Permissões necessárias</string>

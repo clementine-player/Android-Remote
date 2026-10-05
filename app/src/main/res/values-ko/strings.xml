@@ -105,7 +105,6 @@
   <string name="shuffle_all">모두 셔플</string>
   <string name="shuffle_inside_album">이 앨범의 트랙 셔플</string>
   <string name="shuffle_albums">앨범 셔플</string>
-  <string name="first_time_title">환영합니다</string>
   <string name="track_loved">트랙을 좋아합니다 &lt;3</string>
   <string name="track_banned">트랙을 싫어합니다 :-(</string>
   <string name="notification_disconnect_keep_alive">연결을 잃었습니다. 재연결을 터치하세요.</string>

@@ -19,7 +19,6 @@ import de.qspool.clementineremote.ui.settings.ClementineSettings;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Starts the app's screens, to catch errors in setting them up, such as a theme a screen needs
@@ -46,13 +45,11 @@ public class UiSmokeTest {
     }
 
     @Test
-    public void connectStartsWithTheFirstRunMessageThenThePermissions() {
+    public void connectStartsWithThePermissions() {
         ActivityController<ConnectActivity> controller =
                 Robolectric.buildActivity(ConnectActivity.class).setup();
         ConnectViewModel state = new ViewModelProvider(controller.get()).get(ConnectViewModel.class);
 
-        assertTrue(state.getDialog().getValue() instanceof ConnectDialog.Message);
-        state.dismissDialog();
         assertEquals(new ConnectDialog.Permissions(java.util.Arrays.asList(
                 controller.get().missingPermissions())), state.getDialog().getValue());
 

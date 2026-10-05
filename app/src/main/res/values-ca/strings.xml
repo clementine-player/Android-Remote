@@ -200,8 +200,6 @@
   <string name="shuffle_all">Mescla-ho tot</string>
   <string name="shuffle_inside_album">Mescla les peces de l\'àlbum</string>
   <string name="shuffle_albums">Mescla els àlbums</string>
-  <string name="first_time_title">Us donem la benvinguda</string>
-  <string name="first_time_text">Gràcies per utilitzar el control remot del Clementine.\nEsperem que l\'aplicació us sigui útil.&lt;br&gt;&lt;br&gt;Per poder usar aquesta aplicació heu d\'instal·lar en un altre dispositiu la versió %1$s o posterior del Clementine disponible en &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;.</string>
   <string name="track_loved">Peça favorita &lt;3</string>
   <string name="track_banned">Peça vetada :-(</string>
   <string name="permissions_required_title">Permisos necessaris</string>

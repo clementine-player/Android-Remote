@@ -198,8 +198,6 @@
   <string name="shuffle_all">Zufallswiedergabe aller</string>
   <string name="shuffle_inside_album">Zufallswiedergabe der Titel dieses Albums</string>
   <string name="shuffle_albums">Zufällige Albenwiedergabe</string>
-  <string name="first_time_title">Willkommen</string>
-  <string name="first_time_text">Danke, dass Sie die Clementine-Fernbedienung benutzen!\nIch hoffe, dass diese App nützlich für Sie ist.&lt;br&gt;&lt;br&gt;Um diese Fernsteuerung zu benutzen müssen Sie Clementine %1$s oder höher installiert haben. &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;Hier&lt;/a&gt; herunterladen</string>
   <string name="track_loved">Titel geliebt &lt;3</string>
   <string name="track_banned">Titel gesperrt :-(</string>
   <string name="permissions_required_title">Berechtigungen benötigt</string>

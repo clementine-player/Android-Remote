@@ -58,7 +58,6 @@ class CancelConnectingTest {
     /** Opens the connect screen, which auto-connects to a saved address. */
     private fun startConnecting(): Pair<ConnectActivity, ConnectViewModel> {
         App.getPreferences().edit(commit = true) {
-            putBoolean(SharedPreferencesKeys.SP_FIRST_CALL, false)
             putString(SharedPreferencesKeys.SP_KEY_IP, "10.0.0.5")
             putString(SharedPreferencesKeys.SP_KEY_NAME, "")
         }

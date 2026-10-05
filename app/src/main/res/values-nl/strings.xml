@@ -198,8 +198,6 @@
   <string name="shuffle_all">Alles willekeurig</string>
   <string name="shuffle_inside_album">Nummers van dit album willekeurig</string>
   <string name="shuffle_albums">Albums willekeurig afspelen</string>
-  <string name="first_time_title">Welkom</string>
-  <string name="first_time_text">Bedankt voor het gebruiken van Clementine Remote!\nI Ik hoop dat deze app nuttig voor je zal zijn.&lt;br&gt;&lt;br&gt;Om deze app te gebruiken moet je Clementine %1$s of hoger installeren van &lt;a href=\"http://www.clementine-player.org/downloads\"&gt;here&lt;/a&gt;.</string>
   <string name="track_loved">Nummer ge-loved &lt;3</string>
   <string name="track_banned">Nummer ge-banned :-(</string>
   <string name="permissions_required_title">Machtiging vereist</string>
