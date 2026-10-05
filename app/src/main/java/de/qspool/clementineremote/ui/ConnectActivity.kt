@@ -36,6 +36,7 @@ import android.provider.Settings
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.activity.ComponentActivity
@@ -46,7 +47,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import de.qspool.clementineremote.App
@@ -206,21 +206,17 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
         }.toTypedArray()
     }
 
-    override fun onRequestPermissions(permissions: List<String>) {
-        preferences.edit { putBoolean(SharedPreferencesKeys.SP_PERMISSIONS_ASKED, true) }
-        ActivityCompat.requestPermissions(this, permissions.toTypedArray(), ID_PERMISSION_REQUEST)
-    }
-
     // Only Android 17 and later have the local network permission among the results.
     @SuppressLint("InlinedApi")
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        val localNetwork = permissions.indexOf(Manifest.permission.ACCESS_LOCAL_NETWORK)
-        if (requestCode != ID_PERMISSION_REQUEST || localNetwork < 0) {
-            return
-        }
+    private val permissionRequest = registerForActivityResult(RequestMultiplePermissions()) { results ->
+        val localNetwork = results[Manifest.permission.ACCESS_LOCAL_NETWORK] ?: return@registerForActivityResult
         // onResume comes next either way, and starts looking on the network if it can.
-        state.setSearching(grantResults.getOrNull(localNetwork) == PackageManager.PERMISSION_GRANTED)
+        state.setSearching(localNetwork)
+    }
+
+    override fun onRequestPermissions(permissions: List<String>) {
+        preferences.edit { putBoolean(SharedPreferencesKeys.SP_PERMISSIONS_ASKED, true) }
+        permissionRequest.launch(permissions.toTypedArray())
     }
 
     override fun onOpenAppSettings() {
@@ -505,7 +501,6 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
         const val RESULT_DISCONNECT = 1
         const val RESULT_QUIT = 2
         private const val ID_PLAYER_DIALOG = 1
-        private const val ID_PERMISSION_REQUEST = 3
         private const val AUTO_CONNECT_DELAY_MILLIS = 250L
     }
 }
