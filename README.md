@@ -46,6 +46,9 @@ Get Clementine Android-Remote:
 <a href="https://play.google.com/store/apps/details?id=org.clementine_player.remote" target="_blank">
 <img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" alt="Get it on Google Play" height="80"/></a>
 
+To try every change as soon as it's made, [join the beta on Google
+Play](https://play.google.com/apps/testing/org.clementine_player.remote) for development builds.
+
 This application is licensed under the GNU GPLv3.
 
 If you have questions, suggestions etc. please write an e-mail.
