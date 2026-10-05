@@ -2,6 +2,7 @@ package de.qspool.clementineremote.ui.shell
 
 import android.content.Context
 import android.net.TrafficStats
+import android.os.SystemClock
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +28,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -57,7 +59,10 @@ internal data class ConnectionStats(
     val version: String,
     /** How long the connection has been open, as hours, minutes and seconds. */
     val uptime: String,
-    /** Sent and received since connecting, and the average rate; null where Android can't say. */
+    /**
+     * Sent and received since connecting, and the rate over the last few seconds; null where
+     * Android can't say.
+     */
     val traffic: String?,
 )
 
@@ -82,10 +87,11 @@ interface ConnectionActions {
 fun ConnectionSheet(actions: ConnectionActions, onDismiss: () -> Unit) {
     val context = LocalContext.current
     // The uptime and traffic change by themselves, so they're read twice a second.
-    val stats by produceState(readConnectionStats(context)) {
+    val rate = remember { TrafficRate() }
+    val stats by produceState(readConnectionStats(context, rate)) {
         while (true) {
             delay(STATS_INTERVAL_MILLIS)
-            value = readConnectionStats(context)
+            value = readConnectionStats(context, rate)
         }
     }
     ModalBottomSheet(
@@ -202,7 +208,8 @@ private fun Item(icon: Int, title: Int, summary: Int?, tag: String, onClick: () 
     )
 }
 
-internal fun readConnectionStats(context: Context): ConnectionStats {
+/** The connection now; [rate] keeps the traffic read lately, for how fast it's moving. */
+internal fun readConnectionStats(context: Context, rate: TrafficRate): ConnectionStats {
     val preferences = App.getPreferences()
     val ip = preferences.getString(SharedPreferencesKeys.SP_KEY_IP, "").orEmpty()
     val port = preferences.getString(SharedPreferencesKeys.SP_KEY_PORT, "")?.toIntOrNull() ?: 0
@@ -227,9 +234,10 @@ internal fun readConnectionStats(context: Context): ConnectionStats {
     } else {
         val tx = TrafficStats.getUidTxBytes(uid) - connection.startTx
         val rx = received - connection.startRx
-        val perSecond = if (seconds > 0) (tx + rx) / seconds else 0
-        Utilities.humanReadableBytes(tx, true) + " / " + Utilities.humanReadableBytes(rx, true) +
-            " (" + Utilities.humanReadableBytes(perSecond, true) + "/s)"
+        val totals = Utilities.humanReadableBytes(tx, true) + " / " + Utilities.humanReadableBytes(rx, true)
+        // Over the last few seconds, so it settles soon after streaming stops.
+        val perSecond = rate.add(SystemClock.elapsedRealtime(), tx + rx)
+        if (perSecond == null) totals else totals + " (" + Utilities.humanReadableBytes(perSecond, true) + "/s)"
     }
     return ConnectionStats(host, ip, port, version, uptime, traffic)
 }
