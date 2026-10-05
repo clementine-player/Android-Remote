@@ -120,10 +120,15 @@ jobs:
             grep -q '^target=android-${{ matrix.api-level }}$' "$ANDROID_AVD_HOME/test.avd/config.ini"
           # Each line runs on its own. Booted isn't ready: the tests wait for the package manager
           # and the current user. The emulator's log goes in the reports, pass or fail.
+          # LocalNetworkPermissionDeviceTest answers Android 17's local network prompt, so it
+          # runs first, on its own, while the app is freshly installed: the other tests grant the
+          # permission, and it can't be taken back without killing the tests. Gradle clears the
+          # results of a run before the next, so its results are kept elsewhere.
           script: |
             timeout 600 adb wait-for-device shell 'until pm path android > /dev/null 2>&1 && am get-current-user > /dev/null 2>&1; do sleep 2; done'
             scripts/smoke_test_release.sh app/build/outputs/apk/play/release/*.apk
-            ./gradlew connectedFdroidDebugAndroidTest; status=$?; mkdir -p app/build/reports/androidTests && adb logcat -d > app/build/reports/androidTests/logcat.txt; exit $status
+            ./gradlew connectedFdroidDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=de.qspool.clementineremote.LocalNetworkPermissionDeviceTest; status=$?; mkdir -p app/build/localNetworkPermission && cp -r app/build/outputs/androidTest-results app/build/reports/androidTests app/build/localNetworkPermission/; adb logcat -d > app/build/localNetworkPermission/logcat.txt; exit $status
+            ./gradlew connectedFdroidDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.notClass=de.qspool.clementineremote.LocalNetworkPermissionDeviceTest; status=$?; mkdir -p app/build/reports/androidTests && adb logcat -d > app/build/reports/androidTests/logcat.txt; exit $status
       # The Gradle task passes when the app won't install (on a full emulator, say), having run
       # nothing, so the job checks the tests did run.
       - name: Check the tests ran
@@ -137,6 +142,16 @@ jobs:
             echo "::error::No tests ran on the emulator"
             exit 1
           fi
+          # It skips itself before Android 17, and when the permission was granted already. A
+          # skipped test is written down as a failure, an AssumptionViolatedException, which
+          # doesn't fail the run; only a test that passed is a <testcase> with nothing inside.
+          if [ "${{ matrix.api-level }}" != 36 ]; then
+            results=$(find app/build/localNetworkPermission -name 'TEST-*.xml' -exec cat {} +)
+            if ! grep -q '<testcase name="refusingAndThenAllowingTheLocalNetwork"[^>]*/>' <<< "$results"; then
+              echo "::error::The local network permission test didn't run"
+              exit 1
+            fi
+          fi
       - uses: actions/upload-artifact@v7
         if: always()
         with:
@@ -144,3 +159,4 @@ jobs:
           path: |
             app/build/reports/androidTests/
             app/build/outputs/androidTest-results/
+            app/build/localNetworkPermission/
