@@ -7,6 +7,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.pb.ClementineMessage.ErrorMessage;
@@ -20,6 +24,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Requ
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseClementineInfo;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseCurrentMetadata;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylists;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponsePlaylistSongs;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuffle;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ShuffleMode;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata;
@@ -137,6 +142,30 @@ public class ClementinePbParserTest {
         assertEquals(2, App.Clementine.getPlaylistManager().getAllPlaylists().size());
         assertEquals("One", App.Clementine.getPlaylistManager().getPlaylist(1).getName());
         assertEquals(2, App.Clementine.getPlaylistManager().getActivePlaylistId());
+    }
+
+    /**
+     * Clementine sends a song it can't read (a missing file, say) with no fields set, so with
+     * index 0. Its place in the list is its index in the playlist.
+     */
+    @Test
+    public void playlistSongsAreNumberedByTheirPlace() {
+        parse(message(MsgType.PLAYLISTS).setResponsePlaylists(ResponsePlaylists.newBuilder()
+                .addPlaylist(Playlist.newBuilder().setId(1).setName("One"))));
+        parse(message(MsgType.PLAYLIST_SONGS).setResponsePlaylistSongs(ResponsePlaylistSongs.newBuilder()
+                .setRequestedPlaylist(Playlist.newBuilder().setId(1))
+                .addSongs(SongMetadata.newBuilder().setIndex(0).setTitle("First"))
+                .addSongs(SongMetadata.getDefaultInstance())
+                .addSongs(SongMetadata.newBuilder().setIndex(2).setTitle("Third"))
+                .addSongs(SongMetadata.getDefaultInstance())));
+
+        List<MySong> songs = App.Clementine.getPlaylistManager().getPlaylist(1).getPlaylistSongs();
+        List<Integer> indexes = new ArrayList<>();
+        for (MySong song : songs) {
+            indexes.add(song.getIndex());
+        }
+        assertEquals(Arrays.asList(0, 1, 2, 3), indexes);
+        assertEquals("Third", songs.get(2).getTitle());
     }
 
     @Test

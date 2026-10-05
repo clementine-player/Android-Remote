@@ -271,8 +271,14 @@ public class ClementinePbParser {
         List<SongMetadata> songs = response.getSongsList();
         List<MySong> mySongs = new LinkedList<MySong>();
 
+        // Clementine sends the songs in order, numbered by their place, except a song it can't
+        // read (a missing file, say), which comes with no fields set: index 0, the first song's.
+        // So each is numbered by its place here, which keeps the queue's rows apart and has a
+        // tap on one play that song.
         for (SongMetadata s : songs) {
-            mySongs.add(MySong.fromProtocolBuffer(s));
+            MySong song = MySong.fromProtocolBuffer(s);
+            song.setIndex(mySongs.size());
+            mySongs.add(song);
         }
 
         mPlaylistManager.playlistSongsDownloaded(playlist.getId(), mySongs);
