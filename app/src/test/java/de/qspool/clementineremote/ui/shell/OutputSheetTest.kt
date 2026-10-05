@@ -21,6 +21,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
 /** The output sheet lists where Clementine can play, and moves playback when one is picked. */
 @RunWith(RobolectricTestRunner::class)
@@ -65,6 +66,18 @@ class OutputSheetTest {
         }
 
         compose.onNodeWithText("Clementine").assertExists()
+    }
+
+    @Test
+    @Config(qualifiers = "sw600dp")
+    fun aTabletIsCalledATablet() {
+        compose.setContent {
+            ClementineTheme(dynamicColor = false) {
+                OutputSheetContent(outputs(RemoteRepository.LOCAL_OUTPUT), onOutput = {})
+            }
+        }
+
+        compose.onNodeWithText("Pixel 9 (this tablet)").assertExists()
     }
 
     @Test

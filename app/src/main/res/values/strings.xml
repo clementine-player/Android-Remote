@@ -98,6 +98,7 @@
     <string name="connection_switch_summary">Pick another computer on your network</string>
     <string name="output_title">Play on</string>
     <string name="output_this_phone">%1$s (this phone)</string>
+    <string name="output_this_tablet">%1$s (this tablet)</string>
     <string name="output_switching">Switching…</string>
     <string name="output_playing_on">Playing on %1$s</string>
     <string name="output_choose">Choose where to play</string>
