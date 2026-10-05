@@ -33,7 +33,8 @@ jobs:
           path: app/build/outputs/apk/fdroid/debug/*.apk
 
   # Instrumented tests on an emulator. Only a real Android runtime detects StrictMode thread
-  # violations (disk or network on the main thread); see StrictModeDeviceTest.
+  # violations (disk or network on the main thread); see StrictModeDeviceTest. First, the
+  # minified release build is started, to check R8 kept what's reached by reflection.
   device:
     # The current Android keeps the check's name, "device", which branch protection may require.
     name: ${{ matrix.api-level == 36 && 'device' || 'device (Android 17)' }}
@@ -74,7 +75,7 @@ jobs:
           sudo udevadm trigger --name-match=kvm
       # Built before the emulator starts, so the build doesn't starve it of the runner's CPU.
       - name: Build the app and its tests
-        run: ./gradlew assembleFdroidDebug assembleFdroidDebugAndroidTest
+        run: ./gradlew assembleFdroidDebug assembleFdroidDebugAndroidTest assemblePlayRelease
       # Android 17's releases are the first whose package name carries a minor version, which the
       # runner's command-line tools (12.0) don't understand: they write "target=android-0" into
       # the AVD. The emulator then misconfigures its graphics, and Android 17's gralloc mapper
@@ -121,6 +122,7 @@ jobs:
           # and the current user. The emulator's log goes in the reports, pass or fail.
           script: |
             timeout 600 adb wait-for-device shell 'until pm path android > /dev/null 2>&1 && am get-current-user > /dev/null 2>&1; do sleep 2; done'
+            scripts/smoke_test_release.sh app/build/outputs/apk/play/release/*.apk
             ./gradlew connectedFdroidDebugAndroidTest; status=$?; mkdir -p app/build/reports/androidTests && adb logcat -d > app/build/reports/androidTests/logcat.txt; exit $status
       # The Gradle task passes when the app won't install (on a full emulator, say), having run
       # nothing, so the job checks the tests did run.
