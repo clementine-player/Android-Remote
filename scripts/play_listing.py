@@ -136,8 +136,19 @@ def publish(fields, files):
             changed.append(kind)
 
         if changed:
-            edits.commit(packageName=PACKAGE, editId=edit).execute()
-            print(f"Updated Play's listing ({language}): {', '.join(changed)}")
+            try:
+                edits.commit(packageName=PACKAGE, editId=edit).execute()
+                print(f"Updated Play's listing ({language}): {', '.join(changed)}")
+            except HttpError as error:
+                # When Play wants changes sent for review from Play Console (after a rejection,
+                # say), it refuses to send them itself: committed unsent, for someone to send.
+                if "changesNotSentForReview" not in str(error):
+                    raise
+                edits.commit(packageName=PACKAGE, editId=edit,
+                             changesNotSentForReview=True).execute()
+                print(f"Updated Play's listing ({language}): {', '.join(changed)}")
+                print("::warning::Google Play wouldn't send the store listing for review itself, "
+                      "so it waits in Play Console: send it for review from Publishing overview.")
         else:
             edits.delete(packageName=PACKAGE, editId=edit).execute()
             print(f"Play's listing ({language}) already matches")

@@ -175,6 +175,12 @@ If Play rejects uploads with "Only releases with status draft may be created on 
 the first release has not been rolled out yet (step 3): either do that, or set the repository
 variable `PLAY_RELEASE_STATUS` to `draft` and roll each release out by hand.
 
+Play sometimes wants changes sent for review from Play Console rather than through the API,
+such as after it rejects an update, and refuses to send them itself ("Changes cannot be sent
+for review automatically"). Uploads and the store listing then go to Play unsent, with a
+warning on the run: send them for review from *Publishing overview* in Play Console. Once Play
+has reviewed them, it sends the next upload's changes itself again.
+
 ### Before testing more widely
 
 Closed or open testing and production go through review, which needs the *App content*
