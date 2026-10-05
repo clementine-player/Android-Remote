@@ -68,6 +68,7 @@ import de.qspool.clementineremote.ui.connect.ConnectViewModel
 import de.qspool.clementineremote.ui.connect.Server
 import de.qspool.clementineremote.ui.settings.ClementineSettings
 import de.qspool.clementineremote.ui.theme.ClementineTheme
+import de.qspool.clementineremote.utils.RetryWait
 import de.qspool.clementineremote.utils.Utilities
 import java.net.InetAddress
 
@@ -439,6 +440,15 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
             } else if (reason == ReasonDisconnect.Not_Local_Network) {
                 state.showDialog(
                     ConnectDialog.Message(getString(R.string.not_local_network_title), getString(R.string.not_local_network)),
+                )
+            } else if (reason == ReasonDisconnect.Too_Many_Wrong_Auth_Codes) {
+                // Not the auth code dialog: Clementine wouldn't check a code yet.
+                val wait = RetryWait.describe(resources, clementineMessage.message.responseDisconnect)
+                state.showDialog(
+                    ConnectDialog.Message(
+                        getString(R.string.too_many_wrong_auth_codes_title),
+                        getString(R.string.too_many_wrong_auth_codes, wait),
+                    ),
                 )
             }
         }
