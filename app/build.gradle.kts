@@ -165,6 +165,10 @@ dependencies {
     // The home-screen widget.
     implementation(libs.androidx.glance.appwidget)
     implementation(libs.androidx.glance.material3)
+    // Glance brings WorkManager 2.7.1, and with it Room 2.2.5, whose R8 rule keeps the name of
+    // WorkManager's database but not the constructor Room makes it with, so release builds
+    // crashed at launch. Newer WorkManager brings a Room whose rule keeps it.
+    implementation(libs.androidx.work.runtime)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     testImplementation(composeBom)
