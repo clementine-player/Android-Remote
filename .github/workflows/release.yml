@@ -343,4 +343,7 @@ jobs:
       # The listing as released: its text and images, with this release's screenshots.
       - name: Send the store listing to Google Play
         if: steps.setup.outputs.cloud == 'true'
-        run: scripts/play_listing.py
+        run: |
+          # Publishing again checked out the tag: the listing is the tag's, the script this run's.
+          git checkout "$GITHUB_SHA" -- scripts/play_listing.py
+          scripts/play_listing.py
