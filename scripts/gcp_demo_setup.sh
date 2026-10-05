@@ -39,14 +39,18 @@ HOSTNAME="demo.clementine-player.org"
 cd "$(dirname "$0")/.."
 
 exists() { "$@" > /dev/null 2>&1; }
+# Every gcloud command names the demo project, so none falls back to your default project
+# (gcloud config get project). --billing-project is the project an API call is billed and
+# checked against: the billing budget commands use it.
+export CLOUDSDK_CORE_PROJECT="$PROJECT_ID"
+gc() { gcloud --project="$PROJECT_ID" "$@"; }
 
 echo "==> Project $PROJECT_ID"
-if ! exists gcloud projects describe "$PROJECT_ID"; then
-  gcloud projects create "$PROJECT_ID" --name="Clementine Remote demo"
+if ! exists gc projects describe "$PROJECT_ID"; then
+  gc projects create "$PROJECT_ID" --name="Clementine Remote demo"
 fi
-gcloud billing projects link "$PROJECT_ID" --billing-account="$BILLING_ACCOUNT"
-gcloud services enable compute.googleapis.com billingbudgets.googleapis.com --project="$PROJECT_ID"
-gc() { gcloud --project="$PROJECT_ID" "$@"; }
+gc billing projects link "$PROJECT_ID" --billing-account="$BILLING_ACCOUNT"
+gc services enable compute.googleapis.com billingbudgets.googleapis.com
 # A newly enabled Compute Engine API can take a few minutes to answer.
 for i in $(seq 30); do
   exists gc compute regions describe "$REGION" && break
@@ -114,10 +118,10 @@ auth_code=$(gc compute instances describe "$VM" --zone="$ZONE" \
   --format='value(metadata.items.clementine-auth-code)')
 
 echo "==> Budget"
-if ! gcloud billing budgets list --billing-account="$BILLING_ACCOUNT" \
+if ! gc billing budgets list --billing-project="$PROJECT_ID" --billing-account="$BILLING_ACCOUNT" \
     --format='value(displayName)' | grep -qx "Clementine Remote demo"; then
-  project_number=$(gcloud projects describe "$PROJECT_ID" --format='value(projectNumber)')
-  gcloud billing budgets create --billing-account="$BILLING_ACCOUNT" \
+  project_number=$(gc projects describe "$PROJECT_ID" --format='value(projectNumber)')
+  gc billing budgets create --billing-project="$PROJECT_ID" --billing-account="$BILLING_ACCOUNT" \
     --display-name="Clementine Remote demo" --budget-amount="${BUDGET_USD}USD" \
     --filter-projects="projects/$project_number" \
     --threshold-rule=percent=0.5 --threshold-rule=percent=1.0
