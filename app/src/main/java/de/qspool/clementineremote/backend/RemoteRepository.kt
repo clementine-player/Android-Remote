@@ -64,6 +64,10 @@ object RemoteRepository {
         val outputs: List<Output> = emptyList(),
     ) {
         val active: Output? get() = outputs.firstOrNull { it.active }
+
+        /** What Clementine calls its computer, if it says. */
+        val computerName: String?
+            get() = outputs.firstOrNull { it.id == LOCAL_OUTPUT }?.name?.takeIf { it.isNotBlank() }
     }
 
     /** Whether Clementine's Internet sidebar can be browsed, on which connection. */
