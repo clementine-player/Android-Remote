@@ -301,6 +301,9 @@ jobs:
           cp "${{ steps.plan.outputs.notes }}/changelog.txt" "$RUNNER_TEMP/whatsnew/whatsnew-en-US"
 
       - name: Upload to Google Play
+        id: upload
+        # Play may refuse to send changes for review itself (below).
+        continue-on-error: true
         if: steps.setup.outputs.play == 'true'
         uses: r0adkll/upload-google-play@v1
         with:
@@ -314,6 +317,28 @@ jobs:
           tracks: ${{ vars.PLAY_RELEASE_TRACK || 'production' }}
           status: ${{ vars.PLAY_RELEASE_STATUS || 'completed' }}
           whatsNewDirectory: ${{ runner.temp }}/whatsnew
+
+      # When Play wants changes sent for review from Play Console (after a rejection, say), it
+      # refuses to send them itself: commit them unsent, for someone to send there.
+      - name: Upload to Google Play, without sending it for review
+        if: steps.setup.outputs.play == 'true' && steps.upload.outcome == 'failure'
+        uses: r0adkll/upload-google-play@v1
+        with:
+          # The federated credentials from the auth step, not a service account key.
+          serviceAccountJson: ${{ steps.auth.outputs.credentials_file_path }}
+          packageName: org.clementine_player.remote
+          releaseFiles: ${{ steps.bundle.outputs.path }}
+          releaseName: ${{ steps.plan.outputs.name }}
+          # R8's map of the names it shortened, so Play shows readable stack traces.
+          mappingFile: app/build/outputs/mapping/playRelease/mapping.txt
+          tracks: ${{ vars.PLAY_RELEASE_TRACK || 'production' }}
+          status: ${{ vars.PLAY_RELEASE_STATUS || 'completed' }}
+          whatsNewDirectory: ${{ runner.temp }}/whatsnew
+          changesNotSentForReview: true
+      - name: Say it needs sending for review
+        if: steps.setup.outputs.play == 'true' && steps.upload.outcome == 'failure'
+        run: |
+          echo "::warning::Google Play wouldn't send this release for review itself, so it waits in Play Console: send it for review from Publishing overview."
 
       # The listing as released: its text and images, with this release's screenshots.
       - name: Send the store listing to Google Play
