@@ -54,7 +54,7 @@ jobs:
   # job plans it again, in full.
   plan:
     if: github.ref == 'refs/heads/master'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions:
       contents: read
     outputs:
@@ -90,7 +90,7 @@ jobs:
     # Also without screenshots: when they failed, the release keeps the last release's.
     # Workload Identity Federation admits master alone.
     if: ${{ !cancelled() && github.ref == 'refs/heads/master' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     # With dev.yml and play-listing.yml: one Google Play upload at a time.
     concurrency:
       group: play

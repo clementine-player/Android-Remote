@@ -30,7 +30,7 @@ env:
 jobs:
   image:
     if: github.ref == 'refs/heads/master'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v5
 
