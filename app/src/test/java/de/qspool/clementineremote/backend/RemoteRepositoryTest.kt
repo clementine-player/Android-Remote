@@ -175,7 +175,7 @@ class RemoteRepositoryTest {
         assertTrue(RemoteRepository.outputs.value.supported)
 
         receive(message(MsgType.OUTPUTS).setResponseOutputs(ResponseOutputs.newBuilder()
-            .addOutputs(Output.newBuilder().setOutputId("local").setDisplayName("This computer")
+            .addOutputs(Output.newBuilder().setOutputId("local").setDisplayName("studio")
                 .setState(OutputState.OUTPUT_STATE_AVAILABLE))
             .addOutputs(Output.newBuilder().setOutputId(ThisRenderer.id()).setDisplayName("Pixel")
                 .setState(OutputState.OUTPUT_STATE_ACTIVE))))
@@ -184,6 +184,7 @@ class RemoteRepositoryTest {
         assertEquals(listOf("local", ThisRenderer.id()), outputs.outputs.map { it.id })
         assertEquals("Pixel", outputs.active?.name)
         assertTrue(outputs.active!!.isThisPhone)
+        assertEquals("studio", outputs.computerName)
 
         // A Clementine without remote streaming.
         receive(message(MsgType.INFO).setResponseClementineInfo(ResponseClementineInfo.newBuilder().setVersion("1.4")))

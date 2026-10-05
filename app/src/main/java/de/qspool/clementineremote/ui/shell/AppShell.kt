@@ -269,11 +269,13 @@ private fun Destinations(shell: ShellViewModel, onConnection: () -> Unit, onSett
     val internet: InternetViewModel = viewModel()
     val libraryState by library.state.collectAsStateWithLifecycle()
     val internetState by internet.state.collectAsStateWithLifecycle()
-    // Clementine's computer, or its address if it doesn't say.
-    val host = remember {
+    val outputs by RemoteRepository.outputs.collectAsStateWithLifecycle()
+    // Clementine's computer, as Clementine names it; or else as the network does, or its address.
+    val address = remember {
         App.Clementine.hostname?.takeIf { it.isNotBlank() }
             ?: App.getPreferences().getString(SharedPreferencesKeys.SP_KEY_IP, null)?.takeIf { it.isNotBlank() }
     }
+    val host = outputs.computerName ?: address
 
     // Back leaves search results, then the screen, for the queue.
     BackHandler(shell.destination != Destination.QUEUE) { shell.destination = Destination.QUEUE }

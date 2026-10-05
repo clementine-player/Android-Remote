@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.R
 import de.qspool.clementineremote.SharedPreferencesKeys
+import de.qspool.clementineremote.backend.RemoteRepository
 import de.qspool.clementineremote.utils.Utilities
 import kotlinx.coroutines.delay
 import java.util.Locale
@@ -50,7 +51,7 @@ import java.util.concurrent.TimeUnit
 
 /** The Clementine connected to, and how the connection is doing. */
 internal data class ConnectionStats(
-    /** Clementine's computer. */
+    /** Clementine's computer, named as at the top of the screen. */
     val host: String,
     val ip: String,
     val port: Int,
@@ -206,7 +207,10 @@ internal fun readConnectionStats(context: Context): ConnectionStats {
     val preferences = App.getPreferences()
     val ip = preferences.getString(SharedPreferencesKeys.SP_KEY_IP, "").orEmpty()
     val port = preferences.getString(SharedPreferencesKeys.SP_KEY_PORT, "")?.toIntOrNull() ?: 0
-    val host = App.Clementine.hostname?.takeIf { it.isNotBlank() } ?: ip.ifBlank { context.getString(R.string.fragment_title_connection) }
+    // As Clementine names its computer; or else as the network does, or its address.
+    val host = RemoteRepository.outputs.value.computerName
+        ?: App.Clementine.hostname?.takeIf { it.isNotBlank() }
+        ?: ip.ifBlank { context.getString(R.string.fragment_title_connection) }
     val version = App.Clementine.version ?: ""
     val connection = App.ClementineConnection
         ?: return ConnectionStats(host, ip, port, version, uptime = "", traffic = null)
