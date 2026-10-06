@@ -30,6 +30,7 @@
   <plurals name="download_noti_n_downloads">
     <item quantity="one">%d aktívne preberanie</item>
     <item quantity="few">%d aktívne preberania</item>
+    <item quantity="many">%d aktívnych preberaní</item>
     <item quantity="other">%d aktívnych preberaní</item>
   </plurals>
   <string name="download_noti_n_progress">Celkový priebeh: %d %</string>
@@ -40,6 +41,7 @@
   <plurals name="download_noti_n_finished">
     <item quantity="one">%d dokončené preberanie</item>
     <item quantity="few">%d dokončené preberania</item>
+    <item quantity="many">%d dokončených preberaní</item>
     <item quantity="other">%d dokončených preberaní</item>
   </plurals>
   <string name="download_noti_complete">Preberanie dokončené</string>
@@ -190,11 +192,13 @@
   <plurals name="number_items">
     <item quantity="one">%d položka</item>
     <item quantity="few">%d položky</item>
+    <item quantity="many">%d položiek</item>
     <item quantity="other">%d položiek</item>
   </plurals>
   <plurals name="songs_added">
     <item quantity="one">%d skladba pridaná do aktuálneho zoznamu skladieb</item>
     <item quantity="few">%d skladby pridané do aktuálneho zoznamu skladieb</item>
+    <item quantity="many">%d skladieb pridaných do aktuálneho zoznamu skladieb</item>
     <item quantity="other">%d skladieb pridaných do aktuálneho zoznamu skladieb</item>
   </plurals>
   <string name="repeat_off">Neopakovať</string>

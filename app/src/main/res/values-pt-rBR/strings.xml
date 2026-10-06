@@ -29,6 +29,7 @@
   <string name="download_noti_title">Iniciando download</string>
   <plurals name="download_noti_n_downloads">
     <item quantity="one">%d download ativo</item>
+    <item quantity="many">%d downloads ativos</item>
     <item quantity="other">%d downloads ativos</item>
   </plurals>
   <string name="download_noti_n_progress">Progresso: %d %</string>
@@ -38,6 +39,7 @@
   <string name="download_noti_title_songs">[Músicas]</string>
   <plurals name="download_noti_n_finished">
     <item quantity="one">%d download finalizado</item>
+    <item quantity="many">%d downloads finalizados</item>
     <item quantity="other">%d downloads finalizados</item>
   </plurals>
   <string name="download_noti_complete">Download completo</string>
