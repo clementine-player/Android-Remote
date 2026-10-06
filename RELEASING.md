@@ -209,6 +209,9 @@ steps:
   "Automatic merge of translations from Transifex". That commit has a release note, so new
   translations make the next weekly release; however many nights they changed, the release
   notes say so once.
+- A pull that would remove more than a tenth of the translations fails instead of committing:
+  that means Transifex doesn't have them (a wrong resource in `.tx/config`, or step 3 below
+  not done yet).
 
 Which Transifex resources map to which files is in `.tx/config`. A language that's new on
 Transifex gets its folder from `scripts/android-language-folders.sh`, which turns Transifex's
