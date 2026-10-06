@@ -45,8 +45,11 @@ internal fun AboutDialog(onDismiss: () -> Unit) {
         Credit(
             stringResource(R.string.dialog_about_others),
             AnnotatedString.fromHtml(
-                "Thanks to all the <a href=\"https://github.com/clementine-player/Android-Remote/graphs/contributors\">" +
-                    "contributors</a> and <a href=\"https://app.transifex.com/davidsansome/clementine-remot/\">translators</a>!",
+                stringResource(
+                    R.string.dialog_about_thanks,
+                    "https://github.com/clementine-player/Android-Remote/graphs/contributors",
+                    "https://app.transifex.com/davidsansome/clementine-remot/",
+                ),
                 links,
             ),
         )

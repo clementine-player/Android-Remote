@@ -298,6 +298,8 @@
     <string name="dialog_about_authors">Authors</string>
     <string name="dialog_about_supporters">Supporters</string>
     <string name="dialog_about_others">Others</string>
+    <!-- %1$s is the address of the app's contributors, %2$s of its translators. -->
+    <string name="dialog_about_thanks">Thanks to all the &lt;a href=\"%1$s\"&gt;contributors&lt;/a&gt; and &lt;a href=\"%2$s\"&gt;translators&lt;/a&gt;!</string>
     <string name="dialog_license_top"> This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY</string>
 
     <string name="tasker_intro">Please select an action.</string>
