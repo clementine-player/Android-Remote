@@ -58,7 +58,8 @@ data class DownloadsState(
 /** The downloads to this phone, as the download manager has them, read four times a second. */
 class DownloadsViewModel(
     private val downloads: () -> List<ClementineSongDownloader> = { DownloadManager.getInstance(App.getApp()).allDownloaders },
-    private val freeSpace: () -> Long = { Utilities.getFreeSpaceExternal().toLong() },
+    /** Free space where downloads go, in bytes, or a negative number if it can't be told. */
+    private val freeSpace: () -> Long = { DownloadManager.getInstance(App.getApp()).freeSpace },
     /** The library synced from Clementine, if there is one; closed after use. */
     private val library: () -> SQLiteDatabase? = ::openLibrary,
     private val playlists: () -> List<MyPlaylist> = { App.Clementine.playlistManager.allPlaylists },
@@ -84,7 +85,7 @@ class DownloadsViewModel(
         return DownloadsState(
             running = all.filter { it.running },
             finished = all.filterNot { it.running },
-            freeSpace = Utilities.humanReadableBytes(freeSpace(), true),
+            freeSpace = freeSpace().let { if (it >= 0) Utilities.humanReadableBytes(it, true) else "" },
             wifiOnly = App.getPreferences().getBoolean(SharedPreferencesKeys.SP_WIFI_ONLY, false),
         )
     }

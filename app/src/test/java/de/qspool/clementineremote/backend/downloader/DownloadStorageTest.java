@@ -110,6 +110,16 @@ public class DownloadStorageTest {
         assertTrue(ClementineSongDownloader.shouldDownload(saved, 2000, true));
     }
 
+    @Test
+    public void freeSpaceIsReadWhereSongsGoEvenBeforeTheFolderIsMade() {
+        assertTrue(mStorage.freeSpace() > 0);
+        File notMadeYet = new File(mFolder.getRoot(), "Music/Clementine");
+        FileDownloadStorage storage = new FileDownloadStorage(
+                RuntimeEnvironment.getApplication(), notMadeYet);
+        assertEquals(mFolder.getRoot().getUsableSpace(), storage.freeSpace(), 64L << 20);
+        assertFalse(notMadeYet.exists());
+    }
+
     private static ResponseSongFileChunk chunk(String artist, String albumArtist, String album) {
         return ResponseSongFileChunk.newBuilder()
                 .setSongMetadata(SongMetadata.newBuilder()

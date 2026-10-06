@@ -19,7 +19,8 @@ import java.io.OutputStream;
 import java.util.Locale;
 
 /**
- * Saves songs to the shared Music collection through MediaStore, under Music/Clementine/.
+ * Saves songs to the shared Music collection through MediaStore, under Music/Clementine/ on
+ * the storage volume picked in the settings (see {@link DownloadVolumes}).
  * This needs no storage permission on Android 10 and later, and the songs show up in music
  * players straight away.
  *
@@ -33,13 +34,20 @@ public class MediaStoreDownloadStorage implements DownloadStorage {
 
     private static final String DEFAULT_MIME_TYPE = "audio/mpeg";
 
+    private final Context mContext;
+
     private final ContentResolver mResolver;
+
+    private final String mVolumeName;
 
     private final Uri mCollection;
 
-    public MediaStoreDownloadStorage(Context context) {
+    /** Saves to the volume MediaStore names so, such as MediaStore.VOLUME_EXTERNAL_PRIMARY. */
+    public MediaStoreDownloadStorage(Context context, String volumeName) {
+        mContext = context.getApplicationContext();
         mResolver = context.getContentResolver();
-        mCollection = MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
+        mVolumeName = volumeName;
+        mCollection = MediaStore.Audio.Media.getContentUri(volumeName);
     }
 
     @Nullable
@@ -56,6 +64,11 @@ public class MediaStoreDownloadStorage implements DownloadStorage {
             return new SavedSong(ContentUris.withAppendedId(mCollection, cursor.getLong(0)),
                     cursor.getLong(1));
         }
+    }
+
+    @Override
+    public long freeSpace() {
+        return DownloadVolumes.freeSpace(mContext, mVolumeName);
     }
 
     @Override

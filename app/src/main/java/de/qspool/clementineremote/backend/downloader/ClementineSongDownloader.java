@@ -245,8 +245,9 @@ public class ClementineSongDownloader extends
             try {
                 // Check if we need to create a new file
                 if (pending == null) {
-                    // Check if we have enougth free space
-                    if (chunk.getSize() > Utilities.getFreeSpaceExternal()) {
+                    // Check if we have enough free space where the song goes
+                    long freeSpace = mStorage.freeSpace();
+                    if (freeSpace >= 0 && chunk.getSize() > freeSpace) {
                         result = new DownloaderResult(mId, DownloadResult.INSUFFIANT_SPACE);
                         break;
                     }

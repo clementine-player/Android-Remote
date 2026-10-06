@@ -1,8 +1,10 @@
 package de.qspool.clementineremote.ui.settings
 
 import android.os.Environment
+import android.provider.MediaStore
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -19,11 +21,13 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextReplacement
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.SharedPreferencesKeys
+import de.qspool.clementineremote.backend.downloader.DownloadVolume
 import de.qspool.clementineremote.backend.downloader.MediaStoreDownloadStorage
 import de.qspool.clementineremote.ui.theme.ClementineTheme
 import kotlinx.coroutines.Dispatchers
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -47,6 +51,13 @@ class SettingsScreenTest {
 
     private val opened = mutableListOf<String>()
 
+    /** The storage volumes offered. */
+    private val volumes = mutableStateOf(emptyList<DownloadVolume>())
+
+    private val phone = DownloadVolume(MediaStore.VOLUME_EXTERNAL_PRIMARY, "Internal shared storage")
+
+    private val sdCard = DownloadVolume("1234-abcd", "SanDisk SD card")
+
     private val actions = object : SettingsActions {
         override fun onBack() {
             opened += "back"
@@ -64,7 +75,7 @@ class SettingsScreenTest {
             ClementineTheme(dynamicColor = false) {
                 // Folders are read in line, so the dialog's lists are there once it's idle.
                 CompositionLocalProvider(LocalFolderDispatcher provides Dispatchers.Unconfined) {
-                    SettingsScreen(rememberPreferenceStore(preferences), actions) { "/music" }
+                    SettingsScreen(rememberPreferenceStore(preferences), actions, volumes.value) { "/music" }
                 }
             }
         }
@@ -125,6 +136,42 @@ class SettingsScreenTest {
     fun downloadsGoToTheMusicCollection() {
         row(SharedPreferencesKeys.SP_DOWNLOAD_DIR).assertIsNotEnabled()
         compose.onNodeWithText(MediaStoreDownloadStorage.BASE_DIR).assertExists()
+    }
+
+    @Test
+    fun withOneVolumeThereIsNoChoiceOfWhereDownloadsGo() {
+        compose.onNodeWithTag(SharedPreferencesKeys.SP_DOWNLOAD_VOLUME).assertDoesNotExist()
+    }
+
+    @Test
+    fun downloadsCanGoToAnSdCard() {
+        volumes.value = listOf(phone, sdCard)
+        row(SharedPreferencesKeys.SP_DOWNLOAD_VOLUME)
+        // The primary volume unless another is picked.
+        compose.onNodeWithText("Internal shared storage").assertExists()
+
+        row(SharedPreferencesKeys.SP_DOWNLOAD_VOLUME).performClick()
+        compose.onNodeWithTag("${SharedPreferencesKeys.SP_DOWNLOAD_VOLUME}_1234-abcd").performClick()
+        assertEquals("1234-abcd", preferences.getString(SharedPreferencesKeys.SP_DOWNLOAD_VOLUME, null))
+        compose.onNodeWithText("SanDisk SD card").assertExists()
+    }
+
+    @Test
+    fun aVolumeTakenOutCanBeChangedFrom() {
+        preferences.edit().putString(SharedPreferencesKeys.SP_DOWNLOAD_VOLUME, "1234-abcd").commit()
+        volumes.value = listOf(phone)
+        row(SharedPreferencesKeys.SP_DOWNLOAD_VOLUME)
+        compose.onNodeWithText("Not available. Choose where to save downloads.").assertExists()
+    }
+
+    @Test
+    fun volumesAreOfferedWhenThereIsAChoice() {
+        val primary = MediaStore.VOLUME_EXTERNAL_PRIMARY
+        assertFalse(offerVolumeChoice(emptyList(), primary))
+        assertFalse(offerVolumeChoice(listOf(primary), primary))
+        assertTrue(offerVolumeChoice(listOf(primary, "1234-abcd"), primary))
+        // The SD card picked was taken out.
+        assertTrue(offerVolumeChoice(listOf(primary), "1234-abcd"))
     }
 
     @Test

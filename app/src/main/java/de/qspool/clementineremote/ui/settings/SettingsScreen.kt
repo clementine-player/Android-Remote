@@ -1,7 +1,9 @@
 package de.qspool.clementineremote.ui.settings
 
 import android.os.Build
+import android.provider.MediaStore
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -34,6 +36,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import de.qspool.clementineremote.R
 import de.qspool.clementineremote.SharedPreferencesKeys
 import de.qspool.clementineremote.backend.Clementine
+import de.qspool.clementineremote.backend.downloader.DownloadVolume
 import de.qspool.clementineremote.backend.downloader.MediaStoreDownloadStorage
 import de.qspool.clementineremote.ui.hints.Hints
 
@@ -47,7 +50,13 @@ interface SettingsActions {
 /** The settings, on one page: a group for each part of the app, then about and licences. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun SettingsScreen(store: PreferenceStore, actions: SettingsActions, defaultDownloadDir: () -> String) {
+internal fun SettingsScreen(
+    store: PreferenceStore,
+    actions: SettingsActions,
+    /** The storage volumes downloads can go to, on Android 10 and later. */
+    downloadVolumes: List<DownloadVolume> = emptyList(),
+    defaultDownloadDir: () -> String,
+) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -71,7 +80,7 @@ internal fun SettingsScreen(store: PreferenceStore, actions: SettingsActions, de
         ) {
             PlayerSettings(store)
             LibrarySettings(store)
-            DownloadSettings(store, defaultDownloadDir)
+            DownloadSettings(store, downloadVolumes, defaultDownloadDir)
             ConnectionSettings(store)
             AdvancedSettings(store)
             AboutSettings(actions)
@@ -127,7 +136,7 @@ private fun LibrarySettings(store: PreferenceStore) {
 }
 
 @Composable
-private fun DownloadSettings(store: PreferenceStore, defaultDownloadDir: () -> String) {
+private fun DownloadSettings(store: PreferenceStore, downloadVolumes: List<DownloadVolume>, defaultDownloadDir: () -> String) {
     SettingsHeading(stringResource(R.string.pref_cat_downloads))
     booleanSetting(store, SharedPreferencesKeys.SP_WIFI_ONLY, false, R.string.pref_dl_wifi_only_title, R.string.pref_dl_wifi_only_summary)
     // Android 10 and later save songs to the shared Music collection.
@@ -136,6 +145,7 @@ private fun DownloadSettings(store: PreferenceStore, defaultDownloadDir: () -> S
             stringResource(R.string.pref_dl_dir), MediaStoreDownloadStorage.BASE_DIR,
             SharedPreferencesKeys.SP_DOWNLOAD_DIR, enabled = false,
         ) {}
+        DownloadVolumeSetting(store, downloadVolumes)
     } else {
         val folder = store.string(SharedPreferencesKeys.SP_DOWNLOAD_DIR, defaultDownloadDir())
         var choosing by rememberSaveable { mutableStateOf(false) }
@@ -167,6 +177,29 @@ private fun DownloadSettings(store: PreferenceStore, defaultDownloadDir: () -> S
         R.string.pref_dl_pl_album_dir_summary, enabled = artistDir,
     )
 }
+
+/**
+ * Which storage volume downloads go to, such as the phone's own storage or an SD card. Only
+ * offered when there is a choice, or when the volume picked has gone, so another can be.
+ */
+@RequiresApi(Build.VERSION_CODES.Q)
+@Composable
+private fun DownloadVolumeSetting(store: PreferenceStore, volumes: List<DownloadVolume>) {
+    val chosen = store.string(SharedPreferencesKeys.SP_DOWNLOAD_VOLUME, MediaStore.VOLUME_EXTERNAL_PRIMARY)
+    if (!offerVolumeChoice(volumes.map { it.name }, chosen)) {
+        return
+    }
+    val summary = volumes.firstOrNull { it.name == chosen }?.description
+        ?: stringResource(R.string.pref_dl_volume_unavailable)
+    ChoiceSetting(
+        stringResource(R.string.pref_dl_volume), summary, SharedPreferencesKeys.SP_DOWNLOAD_VOLUME,
+        volumes.map { it.description }, volumes.map { it.name }, chosen,
+    ) { store.set(SharedPreferencesKeys.SP_DOWNLOAD_VOLUME, it) }
+}
+
+/** Whether to offer the volumes [available] to pick from, with [chosen] picked. */
+internal fun offerVolumeChoice(available: List<String>, chosen: String): Boolean =
+    available.size > 1 || (available.isNotEmpty() && chosen !in available)
 
 @Composable
 private fun ConnectionSettings(store: PreferenceStore) {
