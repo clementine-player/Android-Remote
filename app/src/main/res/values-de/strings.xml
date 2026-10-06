@@ -109,6 +109,8 @@
 
     <string name="pref_library_sorting_title">Sortierung</string>
     <string name="pref_library_sorting_summary">Die Bibliothek ist »%1$s« sortiert.</string>
+    <!-- Choices are separate strings, not a string-array: Transifex leaves an array's untranslated
+         items out, which moves the translated ones onto the wrong choices. -->
     <string name="pref_library_sorting_asc">Aufsteigend</string>
     <string name="pref_library_sorting_desc">Absteigend</string>
 
@@ -116,6 +118,7 @@
     <string name="pref_library_grouping_summary">Die Bibliothek ist nach »%1$s« gruppiert.</string>
     <string name="pref_library_grouping_artist">Interpret</string>
     <string name="pref_library_grouping_artist_album">Interpret / Album</string>
+    <string name="pref_library_grouping_albumartist_album">Interpret / Jahr</string>
     <string name="pref_library_grouping_artist_year">Interpret / Jahr</string>
     <string name="pref_library_grouping_album">Album</string>
     <string name="pref_library_grouping_genre_album">Genre / Album</string>

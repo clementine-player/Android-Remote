@@ -111,6 +111,8 @@
 
     <string name="pref_library_sorting_title">Ређање</string>
     <string name="pref_library_sorting_summary">Библиотека је поређана %1$s.</string>
+    <!-- Choices are separate strings, not a string-array: Transifex leaves an array's untranslated
+         items out, which moves the translated ones onto the wrong choices. -->
     <string name="pref_library_sorting_asc">растуће</string>
     <string name="pref_library_sorting_desc">опадајуће</string>
 
@@ -118,6 +120,7 @@
     <string name="pref_library_grouping_summary">Библиотека је груписана по %1$s.</string>
     <string name="pref_library_grouping_artist">извођачу</string>
     <string name="pref_library_grouping_artist_album">извођачу/албуму</string>
+    <string name="pref_library_grouping_albumartist_album">извођачу/години</string>
     <string name="pref_library_grouping_artist_year">извођачу/години</string>
     <string name="pref_library_grouping_album">албуму</string>
     <string name="pref_library_grouping_genre_album">жанру/албуму</string>

@@ -111,6 +111,8 @@
 
     <string name="pref_library_sorting_title">Organização</string>
     <string name="pref_library_sorting_summary">A coleção está organizada pela ordem %1$s.</string>
+    <!-- Choices are separate strings, not a string-array: Transifex leaves an array's untranslated
+         items out, which moves the translated ones onto the wrong choices. -->
     <string name="pref_library_sorting_asc">Ascendente</string>
     <string name="pref_library_sorting_desc">Descendente</string>
 
@@ -118,6 +120,7 @@
     <string name="pref_library_grouping_summary">A coleção está agrupada por %1$s.</string>
     <string name="pref_library_grouping_artist">Artista</string>
     <string name="pref_library_grouping_artist_album">Artista/Álbum</string>
+    <string name="pref_library_grouping_albumartist_album">Artista/Ano</string>
     <string name="pref_library_grouping_artist_year">Artista/Ano</string>
     <string name="pref_library_grouping_album">Álbum</string>
     <string name="pref_library_grouping_genre_album">Género/Álbum</string>

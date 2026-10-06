@@ -108,6 +108,8 @@
 
     <string name="pref_library_sorting_title">Sıralama</string>
     <string name="pref_library_sorting_summary">Kütüphane %1$s sıralandı.</string>
+    <!-- Choices are separate strings, not a string-array: Transifex leaves an array's untranslated
+         items out, which moves the translated ones onto the wrong choices. -->
     <string name="pref_library_sorting_asc">Artan</string>
     <string name="pref_library_sorting_desc">Azalan</string>
 
@@ -115,6 +117,7 @@
     <string name="pref_library_grouping_summary">Kütüphane %1$s kriterine göre sıralandı.</string>
     <string name="pref_library_grouping_artist">Sanatçı</string>
     <string name="pref_library_grouping_artist_album">Sanatçı / Albüm</string>
+    <string name="pref_library_grouping_albumartist_album">Sanatçı / Yıl</string>
     <string name="pref_library_grouping_artist_year">Sanatçı / Yıl</string>
     <string name="pref_library_grouping_album">Albüm</string>
     <string name="pref_library_grouping_genre_album">Tarz / Albüm</string>

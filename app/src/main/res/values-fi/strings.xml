@@ -107,11 +107,13 @@
 
     <string name="pref_library_sorting_title">Järjestys</string>
     <string name="pref_library_sorting_summary">Kirjasto on järjestetty %1$s järjestykseen.</string>
+    <!-- Choices are separate strings, not a string-array: Transifex leaves an array's untranslated
+         items out, which moves the translated ones onto the wrong choices. -->
     <string name="pref_library_sorting_asc">nousevaan</string>
     <string name="pref_library_sorting_desc">laskevaan</string>
 
     <string name="pref_library_grouping_title">Ryhmittely</string>
-
+    <string name="pref_library_grouping_album">Albumi</string>
     <string name="pref_autoconnect_title">Yhdistä automaattisesti</string>
     <string name="pref_autoconnect_summary">Yhdistä Clementineen automaattisesti kaukosäätimen käynnistyessä.</string>
     <string name="pref_port_title">Portti</string>

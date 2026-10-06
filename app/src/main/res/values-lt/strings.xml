@@ -113,6 +113,8 @@
 
     <string name="pref_library_sorting_title">Rikiavimas</string>
     <string name="pref_library_sorting_summary">Biblioteka yra rikiuojama %1$s tvarka.</string>
+    <!-- Choices are separate strings, not a string-array: Transifex leaves an array's untranslated
+         items out, which moves the translated ones onto the wrong choices. -->
     <string name="pref_library_sorting_asc">Didejančia</string>
     <string name="pref_library_sorting_desc">Mažėjančia</string>
 
@@ -120,6 +122,7 @@
     <string name="pref_library_grouping_summary">Biblioteka yra grupuojama pagal %1$s.</string>
     <string name="pref_library_grouping_artist">Atlikėją</string>
     <string name="pref_library_grouping_artist_album">Atlikėją / Albumą</string>
+    <string name="pref_library_grouping_albumartist_album">Atlikėją / Metus</string>
     <string name="pref_library_grouping_artist_year">Atlikėją / Metus</string>
     <string name="pref_library_grouping_album">Albumą</string>
     <string name="pref_library_grouping_genre_album">Žanrą / Albumą</string>

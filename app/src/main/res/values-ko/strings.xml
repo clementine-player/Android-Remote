@@ -72,7 +72,7 @@
     <string name="pref_volume_inc_title">볼륨 단계 변화</string>
     <string name="pref_volume_inc_summary">현재 볼륨 단계: %s</string>
 
-
+    <string name="pref_library_grouping_album">앨범</string>
     <string name="pref_port_title">포트</string>
     <string name="pref_port_summary">현재 포트:</string>
     <string name="pref_port_error">불법 포트!</string>
@@ -121,5 +121,5 @@
 
     <string name="fragment_title_connection">Clementine</string>
 
-
+    <string name="player_download_what_album">앨범</string>
     </resources>

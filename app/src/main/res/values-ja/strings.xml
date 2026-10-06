@@ -107,6 +107,8 @@
 
     <string name="pref_library_sorting_title">並び替え</string>
     <string name="pref_library_sorting_summary">ライブラリーは %1$s で表示します。</string>
+    <!-- Choices are separate strings, not a string-array: Transifex leaves an array's untranslated
+         items out, which moves the translated ones onto the wrong choices. -->
     <string name="pref_library_sorting_asc">昇順</string>
     <string name="pref_library_sorting_desc">降順</string>
 
@@ -114,6 +116,7 @@
     <string name="pref_library_grouping_summary">ライブラリーは %1$s でグループ化します。</string>
     <string name="pref_library_grouping_artist">アーティスト</string>
     <string name="pref_library_grouping_artist_album">アーティスト / アルバム</string>
+    <string name="pref_library_grouping_albumartist_album">アーティスト / 年</string>
     <string name="pref_library_grouping_artist_year">アーティスト / 年</string>
     <string name="pref_library_grouping_album">アルバム</string>
     <string name="pref_library_grouping_genre_album">ジャンル / アルバム</string>
