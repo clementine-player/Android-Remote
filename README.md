@@ -32,7 +32,7 @@ __All Features:__
 * Clementine Network Discovery: You don't have to enter the ip, Clementine Remote finds Clementine Players itself in the network!
 
 __TRANSLATE:__
-We use [Transifex](https://app.transifex.com/davidsansome/clementine-remot/), you can login via your Github account or create a new one. Translations made there reach the app by themselves: they're brought back every night and go out with the next release.
+The app is translated on [Transifex](https://explore.transifex.com/davidsansome/clementine-remot/), together with the iOS remote: sign in with a GitHub account, or make a Transifex one, and join a language. Translations made there come back into the app by themselves, every night, and go out with the next release. Please don't translate in pull requests: the next night's translations would replace them.
 
 __INSTALLATION DETAILS:__<br />
 Download Clementine 1.3 from here: http://www.clementine-player.org/downloads
