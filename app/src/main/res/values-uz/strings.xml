@@ -64,9 +64,6 @@
     <string name="pref_lower_volume_summary">Kiruvchi/chiquvchi qo\'ng\'iroqlarda ovozni pasaytirish.</string>
     <string name="pref_call_volume_title">Qo\'ng\'iroq ovoz darajasi</string>
     <string name="pref_call_volume_summary">Joriy qo\'ng\'iroq ovoz darajasi: %s</string>
-    <string-array name="pref_library_grouping">
-        <item>Albom</item>
-    </string-array>
 
     <string name="pref_port_title">Port</string>
     <string name="pref_port_summary">Joriy port:</string>
@@ -112,8 +109,5 @@
 
     <string name="fragment_title_connection">Clementine</string>
 
-    <string-array name="player_download_list">
-        <item>Albom</item>
-    </string-array>
 
     </resources>

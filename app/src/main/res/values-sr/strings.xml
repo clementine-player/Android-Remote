@@ -111,21 +111,17 @@
 
     <string name="pref_library_sorting_title">Ређање</string>
     <string name="pref_library_sorting_summary">Библиотека је поређана %1$s.</string>
-    <string-array name="pref_library_sorting">
-        <item>растуће</item>
-        <item>опадајуће</item>
-    </string-array>
+    <string name="pref_library_sorting_asc">растуће</string>
+    <string name="pref_library_sorting_desc">опадајуће</string>
 
     <string name="pref_library_grouping_title">Груписање</string>
     <string name="pref_library_grouping_summary">Библиотека је груписана по %1$s.</string>
-    <string-array name="pref_library_grouping">
-        <item>извођачу</item>
-        <item>извођачу/албуму</item>
-        <item>извођачу/години</item>
-        <item>албуму</item>
-        <item>жанру/албуму</item>
-        <item>жанру/извођачу/албуму</item>
-    </string-array>
+    <string name="pref_library_grouping_artist">извођачу</string>
+    <string name="pref_library_grouping_artist_album">извођачу/албуму</string>
+    <string name="pref_library_grouping_artist_year">извођачу/години</string>
+    <string name="pref_library_grouping_album">албуму</string>
+    <string name="pref_library_grouping_genre_album">жанру/албуму</string>
+    <string name="pref_library_grouping_genre_artist_album">жанру/извођачу/албуму</string>
 
     <string name="pref_autoconnect_title">Ауто-повезивање</string>
     <string name="pref_autoconnect_summary">Аутоматски се повежи са Клементином по покретању даљинског.</string>
@@ -238,10 +234,8 @@
     <string name="navigation_drawer_clementine_on">Клементина на %s</string>
 
     <string name="player_download_what">Шта да преузмем?</string>
-    <string-array name="player_download_list">
-        <item>Песма</item>
-        <item>Албум</item>
-        <item>Листа нумера</item>
-    </string-array>
+    <string name="player_download_song">Песма</string>
+    <string name="player_download_album">Албум</string>
+    <string name="player_download_playlist">Листа нумера</string>
 
     </resources>

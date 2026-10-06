@@ -107,21 +107,17 @@
 
     <string name="pref_library_sorting_title">並び替え</string>
     <string name="pref_library_sorting_summary">ライブラリーは %1$s で表示します。</string>
-    <string-array name="pref_library_sorting">
-        <item>昇順</item>
-        <item>降順</item>
-    </string-array>
+    <string name="pref_library_sorting_asc">昇順</string>
+    <string name="pref_library_sorting_desc">降順</string>
 
     <string name="pref_library_grouping_title">グループ化</string>
     <string name="pref_library_grouping_summary">ライブラリーは %1$s でグループ化します。</string>
-    <string-array name="pref_library_grouping">
-        <item>アーティスト</item>
-        <item>アーティスト / アルバム</item>
-        <item>アーティスト / 年</item>
-        <item>アルバム</item>
-        <item>ジャンル / アルバム</item>
-        <item>ジャンル / アーティスト / アルバム</item>
-    </string-array>
+    <string name="pref_library_grouping_artist">アーティスト</string>
+    <string name="pref_library_grouping_artist_album">アーティスト / アルバム</string>
+    <string name="pref_library_grouping_artist_year">アーティスト / 年</string>
+    <string name="pref_library_grouping_album">アルバム</string>
+    <string name="pref_library_grouping_genre_album">ジャンル / アルバム</string>
+    <string name="pref_library_grouping_genre_artist_album">ジャンル / アーティスト / アルバム</string>
 
     <string name="pref_autoconnect_title">自動接続</string>
     <string name="pref_autoconnect_summary">リモートの起動時に自動的に Clementine に接続します。</string>
@@ -230,10 +226,8 @@
     <string name="navigation_drawer_clementine_on">%s の Clementine</string>
 
     <string name="player_download_what">何をダウンロードしますか?</string>
-    <string-array name="player_download_list">
-        <item>曲</item>
-        <item>アルバム</item>
-        <item>プレイリスト</item>
-    </string-array>
+    <string name="player_download_song">曲</string>
+    <string name="player_download_album">アルバム</string>
+    <string name="player_download_playlist">プレイリスト</string>
 
     </resources>

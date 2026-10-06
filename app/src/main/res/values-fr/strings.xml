@@ -111,21 +111,17 @@
 
     <string name="pref_library_sorting_title">Tri</string>
     <string name="pref_library_sorting_summary">La bibliothèque est triée par %1$s</string>
-    <string-array name="pref_library_sorting">
-        <item>Croissant</item>
-        <item>Décroissant</item>
-    </string-array>
+    <string name="pref_library_sorting_asc">Croissant</string>
+    <string name="pref_library_sorting_desc">Décroissant</string>
 
     <string name="pref_library_grouping_title">Regroupement</string>
     <string name="pref_library_grouping_summary">La bibliothèque est groupée par %1$s.</string>
-    <string-array name="pref_library_grouping">
-        <item>Artiste</item>
-        <item>Artiste / Album</item>
-        <item>Artiste / Année</item>
-        <item>Album</item>
-        <item>Genre / Album</item>
-        <item>Genre / Artiste / Album</item>
-    </string-array>
+    <string name="pref_library_grouping_artist">Artiste</string>
+    <string name="pref_library_grouping_artist_album">Artiste / Album</string>
+    <string name="pref_library_grouping_artist_year">Artiste / Année</string>
+    <string name="pref_library_grouping_album">Album</string>
+    <string name="pref_library_grouping_genre_album">Genre / Album</string>
+    <string name="pref_library_grouping_genre_artist_album">Genre / Artiste / Album</string>
 
     <string name="pref_autoconnect_title">Connexion automatique</string>
     <string name="pref_autoconnect_summary">Connexion automatique à Clementine au démarrage de l\'application.</string>
@@ -238,10 +234,8 @@
     <string name="navigation_drawer_clementine_on">Clementine sur %s</string>
 
     <string name="player_download_what">Que télécharger ?</string>
-    <string-array name="player_download_list">
-        <item>Titre</item>
-        <item>Album</item>
-        <item>Liste de lecture</item>
-    </string-array>
+    <string name="player_download_song">Titre</string>
+    <string name="player_download_album">Album</string>
+    <string name="player_download_playlist">Liste de lecture</string>
 
     </resources>

@@ -109,21 +109,17 @@
 
     <string name="pref_library_sorting_title">Sortierung</string>
     <string name="pref_library_sorting_summary">Die Bibliothek ist »%1$s« sortiert.</string>
-    <string-array name="pref_library_sorting">
-        <item>Aufsteigend</item>
-        <item>Absteigend</item>
-    </string-array>
+    <string name="pref_library_sorting_asc">Aufsteigend</string>
+    <string name="pref_library_sorting_desc">Absteigend</string>
 
     <string name="pref_library_grouping_title">Gruppierung</string>
     <string name="pref_library_grouping_summary">Die Bibliothek ist nach »%1$s« gruppiert.</string>
-    <string-array name="pref_library_grouping">
-        <item>Interpret</item>
-        <item>Interpret / Album</item>
-        <item>Interpret / Jahr</item>
-        <item>Album</item>
-        <item>Genre / Album</item>
-        <item>Genre / Interpret / Album</item>
-    </string-array>
+    <string name="pref_library_grouping_artist">Interpret</string>
+    <string name="pref_library_grouping_artist_album">Interpret / Album</string>
+    <string name="pref_library_grouping_artist_year">Interpret / Jahr</string>
+    <string name="pref_library_grouping_album">Album</string>
+    <string name="pref_library_grouping_genre_album">Genre / Album</string>
+    <string name="pref_library_grouping_genre_artist_album">Genre / Interpret / Album</string>
 
     <string name="pref_autoconnect_title">Direkt verbinden</string>
     <string name="pref_autoconnect_summary">Automatisch mit Clementine verbinden wenn die Anwendung gestartet wird.</string>
@@ -234,10 +230,8 @@
     <string name="navigation_drawer_clementine_on">Clementine auf %s</string>
 
     <string name="player_download_what">Was herunterladen?</string>
-    <string-array name="player_download_list">
-        <item>Lied</item>
-        <item>Album</item>
-        <item>Wiedergabeliste</item>
-    </string-array>
+    <string name="player_download_song">Lied</string>
+    <string name="player_download_album">Album</string>
+    <string name="player_download_playlist">Wiedergabeliste</string>
 
     </resources>

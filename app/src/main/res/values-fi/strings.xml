@@ -107,15 +107,10 @@
 
     <string name="pref_library_sorting_title">Järjestys</string>
     <string name="pref_library_sorting_summary">Kirjasto on järjestetty %1$s järjestykseen.</string>
-    <string-array name="pref_library_sorting">
-        <item>nousevaan</item>
-        <item>laskevaan</item>
-    </string-array>
+    <string name="pref_library_sorting_asc">nousevaan</string>
+    <string name="pref_library_sorting_desc">laskevaan</string>
 
     <string name="pref_library_grouping_title">Ryhmittely</string>
-    <string-array name="pref_library_grouping">
-        <item>Albumi</item>
-    </string-array>
 
     <string name="pref_autoconnect_title">Yhdistä automaattisesti</string>
     <string name="pref_autoconnect_summary">Yhdistä Clementineen automaattisesti kaukosäätimen käynnistyessä.</string>
@@ -221,10 +216,8 @@
     <string name="navigation_drawer_clementine_on">Clementine koneella %s</string>
 
     <string name="player_download_what">Mitä ladataan?</string>
-    <string-array name="player_download_list">
-        <item>Kappale</item>
-        <item>Albumi</item>
-        <item>Soittolista</item>
-    </string-array>
+    <string name="player_download_song">Kappale</string>
+    <string name="player_download_album">Albumi</string>
+    <string name="player_download_playlist">Soittolista</string>
 
     </resources>

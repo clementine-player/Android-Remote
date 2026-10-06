@@ -113,21 +113,17 @@
 
     <string name="pref_library_sorting_title">Třídění</string>
     <string name="pref_library_sorting_summary">Sbírka je tříděna v pořadí %1$s.</string>
-    <string-array name="pref_library_sorting">
-        <item>Vzestupně</item>
-        <item>Sestupně</item>
-    </string-array>
+    <string name="pref_library_sorting_asc">Vzestupně</string>
+    <string name="pref_library_sorting_desc">Sestupně</string>
 
     <string name="pref_library_grouping_title">Seskupování</string>
     <string name="pref_library_grouping_summary">Sbírka je seskupena podle %1$s.</string>
-    <string-array name="pref_library_grouping">
-        <item>Umělec</item>
-        <item>Umělec/Album</item>
-        <item>Umělec/Rok</item>
-        <item>Album</item>
-        <item>Žánr/Album</item>
-        <item>Žánr/Umělec/Album</item>
-    </string-array>
+    <string name="pref_library_grouping_artist">Umělec</string>
+    <string name="pref_library_grouping_artist_album">Umělec/Album</string>
+    <string name="pref_library_grouping_artist_year">Umělec/Rok</string>
+    <string name="pref_library_grouping_album">Album</string>
+    <string name="pref_library_grouping_genre_album">Žánr/Album</string>
+    <string name="pref_library_grouping_genre_artist_album">Žánr/Umělec/Album</string>
 
     <string name="pref_autoconnect_title">Automaticky připojit</string>
     <string name="pref_autoconnect_summary">Automaticky se spojit s Clementine při spouštění vzdáleného.
@@ -246,10 +242,8 @@
     <string name="navigation_drawer_clementine_on">Clementine na %s</string>
 
     <string name="player_download_what">Co stahovat?</string>
-    <string-array name="player_download_list">
-        <item>Píseň</item>
-        <item>Album</item>
-        <item>Seznam skladeb</item>
-    </string-array>
+    <string name="player_download_song">Píseň</string>
+    <string name="player_download_album">Album</string>
+    <string name="player_download_playlist">Seznam skladeb</string>
 
     </resources>

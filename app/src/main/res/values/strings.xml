@@ -233,22 +233,20 @@
 
     <string name="pref_library_sorting_title">Sorting</string>
     <string name="pref_library_sorting_summary">The library is sorted in %1$s order.</string>
-    <string-array name="pref_library_sorting">
-        <item>Ascending</item>
-        <item>Descending</item>
-    </string-array>
+    <!-- Choices are separate strings, not a string-array: Transifex leaves an array's untranslated
+         items out, which moves the translated ones onto the wrong choices. -->
+    <string name="pref_library_sorting_asc">Ascending</string>
+    <string name="pref_library_sorting_desc">Descending</string>
 
     <string name="pref_library_grouping_title">Grouping</string>
     <string name="pref_library_grouping_summary">The library is grouped by %1$s.</string>
-    <string-array name="pref_library_grouping">
-        <item>Artist</item>
-        <item>Artist / Album</item>
-        <item>Album Artist / Album</item>
-        <item>Artist / Year</item>
-        <item>Album</item>
-        <item>Genre / Album</item>
-        <item>Genre / Artist / Album</item>
-    </string-array>
+    <string name="pref_library_grouping_artist">Artist</string>
+    <string name="pref_library_grouping_artist_album">Artist / Album</string>
+    <string name="pref_library_grouping_albumartist_album">Album Artist / Album</string>
+    <string name="pref_library_grouping_artist_year">Artist / Year</string>
+    <string name="pref_library_grouping_album">Album</string>
+    <string name="pref_library_grouping_genre_album">Genre / Album</string>
+    <string name="pref_library_grouping_genre_artist_album">Genre / Artist / Album</string>
 
     <string name="pref_autoconnect_title">Auto-Connect</string>
     <string name="pref_autoconnect_summary">Automatically connect to Clementine when starting the remote.
@@ -392,11 +390,9 @@
     <string name="navigation_drawer_clementine_on">Clementine on %s</string>
 
     <string name="player_download_what">What to download?</string>
-    <string-array name="player_download_list">
-        <item>Song</item>
-        <item>Album</item>
-        <item>Playlist</item>
-    </string-array>
+    <string name="player_download_song">Song</string>
+    <string name="player_download_album">Album</string>
+    <string name="player_download_playlist">Playlist</string>
 
     <string name="cd_cover_image">Album Cover Image</string>
     <string name="cd_cancel_download">Cancel the download</string>

@@ -113,21 +113,17 @@
 
     <string name="pref_library_sorting_title">Упорядковування</string>
     <string name="pref_library_sorting_summary">Бібліотеку упорядковано за %1$s.</string>
-    <string-array name="pref_library_sorting">
-        <item>Зростанням</item>
-        <item>Спаданням</item>
-    </string-array>
+    <string name="pref_library_sorting_asc">Зростанням</string>
+    <string name="pref_library_sorting_desc">Спаданням</string>
 
     <string name="pref_library_grouping_title">Групування</string>
     <string name="pref_library_grouping_summary">Бібліотеку згруповано за %1$s.</string>
-    <string-array name="pref_library_grouping">
-        <item>Виконавець</item>
-        <item>Виконавець / Альбом</item>
-        <item>Виконавець / Рік</item>
-        <item>Альбом</item>
-        <item>Жанр / Альбом</item>
-        <item>Жанр / Виконавець / Альбом</item>
-    </string-array>
+    <string name="pref_library_grouping_artist">Виконавець</string>
+    <string name="pref_library_grouping_artist_album">Виконавець / Альбом</string>
+    <string name="pref_library_grouping_artist_year">Виконавець / Рік</string>
+    <string name="pref_library_grouping_album">Альбом</string>
+    <string name="pref_library_grouping_genre_album">Жанр / Альбом</string>
+    <string name="pref_library_grouping_genre_artist_album">Жанр / Виконавець / Альбом</string>
 
     <string name="pref_autoconnect_title">Автоз’єднання</string>
     <string name="pref_autoconnect_summary">Автоматично встановлювати з’єднання із Clementine після запуску дистанційного керування.
@@ -243,10 +239,8 @@
     <string name="navigation_drawer_clementine_on">Clementine на %s</string>
 
     <string name="player_download_what">Що отримати?</string>
-    <string-array name="player_download_list">
-        <item>Композицію</item>
-        <item>Альбом</item>
-        <item>Список композицій</item>
-    </string-array>
+    <string name="player_download_song">Композицію</string>
+    <string name="player_download_album">Альбом</string>
+    <string name="player_download_playlist">Список композицій</string>
 
     </resources>

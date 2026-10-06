@@ -109,21 +109,17 @@
 
     <string name="pref_library_sorting_title">Rendezés</string>
     <string name="pref_library_sorting_summary">A zenetár eszerint rendezett: %1$s</string>
-    <string-array name="pref_library_sorting">
-        <item>Növekvő</item>
-        <item>Csökkenő</item>
-    </string-array>
+    <string name="pref_library_sorting_asc">Növekvő</string>
+    <string name="pref_library_sorting_desc">Csökkenő</string>
 
     <string name="pref_library_grouping_title">Csoportosítás</string>
     <string name="pref_library_grouping_summary">A zenetár eszerint csoportosított: %1$s</string>
-    <string-array name="pref_library_grouping">
-        <item>Előadó</item>
-        <item>Előadó / Album</item>
-        <item>Előadó / Év</item>
-        <item>Album</item>
-        <item>Műfaj / Album</item>
-        <item>Műfaj / Előadó / Album</item>
-    </string-array>
+    <string name="pref_library_grouping_artist">Előadó</string>
+    <string name="pref_library_grouping_artist_album">Előadó / Album</string>
+    <string name="pref_library_grouping_artist_year">Előadó / Év</string>
+    <string name="pref_library_grouping_album">Album</string>
+    <string name="pref_library_grouping_genre_album">Műfaj / Album</string>
+    <string name="pref_library_grouping_genre_artist_album">Műfaj / Előadó / Album</string>
 
     <string name="pref_autoconnect_title">Automatikus kapcsolódás</string>
     <string name="pref_autoconnect_summary">Automatikus kapcsolódás a Clementine-hoz a távvezérlő indításakor.
@@ -235,10 +231,8 @@
     <string name="navigation_drawer_clementine_on">Clementine itt: %s</string>
 
     <string name="player_download_what">Mit töltsön le?</string>
-    <string-array name="player_download_list">
-        <item>Szám</item>
-        <item>Album</item>
-        <item>Lejátszólista</item>
-    </string-array>
+    <string name="player_download_song">Szám</string>
+    <string name="player_download_album">Album</string>
+    <string name="player_download_playlist">Lejátszólista</string>
 
     </resources>
