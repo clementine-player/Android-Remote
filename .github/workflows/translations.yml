@@ -18,6 +18,7 @@ on:
     branches: [master]
     paths:
       - .tx/config
+      - .github/workflows/translations.yml
       - app/src/main/res/values/strings.xml
   schedule:
     - cron: "23 2 * * *" # Every night, 02:23 UTC
