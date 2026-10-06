@@ -216,8 +216,8 @@
     <string name="navigation_drawer_clementine_on">Clementine dalam %s</string>
 
     <string name="player_download_what">Apa yang hendak dimuat turun?</string>
-    <string name="player_download_song">Lagu</string>
-    <string name="player_download_album">Album</string>
-    <string name="player_download_playlist">Senarai Mai</string>
+    <string name="player_download_what_song">Lagu</string>
+    <string name="player_download_what_album">Album</string>
+    <string name="player_download_what_playlist">Senarai Mai</string>
 
     </resources>

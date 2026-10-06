@@ -226,8 +226,8 @@
     <string name="navigation_drawer_clementine_on">%s の Clementine</string>
 
     <string name="player_download_what">何をダウンロードしますか?</string>
-    <string name="player_download_song">曲</string>
-    <string name="player_download_album">アルバム</string>
-    <string name="player_download_playlist">プレイリスト</string>
+    <string name="player_download_what_song">曲</string>
+    <string name="player_download_what_album">アルバム</string>
+    <string name="player_download_what_playlist">プレイリスト</string>
 
     </resources>

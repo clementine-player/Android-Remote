@@ -241,8 +241,8 @@
     <string name="navigation_drawer_clementine_on">Clementine на %s</string>
 
     <string name="player_download_what">Что скачать?</string>
-    <string name="player_download_song">Песня</string>
-    <string name="player_download_album">Альбом</string>
-    <string name="player_download_playlist">Плейлист</string>
+    <string name="player_download_what_song">Песня</string>
+    <string name="player_download_what_album">Альбом</string>
+    <string name="player_download_what_playlist">Плейлист</string>
 
     </resources>

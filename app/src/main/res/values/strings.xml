@@ -390,9 +390,9 @@
     <string name="navigation_drawer_clementine_on">Clementine on %s</string>
 
     <string name="player_download_what">What to download?</string>
-    <string name="player_download_song">Song</string>
-    <string name="player_download_album">Album</string>
-    <string name="player_download_playlist">Playlist</string>
+    <string name="player_download_what_song">Song</string>
+    <string name="player_download_what_album">Album</string>
+    <string name="player_download_what_playlist">Playlist</string>
 
     <string name="cd_cover_image">Album Cover Image</string>
     <string name="cd_cancel_download">Cancel the download</string>

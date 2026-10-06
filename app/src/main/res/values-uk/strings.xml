@@ -239,8 +239,8 @@
     <string name="navigation_drawer_clementine_on">Clementine на %s</string>
 
     <string name="player_download_what">Що отримати?</string>
-    <string name="player_download_song">Композицію</string>
-    <string name="player_download_album">Альбом</string>
-    <string name="player_download_playlist">Список композицій</string>
+    <string name="player_download_what_song">Композицію</string>
+    <string name="player_download_what_album">Альбом</string>
+    <string name="player_download_what_playlist">Список композицій</string>
 
     </resources>
