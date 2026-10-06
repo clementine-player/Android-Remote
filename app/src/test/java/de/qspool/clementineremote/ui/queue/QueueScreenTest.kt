@@ -33,6 +33,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
+import org.robolectric.annotation.Config
 
 /** The queue shows Clementine's playlists and hands on what the user does with their songs. */
 @RunWith(RobolectricTestRunner::class)
@@ -132,6 +133,32 @@ class QueueScreenTest {
         compose.onNodeWithText("Menuet").performClick()
 
         assertEquals(listOf("play Menuet"), done)
+    }
+
+    @Test
+    @Config(qualifiers = "w360dp-h800dp")
+    fun tappingASongLeavesTheListWhereItIs() {
+        val many = (0 until 30).map { song(it, "Song $it", 200) }
+        var shown by mutableStateOf(state.copy(songs = many, songCount = 30, playingIndex = 0))
+        compose.setContent {
+            ClementineTheme(dynamicColor = false) {
+                QueueContent(
+                    shown,
+                    onShow = {},
+                    onPlay = { shown = shown.copy(playingIndex = it.index) },
+                    onDownload = {},
+                    onRemove = {},
+                )
+            }
+        }
+
+        compose.onNodeWithText("Song 5").performClick()
+        compose.onNodeWithText("Song 0").assertIsDisplayed()
+
+        // Another song playing by itself is shown, a few rows down.
+        shown = shown.copy(playingIndex = 6)
+        compose.onNodeWithText("Song 0").assertDoesNotExist()
+        compose.onNodeWithText("Song 6").assertIsDisplayed()
     }
 
     @Test
