@@ -47,7 +47,9 @@ jobs:
         # 37.2, which only comes with 16 KB pages. It boots much more slowly with the software GPU,
         # so it gets the runner's four cores, more memory and longer to boot (it was still offline
         # after the default 10 minutes on two cores), and a bigger data partition: its own apps
-        # leave too little room to install the app and its tests.
+        # leave too little room to install the app and its tests. With 4 GB, its low memory killer
+        # ran all through the tests, and sometimes killed the app as they started; 6 GB still
+        # leaves the runner's 16 GB room for Gradle (2 GB) and the emulator itself.
         include:
           - api-level: 36
             target: google_apis
@@ -58,7 +60,7 @@ jobs:
           - api-level: "37.2"
             target: google_apis_ps16k
             cores: 4
-            ram-size: 4096M
+            ram-size: 6144M
             disk-size: 8G
             boot-timeout: 1200
     steps:
@@ -126,10 +128,14 @@ jobs:
           # results of a run before the next, so its results are kept elsewhere. Between the two,
           # the emulator can show as offline for a few seconds, as when adb's server first starts,
           # so the second waits for it again: otherwise it can't install the app and runs nothing.
+          # Android 17's emulator is short of memory just after booting, and its low memory killer
+          # can kill the app as its tests start ("Crash of app ... running instrumentation"):
+          # nothing runs, and Gradle still passes. Gradle uninstalls the app after each run, so
+          # the local network test is run once more, on a fresh install again, if no test started.
           script: |
             timeout 600 adb wait-for-device shell 'until pm path android > /dev/null 2>&1 && am get-current-user > /dev/null 2>&1; do sleep 2; done'
             scripts/smoke_test_release.sh app/build/outputs/apk/play/release/*.apk
-            ./gradlew connectedFdroidDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=de.qspool.clementineremote.LocalNetworkPermissionDeviceTest; status=$?; mkdir -p app/build/localNetworkPermission && cp -r app/build/outputs/androidTest-results app/build/reports/androidTests app/build/localNetworkPermission/; adb logcat -d > app/build/localNetworkPermission/logcat.txt; exit $status
+            for attempt in 1 2; do ./gradlew connectedFdroidDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=de.qspool.clementineremote.LocalNetworkPermissionDeviceTest; status=$?; if [ $status -ne 0 ] || find app/build/outputs/androidTest-results -name 'TEST-*.xml' -exec grep -q '<testcase ' {} +; then break; fi; echo "::warning::The local network permission test didn't start (attempt $attempt)"; timeout 600 adb wait-for-device shell 'until pm path android > /dev/null 2>&1 && am get-current-user > /dev/null 2>&1; do sleep 2; done'; done; mkdir -p app/build/localNetworkPermission && cp -r app/build/outputs/androidTest-results app/build/reports/androidTests app/build/localNetworkPermission/; adb logcat -d > app/build/localNetworkPermission/logcat.txt; exit $status
             timeout 600 adb wait-for-device shell 'until pm path android > /dev/null 2>&1 && am get-current-user > /dev/null 2>&1; do sleep 2; done'
             ./gradlew connectedFdroidDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.notClass=de.qspool.clementineremote.LocalNetworkPermissionDeviceTest; status=$?; mkdir -p app/build/reports/androidTests && adb logcat -d > app/build/reports/androidTests/logcat.txt; exit $status
       # The Gradle task passes when the app won't install (on a full emulator, say), having run
