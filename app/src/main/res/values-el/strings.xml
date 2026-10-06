@@ -60,7 +60,7 @@
     <string name="song_info_size">Μέγεθος</string>
     <string name="song_info_filename">Όνομα αρχείου</string>
     <string name="song_info_rating">Αξιολόγηση</string>
-    <string name="song_info_rated">Τραγούδι βαθμολογία $αστέρια$ αστέρια</string>
+    <string name="song_info_rated">Τραγούδι βαθμολογία $stars$ αστέρια</string>
 
 
     <string name="connection_volume">Ένταση</string>
