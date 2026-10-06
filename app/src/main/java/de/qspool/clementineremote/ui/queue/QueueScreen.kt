@@ -79,6 +79,12 @@ internal fun QueueContent(
     // Selected songs, by their index in the playlist; cleared when another playlist shows.
     var selection by remember(state.shown?.id) { mutableStateOf(emptySet<Int>()) }
     val selected = state.songs.filter { it.index in selection }
+    // The song last tapped to play: the list stays where it is when it starts playing.
+    var tapped by remember { mutableStateOf<Int?>(null) }
+    val play = { song: MySong ->
+        tapped = song.index
+        onPlay(song)
+    }
 
     Column(modifier.fillMaxSize()) {
         state.loading?.let { (done, total) ->
@@ -94,7 +100,7 @@ internal fun QueueContent(
                 count = selected.size,
                 onClear = { selection = emptySet() },
                 onPlay = {
-                    selected.firstOrNull()?.let(onPlay)
+                    selected.firstOrNull()?.let(play)
                     selection = emptySet()
                 },
                 onDownload = {
@@ -114,9 +120,11 @@ internal fun QueueContent(
             Songs(
                 state,
                 selection,
+                tapped,
+                onPlayingTapped = { tapped = null },
                 onClick = { song ->
                     if (selection.isEmpty()) {
-                        onPlay(song)
+                        play(song)
                     } else {
                         selection = selection.toggle(song.index)
                     }
@@ -215,16 +223,27 @@ private fun SelectionBar(
 private fun Songs(
     state: QueueState,
     selection: Set<Int>,
+    tapped: Int?,
+    onPlayingTapped: () -> Unit,
     onClick: (MySong) -> Unit,
     onLongClick: (MySong) -> Unit,
     modifier: Modifier,
 ) {
     val listState = rememberLazyListState()
-    // Show the song playing, a few rows down, when it changes or another playlist shows.
-    LaunchedEffect(state.shown?.id, state.playingIndex) {
+    // Show the song playing, a few rows down, when another playlist shows, or when another song
+    // plays, unless it was tapped to play.
+    suspend fun showPlaying() {
         val row = state.songs.indexOfFirst { it.index == state.playingIndex }
         if (row >= 0) {
             listState.scrollToItem((row - 3).coerceAtLeast(0))
+        }
+    }
+    LaunchedEffect(state.shown?.id) { showPlaying() }
+    LaunchedEffect(state.playingIndex) {
+        val wasTapped = state.playingIndex == tapped
+        onPlayingTapped()
+        if (!wasTapped) {
+            showPlaying()
         }
     }
     LazyColumn(modifier.fillMaxWidth().testTag("queueSongs"), state = listState) {
