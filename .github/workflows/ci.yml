@@ -132,12 +132,32 @@ jobs:
           # can kill the app as its tests start ("Crash of app ... running instrumentation"):
           # nothing runs, and Gradle still passes. Gradle uninstalls the app after each run, so
           # the local network test is run once more, on a fresh install again, if no test started.
+          # The emulator's logs are saved after each run, by save_device_logs.sh, which reconnects
+          # first if adb lost the emulator during the run.
           script: |
             timeout 600 adb wait-for-device shell 'until pm path android > /dev/null 2>&1 && am get-current-user > /dev/null 2>&1; do sleep 2; done'
             scripts/smoke_test_release.sh app/build/outputs/apk/play/release/*.apk
-            for attempt in 1 2; do ./gradlew connectedFdroidDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=de.qspool.clementineremote.LocalNetworkPermissionDeviceTest; status=$?; if [ $status -ne 0 ] || find app/build/outputs/androidTest-results -name 'TEST-*.xml' -exec grep -q '<testcase ' {} +; then break; fi; echo "::warning::The local network permission test didn't start (attempt $attempt)"; timeout 600 adb wait-for-device shell 'until pm path android > /dev/null 2>&1 && am get-current-user > /dev/null 2>&1; do sleep 2; done'; done; mkdir -p app/build/localNetworkPermission && cp -r app/build/outputs/androidTest-results app/build/reports/androidTests app/build/localNetworkPermission/; adb logcat -d > app/build/localNetworkPermission/logcat.txt; exit $status
+            for attempt in 1 2; do ./gradlew connectedFdroidDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=de.qspool.clementineremote.LocalNetworkPermissionDeviceTest; status=$?; if [ $status -ne 0 ] || find app/build/outputs/androidTest-results -name 'TEST-*.xml' -exec grep -q '<testcase ' {} +; then break; fi; echo "::warning::The local network permission test didn't start (attempt $attempt)"; timeout 600 adb wait-for-device shell 'until pm path android > /dev/null 2>&1 && am get-current-user > /dev/null 2>&1; do sleep 2; done'; done; mkdir -p app/build/localNetworkPermission && cp -r app/build/outputs/androidTest-results app/build/reports/androidTests app/build/localNetworkPermission/; scripts/save_device_logs.sh app/build/localNetworkPermission; exit $status
             timeout 600 adb wait-for-device shell 'until pm path android > /dev/null 2>&1 && am get-current-user > /dev/null 2>&1; do sleep 2; done'
-            ./gradlew connectedFdroidDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.notClass=de.qspool.clementineremote.LocalNetworkPermissionDeviceTest; status=$?; mkdir -p app/build/reports/androidTests && adb logcat -d > app/build/reports/androidTests/logcat.txt; exit $status
+            ./gradlew connectedFdroidDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.notClass=de.qspool.clementineremote.LocalNetworkPermissionDeviceTest; status=$?; scripts/save_device_logs.sh app/build/reports/androidTests; exit $status
+      # The test report is in the artifact below; the failures go in the log too, to be read
+      # without downloading it. A skipped test is written down as a failure too (see below).
+      - name: Show the failed tests
+        if: failure()
+        run: |
+          python3 - app/build/localNetworkPermission app/build/outputs/androidTest-results <<'EOF'
+          import pathlib, sys, xml.etree.ElementTree as ET
+          for results in sys.argv[1:]:
+              for path in sorted(pathlib.Path(results).rglob('TEST-*.xml')):
+                  for case in ET.parse(path).iter('testcase'):
+                      for failure in case.findall('failure') + case.findall('error'):
+                          text = failure.text or failure.get('message') or ''
+                          if 'AssumptionViolatedException' in text:
+                              continue
+                          name = f"{case.get('classname')}.{case.get('name')}"
+                          print(f"::error title={name}::{text.splitlines()[0] if text else 'failed'}")
+                          print(f"::group::{name}\n{text}\n::endgroup::")
+          EOF
       # The Gradle task passes when the app won't install (on a full emulator, say), having run
       # nothing, so the job checks the tests did run.
       - name: Check the tests ran
