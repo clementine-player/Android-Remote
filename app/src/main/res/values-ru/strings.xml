@@ -8,12 +8,20 @@
     <string name="connectdialog_connecting">Подключение к Clementine</string>
     <string name="connectdialog_download_data">Загрузка данных</string>
     <string name="connectdialog_error">Не могу подключиться</string>
-    <string name="connectdialog_ip_hint">Введите IP адрес</string>
+    <string name="connectdialog_ip_hint">Введите IP-адрес</string>
     <string name="connect_intro">Выберите Clementine, которым хотите управлять. Он должен находиться в той же сети Wi-Fi, что и этот телефон.</string>
     <string name="connect_on_network">В вашей сети</string>
     <string name="connect_search_again">Повторить поиск</string>
     <string name="connect_searching">Поиск Clementine…</string>
-    <string name="connect_searching_help">Не отображается\? Проверьте, включён ли его сетевой пульт, или введите его адрес ниже.</string>
+    <string name="connect_searching_help">Не отображается\? Проверьте, включён ли его удалённый доступ по сети, или введите его адрес ниже.</string>
+    <string name="connect_server_address">%1$s · порт %2$d</string>
+    <string name="connect_not_searching">Не ищет в этой сети</string>
+    <string name="connect_not_searching_help">Без разрешения «Устройства поблизости» Clementine Remote не может найти Clementine в вашей сети. Введите его адрес ниже или включите разрешение.</string>
+    <string name="connect_enter_address">Или введите его адрес</string>
+    <string name="connect_address">Адрес</string>
+    <string name="connect_requirements">Требуется Clementine %1$s или новее с включённым пунктом «Сервис → Настройки → Удалённый доступ».</string>
+
+
     <string name="player_nosong">Сейчас ничего не проигрывается</string>
     <string name="player_disconnected">Отключено</string>
     <string name="playler_volume">Громкость</string>
@@ -33,9 +41,68 @@
     <string name="playlist_clear">Очистить плейлист</string>
     <string name="playlist_clear_content">Данное действие безвозвратно удалит все песни из плейлиста. Продолжить?</string>
     <string name="playlist_clear_confirm">Очистить плейлист</string>
+    <plurals name="queue_songs">
+        <item quantity="one">%d песня</item>
+        <item quantity="few">%d песни</item>
+        <item quantity="many">%d песен</item>
+        <item quantity="other">%d песен</item>
+    </plurals>
+    <string name="queue_minutes">%d мин</string>
+    <string name="queue_hours_minutes">%1$d ч %2$d мин</string>
+    <plurals name="queue_selected">
+        <item quantity="one">%d выбран</item>
+        <item quantity="few">%d выбраны</item>
+        <item quantity="many">%d выбрано</item>
+        <item quantity="other">%d выбрано</item>
+    </plurals>
+    <string name="queue_clear_selection">Очистить выделение</string>
+
+
     <string name="downloads_empty">Нет загрузок!</string>
+    <string name="downloads_empty_summary">Скачать музыку на этот телефон, чтобы слушать её вдали от Clementine.</string>
+    <string name="downloads_empty_how">Скачать песню из проигрывателя, альбом из библиотеки или плейлист из его меню.</string>
+    <string name="downloads_suggest_most_played">Ваши самые прослушиваемые альбомы</string>
+    <string name="downloads_suggest_recent">Недавно добавленные альбомы</string>
+    <string name="downloads_suggest_playlists">Плейлисты</string>
+    <plurals name="downloads_plays">
+        <item quantity="one">%d прослушивание</item>
+        <item quantity="few">%d прослушивания</item>
+        <item quantity="many">%d прослушиваний</item>
+        <item quantity="other">%d прослушиваний</item>
+    </plurals>
+    <string name="downloads_playlist_playing">Сейчас играет</string>
+    <string name="downloads_playlist_favorite">Избранное</string>
+    <string name="downloads_download">Скачать %1$s</string>
     <string name="downloaded_songs">Загруженные песни - нажмите для воспроизведения</string>
     <string name="downloads_title">Загрузки</string>
+    <string name="downloads_free_space">%s свободно на этом телефоне</string>
+    <string name="downloads_running">Скачивается</string>
+    <string name="downloads_finished">Завершено</string>
+    <string name="downloads_wifi_only">Скачивание выполняется только по Wi-Fi.</string>
+    <string name="downloads_change">Сменить</string>
+
+    <!-- The app's shell: navigation, mini player, player and sheets. -->
+    <string name="nav_queue">Очередь</string>
+    <string name="shell_open_player">Открыть проигрыватель: %s</string>
+    <string name="shell_connected_to">Подключено к %s</string>
+    <string name="shell_search_close">Закрыть поиск</string>
+    <string name="shell_more">Больше параметров</string>
+    <string name="player_collapse">Свернуть проигрыватель</string>
+    <string name="player_playing_from">Играет с</string>
+    <string name="queue_playing">Играет</string>
+    <string name="player_love">В избранное Last.fm</string>
+    <string name="player_details">Текст песни и сведения</string>
+    <string name="player_download_song">Скачать песню</string>
+    <string name="player_volume_level">Громкость Clementine %1$d%%</string>
+    <string name="player_volume_up">Повысить громкость</string>
+    <string name="player_volume_down">Понизить громкость</string>
+    <string name="details_tab">Сведения</string>
+    <string name="lyrics_tab">Текст песни</string>
+    <string name="connection_connected">Подключено</string>
+    <string name="connection_uptime">Подключено для</string>
+    <string name="connection_switch">Переключить Clementine</string>
+    <string name="connection_switch_summary">Выбрать другой компьютер в вашей сети</string>
+    <string name="output_title">Играет на</string>
     <string name="download_noti_title">Загрузка начата</string>
     <plurals name="download_noti_n_downloads">
         <item quantity="one">%d активная загрузка</item>
@@ -70,7 +137,15 @@
     <string name="internet_play">Играть</string>
     <string name="global_search_empty">Введите ключевое слово выше, чтобы найти музыку на вашем компьютере или в интернет</string>
     <string name="global_search_search">Искать что угодно</string>
-    <string name="search_top_artist">Исполнитель</string>
+    <string name="search_top_artist">Артист</string>
+    <plurals name="search_number_albums">
+        <item quantity="one">%d альбом</item>
+        <item quantity="few">%d альбома</item>
+        <item quantity="many">%d альбомов</item>
+        <item quantity="other">%d альбомов</item>
+    </plurals>
+
+
     <string name="song_info_album">Альбом</string>
     <string name="song_info_genre">Жанр</string>
     <string name="song_info_year">Год</string>
@@ -125,13 +200,13 @@
 
     <string name="pref_library_grouping_title">Группировка</string>
     <string name="pref_library_grouping_summary">Фонотека сгруппипрована по %1$s.</string>
-    <string name="pref_library_grouping_artist">Исполнитель</string>
-    <string name="pref_library_grouping_artist_album">Исполнитель / Альбом</string>
-    <string name="pref_library_grouping_albumartist_album">Исполнитель / Гол</string>
-    <string name="pref_library_grouping_artist_year">Исполнитель / Гол</string>
+    <string name="pref_library_grouping_artist">Артист</string>
+    <string name="pref_library_grouping_artist_album">Артист / Альбом</string>
+    <string name="pref_library_grouping_albumartist_album">Артист альбома / Альбом</string>
+    <string name="pref_library_grouping_artist_year">Артист / Год</string>
     <string name="pref_library_grouping_album">Альбом</string>
     <string name="pref_library_grouping_genre_album">Жанр / Альбом</string>
-    <string name="pref_library_grouping_genre_artist_album">Жанр / Исполнитель / Альбом</string>
+    <string name="pref_library_grouping_genre_artist_album">Жанр / Артист / Альбом</string>
 
     <string name="pref_autoconnect_title">Авто-подлючение</string>
     <string name="pref_autoconnect_summary">Автоматически подключаться к Clementine при запуске удалённого управления.
@@ -205,9 +280,9 @@
     <string name="error_versions">Несовместимая версия</string>
     <string name="old_proto">Пожалуйста, обновите Clementine! Требуется версия Clementine %1$s или выше.</string>
 
-    <string name="no_private_ip">Ваше Android устройство не имеет локального IP адреса. Попробуйте отключить \"Разрешать соединения только из локальной сети\" в настройках Clementine.</string>
+    <string name="no_private_ip">Ваше Android устройство не имеет локального IP-адреса. Попробуйте отключить «Разрешать соединения только из локальной сети» в настройках Clementine.</string>
     <string name="check_ip">1) Запущен ли Clementine?\n2) У вас Clementine %1$s или выше?\n3) Задействовано ли удалённое управление в настройках Clementine?\n4) Проверьте правильность введённого адреса IP.\n</string>
-    <string name="wifi_disabled">Wifi отключен. Если вы хотите подключиться к Clementine через интернет, убедитесь что вы пробросили порты и выключили опцию \"Использовать только локальный IP адрес\".</string>
+    <string name="wifi_disabled">Wi-Fi отключён. Если вы хотите подключиться к Clementine через интернет, убедитесь что вы пробросили порты и выключили опцию «Использовать только локальный IP-адрес».</string>
 
     <string name="input_auth_code">Код авторизации</string>
     <string name="done">Готово</string>
