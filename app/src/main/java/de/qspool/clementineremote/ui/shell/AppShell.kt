@@ -129,6 +129,7 @@ interface ShellActions : ConnectionActions {
 @Composable
 fun AppShell(shell: ShellViewModel, actions: ShellActions) {
     val player: PlayerViewModel = viewModel()
+    val queue: QueueViewModel = viewModel()
     val nowPlaying by player.nowPlaying.collectAsStateWithLifecycle()
     var connectionOpen by rememberSaveable { mutableStateOf(false) }
     // The song details sheet, and whether it shows the lyrics; null while closed.
@@ -206,6 +207,7 @@ fun AppShell(shell: ShellViewModel, actions: ShellActions) {
                         }
 
                         override fun onQueue() {
+                            queue.showPlaying()
                             shell.destination = Destination.QUEUE
                             shell.playerOpen = false
                         }

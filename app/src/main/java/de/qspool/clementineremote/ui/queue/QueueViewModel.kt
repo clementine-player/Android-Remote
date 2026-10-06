@@ -145,6 +145,11 @@ class QueueViewModel(
         shownId.value = playlist.id
     }
 
+    /** Shows the playlist playing, if there is one. */
+    fun showPlaying() {
+        playlists.activePlaylist?.let { shownId.value = it.id }
+    }
+
     fun setFilter(text: String) {
         filter.value = text
     }
