@@ -198,12 +198,12 @@ New personal developer accounts must also run a closed test with at least 12 tes
 
 ## Translations
 
-The app is translated on [Transifex](https://app.transifex.com/amuttsch/clementine-remote/), as
-Clementine is, and `.github/workflows/translations.yml` keeps the two in step, with no manual
-steps:
+The app is translated on [Transifex](https://app.transifex.com/davidsansome/clementine-remot/),
+next to the iOS remote, and `.github/workflows/translations.yml` keeps the two in step, as
+Clementine's own workflow does, with no manual steps:
 
-- When the English strings (`app/src/main/res/values/strings.xml` and `contentdescription.xml`)
-  change on `master`, they're pushed to Transifex for the translators.
+- When the English strings (`app/src/main/res/values/strings.xml`) change on `master`, they're
+  pushed to Transifex for the translators.
 - Every night, the translations are pulled back (only translated strings: the rest show in
   English), checked with lint, and committed to `master` when they changed, as
   "Automatic merge of translations from Transifex". That commit has a release note, so new
@@ -212,17 +212,20 @@ steps:
 - A pull that would remove more than a tenth of the translations fails instead of committing:
   that means Transifex doesn't have them (a wrong resource in `.tx/config`, or step 3 below
   not done yet).
+- Transifex fills in strings whose English it has translated already, for this app or the iOS
+  remote (its translation memory fill-up): the same wording in both apps is translated once.
 
-Which Transifex resources map to which files is in `.tx/config`. A language that's new on
+Which files the Transifex resource maps to is in `.tx/config`. A language that's new on
 Transifex gets its folder from `scripts/android-language-folders.sh`, which turns Transifex's
 `zh_CN` into Android's `values-zh-rCN`. Translations are made on Transifex, not in pull
 requests: the next pull would overwrite them.
 
 **One-time setup:**
 
-1. **Transifex:** check `.tx/config` names the project's organization and project, and the
-   resources' slugs if the project has them already. Make an API token (*User settings → API
-   token*) and add it as the repository secret `TX_TOKEN`.
+1. **Transifex:** in the project's settings, add the languages the app has (`values-*` here:
+   Malay as `ms` and European Portuguese as `pt_PT`, as above), and turn on translation memory
+   fill-up. Make an API token (*User settings → API token*) and add it as the repository secret
+   `TX_TOKEN`. The resource needn't be made by hand: the first push makes it.
 2. **GitHub:** make a deploy key with write access (*Settings → Deploy keys*), add its private
    half as the secret `TX_KEY`, and if `master`'s branch protection or rulesets would refuse
    the push, let deploy keys bypass them. It pushes as itself so that `ci.yml` runs on the

@@ -1,10 +1,10 @@
-# Keeps the app's translations in step with Transifex, as Clementine does with its own:
+# Keeps the app's translations in step with Transifex, as Clementine and the iOS remote do:
 #   - push: when the English strings change on master, sends them to Transifex for the
 #     translators
 #   - pull: every night, brings the translations back, and commits them to master when they
 #     changed. Each such commit has a release note, so new translations make the next release.
 #
-# Which Transifex resources, and the files they map to, are in .tx/config. Needs two secrets
+# The Transifex resource, and the files it maps to, are in .tx/config. Needs two secrets
 # (see RELEASING.md): TX_TOKEN, a Transifex API token, and TX_KEY, the private half of a deploy
 # key with write access, which pushes the translations to master. Until they're set, each job
 # is skipped with a notice.
@@ -19,7 +19,6 @@ on:
     paths:
       - .tx/config
       - app/src/main/res/values/strings.xml
-      - app/src/main/res/values/contentdescription.xml
   schedule:
     - cron: "23 2 * * *" # Every night, 02:23 UTC
   workflow_dispatch:
@@ -100,8 +99,7 @@ jobs:
         if: env.TX_TOKEN != '' && env.HAS_TX_KEY == 'true'
         run: |
           count() {
-            find app/src/main/res -path '*/values-*/strings.xml' -o -path '*/values-*/contentdescription.xml' \
-              | xargs cat | awk '/<string |<item / { n++ } END { print n + 0 }'
+            find app/src/main/res -path '*/values-*/strings.xml' | xargs cat | awk '/<string |<item / { n++ } END { print n + 0 }'
           }
           before=$(count)
           tx pull --all --force --mode onlytranslated
