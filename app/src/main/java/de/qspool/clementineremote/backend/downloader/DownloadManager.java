@@ -83,7 +83,7 @@ public class DownloadManager {
     }
 
     private DownloadManager(Context context) {
-        mContext = context;
+        mContext = context.getApplicationContext();
         mNotifyManager =
                 (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
