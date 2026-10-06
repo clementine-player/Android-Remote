@@ -99,24 +99,26 @@ jobs:
           curl -fsSL "https://github.com/transifex/cli/releases/download/v$TX_VERSION/tx-linux-amd64.tar.gz" \
             | tar -xz -C "$RUNNER_TEMP/tx" tx
           echo "$RUNNER_TEMP/tx" >> "$GITHUB_PATH"
-      # Only translated strings: Android shows English for the rest by itself.
       - name: Pull the translations
         id: pull
         if: env.TX_TOKEN != '' && env.HAS_TX_KEY == 'true'
         run: |
-          count() {
-            find app/src/main/res -path '*/values-*/strings.xml' | xargs cat | awk '/<string |<item / { n++ } END { print n + 0 }'
-          }
-          before=$(count)
+          # For Android files, onlytranslated leaves reviewed translations out, and onlyreviewed
+          # those not reviewed yet: the reviewed ones are pulled first and kept aside, then merged
+          # into the rest. Only translated strings: Android shows English for the others itself.
+          scripts/android-translations.py count > "$RUNNER_TEMP/before"
+          tx pull --all --force --mode onlyreviewed --silent
+          scripts/android-language-folders.sh
+          mkdir "$RUNNER_TEMP/reviewed"
+          for f in app/src/main/res/values-*/strings.xml; do
+            mkdir -p "$RUNNER_TEMP/reviewed/$(basename "$(dirname "$f")")"
+            cp "$f" "$RUNNER_TEMP/reviewed/$(basename "$(dirname "$f")")/"
+          done
           tx pull --all --force --mode onlytranslated --silent
           scripts/android-language-folders.sh
-          after=$(count)
-          echo "Translated strings: $before before, $after after."
-          # Losing many translations at once means Transifex doesn't have them: a resource
-          # .tx/config names wrongly, or one never given the translations (see RELEASING.md).
-          if [ $(( after * 10 )) -lt $(( before * 9 )) ]; then
+          scripts/android-translations.py merge "$RUNNER_TEMP/reviewed"
+          if ! scripts/android-translations.py check "$RUNNER_TEMP/before"; then
             git diff --stat
-            echo "::error::The pull would remove more than a tenth of the translations, so it wasn't committed. Check .tx/config's resources have the translations on Transifex."
             exit 1
           fi
           git add app/src/main/res
