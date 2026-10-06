@@ -54,9 +54,10 @@ import de.qspool.clementineremote.ui.settings.ClementineSettings
 import de.qspool.clementineremote.utils.Utilities
 
 /**
- * Downloads: those running, with their progress, and those finished, whose songs can be played.
- * Cancelling a running download stops it; on a finished one, it forgets it. With no downloads,
- * suggests some: the albums played most in Clementine, and its playlists.
+ * Downloads: those running, with their progress, and those finished, whose songs can be played,
+ * then every song on this phone, downloaded now or before, to play. Cancelling a running download
+ * stops it; on a finished one, it forgets it. With nothing downloaded, suggests some: the albums
+ * played most in Clementine, and its playlists.
  */
 @Composable
 fun DownloadsScreen(viewModel: DownloadsViewModel) {
@@ -123,7 +124,7 @@ internal fun DownloadsContent(
             }
         }
 
-        if (state.running.isEmpty() && state.finished.isEmpty()) {
+        if (state.loaded && state.running.isEmpty() && state.finished.isEmpty() && state.onPhone.isEmpty()) {
             item { Empty(suggestions.isEmpty) }
             suggestions(suggestions, onDownloadAlbum, onDownloadPlaylist)
         }
@@ -133,6 +134,7 @@ internal fun DownloadsContent(
         if (state.wifiOnly) {
             item { WifiOnly(onChangeSettings) }
         }
+        onPhone(state.onPhone, onPlay)
     }
 
     picking?.let { download ->
@@ -220,6 +222,38 @@ private fun DownloadRow(download: Download, onCancel: (Download) -> Unit, onClic
                 modifier = Modifier.fillMaxWidth().padding(start = 72.dp, end = 16.dp, bottom = 12.dp),
             )
         }
+    }
+}
+
+/** The songs on this phone, whenever they were downloaded: tap one to play it. */
+private fun LazyListScope.onPhone(songs: List<DownloadedSong>, onPlay: (DownloadedSong) -> Unit) {
+    if (songs.isEmpty()) {
+        return
+    }
+    item { Heading(R.string.downloads_on_phone) }
+    items(songs, key = { "song/${it.uri}" }) { song ->
+        ListItem(
+            headlineContent = { Text(song.title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+            supportingContent = if (song.artist.isEmpty()) {
+                null
+            } else {
+                { Text(song.artist, maxLines = 1, overflow = TextOverflow.Ellipsis) }
+            },
+            leadingContent = {
+                Box(
+                    Modifier.size(40.dp).clip(RoundedCornerShape(8.dp)).background(MaterialTheme.colorScheme.secondaryContainer),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        painterResource(R.drawable.ic_music_note),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                    )
+                }
+            },
+            colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+            modifier = Modifier.clickable { onPlay(song) }.testTag("songOnPhone"),
+        )
     }
 }
 

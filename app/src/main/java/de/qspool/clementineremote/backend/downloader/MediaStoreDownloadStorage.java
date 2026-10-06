@@ -16,6 +16,8 @@ import androidx.annotation.RequiresApi;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -64,6 +66,40 @@ public class MediaStoreDownloadStorage implements DownloadStorage {
             return new SavedSong(ContentUris.withAppendedId(mCollection, cursor.getLong(0)),
                     cursor.getLong(1));
         }
+    }
+
+    /** The songs this app saved under Music/Clementine/, in any folder there. */
+    @Override
+    public List<StoredSong> list() {
+        String[] projection = {MediaStore.Audio.Media._ID, MediaStore.Audio.Media.RELATIVE_PATH,
+                MediaStore.Audio.Media.DISPLAY_NAME, MediaStore.Audio.Media.TITLE,
+                MediaStore.Audio.Media.ARTIST};
+        String selection = MediaStore.Audio.Media.RELATIVE_PATH + " LIKE ?";
+        String[] args = {BASE_DIR + "%"};
+        List<StoredSong> songs = new ArrayList<>();
+        try (Cursor cursor = mResolver.query(mCollection, projection, selection, args, null)) {
+            if (cursor == null) {
+                return songs;
+            }
+            while (cursor.moveToNext()) {
+                String path = cursor.getString(1);
+                if (path == null
+                        || !path.regionMatches(true, 0, BASE_DIR, 0, BASE_DIR.length())) {
+                    continue;
+                }
+                songs.add(new StoredSong(
+                        ContentUris.withAppendedId(mCollection, cursor.getLong(0)),
+                        path.substring(BASE_DIR.length()), cursor.getString(2),
+                        known(cursor.getString(3)), known(cursor.getString(4))));
+            }
+        }
+        return songs;
+    }
+
+    /** MediaStore has "<unknown>" for tags a song doesn't have. */
+    @Nullable
+    private static String known(@Nullable String tag) {
+        return tag == null || tag.isEmpty() || MediaStore.UNKNOWN_STRING.equals(tag) ? null : tag;
     }
 
     @Override

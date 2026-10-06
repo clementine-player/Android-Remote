@@ -15,6 +15,10 @@ import org.robolectric.annotation.Config;
 import java.io.File;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongFileChunk;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata;
@@ -118,6 +122,38 @@ public class DownloadStorageTest {
                 RuntimeEnvironment.getApplication(), notMadeYet);
         assertEquals(mFolder.getRoot().getUsableSpace(), storage.freeSpace(), 64L << 20);
         assertFalse(notMadeYet.exists());
+    }
+
+    @Test
+    public void listsTheSongsSavedInEveryFolder() throws Exception {
+        Uri top = save("", "song.mp3", "top");
+        Uri inAlbum = save("Artist/Album/", "01 Song.FLAC", "album");
+        // Not songs: other files, hidden ones, and those whose download was cut short.
+        save("Artist/", "cover.jpg", "image");
+        save("Artist/", ".hidden.mp3", "hidden");
+        mStorage.create("Artist/", "partial.ogg").abort();
+
+        Map<String, StoredSong> songs = new HashMap<>();
+        for (StoredSong song : mStorage.list()) {
+            songs.put(song.relativeDir + song.fileName, song);
+        }
+
+        assertEquals(new HashSet<>(Arrays.asList("song.mp3", "Artist/Album/01 Song.FLAC")),
+                songs.keySet());
+        assertEquals(top, songs.get("song.mp3").uri);
+        StoredSong song = songs.get("Artist/Album/01 Song.FLAC");
+        assertEquals(inAlbum, song.uri);
+        assertEquals("Artist/Album/", song.relativeDir);
+        assertEquals("01 Song.FLAC", song.fileName);
+        assertNull(song.title);
+        assertEquals("album", read(song.uri));
+    }
+
+    @Test
+    public void nothingIsListedBeforeTheFolderIsMade() {
+        FileDownloadStorage storage = new FileDownloadStorage(RuntimeEnvironment.getApplication(),
+                new File(mFolder.getRoot(), "not made yet"));
+        assertTrue(storage.list().isEmpty());
     }
 
     private static ResponseSongFileChunk chunk(String artist, String albumArtist, String album) {

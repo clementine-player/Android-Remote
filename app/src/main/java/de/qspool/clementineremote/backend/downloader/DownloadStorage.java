@@ -7,6 +7,7 @@ import androidx.annotation.WorkerThread;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 
 /**
  * Where downloaded songs are saved. Songs are addressed by a directory relative to the
@@ -25,6 +26,12 @@ public interface DownloadStorage {
      * cannot be told.
      */
     long freeSpace();
+
+    /**
+     * Returns the songs saved where downloads go, in no particular order: those downloaded
+     * before the app last started too.
+     */
+    List<StoredSong> list() throws IOException;
 
     /** Starts saving a song, replacing any saved under the same name. */
     PendingSong create(String relativeDir, String fileName) throws IOException;

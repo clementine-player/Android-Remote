@@ -11,6 +11,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 /**
  * Saves songs as files under a directory the user picked, for Android 9 and earlier, where
@@ -18,6 +24,10 @@ import java.io.OutputStream;
  * URIs cannot be passed to other apps.
  */
 public class FileDownloadStorage implements DownloadStorage {
+
+    private static final Set<String> AUDIO_EXTENSIONS = new HashSet<>(Arrays.asList(
+            "aac", "aif", "aiff", "ape", "flac", "m4a", "mp3", "mp4", "mpc", "oga", "ogg",
+            "opus", "spc", "spx", "tta", "vgm", "wav", "wma", "wv"));
 
     private final Context mContext;
 
@@ -45,6 +55,41 @@ public class FileDownloadStorage implements DownloadStorage {
     public SavedSong find(String relativeDir, String fileName) {
         File file = file(relativeDir, fileName);
         return file.exists() ? new SavedSong(contentUri(file), file.length()) : null;
+    }
+
+    /**
+     * The audio files in the folder and the folders in it. Their titles aren't read, as that
+     * means opening every file; the folder may be one the user picked with other music in it.
+     */
+    @Override
+    public List<StoredSong> list() {
+        List<StoredSong> songs = new ArrayList<>();
+        addSongs(mBaseDir, "", songs);
+        return songs;
+    }
+
+    private void addSongs(File dir, String relativeDir, List<StoredSong> songs) {
+        File[] files = dir.listFiles();
+        if (files == null) {
+            return;
+        }
+        for (File file : files) {
+            if (file.getName().startsWith(".")) {
+                continue;
+            }
+            if (file.isDirectory()) {
+                addSongs(file, relativeDir + file.getName() + "/", songs);
+            } else if (isAudio(file.getName())) {
+                songs.add(new StoredSong(contentUri(file), relativeDir, file.getName(), null, null));
+            }
+        }
+    }
+
+    /** Whether the file is of a type Clementine plays, and so can send, by its extension. */
+    static boolean isAudio(String fileName) {
+        int dot = fileName.lastIndexOf('.');
+        return dot >= 0 && AUDIO_EXTENSIONS.contains(
+                fileName.substring(dot + 1).toLowerCase(Locale.ROOT));
     }
 
     @Override

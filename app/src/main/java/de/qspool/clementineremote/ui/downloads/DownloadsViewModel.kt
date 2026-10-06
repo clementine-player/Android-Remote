@@ -9,6 +9,7 @@ import de.qspool.clementineremote.SharedPreferencesKeys
 import de.qspool.clementineremote.backend.BackgroundTask
 import de.qspool.clementineremote.backend.downloader.ClementineSongDownloader
 import de.qspool.clementineremote.backend.downloader.DownloadManager
+import de.qspool.clementineremote.backend.downloader.StoredSong
 import de.qspool.clementineremote.backend.library.LibraryDatabaseHelper
 import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory
@@ -53,11 +54,20 @@ data class DownloadsState(
     val freeSpace: String = "",
     /** Downloads only run on Wi-Fi. */
     val wifiOnly: Boolean = false,
+    /** The songs on this phone, downloaded now or before, by folder and file name. */
+    val onPhone: List<DownloadedSong> = emptyList(),
+    /** Whether the songs on this phone have been read, so there may really be none. */
+    val loaded: Boolean = true,
 )
 
-/** The downloads to this phone, as the download manager has them, read four times a second. */
+/**
+ * The downloads to this phone, as the download manager has them, read four times a second, and
+ * the songs saved on it, read again each time a download finishes.
+ */
 class DownloadsViewModel(
     private val downloads: () -> List<ClementineSongDownloader> = { DownloadManager.getInstance(App.getApp()).allDownloaders },
+    /** The songs where downloads are saved, whenever they were downloaded. */
+    private val storedSongs: () -> List<StoredSong> = { DownloadManager.getInstance(App.getApp()).storedSongs },
     /** Free space where downloads go, in bytes, or a negative number if it can't be told. */
     private val freeSpace: () -> Long = { DownloadManager.getInstance(App.getApp()).freeSpace },
     /** The library synced from Clementine, if there is one; closed after use. */
@@ -73,22 +83,48 @@ class DownloadsViewModel(
     val suggestions: StateFlow<Suggestions> = _suggestions.asStateFlow()
 
     val state: StateFlow<DownloadsState> = flow {
+        var onPhone = emptyList<DownloadedSong>()
+        // The finished downloads when the songs were last read; null until they are.
+        var finishedWhenRead: Set<Int>? = null
         while (true) {
-            emit(snapshot())
+            val all = downloads().map(::download)
+            val finished = all.filterNot { it.running }.map { it.id }.toSet()
+            if (finished != finishedWhenRead) {
+                onPhone = readOnPhone()
+                finishedWhenRead = finished
+            }
+            emit(snapshot(all, onPhone))
             delay(REFRESH_MILLIS)
         }
-    }.flowOn(Dispatchers.IO) // Free space is read from the disk.
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), DownloadsState())
+    }.flowOn(Dispatchers.IO) // Free space and the songs saved are read from the disk.
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), DownloadsState(loaded = false))
 
-    private fun snapshot(): DownloadsState {
-        val all = downloads().map(::download)
+    private fun snapshot(all: List<Download>, onPhone: List<DownloadedSong>): DownloadsState {
         return DownloadsState(
             running = all.filter { it.running },
             finished = all.filterNot { it.running },
             freeSpace = freeSpace().let { if (it >= 0) Utilities.humanReadableBytes(it, true) else "" },
             wifiOnly = App.getPreferences().getBoolean(SharedPreferencesKeys.SP_WIFI_ONLY, false),
+            onPhone = onPhone,
         )
     }
+
+    /**
+     * The songs saved, by folder and file name: with the folder settings' defaults, by artist
+     * and album, then track number. Songs without tags are named after their file and folder.
+     */
+    private fun readOnPhone(): List<DownloadedSong> = storedSongs()
+        .sortedWith(
+            compareBy<StoredSong, String>(String.CASE_INSENSITIVE_ORDER) { it.relativeDir }
+                .thenBy(String.CASE_INSENSITIVE_ORDER) { it.fileName },
+        )
+        .map { song ->
+            DownloadedSong(
+                title = song.title ?: song.fileName.substringBeforeLast('.'),
+                artist = song.artist ?: song.relativeDir.trimEnd('/'),
+                uri = song.uri,
+            )
+        }
 
     private fun download(downloader: ClementineSongDownloader): Download {
         val manager = DownloadManager.getInstance(App.getApp())

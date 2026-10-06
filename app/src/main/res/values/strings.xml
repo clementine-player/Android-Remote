@@ -72,6 +72,7 @@
     <string name="downloads_free_space">%s free on this phone</string>
     <string name="downloads_running">Downloading</string>
     <string name="downloads_finished">Finished</string>
+    <string name="downloads_on_phone">On this phone</string>
     <string name="downloads_wifi_only">Downloads only run on Wi-Fi.</string>
     <string name="downloads_change">Change</string>
 

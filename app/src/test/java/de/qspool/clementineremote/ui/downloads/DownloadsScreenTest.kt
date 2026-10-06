@@ -12,6 +12,7 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.lifecycle.viewModelScope
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.SharedPreferencesKeys
+import de.qspool.clementineremote.backend.downloader.StoredSong
 import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem
 import de.qspool.clementineremote.backend.player.MyPlaylist
@@ -133,6 +134,28 @@ class DownloadsScreenTest {
     }
 
     @Test
+    fun songsDownloadedBeforeAreOnThePhoneToPlay() {
+        val song = DownloadedSong("Clair de lune", "Claude Debussy", Uri.parse("content://media/2"))
+        show(DownloadsState(onPhone = listOf(song)), suggestions)
+
+        // Something is downloaded, so no suggestions.
+        compose.onNodeWithTag("downloadsEmpty").assertDoesNotExist()
+        compose.onNodeWithTag("suggestAlbum").assertDoesNotExist()
+        compose.onNodeWithText("On this phone").assertIsDisplayed()
+        compose.onNodeWithText("Claude Debussy").assertIsDisplayed()
+        compose.onNodeWithText("Clair de lune").performClick()
+
+        assertEquals(listOf("play Clair de lune"), done)
+    }
+
+    @Test
+    fun nothingIsSaidToBeDownloadedBeforeThePhoneIsRead() {
+        show(DownloadsState(loaded = false))
+
+        compose.onNodeWithTag("downloadsEmpty").assertDoesNotExist()
+    }
+
+    @Test
     fun saysWhenDownloadsOnlyRunOnWifi() {
         show(DownloadsState(wifiOnly = true))
 
@@ -145,7 +168,7 @@ class DownloadsScreenTest {
     @Test
     fun viewModelReadsTheDownloadsAndSettings() {
         App.getPreferences().edit().putBoolean(SharedPreferencesKeys.SP_WIFI_ONLY, true).commit()
-        val downloads = DownloadsViewModel(downloads = { emptyList() }, freeSpace = { 1L shl 30 })
+        val downloads = DownloadsViewModel(downloads = { emptyList() }, storedSongs = { emptyList() }, freeSpace = { 1L shl 30 })
         downloads.viewModelScope.launch { downloads.state.collect {} }
 
         // The state is read off the main thread; wait for the first reading.
@@ -158,6 +181,30 @@ class DownloadsScreenTest {
         assertEquals(Utilities.humanReadableBytes(1L shl 30, true), downloads.state.value.freeSpace)
         assertTrue(downloads.state.value.wifiOnly)
         assertTrue(downloads.state.value.running.isEmpty())
+    }
+
+    @Test
+    fun viewModelListsTheSongsOnThePhoneByFolderAndName() {
+        val untagged = StoredSong(Uri.parse("content://media/3"), "Erik Satie/Gymnopédies/", "02 Gymnopédie No. 2.mp3", null, null)
+        val tagged = StoredSong(Uri.parse("content://media/4"), "Claude Debussy/", "Clair.ogg", "Clair de lune", "Claude Debussy")
+        val downloads = DownloadsViewModel(downloads = { emptyList() }, storedSongs = { listOf(untagged, tagged) }, freeSpace = { 0 })
+        downloads.viewModelScope.launch { downloads.state.collect {} }
+
+        // The state is read off the main thread; wait for the first reading.
+        val end = System.currentTimeMillis() + 5_000
+        while (!downloads.state.value.loaded && System.currentTimeMillis() < end) {
+            shadowOf(Looper.getMainLooper()).idle()
+            Thread.sleep(10)
+        }
+
+        assertEquals(
+            listOf(
+                DownloadedSong("Clair de lune", "Claude Debussy", Uri.parse("content://media/4")),
+                // Named after its file and folder.
+                DownloadedSong("02 Gymnopédie No. 2", "Erik Satie/Gymnopédies", Uri.parse("content://media/3")),
+            ),
+            downloads.state.value.onPhone,
+        )
     }
 
     @Test
@@ -178,6 +225,7 @@ class DownloadsScreenTest {
         val started = mutableListOf<ClementineMessage>()
         val downloads = DownloadsViewModel(
             downloads = { emptyList() },
+            storedSongs = { emptyList() },
             freeSpace = { 0 },
             library = { SQLiteDatabase.openDatabase(file.path, null, SQLiteDatabase.OPEN_READONLY) },
             playlists = { listOf(playlist) },
