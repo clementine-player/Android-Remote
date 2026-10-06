@@ -1,0 +1,22 @@
+# Transifex (https://app.transifex.com/amuttsch/clementine-remote/), where the app is
+# translated. .github/workflows/translations.yml pushes the English strings here when they
+# change on master, and pulls the translations back every night.
+#
+# Transifex names languages like pt_BR; Android's folders are values-pt-rBR. The languages
+# below have folders already; scripts/android-language-folders.sh renames any new one.
+[main]
+host = https://app.transifex.com
+
+[o:amuttsch:p:clementine-remote:r:strings]
+source_file = app/src/main/res/values/strings.xml
+file_filter = app/src/main/res/values-<lang>/strings.xml
+source_lang = en
+type = ANDROID
+lang_map = el_GR: el-rGR, ms_MY: ms-rMY, pt_BR: pt-rBR
+
+[o:amuttsch:p:clementine-remote:r:contentdescription]
+source_file = app/src/main/res/values/contentdescription.xml
+file_filter = app/src/main/res/values-<lang>/contentdescription.xml
+source_lang = en
+type = ANDROID
+lang_map = el_GR: el-rGR, ms_MY: ms-rMY, pt_BR: pt-rBR

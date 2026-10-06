@@ -1,0 +1,134 @@
+# Keeps the app's translations in step with Transifex, as Clementine does with its own:
+#   - push: when the English strings change on master, sends them to Transifex for the
+#     translators
+#   - pull: every night, brings the translations back, and commits them to master when they
+#     changed. Each such commit has a release note, so new translations make the next release.
+#
+# Which Transifex resources, and the files they map to, are in .tx/config. Needs two secrets
+# (see RELEASING.md): TX_TOKEN, a Transifex API token, and TX_KEY, the private half of a deploy
+# key with write access, which pushes the translations to master. Until they're set, each job
+# is skipped with a notice.
+#
+# Run it by hand (Actions → translations → Run workflow) to pull now. With "Push translations"
+# ticked, it first sends the repository's translations to Transifex: once, to fill a new
+# Transifex resource with the translations made before it.
+name: translations
+on:
+  push:
+    branches: [master]
+    paths:
+      - .tx/config
+      - app/src/main/res/values/strings.xml
+      - app/src/main/res/values/contentdescription.xml
+  schedule:
+    - cron: "23 2 * * *" # Every night, 02:23 UTC
+  workflow_dispatch:
+    inputs:
+      push_translations:
+        description: "Push translations: send the repository's translations to Transifex first"
+        type: boolean
+        default: false
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  TX_VERSION: 1.6.17
+
+jobs:
+  push:
+    name: Push strings to Transifex
+    if: github.repository == 'clementine-player/Android-Remote' && github.event_name != 'schedule'
+    runs-on: ubuntu-26.04
+    env:
+      TX_TOKEN: ${{ secrets.TX_TOKEN }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install the Transifex client
+        if: env.TX_TOKEN != ''
+        run: |
+          mkdir -p "$RUNNER_TEMP/tx"
+          curl -fsSL "https://github.com/transifex/cli/releases/download/v$TX_VERSION/tx-linux-amd64.tar.gz" \
+            | tar -xz -C "$RUNNER_TEMP/tx" tx
+          echo "$RUNNER_TEMP/tx" >> "$GITHUB_PATH"
+      - name: Push the English strings
+        if: env.TX_TOKEN != ''
+        run: tx push --source
+      - name: Push the translations
+        if: env.TX_TOKEN != '' && inputs.push_translations
+        run: tx push --translation --skip
+      - name: No Transifex token
+        if: env.TX_TOKEN == ''
+        run: echo "::notice::The TX_TOKEN secret isn't set, so nothing was sent to Transifex. See RELEASING.md."
+
+  pull:
+    name: Pull translations from Transifex
+    needs: push
+    # After the push when there is one (run by hand), but on its own every night.
+    if: >-
+      always() && github.repository == 'clementine-player/Android-Remote'
+      && github.event_name != 'push' && needs.push.result != 'failure'
+    runs-on: ubuntu-26.04
+    env:
+      TX_TOKEN: ${{ secrets.TX_TOKEN }}
+      HAS_TX_KEY: ${{ secrets.TX_KEY != '' }}
+    steps:
+      - name: No Transifex token or deploy key
+        if: env.TX_TOKEN == '' || env.HAS_TX_KEY != 'true'
+        run: echo "::notice::The TX_TOKEN or TX_KEY secret isn't set, so no translations were pulled. See RELEASING.md."
+      # Checked out with the deploy key, so the push below runs ci.yml on the new commit, as a
+      # push with the workflow's own token wouldn't.
+      - uses: actions/checkout@v5
+        if: env.TX_TOKEN != '' && env.HAS_TX_KEY == 'true'
+        with:
+          ref: master
+          ssh-key: ${{ secrets.TX_KEY }}
+      - name: Install the Transifex client
+        if: env.TX_TOKEN != '' && env.HAS_TX_KEY == 'true'
+        run: |
+          mkdir -p "$RUNNER_TEMP/tx"
+          curl -fsSL "https://github.com/transifex/cli/releases/download/v$TX_VERSION/tx-linux-amd64.tar.gz" \
+            | tar -xz -C "$RUNNER_TEMP/tx" tx
+          echo "$RUNNER_TEMP/tx" >> "$GITHUB_PATH"
+      # Only translated strings: Android shows English for the rest by itself.
+      - name: Pull the translations
+        id: pull
+        if: env.TX_TOKEN != '' && env.HAS_TX_KEY == 'true'
+        run: |
+          tx pull --all --force --mode onlytranslated
+          scripts/android-language-folders.sh
+          git add app/src/main/res
+          if git diff --cached --quiet; then
+            echo "Translations are up to date."
+          else
+            git diff --cached --stat
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+      # A translation can break the build (a mistyped %1$s, say): lint catches it here, rather
+      # than on master.
+      - uses: actions/setup-java@v5
+        if: steps.pull.outputs.changed
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v5
+        if: steps.pull.outputs.changed
+      - name: Lint
+        if: steps.pull.outputs.changed
+        run: ./gradlew lintFdroidDebug
+      - uses: actions/upload-artifact@v7
+        if: failure() && steps.pull.outputs.changed
+        with:
+          name: lint-reports
+          path: app/build/reports/
+      - name: Commit and push
+        if: steps.pull.outputs.changed
+        run: |
+          git -c user.name='Clementine Buildbot' -c user.email='buildbot@clementine-player.org' \
+            commit -m 'Automatic merge of translations from Transifex' \
+            -m 'Release-note: Updated translations, thanks to our translators on Transifex.'
+          git push origin HEAD:master

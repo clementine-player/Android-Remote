@@ -196,6 +196,37 @@ section of Play Console completed:
 New personal developer accounts must also run a closed test with at least 12 testers for
 14 days before production access is granted.
 
+## Translations
+
+The app is translated on [Transifex](https://app.transifex.com/amuttsch/clementine-remote/), as
+Clementine is, and `.github/workflows/translations.yml` keeps the two in step, with no manual
+steps:
+
+- When the English strings (`app/src/main/res/values/strings.xml` and `contentdescription.xml`)
+  change on `master`, they're pushed to Transifex for the translators.
+- Every night, the translations are pulled back (only translated strings: the rest show in
+  English), checked with lint, and committed to `master` when they changed, as
+  "Automatic merge of translations from Transifex". That commit has a release note, so new
+  translations make the next weekly release; however many nights they changed, the release
+  notes say so once.
+
+Which Transifex resources map to which files is in `.tx/config`. A language that's new on
+Transifex gets its folder from `scripts/android-language-folders.sh`, which turns Transifex's
+`zh_CN` into Android's `values-zh-rCN`. Translations are made on Transifex, not in pull
+requests: the next pull would overwrite them.
+
+**One-time setup:**
+
+1. **Transifex:** check `.tx/config` names the project's organization and project, and the
+   resources' slugs if the project has them already. Make an API token (*User settings → API
+   token*) and add it as the repository secret `TX_TOKEN`.
+2. **GitHub:** make a deploy key with write access (*Settings → Deploy keys*), add its private
+   half as the secret `TX_KEY`, and if `master`'s branch protection or rulesets would refuse
+   the push, let deploy keys bypass them. It pushes as itself so that `ci.yml` runs on the
+   commit; the workflow's own token can't start other workflows.
+3. **The first time,** run the workflow by hand with *Push translations* ticked: it sends the
+   repository's translations up to Transifex, so translators start from them, then pulls.
+
 ## Store listing
 
 `fastlane/metadata/android/en-US/` is the store listing for both stores: `title.txt`,
