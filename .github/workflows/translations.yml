@@ -61,9 +61,11 @@ jobs:
       - name: Push the English strings
         if: env.TX_TOKEN != ''
         run: tx push --source --silent
+      # --all adds the languages the project doesn't have yet: without it they're skipped,
+      # silently. --force sends every file, not only those newer than Transifex's.
       - name: Push the translations
         if: env.TX_TOKEN != '' && inputs.push_translations
-        run: tx push --translation --skip --silent
+        run: tx push --translation --all --force --skip --silent
       - name: No Transifex token
         if: env.TX_TOKEN == ''
         run: echo "::notice::The TX_TOKEN secret isn't set, so nothing was sent to Transifex. See RELEASING.md."
