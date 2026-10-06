@@ -31,10 +31,13 @@ import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.TaskStackBuilder;
+import android.util.Log;
 import android.util.SparseArray;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -47,6 +50,8 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.ui.MainActivity;
 
 public class DownloadManager {
+
+    private static final String TAG = "DownloadManager";
 
     public final static int NOTIFICATION_ID_DOWNLOADS = 129312;
 
@@ -245,6 +250,23 @@ public class DownloadManager {
         }
         DownloadStorage storage = createStorage();
         return storage == null ? -1 : storage.freeSpace();
+    }
+
+    /**
+     * Returns the songs saved where downloads go, whenever they were downloaded, or none if
+     * there is nowhere to save them or they can't be read.
+     */
+    @WorkerThread
+    public List<StoredSong> getStoredSongs() {
+        try {
+            DownloadStorage storage = createStorage();
+            return storage == null ? Collections.<StoredSong>emptyList() : storage.list();
+        } catch (IOException | RuntimeException e) {
+            // MediaStore reports some failures, such as a missing volume, as runtime
+            // exceptions.
+            Log.w(TAG, "Cannot list the downloaded songs", e);
+            return Collections.emptyList();
+        }
     }
 
     public List<ClementineSongDownloader> getAllDownloaders() {

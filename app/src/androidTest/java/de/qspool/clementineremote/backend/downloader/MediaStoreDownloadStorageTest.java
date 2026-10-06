@@ -126,6 +126,23 @@ public class MediaStoreDownloadStorageTest {
     }
 
     @Test
+    public void listsTheSongsSavedInItsFolders() throws Exception {
+        Uri uri = save("01 Song.ogg", "first");
+
+        StoredSong found = null;
+        for (StoredSong song : mStorage.list()) {
+            assertTrue(song.relativeDir, !song.relativeDir.startsWith("Music/"));
+            if (song.uri.equals(uri)) {
+                found = song;
+            }
+        }
+        assertNotNull(found);
+        assertEquals(mDir, found.relativeDir);
+        assertEquals("01 Song.ogg", found.fileName);
+        assertEquals("first", read(found.uri));
+    }
+
+    @Test
     public void mimeTypesComeFromTheExtension() {
         assertEquals("audio/mpeg", MediaStoreDownloadStorage.mimeType("song.MP3"));
         assertEquals("audio/flac", MediaStoreDownloadStorage.mimeType("song.flac"));
