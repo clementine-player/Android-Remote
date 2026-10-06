@@ -61,6 +61,9 @@ public class SharedPreferencesKeys {
 
     public final static String SP_DOWNLOAD_DIR = "pref_dl_dir";
 
+    /** The MediaStore volume downloads are saved to, on Android 10 and later. */
+    public final static String SP_DOWNLOAD_VOLUME = "pref_dl_volume";
+
     public final static String SP_DOWNLOAD_OVERRIDE = "pref_dl_override";
 
     public final static String SP_DOWNLOAD_SAVE_OWN_DIR = "pref_dl_pl_save_own_dir";

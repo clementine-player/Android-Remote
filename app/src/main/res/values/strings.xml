@@ -277,6 +277,8 @@
     <string name="pref_dl_wifi_only_title">WiFi only</string>
     <string name="pref_dl_wifi_only_summary">Download songs only when connected to a wifi network.</string>
     <string name="pref_dl_dir">Set download folder</string>
+    <string name="pref_dl_volume">Save downloads to</string>
+    <string name="pref_dl_volume_unavailable">Not available. Choose where to save downloads.</string>
     <string name="pref_dl_override">Override existing files</string>
     <string name="pref_dl_override_summary">Downloads songs again when they differ from those on this phone.</string>
     <string name="pref_dl_cat_folders">Folders</string>

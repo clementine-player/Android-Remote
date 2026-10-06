@@ -48,6 +48,16 @@ public class FileDownloadStorage implements DownloadStorage {
     }
 
     @Override
+    public long freeSpace() {
+        // The folder is only made with the first song saved.
+        File dir = mBaseDir;
+        while (dir != null && !dir.exists()) {
+            dir = dir.getParentFile();
+        }
+        return dir == null ? -1 : dir.getUsableSpace();
+    }
+
+    @Override
     public PendingSong create(String relativeDir, String fileName) throws IOException {
         final File file = file(relativeDir, fileName);
         if (file.exists()) {

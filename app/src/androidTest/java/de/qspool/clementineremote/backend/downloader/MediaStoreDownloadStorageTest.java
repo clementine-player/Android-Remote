@@ -18,11 +18,14 @@ import org.junit.runner.RunWith;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /** Saves songs to the shared Music collection, as on Android 10 and later. */
 @RunWith(AndroidJUnit4.class)
@@ -38,7 +41,7 @@ public class MediaStoreDownloadStorageTest {
     @Before
     public void setUp() {
         mContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        mStorage = new MediaStoreDownloadStorage(mContext);
+        mStorage = new MediaStoreDownloadStorage(mContext, MediaStore.VOLUME_EXTERNAL_PRIMARY);
     }
 
     @After
@@ -110,6 +113,16 @@ public class MediaStoreDownloadStorageTest {
         song.abort();
 
         assertNull(mStorage.find(mDir, "song.flac"));
+    }
+
+    @Test
+    public void thePrimaryVolumeIsOfferedFirstWithItsFreeSpace() {
+        List<DownloadVolume> volumes = DownloadVolumes.available(mContext);
+        assertEquals(MediaStore.VOLUME_EXTERNAL_PRIMARY, volumes.get(0).name);
+        assertTrue(DownloadVolumes.isAvailable(mContext, MediaStore.VOLUME_EXTERNAL_PRIMARY));
+        assertFalse(DownloadVolumes.isAvailable(mContext, "0000-0000"));
+        assertTrue(mStorage.freeSpace() > 0);
+        assertEquals(DownloadVolumes.UNKNOWN_SPACE, DownloadVolumes.freeSpace(mContext, "0000-0000"));
     }
 
     @Test

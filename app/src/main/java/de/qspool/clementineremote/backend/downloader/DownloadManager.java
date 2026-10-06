@@ -28,6 +28,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Environment;
 import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.TaskStackBuilder;
 import android.util.SparseArray;
@@ -209,21 +210,41 @@ public class DownloadManager {
     }
 
     /**
-     * Songs go to the shared Music collection on Android 10 and later, and to the directory
-     * picked in the settings before that. Returns null if there is nowhere to save them.
+     * Songs go to the shared Music collection on Android 10 and later, on the storage volume
+     * picked in the settings, and to the directory picked in the settings before that.
+     * Returns null if there is nowhere to save them, such as when the SD card picked has been
+     * taken out: they don't go elsewhere unasked.
      */
     @Nullable
     private DownloadStorage createStorage() {
+        SharedPreferences preferences = App.getPreferences();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            return new MediaStoreDownloadStorage(mContext);
+            String volume = DownloadVolumes.chosen(preferences);
+            if (!DownloadVolumes.isAvailable(mContext, volume)) {
+                return null;
+            }
+            return new MediaStoreDownloadStorage(mContext, volume);
         }
 
-        String path = mSharedPref.getString(SharedPreferencesKeys.SP_DOWNLOAD_DIR, null);
+        String path = preferences.getString(SharedPreferencesKeys.SP_DOWNLOAD_DIR, null);
         if (path != null) {
             return new FileDownloadStorage(mContext, new File(path));
         }
         File defaultDir = mContext.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
         return defaultDir == null ? null : new FileDownloadStorage(mContext, defaultDir);
+    }
+
+    /**
+     * Returns the free space where songs are saved, in bytes, or a negative number if it
+     * cannot be told, such as when the SD card picked has been taken out.
+     */
+    @WorkerThread
+    public long getFreeSpace() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return DownloadVolumes.freeSpace(mContext, DownloadVolumes.chosen(App.getPreferences()));
+        }
+        DownloadStorage storage = createStorage();
+        return storage == null ? -1 : storage.freeSpace();
     }
 
     public List<ClementineSongDownloader> getAllDownloaders() {

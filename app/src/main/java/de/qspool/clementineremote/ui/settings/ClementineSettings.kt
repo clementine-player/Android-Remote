@@ -18,6 +18,7 @@ package de.qspool.clementineremote.ui.settings
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.WindowManager
@@ -28,6 +29,8 @@ import androidx.activity.ComponentActivity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
@@ -36,8 +39,12 @@ import androidx.core.net.toUri
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.R
 import de.qspool.clementineremote.SharedPreferencesKeys
+import de.qspool.clementineremote.backend.downloader.DownloadVolume
+import de.qspool.clementineremote.backend.downloader.DownloadVolumes
 import de.qspool.clementineremote.ui.theme.ClementineTheme
 import de.qspool.clementineremote.utils.Utilities
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /** The settings screen of Clementine Remote: [SettingsScreen], over the app's preferences. */
 class ClementineSettings : ComponentActivity(), SettingsActions {
@@ -58,7 +65,11 @@ class ClementineSettings : ComponentActivity(), SettingsActions {
             ClementineTheme(darkTheme = isSystemInDarkTheme(), dynamicColor = false) {
                 // Test tags as resource IDs, for UI Automator.
                 Surface(Modifier.semantics { testTagsAsResourceId = true }, color = MaterialTheme.colorScheme.surface) {
-                    SettingsScreen(rememberPreferenceStore(App.getPreferences()), this, ::defaultDownloadDir)
+                    // Read off the main thread, as they come from the system's storage service.
+                    val volumes by produceState(emptyList<DownloadVolume>()) {
+                        value = withContext(Dispatchers.IO) { downloadVolumes() }
+                    }
+                    SettingsScreen(rememberPreferenceStore(App.getPreferences()), this, volumes, ::defaultDownloadDir)
                 }
             }
         }
@@ -73,6 +84,9 @@ class ClementineSettings : ComponentActivity(), SettingsActions {
             Toast.makeText(this, R.string.app_not_available, Toast.LENGTH_LONG).show()
         }
     }
+
+    private fun downloadVolumes(): List<DownloadVolume> =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) DownloadVolumes.available(this) else emptyList()
 
     private fun defaultDownloadDir(): String =
         getExternalFilesDir(Environment.DIRECTORY_MUSIC)?.absolutePath ?: ""

@@ -20,6 +20,12 @@ public interface DownloadStorage {
     @Nullable
     SavedSong find(String relativeDir, String fileName) throws IOException;
 
+    /**
+     * Returns the free space where songs are saved, in bytes, or a negative number if it
+     * cannot be told.
+     */
+    long freeSpace();
+
     /** Starts saving a song, replacing any saved under the same name. */
     PendingSong create(String relativeDir, String fileName) throws IOException;
 
