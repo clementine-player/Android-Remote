@@ -109,12 +109,19 @@ private fun LibrarySettings(store: PreferenceStore) {
     SettingsHeading(stringResource(R.string.pref_cat_library))
     StringChoiceSetting(
         store, SharedPreferencesKeys.SP_LIBRARY_GROUPING, "artist-album", R.string.pref_library_grouping_title,
-        R.string.pref_library_grouping_summary, stringArrayResource(R.array.pref_library_grouping).toList(),
+        R.string.pref_library_grouping_summary,
+        listOf(
+            R.string.pref_library_grouping_artist, R.string.pref_library_grouping_artist_album,
+            R.string.pref_library_grouping_albumartist_album, R.string.pref_library_grouping_artist_year,
+            R.string.pref_library_grouping_album, R.string.pref_library_grouping_genre_album,
+            R.string.pref_library_grouping_genre_artist_album,
+        ).map { stringResource(it) },
         stringArrayResource(R.array.pref_library_grouping_values).toList(),
     )
     StringChoiceSetting(
         store, SharedPreferencesKeys.SP_LIBRARY_SORTING, "ASC", R.string.pref_library_sorting_title,
-        R.string.pref_library_sorting_summary, stringArrayResource(R.array.pref_library_sorting).toList(),
+        R.string.pref_library_sorting_summary,
+        listOf(stringResource(R.string.pref_library_sorting_asc), stringResource(R.string.pref_library_sorting_desc)),
         stringArrayResource(R.array.pref_library_sorting_values).toList(),
     )
 }

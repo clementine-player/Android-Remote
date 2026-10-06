@@ -113,21 +113,17 @@
 
     <string name="pref_library_sorting_title">Сортировка</string>
     <string name="pref_library_sorting_summary">Фонотека отсортирована по %1$s.</string>
-    <string-array name="pref_library_sorting">
-        <item>Возрастанию</item>
-        <item>Убыванию</item>
-    </string-array>
+    <string name="pref_library_sorting_asc">Возрастанию</string>
+    <string name="pref_library_sorting_desc">Убыванию</string>
 
     <string name="pref_library_grouping_title">Группировка</string>
     <string name="pref_library_grouping_summary">Фонотека сгруппипрована по %1$s.</string>
-    <string-array name="pref_library_grouping">
-        <item>Исполнитель</item>
-        <item>Исполнитель / Альбом</item>
-        <item>Исполнитель / Гол</item>
-        <item>Альбом</item>
-        <item>Жанр / Альбом</item>
-        <item>Жанр / Исполнитель / Альбом</item>
-    </string-array>
+    <string name="pref_library_grouping_artist">Исполнитель</string>
+    <string name="pref_library_grouping_artist_album">Исполнитель / Альбом</string>
+    <string name="pref_library_grouping_artist_year">Исполнитель / Гол</string>
+    <string name="pref_library_grouping_album">Альбом</string>
+    <string name="pref_library_grouping_genre_album">Жанр / Альбом</string>
+    <string name="pref_library_grouping_genre_artist_album">Жанр / Исполнитель / Альбом</string>
 
     <string name="pref_autoconnect_title">Авто-подлючение</string>
     <string name="pref_autoconnect_summary">Автоматически подключаться к Clementine при запуске удалённого управления.
@@ -245,10 +241,8 @@
     <string name="navigation_drawer_clementine_on">Clementine на %s</string>
 
     <string name="player_download_what">Что скачать?</string>
-    <string-array name="player_download_list">
-        <item>Песня</item>
-        <item>Альбом</item>
-        <item>Плейлист</item>
-    </string-array>
+    <string name="player_download_song">Песня</string>
+    <string name="player_download_album">Альбом</string>
+    <string name="player_download_playlist">Плейлист</string>
 
     </resources>

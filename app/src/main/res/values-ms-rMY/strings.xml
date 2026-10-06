@@ -97,21 +97,17 @@
 
     <string name="pref_library_sorting_title">Mengisih</string>
     <string name="pref_library_sorting_summary">Pustaka diisih dalam tertib %1$s.</string>
-    <string-array name="pref_library_sorting">
-        <item>Menaik</item>
-        <item>Menurun</item>
-    </string-array>
+    <string name="pref_library_sorting_asc">Menaik</string>
+    <string name="pref_library_sorting_desc">Menurun</string>
 
     <string name="pref_library_grouping_title">Pengelompokan</string>
     <string name="pref_library_grouping_summary">Pustaka dikelompok mengikut %1$s.</string>
-    <string-array name="pref_library_grouping">
-        <item>Artis</item>
-        <item>Artis / Album</item>
-        <item>Artis / Tahun</item>
-        <item>Album</item>
-        <item>Genre / Album</item>
-        <item>Genre / Artis / Album</item>
-    </string-array>
+    <string name="pref_library_grouping_artist">Artis</string>
+    <string name="pref_library_grouping_artist_album">Artis / Album</string>
+    <string name="pref_library_grouping_artist_year">Artis / Tahun</string>
+    <string name="pref_library_grouping_album">Album</string>
+    <string name="pref_library_grouping_genre_album">Genre / Album</string>
+    <string name="pref_library_grouping_genre_artist_album">Genre / Artis / Album</string>
 
     <string name="pref_autoconnect_title">Auto-Sambung</string>
     <string name="pref_autoconnect_summary">Sambung secara automatik ke Clementine bila memulakan jauh.</string>
@@ -220,10 +216,8 @@
     <string name="navigation_drawer_clementine_on">Clementine dalam %s</string>
 
     <string name="player_download_what">Apa yang hendak dimuat turun?</string>
-    <string-array name="player_download_list">
-        <item>Lagu</item>
-        <item>Album</item>
-        <item>Senarai Mai</item>
-    </string-array>
+    <string name="player_download_song">Lagu</string>
+    <string name="player_download_album">Album</string>
+    <string name="player_download_playlist">Senarai Mai</string>
 
     </resources>

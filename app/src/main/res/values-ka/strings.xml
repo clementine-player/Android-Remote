@@ -69,9 +69,6 @@
     <string name="pref_lower_volume_summary">ხმის დაწევა შემომავალი / გამავალი ზარის დროს.</string>
     <string name="pref_call_volume_title">ზარის ხმის დონე</string>
     <string name="pref_call_volume_summary">ზარის ხმის მიმდინარე დონე: %s</string>
-    <string-array name="pref_library_grouping">
-        <item>ალბომი</item>
-    </string-array>
 
     <string name="pref_port_title">პორტი</string>
     <string name="pref_port_summary">მიმდინარე პორტი:</string>
@@ -121,8 +118,5 @@
 
     <string name="fragment_title_connection">Clementine</string>
 
-    <string-array name="player_download_list">
-        <item>ალბომი</item>
-    </string-array>
 
     </resources>

@@ -113,21 +113,17 @@
 
     <string name="pref_library_sorting_title">Rikiavimas</string>
     <string name="pref_library_sorting_summary">Biblioteka yra rikiuojama %1$s tvarka.</string>
-    <string-array name="pref_library_sorting">
-        <item>Didejančia</item>
-        <item>Mažėjančia</item>
-    </string-array>
+    <string name="pref_library_sorting_asc">Didejančia</string>
+    <string name="pref_library_sorting_desc">Mažėjančia</string>
 
     <string name="pref_library_grouping_title">Grupavimas</string>
     <string name="pref_library_grouping_summary">Biblioteka yra grupuojama pagal %1$s.</string>
-    <string-array name="pref_library_grouping">
-        <item>Atlikėją</item>
-        <item>Atlikėją / Albumą</item>
-        <item>Atlikėją / Metus</item>
-        <item>Albumą</item>
-        <item>Žanrą / Albumą</item>
-        <item>Žanrą / Atlikėją / Albumą</item>
-    </string-array>
+    <string name="pref_library_grouping_artist">Atlikėją</string>
+    <string name="pref_library_grouping_artist_album">Atlikėją / Albumą</string>
+    <string name="pref_library_grouping_artist_year">Atlikėją / Metus</string>
+    <string name="pref_library_grouping_album">Albumą</string>
+    <string name="pref_library_grouping_genre_album">Žanrą / Albumą</string>
+    <string name="pref_library_grouping_genre_artist_album">Žanrą / Atlikėją / Albumą</string>
 
     <string name="pref_autoconnect_title">Automatinis prisijungimas</string>
     <string name="pref_autoconnect_summary">Paleidus nuotolinį valdymą, automatiškai jungtis prie Clementine.
@@ -245,10 +241,8 @@
     <string name="navigation_drawer_clementine_on">Clementine ties %s</string>
 
     <string name="player_download_what">Ką atsisiųsti?</string>
-    <string-array name="player_download_list">
-        <item>Daina</item>
-        <item>Albumas</item>
-        <item>Grojaraštis</item>
-    </string-array>
+    <string name="player_download_song">Daina</string>
+    <string name="player_download_album">Albumas</string>
+    <string name="player_download_playlist">Grojaraštis</string>
 
     </resources>

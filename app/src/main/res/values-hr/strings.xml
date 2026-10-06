@@ -111,21 +111,17 @@
 
     <string name="pref_library_sorting_title">Razvrstavanje</string>
     <string name="pref_library_sorting_summary">Fonoteka je spremljena po %1$s redoslijedu.</string>
-    <string-array name="pref_library_sorting">
-        <item>Uzlazni</item>
-        <item>Silazni</item>
-    </string-array>
+    <string name="pref_library_sorting_asc">Uzlazni</string>
+    <string name="pref_library_sorting_desc">Silazni</string>
 
     <string name="pref_library_grouping_title">Grupiranje</string>
     <string name="pref_library_grouping_summary">Fonoteka je grupirana po %1$s.</string>
-    <string-array name="pref_library_grouping">
-        <item>Izvođaču</item>
-        <item>Izvođaču / Albumu</item>
-        <item>Izvođaču / Godini</item>
-        <item>Albumu</item>
-        <item>Žanru / Albumu</item>
-        <item>Žanru / Izvođaču / Albumu</item>
-    </string-array>
+    <string name="pref_library_grouping_artist">Izvođaču</string>
+    <string name="pref_library_grouping_artist_album">Izvođaču / Albumu</string>
+    <string name="pref_library_grouping_artist_year">Izvođaču / Godini</string>
+    <string name="pref_library_grouping_album">Albumu</string>
+    <string name="pref_library_grouping_genre_album">Žanru / Albumu</string>
+    <string name="pref_library_grouping_genre_artist_album">Žanru / Izvođaču / Albumu</string>
 
     <string name="pref_autoconnect_title">Automatsko-povezivanje</string>
     <string name="pref_autoconnect_summary">Automatisko povezivanje s Clementine pri pokretanju daljinskog upravljača.
@@ -241,10 +237,8 @@
     <string name="navigation_drawer_clementine_on">Clementine na %s</string>
 
     <string name="player_download_what">Što preuzeti?</string>
-    <string-array name="player_download_list">
-        <item>Pjesmu</item>
-        <item>Album</item>
-        <item>Popis izvođenja</item>
-    </string-array>
+    <string name="player_download_song">Pjesmu</string>
+    <string name="player_download_album">Album</string>
+    <string name="player_download_playlist">Popis izvođenja</string>
 
     </resources>

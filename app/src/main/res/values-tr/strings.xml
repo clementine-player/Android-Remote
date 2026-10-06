@@ -108,21 +108,17 @@
 
     <string name="pref_library_sorting_title">Sıralama</string>
     <string name="pref_library_sorting_summary">Kütüphane %1$s sıralandı.</string>
-    <string-array name="pref_library_sorting">
-        <item>Artan</item>
-        <item>Azalan</item>
-    </string-array>
+    <string name="pref_library_sorting_asc">Artan</string>
+    <string name="pref_library_sorting_desc">Azalan</string>
 
     <string name="pref_library_grouping_title">Gruplandırma</string>
     <string name="pref_library_grouping_summary">Kütüphane %1$s kriterine göre sıralandı.</string>
-    <string-array name="pref_library_grouping">
-        <item>Sanatçı</item>
-        <item>Sanatçı / Albüm</item>
-        <item>Sanatçı / Yıl</item>
-        <item>Albüm</item>
-        <item>Tarz / Albüm</item>
-        <item>Tarz / Sanatçı / Albüm</item>
-    </string-array>
+    <string name="pref_library_grouping_artist">Sanatçı</string>
+    <string name="pref_library_grouping_artist_album">Sanatçı / Albüm</string>
+    <string name="pref_library_grouping_artist_year">Sanatçı / Yıl</string>
+    <string name="pref_library_grouping_album">Albüm</string>
+    <string name="pref_library_grouping_genre_album">Tarz / Albüm</string>
+    <string name="pref_library_grouping_genre_artist_album">Tarz / Sanatçı / Albüm</string>
 
     <string name="pref_autoconnect_title">Otomatik Bağlan</string>
     <string name="pref_autoconnect_summary">Kumanda başlatılırken Clementine\'e otomatik bağlan.
@@ -208,10 +204,8 @@
     <string name="fragment_title_connection">Clementine</string>
 
     <string name="player_download_what">İndirilecek şey ne?</string>
-    <string-array name="player_download_list">
-        <item>Şarkı</item>
-        <item>Albüm</item>
-        <item>Çalma Listesi</item>
-    </string-array>
+    <string name="player_download_song">Şarkı</string>
+    <string name="player_download_album">Albüm</string>
+    <string name="player_download_playlist">Çalma Listesi</string>
 
     </resources>

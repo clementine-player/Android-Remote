@@ -109,21 +109,17 @@
 
     <string name="pref_library_sorting_title">Ordenació</string>
     <string name="pref_library_sorting_summary">S\'ha ordenat la biblioteca en ordre %1$s.</string>
-    <string-array name="pref_library_sorting">
-        <item>Ascendent</item>
-        <item>Descendent</item>
-    </string-array>
+    <string name="pref_library_sorting_asc">Ascendent</string>
+    <string name="pref_library_sorting_desc">Descendent</string>
 
     <string name="pref_library_grouping_title">Agrupació</string>
     <string name="pref_library_grouping_summary">La biblioteca està agrupada per %1$s.</string>
-    <string-array name="pref_library_grouping">
-        <item>Artista</item>
-        <item>Artista / Àlbum</item>
-        <item>Artista / Any</item>
-        <item>Àlbum</item>
-        <item>Estil / Àlbum</item>
-        <item>Estil / Artista / Àlbum</item>
-    </string-array>
+    <string name="pref_library_grouping_artist">Artista</string>
+    <string name="pref_library_grouping_artist_album">Artista / Àlbum</string>
+    <string name="pref_library_grouping_artist_year">Artista / Any</string>
+    <string name="pref_library_grouping_album">Àlbum</string>
+    <string name="pref_library_grouping_genre_album">Estil / Àlbum</string>
+    <string name="pref_library_grouping_genre_artist_album">Estil / Artista / Àlbum</string>
 
     <string name="pref_autoconnect_title">Connexió automàtica</string>
     <string name="pref_autoconnect_summary">Connecta\'t automàticament al Clementine quan s\'iniciï el control remot.
@@ -236,10 +232,8 @@
     <string name="navigation_drawer_clementine_on">Clementine en %s</string>
 
     <string name="player_download_what">Què s\'ha de baixar?</string>
-    <string-array name="player_download_list">
-        <item>Títol</item>
-        <item>Àlbum</item>
-        <item>Llista</item>
-    </string-array>
+    <string name="player_download_song">Títol</string>
+    <string name="player_download_album">Àlbum</string>
+    <string name="player_download_playlist">Llista</string>
 
     </resources>

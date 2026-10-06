@@ -111,21 +111,17 @@
 
     <string name="pref_library_sorting_title">Organização</string>
     <string name="pref_library_sorting_summary">A coleção está organizada pela ordem %1$s.</string>
-    <string-array name="pref_library_sorting">
-        <item>Ascendente</item>
-        <item>Descendente</item>
-    </string-array>
+    <string name="pref_library_sorting_asc">Ascendente</string>
+    <string name="pref_library_sorting_desc">Descendente</string>
 
     <string name="pref_library_grouping_title">Agrupamento</string>
     <string name="pref_library_grouping_summary">A coleção está agrupada por %1$s.</string>
-    <string-array name="pref_library_grouping">
-        <item>Artista</item>
-        <item>Artista/Álbum</item>
-        <item>Artista/Ano</item>
-        <item>Álbum</item>
-        <item>Álbum</item>
-        <item>Género/Artista/Álbum</item>
-    </string-array>
+    <string name="pref_library_grouping_artist">Artista</string>
+    <string name="pref_library_grouping_artist_album">Artista/Álbum</string>
+    <string name="pref_library_grouping_artist_year">Artista/Ano</string>
+    <string name="pref_library_grouping_album">Álbum</string>
+    <string name="pref_library_grouping_genre_album">Álbum</string>
+    <string name="pref_library_grouping_genre_artist_album">Género/Artista/Álbum</string>
 
     <string name="pref_autoconnect_title">Ligação automática</string>
     <string name="pref_autoconnect_summary">Estabelecer ligação ao Clementine ao iniciar a aplicação.</string>
@@ -238,10 +234,8 @@
     <string name="navigation_drawer_clementine_on">Clementine em %s</string>
 
     <string name="player_download_what">O que descarregar\?</string>
-    <string-array name="player_download_list">
-        <item>Faixa</item>
-        <item>Álbum</item>
-        <item>Lista de reprodução</item>
-    </string-array>
+    <string name="player_download_song">Faixa</string>
+    <string name="player_download_album">Álbum</string>
+    <string name="player_download_playlist">Lista de reprodução</string>
 
     </resources>

@@ -109,21 +109,17 @@
 
     <string name="pref_library_sorting_title">Sorteren</string>
     <string name="pref_library_sorting_summary">De bibliotheek is gesorteerd in %1$s volgorde.</string>
-    <string-array name="pref_library_sorting">
-        <item>Oplopend</item>
-        <item>Aflopend</item>
-    </string-array>
+    <string name="pref_library_sorting_asc">Oplopend</string>
+    <string name="pref_library_sorting_desc">Aflopend</string>
 
     <string name="pref_library_grouping_title">Groeperen</string>
     <string name="pref_library_grouping_summary">De bibliotheek is gegroepeerd als %1$s.</string>
-    <string-array name="pref_library_grouping">
-        <item>Artiest</item>
-        <item>Artiest / Album</item>
-        <item>Artiest / Jaar</item>
-        <item>Album</item>
-        <item>Genre / Album</item>
-        <item>Genre / Artiest / Album</item>
-    </string-array>
+    <string name="pref_library_grouping_artist">Artiest</string>
+    <string name="pref_library_grouping_artist_album">Artiest / Album</string>
+    <string name="pref_library_grouping_artist_year">Artiest / Jaar</string>
+    <string name="pref_library_grouping_album">Album</string>
+    <string name="pref_library_grouping_genre_album">Genre / Album</string>
+    <string name="pref_library_grouping_genre_artist_album">Genre / Artiest / Album</string>
 
     <string name="pref_autoconnect_title">Auto-verbinden</string>
     <string name="pref_autoconnect_summary">Automatisch connectie maken met Clementine bij opstarten remote. </string>
@@ -234,10 +230,8 @@
     <string name="navigation_drawer_clementine_on">Clementine op %s</string>
 
     <string name="player_download_what">Wat te downloaden?</string>
-    <string-array name="player_download_list">
-        <item>Nummer</item>
-        <item>Album</item>
-        <item>Afspeellijst</item>
-    </string-array>
+    <string name="player_download_song">Nummer</string>
+    <string name="player_download_album">Album</string>
+    <string name="player_download_playlist">Afspeellijst</string>
 
     </resources>

@@ -113,21 +113,17 @@
 
     <string name="pref_library_sorting_title">Usporiadanie</string>
     <string name="pref_library_sorting_summary">Zbierka je usporiadaná v %1$s poradí.</string>
-    <string-array name="pref_library_sorting">
-        <item>vzostupnom</item>
-        <item>zostupnom</item>
-    </string-array>
+    <string name="pref_library_sorting_asc">vzostupnom</string>
+    <string name="pref_library_sorting_desc">zostupnom</string>
 
     <string name="pref_library_grouping_title">Zoskupenie</string>
     <string name="pref_library_grouping_summary">Zbierka je zoskupená podľa %1$s.</string>
-    <string-array name="pref_library_grouping">
-        <item>Interpret</item>
-        <item>Interpret / Album</item>
-        <item>Interpret / Rok</item>
-        <item>Album</item>
-        <item>Žáner / Album</item>
-        <item>Žáner / Interpret / Album</item>
-    </string-array>
+    <string name="pref_library_grouping_artist">Interpret</string>
+    <string name="pref_library_grouping_artist_album">Interpret / Album</string>
+    <string name="pref_library_grouping_artist_year">Interpret / Rok</string>
+    <string name="pref_library_grouping_album">Album</string>
+    <string name="pref_library_grouping_genre_album">Žáner / Album</string>
+    <string name="pref_library_grouping_genre_artist_album">Žáner / Interpret / Album</string>
 
     <string name="pref_autoconnect_title">Pripojiť automaticky</string>
     <string name="pref_autoconnect_summary">Automaticky pripojiť k prehrávaču Clementine po spustení diaľkového ovládania.
@@ -245,10 +241,8 @@
     <string name="navigation_drawer_clementine_on">Clementine na %s</string>
 
     <string name="player_download_what">Čo sa má prevziať?</string>
-    <string-array name="player_download_list">
-        <item>Skladba</item>
-        <item>Album</item>
-        <item>Zoznam skladieb</item>
-    </string-array>
+    <string name="player_download_song">Skladba</string>
+    <string name="player_download_album">Album</string>
+    <string name="player_download_playlist">Zoznam skladieb</string>
 
     </resources>

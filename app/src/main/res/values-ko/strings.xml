@@ -72,9 +72,6 @@
     <string name="pref_volume_inc_title">볼륨 단계 변화</string>
     <string name="pref_volume_inc_summary">현재 볼륨 단계: %s</string>
 
-    <string-array name="pref_library_grouping">
-        <item>앨범</item>
-    </string-array>
 
     <string name="pref_port_title">포트</string>
     <string name="pref_port_summary">현재 포트:</string>
@@ -124,8 +121,5 @@
 
     <string name="fragment_title_connection">Clementine</string>
 
-    <string-array name="player_download_list">
-        <item>앨범</item>
-    </string-array>
 
     </resources>

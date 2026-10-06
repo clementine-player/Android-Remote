@@ -99,9 +99,6 @@
     <string name="pref_library_sorting_summary">Η βιβλιοθήκη είναι ταξινομημένη στην %1$s σειρα.</string>
     <string name="pref_library_grouping_title">Ομαδοποίηση</string>
     <string name="pref_library_grouping_summary">Η βιβλιοθήκη είναι ομαδοποιημένη  κατά %1$s.</string>
-    <string-array name="pref_library_grouping">
-        <item>Αλμπουμ</item>
-    </string-array>
 
     <string name="pref_autoconnect_title">Αυτόματη Σύνδεση</string>
     <string name="pref_autoconnect_summary">Αυτόματη σύνδεση με το Clementine κατά την εκκίνηση του τηλεχειριστηρίου.</string>
@@ -193,8 +190,5 @@
     <string name="navigation_drawer_clementine_on">Clementine σε %s</string>
 
     <string name="player_download_what">Τι να κατεβάσω;</string>
-    <string-array name="player_download_list">
-        <item>Αλμπουμ</item>
-    </string-array>
 
     </resources>
