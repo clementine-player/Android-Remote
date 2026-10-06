@@ -237,8 +237,8 @@
     <string name="navigation_drawer_clementine_on">Clementine na %s</string>
 
     <string name="player_download_what">Što preuzeti?</string>
-    <string name="player_download_song">Pjesmu</string>
-    <string name="player_download_album">Album</string>
-    <string name="player_download_playlist">Popis izvođenja</string>
+    <string name="player_download_what_song">Pjesmu</string>
+    <string name="player_download_what_album">Album</string>
+    <string name="player_download_what_playlist">Popis izvođenja</string>
 
     </resources>

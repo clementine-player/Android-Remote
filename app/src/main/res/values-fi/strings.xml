@@ -216,8 +216,8 @@
     <string name="navigation_drawer_clementine_on">Clementine koneella %s</string>
 
     <string name="player_download_what">Mitä ladataan?</string>
-    <string name="player_download_song">Kappale</string>
-    <string name="player_download_album">Albumi</string>
-    <string name="player_download_playlist">Soittolista</string>
+    <string name="player_download_what_song">Kappale</string>
+    <string name="player_download_what_album">Albumi</string>
+    <string name="player_download_what_playlist">Soittolista</string>
 
     </resources>

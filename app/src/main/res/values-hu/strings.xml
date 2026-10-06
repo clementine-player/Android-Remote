@@ -231,8 +231,8 @@
     <string name="navigation_drawer_clementine_on">Clementine itt: %s</string>
 
     <string name="player_download_what">Mit töltsön le?</string>
-    <string name="player_download_song">Szám</string>
-    <string name="player_download_album">Album</string>
-    <string name="player_download_playlist">Lejátszólista</string>
+    <string name="player_download_what_song">Szám</string>
+    <string name="player_download_what_album">Album</string>
+    <string name="player_download_what_playlist">Lejátszólista</string>
 
     </resources>

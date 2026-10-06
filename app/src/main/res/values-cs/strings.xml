@@ -242,8 +242,8 @@
     <string name="navigation_drawer_clementine_on">Clementine na %s</string>
 
     <string name="player_download_what">Co stahovat?</string>
-    <string name="player_download_song">Píseň</string>
-    <string name="player_download_album">Album</string>
-    <string name="player_download_playlist">Seznam skladeb</string>
+    <string name="player_download_what_song">Píseň</string>
+    <string name="player_download_what_album">Album</string>
+    <string name="player_download_what_playlist">Seznam skladeb</string>
 
     </resources>

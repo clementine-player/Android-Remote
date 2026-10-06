@@ -230,8 +230,8 @@
     <string name="navigation_drawer_clementine_on">Clementine auf %s</string>
 
     <string name="player_download_what">Was herunterladen?</string>
-    <string name="player_download_song">Lied</string>
-    <string name="player_download_album">Album</string>
-    <string name="player_download_playlist">Wiedergabeliste</string>
+    <string name="player_download_what_song">Lied</string>
+    <string name="player_download_what_album">Album</string>
+    <string name="player_download_what_playlist">Wiedergabeliste</string>
 
     </resources>

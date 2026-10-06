@@ -213,8 +213,8 @@
     <string name="navigation_drawer_clementine_on">Clementine su %s</string>
 
     <string name="player_download_what">Cosa scaricare?</string>
-    <string name="player_download_song">Canzone</string>
-    <string name="player_download_album">Album</string>
-    <string name="player_download_playlist">Playlist</string>
+    <string name="player_download_what_song">Canzone</string>
+    <string name="player_download_what_album">Album</string>
+    <string name="player_download_what_playlist">Playlist</string>
 
     </resources>

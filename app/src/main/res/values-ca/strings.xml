@@ -232,8 +232,8 @@
     <string name="navigation_drawer_clementine_on">Clementine en %s</string>
 
     <string name="player_download_what">Què s\'ha de baixar?</string>
-    <string name="player_download_song">Títol</string>
-    <string name="player_download_album">Àlbum</string>
-    <string name="player_download_playlist">Llista</string>
+    <string name="player_download_what_song">Títol</string>
+    <string name="player_download_what_album">Àlbum</string>
+    <string name="player_download_what_playlist">Llista</string>
 
     </resources>

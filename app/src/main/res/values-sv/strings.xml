@@ -232,8 +232,8 @@
     <string name="navigation_drawer_clementine_on">Clementine på %s</string>
 
     <string name="player_download_what">Vad ska nerladdas?</string>
-    <string name="player_download_song">Låt</string>
-    <string name="player_download_album">Album</string>
-    <string name="player_download_playlist">Spellista</string>
+    <string name="player_download_what_song">Låt</string>
+    <string name="player_download_what_album">Album</string>
+    <string name="player_download_what_playlist">Spellista</string>
 
     </resources>

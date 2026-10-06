@@ -234,8 +234,8 @@
     <string name="navigation_drawer_clementine_on">Клементина на %s</string>
 
     <string name="player_download_what">Шта да преузмем?</string>
-    <string name="player_download_song">Песма</string>
-    <string name="player_download_album">Албум</string>
-    <string name="player_download_playlist">Листа нумера</string>
+    <string name="player_download_what_song">Песма</string>
+    <string name="player_download_what_album">Албум</string>
+    <string name="player_download_what_playlist">Листа нумера</string>
 
     </resources>

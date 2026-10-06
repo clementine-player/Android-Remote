@@ -204,8 +204,8 @@
     <string name="fragment_title_connection">Clementine</string>
 
     <string name="player_download_what">İndirilecek şey ne?</string>
-    <string name="player_download_song">Şarkı</string>
-    <string name="player_download_album">Albüm</string>
-    <string name="player_download_playlist">Çalma Listesi</string>
+    <string name="player_download_what_song">Şarkı</string>
+    <string name="player_download_what_album">Albüm</string>
+    <string name="player_download_what_playlist">Çalma Listesi</string>
 
     </resources>

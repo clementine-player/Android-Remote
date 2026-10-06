@@ -19,9 +19,9 @@ import de.qspool.clementineremote.R
 
 /** What to download from the player, and what the choice is called. */
 enum class DownloadWhat(val tag: String, @StringRes val label: Int) {
-    SONG("downloadSong", R.string.player_download_song),
-    ALBUM("downloadAlbum", R.string.player_download_album),
-    PLAYLIST("downloadPlaylist", R.string.player_download_playlist),
+    SONG("downloadSong", R.string.player_download_what_song),
+    ALBUM("downloadAlbum", R.string.player_download_what_album),
+    PLAYLIST("downloadPlaylist", R.string.player_download_what_playlist),
 }
 
 /** Asks whether to download the song playing, its album or its playlist. */

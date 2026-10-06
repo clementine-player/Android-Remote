@@ -241,8 +241,8 @@
     <string name="navigation_drawer_clementine_on">Clementine ties %s</string>
 
     <string name="player_download_what">Ką atsisiųsti?</string>
-    <string name="player_download_song">Daina</string>
-    <string name="player_download_album">Albumas</string>
-    <string name="player_download_playlist">Grojaraštis</string>
+    <string name="player_download_what_song">Daina</string>
+    <string name="player_download_what_album">Albumas</string>
+    <string name="player_download_what_playlist">Grojaraštis</string>
 
     </resources>
