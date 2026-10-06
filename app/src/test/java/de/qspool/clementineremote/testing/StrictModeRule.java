@@ -42,7 +42,30 @@ public class StrictModeRule extends ExternalResource {
         if (violation instanceof IncorrectContextUseViolation) {
             return;
         }
+        // Robolectric's stand-in for MediaStore never closes the database it makes to keep the
+        // songs in. That leak is found whenever the garbage collector next runs, often in a later
+        // test. Cursors the app leaks from its queries are opened elsewhere, and still fail.
+        if (openedIn(violation, "org.robolectric.fakes.FakeMediaProvider", "onCreate")) {
+            return;
+        }
         mViolations.add(violation);
+    }
+
+    /**
+     * Whether the resource {@code violation} reports was opened in {@code className}'s method
+     * {@code method}, or in a lambda inside it.
+     */
+    private static boolean openedIn(Violation violation, String className, String method) {
+        for (Throwable t = violation; t != null; t = t.getCause()) {
+            for (StackTraceElement frame : t.getStackTrace()) {
+                if (frame.getClassName().equals(className)
+                        && (frame.getMethodName().equals(method)
+                                || frame.getMethodName().startsWith("lambda$" + method + "$"))) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override
