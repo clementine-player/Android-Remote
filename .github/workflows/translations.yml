@@ -38,6 +38,9 @@ permissions:
 env:
   TX_VERSION: 1.6.17
 
+# Every tx command is --silent: otherwise the client cuts each line, errors included, to the
+# terminal's width, 80 columns in CI, which hides why Transifex refused a file.
+
 jobs:
   push:
     name: Push strings to Transifex
@@ -56,10 +59,10 @@ jobs:
           echo "$RUNNER_TEMP/tx" >> "$GITHUB_PATH"
       - name: Push the English strings
         if: env.TX_TOKEN != ''
-        run: tx push --source
+        run: tx push --source --silent
       - name: Push the translations
         if: env.TX_TOKEN != '' && inputs.push_translations
-        run: tx push --translation --skip
+        run: tx push --translation --skip --silent
       - name: No Transifex token
         if: env.TX_TOKEN == ''
         run: echo "::notice::The TX_TOKEN secret isn't set, so nothing was sent to Transifex. See RELEASING.md."
@@ -102,7 +105,7 @@ jobs:
             find app/src/main/res -path '*/values-*/strings.xml' | xargs cat | awk '/<string |<item / { n++ } END { print n + 0 }'
           }
           before=$(count)
-          tx pull --all --force --mode onlytranslated
+          tx pull --all --force --mode onlytranslated --silent
           scripts/android-language-folders.sh
           after=$(count)
           echo "Translated strings: $before before, $after after."
