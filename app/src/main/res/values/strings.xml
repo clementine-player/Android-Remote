@@ -299,7 +299,7 @@
     <string name="dialog_license_top"> This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY</string>
 
     <string name="tasker_intro">Please select an action.</string>
-    <string name="tasker_ip_help">Enter the details you want to connect to if you selected "Connect" above. Auth code is optional if disabled in Clementine.</string>
+    <string name="tasker_ip_help">Enter the details you want to connect to if you selected \"Connect\" above. Auth code is optional if disabled in Clementine.</string>
     <string name="tasker_action">Action:</string>
     <string name="tasker_connect">Connect</string>
     <string name="tasker_disconnect">Disconnect</string>
@@ -326,7 +326,7 @@
 
     <string name="no_private_ip">Your Android device has a non local ip address. Try disabling \"Use only local ip addresses\" in the Clementine settings.</string>
     <string name="check_ip">1) Is Clementine running?\n2) Are you using Clementine %1$s or later?\n3) Did you enable the network remote in the Clementine settings?\n4) Check if you entered the correct ip address.\n</string>
-    <string name="wifi_disabled">Wifi is disabled. If you want to connect to Clementine via internet make sure you forwarded the ports correctly and you have disabled \"Use only local ip addresses\"".</string>
+    <string name="wifi_disabled">Wifi is disabled. If you want to connect to Clementine via internet make sure you forwarded the ports correctly and you have disabled \"Use only local ip addresses\".</string>
 
     <string name="input_auth_code">Authentication Code</string>
     <string name="done">Done</string>
