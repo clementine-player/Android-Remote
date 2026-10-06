@@ -83,6 +83,7 @@
     <string name="shell_search_close">Close search</string>
     <string name="shell_more">More options</string>
     <string name="player_collapse">Collapse player</string>
+    <!-- Small heading at the top of the player, above the name of the playlist the song is playing from. -->
     <string name="player_playing_from">Playing from</string>
     <string name="queue_playing">Playing</string>
     <string name="player_love">Love on Last.fm</string>
@@ -94,6 +95,7 @@
     <string name="details_tab">Details</string>
     <string name="lyrics_tab">Lyrics</string>
     <string name="connection_connected">Connected</string>
+    <!-- Label for how long the phone has been connected to Clementine, shown next to it as a duration such as 01:23:45. -->
     <string name="connection_uptime">Connected for</string>
     <string name="connection_switch">Switch Clementine</string>
     <string name="connection_switch_summary">Pick another computer on your network</string>
