@@ -1,227 +1,254 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-  <string name="app_name">Clementine Remote</string>
-  <string name="app_not_available">Programa neprieinama!</string>
-  <string name="connectdialog_connect">Prisijungti</string>
-  <string name="connectdialog_connecting">Jungiamasi prie Clementine</string>
-  <string name="connectdialog_download_data">Atsiunčiami duomenys</string>
-  <string name="connectdialog_error">Nepavyko pasiekti kompiuterio</string>
-  <string name="connectdialog_ip_hint">Įrašykite IP adresą</string>
-  <string name="player_nosong">Šiuo metu negroja jokia daina</string>
-  <string name="player_disconnected">Atsijungta</string>
-  <string name="playler_volume">Garsumas</string>
-  <string name="player_stop_after_current">Po takelio pabaigos perjungti stabdymą.</string>
-  <string name="player_download_lyrics">Atsiunčiami dainos žodžiai</string>
-  <string name="player_no_lyrics">Dainos žodžių nerasta.</string>
-  <string name="player_download_started">Atsiuntimas pradėtas!</string>
-  <string name="player_song_is_stream">Nepavyksta atsisiųsti srautų!</string>
-  <string name="player_stream">[S]</string>
-  <string name="playlist_search_hint">Ieškoti takelio</string>
-  <string name="playlist_empty">Grojaraštis tuščias!</string>
-  <string name="playlist_context_play">Groti elementą</string>
-  <string name="playlist_context_remove">Šalinti iš grojaraščio</string>
-  <string name="playlist_close">Užverti grojaraštį</string>
-  <string name="playlist_clear">Išvalyti grojaraštį</string>
-  <string name="playlist_clear_content">Tai neatitaisomai pašalins visas dainas iš grojaraščio. Tęsti?</string>
-  <string name="playlist_clear_confirm">Išvalyti grojaraštį</string>
-  <string name="downloads_empty">Atsiuntimų nėra!</string>
-  <string name="downloaded_songs">Dainos atsiųstos - spustelėkite, norėdami groti</string>
-  <string name="download_noti_title">Pradedamas atsiuntimas</string>
-  <plurals name="download_noti_n_downloads">
-    <item quantity="one">%d aktyvus atsiuntimas</item>
-    <item quantity="few">%d aktyvūs atsiuntimai</item>
-    <item quantity="many">%d aktyvių atsiuntimų</item>
-    <item quantity="other">%d aktyvių atsiuntimų</item>
-  </plurals>
-  <string name="download_noti_n_progress">Bendra eiga: %d %</string>
-  <string name="download_noti_title_song">[Daina]</string>
-  <string name="download_noti_title_album">[Albumas]</string>
-  <string name="download_noti_title_playlist">[Grojaraštis]</string>
-  <string name="download_noti_title_songs">[Dainos]</string>
-  <plurals name="download_noti_n_finished">
-    <item quantity="one">Užbaigtas %d atsiuntimas</item>
-    <item quantity="few">Užbaigti %d atsiuntimai</item>
-    <item quantity="many">Užbaigta %d atsiuntimų</item>
-    <item quantity="other">Užbaigta %d atsiuntimų</item>
-  </plurals>
-  <string name="download_noti_complete">Atsiuntimas užbaigtas</string>
-  <string name="download_noti_canceled">Atsiuntimas atšauktas</string>
-  <string name="download_noti_insufficient_space">Nepakanka vietos, atsiuntimas nutraukiamas.</string>
-  <string name="download_noti_forbidden">Atsiuntimas uždraustas. Aktyvuokite Clementine nustatymuose.</string>
-  <string name="download_noti_not_mounted">Atminties įrenginys nerastas!</string>
-  <string name="download_noti_only_wifi">Atsiuntimas leidžiamas tik naudojantis belaidžiu (wifi) tinklu.</string>
-  <string name="download_noti_transcoding">Perkoduojami failai</string>
-  <string name="download_noti_transcoding_subtitle">Prašome palaukti</string>
-  <string name="library_optimize">Optimizuojama duomenų bazė</string>
-  <string name="library_no_search_results">Nėra dainų, atitinkančių jūsų paieškos kriterijų!</string>
-  <string name="global_search_empty">Įrašykite paieškos žodžius, kad rastumėte muziką savo kompiuteryje ar internete</string>
-  <string name="global_search_search">Ieškokite ko nors</string>
-  <string name="song_info_album">Albumas</string>
-  <string name="song_info_genre">Žanras</string>
-  <string name="song_info_year">Metai</string>
-  <string name="song_info_track">Takelis</string>
-  <string name="song_info_disc">Diskas</string>
-  <string name="song_info_playcount">Grojimo skaitiklis</string>
-  <string name="song_info_length">Trukmė</string>
-  <string name="song_info_size">Dydis</string>
-  <string name="song_info_filename">Failo pavadinimas</string>
-  <string name="song_info_rating">Įvertinimas</string>
-  <string name="song_info_rated">Daina įvertinta $stars$ žvaigždutėmis</string>
-  <string name="connection_volume">Garsumas</string>
-  <string name="connection_version">Clementine versija</string>
-  <string name="connection_traffic">Duomenų Išsiuntimas / Atsiuntimas (vid. / sek.)</string>
-  <string name="connection_traffic_unsupported">Statistika šiame įrenginyje yra neprieinama</string>
-  <string name="menu_settings">Nustatymai</string>
-  <string name="menu_search">Paieška</string>
-  <string name="menu_ban">Blokuoti</string>
-  <string name="menu_download">Atsisiųsti</string>
-  <string name="menu_download_playlist">Atsisiųsti grojaraštį</string>
-  <string name="donate_header">Paaukojimai</string>
-  <string name="donate_text">Ačiū, kad naudojatės mano programa, tikiuosi, kad ji yra jums naudinga!\n\nJeigu jums labai patiko mano darbas, paremkite mane, paaukodami nedidelę pinigų sumą.</string>
-  <string name="donate_i_want">Aš noriu paaukoti:</string>
-  <string name="donate_one">Spurgos (1.00 €)</string>
-  <string name="donate_two">Kava (2.00 €)</string>
-  <string name="donate_five">Pica (5.00 €)</string>
-  <string name="donate_thanks">Dėkojame už jūsų palaikymą! :-)</string>
-  <string name="donate_complete">Paaukojimas užbaigtas, dėkoju! :-)</string>
-  <string name="donate_try_again">Vykdomas paskiausias paaukojimas, bandykite vėl</string>
-  <string name="donate_not_available">Google Play neprieinama</string>
-  <string name="donate_not_available_text">Prašome patikrinti ar turite įdiegtą naujausią \"Google Play\" parduotuvės versiją ir bandyti vėl!</string>
-  <string name="pref_cat_player">Grotuvas</string>
-  <string name="pref_cat_library">Biblioteka</string>
-  <string name="pref_cat_downloads">Atsiuntimai</string>
-  <string name="pref_cat_advanced">Išplėstiniai</string>
-  <string name="pref_cat_connection">Ryšys</string>
-  <string name="pref_cat_about">Apie</string>
-  <string name="pref_volume_title">Naudoti garsumo klavišus</string>
-  <string name="pref_volume_summary">Naudoti garsumo klavišus, kad būtų valdomas Clementine garsumas.</string>
-  <string name="pref_trackno_title">Rodyti takelio numerį</string>
-  <string name="pref_trackno_summary">Rodyti ar slėpti takelio numerį grojaraščiuose.</string>
-  <string name="pref_lastfm_title">Last.fm</string>
-  <string name="pref_lastfm_summary">Aktyvuokite, kad žymėtumėte kaip patinkančius / blokuotumėte takelius.</string>
-  <string name="pref_lower_volume_title">Mažinti garsumą</string>
-  <string name="pref_lower_volume_summary">Mažinti garsumą įeinančių / išeinančių skambučių metu.</string>
-  <string name="pref_call_volume_title">Skambučio garsumo lygis</string>
-  <string name="pref_call_volume_summary">Esamas skambučio garsumo lygis: %s</string>
-  <string name="pref_volume_inc_title">Garsumo keitimo lygis</string>
-  <string name="pref_volume_inc_summary">Esamas garsumo keitimo lygis : %s</string>
-  <string name="pref_library_sorting_title">Rikiavimas</string>
-  <string name="pref_library_sorting_summary">Biblioteka yra rikiuojama %1$s tvarka.</string>
-  <string-array name="pref_library_sorting">
-    <item>Didejančia</item>
-    <item>Mažėjančia</item>
-  </string-array>
-  <string name="pref_library_grouping_title">Grupavimas</string>
-  <string name="pref_library_grouping_summary">Biblioteka yra grupuojama pagal %1$s.</string>
-  <string-array name="pref_library_grouping">
-    <item>Atlikėją</item>
-    <item>Atlikėją / Albumą</item>
-    <item>Atlikėją / Metus</item>
-    <item>Albumą</item>
-    <item>Žanrą / Albumą</item>
-    <item>Žanrą / Atlikėją / Albumą</item>
-  </string-array>
-  <string name="pref_autoconnect_title">Automatinis prisijungimas</string>
-  <string name="pref_autoconnect_summary">Paleidus nuotolinį valdymą, automatiškai jungtis prie Clementine.
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="app_name">Clementine Remote</string>
+    <string name="app_not_available">Programa neprieinama!</string>
+
+
+    <string name="connectdialog_connect">Prisijungti</string>
+    <string name="connectdialog_connecting">Jungiamasi prie Clementine</string>
+    <string name="connectdialog_download_data">Atsiunčiami duomenys</string>
+    <string name="connectdialog_error">Nepavyko pasiekti kompiuterio</string>
+    <string name="connectdialog_ip_hint">Įrašykite IP adresą</string>
+    <string name="player_nosong">Šiuo metu negroja jokia daina</string>
+    <string name="player_disconnected">Atsijungta</string>
+    <string name="playler_volume">Garsumas</string>
+    <string name="player_stop_after_current">Po takelio pabaigos perjungti stabdymą.</string>
+    <string name="player_download_lyrics">Atsiunčiami dainos žodžiai</string>
+    <string name="player_no_lyrics">Dainos žodžių nerasta.</string>
+    <string name="player_download_started">Atsiuntimas pradėtas!</string>
+    <string name="player_song_is_stream">Nepavyksta atsisiųsti srautų!</string>
+    <string name="player_stream">[S]</string>
+
+
+    <string name="playlist_search_hint">Ieškoti takelio</string>
+    <string name="playlist_empty">Grojaraštis tuščias!</string>
+    <string name="playlist_context_play">Groti elementą</string>
+    <string name="playlist_context_remove">Šalinti iš grojaraščio</string>
+    <string name="playlist_close">Užverti grojaraštį</string>
+    <string name="playlist_clear">Išvalyti grojaraštį</string>
+    <string name="playlist_clear_content">Tai neatitaisomai pašalins visas dainas iš grojaraščio. Tęsti?</string>
+    <string name="playlist_clear_confirm">Išvalyti grojaraštį</string>
+    <string name="downloads_empty">Atsiuntimų nėra!</string>
+    <string name="downloaded_songs">Dainos atsiųstos - spustelėkite, norėdami groti</string>
+    <string name="downloads_title">Atsiuntimai</string>
+    <string name="download_noti_title">Pradedamas atsiuntimas</string>
+    <plurals name="download_noti_n_downloads">
+        <item quantity="one">%d aktyvus atsiuntimas</item>
+        <item quantity="few">%d aktyvūs atsiuntimai</item>
+        <item quantity="many">%d aktyvių atsiuntimų</item>
+        <item quantity="other">%d aktyvių atsiuntimų</item>
+    </plurals>
+    <string name="download_noti_n_progress">Bendra eiga: %d %</string>
+    <string name="download_noti_title_song">[Daina]</string>
+    <string name="download_noti_title_album">[Albumas]</string>
+    <string name="download_noti_title_playlist">[Grojaraštis]</string>
+    <string name="download_noti_title_songs">[Dainos]</string>
+    <plurals name="download_noti_n_finished">
+        <item quantity="one">Užbaigtas %d atsiuntimas</item>
+        <item quantity="few">Užbaigti %d atsiuntimai</item>
+        <item quantity="many">Užbaigta %d atsiuntimų</item>
+        <item quantity="other">Užbaigta %d atsiuntimų</item>
+    </plurals>
+    <string name="download_noti_complete">Atsiuntimas užbaigtas</string>
+    <string name="download_noti_canceled">Atsiuntimas atšauktas</string>
+    <string name="download_noti_insufficient_space">Nepakanka vietos, atsiuntimas nutraukiamas.</string>
+    <string name="download_noti_forbidden">Atsiuntimas uždraustas. Aktyvuokite Clementine nustatymuose.</string>
+    <string name="download_noti_not_mounted">Atminties įrenginys nerastas!</string>
+    <string name="download_noti_only_wifi">Atsiuntimas leidžiamas tik naudojantis belaidžiu (wifi) tinklu.</string>
+    <string name="download_noti_transcoding">Perkoduojami failai</string>
+    <string name="download_noti_transcoding_subtitle">Prašome palaukti</string>
+
+
+    <string name="library_optimize">Optimizuojama duomenų bazė</string>
+    <string name="library_no_search_results">Nėra dainų, atitinkančių jūsų paieškos kriterijų!</string>
+    <string name="library_title">Biblioteka</string>
+    <string name="internet_play">Groti</string>
+    <string name="global_search_empty">Įrašykite paieškos žodžius, kad rastumėte muziką savo kompiuteryje ar internete</string>
+    <string name="global_search_search">Ieškokite ko nors</string>
+    <string name="search_top_artist">Atlikėją</string>
+    <string name="song_info_album">Albumas</string>
+    <string name="song_info_genre">Žanras</string>
+    <string name="song_info_year">Metai</string>
+    <string name="song_info_track">Takelis</string>
+    <string name="song_info_disc">Diskas</string>
+    <string name="song_info_playcount">Grojimo skaitiklis</string>
+    <string name="song_info_length">Trukmė</string>
+    <string name="song_info_size">Dydis</string>
+    <string name="song_info_filename">Failo pavadinimas</string>
+    <string name="song_info_rating">Įvertinimas</string>
+    <string name="song_info_rated">Daina įvertinta $stars$ žvaigždutėmis</string>
+
+
+    <string name="connection_volume">Garsumas</string>
+    <string name="connection_version">Clementine versija</string>
+    <string name="connection_traffic">Duomenų Išsiuntimas / Atsiuntimas (vid. / sek.)</string>
+    <string name="connection_traffic_unsupported">Statistika šiame įrenginyje yra neprieinama</string>
+
+
+    <string name="menu_settings">Nustatymai</string>
+    <string name="menu_search">Paieška</string>
+    <string name="menu_ban">Blokuoti</string>
+    <string name="menu_download">Atsisiųsti</string>
+    <string name="menu_download_playlist">Atsisiųsti grojaraštį</string>
+
+    <string name="pref_cat_player">Grotuvas</string>
+    <string name="pref_cat_library">Biblioteka</string>
+    <string name="pref_cat_downloads">Atsiuntimai</string>
+    <string name="pref_cat_advanced">Išplėstiniai</string>
+    <string name="pref_cat_connection">Ryšys</string>
+    <string name="pref_cat_about">Apie</string>
+
+    <string name="pref_volume_title">Naudoti garsumo klavišus</string>
+    <string name="pref_volume_summary">Naudoti garsumo klavišus, kad būtų valdomas Clementine garsumas.</string>
+    <string name="pref_trackno_title">Rodyti takelio numerį</string>
+    <string name="pref_trackno_summary">Rodyti ar slėpti takelio numerį grojaraščiuose.</string>
+    <string name="pref_lastfm_title">Last.fm</string>
+    <string name="pref_lastfm_summary">Aktyvuokite, kad žymėtumėte kaip patinkančius / blokuotumėte takelius.</string>
+    <string name="pref_lower_volume_title">Mažinti garsumą</string>
+    <string name="pref_lower_volume_summary">Mažinti garsumą įeinančių / išeinančių skambučių metu.</string>
+    <string name="pref_call_volume_title">Skambučio garsumo lygis</string>
+    <string name="pref_call_volume_summary">Esamas skambučio garsumo lygis: %s</string>
+    <string name="pref_volume_inc_title">Garsumo keitimo lygis</string>
+    <string name="pref_volume_inc_summary">Esamas garsumo keitimo lygis : %s</string>
+
+    <string name="pref_library_sorting_title">Rikiavimas</string>
+    <string name="pref_library_sorting_summary">Biblioteka yra rikiuojama %1$s tvarka.</string>
+    <string-array name="pref_library_sorting">
+        <item>Didejančia</item>
+        <item>Mažėjančia</item>
+    </string-array>
+
+    <string name="pref_library_grouping_title">Grupavimas</string>
+    <string name="pref_library_grouping_summary">Biblioteka yra grupuojama pagal %1$s.</string>
+    <string-array name="pref_library_grouping">
+        <item>Atlikėją</item>
+        <item>Atlikėją / Albumą</item>
+        <item>Atlikėją / Metus</item>
+        <item>Albumą</item>
+        <item>Žanrą / Albumą</item>
+        <item>Žanrą / Atlikėją / Albumą</item>
+    </string-array>
+
+    <string name="pref_autoconnect_title">Automatinis prisijungimas</string>
+    <string name="pref_autoconnect_summary">Paleidus nuotolinį valdymą, automatiškai jungtis prie Clementine.
     </string>
-  <string name="pref_port_title">Prievadas</string>
-  <string name="pref_port_summary">Esamas prievadas:</string>
-  <string name="pref_port_error">Neleistinas prievadas!</string>
-  <string name="pref_wake_lock_title">Išlaikyti kompiuterį prijungtą</string>
-  <string name="pref_wake_lock_summary">Įjunkite, jeigu programa, būdama fone, atsitiktinai atsijungia. Tai gali išnaudoti daugiau baterijos energijos.
+    <string name="pref_port_title">Prievadas</string>
+    <string name="pref_port_summary">Esamas prievadas:</string>
+    <string name="pref_port_error">Neleistinas prievadas!</string>
+
+    <string name="pref_wake_lock_title">Išlaikyti kompiuterį prijungtą</string>
+    <string name="pref_wake_lock_summary">Įjunkite, jeigu programa, būdama fone, atsitiktinai atsijungia. Tai gali išnaudoti daugiau baterijos energijos.
     </string>
-  <string name="pref_keep_screen_on_title">Išlaikyti ekraną įjungtą</string>
-  <string name="pref_keep_screen_on_summary">Neleisti išjungti ekrano tol, kol Clementine Remote yra prisijungusi prie Clementine.
+    <string name="pref_keep_screen_on_title">Išlaikyti ekraną įjungtą</string>
+    <string name="pref_keep_screen_on_summary">Neleisti išjungti ekrano tol, kol Clementine Remote yra prisijungusi prie Clementine.
     </string>
-  <string name="pref_version_summary">Spustelėkite, kad aplankytumėte projekto svetainę</string>
-  <string name="pref_version_title">Versija</string>
-  <string name="pref_license_title">Licencija</string>
-  <string name="pref_license_summary">GNU GPLv3</string>
-  <string name="pref_opensource_title">Atviras kodas</string>
-  <string name="pref_opensource_summary">Rodyti atviro kodo programinės įrangos licencijas</string>
-  <string name="pref_opensource">Atviro kodo programinės įrangos licencijos</string>
-  <string name="pref_about_title">Apie</string>
-  <string name="pref_about_summary">Žmonės dirbantys su šiuo projektu</string>
-  <string name="pref_clementine_title">Clementine</string>
-  <string name="pref_clementine_summary">Apsilankyti Clementine svetainėje</string>
-  <string name="pref_dl_wifi_only_title">Tik WiFi</string>
-  <string name="pref_dl_wifi_only_summary">Atsisiųsti dainas tik tuomet, kai yra prisijungta prie belaidžio tinklo.</string>
-  <string name="pref_dl_dir">Nustatyti atsiuntimo aplanką</string>
-  <string name="pref_dl_override">Nustelbti esamus failus</string>
-  <string name="pref_dl_cat_folders">Aplankai</string>
-  <string name="pref_dl_pl_save_own_dir_title">Įrašyti takelius į grojaraščio aplanką</string>
-  <string name="pref_dl_pl_save_own_dir_summary">Sukuria grojaraščio pavadinimu pavadintą aplanką ir ten įrašo takelius.</string>
-  <string name="pref_dl_pl_artist_dir_title">Sukurti atlikėjo poaplankį</string>
-  <string name="pref_dl_pl_artist_dir_summary">Sukurti atlikėjo poaplankį kiekvienam atskiram takeliui.</string>
-  <string name="pref_dl_pl_album_dir_title">Sukurti albumo poaplankį</string>
-  <string name="pref_dl_pl_album_dir_summary">Atlikėjo viduje sukurti albumo poaplankį kiekvienam atskiram takeliui.</string>
-  <string name="file_dialog_set_dir">Pasirinkti katalogą</string>
-  <string name="file_dialog_not_writable">Katalogas neįrašomas</string>
-  <string name="file_dialog_custom_paths_available">Pasirinkti kitą</string>
-  <string name="dialog_about_authors">Autoriai</string>
-  <string name="dialog_about_supporters">Remėjai</string>
-  <string name="dialog_about_others">Kiti</string>
-  <string name="dialog_license_top">Ši programa yra platinama tikintis, kad ji bus naudinga, tačiau BE JOKIOS GARANTIJOS</string>
-  <string name="tasker_intro">Prašome pasirinkti veiksmą.</string>
-  <string name="tasker_ip_help">Jei viršuje pasirinkote \"Prisijungti\", tuomet įrašykite prie kur jungsitės. Atpažinimo kodas yra nebūtinas, jeigu jis programoje Clementine yra išjungtas.</string>
-  <string name="tasker_action">Veiksmas:</string>
-  <string name="tasker_connect">Prisijungti</string>
-  <string name="tasker_disconnect">Atsijungti</string>
-  <string name="tasker_play">Groti</string>
-  <string name="tasker_pause">Pristabdyti</string>
-  <string name="tasker_playpause">Groti / Pristabdyti</string>
-  <string name="tasker_stop">Stabdyti</string>
-  <string name="tasker_next">Kita daina</string>
-  <string name="tasker_port_hint">Įrašykite prievadą</string>
-  <string name="tasker_auth_hint">Įrašykite atpažinimo kodą</string>
-  <string name="widget_connect_to">Prilieskite, kad prisijungtumėte</string>
-  <string name="widget_not_connected">Neprisijungta</string>
-  <string name="widget_open_clementine">Palieskite, kad paleistumėte Clementine Remote</string>
-  <string name="widget_couldnt_connect">Nepavyko prisijungti</string>
-  <string name="dialog_close">Užverti</string>
-  <string name="dialog_cancel">Atsisakyti</string>
-  <string name="dialog_continue">Tęsti</string>
-  <string name="error_versions">Nesuderinama versija</string>
-  <string name="old_proto">Prašome atnaujinti Clementine! Jums reikia Clementine %1$s arba naujesnės versijos.</string>
-  <string name="no_private_ip">Jūsų Android įrenginio adresas yra ne vietinis. Pabandykite Clementine nustatymuose išjungti parinktį \"Leisti tik ryšius iš vietinio tinklo\".</string>
-  <string name="check_ip">1) Ar Clementine yra vykdoma?\n2) Ar jūs naudojate Clementine %1$s ar vėlesnę versiją?\n3) Ar Clementine nustatymuose įjungėte nuotolinį tinklą?\n4) Patikrinkite ar įvedėte teisingą IP adresą.\n</string>
-  <string name="wifi_disabled">Belaidis vietinis tinklas (Wifi) yra išjungtas. Jeigu norite prisijungti prie Clementine per internetą, įsitikinkite, kad teisingai nukreipėte visus prievadus ir esate išjungę \"Leisti tik ryšius iš vietinio tinklo\"\".</string>
-  <string name="input_auth_code">Atpažinimo kodas</string>
-  <string name="done">Atlikta</string>
-  <string name="unknown">Nežinoma</string>
-  <plurals name="number_items">
-    <item quantity="one">%d elementas</item>
-    <item quantity="few">%d elementai</item>
-    <item quantity="many">%d elementų</item>
-    <item quantity="other">%d elementų</item>
-  </plurals>
-  <plurals name="songs_added">
-    <item quantity="one">%d daina pridėta į esamą grojaraštį</item>
-    <item quantity="few">%d dainos pridėtos į esamą grojaraštį</item>
-    <item quantity="many">%d dainų pridėta į esamą grojaraštį</item>
-    <item quantity="other">%d dainų pridėta į esamą grojaraštį</item>
-  </plurals>
-  <string name="repeat_off">Nekartoti</string>
-  <string name="repeat_track">Kartoti takelį</string>
-  <string name="repeat_album">Kartoti albumą</string>
-  <string name="repeat_playlist">Kartoti grojaraštį</string>
-  <string name="shuffle_off">Nemaišyti</string>
-  <string name="shuffle_all">Maišyti viską</string>
-  <string name="shuffle_inside_album">Maišyti takelius šiame albume</string>
-  <string name="shuffle_albums">Maišyti albumus</string>
-  <string name="track_loved">Takelis pažymėtas kaip patinkantis &lt;3</string>
-  <string name="track_banned">Takelis užblokuotas :-(</string>
-  <string name="permissions_required_title">Reikia leidimų</string>
-  <string name="notification_disconnect_keep_alive">Ryšys prarastas. Prilieskite, kad būtų jungiamasi iš naujo.</string>
-  <string name="crash_report_title">Oi, kažkas atsitiko!</string>
-  <string name="crash_report_message">Paskutinį kartą Clementine Remote užstrigo! To neturėjo įvykti! Prašau padėti man patobulinti programą ir išsiųsti man žurnalo failą. Ačiū!</string>
-  <string name="crash_report_send">Siųsti!</string>
-  <string name="fragment_title_connection">Clementine</string>
-  <string name="navigation_drawer_clementine_on">Clementine ties %s</string>
-  <string name="player_download_what">Ką atsisiųsti?</string>
-  <string-array name="player_download_list">
-    <item>Daina</item>
-    <item>Albumas</item>
-    <item>Grojaraštis</item>
-  </string-array>
-</resources>
+
+    <string name="pref_version_summary">Spustelėkite, kad aplankytumėte projekto svetainę</string>
+    <string name="pref_version_title">Versija</string>
+    <string name="pref_license_title">Licencija</string>
+    <string name="pref_license_summary">GNU GPLv3</string>
+    <string name="pref_opensource_title">Atviras kodas</string>
+    <string name="pref_opensource_summary">Rodyti atviro kodo programinės įrangos licencijas</string>
+    <string name="pref_opensource">Atviro kodo programinės įrangos licencijos</string>
+    <string name="pref_about_title">Apie</string>
+    <string name="pref_about_summary">Žmonės dirbantys su šiuo projektu</string>
+    <string name="pref_clementine_title">Clementine</string>
+    <string name="pref_clementine_summary">Apsilankyti Clementine svetainėje</string>
+
+    <string name="pref_dl_wifi_only_title">Tik WiFi</string>
+    <string name="pref_dl_wifi_only_summary">Atsisiųsti dainas tik tuomet, kai yra prisijungta prie belaidžio tinklo.</string>
+    <string name="pref_dl_dir">Nustatyti atsiuntimo aplanką</string>
+    <string name="pref_dl_override">Nustelbti esamus failus</string>
+    <string name="pref_dl_cat_folders">Aplankai</string>
+    <string name="pref_dl_pl_save_own_dir_title">Įrašyti takelius į grojaraščio aplanką</string>
+    <string name="pref_dl_pl_save_own_dir_summary">Sukuria grojaraščio pavadinimu pavadintą aplanką ir ten įrašo takelius.</string>
+    <string name="pref_dl_pl_artist_dir_title">Sukurti atlikėjo poaplankį</string>
+    <string name="pref_dl_pl_artist_dir_summary">Sukurti atlikėjo poaplankį kiekvienam atskiram takeliui.</string>
+    <string name="pref_dl_pl_album_dir_title">Sukurti albumo poaplankį</string>
+    <string name="pref_dl_pl_album_dir_summary">Atlikėjo viduje sukurti albumo poaplankį kiekvienam atskiram takeliui.</string>
+
+    <string name="file_dialog_set_dir">Pasirinkti katalogą</string>
+    <string name="file_dialog_not_writable">Katalogas neįrašomas</string>
+    <string name="file_dialog_custom_paths_available">Pasirinkti kitą</string>
+
+
+    <string name="dialog_about_authors">Autoriai</string>
+    <string name="dialog_about_supporters">Remėjai</string>
+    <string name="dialog_about_others">Kiti</string>
+    <string name="dialog_license_top">Ši programa yra platinama tikintis, kad ji bus naudinga, tačiau BE JOKIOS GARANTIJOS</string>
+
+    <string name="tasker_intro">Prašome pasirinkti veiksmą.</string>
+    <string name="tasker_ip_help">Jei viršuje pasirinkote \"Prisijungti\", tuomet įrašykite prie kur jungsitės. Atpažinimo kodas yra nebūtinas, jeigu jis programoje Clementine yra išjungtas.</string>
+    <string name="tasker_action">Veiksmas:</string>
+    <string name="tasker_connect">Prisijungti</string>
+    <string name="tasker_disconnect">Atsijungti</string>
+    <string name="tasker_play">Groti</string>
+    <string name="tasker_pause">Pristabdyti</string>
+    <string name="tasker_playpause">Groti / Pristabdyti</string>
+    <string name="tasker_stop">Stabdyti</string>
+    <string name="tasker_next">Kita daina</string>
+    <string name="tasker_port_hint">Įrašykite prievadą</string>
+    <string name="tasker_auth_hint">Įrašykite atpažinimo kodą</string>
+
+    <string name="widget_connect_to">Prilieskite, kad prisijungtumėte</string>
+    <string name="widget_not_connected">Neprisijungta</string>
+    <string name="widget_open_clementine">Palieskite, kad paleistumėte Clementine Remote</string>
+    <string name="widget_couldnt_connect">Nepavyko prisijungti</string>
+    <string name="dialog_close">Užverti</string>
+    <string name="dialog_cancel">Atsisakyti</string>
+    <string name="dialog_continue">Tęsti</string>
+
+    <string name="error_versions">Nesuderinama versija</string>
+    <string name="old_proto">Prašome atnaujinti Clementine! Jums reikia Clementine %1$s arba naujesnės versijos.</string>
+
+    <string name="no_private_ip">Jūsų Android įrenginio adresas yra ne vietinis. Pabandykite Clementine nustatymuose išjungti parinktį \"Leisti tik ryšius iš vietinio tinklo\".</string>
+    <string name="check_ip">1) Ar Clementine yra vykdoma?\n2) Ar jūs naudojate Clementine %1$s ar vėlesnę versiją?\n3) Ar Clementine nustatymuose įjungėte nuotolinį tinklą?\n4) Patikrinkite ar įvedėte teisingą IP adresą.\n</string>
+    <string name="wifi_disabled">Belaidis vietinis tinklas (Wifi) yra išjungtas. Jeigu norite prisijungti prie Clementine per internetą, įsitikinkite, kad teisingai nukreipėte visus prievadus ir esate išjungę \"Leisti tik ryšius iš vietinio tinklo\"\".</string>
+
+    <string name="input_auth_code">Atpažinimo kodas</string>
+    <string name="done">Atlikta</string>
+    <string name="unknown">Nežinoma</string>
+    <plurals name="number_items">
+        <item quantity="one">%d elementas</item>
+        <item quantity="few">%d elementai</item>
+        <item quantity="many">%d elementų</item>
+        <item quantity="other">%d elementų</item>
+    </plurals>
+
+    <plurals name="songs_added">
+        <item quantity="one">%d daina pridėta į esamą grojaraštį</item>
+        <item quantity="few">%d dainos pridėtos į esamą grojaraštį</item>
+        <item quantity="many">%d dainų pridėta į esamą grojaraštį</item>
+        <item quantity="other">%d dainų pridėta į esamą grojaraštį</item>
+    </plurals>
+
+
+    <string name="repeat_off">Nekartoti</string>
+    <string name="repeat_track">Kartoti takelį</string>
+    <string name="repeat_album">Kartoti albumą</string>
+    <string name="repeat_playlist">Kartoti grojaraštį</string>
+    <string name="shuffle_off">Nemaišyti</string>
+    <string name="shuffle_all">Maišyti viską</string>
+    <string name="shuffle_inside_album">Maišyti takelius šiame albume</string>
+    <string name="shuffle_albums">Maišyti albumus</string>
+
+
+    <string name="track_loved">Takelis pažymėtas kaip patinkantis &lt;3</string>
+    <string name="track_banned">Takelis užblokuotas :-(</string>
+    <string name="permissions_required_title">Reikia leidimų</string>
+    <string name="notification_play">Groti</string>
+    <string name="notification_pause">Pristabdyti</string>
+    <string name="notification_disconnect_keep_alive">Ryšys prarastas. Prilieskite, kad būtų jungiamasi iš naujo.</string>
+
+    <string name="fragment_title_connection">Clementine</string>
+
+    <string name="navigation_drawer_clementine_on">Clementine ties %s</string>
+
+    <string name="player_download_what">Ką atsisiųsti?</string>
+    <string-array name="player_download_list">
+        <item>Daina</item>
+        <item>Albumas</item>
+        <item>Grojaraštis</item>
+    </string-array>
+
+    </resources>
