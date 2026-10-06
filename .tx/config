@@ -1,22 +1,17 @@
-# Transifex (https://app.transifex.com/amuttsch/clementine-remote/), where the app is
-# translated. .github/workflows/translations.yml pushes the English strings here when they
-# change on master, and pulls the translations back every night.
+# Transifex (https://app.transifex.com/davidsansome/clementine-remot/), where the app is
+# translated, next to the iOS remote. .github/workflows/translations.yml pushes the English
+# strings here when they change on master, and pulls the translations back every night.
 #
-# Transifex names languages like pt_BR; Android's folders are values-pt-rBR. The languages
-# below have folders already; scripts/android-language-folders.sh renames any new one.
+# Transifex names languages like pt_BR; Android's folders are values-pt-rBR. Malay and
+# European Portuguese are ms and pt_PT on Transifex, as the iOS remote has them, though their
+# folders here are values-ms-rMY and values-pt. scripts/android-language-folders.sh names the
+# folders of languages new on Transifex.
 [main]
 host = https://app.transifex.com
 
-[o:amuttsch:p:clementine-remote:r:strings]
+[o:davidsansome:p:clementine-remot:r:android]
 source_file = app/src/main/res/values/strings.xml
 file_filter = app/src/main/res/values-<lang>/strings.xml
 source_lang = en
 type = ANDROID
-lang_map = el_GR: el-rGR, ms_MY: ms-rMY, pt_BR: pt-rBR
-
-[o:amuttsch:p:clementine-remote:r:contentdescription]
-source_file = app/src/main/res/values/contentdescription.xml
-file_filter = app/src/main/res/values-<lang>/contentdescription.xml
-source_lang = en
-type = ANDROID
-lang_map = el_GR: el-rGR, ms_MY: ms-rMY, pt_BR: pt-rBR
+lang_map = ms: ms-rMY, pt_BR: pt-rBR, pt_PT: pt
