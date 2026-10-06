@@ -71,7 +71,9 @@ public class DownloadStorageTest {
         assertEquals(ContentResolver.SCHEME_CONTENT, uri.getScheme());
         assertEquals(FileDownloadStorage.authority(RuntimeEnvironment.getApplication()),
                 uri.getAuthority());
-        assertEquals(uri, mStorage.find("Artist/Album/", "song.ogg"));
+        SavedSong saved = mStorage.find("Artist/Album/", "song.ogg");
+        assertEquals(uri, saved.uri);
+        assertEquals("first".length(), saved.size);
         assertTrue(new File(mFolder.getRoot(), "Artist/Album/song.ogg").isFile());
         assertEquals("first", read(uri));
     }
@@ -91,6 +93,21 @@ public class DownloadStorageTest {
 
         assertNull(mStorage.find("Artist/", "song.ogg"));
         assertFalse(new File(mFolder.getRoot(), "Artist/song.ogg").exists());
+    }
+
+    @Test
+    public void songsAlreadySavedAreOnlyDownloadedAgainWhenOverriddenAndDifferent() {
+        SavedSong saved = new SavedSong(Uri.parse("content://downloads/song.ogg"), 1000);
+
+        // Not saved yet.
+        assertTrue(ClementineSongDownloader.shouldDownload(null, 1000, false));
+        assertTrue(ClementineSongDownloader.shouldDownload(null, 1000, true));
+        // Saved, and existing files are kept.
+        assertFalse(ClementineSongDownloader.shouldDownload(saved, 1000, false));
+        assertFalse(ClementineSongDownloader.shouldDownload(saved, 2000, false));
+        // Overridden only when the file offered differs.
+        assertFalse(ClementineSongDownloader.shouldDownload(saved, 1000, true));
+        assertTrue(ClementineSongDownloader.shouldDownload(saved, 2000, true));
     }
 
     private static ResponseSongFileChunk chunk(String artist, String albumArtist, String album) {
