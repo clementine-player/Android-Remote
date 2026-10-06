@@ -72,7 +72,7 @@
     <string name="song_info_size">Storlek</string>
     <string name="song_info_filename">Filnamn</string>
     <string name="song_info_rating">Betyg</string>
-    <string name="song_info_rated">Låtbetyg $stjärnor$ stjärnor</string>
+    <string name="song_info_rated">Låtbetyg $stars$ stjärnor</string>
 
 
     <string name="connection_volume">Volym</string>
