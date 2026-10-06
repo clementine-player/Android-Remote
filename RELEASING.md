@@ -205,13 +205,14 @@ Clementine's own workflow does, with no manual steps:
 - When the English strings (`app/src/main/res/values/strings.xml`) change on `master`, they're
   pushed to Transifex for the translators.
 - Every night, the translations are pulled back (only translated strings: the rest show in
-  English), checked with lint, and committed to `master` when they changed, as
+  English), reviewed and not reviewed yet alike (`scripts/android-translations.py` merges the
+  two, as Transifex's modes for Android files each leave one out), checked with lint, and committed to `master` when they changed, as
   "Automatic merge of translations from Transifex". That commit has a release note, so new
   translations make the next weekly release; however many nights they changed, the release
   notes say so once.
-- A pull that would remove more than a tenth of the translations fails instead of committing:
-  that means Transifex doesn't have them (a wrong resource in `.tx/config`, or step 3 below
-  not done yet).
+- A pull that would remove more than a tenth of a language's translations, or of all of them,
+  fails instead of committing: that means Transifex didn't give them (a wrong resource in
+  `.tx/config`, or step 3 below not done yet).
 - Transifex fills in strings whose English it has translated already, for this app or the iOS
   remote (its translation memory fill-up): the same wording in both apps is translated once.
 
