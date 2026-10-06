@@ -222,16 +222,18 @@ requests: the next pull would overwrite them.
 
 **One-time setup:**
 
-1. **Transifex:** in the project's settings, add the languages the app has (`values-*` here:
-   Malay as `ms` and European Portuguese as `pt_PT`, as above), and turn on translation memory
-   fill-up. Make an API token (*User settings → API token*) and add it as the repository secret
-   `TX_TOKEN`. The resource needn't be made by hand: the first push makes it.
+1. **Transifex:** in the project's settings, turn on translation memory fill-up. Make an API
+   token (*User settings → API token*) and add it as the repository secret `TX_TOKEN`. The
+   resource and its languages needn't be made by hand: the first push makes the resource, and
+   step 3 adds every language the app has.
 2. **GitHub:** make a deploy key with write access (*Settings → Deploy keys*), add its private
    half as the secret `TX_KEY`, and if `master`'s branch protection or rulesets would refuse
    the push, let deploy keys bypass them. It pushes as itself so that `ci.yml` runs on the
    commit; the workflow's own token can't start other workflows.
-3. **The first time,** run the workflow by hand with *Push translations* ticked: it sends the
-   repository's translations up to Transifex, so translators start from them, then pulls.
+3. **The first time,** run the workflow by hand with *Push translations* ticked: it adds the
+   app's languages to the project and sends the repository's translations up to Transifex, so
+   translators start from them, then pulls. Do this before the iOS remote's first run: its
+   String Catalog is uploaded as one file, which only fills in languages the project has.
 
 ## Store listing
 
