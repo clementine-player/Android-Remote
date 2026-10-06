@@ -18,7 +18,7 @@ public interface DownloadStorage {
 
     /** Returns the song saved under this name, or null if there is none. */
     @Nullable
-    Uri find(String relativeDir, String fileName) throws IOException;
+    SavedSong find(String relativeDir, String fileName) throws IOException;
 
     /** Starts saving a song, replacing any saved under the same name. */
     PendingSong create(String relativeDir, String fileName) throws IOException;

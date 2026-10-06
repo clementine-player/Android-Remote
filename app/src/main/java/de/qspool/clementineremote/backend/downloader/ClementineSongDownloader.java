@@ -19,6 +19,8 @@ package de.qspool.clementineremote.backend.downloader;
 
 import android.net.Uri;
 
+import androidx.annotation.Nullable;
+
 import java.io.IOException;
 import java.util.LinkedList;
 
@@ -250,7 +252,7 @@ public class ClementineSongDownloader extends
                     }
 
                     // This replaces an existing song. processSongOffer() only accepted the
-                    // song if there is none or the user wants to override it.
+                    // song if there is none, or the user wants to override it and it differs.
                     pending = mStorage.create(buildRelativeDir(chunk), buildFileName(chunk));
                 }
 
@@ -306,34 +308,47 @@ public class ClementineSongDownloader extends
     }
 
     /**
-     * This method checks if the offered file exists and sends a response to Clementine.
-     * If the file does not exist -> Download file
-     * otherwise
-     * The user wants to override existing files -> Download file
-     * otherwise
-     * refuse file
+     * This method checks if the offered file exists and sends a response to Clementine:
+     * see {@link #shouldDownload}.
      *
      * @param chunk The chunk with the metadata
      * @return a boolean indicating if the song will be sent or not
      */
     private boolean processSongOffer(MySong song, ResponseSongFileChunk chunk) {
-        Uri existing;
+        SavedSong existing;
         try {
             existing = mStorage.find(buildRelativeDir(chunk), buildFileName(chunk));
         } catch (IOException | RuntimeException e) {
             existing = null;
         }
-        boolean accept = existing == null || mOverrideExistingFiles;
+        boolean accept = shouldDownload(existing, chunk.getSize(), mOverrideExistingFiles);
 
         mClient.sendRequest(ClementineMessageFactory.buildSongOfferResponse(accept));
 
         // A refused song is listed with the downloaded ones, as it is already here. An
         // accepted one is listed once it is saved.
         if (!accept) {
-            mDownloadedSongs.add(new DownloadedSong(song, existing));
+            mDownloadedSongs.add(new DownloadedSong(song, existing.uri));
         }
 
         return accept;
+    }
+
+    /**
+     * Whether to download an offered song: if it isn't saved yet, or if the user wants
+     * existing files overridden and the one saved isn't the same. The offer only tells the
+     * file's size, so a saved song of the same size is taken to be the same: downloading a
+     * playlist again then only downloads the songs that are new or changed.
+     *
+     * @param existing    The song saved under the same name, or null
+     * @param offeredSize The size of the file offered, in bytes
+     */
+    static boolean shouldDownload(@Nullable SavedSong existing, long offeredSize,
+            boolean overrideExisting) {
+        if (existing == null) {
+            return true;
+        }
+        return overrideExisting && existing.size != offeredSize;
     }
 
     /**

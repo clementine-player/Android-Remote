@@ -44,8 +44,8 @@ public class MediaStoreDownloadStorage implements DownloadStorage {
 
     @Nullable
     @Override
-    public Uri find(String relativeDir, String fileName) {
-        String[] projection = {MediaStore.Audio.Media._ID};
+    public SavedSong find(String relativeDir, String fileName) {
+        String[] projection = {MediaStore.Audio.Media._ID, MediaStore.Audio.Media.SIZE};
         String selection = MediaStore.Audio.Media.RELATIVE_PATH + "=? AND "
                 + MediaStore.Audio.Media.DISPLAY_NAME + "=?";
         String[] args = {BASE_DIR + relativeDir, fileName};
@@ -53,15 +53,16 @@ public class MediaStoreDownloadStorage implements DownloadStorage {
             if (cursor == null || !cursor.moveToFirst()) {
                 return null;
             }
-            return ContentUris.withAppendedId(mCollection, cursor.getLong(0));
+            return new SavedSong(ContentUris.withAppendedId(mCollection, cursor.getLong(0)),
+                    cursor.getLong(1));
         }
     }
 
     @Override
     public PendingSong create(String relativeDir, String fileName) throws IOException {
-        Uri existing = find(relativeDir, fileName);
+        SavedSong existing = find(relativeDir, fileName);
         if (existing != null) {
-            mResolver.delete(existing, null, null);
+            mResolver.delete(existing.uri, null, null);
         }
 
         ContentValues values = new ContentValues();

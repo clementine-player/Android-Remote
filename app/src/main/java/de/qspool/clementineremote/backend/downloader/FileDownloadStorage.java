@@ -42,9 +42,9 @@ public class FileDownloadStorage implements DownloadStorage {
 
     @Nullable
     @Override
-    public Uri find(String relativeDir, String fileName) {
+    public SavedSong find(String relativeDir, String fileName) {
         File file = file(relativeDir, fileName);
-        return file.exists() ? contentUri(file) : null;
+        return file.exists() ? new SavedSong(contentUri(file), file.length()) : null;
     }
 
     @Override

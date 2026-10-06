@@ -149,7 +149,9 @@ private fun DownloadSettings(store: PreferenceStore, defaultDownloadDir: () -> S
             }
         }
     }
-    booleanSetting(store, SharedPreferencesKeys.SP_DOWNLOAD_OVERRIDE, false, R.string.pref_dl_override, null)
+    booleanSetting(
+        store, SharedPreferencesKeys.SP_DOWNLOAD_OVERRIDE, false, R.string.pref_dl_override, R.string.pref_dl_override_summary,
+    )
 
     SettingsHeading(stringResource(R.string.pref_dl_cat_folders))
     booleanSetting(

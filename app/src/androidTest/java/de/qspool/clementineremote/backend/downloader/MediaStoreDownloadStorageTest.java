@@ -83,7 +83,8 @@ public class MediaStoreDownloadStorageTest {
         Uri uri = save("01 Song.ogg", "first");
 
         assertEquals(ContentResolver.SCHEME_CONTENT, uri.getScheme());
-        assertEquals(uri, mStorage.find(mDir, "01 Song.ogg"));
+        assertEquals(uri, mStorage.find(mDir, "01 Song.ogg").uri);
+        assertEquals("first".length(), mStorage.find(mDir, "01 Song.ogg").size);
         assertEquals("first", read(uri));
         assertEquals("Music/Clementine/" + mDir,
                 column(uri, MediaStore.Audio.Media.RELATIVE_PATH));
@@ -97,7 +98,7 @@ public class MediaStoreDownloadStorageTest {
         Uri second = save("song.mp3", "second");
 
         assertNotEquals(first, second);
-        assertEquals(second, mStorage.find(mDir, "song.mp3"));
+        assertEquals(second, mStorage.find(mDir, "song.mp3").uri);
         assertEquals("second", read(second));
         assertEquals("song.mp3", column(second, MediaStore.Audio.Media.DISPLAY_NAME));
     }
