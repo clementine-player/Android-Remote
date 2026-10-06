@@ -29,9 +29,10 @@ mkdir -p "$notes_dir"
 last=$(git tag --list 'v[0-9]*' --sort=-v:refname | head -n 1)
 echo "last=$last"
 
-# The notes of every commit since then, oldest first.
+# The notes of every commit since then, oldest first, each once: the nightly translations
+# commits (translations.yml) all have the same one.
 notes=$(git log --reverse --format='%(trailers:key=Release-note,valueonly,separator=%x0A)' \
-  ${last:+"$last.."}"$master" | sed '/^[[:space:]]*$/d')
+  ${last:+"$last.."}"$master" | sed '/^[[:space:]]*$/d' | awk '!seen[$0]++')
 if [ -z "$notes" ] && [ -n "${ALWAYS:-}" ] && [ -n "$(git rev-list ${last:+"$last.."}"$master")" ]; then
   notes="Fixes and improvements."
 fi
