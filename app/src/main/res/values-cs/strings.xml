@@ -30,6 +30,7 @@
   <plurals name="download_noti_n_downloads">
     <item quantity="one">%d činné stahování</item>
     <item quantity="few">%d činná stahování</item>
+    <item quantity="many">%d činných stahování</item>
     <item quantity="other">%d činných stahování</item>
   </plurals>
   <string name="download_noti_n_progress">Celkový postup: %d %</string>
@@ -40,6 +41,7 @@
   <plurals name="download_noti_n_finished">
     <item quantity="one">%d stahování dokončeno</item>
     <item quantity="few">%d stahování dokončena</item>
+    <item quantity="many">%d stahování dokončeno</item>
     <item quantity="other">%d stahování dokončeno</item>
   </plurals>
   <string name="download_noti_complete">Stahování dokončeno</string>
@@ -193,11 +195,13 @@ Pokud máte díky mé práci skutečně dobrou náladu, malý dar od vás by byl
   <plurals name="number_items">
     <item quantity="one">%d položka</item>
     <item quantity="few">%d položky</item>
+    <item quantity="many">%d položek</item>
     <item quantity="other">%d položek</item>
   </plurals>
   <plurals name="songs_added">
     <item quantity="one">%d píseň přidána do nynějšího seznamu skladeb</item>
     <item quantity="few">%d písně přidány do nynějšího seznamu skladeb</item>
+    <item quantity="many">%d písní přidáno do nynějšího seznamu skladeb</item>
     <item quantity="other">%d písní přidáno do nynějšího seznamu skladeb</item>
   </plurals>
   <string name="repeat_off">Neopakovat</string>

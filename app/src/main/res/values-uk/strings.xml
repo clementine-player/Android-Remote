@@ -30,6 +30,7 @@
   <plurals name="download_noti_n_downloads">
     <item quantity="one">%d активний сеанс отримання даних</item>
     <item quantity="few">%d активних сеанси отримання даних</item>
+    <item quantity="many">%d активних сеансів отримання даних</item>
     <item quantity="other">%d активних сеансів отримання даних</item>
   </plurals>
   <string name="download_noti_n_progress">Загальний поступ: %d %</string>
@@ -40,6 +41,7 @@
   <plurals name="download_noti_n_finished">
     <item quantity="one">%d запис вже отримано</item>
     <item quantity="few">%d записи вже отримано</item>
+    <item quantity="many">%d записів вже отримано</item>
     <item quantity="other">%d записів вже отримано</item>
   </plurals>
   <string name="download_noti_complete">Отримання даних завершено</string>
@@ -188,11 +190,13 @@
   <plurals name="number_items">
     <item quantity="one">%d запис</item>
     <item quantity="few">%d записи</item>
+    <item quantity="many">%d записів</item>
     <item quantity="other">%d записів</item>
   </plurals>
   <plurals name="songs_added">
     <item quantity="one">До поточного списку відтворення додано %d композицію</item>
     <item quantity="few">До поточного списку відтворення додано %d композиції</item>
+    <item quantity="many">До поточного списку відтворення додано %d композицій</item>
     <item quantity="other">До поточного списку відтворення додано %d композицій</item>
   </plurals>
   <string name="repeat_off">Не повторювати</string>

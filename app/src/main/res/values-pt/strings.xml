@@ -29,6 +29,7 @@
   <string name="download_noti_title">A iniciar descarga</string>
   <plurals name="download_noti_n_downloads">
     <item quantity="one">%d descarga ativa</item>
+    <item quantity="many">%d descargas ativas</item>
     <item quantity="other">%d descargas ativas</item>
   </plurals>
   <string name="download_noti_n_progress">Evolução: %d %</string>
@@ -38,6 +39,7 @@
   <string name="download_noti_title_songs">[Faixas]</string>
   <plurals name="download_noti_n_finished">
     <item quantity="one">%d descarga terminada</item>
+    <item quantity="many">%d descargas terminadas</item>
     <item quantity="other">%d descargas terminadas</item>
   </plurals>
   <string name="download_noti_complete">Descarga terminada</string>
@@ -184,10 +186,12 @@
   <string name="unknown">Desconhecido</string>
   <plurals name="number_items">
     <item quantity="one">%d item</item>
+    <item quantity="many">%d itens</item>
     <item quantity="other">%d itens</item>
   </plurals>
   <plurals name="songs_added">
     <item quantity="one">%d faixa adicionada à lista de reprodução</item>
+    <item quantity="many">%d faixas adicionadas à lista de reprodução</item>
     <item quantity="other">%d faixas adicionadas à lista de reprodução</item>
   </plurals>
   <string name="repeat_off">Não repetir</string>

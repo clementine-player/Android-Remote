@@ -30,6 +30,7 @@
   <plurals name="download_noti_n_downloads">
     <item quantity="one">%d aktyvus atsiuntimas</item>
     <item quantity="few">%d aktyvūs atsiuntimai</item>
+    <item quantity="many">%d aktyvių atsiuntimų</item>
     <item quantity="other">%d aktyvių atsiuntimų</item>
   </plurals>
   <string name="download_noti_n_progress">Bendra eiga: %d %</string>
@@ -40,6 +41,7 @@
   <plurals name="download_noti_n_finished">
     <item quantity="one">Užbaigtas %d atsiuntimas</item>
     <item quantity="few">Užbaigti %d atsiuntimai</item>
+    <item quantity="many">Užbaigta %d atsiuntimų</item>
     <item quantity="other">Užbaigta %d atsiuntimų</item>
   </plurals>
   <string name="download_noti_complete">Atsiuntimas užbaigtas</string>
@@ -190,11 +192,13 @@
   <plurals name="number_items">
     <item quantity="one">%d elementas</item>
     <item quantity="few">%d elementai</item>
+    <item quantity="many">%d elementų</item>
     <item quantity="other">%d elementų</item>
   </plurals>
   <plurals name="songs_added">
     <item quantity="one">%d daina pridėta į esamą grojaraštį</item>
     <item quantity="few">%d dainos pridėtos į esamą grojaraštį</item>
+    <item quantity="many">%d dainų pridėta į esamą grojaraštį</item>
     <item quantity="other">%d dainų pridėta į esamą grojaraštį</item>
   </plurals>
   <string name="repeat_off">Nekartoti</string>
