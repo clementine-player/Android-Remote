@@ -105,6 +105,10 @@
     <string name="wifi_disabled">Wifi가 비활성화 상태입니다. 인터넷을 통하여 Clementine에 연결하기 원한다면 정확하게 포트를 통해 전달되는지 확인하시고 \"로컬 ip 주소만 사용\"을 해제합니다.</string>
 
     <string name="input_auth_code">인증 코드</string>
+    <plurals name="number_items">
+        <item quantity="other">%d 항목</item>
+    </plurals>
+
     <string name="repeat_off">반복하지 않음</string>
     <string name="repeat_track">트랙 반복</string>
     <string name="repeat_album">앨범 반복</string>
