@@ -40,16 +40,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.qspool.clementineremote.R
+import de.qspool.clementineremote.backend.AddAction
 import de.qspool.clementineremote.backend.database.SongSelectItem
 
 /**
  * Search: a search bar that asks Clementine to search its library and internet services, and the
  * results in sections by what matched: the best match, songs, artists, albums, radio stations and
- * the rest. Tapping a song adds it to the playlist; an artist or album opens.
+ * the rest. Tapping a song adds it to the playlist; an artist or album opens. A long press offers
+ * the other ways to put it on the playlist.
  */
 @Composable
 fun SearchScreen(viewModel: SearchViewModel) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val canPlayNext by viewModel.canPlayNext.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val resources = LocalResources.current
     LaunchedEffect(viewModel) {
@@ -66,6 +69,7 @@ fun SearchScreen(viewModel: SearchViewModel) {
         onSeeAll = viewModel::seeAll,
         onBack = { viewModel.back() },
         onAdd = viewModel::addToPlaylist,
+        canPlayNext = canPlayNext,
     )
 }
 
@@ -76,9 +80,10 @@ internal fun SearchContent(
     onOpen: (SongSelectItem) -> Unit,
     onSeeAll: (SearchSection) -> Unit,
     onBack: () -> Unit,
-    onAdd: (List<SongSelectItem>) -> Unit,
+    onAdd: (List<SongSelectItem>, AddAction) -> Unit,
     modifier: Modifier = Modifier,
     icon: (String) -> Bitmap? = { null },
+    canPlayNext: Boolean = false,
 ) {
     val results = state.results
     Column(modifier.fillMaxSize()) {
@@ -105,6 +110,7 @@ internal fun SearchContent(
                 onBack = onBack,
                 onAdd = onAdd,
                 onDownload = null,
+                canPlayNext = canPlayNext,
                 tag = "search",
             )
             state.searching -> {}

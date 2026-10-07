@@ -145,6 +145,9 @@
     <string name="library_title">Library</string>
     <string name="library_sync_action">Sync library</string>
     <string name="library_add_to_playlist">Add to playlist</string>
+    <string name="library_add_to_queue">Add to queue</string>
+    <string name="library_open_in_new_playlist">Open in new playlist</string>
+    <string name="library_select">Select</string>
     <string name="library_back">Back</string>
 
     <!-- Browsing Clementine's internet services: its Internet sidebar. -->
