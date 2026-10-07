@@ -176,7 +176,7 @@ class SearchScreenTest {
         val searched = mutableListOf<String>()
         compose.setContent {
             ClementineTheme(dynamicColor = false) {
-                SearchContent(SearchState(), onSearch = { searched += it }, onOpen = {}, onSeeAll = {}, onBack = {}, onAdd = {})
+                SearchContent(SearchState(), onSearch = { searched += it }, onOpen = {}, onSeeAll = {}, onBack = {}, onAdd = { _, _ -> })
             }
         }
 
@@ -216,7 +216,7 @@ class SearchScreenTest {
             ClementineTheme(dynamicColor = false) {
                 SearchContent(
                     SearchState(searchedFor = "nothing", results = SearchResults()),
-                    onSearch = {}, onOpen = {}, onSeeAll = {}, onBack = {}, onAdd = {},
+                    onSearch = {}, onOpen = {}, onSeeAll = {}, onBack = {}, onAdd = { _, _ -> },
                 )
             }
         }

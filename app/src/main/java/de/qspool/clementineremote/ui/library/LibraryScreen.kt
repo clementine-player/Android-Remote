@@ -54,6 +54,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.qspool.clementineremote.R
+import de.qspool.clementineremote.backend.AddAction
 import de.qspool.clementineremote.backend.database.SongSelectItem
 import de.qspool.clementineremote.ui.browse.BrowseItems
 import de.qspool.clementineremote.ui.browse.BrowseLevel
@@ -65,13 +66,15 @@ import de.qspool.clementineremote.ui.search.SearchSection
 
 /**
  * The library: Clementine's library, browsed level by level (artists, their albums, their songs).
- * Tapping a song adds it to the playlist; a long press starts selecting items to add or download.
+ * Tapping a song adds it to the playlist; a long press offers the other ways to put an item on the
+ * playlist, and selecting items to add or download.
  * Searching it shows what matched in sections, as the Search screen does. Pulling down downloads
  * the library from Clementine again.
  */
 @Composable
 fun LibraryScreen(viewModel: LibraryViewModel) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val canPlayNext by viewModel.canPlayNext.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val resources = LocalResources.current
     LaunchedEffect(viewModel) {
@@ -100,6 +103,7 @@ fun LibraryScreen(viewModel: LibraryViewModel) {
             onAdd = viewModel::addResults,
             onDownload = viewModel::downloadResults,
         ),
+        canPlayNext = canPlayNext,
     )
 }
 
@@ -108,7 +112,7 @@ internal class ResultActions(
     val onOpen: (SongSelectItem) -> Unit = {},
     val onSeeAll: (SearchSection) -> Unit = {},
     val onBack: () -> Unit = {},
-    val onAdd: (List<SongSelectItem>) -> Unit = {},
+    val onAdd: (List<SongSelectItem>, AddAction) -> Unit = { _, _ -> },
     val onDownload: (List<SongSelectItem>) -> Unit = {},
 )
 
@@ -119,10 +123,11 @@ internal fun LibraryContent(
     onOpen: (SongSelectItem) -> Unit,
     onBack: () -> Unit,
     onSyncLibrary: () -> Unit,
-    onAdd: (List<SongSelectItem>) -> Unit,
+    onAdd: (List<SongSelectItem>, AddAction) -> Unit,
     onDownload: (List<SongSelectItem>) -> Unit,
     modifier: Modifier = Modifier,
     results: ResultActions = ResultActions(),
+    canPlayNext: Boolean = false,
 ) {
     val shown = state.shown
     val search = state.search
@@ -140,7 +145,7 @@ internal fun LibraryContent(
                 count = selected.size,
                 onClear = { selection = emptySet() },
                 onAdd = {
-                    onAdd(selected)
+                    onAdd(selected, AddAction.APPEND)
                     selection = emptySet()
                 },
                 onDownload = {
@@ -173,6 +178,7 @@ internal fun LibraryContent(
                     onAdd = results.onAdd,
                     onDownload = results.onDownload,
                     tag = "library",
+                    canPlayNext = canPlayNext,
                 )
             } else if (shown != null) {
                 BrowseItems(
@@ -185,7 +191,9 @@ internal fun LibraryContent(
                             selection = selection.toggle(index)
                         }
                     },
-                    onLongClick = { index -> selection = selection.toggle(index) },
+                    onToggle = { index -> selection = selection.toggle(index) },
+                    onAdd = { item, action -> onAdd(listOf(item), action) },
+                    canPlayNext = canPlayNext,
                     tag = "library",
                     listState = listState,
                 )
@@ -245,7 +253,7 @@ private fun Top(shown: BrowseLevel?) {
 private fun Opened(
     shown: BrowseLevel,
     onBack: () -> Unit,
-    onAdd: (List<SongSelectItem>) -> Unit,
+    onAdd: (List<SongSelectItem>, AddAction) -> Unit,
     onDownload: (List<SongSelectItem>) -> Unit,
 ) {
     val opened = shown.opened ?: return
@@ -271,7 +279,7 @@ private fun Opened(
             }
         }
         Row(Modifier.padding(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(onClick = { onAdd(listOf(opened)) }, modifier = Modifier.testTag("libraryAddAll")) {
+            Button(onClick = { onAdd(listOf(opened), AddAction.APPEND) }, modifier = Modifier.testTag("libraryAddAll")) {
                 Icon(painterResource(R.drawable.ic_add), contentDescription = null, modifier = Modifier.size(18.dp))
                 Text(stringResource(R.string.library_add_to_playlist), modifier = Modifier.padding(start = 8.dp))
             }

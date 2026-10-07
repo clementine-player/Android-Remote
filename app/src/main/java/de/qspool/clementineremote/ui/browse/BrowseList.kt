@@ -25,9 +25,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,6 +46,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import de.qspool.clementineremote.R
+import de.qspool.clementineremote.backend.AddAction
 import de.qspool.clementineremote.backend.database.SongSelectItem
 
 /**
@@ -67,27 +71,40 @@ private val LevelListStatesSaver = listSaver<MutableList<LazyListState>, Int>(
 )
 
 /**
- * The items of a level: tapping one runs [onClick], a long press [onLongClick]. The list is
- * tagged [tag], for tests.
+ * The items of a level: tapping one runs [onClick]. A long press offers the ways to put it on the
+ * playlist ([onAdd]) and selecting it ([onToggle]); while items are selected, it selects or
+ * deselects it instead. The list is tagged [tag], for tests.
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun BrowseItems(
     shown: BrowseLevel,
     selection: Set<Int>,
     onClick: (Int, SongSelectItem) -> Unit,
-    onLongClick: (Int) -> Unit,
+    onToggle: (Int) -> Unit,
+    onAdd: (SongSelectItem, AddAction) -> Unit,
+    canPlayNext: Boolean,
     tag: String,
     listState: LazyListState = rememberLazyListState(),
 ) {
     LazyColumn(Modifier.fillMaxSize().testTag(tag), state = listState) {
         itemsIndexed(shown.items) { index, item ->
-            BrowseRow(shown.kind, item, index in selection, onClick = { onClick(index, item) }, onLongClick = { onLongClick(index) })
+            BrowseRow(
+                shown.kind, item, index in selection,
+                onClick = { onClick(index, item) },
+                onAdd = { onAdd(item, it) },
+                canPlayNext = canPlayNext,
+                onSelect = { onToggle(index) },
+                selecting = selection.isNotEmpty(),
+            )
         }
     }
 }
 
-/** An item of a level, of [kind]: tapping it runs [onClick], a long press [onLongClick]. */
+/**
+ * An item of a level, of [kind]: tapping it runs [onClick]. A long press offers the ways to put
+ * it on the playlist ([onAdd]) and, with [onSelect], selecting it; while [selecting], it runs
+ * [onSelect] straight away.
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun BrowseRow(
@@ -95,19 +112,30 @@ internal fun BrowseRow(
     item: SongSelectItem,
     isSelected: Boolean = false,
     onClick: () -> Unit,
-    onLongClick: (() -> Unit)? = null,
+    onAdd: (AddAction) -> Unit,
+    canPlayNext: Boolean,
+    onSelect: (() -> Unit)? = null,
+    selecting: Boolean = false,
 ) {
-    ListItem(
-        headlineContent = { Text(item.listTitle, maxLines = 1, overflow = TextOverflow.Ellipsis) },
-        supportingContent = { Text(item.listSubtitle.orEmpty(), maxLines = 1, overflow = TextOverflow.Ellipsis) },
-        leadingContent = { Leading(kind, item) },
-        colors = ListItemDefaults.colors(
-            containerColor = if (isSelected) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent,
-        ),
-        modifier = Modifier
-            .combinedClickable(onClick = onClick, onLongClick = onLongClick)
-            .semantics { selected = isSelected },
-    )
+    var menu by remember { mutableStateOf(false) }
+    Box {
+        ListItem(
+            headlineContent = { Text(item.listTitle, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+            supportingContent = { Text(item.listSubtitle.orEmpty(), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+            leadingContent = { Leading(kind, item) },
+            colors = ListItemDefaults.colors(
+                containerColor = if (isSelected) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent,
+            ),
+            modifier = Modifier
+                .combinedClickable(
+                    onClick = onClick,
+                    onLongClickLabel = stringResource(R.string.shell_more),
+                    onLongClick = { if (selecting && onSelect != null) onSelect() else menu = true },
+                )
+                .semantics { selected = isSelected },
+        )
+        AddMenu(menu, onDismiss = { menu = false }, canPlayNext = canPlayNext, onAdd = onAdd, onSelect = onSelect)
+    }
 }
 
 /** A tile for what an item groups; a search source shows its own icon, if Clementine sent one. */

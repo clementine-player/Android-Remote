@@ -127,6 +127,12 @@ object RemoteRepository {
     @JvmStatic
     val browsing: StateFlow<Browsing> = _browsing.asStateFlow()
 
+    private val _canEnqueueNext = MutableStateFlow(false)
+
+    /** Whether Clementine can queue songs it's given to play next ([AddAction.PLAY_NEXT]). */
+    @JvmStatic
+    val canEnqueueNext: StateFlow<Boolean> = _canEnqueueNext.asStateFlow()
+
     private val _browseMessages = MutableSharedFlow<BrowseMessage>(
         extraBufferCapacity = 64,
         onBufferOverflow = BufferOverflow.DROP_OLDEST,
@@ -175,6 +181,8 @@ object RemoteRepository {
                         message.message.responseClementineInfo.featuresList,
                     connection = _browsing.value.connection + 1,
                 )
+                _canEnqueueNext.value = ServerFeature.SERVER_FEATURE_ENQUEUE_NEXT in
+                    message.message.responseClementineInfo.featuresList
                 refresh()
             }
             MsgType.BROWSE -> _browseMessages.tryEmit(

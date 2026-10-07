@@ -17,6 +17,7 @@ import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTouchInput
 import androidx.test.core.app.ApplicationProvider
 import de.qspool.clementineremote.App
+import de.qspool.clementineremote.backend.AddAction
 import de.qspool.clementineremote.backend.Clementine
 import de.qspool.clementineremote.backend.database.DynamicSongQuery
 import de.qspool.clementineremote.backend.database.SongSelectItem
@@ -97,7 +98,11 @@ class LibraryScreenTest {
 
     private fun idle() = shadowOf(Looper.getMainLooper()).idle()
 
-    private fun viewModel(sent: MutableList<ClementineMessage>, exists: Boolean = true) = LibraryViewModel(
+    private fun viewModel(
+        sent: MutableList<ClementineMessage>,
+        exists: Boolean = true,
+        cleared: MutableList<Int> = mutableListOf(),
+    ) = LibraryViewModel(
         send = { sent += it },
         newQuery = { TestQuery() },
         io = Dispatchers.Unconfined,
@@ -105,6 +110,7 @@ class LibraryScreenTest {
         newSearchQuery = { TestSearchQuery() },
         searchLibrary = { text -> open().use { librarySearchCandidates(it, text) } },
         searchDelay = 0,
+        clearPlaylist = { cleared += it },
     ).also { idle() }
 
     @Test
@@ -161,6 +167,62 @@ class LibraryScreenTest {
         idle()
 
         assertEquals(listOf(true, true, false, false), sent.map { it.message.requestInsertUrls.playNow })
+    }
+
+    @Test
+    fun addsSongsAsEachActionSays() {
+        val sent = mutableListOf<ClementineMessage>()
+        val cleared = mutableListOf<Int>()
+        val library = viewModel(sent, cleared = cleared)
+        val chopin = library.state.value.shown!!.items.first { it.listTitle == "Frédéric Chopin" }
+        App.Clementine.state = Clementine.State.PLAY
+
+        for (action in AddAction.entries) {
+            library.addToPlaylist(listOf(chopin), action)
+        }
+        idle()
+
+        val requests = sent.map { it.message.requestInsertUrls }
+        // Playing already, so PLAY_IF_STOPPED doesn't play.
+        assertEquals(listOf(false, false, true, false, false, true, false), requests.map { it.playNow })
+        assertEquals(listOf(false, false, false, true, false, false, false), requests.map { it.enqueue })
+        assertEquals(listOf(false, false, false, false, true, false, false), requests.map { it.enqueueNext })
+        assertEquals(listOf("", "", "", "", "", "", "Frédéric Chopin"), requests.map { it.newPlaylistName })
+        // Only REPLACE empties the playlist first.
+        assertEquals(listOf(App.Clementine.playlistManager.activePlaylistId), cleared)
+    }
+
+    @Test
+    fun aLongPressOffersTheWaysToAddAnItem() {
+        val artist = item("Frédéric Chopin", 0)
+        val done = mutableListOf<String>()
+        var canPlayNext by mutableStateOf(false)
+        compose.setContent {
+            ClementineTheme(dynamicColor = false) {
+                LibraryContent(
+                    LibraryState(LibraryStatus.Ready, listOf(BrowseLevel(null, ItemKind.ARTIST, listOf(artist)))),
+                    onOpen = {},
+                    onBack = {},
+                    onSyncLibrary = {},
+                    onAdd = { items, action -> done += items.joinToString { it.listTitle } + " " + action },
+                    onDownload = {},
+                    canPlayNext = canPlayNext,
+                )
+            }
+        }
+
+        compose.onNodeWithText("Frédéric Chopin").performTouchInput { longClick() }
+        compose.onNodeWithTag("addMenu_PLAY_NEXT").assertDoesNotExist()
+        compose.onNodeWithTag("addMenu_PLAY_NOW").performClick()
+        canPlayNext = true
+        compose.onNodeWithText("Frédéric Chopin").performTouchInput { longClick() }
+        compose.onNodeWithTag("addMenu_PLAY_NEXT").performClick()
+        compose.onNodeWithText("Frédéric Chopin").performTouchInput { longClick() }
+        compose.onNodeWithTag("addMenu_NEW_PLAYLIST").performClick()
+
+        assertEquals(
+            listOf("Frédéric Chopin PLAY_NOW", "Frédéric Chopin PLAY_NEXT", "Frédéric Chopin NEW_PLAYLIST"),
+            done)
     }
 
     @Test
@@ -256,7 +318,7 @@ class LibraryScreenTest {
         )))
         compose.setContent {
             ClementineTheme(dynamicColor = false) {
-                LibraryContent(state, onOpen = {}, onBack = {}, onSyncLibrary = {}, onAdd = {}, onDownload = {})
+                LibraryContent(state, onOpen = {}, onBack = {}, onSyncLibrary = {}, onAdd = { _, _ -> }, onDownload = {})
             }
         }
         compose.onNodeWithTag("librarySections").assertIsDisplayed()
@@ -275,7 +337,7 @@ class LibraryScreenTest {
         val state = library.state.value
         compose.setContent {
             ClementineTheme(dynamicColor = false) {
-                LibraryContent(state, {}, {}, { downloads++ }, {}, {})
+                LibraryContent(state, {}, {}, { downloads++ }, { _, _ -> }, {})
             }
         }
         compose.onNodeWithTag("btnSyncLibrary").performClick()
@@ -302,7 +364,7 @@ class LibraryScreenTest {
                     onOpen = { done += "open ${it.listTitle}" },
                     onBack = { done += "back" },
                     onSyncLibrary = {},
-                    onAdd = { items -> done += "add " + items.joinToString { it.listTitle } },
+                    onAdd = { items, action -> done += "add " + items.joinToString { it.listTitle } + " " + action },
                     onDownload = { items -> done += "download " + items.joinToString { it.listTitle } },
                 )
             }
@@ -312,13 +374,14 @@ class LibraryScreenTest {
         compose.onNodeWithTag("libraryAddAll").performClick()
         compose.onNodeWithText("Nocturne in E-flat major").performClick()
         compose.onNodeWithText("Nocturne in B-flat minor").performTouchInput { longClick() }
+        compose.onNodeWithTag("addMenu_SELECT").performClick()
         compose.onNodeWithTag("librarySelection").assertIsDisplayed()
         compose.onNodeWithTag("libraryDownload").performClick()
         compose.onNodeWithTag("libraryBack").performClick()
 
         assertEquals(
             listOf(
-                "add Nocturnes, Op. 9",
+                "add Nocturnes, Op. 9 APPEND",
                 "open Nocturne in E-flat major",
                 "download Nocturne in B-flat minor",
                 "back",
@@ -422,7 +485,7 @@ class LibraryScreenTest {
         var state by mutableStateOf(LibraryState(LibraryStatus.Ready, listOf(BrowseLevel(null, ItemKind.ARTIST, artists))))
         compose.setContent {
             ClementineTheme(dynamicColor = false) {
-                LibraryContent(state, {}, {}, {}, {}, {})
+                LibraryContent(state, {}, {}, {}, { _, _ -> }, {})
             }
         }
         compose.onNodeWithTag("library").performScrollToIndex(45)

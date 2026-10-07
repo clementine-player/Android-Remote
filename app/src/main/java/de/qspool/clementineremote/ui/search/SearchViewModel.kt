@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.SharedPreferencesKeys
+import de.qspool.clementineremote.backend.AddAction
 import de.qspool.clementineremote.backend.Clementine
 import de.qspool.clementineremote.backend.RemoteRepository
 import de.qspool.clementineremote.backend.database.DynamicSongQuery
@@ -30,7 +31,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.LinkedList
 
 data class SearchState(
     /** What was searched for last; null before the first search. */
@@ -62,6 +62,10 @@ class SearchViewModel(
     },
     private val io: CoroutineDispatcher = Dispatchers.IO,
     private val listenToClementine: Boolean = true,
+    /** Whether Clementine can queue songs to play next ([AddAction.PLAY_NEXT]). */
+    val canPlayNext: StateFlow<Boolean> = RemoteRepository.canEnqueueNext,
+    /** Empties a playlist, by its id. */
+    private val clearPlaylist: (Int) -> Unit = { App.Clementine.playlistManager.clearPlaylist(it) },
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(SearchState())
@@ -144,7 +148,7 @@ class SearchViewModel(
      */
     fun open(item: SongSelectItem) {
         if (item.level == SONG_LEVEL) {
-            addToPlaylist(listOf(item), playIfStopped = true)
+            addToPlaylist(listOf(item), AddAction.PLAY_IF_STOPPED)
             return
         }
         val id = searchId ?: return
@@ -181,10 +185,10 @@ class SearchViewModel(
     }
 
     /**
-     * Adds the songs of [items] (songs, or whatever groups them) to the playlist playing. With
-     * [playIfStopped], Clementine plays them unless it's playing already.
+     * Adds the songs of [items] (songs, or whatever groups them) to the playlist playing, doing
+     * [action]. A new playlist is named after the first of them.
      */
-    fun addToPlaylist(items: List<SongSelectItem>, playIfStopped: Boolean = false) {
+    fun addToPlaylist(items: List<SongSelectItem>, action: AddAction = AddAction.APPEND) {
         val id = searchId ?: return
         viewModelScope.launch {
             val songs = withContext(io) {
@@ -193,9 +197,13 @@ class SearchViewModel(
             if (songs.isEmpty()) {
                 return@launch
             }
-            val playNow = playIfStopped && App.Clementine.state != Clementine.State.PLAY
-            send(ClementineMessageFactory.buildInsertSongs(
-                App.Clementine.playlistManager.activePlaylistId, LinkedList(songs), playNow))
+            val playlist = App.Clementine.playlistManager.activePlaylistId
+            if (action == AddAction.REPLACE) {
+                clearPlaylist(playlist)
+            }
+            send(action.insert(playlist, App.Clementine.state == Clementine.State.PLAY, items.first().listTitle) {
+                addAllSongs(songs)
+            })
             _added.trySend(songs.size)
         }
     }

@@ -38,6 +38,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import de.qspool.clementineremote.R
+import de.qspool.clementineremote.backend.AddAction
 import de.qspool.clementineremote.backend.database.SongSelectItem
 import de.qspool.clementineremote.ui.browse.BrowseItems
 import de.qspool.clementineremote.ui.browse.BrowseLevel
@@ -88,7 +89,8 @@ private const val SHOWN = 4
 /**
  * Search results: their sections, or the page opened from them. Tapping a song or station adds it
  * to the playlist ([onOpen]); an artist or album opens ([onOpen] too); See all shows all of a
- * section. On a page, a long press starts selecting items to add, or with [onDownload], download.
+ * section. A long press offers the other ways to put it on the playlist ([onAdd]); on a page, it
+ * also offers selecting items to add, or with [onDownload], download.
  * The sections are tagged "[tag]Sections", a page's list "[tag]Results", for tests.
  *
  * @param icon a provider's icon, by its name
@@ -100,25 +102,26 @@ internal fun SearchResultsContent(
     onOpen: (SongSelectItem) -> Unit,
     onSeeAll: (SearchSection) -> Unit,
     onBack: () -> Unit,
-    onAdd: (List<SongSelectItem>) -> Unit,
+    onAdd: (List<SongSelectItem>, AddAction) -> Unit,
     onDownload: ((List<SongSelectItem>) -> Unit)?,
     tag: String,
     modifier: Modifier = Modifier,
+    canPlayNext: Boolean = false,
 ) {
     val resources = LocalResources.current
     BackHandler(results.pages.isNotEmpty(), onBack)
     when (val page = results.pages.lastOrNull()) {
-        null -> Sections(results.sections, icon, onOpen, onSeeAll, tag, modifier)
+        null -> Sections(results.sections, icon, onOpen, onSeeAll, onAdd, canPlayNext, tag, modifier)
         is SearchPage.All -> {
             val level = BrowseLevel(
                 null,
                 page.section.kind,
                 page.section.items(results.sections).map { it.toSongSelectItem(resources, page.section, icon) },
             )
-            Page(level, resources.getString(page.section.title), opened = null, onOpen, onBack, onAdd, onDownload, tag, modifier)
+            Page(level, resources.getString(page.section.title), opened = null, onOpen, onBack, onAdd, onDownload, canPlayNext, tag, modifier)
         }
         is SearchPage.Opened ->
-            Page(page.level, page.level.opened?.listTitle.orEmpty(), page.level.opened, onOpen, onBack, onAdd, onDownload, tag, modifier)
+            Page(page.level, page.level.opened?.listTitle.orEmpty(), page.level.opened, onOpen, onBack, onAdd, onDownload, canPlayNext, tag, modifier)
     }
 }
 
@@ -129,6 +132,8 @@ private fun Sections(
     icon: (String) -> Bitmap?,
     onOpen: (SongSelectItem) -> Unit,
     onSeeAll: (SearchSection) -> Unit,
+    onAdd: (List<SongSelectItem>, AddAction) -> Unit,
+    canPlayNext: Boolean,
     tag: String,
     modifier: Modifier,
 ) {
@@ -140,7 +145,12 @@ private fun Sections(
             item(key = "top") { Header(stringResource(R.string.search_top_result)) }
             item(key = "topItem") {
                 val item = remember(top) { top.toSongSelectItem(resources, topSection, icon, topMeta = true) }
-                BrowseRow(topSection.kind, item, onClick = { onOpen(item) })
+                BrowseRow(
+                    topSection.kind, item,
+                    onClick = { onOpen(item) },
+                    onAdd = { onAdd(listOf(item), it) },
+                    canPlayNext = canPlayNext,
+                )
             }
         }
         for (section in SearchSection.entries) {
@@ -155,7 +165,12 @@ private fun Sections(
             }
             items(shown.take(SHOWN), key = { section to it.selection }) { result ->
                 val item = remember(result) { result.toSongSelectItem(resources, section, icon) }
-                BrowseRow(section.kind, item, onClick = { onOpen(item) })
+                BrowseRow(
+                    section.kind, item,
+                    onClick = { onOpen(item) },
+                    onAdd = { onAdd(listOf(item), it) },
+                    canPlayNext = canPlayNext,
+                )
             }
         }
     }
@@ -193,8 +208,9 @@ private fun Page(
     opened: SongSelectItem?,
     onOpen: (SongSelectItem) -> Unit,
     onBack: () -> Unit,
-    onAdd: (List<SongSelectItem>) -> Unit,
+    onAdd: (List<SongSelectItem>, AddAction) -> Unit,
     onDownload: ((List<SongSelectItem>) -> Unit)?,
+    canPlayNext: Boolean,
     tag: String,
     modifier: Modifier,
 ) {
@@ -206,7 +222,7 @@ private fun Page(
                 count = selected.size,
                 onClear = { selection = emptySet() },
                 onAdd = {
-                    onAdd(selected)
+                    onAdd(selected, AddAction.APPEND)
                     selection = emptySet()
                 },
                 onDownload = onDownload?.let { download ->
@@ -241,7 +257,7 @@ private fun Page(
                 }
                 if (opened != null) {
                     Row(Modifier.padding(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Button(onClick = { onAdd(listOf(opened)) }, modifier = Modifier.testTag("${tag}AddAll")) {
+                        Button(onClick = { onAdd(listOf(opened), AddAction.APPEND) }, modifier = Modifier.testTag("${tag}AddAll")) {
                             Icon(painterResource(R.drawable.ic_add), contentDescription = null, modifier = Modifier.size(18.dp))
                             Text(stringResource(R.string.library_add_to_playlist), modifier = Modifier.padding(start = 8.dp))
                         }
@@ -265,7 +281,9 @@ private fun Page(
                     selection = if (index in selection) selection - index else selection + index
                 }
             },
-            onLongClick = { index -> selection = if (index in selection) selection - index else selection + index },
+            onToggle = { index -> selection = if (index in selection) selection - index else selection + index },
+            onAdd = { item, action -> onAdd(listOf(item), action) },
+            canPlayNext = canPlayNext,
             tag = "${tag}Results",
         )
     }
