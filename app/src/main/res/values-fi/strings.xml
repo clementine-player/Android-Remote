@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-    <string name="app_name">Clementine-kaukosäädin</string>
+    <string name="app_name">Clementine Remote</string>
     <string name="app_not_available">Sovellus ei ole saatavilla!</string>
 
 
@@ -9,6 +9,19 @@
     <string name="connectdialog_download_data">Ladataan dataa</string>
     <string name="connectdialog_error">Ei yhteyttä isäntään</string>
     <string name="connectdialog_ip_hint">Anna IP-osoite</string>
+    <string name="connect_intro">Valitse Clementine, jota haluat ohjata. Sen täytyy olla samassa wifi-verkossa kuin tämä puhelin.</string>
+    <string name="connect_on_network">Sinun verkossa</string>
+    <string name="connect_search_again">Etsi uudelleen</string>
+    <string name="connect_searching">Kutsutaan Clementine…</string>
+    <string name="connect_searching_help">Eikö laite näy\? Varmista, että sen kauko-ohjain on päällä tai anna sen osoite.</string>
+    <string name="connect_server_address">%1$s · portti %2$d</string>
+    <string name="connect_not_searching">Ei etsitä tästä verkosta</string>
+    <string name="connect_not_searching_help">Ilman ”Lähellä olevat laitteet” -käyttöoikeutta Clementine Remote ei löydä Clementineä verkostasi. Anna sen osoite alle tai ota käyttöoikeus käyttöön.</string>
+    <string name="connect_enter_address">tai anna sen osoite</string>
+    <string name="connect_address">Osoitteet</string>
+    <string name="connect_requirements">Vaatii Clementine %1$s tai uudemman, sekä asetuksen Työkalut → Asetukset → Kauko-ohjaus käytössä.</string>
+
+
     <string name="player_nosong">Ei toistettavaa kappaletta</string>
     <string name="player_disconnected">Yhteys katkaistu</string>
     <string name="playler_volume">Äänenvoimakkuus</string>
@@ -28,8 +41,79 @@
     <string name="playlist_clear">Tyhjennä soittolista</string>
     <string name="playlist_clear_content">Tämä poistaa pysyvästi kaikki kappaleet soittolistalta. Jatketaanko?</string>
     <string name="playlist_clear_confirm">Tyhjennä soittolista</string>
+    <plurals name="queue_songs">
+        <item quantity="one">%d kappale</item>
+        <item quantity="other">%d kappaletta</item>
+    </plurals>
+    <string name="queue_minutes">%d min</string>
+    <string name="queue_hours_minutes">%1$d t %2$d min</string>
+    <plurals name="queue_selected">
+        <item quantity="one">%d valittu</item>
+        <item quantity="other">%d valittua</item>
+    </plurals>
+    <string name="queue_clear_selection">Poista valinta</string>
+
+
     <string name="downloads_empty">Ei latauksia!</string>
+    <string name="downloads_empty_summary">Lataa musiikkia tähän puhelimeen ja voit kuunnella sitä ilman Clementine-yhteyttä.</string>
+    <string name="downloads_empty_how">Lataa kappale soittimesta, albumi kirjastosta tai soittolista sen valikosta.</string>
+    <string name="downloads_suggest_most_played">Eniten kuuntelemasi albumit</string>
+    <string name="downloads_suggest_recent">Hiljattain lisätyt albumit</string>
+    <string name="downloads_suggest_playlists">Soittolistat</string>
+    <plurals name="downloads_plays">
+        <item quantity="one">%d toisto</item>
+        <item quantity="other">%d toistoa</item>
+    </plurals>
+    <string name="downloads_playlist_playing">Toistetaan</string>
+    <string name="downloads_playlist_favorite">Suosikki</string>
+    <string name="downloads_download">Lataa %1$s</string>
+    <string name="downloaded_songs">Ladatut kappaleet – paina ja toista</string>
     <string name="downloads_title">Lataukset</string>
+    <string name="downloads_free_space">%s vapaata puhelimella</string>
+    <string name="downloads_running">Ladataan</string>
+    <string name="downloads_finished">Valmis</string>
+    <string name="downloads_on_phone">Puhelimessa</string>
+    <string name="downloads_wifi_only">Lataukset toimivat vain wifi-yhteydellä.</string>
+    <string name="downloads_change">Vaihda</string>
+
+    <!-- The app's shell: navigation, mini player, player and sheets. -->
+    <string name="nav_queue">Jono</string>
+    <string name="shell_open_player">Avaa soitin: %s</string>
+    <string name="shell_connected_to">Yhdistettynä %s</string>
+    <string name="shell_search_close">Sulje haku</string>
+    <string name="shell_more">Lisäasetukset</string>
+    <string name="player_collapse">Pienennä soitin</string>
+    <!-- Small heading at the top of the player, above the name of the playlist the song is playing from. -->
+    <string name="player_playing_from">Toistetaan lähteestä</string>
+    <string name="queue_playing">Toistaa</string>
+    <string name="player_love">Pidetty Last.fm</string>
+    <string name="player_details">Sanoitukset ja tiedot</string>
+    <string name="player_download_song">Lataa kappale</string>
+    <string name="player_volume_level">Clementine voimakkuus, %1$d%%</string>
+    <string name="player_volume_up">Lisää voimakkuutta</string>
+    <string name="player_volume_down">Vähennä voimakkuutta</string>
+    <string name="details_tab">Tiedot</string>
+    <string name="lyrics_tab">Sanoitukset</string>
+    <string name="connection_connected">Yhteys</string>
+    <!-- Label for how long the phone has been connected to Clementine, shown next to it as a duration such as 01:23:45. -->
+    <string name="connection_uptime">Yhdistettynä</string>
+    <string name="connection_switch">Vaihda Clementine</string>
+    <string name="connection_switch_summary">Valitse toinen tietokone verkosta</string>
+    <string name="output_title">Toisto päällä</string>
+    <string name="output_this_phone">%1$s (tämä puhelin)</string>
+    <string name="output_this_tablet">%1$s (tämä tabletti)</string>
+    <string name="output_switching">Vaihdetaan…</string>
+    <string name="output_playing_on">Toistetaan %1$s</string>
+    <string name="output_choose">Valitse missä toistetaan</string>
+    <string name="hint_done">Selvä</string>
+    <string name="hint_outputs_title">Toista tällä laitteella</string>
+    <string name="hint_outputs">Kuuntele Clementineä tällä laitteella tai vaihda takaisin tietokoneellesi tällä painikkeella.</string>
+    <string name="pref_hints_reset">Näytä vinkit uudelleen</string>
+    <string name="pref_hints_reset_summary">Osoita ominaisuudet uudelleen, kuten ensimmäisellä käyttökerralla.</string>
+    <string name="pref_hints_reset_done">Vinkit näytetään uudelleen</string>
+    <string name="pref_renderer">Anna Clementinen toistaa tällä puhelimella</string>
+    <string name="pref_renderer_summary">Clementine voi lähettää musiikkia tänne kun se toistaa sitä muilla laitteilla</string>
+
     <string name="download_noti_title">Aloitetaan latausta</string>
     <plurals name="download_noti_n_downloads">
         <item quantity="one">%d aktiivinen lataus</item>
@@ -48,18 +132,66 @@
     <string name="download_noti_canceled">Lataus peruttiin</string>
     <string name="download_noti_insufficient_space">Ei riittävästi levytilaa, lopetetaan lataaminen.</string>
     <string name="download_noti_forbidden">Lataaminen on kielletty. Aktivoi lataaminen Clementinen asetuksista.</string>
+    <string name="download_noti_not_local_network">Clementine hyväksyy yhteyksiä vain lähiverkosta.</string>
+    <string name="download_noti_too_many_wrong_auth_codes">Liian monta virheellistä tunnistuskoodia. Clementine ei hyväksy uutta koodia tästä puhelimesta %s:n aikana.</string>
     <string name="download_noti_not_mounted">Tallennustilaa ei löytynyt!</string>
     <string name="download_noti_only_wifi">Lataus on sallittu vain wifi-yhteydellä.</string>
     <string name="download_noti_transcoding">Muunnetaan tiedostoja</string>
     <string name="download_noti_transcoding_subtitle">Odota hetki</string>
 
 
+    <string name="library_syncing">Kirjaston synkronointi Clementinesta</string>
     <string name="library_optimize">Optimoidaan tietokantaa</string>
+    <string name="library_empty">Kirjastoa ei vielä ole tässä puhelimessa. Vedä alaspäin ja synkronoi se Clementinesta.</string>
     <string name="library_no_search_results">Ei hakuehtoihisi osuvia kappaleita!</string>
+    <string name="library_sync_error">Kirjastoa ei voitu synkronoida</string>
     <string name="library_title">Kirjasto</string>
+    <string name="library_sync_action">Synkronoi kirjasto</string>
+    <string name="library_add_to_playlist">Lisää soittolistaan</string>
+    <string name="library_add_to_queue">Lisää jonoon</string>
+    <string name="library_open_in_new_playlist">Avaa uudessa soittolistassa</string>
+    <string name="library_select">Valitse</string>
+    <string name="library_back">Takaisin</string>
+
+    <!-- Browsing Clementine's internet services: its Internet sidebar. -->
+    <string name="internet_title">Internet</string>
+    <string name="internet_loading">Ladataan…</string>
+    <string name="internet_needs_setup">Määritä Clementinessä</string>
+    <string name="internet_empty">Täällä ei ole mitään</string>
     <string name="internet_play">Toista</string>
+    <string name="internet_play_now">Toista heti</string>
+    <string name="internet_play_next">Toista seuraava</string>
+    <string name="internet_replace_playlist">Korvaa soittolista</string>
+    <string name="internet_added">Lisätty soittolistalle</string>
+    <string name="internet_playing_next">Seuraavaksi vuorossa</string>
+    <string name="internet_not_playable">Clementine ei voi lisätä sitä soittolistalle</string>
+    <string name="internet_gone">Tätä ei enää ole Clementinessä</string>
+
+
     <string name="global_search_empty">Anna hakuehdot yläpuolella löytääksesi musiikkia tietokoneeltasi ja internetistä</string>
     <string name="global_search_search">Etsi mitä tahansa</string>
+    <string name="search_searching">Haetaan “%s”…</string>
+    <string name="search_clear">Tyhjennä haku</string>
+    <string name="search_top_result">Paras osuma</string>
+    <string name="search_songs">Kappaleet</string>
+    <string name="search_artists">Artistit</string>
+    <string name="search_albums">Albumit</string>
+    <string name="search_stations">Asemat</string>
+    <string name="search_other_matches">Muut osumat</string>
+    <string name="search_see_all">Näytä kaikki</string>
+    <!-- The See all button's description for accessibility, with the section's name. -->
+    <string name="search_see_all_of">Näytä kaikki %s</string>
+    <!-- The top result's second line: what it is, and whose. -->
+    <string name="search_top_song">Kappale • %s</string>
+    <string name="search_top_artist">Artisti</string>
+    <string name="search_top_album">Albumi • %s</string>
+    <string name="search_top_station">Asema • %s</string>
+    <plurals name="search_number_albums">
+        <item quantity="one">%d albumi</item>
+        <item quantity="other">%d albumia</item>
+    </plurals>
+
+
     <string name="song_info_album">Albumi</string>
     <string name="song_info_genre">Tyylilaji</string>
     <string name="song_info_year">Vuosi</string>
@@ -113,7 +245,15 @@
     <string name="pref_library_sorting_desc">laskevaan</string>
 
     <string name="pref_library_grouping_title">Ryhmittely</string>
+    <string name="pref_library_grouping_summary">Kirjasto on ryhmitelty %1$s:n mukaan.</string>
+    <string name="pref_library_grouping_artist">Artisti</string>
+    <string name="pref_library_grouping_artist_album">Artisti / Albumi</string>
+    <string name="pref_library_grouping_albumartist_album">Albumi Artisti / Albumi</string>
+    <string name="pref_library_grouping_artist_year">Artisti / Vuosi</string>
     <string name="pref_library_grouping_album">Albumi</string>
+    <string name="pref_library_grouping_genre_album">Tyylilaji / Albumi</string>
+    <string name="pref_library_grouping_genre_artist_album">Tyylilaji / Artisti / Albumi</string>
+
     <string name="pref_autoconnect_title">Yhdistä automaattisesti</string>
     <string name="pref_autoconnect_summary">Yhdistä Clementineen automaattisesti kaukosäätimen käynnistyessä.</string>
     <string name="pref_port_title">Portti</string>
@@ -140,12 +280,18 @@
     <string name="pref_dl_wifi_only_title">Vain wifi</string>
     <string name="pref_dl_wifi_only_summary">Lataa kappaleet vain wifi-yhteydellä.</string>
     <string name="pref_dl_dir">Aseta latauskansio</string>
+    <string name="pref_dl_volume">Tallenna lataukset kohteeseen</string>
+    <string name="pref_dl_volume_unavailable">Ei käytettävissä. Valitse, mihin lataukset tallennetaan.</string>
     <string name="pref_dl_override">Korvaa olemassa olevat tiedostot</string>
+    <string name="pref_dl_override_summary">Lataa kappaleet uudelleen, jos ne eroavat tämän puhelimen kappaleista.</string>
     <string name="pref_dl_cat_folders">Kansiot</string>
     <string name="pref_dl_pl_save_own_dir_title">Tallenna kappaleet soittolistan kansioon</string>
     <string name="pref_dl_pl_save_own_dir_summary">Luo soittolistan nimisen kansion ja tallentaa kappaleet sinne.</string>
     <string name="pref_dl_pl_artist_dir_title">Luo alikansio artistille</string>
+    <string name="pref_dl_pl_artist_dir_summary">Luo artistikohtainen alikansio jokaiselle yksittäiselle kappaleelle.</string>
     <string name="pref_dl_pl_album_dir_title">Luo alikansio albumille</string>
+    <string name="pref_dl_pl_album_dir_summary">Luo artistikansion sisään albumialikansio kullekin yksittäiselle kappaleelle.</string>
+
     <string name="file_dialog_set_dir">Valitse kansio</string>
     <string name="file_dialog_not_writable">Kansioon ei voi kirjoittaa</string>
     <string name="file_dialog_custom_paths_available">Valitse muu</string>
@@ -154,9 +300,12 @@
     <string name="dialog_about_authors">Tekijät</string>
     <string name="dialog_about_supporters">Tukijat</string>
     <string name="dialog_about_others">Muut</string>
+    <!-- %1$s is the address of the app's contributors, %2$s of its translators. -->
+    <string name="dialog_about_thanks">Kiitos kaikille <a href="%1$s">kehittäjille</a> ja <a href="%2$s">kääntäjille</a>!</string>
     <string name="dialog_license_top">Tätä ohjelmaa levitetään siinä toivossa, että se on hyödyllinen, mutta kuitenkin ILMAN MINKÄÄNLAISTA TAKUUTA</string>
 
     <string name="tasker_intro">Valitse toiminto.</string>
+    <string name="tasker_ip_help">Anna tiedot, mihin haluat muodostaa yhteyden, jos valitsit yllä \"Yhdistä\". tunnistuskoodi on valinnainen, jos se on poistettu Clementinen käytöstä.</string>
     <string name="tasker_action">Toiminto:</string>
     <string name="tasker_connect">Yhdistä</string>
     <string name="tasker_disconnect">Katkaise yhteys</string>
@@ -172,6 +321,8 @@
     <string name="widget_not_connected">Ei yhdistetty</string>
     <string name="widget_open_clementine">Kosketa käynnistääksesi Clementine-kaukosäätimen</string>
     <string name="widget_couldnt_connect">Yhdistäminen ei onnistunut</string>
+    <string name="widget_description">Kappale, jota Clementine soittaa, toisto/tauko- ja seuraava-painikkeilla</string>
+
     <string name="dialog_close">Sulje</string>
     <string name="dialog_cancel">Peru</string>
     <string name="dialog_continue">Jatka</string>
@@ -180,6 +331,7 @@
     <string name="old_proto">Päivitä Clementine! Tarvitset Clementinen version %1$s tai uudemman.</string>
 
     <string name="no_private_ip">Android-laitteesi IP-osoite ei ole paikallinen. Kokeile poistaa käytöstä \"Salli yhteydet vain paikallisverkosta\" Clementinen asetuksista.</string>
+    <string name="check_ip">1) Onko Clementine käynnissä\?\n2) Clementine %1$s tai uudempi\?\n3) Otitko kauko-ohjauksen käyttöön Clementine asetuksista\?\n4) Tarkista, annoitko oikean IP-osoitteen.\n</string>
     <string name="wifi_disabled">Wifi ei ole päällä. Jos haluat yhdistää Clementineen internetin kautta, varmista että olet ohjannut portit oikein ja olet poistanut käytöstä \"Salli yhteydet vain paikallisverkosta\".</string>
 
     <string name="input_auth_code">Tunnistuskoodi</string>
@@ -209,8 +361,36 @@
     <string name="track_loved">Pidin kappaleesta &lt;3</string>
     <string name="track_banned">En pitänyt kappaleesta :-(</string>
     <string name="permissions_required_title">Vaaditaan oikeuksia</string>
+    <string name="permissions_intro">Android pyytää:</string>
+    <string name="permission_local_network">Lähellä olevat laitteet: Clementine Remote löytää lähiverkossasi olevan Clementinen ja muodostaa siihen yhteyden.</string>
+    <string name="permission_notifications">Ilmoitukset: Soittimen hallintapainikkeet ja latausten edistyminen.</string>
+    <string name="permission_phone">Puhelin: Clementinen voimakkuuden laskeminen puheluiden aikana.</string>
+    <string name="permission_storage">Tallennustila: Lataamiesi kappaleiden tallentamiseen.</string>
+    <string name="not_local_network_title">Clementine kieltäytyi yhteydestä</string>
+    <string name="not_local_network">Clementine hyväksyy yhteyksiä vain lähiverkosta. Jos haluat muodostaa yhteyden muualta, poista käytöstä asetus ”Salli yhteydet vain lähiverkosta” ohjelman verkko- ja etäkäyttöasetuksista.</string>
+    <string name="too_many_wrong_auth_codes_title">Liian monta virheellistä tunnistuskoodia</string>
+    <string name="too_many_wrong_auth_codes">Clementine ei tarkista toista todennuskoodia tästä puhelimesta %s. Anna asetuksissa näkyvä koodi.</string>
+    <!-- How long Clementine said to wait, in "for %s" above. -->
+    <plurals name="wait_seconds">
+        <item quantity="one">%d sekunti</item>
+        <item quantity="other">%d sekuntia</item>
+    </plurals>
+    <plurals name="wait_minutes">
+        <item quantity="one">%d minuutti</item>
+        <item quantity="other">%d minuuttia</item>
+    </plurals>
+    <plurals name="wait_hours">
+        <item quantity="one">%d tunti</item>
+        <item quantity="other">%d tuntia</item>
+    </plurals>
+    <string name="wait_a_while">hetki</string>
+    <string name="local_network_on_link">Tämä osoite on verkossa, johon tämä puhelin on yhdistetty, ja Android antaa Clementine Remote -sovelluksen käyttää sitä vain lähellä olevien laitteiden luvalla. Voit sallia sen sovelluksen asetuksista.</string>
+    <string name="open_settings">Avaa asetukset</string>
+
+    <string name="notification_previous">Edellinen</string>
     <string name="notification_play">Toista</string>
     <string name="notification_pause">Keskeytä</string>
+    <string name="notification_next">Seuraava</string>
     <string name="notification_disconnect_keep_alive">Yhteys katkesi. Kosketa yhdistääksesi uudelleen.</string>
 
     <string name="fragment_title_connection">Clementine</string>
@@ -222,4 +402,10 @@
     <string name="player_download_what_album">Albumi</string>
     <string name="player_download_what_playlist">Soittolista</string>
 
-    </resources>
+    <string name="cd_cover_image">Albumin kansikuva</string>
+    <string name="cd_cancel_download">Peru lataaminen</string>
+    <plurals name="song_info_stars">
+        <item quantity="one">%d tähti</item>
+        <item quantity="other">%d tähteä</item>
+    </plurals>
+</resources>

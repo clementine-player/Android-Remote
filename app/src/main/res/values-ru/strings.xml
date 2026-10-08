@@ -6,7 +6,7 @@
 
     <string name="connectdialog_connect">Подключиться</string>
     <string name="connectdialog_connecting">Подключение к Clementine</string>
-    <string name="connectdialog_download_data">Загрузка данных</string>
+    <string name="connectdialog_download_data">Скачивание данных</string>
     <string name="connectdialog_error">Не могу подключиться</string>
     <string name="connectdialog_ip_hint">Введите IP-адрес</string>
     <string name="connect_intro">Выберите Clementine, которым хотите управлять. Он должен находиться в той же сети Wi-Fi, что и этот телефон.</string>
@@ -26,10 +26,10 @@
     <string name="player_disconnected">Отключено</string>
     <string name="playler_volume">Громкость</string>
     <string name="player_stop_after_current">Остановить после этой композиции.</string>
-    <string name="player_download_lyrics">Загрузка текста песни</string>
+    <string name="player_download_lyrics">Скачивается текст песни</string>
     <string name="player_no_lyrics">Текст песни не найден.</string>
-    <string name="player_download_started">Загрузка началась!</string>
-    <string name="player_song_is_stream">Не могу загрузить потоки!</string>
+    <string name="player_download_started">Скачивание запущено!</string>
+    <string name="player_song_is_stream">Не удаётся скачать потоки!</string>
     <string name="player_stream">[S]</string>
 
 
@@ -39,7 +39,7 @@
     <string name="playlist_context_remove">Удалить из плейлиста</string>
     <string name="playlist_close">Закрыть плейлист</string>
     <string name="playlist_clear">Очистить плейлист</string>
-    <string name="playlist_clear_content">Данное действие безвозвратно удалит все песни из плейлиста. Продолжить?</string>
+    <string name="playlist_clear_content">Это безвозвратно удалит все песни из плейлиста. Продолжить\?</string>
     <string name="playlist_clear_confirm">Очистить плейлист</string>
     <plurals name="queue_songs">
         <item quantity="one">%d песня</item>
@@ -58,7 +58,7 @@
     <string name="queue_clear_selection">Очистить выделение</string>
 
 
-    <string name="downloads_empty">Нет загрузок!</string>
+    <string name="downloads_empty">Пока ничего не скачано</string>
     <string name="downloads_empty_summary">Скачать музыку на этот телефон, чтобы слушать её вдали от Clementine.</string>
     <string name="downloads_empty_how">Скачать песню из проигрывателя, альбом из библиотеки или плейлист из его меню.</string>
     <string name="downloads_suggest_most_played">Ваши самые прослушиваемые альбомы</string>
@@ -73,8 +73,8 @@
     <string name="downloads_playlist_playing">Сейчас играет</string>
     <string name="downloads_playlist_favorite">Избранное</string>
     <string name="downloads_download">Скачать %1$s</string>
-    <string name="downloaded_songs">Загруженные песни - нажмите для воспроизведения</string>
-    <string name="downloads_title">Загрузки</string>
+    <string name="downloaded_songs">Скачанные песни — нажмите для воспроизведения</string>
+    <string name="downloads_title">Скачивания</string>
     <string name="downloads_free_space">%s свободно на этом телефоне</string>
     <string name="downloads_running">Скачивается</string>
     <string name="downloads_finished">Завершено</string>
@@ -102,7 +102,7 @@
     <string name="lyrics_tab">Текст песни</string>
     <string name="connection_connected">Подключено</string>
     <!-- Label for how long the phone has been connected to Clementine, shown next to it as a duration such as 01:23:45. -->
-    <string name="connection_uptime">Подключено для</string>
+    <string name="connection_uptime">Подключено в течение</string>
     <string name="connection_switch">Переключить Clementine</string>
     <string name="connection_switch_summary">Выбрать другой компьютер в вашей сети</string>
     <string name="output_title">Играет на</string>
@@ -120,12 +120,12 @@
     <string name="pref_renderer">Разрешить проигрывание Clementine на этом телефоне</string>
     <string name="pref_renderer_summary">Clementine может отправлять сюда свою музыку, когда воспроизводит её на других устройствах</string>
 
-    <string name="download_noti_title">Загрузка начата</string>
+    <string name="download_noti_title">Запуск скачивания</string>
     <plurals name="download_noti_n_downloads">
-        <item quantity="one">%d активная загрузка</item>
-        <item quantity="few">%d активных загрузки</item>
-        <item quantity="many">%d активных загрузок</item>
-        <item quantity="other">%d активных загрузок</item>
+        <item quantity="one">%d активное скачивание</item>
+        <item quantity="few">%d активных скачивания</item>
+        <item quantity="many">%d активных скачиваний</item>
+        <item quantity="other">%d активных скачиваний</item>
     </plurals>
     <string name="download_noti_n_progress">Общий прогресс: %d %</string>
     <string name="download_noti_title_song">[Песня]</string>
@@ -133,19 +133,19 @@
     <string name="download_noti_title_playlist">[Плейлист]</string>
     <string name="download_noti_title_songs">[Песни]</string>
     <plurals name="download_noti_n_finished">
-        <item quantity="one">%d загрузка завершена</item>
-        <item quantity="few">%d загрузки завершены</item>
-        <item quantity="many">%d загрузок завершено</item>
-        <item quantity="other">%d загрузок завершено</item>
+        <item quantity="one">%d скачивание завершено</item>
+        <item quantity="few">%d скачивания завершены</item>
+        <item quantity="many">%d скачивания завершено</item>
+        <item quantity="other">%d скачивания завершено</item>
     </plurals>
-    <string name="download_noti_complete">Загрузка завершена</string>
-    <string name="download_noti_canceled">Загрузка отменена</string>
-    <string name="download_noti_insufficient_space">Недостаточно места, загрузка прервана.</string>
-    <string name="download_noti_forbidden">Загрузка запрещена. Активируйте функцию в настройках Clementine.</string>
+    <string name="download_noti_complete">Скачивание завершено</string>
+    <string name="download_noti_canceled">Скачивание отменено</string>
+    <string name="download_noti_insufficient_space">Недостаточно места, скачивание прервано.</string>
+    <string name="download_noti_forbidden">Скачивание запрещено. Активируйте его в настройках Clementine.</string>
     <string name="download_noti_not_local_network">Clementine принимает подключения только из своей локальной сети.</string>
-    <string name="download_noti_too_many_wrong_auth_codes">Слишком много неверных кодов аутентификации. Clementine не будет проверять последующие с этого телефона в течение %s.</string>
+    <string name="download_noti_too_many_wrong_auth_codes">Слишком много неверных кодов аутентификации. Clementine не будет проверять коды с этого телефона в течение %s.</string>
     <string name="download_noti_not_mounted">Устройство для хранения не найдено!</string>
-    <string name="download_noti_only_wifi">Загрузка разрешена только через WiFi.</string>
+    <string name="download_noti_only_wifi">Скачивание разрешено только по Wi-Fi.</string>
     <string name="download_noti_transcoding">Конвертация файлов</string>
     <string name="download_noti_transcoding_subtitle">Пожалуйста, подождите</string>
 
@@ -158,6 +158,9 @@
     <string name="library_title">Фонотека</string>
     <string name="library_sync_action">Синхронизировать фонотеку</string>
     <string name="library_add_to_playlist">Добавить в плейлист</string>
+    <string name="library_add_to_queue">Добавить в очередь</string>
+    <string name="library_open_in_new_playlist">Открыть в новом плейлисте</string>
+    <string name="library_select">Выбрать</string>
     <string name="library_back">Назад</string>
 
     <!-- Browsing Clementine's internet services: its Internet sidebar. -->
@@ -171,11 +174,11 @@
     <string name="internet_replace_playlist">Заменить плейлист</string>
     <string name="internet_added">Добавлено в плейлист</string>
     <string name="internet_playing_next">Будет следующим</string>
-    <string name="internet_not_playable">Clementine не может добавить его в плейлист.</string>
-    <string name="internet_gone">Его больше нет в Clementine.</string>
+    <string name="internet_not_playable">Clementine не может добавить это в плейлист</string>
+    <string name="internet_gone">Его больше нет в Clementine</string>
 
 
-    <string name="global_search_empty">Введите ключевое слово выше, чтобы найти музыку на вашем компьютере или в интернет</string>
+    <string name="global_search_empty">Введите поисковый запрос выше, чтобы найти музыку на вашем компьютере и в интернете</string>
     <string name="global_search_search">Искать что угодно</string>
     <string name="search_searching">Выполняется поиск «%s»…</string>
     <string name="search_clear">Очистить поиск</string>
@@ -216,19 +219,19 @@
 
     <string name="connection_volume">Громкость</string>
     <string name="connection_version">Версия Clementine</string>
-    <string name="connection_traffic">Траффик Исх / Вх (сред / c)</string>
-    <string name="connection_traffic_unsupported">Статистика не доступна на данном устройстве</string>
+    <string name="connection_traffic">Трафик исх. / вх. (сред. / с)</string>
+    <string name="connection_traffic_unsupported">Статистика недоступна на этом устройстве</string>
 
 
     <string name="menu_settings">Настройки</string>
     <string name="menu_search">Поиск</string>
     <string name="menu_ban">Запретить</string>
     <string name="menu_download">Скачать</string>
-    <string name="menu_download_playlist">Загрузить плейлист</string>
+    <string name="menu_download_playlist">Скачать плейлист</string>
 
     <string name="pref_cat_player">Плеер</string>
     <string name="pref_cat_library">Фонотека</string>
-    <string name="pref_cat_downloads">Загрузки</string>
+    <string name="pref_cat_downloads">Скачивания</string>
     <string name="pref_cat_advanced">Дополнительно</string>
     <string name="pref_cat_connection">Подключение</string>
     <string name="pref_cat_about">О программе</string>
@@ -238,7 +241,7 @@
     <string name="pref_trackno_title">Показывать номер трека</string>
     <string name="pref_trackno_summary">Показывать или скрывать номера треков в плейлистах.</string>
     <string name="pref_lastfm_title">Last.fm</string>
-    <string name="pref_lastfm_summary">Активируйте для добавления в любимые / запрета треков.</string>
+    <string name="pref_lastfm_summary">Включите, чтобы добавлять треки в избранное или запрещать их.</string>
     <string name="pref_lower_volume_title">Понижать громкость</string>
     <string name="pref_lower_volume_summary">Понижать громкость при входящих / исходящих звонках.</string>
     <string name="pref_call_volume_title">Громкость при звонке</string>
@@ -254,7 +257,7 @@
     <string name="pref_library_sorting_desc">Убыванию</string>
 
     <string name="pref_library_grouping_title">Группировка</string>
-    <string name="pref_library_grouping_summary">Фонотека сгруппипрована по %1$s.</string>
+    <string name="pref_library_grouping_summary">Фонотека сгруппирована по %1$s.</string>
     <string name="pref_library_grouping_artist">Артист</string>
     <string name="pref_library_grouping_artist_album">Артист / Альбом</string>
     <string name="pref_library_grouping_albumartist_album">Артист альбома / Альбом</string>
@@ -263,19 +266,16 @@
     <string name="pref_library_grouping_genre_album">Жанр / Альбом</string>
     <string name="pref_library_grouping_genre_artist_album">Жанр / Артист / Альбом</string>
 
-    <string name="pref_autoconnect_title">Авто-подлючение</string>
-    <string name="pref_autoconnect_summary">Автоматически подключаться к Clementine при запуске удалённого управления.
-    </string>
+    <string name="pref_autoconnect_title">Автоподлючение</string>
+    <string name="pref_autoconnect_summary">Автоматически подключаться к Clementine при запуске удалённого доступа.\n    </string>
     <string name="pref_port_title">Порт</string>
     <string name="pref_port_summary">Текущий порт:</string>
     <string name="pref_port_error">Неверный порт!</string>
 
     <string name="pref_wake_lock_title">Держать CPU включённым</string>
-    <string name="pref_wake_lock_summary">Включите если приложения постоянно отсоединяется при работе в фоне. Может вызвать больший расход батареи.
-    </string>
+    <string name="pref_wake_lock_summary">Включите, если приложение произвольно отключается в фоновом режиме. Может ускорить разряд батареи.\n    </string>
     <string name="pref_keep_screen_on_title">Держать экран включённым</string>
-    <string name="pref_keep_screen_on_summary">Предотвращает затухание экрана, пока Clementine Remote подключен к Clementine.
-    </string>
+    <string name="pref_keep_screen_on_summary">Не давать экрану выключаться, пока Clementine Remote подключён к Clementine.\n    </string>
 
     <string name="pref_version_summary">Посетить страницу проекта</string>
     <string name="pref_version_title">Версия</string>
@@ -290,22 +290,22 @@
     <string name="pref_clementine_summary">Посетить страницу Clementine</string>
 
     <string name="pref_dl_wifi_only_title">Только WiFi </string>
-    <string name="pref_dl_wifi_only_summary">Скачивать песни, только когда есть подключение к wifi сети.</string>
-    <string name="pref_dl_dir">Папка для загрузок</string>
+    <string name="pref_dl_wifi_only_summary">Скачивать песни, только когда есть подключение к сети Wi-Fi.</string>
+    <string name="pref_dl_dir">Задать папку для скачиваний</string>
     <string name="pref_dl_volume">Сохранять скачивания в</string>
     <string name="pref_dl_volume_unavailable">Недоступно. Выберите, куда сохранять скачивания.</string>
     <string name="pref_dl_override">Перезаписывать существующие файлы</string>
-    <string name="pref_dl_override_summary">Повторно скачивает песни, если они отличаются от находящихся на этом телефоне.</string>
+    <string name="pref_dl_override_summary">Повторно скачивает песни, если они отличаются от тех, что уже есть на этом телефоне.</string>
     <string name="pref_dl_cat_folders">Папки</string>
     <string name="pref_dl_pl_save_own_dir_title">Сохранять композиции в папке плейлиста</string>
-    <string name="pref_dl_pl_save_own_dir_summary">Создавать папку с названием плейлиста и сохранять композиции в ней.</string>
+    <string name="pref_dl_pl_save_own_dir_summary">Создавать папку с именем плейлиста и сохранять дорожки в неё.</string>
     <string name="pref_dl_pl_artist_dir_title">Создать подпапку с именем артиста</string>
     <string name="pref_dl_pl_artist_dir_summary">Создавать подпапку с именем артиста для каждого трека.</string>
     <string name="pref_dl_pl_album_dir_title">Создать подпапку с именем альбома</string>
     <string name="pref_dl_pl_album_dir_summary">Создавать подпапку с именем альбома внтури папки артиста для каждого трека.</string>
 
     <string name="file_dialog_set_dir">Выберите папку</string>
-    <string name="file_dialog_not_writable">Папка не доступна для записи</string>
+    <string name="file_dialog_not_writable">Каталог недоступен для записи</string>
     <string name="file_dialog_custom_paths_available">Выберите другую</string>
 
 
@@ -314,10 +314,10 @@
     <string name="dialog_about_others">Другое</string>
     <!-- %1$s is the address of the app's contributors, %2$s of its translators. -->
     <string name="dialog_about_thanks">Спасибо всем <a href="%1$s">участникам</a> и <a href="%2$s">переводчикам</a>!</string>
-    <string name="dialog_license_top">Программа распространяется в надежде что она будет полезной, но БЕЗ КАКИХ ЛИБО ГАРАНТИЙ</string>
+    <string name="dialog_license_top"> Эта программа распространяется в надежде, что она будет полезной, но БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ</string>
 
     <string name="tasker_intro">Пожалуйста, выберите действие.</string>
-    <string name="tasker_ip_help">Введите сведения для подключения, в случае выбора \"Подключить\" выше. Код безопастности используется по желанию, если он выключен в Clementine.</string>
+    <string name="tasker_ip_help">Введите данные, к которым хотите подключиться, если выше выбрали «Подключиться». Код авторизации необязателен, если он отключён в Clementine.</string>
     <string name="tasker_action">Действие:</string>
     <string name="tasker_connect">Подключиться</string>
     <string name="tasker_disconnect">Отключиться</string>
@@ -327,11 +327,11 @@
     <string name="tasker_stop">Стоп</string>
     <string name="tasker_next">Следующая песня</string>
     <string name="tasker_port_hint">Введите порт</string>
-    <string name="tasker_auth_hint">Введите код безопастности</string>
+    <string name="tasker_auth_hint">Введите код авторизации</string>
 
     <string name="widget_connect_to">Коснитесь для подключения</string>
     <string name="widget_not_connected">Не подключено</string>
-    <string name="widget_open_clementine">Коснитесь для старта Clementine Remote</string>
+    <string name="widget_open_clementine">Коснитесь для запуска Clementine Remote</string>
     <string name="widget_couldnt_connect">Не могу подключиться</string>
     <string name="widget_description">Песня, которую воспроизводит Clementine, с кнопками играть/пауза и перехода к следующей</string>
 
@@ -342,13 +342,13 @@
     <string name="error_versions">Несовместимая версия</string>
     <string name="old_proto">Пожалуйста, обновите Clementine! Требуется версия Clementine %1$s или выше.</string>
 
-    <string name="no_private_ip">Ваше Android устройство не имеет локального IP-адреса. Попробуйте отключить «Разрешать соединения только из локальной сети» в настройках Clementine.</string>
+    <string name="no_private_ip">У вашего устройства Android нет локального IP-адреса. Попробуйте отключить «Использовать только локальные IP-адреса» в настройках Clementine.</string>
     <string name="check_ip">1) Запущен ли Clementine?\n2) У вас Clementine %1$s или выше?\n3) Задействовано ли удалённое управление в настройках Clementine?\n4) Проверьте правильность введённого адреса IP.\n</string>
-    <string name="wifi_disabled">Wi-Fi отключён. Если вы хотите подключиться к Clementine через интернет, убедитесь что вы пробросили порты и выключили опцию «Использовать только локальный IP-адрес».</string>
+    <string name="wifi_disabled">Wi-Fi отключён. Если вы хотите подключиться к Clementine через интернет, убедитесь, что вы правильно пробросили порты и отключили опцию «Использовать только локальные IP-адреса».</string>
 
     <string name="input_auth_code">Код авторизации</string>
     <string name="done">Готово</string>
-    <string name="unknown">Неизвестный</string>
+    <string name="unknown">Неизвестно</string>
     <plurals name="number_items">
         <item quantity="one">%d элемент</item>
         <item quantity="few">%d элемента</item>
@@ -358,7 +358,7 @@
 
     <plurals name="songs_added">
         <item quantity="one">%d песня добавлена в текущий плейлист</item>
-        <item quantity="few">%d песни добавлено в текущий плейлист</item>
+        <item quantity="few">%d песни добавлены в текущий плейлист</item>
         <item quantity="many">%d песен добавлено в текущий плейлист</item>
         <item quantity="other">%d песен добавлено в текущий плейлист</item>
     </plurals>
@@ -374,18 +374,18 @@
     <string name="shuffle_albums">Перемешать альбомы</string>
 
 
-    <string name="track_loved">Трек добавлен в любимые &lt;3</string>
-    <string name="track_banned">Композиция запрещена :-(</string>
-    <string name="permissions_required_title">Требуется разрешение</string>
+    <string name="track_loved">Трек добавлен в избранное &lt;3</string>
+    <string name="track_banned">Трек запрещён :-(</string>
+    <string name="permissions_required_title">Требуются разрешения</string>
     <string name="permissions_intro">Android запросит:</string>
     <string name="permission_local_network">Устройства поблизости: Clementine Remote находит Clementine в вашей локальной сети и связывается с ним.</string>
-    <string name="permission_notifications">Уведомления: для элементов управления плеера и хода скачивания ваших файлов.</string>
+    <string name="permission_notifications">Уведомления: для управления проигрывателем и отображения хода скачивания.</string>
     <string name="permission_phone">Телефон: чтобы понижать громкость Clementine во время звонков.</string>
     <string name="permission_storage">Хранилище: чтобы сохранять скачанные вами песни.</string>
     <string name="not_local_network_title">Clementine отклонил подключение</string>
     <string name="not_local_network">Clementine принимает подключения только из своей локальной сети. Чтобы подключиться извне, отключите «Разрешать подключения только из локальной сети» в настройках удалённого управления по сети.</string>
     <string name="too_many_wrong_auth_codes_title">Слишком много неверных кодов аутентификации</string>
-    <string name="too_many_wrong_auth_codes">Clementine не будет проверять последующие коды аутентификации с этого телефона в течение %s. Затем введите код, показанный в настройках удалённого управления по сети.</string>
+    <string name="too_many_wrong_auth_codes">Clementine не будет проверять коды с этого телефона в течение %s. После этого введите код, показанный в настройках сетевого удалённого управления.</string>
     <!-- How long Clementine said to wait, in "for %s" above. -->
     <plurals name="wait_seconds">
         <item quantity="one">%d секунды</item>
@@ -406,7 +406,7 @@
         <item quantity="other">%d часов</item>
     </plurals>
     <string name="wait_a_while">некоторого времени</string>
-    <string name="local_network_on_link">Этот адрес находится в сети, к которой подключён этот телефон, и Android разрешает Clementine Remote обращаться к ней только с разрешением «Устройства поблизости». Вы можете предоставить его в настройках приложения.</string>
+    <string name="local_network_on_link">Этот адрес находится в сети, к которой подключён телефон. Android разрешает Clementine Remote обращаться к ней только с разрешением «Устройства поблизости». Его можно предоставить в настройках приложения.</string>
     <string name="open_settings">Открыть настройки</string>
 
     <string name="notification_previous">Предыдущее</string>
@@ -420,7 +420,7 @@
     <string name="navigation_drawer_clementine_on">Clementine на %s</string>
 
     <string name="player_download_what">Что скачать?</string>
-    <string name="player_download_what_song">Песня</string>
+    <string name="player_download_what_song">Песню</string>
     <string name="player_download_what_album">Альбом</string>
     <string name="player_download_what_playlist">Плейлист</string>
 

@@ -9,6 +9,8 @@
     <string name="connectdialog_download_data">Stahují se data</string>
     <string name="connectdialog_error">Nepodařilo se dostat se k hostiteli</string>
     <string name="connectdialog_ip_hint">Zadat adresu IP</string>
+    <string name="connect_server_address">%1$s · port %2$d</string>
+    <string name="connect_address">Adresa</string>
     <string name="player_nosong">Nyní se nepřehrávají žádné písně</string>
     <string name="player_disconnected">Odpojeno</string>
     <string name="playler_volume">Hlasitost</string>
@@ -28,9 +30,20 @@
     <string name="playlist_clear">Smazat seznam skladeb</string>
     <string name="playlist_clear_content">Tímto budou nenávratně odstraněny všechny písně ze seznamu skladeb. Pokračovat?</string>
     <string name="playlist_clear_confirm">Smazat seznam skladeb</string>
+    <string name="queue_minutes">%d min</string>
+    <string name="queue_hours_minutes">%1$d h %2$d min</string>
     <string name="downloads_empty">Žádné stažené!</string>
     <string name="downloaded_songs">Stažené písně - Klepněte pro přehrání</string>
     <string name="downloads_title">Stahování</string>
+    <string name="downloads_free_space">%s zdarma na tomto telefonu</string>
+    <string name="downloads_change">Změnit</string>
+
+    <string name="details_tab">Podrobnosti</string>
+    <string name="connection_connected">Připojeno</string>
+    <!-- Label for how long the phone has been connected to Clementine, shown next to it as a duration such as 01:23:45. -->
+    <string name="connection_uptime">Připojeno po</string>
+    <string name="output_this_phone">%1$s (tento telefon)</string>
+    <string name="output_choose">Vybrat, kde přehrávat</string>
     <string name="download_noti_title">Spouští se stahování</string>
     <plurals name="download_noti_n_downloads">
         <item quantity="one">%d činné stahování</item>
@@ -53,6 +66,7 @@
     <string name="download_noti_canceled">Stahování zrušeno</string>
     <string name="download_noti_insufficient_space">Nedostatek místa. Stahování zrušeno.</string>
     <string name="download_noti_forbidden">Stahování zakázáno. Zapněte je v nastavení Clementine.</string>
+    <string name="download_noti_not_local_network">Clementine přijímá pouze připojení z vlastní místní sítě.</string>
     <string name="download_noti_not_mounted">Nenalezeno žádné ukládací zařízení!</string>
     <string name="download_noti_only_wifi">Stahování povoleno jen na Wifi.</string>
     <string name="download_noti_transcoding">Probíhá překódování souborů</string>
@@ -62,10 +76,23 @@
     <string name="library_optimize">Optimalizuje se databáze</string>
     <string name="library_no_search_results">Žádné písně neodpovídají vašim hlediskům hledání!</string>
     <string name="library_title">Sbírka</string>
+    <string name="library_add_to_playlist">Přidat do seznamu skladeb</string>
     <string name="internet_play">Přehrát</string>
+    <string name="internet_added">Přidáno do seznamu skladeb</string>
+    <string name="internet_not_playable">Clementine nemůže přidat do seznamu skladeb</string>
     <string name="global_search_empty">Zadejte hledané pojmy výše pro hledání hudby ve vašem počítači a na internetu</string>
     <string name="global_search_search">Hledat cokoli</string>
+    <string name="search_artists">Umělci</string>
+    <string name="search_albums">Alba</string>
     <string name="search_top_artist">Umělec</string>
+    <plurals name="search_number_albums">
+        <item quantity="one">%d album</item>
+        <item quantity="few">%d alba</item>
+        <item quantity="many">%d alb</item>
+        <item quantity="other">%d alba</item>
+    </plurals>
+
+
     <string name="song_info_album">Album</string>
     <string name="song_info_genre">Žánr</string>
     <string name="song_info_year">Rok</string>
@@ -236,6 +263,9 @@
     <string name="track_loved">Skladba je oblíbená &lt;3</string>
     <string name="track_banned">Skladba je zakázaná :-(</string>
     <string name="permissions_required_title">Požadována oprávnění</string>
+    <string name="not_local_network_title">Clementine odmítla spojení</string>
+    <string name="not_local_network">Aplikace Clementine přijímá pouze připojení z místní sítě. Chcete-li se připojit z jiného místa, vypněte v nastavení pro síťové vzdálené ovládání volbu Povolit spojení pouze z místní sítě.</string>
+    <string name="too_many_wrong_auth_codes">Clementine z tohoto telefonu již nebude ověřovat žádný další autorizační kód po %s. Poté zadejte kód zobrazený v nastavení pro síťové vzdálené ovládání.</string>
     <string name="notification_play">Přehrát</string>
     <string name="notification_pause">Pozastavit</string>
     <string name="notification_disconnect_keep_alive">Spojení ztraceno. Ťukněte pro opětovné připojení.</string>
