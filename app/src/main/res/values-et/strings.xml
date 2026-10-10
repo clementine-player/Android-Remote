@@ -9,8 +9,13 @@
     <string name="connectdialog_download_data">Andmed on allalaadimisel</string>
     <string name="connectdialog_error">Ei leidnud hosti</string>
     <string name="connectdialog_ip_hint">Sisesta IP-aadress</string>
+    <string name="connect_intro">Vali arvuti, milles leiduvat Clementine\'i soovid juhtida. Ta peab olema selle nutiseadmega samas WiFi võrgus.</string>
+    <string name="connect_on_network">Sinu võrgud</string>
     <string name="connect_search_again">Otsi lugu</string>
+    <string name="connect_searching">Otsin Clementine\'iga arvutit…</string>
+    <string name="connect_searching_help">Kas kuidagi  pole näha\? Kontrolli, kas arvutis on ligipääs võrgus sisse lülitatud või sisesta aadress käsitsi.</string>
     <string name="connect_server_address">%1$s · port %2$d</string>
+    <string name="connect_enter_address">Või sisesta aadress</string>
     <string name="connect_address">Aadress</string>
     <string name="player_nosong">Ükski lugu ei ole hetkel esitamisel</string>
     <string name="player_disconnected">Ühendus on katkestatud</string>
@@ -28,6 +33,7 @@
     <string name="playlist_context_remove">Eemalda esitusloendist</string>
     <string name="playlist_close">Sulge esitusloend</string>
     <string name="playlist_clear">Tühjenda esitusloend</string>
+    <string name="playlist_clear_content">Järgnevaga eemaldad pöördumatult kõik lood sellest esitusloendist. Tahad jätkata\?</string>
     <string name="playlist_clear_confirm">Tühjenda esitusloend</string>
     <plurals name="queue_songs">
         <item quantity="one">%d lugu</item>
@@ -43,57 +49,114 @@
 
 
     <string name="downloads_empty">Mitte  midagi pole veel allalaaditud</string>
+    <string name="downloads_empty_summary">Laadi muusika siia telefoni alla ja saad seda kuulata, kui oled Clementine\'i arvutist eemal.</string>
+    <string name="downloads_empty_how">Võid loo laadida alla pleierist, albumi muusikakogust või esitusloendi tema menüüst.</string>
+    <string name="downloads_suggest_most_played">Sinu enimkuulatud albumid</string>
+    <string name="downloads_suggest_recent">Hiljuti esitatud albumid</string>
     <string name="downloads_suggest_playlists">Esitusloendid</string>
     <plurals name="downloads_plays">
         <item quantity="one">%d esitamine</item>
         <item quantity="other">%d esitamist</item>
     </plurals>
     <string name="downloads_playlist_playing">Hetkel esitamisel</string>
+    <string name="downloads_playlist_favorite">Lemmik</string>
+    <string name="downloads_download">Laadi %1$s alla</string>
+    <string name="downloaded_songs">Allalaaditud lood - kuulamiseks klõpsa</string>
     <string name="downloads_title">Allalaadimised</string>
+    <string name="downloads_free_space">Vaba andmeruumi on selles telefonis %s</string>
     <string name="downloads_running">Allalaadimisel</string>
     <string name="downloads_finished">Lõpetatud</string>
+    <string name="downloads_on_phone">Selles telefonis</string>
+    <string name="downloads_wifi_only">Allalaadimine toimib ainult WiFi võrgus</string>
     <string name="downloads_change">Muuda</string>
 
     <!-- The app's shell: navigation, mini player, player and sheets. -->
     <string name="nav_queue">Lisa järjekorda</string>
+    <string name="shell_open_player">Ava pleier: %s</string>
+    <string name="shell_connected_to">Ühendatud arvutiga %s</string>
+    <string name="shell_search_close">Sulge otsing</string>
+    <string name="shell_more">Lisavalikud</string>
+    <string name="player_collapse">Lappa pleier kokku</string>
+    <!-- Small heading at the top of the player, above the name of the playlist the song is playing from. -->
+    <string name="player_playing_from">Esitamisel asukohast</string>
     <string name="queue_playing">Esitamisel</string>
+    <string name="player_details">Laulusõnad ja üksikasjad</string>
+    <string name="player_download_song">Laadi lugu alla</string>
+    <string name="player_volume_level">Clementine\'i helivaljus, %1$d%%</string>
     <string name="player_volume_up">Heli valjemaks</string>
     <string name="player_volume_down">Heli vaiksemaks</string>
     <string name="details_tab">Üksiaksjad</string>
     <string name="lyrics_tab">Laulusõnad</string>
     <string name="connection_connected">Ühendatud</string>
+    <string name="connection_switch_summary">Vali oma võrgust mõnu muu arvuti</string>
     <string name="output_this_phone">%1$s (selles telefonis)</string>
+    <string name="output_this_tablet">%1$s (selles tahvelarvutis)</string>
     <string name="output_switching">Vahetamisel…</string>
+    <string name="output_choose">Vali esitamise koht</string>
+    <string name="hint_done">Selge</string>
+    <string name="hint_outputs_title">Esita selles seadmes</string>
+    <string name="hint_outputs">Kuula Clementine\'i selles seadmes või lülitu selle nupuga tagasi arvutis oleva Clementine\'i juurde.</string>
+    <string name="pref_hints_reset">Näita soovitusi uuesti</string>
     <string name="download_noti_title">Allalaadimine on käivitamisel</string>
+    <plurals name="download_noti_n_downloads">
+        <item quantity="one">%d aktiivne allalaadimine</item>
+        <item quantity="other">%d aktiivset allalaadimist</item>
+    </plurals>
+    <string name="download_noti_n_progress">Edenemine kokku: %d%</string>
     <string name="download_noti_title_song">[Lugu]</string>
     <string name="download_noti_title_album">[Album]</string>
     <string name="download_noti_title_playlist">[Esitusloend]</string>
     <string name="download_noti_title_songs">[Lood]</string>
+    <plurals name="download_noti_n_finished">
+        <item quantity="one">%d allalaadimine on lõppenud</item>
+        <item quantity="other">%d allalaadimist on lõppenud</item>
+    </plurals>
     <string name="download_noti_complete">Allalaadimine on lõpetatud</string>
     <string name="download_noti_canceled">Allalaadimine on tühistatud</string>
     <string name="download_noti_insufficient_space">Pole piisavalt andmeruumi, katkestan allalaadimise.</string>
     <string name="download_noti_forbidden">Allalaadimine pole lubatud. Lülita see Clementine\'i seadistustes sisse.</string>
+    <string name="download_noti_too_many_wrong_auth_codes">Liiga mitu vale autentimiskoodi sisestust. Clementine ei kontrolli sellest telefonist päritud koode %s.</string>
+    <string name="download_noti_not_mounted">Ühtegi andmeruumiseadet ei leidu!</string>
     <string name="download_noti_only_wifi">Allalaadimine on lubatud ainult WiFi võrgus.</string>
+    <string name="download_noti_transcoding">Kodeerin faile</string>
+    <string name="download_noti_transcoding_subtitle">Palun oota</string>
+
+
+    <string name="library_syncing">Sünkroonin muusikakogu Clementine\'ist</string>
+    <string name="library_optimize">Optimeerin andmebaasi</string>
+    <string name="library_sync_error">Muusikakogu sünkroonimine ei õnnestunud</string>
     <string name="library_title">Muusikakogu</string>
+    <string name="library_sync_action">Sünkrooni muusikakogu</string>
     <string name="library_add_to_playlist">Lisa esitusloendisse</string>
+    <string name="library_add_to_queue">Lisa esitusjärjekorda</string>
     <string name="library_open_in_new_playlist">Ava uues esitusloendis</string>
+    <string name="library_select">Vali</string>
     <string name="library_back">Tagasi</string>
 
     <!-- Browsing Clementine's internet services: its Internet sidebar. -->
     <string name="internet_title">Internet</string>
     <string name="internet_loading">Laadimisel…</string>
+    <string name="internet_needs_setup">Seadista Clementine\'is</string>
     <string name="internet_empty">Siin pole mitte midagi</string>
     <string name="internet_play">Esita</string>
     <string name="internet_play_now">Esita kohe</string>
     <string name="internet_play_next">Esita järgmisena</string>
     <string name="internet_replace_playlist">Asenda esitusloend</string>
     <string name="internet_added">Lisatud esitusloendisse</string>
+    <string name="internet_playing_next">Esitamisel järgmisena</string>
     <string name="internet_not_playable">Clementine ei saa seda esitusloendisse lisada</string>
+    <string name="search_clear">Tühjenda otsing</string>
     <string name="search_songs">Lood</string>
     <string name="search_artists">Esitajad</string>
     <string name="search_albums">Albumid</string>
     <string name="search_stations">Raadiojaaamad</string>
+    <string name="search_other_matches">Muud vasted</string>
+    <string name="search_see_all">Vaata kõiki</string>
+    <!-- The top result's second line: what it is, and whose. -->
+    <string name="search_top_song">Lugu • %s</string>
     <string name="search_top_artist">Esitaja</string>
+    <string name="search_top_album">Album • %s</string>
+    <string name="search_top_station">Raadiojaaam • %s</string>
     <plurals name="search_number_albums">
         <item quantity="one">%d album</item>
         <item quantity="other">%d albumit</item>
@@ -111,6 +174,10 @@
     <string name="song_info_filename">Failinimi</string>
     <string name="song_info_rating">Hinnang</string>
     <string name="connection_volume">Helivaljus</string>
+    <string name="connection_version">Clementine\'i versioon</string>
+    <string name="connection_traffic_unsupported">Statistika pole selles seadmes saadaval</string>
+
+
     <string name="menu_settings">Seadistused</string>
     <string name="menu_search">Otsi</string>
     <string name="menu_ban">Keela</string>
@@ -125,36 +192,49 @@
     <string name="pref_cat_about">Rakenduse teave</string>
 
     <string name="pref_volume_title">Kasuta helivaljuse nuppe</string>
+    <string name="pref_trackno_title">Näita loo numbrit</string>
     <string name="pref_trackno_summary">Näita või peida esituloendis lugude numbrid.</string>
     <string name="pref_lastfm_title">Last.fm</string>
     <string name="pref_library_sorting_title">Järjestus</string>
+    <string name="pref_library_sorting_summary">Muusikakogu järjestus: %1$s.</string>
     <!-- Choices are separate strings, not a string-array: Transifex leaves an array's untranslated
          items out, which moves the translated ones onto the wrong choices. -->
     <string name="pref_library_sorting_asc">Kasvavalt</string>
     <string name="pref_library_sorting_desc">Kahanevalt</string>
 
     <string name="pref_library_grouping_title">Grupeerimine</string>
+    <string name="pref_library_grouping_summary">Muusikakogu grupeerimine: %1$s.</string>
     <string name="pref_library_grouping_artist">Esitaja</string>
     <string name="pref_library_grouping_artist_album">Esitaja / Album</string>
+    <string name="pref_library_grouping_albumartist_album">Albumi esitaja / Album</string>
     <string name="pref_library_grouping_artist_year">Esitaja / Aasta</string>
     <string name="pref_library_grouping_album">Album</string>
     <string name="pref_library_grouping_genre_album">Žanr / Album</string>
+    <string name="pref_library_grouping_genre_artist_album">Žanr / Esitaja / Album</string>
+
     <string name="pref_autoconnect_title">Ühenda automaatselt</string>
     <string name="pref_port_title">Port</string>
     <string name="pref_port_summary">Kasutatav port:</string>
     <string name="pref_port_error">Port pole lubatud!</string>
 
+    <string name="pref_keep_screen_on_title">Jäta ekraan sisselülitatuks</string>
     <string name="pref_version_summary">Külasta projekti veebilehte</string>
     <string name="pref_version_title">Versioon</string>
     <string name="pref_license_title">Litsents</string>
     <string name="pref_license_summary">GNU GPLv3</string>
+    <string name="pref_opensource_title">Avatud lähtekood</string>
+    <string name="pref_opensource_summary">Näita avatud lähtekoodiga tarkvara litsentse</string>
+    <string name="pref_opensource">Avatud lähtekoodiga tarkvara litsentsid</string>
     <string name="pref_about_title">Rakenduse teave</string>
     <string name="pref_about_summary">Projektiga seotud inimesed</string>
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Vaata Clementine\'i veebilehte</string>
 
     <string name="pref_dl_wifi_only_title">Ainult WiFi võrgus</string>
+    <string name="pref_dl_wifi_only_summary">Laadi lood alla vaid WiFi võrgus.</string>
     <string name="pref_dl_dir">Määra allalaadimise kaust</string>
+    <string name="pref_dl_volume">Salvesta allalaadimised asukohta</string>
+    <string name="pref_dl_volume_unavailable">Pole saadaval. Vali kuhu salvestame allalaadimised.</string>
     <string name="pref_dl_override">Kirjuta olemasolevad failid üle</string>
     <string name="pref_dl_cat_folders">Kaustad</string>
     <string name="pref_dl_pl_save_own_dir_title">Salvesta lood esitusloendi kausta</string>
@@ -167,8 +247,11 @@
     <string name="dialog_about_authors">Autorid</string>
     <string name="dialog_about_supporters">Toetajad</string>
     <string name="dialog_about_others">Teised</string>
+    <!-- %1$s is the address of the app's contributors, %2$s of its translators. -->
+    <string name="dialog_about_thanks">Tänud kõikidele <a href="%1$s">kaasautoritele</a> ja <a href="%2$s">tõlkijatele</a>!</string>
     <string name="dialog_license_top">Seda programmi levitatakse lootuses, et see on kasulik, kuid ILMA IGASUGUSE GARANTIITA</string>
 
+    <string name="tasker_intro">Palun vali tegevus.</string>
     <string name="tasker_action">Tegevused:</string>
     <string name="tasker_connect">Ühenda</string>
     <string name="tasker_disconnect">Katkesta ühendus</string>
@@ -212,6 +295,7 @@
     <string name="shuffle_albums">Sega albumid</string>
 
 
+    <string name="too_many_wrong_auth_codes_title">Liiga mitu vale autentimiskoodi sisestust</string>
     <!-- How long Clementine said to wait, in "for %s" above. -->
     <plurals name="wait_seconds">
         <item quantity="one">%d sekund</item>
