@@ -28,6 +28,16 @@
     <string name="playlist_clear">Vaciar lista</string>
     <string name="playlist_clear_content">Esto quitará todas las canciones de la lista irreversiblemente. ¿Continuar?</string>
     <string name="playlist_clear_confirm">Vaciar lista</string>
+    <plurals name="queue_songs">
+        <item quantity="one">%d canción</item>
+        <item quantity="many">%d canciones</item>
+        <item quantity="other">%d canciones</item>
+    </plurals>
+    <plurals name="queue_selected">
+        <item quantity="one">%d elemento seleccionado</item>
+        <item quantity="many">%d elementos seleccionados</item>
+        <item quantity="other">%d elementos seleccionados</item>
+    </plurals>
     <string name="downloads_empty">No hay descargas.</string>
     <string name="downloaded_songs">Canciones descargadas. Toque para reproducirlas</string>
     <string name="downloads_title">Descargas</string>
@@ -64,6 +74,13 @@
     <string name="global_search_empty">Escriba términos de búsqueda más arriba para encontrar música en el equipo y en la Internet</string>
     <string name="global_search_search">Busque lo que quiera</string>
     <string name="search_top_artist">Artista</string>
+    <plurals name="search_number_albums">
+        <item quantity="one">%d álbum</item>
+        <item quantity="many">%d álbumes</item>
+        <item quantity="other">%d álbumes</item>
+    </plurals>
+
+
     <string name="song_info_album">Álbum</string>
     <string name="song_info_genre">Género</string>
     <string name="song_info_year">Año</string>
