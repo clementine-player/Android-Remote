@@ -1,0 +1,6 @@
+- The connection details show how fast data is moving now, rather than the average since connecting.
+- "Play on" names Clementine's computer instead of saying "This computer".
+- The top of the screen and the connection details name Clementine's computer as Clementine does.
+- On a tablet, "Play on" calls it this tablet rather than this phone.
+- The Tasker plugin's help puts "Connect" in quotes, as it meant to.
+- And more fixes and improvements.
