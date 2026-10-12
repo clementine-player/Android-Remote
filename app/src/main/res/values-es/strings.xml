@@ -1,22 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-    <string name="app_name">Control remoto de Clementine</string>
+    <string name="app_name">Mando a distancia de Clementine</string>
     <string name="app_not_available">La aplicación no está disponible</string>
 
 
     <string name="connectdialog_connect">Conectar</string>
     <string name="connectdialog_connecting">Conectando con Clementine</string>
     <string name="connectdialog_download_data">Descargando datos</string>
-    <string name="connectdialog_error">No se pudo conectar con el equipo</string>
-    <string name="connectdialog_ip_hint">Escriba la dirección IP</string>
-    <string name="player_nosong">No hay ninguna canción en reproducción</string>
+    <string name="connectdialog_error">No se pudo contactar con el anfitrión</string>
+    <string name="connectdialog_ip_hint">Introduzca la dirección IP</string>
+    <string name="connect_intro">Elija el Clementine que quiere controlar. Debe estar en la misma red wifi que este teléfono.</string>
+    <string name="connect_on_network">En su red</string>
+    <string name="connect_search_again">Buscar nuevamente</string>
+    <string name="connect_searching">Buscando a Clementine…</string>
+    <string name="connect_searching_help">¿No aparece? Cerciórese de que el mando de red esté activado o introduzca su dirección:</string>
+    <string name="connect_server_address">%1$s · puerto %2$d</string>
+    <string name="connect_not_searching">No se está buscando en esta red</string>
+    <string name="connect_not_searching_help">Sin el permiso «Dispositivos cercanos», el control remoto de Clementine no puede encontrar Clementine en su red. Introduzca su dirección a continuación o active el permiso.</string>
+    <string name="connect_enter_address">O introduzca su dirección</string>
+    <string name="connect_address">Dirección</string>
+    <string name="player_nosong">Ahora no suena ninguna canción</string>
     <string name="player_disconnected">Desconectado</string>
     <string name="playler_volume">Volumen</string>
     <string name="player_stop_after_current">Activa/desactiva la detención tras finalizar la pista.</string>
-    <string name="player_download_lyrics">Descargando la letra</string>
-    <string name="player_no_lyrics">No se encontraron letras.</string>
+    <string name="player_download_lyrics">Descargando letra</string>
+    <string name="player_no_lyrics">No se encontró ninguna letra.</string>
     <string name="player_download_started">La descarga ha comenzado.</string>
-    <string name="player_song_is_stream">No se pueden descargar las secuencias.</string>
+    <string name="player_song_is_stream">No se pueden descargar las transmisiones.</string>
     <string name="player_stream">[S]</string>
 
 
@@ -30,17 +40,46 @@
     <string name="playlist_clear_confirm">Vaciar lista</string>
     <plurals name="queue_songs">
         <item quantity="one">%d canción</item>
-        <item quantity="many">%d canciones</item>
+        <item quantity="many">%d de canciones</item>
         <item quantity="other">%d canciones</item>
     </plurals>
+    <string name="queue_minutes">%d min</string>
+    <string name="queue_hours_minutes">%1$d h %2$d min</string>
     <plurals name="queue_selected">
         <item quantity="one">%d elemento seleccionado</item>
         <item quantity="many">%d elementos seleccionados</item>
         <item quantity="other">%d elementos seleccionados</item>
     </plurals>
-    <string name="downloads_empty">No hay descargas.</string>
+    <string name="queue_clear_selection">Vaciar selección</string>
+
+
+    <string name="downloads_empty">No se ha descargado nada aún</string>
+    <string name="downloads_suggest_most_played">Sus álbumes más reproducidos</string>
+    <string name="downloads_suggest_recent">Álbumes añadidos recientemente</string>
+    <string name="downloads_suggest_playlists">Listas</string>
+    <string name="downloads_playlist_playing">Ahora suena</string>
     <string name="downloaded_songs">Canciones descargadas. Toque para reproducirlas</string>
     <string name="downloads_title">Descargas</string>
+    <string name="downloads_running">Descargando</string>
+    <string name="downloads_wifi_only">Las descargas solo se ejecutan con wifi.</string>
+    <string name="downloads_change">Cambiar</string>
+
+    <!-- The app's shell: navigation, mini player, player and sheets. -->
+    <string name="nav_queue">Cola</string>
+    <string name="shell_search_close">Cerrar búsqueda</string>
+    <string name="shell_more">Más opciones</string>
+    <string name="player_collapse">Contraer reproductor</string>
+    <string name="player_details">Letra y detalles</string>
+    <string name="player_download_song">Descargar canción</string>
+    <string name="player_volume_up">Subir volumen</string>
+    <string name="player_volume_down">Bajar volumen</string>
+    <string name="details_tab">Detalles</string>
+    <string name="lyrics_tab">Letra</string>
+    <string name="output_title">Reproducir en</string>
+    <string name="output_this_phone">%1$s (este teléfono)</string>
+    <string name="output_choose">Elija dónde reproducir</string>
+    <string name="hint_done">Entiendo</string>
+    <string name="hint_outputs_title">Reproducir en este dispositivo</string>
     <string name="download_noti_title">Iniciando la descarga</string>
     <plurals name="download_noti_n_downloads">
         <item quantity="one">%d descarga en curso</item>
@@ -60,19 +99,45 @@
     <string name="download_noti_complete">Descarga completa</string>
     <string name="download_noti_canceled">Descarga cancelada</string>
     <string name="download_noti_insufficient_space">No hay espacio suficiente; se interrumpió la descarga.</string>
-    <string name="download_noti_forbidden">Se ha restringido la descarga. Actívela en la configuración de Clementine.</string>
+    <string name="download_noti_forbidden">Se restringió la descarga. Actívela en la configuración de Clementine.</string>
+    <string name="download_noti_not_local_network">Clementine solo acepta conexiones de su red local.</string>
     <string name="download_noti_not_mounted">No se encontró ningún dispositivo de almacenamiento.</string>
     <string name="download_noti_only_wifi">Solo se permiten las descargas al usar wifi.</string>
     <string name="download_noti_transcoding">Convirtiendo archivos</string>
     <string name="download_noti_transcoding_subtitle">Espere</string>
 
 
+    <string name="library_syncing">Sincronizando la fonoteca desde Clementine</string>
     <string name="library_optimize">Optimizando la base de datos</string>
     <string name="library_no_search_results">Ninguna canción coincide con los criterios de búsqueda.</string>
-    <string name="library_title">Colección</string>
+    <string name="library_sync_error">No se pudo sincronizar la fonoteca</string>
+    <string name="library_title">Fonoteca</string>
+    <string name="library_sync_action">Sincronizar fonoteca</string>
+    <string name="library_add_to_playlist">Añadir a lista</string>
+    <string name="library_back">Volver</string>
+
+    <!-- Browsing Clementine's internet services: its Internet sidebar. -->
+    <string name="internet_title">Internet</string>
+    <string name="internet_loading">Cargando…</string>
     <string name="internet_play">Reproducir</string>
+    <string name="internet_play_now">Reproducir ahora</string>
+    <string name="internet_play_next">Reproducir a continuación</string>
+    <string name="internet_replace_playlist">Reemplazar lista</string>
+    <string name="internet_added">Se añadió a la lista</string>
+    <string name="internet_not_playable">Clementine no lo puede añadir a la lista</string>
+    <string name="internet_gone">Ya no está en Clementine</string>
+
+
     <string name="global_search_empty">Escriba términos de búsqueda más arriba para encontrar música en el equipo y en la Internet</string>
     <string name="global_search_search">Busque lo que quiera</string>
+    <string name="search_searching">Buscando «%s»…</string>
+    <string name="search_top_result">Mejor resultado</string>
+    <string name="search_songs">Canciones</string>
+    <string name="search_artists">Artistas</string>
+    <string name="search_albums">Álbumes</string>
+    <string name="search_stations">Emisoras</string>
+    <string name="search_other_matches">Otras coincidencias</string>
+    <string name="search_see_all">Ver todo</string>
     <string name="search_top_artist">Artista</string>
     <plurals name="search_number_albums">
         <item quantity="one">%d álbum</item>
@@ -107,7 +172,7 @@
     <string name="menu_download_playlist">Descargar lista</string>
 
     <string name="pref_cat_player">Reproductor</string>
-    <string name="pref_cat_library">Colección</string>
+    <string name="pref_cat_library">Fonoteca</string>
     <string name="pref_cat_downloads">Descargas</string>
     <string name="pref_cat_advanced">Avanzadas</string>
     <string name="pref_cat_connection">Conexión</string>
@@ -172,7 +237,10 @@
     <string name="pref_dl_wifi_only_title">Solo wifi</string>
     <string name="pref_dl_wifi_only_summary">Solo descargar canciones mientras está conectado a una red wifi.</string>
     <string name="pref_dl_dir">Definir la carpeta de descargas</string>
+    <string name="pref_dl_volume">Guardar descargas en</string>
+    <string name="pref_dl_volume_unavailable">No disponible. Escoja dónde guardar las descargas.</string>
     <string name="pref_dl_override">Sobrescribir archivos existentes</string>
+    <string name="pref_dl_override_summary">Vuelve a descargar las canciones cuando no coinciden con las que hay en este móvil.</string>
     <string name="pref_dl_cat_folders">Carpetas</string>
     <string name="pref_dl_pl_save_own_dir_title">Guardar pistas en la carpeta de la lista de reproducción</string>
     <string name="pref_dl_pl_save_own_dir_summary">Crea una carpeta con el nombre de la lista de reproducción y guarda las pistas ahí.</string>
@@ -238,18 +306,26 @@
     <string name="repeat_off">No repetir</string>
     <string name="repeat_track">Repetir pista</string>
     <string name="repeat_album">Repetir álbum</string>
-    <string name="repeat_playlist">Repetir lista de reproducción</string>
-    <string name="shuffle_off">No mezclar</string>
-    <string name="shuffle_all">Mezclar todo</string>
-    <string name="shuffle_inside_album">Mezclar pistas en este álbum</string>
-    <string name="shuffle_albums">Mezclar álbumes</string>
+    <string name="repeat_playlist">Repetir lista</string>
+    <string name="shuffle_off">No aleatorizar</string>
+    <string name="shuffle_all">Aleatorizar todo</string>
+    <string name="shuffle_inside_album">Aleatorizar pistas en este álbum</string>
+    <string name="shuffle_albums">Aleatorizar álbumes</string>
 
 
     <string name="track_loved">Le encanta esta pista &lt;3</string>
     <string name="track_banned">Ha vetado esta pista :-(</string>
     <string name="permissions_required_title">Se necesitan permisos</string>
+    <string name="permissions_intro">Android solicitará:</string>
+    <string name="not_local_network_title">Clementine rechazó la conexión</string>
+    <string name="too_many_wrong_auth_codes_title">Demasiados códigos de autenticación incorrectos</string>
+    <string name="wait_a_while">un rato</string>
+    <string name="open_settings">Abrir configuración</string>
+
+    <string name="notification_previous">Anterior</string>
     <string name="notification_play">Reproducir</string>
     <string name="notification_pause">Pausar</string>
+    <string name="notification_next">Siguiente</string>
     <string name="notification_disconnect_keep_alive">Se perdió la conexión. Toque para reconectar.</string>
 
     <string name="fragment_title_connection">Clementine</string>
@@ -261,4 +337,6 @@
     <string name="player_download_what_album">Álbum</string>
     <string name="player_download_what_playlist">Lista</string>
 
+    <string name="cd_cover_image">Imagen de portada de álbum</string>
+    <string name="cd_cancel_download">Cancelar la descarga</string>
     </resources>

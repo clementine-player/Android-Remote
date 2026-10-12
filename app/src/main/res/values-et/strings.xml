@@ -115,6 +115,7 @@
     <string name="download_noti_canceled">Allalaadimine on tühistatud</string>
     <string name="download_noti_insufficient_space">Pole piisavalt andmeruumi, katkestan allalaadimise.</string>
     <string name="download_noti_forbidden">Allalaadimine pole lubatud. Lülita see Clementine\'i seadistustes sisse.</string>
+    <string name="download_noti_not_local_network">Clementine lubab ühendusi vaid kohtvõrgust.</string>
     <string name="download_noti_too_many_wrong_auth_codes">Liiga mitu vale autentimiskoodi sisestust. Clementine ei kontrolli sellest telefonist päritud koode %s.</string>
     <string name="download_noti_not_mounted">Ühtegi andmeruumiseadet ei leidu!</string>
     <string name="download_noti_only_wifi">Allalaadimine on lubatud ainult WiFi võrgus.</string>
@@ -295,6 +296,7 @@
     <string name="shuffle_albums">Sega albumid</string>
 
 
+    <string name="not_local_network_title">Clementine keeldus ühendusest</string>
     <string name="too_many_wrong_auth_codes_title">Liiga mitu vale autentimiskoodi sisestust</string>
     <!-- How long Clementine said to wait, in "for %s" above. -->
     <plurals name="wait_seconds">
