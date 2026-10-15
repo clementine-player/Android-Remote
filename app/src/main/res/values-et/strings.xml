@@ -88,6 +88,7 @@
     <string name="details_tab">Üksiaksjad</string>
     <string name="lyrics_tab">Laulusõnad</string>
     <string name="connection_connected">Ühendatud</string>
+    <string name="connection_switch">Vaheta Clementine\'i</string>
     <string name="connection_switch_summary">Vali oma võrgust mõnu muu arvuti</string>
     <string name="output_this_phone">%1$s (selles telefonis)</string>
     <string name="output_this_tablet">%1$s (selles tahvelarvutis)</string>
@@ -97,6 +98,7 @@
     <string name="hint_outputs_title">Esita selles seadmes</string>
     <string name="hint_outputs">Kuula Clementine\'i selles seadmes või lülitu selle nupuga tagasi arvutis oleva Clementine\'i juurde.</string>
     <string name="pref_hints_reset">Näita soovitusi uuesti</string>
+    <string name="pref_renderer">Luba Clementine\'il esitada muusikat selles telefonis</string>
     <string name="download_noti_title">Allalaadimine on käivitamisel</string>
     <plurals name="download_noti_n_downloads">
         <item quantity="one">%d aktiivne allalaadimine</item>
@@ -146,6 +148,10 @@
     <string name="internet_added">Lisatud esitusloendisse</string>
     <string name="internet_playing_next">Esitamisel järgmisena</string>
     <string name="internet_not_playable">Clementine ei saa seda esitusloendisse lisada</string>
+    <string name="internet_gone">Seda enam ei leidu Clementine\'is</string>
+
+
+    <string name="search_searching">Otsin märksõna „%s“…</string>
     <string name="search_clear">Tühjenda otsing</string>
     <string name="search_songs">Lood</string>
     <string name="search_artists">Esitajad</string>
@@ -193,9 +199,17 @@
     <string name="pref_cat_about">Rakenduse teave</string>
 
     <string name="pref_volume_title">Kasuta helivaljuse nuppe</string>
+    <string name="pref_volume_summary">Kasuta helivaljuse nuppe Clementine\'i helivaljuse muutmiseks.</string>
     <string name="pref_trackno_title">Näita loo numbrit</string>
     <string name="pref_trackno_summary">Näita või peida esituloendis lugude numbrid.</string>
     <string name="pref_lastfm_title">Last.fm</string>
+    <string name="pref_lower_volume_title">Heli vaiksemaks</string>
+    <string name="pref_lower_volume_summary">Helistamisel vähenda helivaljust</string>
+    <string name="pref_call_volume_title">Kõne helivaljuse tase</string>
+    <string name="pref_call_volume_summary">Pragune kõne helivaljuse tase: %s</string>
+    <string name="pref_volume_inc_title">Helivaljuse muutmise tase</string>
+    <string name="pref_volume_inc_summary">Pragune helivaljuse muutmise tase: %s</string>
+
     <string name="pref_library_sorting_title">Järjestus</string>
     <string name="pref_library_sorting_summary">Muusikakogu järjestus: %1$s.</string>
     <!-- Choices are separate strings, not a string-array: Transifex leaves an array's untranslated
@@ -218,6 +232,7 @@
     <string name="pref_port_summary">Kasutatav port:</string>
     <string name="pref_port_error">Port pole lubatud!</string>
 
+    <string name="pref_wake_lock_title">Hoia protsessor töös</string>
     <string name="pref_keep_screen_on_title">Jäta ekraan sisselülitatuks</string>
     <string name="pref_version_summary">Külasta projekti veebilehte</string>
     <string name="pref_version_title">Versioon</string>
@@ -240,6 +255,8 @@
     <string name="pref_dl_cat_folders">Kaustad</string>
     <string name="pref_dl_pl_save_own_dir_title">Salvesta lood esitusloendi kausta</string>
     <string name="pref_dl_pl_save_own_dir_summary">Loob esitusloendi-nimelise kausta ja salvestab lood sinna.</string>
+    <string name="pref_dl_pl_artist_dir_title">Loo esitajakohane alamkaust</string>
+    <string name="pref_dl_pl_album_dir_title">Loo albumikohane alamkaust</string>
     <string name="file_dialog_set_dir">Vali kaust</string>
     <string name="file_dialog_not_writable">Kaust pole kirjutatav</string>
     <string name="file_dialog_custom_paths_available">Vali muu</string>
@@ -272,6 +289,9 @@
     <string name="dialog_continue">Jätka</string>
 
     <string name="error_versions">Versioon pole ühilduv</string>
+    <string name="check_ip">1) Kas Clementine töötab\?\n2) Kas sul on kasutusel Clementine %1$s või hilisem\?\n3) Kas lülitasid Clementine\'i seadistustes sisse võrgupõhise kaugjuhtimise\?\n4) Kontrolli, kas sisestasid õige IP-aadressi.\n</string>
+    <string name="wifi_disabled">WiFi on lülitatud välja. Kui tahtsid ühendada Clementine\'iga üle interneti, siis kontrolli, et pordid on tulemüüris korrektselt edasi suunatud ja oled lülitanud välja valiku „Kasuta vaid kohtvõrgu IP-aadresse“.</string>
+
     <string name="input_auth_code">Autentimiskood</string>
     <string name="done">Valmis</string>
     <string name="unknown">Pole teada</string>
@@ -296,6 +316,7 @@
     <string name="shuffle_albums">Sega albumid</string>
 
 
+    <string name="permissions_required_title">Vajalikud on õigused</string>
     <string name="not_local_network_title">Clementine keeldus ühendusest</string>
     <string name="too_many_wrong_auth_codes_title">Liiga mitu vale autentimiskoodi sisestust</string>
     <!-- How long Clementine said to wait, in "for %s" above. -->
