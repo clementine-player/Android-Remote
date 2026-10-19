@@ -1,0 +1,1 @@
+- Updated translations, thanks to our translators on Transifex.
