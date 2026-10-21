@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-    <string name="app_name">Clementine Remote</string>
+    <string name="app_name">Clementine\'i kaugjuhtimispult</string>
     <string name="app_not_available">Rakendus ei ole saadaval!</string>
 
 
@@ -30,6 +30,7 @@
 
     <string name="playlist_search_hint">Otsi lugu</string>
     <string name="playlist_empty">Esitusloend on tühi!</string>
+    <string name="playlist_context_play">Esita lugu</string>
     <string name="playlist_context_remove">Eemalda esitusloendist</string>
     <string name="playlist_close">Sulge esitusloend</string>
     <string name="playlist_clear">Tühjenda esitusloend</string>
@@ -80,6 +81,7 @@
     <!-- Small heading at the top of the player, above the name of the playlist the song is playing from. -->
     <string name="player_playing_from">Esitamisel asukohast</string>
     <string name="queue_playing">Esitamisel</string>
+    <string name="player_love">Märgi Last.fm-is meeldivaks</string>
     <string name="player_details">Laulusõnad ja üksikasjad</string>
     <string name="player_download_song">Laadi lugu alla</string>
     <string name="player_volume_level">Clementine\'i helivaljus, %1$d%%</string>
@@ -93,6 +95,7 @@
     <string name="output_this_phone">%1$s (selles telefonis)</string>
     <string name="output_this_tablet">%1$s (selles tahvelarvutis)</string>
     <string name="output_switching">Vahetamisel…</string>
+    <string name="output_playing_on">Esitamisel asukohas %1$s</string>
     <string name="output_choose">Vali esitamise koht</string>
     <string name="hint_done">Selge</string>
     <string name="hint_outputs_title">Esita selles seadmes</string>
