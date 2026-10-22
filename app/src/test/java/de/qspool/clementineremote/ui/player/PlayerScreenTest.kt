@@ -19,7 +19,9 @@ import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.click
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performCustomAccessibilityActionWithLabel
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTouchInput
@@ -248,7 +250,7 @@ class PlayerScreenTest {
         compose.onNodeWithContentDescription("Don't repeat").assertIsDisplayed()
     }
 
-    private fun showDetails(song: MySong?, lyrics: Lyrics = Lyrics.NotAsked, lyricsShown: Boolean = false, onRate: (Int) -> Unit = {}) {
+    private fun showDetails(song: MySong?, lyrics: Lyrics = Lyrics.NotAsked, lyricsShown: Boolean = false, onRate: (Float) -> Unit = {}) {
         compose.setContent {
             ClementineTheme(dynamicColor = false) {
                 var shown by remember { mutableStateOf(lyricsShown) }
@@ -266,7 +268,7 @@ class PlayerScreenTest {
 
     @Test
     fun songDetailsShowWhatClementineKnows() {
-        val rated = mutableListOf<Int>()
+        val rated = mutableListOf<Float>()
         song.track = 3
         song.disc = 0
         song.playcount = 12
@@ -283,7 +285,11 @@ class PlayerScreenTest {
         compose.onNodeWithText("Disc").assertDoesNotExist()
 
         compose.onNodeWithTag("siStar4").performScrollTo().performClick()
-        assertEquals(listOf(4), rated)
+        // The left half of a star is half a star less, as is TalkBack's action on it.
+        compose.onNodeWithTag("siStar2").performTouchInput { click(centerLeft) }
+        compose.onNodeWithTag("siStar5").performTouchInput { click(centerRight) }
+        compose.onNodeWithTag("siStar3").performCustomAccessibilityActionWithLabel("Rate 2.5 stars")
+        assertEquals(listOf(4f, 1.5f, 5f, 2.5f), rated)
     }
 
     @Test
