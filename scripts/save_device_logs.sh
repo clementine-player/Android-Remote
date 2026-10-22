@@ -9,9 +9,9 @@
 #
 # Given the run's exit status, and it isn't 0, it also prints what the logs say about the
 # emulator's state into the job's log, in a group of its own: how long it has been up (a
-# restart of Android shows there), its memory, and the lines from adbd, the low memory killer,
-# the test runner and crashes. The artifact has the whole logcat, but can't be downloaded from
-# everywhere the job's log can be read.
+# restart of Android shows there), its memory, logd's buffers and when the saved logs end, and
+# the lines from adbd, the low memory killer, the test runner and crashes. The artifact has the
+# whole logcat, but can't be downloaded from everywhere the job's log can be read.
 #
 # Usage: save_device_logs.sh <dir> [exit status of the run]
 set -uo pipefail
@@ -28,7 +28,10 @@ adb logcat -d -b all > "$dir/logcat.txt"
 
 if [ "$status" -ne 0 ]; then
   echo "::group::The emulator's state after the failed run"
-  adb shell 'uptime; grep -E "^(MemTotal|MemFree|MemAvailable|SwapTotal|SwapFree):" /proc/meminfo'
+  adb shell 'uptime; grep -E "^(MemTotal|MemFree|MemAvailable|SwapTotal|SwapFree):" /proc/meminfo; logcat -g'
+  # The saved logs of one failure ended 90 s before it, a minute after boot: logd's buffers
+  # (logcat -g, above) and this say whether the logs still reach the end of the run.
+  echo "The saved logs end at: $(grep -E '^[0-9]{2}-[0-9]{2} ' "$dir/logcat.txt" | cut -c1-18 | sort | tail -n 1)"
   grep -E -i 'adbd|lowmemorykiller|lmkd|out of memory|oom-kill|watchdog|FATAL EXCEPTION|AndroidRuntime|TestRunner|am_crash|am_anr|Zygote *:.*(died|crash)|system_server' \
     "$dir/logcat.txt" | tail -n 300
   echo "::endgroup::"
