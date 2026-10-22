@@ -19,6 +19,20 @@ only for this client, ask them whether they want it in both clients before you s
 the other client's repository isn't in the session, ask them to add it (for example with
 `/add-dir`), so both changes are made together.
 
+## Translations are shared with the iOS client
+
+Both clients are translated on [Transifex](https://app.transifex.com/davidsansome/clementine-remot/),
+as two resources of one project, by the same translators, and Transifex's translation memory offers
+a translation made for one client's string for the same English string in the other. So a string
+both clients show is one string to translators: give it the same English, and the same note for
+translators, in both. Here a note is the XML comment just before the string in `values/strings.xml`;
+in the iOS client, it's the `comment:` of the string in the Swift code, which the String Catalog
+takes.
+
+When the clients fill a placeholder differently, the note says so, and asks for a translation that
+works with both. For example, iOS writes durations in its own words, which can't take another
+grammatical form, so the sentences they go into have to read right with the duration as it is.
+
 ## Release Notes
 
 Add a "Release-note:" trailer to commits that make user-facing changes so that the changes are mentioned in
