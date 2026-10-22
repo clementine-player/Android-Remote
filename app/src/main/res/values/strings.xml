@@ -135,11 +135,12 @@
     <string name="download_noti_insufficient_space">Insufficient space, aborting download.</string>
     <string name="download_noti_forbidden">Download forbidden. Activate in Clementine settings.</string>
     <string name="download_noti_not_local_network">Clementine only accepts connections from its local network.</string>
-    <!-- Notification when a download fails because of too many wrong auth codes. %s is how long
-         Clementine said to wait, from the wait_ strings below: "10 seconds", "1 minute", "3
-         minutes", "2 hours", or "a while" if Clementine didn't say. Clementine won't check a code
-         until the time is up. Translate the wait_ strings in the form that reads right in this
-         sentence. -->
+    <!-- Notification when a download fails because of too many wrong auth codes.
+         The placeholder is how long Clementine said to wait before it checks another auth
+         code from this phone: "10 seconds", "1 minute", "3 minutes", "2 hours", or "a while" if it
+         didn't say. The iOS app shows the same sentence with the duration in iOS's own words,
+         which can't take another grammatical form, so write the sentence so the duration reads
+         right as it is. -->
     <string name="download_noti_too_many_wrong_auth_codes">Too many wrong auth codes. Clementine won\'t check another from this phone for %s.</string>
     <string name="download_noti_not_mounted">No storage device found!</string>
     <string name="download_noti_only_wifi">Download only on wifi allowed.</string>
@@ -379,15 +380,16 @@
     <string name="not_local_network_title">Clementine refused the connection</string>
     <string name="not_local_network">Clementine only accepts connections from its local network. To connect from elsewhere, turn off \"Only allow connections from the local network\" in its Network Remote settings.</string>
     <string name="too_many_wrong_auth_codes_title">Too many wrong auth codes</string>
-    <!-- %s is how long Clementine said to wait, from the wait_ strings below: "10 seconds", "1
-         minute", "3 minutes", "2 hours", or "a while" if Clementine didn't say. Clementine won't
-         check a code until the time is up. Translate the wait_ strings in the form that reads right
-         in this sentence. -->
+    <!-- The placeholder is how long Clementine said to wait before it checks another auth
+         code from this phone: "10 seconds", "1 minute", "3 minutes", "2 hours", or "a while" if it
+         didn't say. The iOS app shows the same sentence with the duration in iOS's own words,
+         which can't take another grammatical form, so write the sentence so the duration reads
+         right as it is. -->
     <string name="too_many_wrong_auth_codes">Clementine won\'t check another auth code from this phone for %s. Then enter the code shown in its Network Remote settings.</string>
-    <!-- How long Clementine said to wait: the %s in too_many_wrong_auth_codes and
-         download_noti_too_many_wrong_auth_codes ("…won't check another auth code from this
-         phone for 10 seconds."). Seconds under a minute; otherwise rounded up to minutes, or to
-         hours over an hour. Translate them in the form that fits after "for" in those strings. -->
+    <!-- How long Clementine said to wait: the placeholder in too_many_wrong_auth_codes and
+         download_noti_too_many_wrong_auth_codes. Seconds under a minute; otherwise rounded up to
+         minutes, or to hours over an hour. Translate them as a plain duration: those sentences
+         are written so it reads right as it is, as the iOS app shows it in iOS's own words. -->
     <plurals name="wait_seconds">
         <item quantity="one">%d second</item>
         <item quantity="other">%d seconds</item>
@@ -400,6 +402,8 @@
         <item quantity="one">%d hour</item>
         <item quantity="other">%d hours</item>
     </plurals>
+    <!-- Shown instead of a duration when Clementine doesn't say how long to wait, as the
+         placeholder in too_many_wrong_auth_codes and download_noti_too_many_wrong_auth_codes. -->
     <string name="wait_a_while">a while</string>
     <string name="local_network_on_link">That address is on the network this phone is connected to, which Android only lets Clementine Remote reach with the Nearby devices permission. You can allow it in the app\'s settings.</string>
     <string name="open_settings">Open settings</string>
