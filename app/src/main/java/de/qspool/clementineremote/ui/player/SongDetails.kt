@@ -1,7 +1,12 @@
 package de.qspool.clementineremote.ui.player
 
 import android.widget.Toast
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,25 +20,35 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.style.TextOverflow
@@ -43,6 +58,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import de.qspool.clementineremote.R
 import de.qspool.clementineremote.backend.player.MySong
 import de.qspool.clementineremote.utils.Utilities
+import java.text.NumberFormat
+import kotlinx.coroutines.launch
 
 /**
  * The song details, in a sheet over the player: what Clementine says about the song and its
@@ -69,8 +86,8 @@ fun SongDetailsSheet(showLyrics: Boolean, onDismiss: () -> Unit, viewModel: Play
             onShowLyrics = { lyricsShown = it },
             onRequestLyrics = viewModel::requestLyrics,
             onRate = { stars ->
-                viewModel.rate(stars.toFloat())
-                Toast.makeText(context, rated.replace("\$stars\$", stars.toString()), Toast.LENGTH_SHORT)
+                viewModel.rate(stars)
+                Toast.makeText(context, rated.replace("\$stars\$", formatStars(stars)), Toast.LENGTH_SHORT)
                     .show()
             },
         )
@@ -84,7 +101,7 @@ internal fun SongDetailsContent(
     lyricsShown: Boolean,
     onShowLyrics: (Boolean) -> Unit,
     onRequestLyrics: () -> Unit,
-    onRate: (Int) -> Unit,
+    onRate: (Float) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier.fillMaxWidth().padding(bottom = 24.dp)) {
@@ -135,7 +152,7 @@ internal fun SongDetailsContent(
 }
 
 @Composable
-private fun Details(song: MySong, onRate: (Int) -> Unit) {
+private fun Details(song: MySong, onRate: (Float) -> Unit) {
     Detail(R.string.song_info_album, song.album)
     Detail(R.string.song_info_genre, song.genre)
     Detail(R.string.song_info_year, song.year)
@@ -168,9 +185,9 @@ private fun Detail(label: Int, value: String?) {
     }
 }
 
-/** Clementine's rating in half stars; tapping a star rates the song that many stars. */
+/** Clementine's rating in half stars; tapping a star rates the song that many stars, or half a star less. */
 @Composable
-private fun Rating(stars: Float, onRate: (Int) -> Unit) {
+private fun Rating(stars: Float, onRate: (Float) -> Unit) {
     Row(Modifier.padding(top = 8.dp), verticalAlignment = Alignment.CenterVertically) {
         Text(
             stringResource(R.string.song_info_rating),
@@ -185,17 +202,62 @@ private fun Rating(stars: Float, onRate: (Int) -> Unit) {
                     stars >= star - 0.75f -> R.drawable.ic_player_star_half
                     else -> R.drawable.ic_player_star_border
                 }
-                IconButton(onClick = { onRate(star) }, modifier = Modifier.testTag("siStar$star")) {
-                    Icon(
-                        painterResource(icon),
-                        contentDescription = pluralStringResource(R.plurals.song_info_stars, star, star),
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
-                }
+                Star(star, icon, onRate)
             }
         }
     }
 }
+
+/**
+ * One of the rating's stars, a button the size of an icon button. A tap on its left half rates the
+ * song half a star less than a tap on its right half; TalkBack offers the half star as an action.
+ */
+@Composable
+private fun Star(star: Int, icon: Int, onRate: (Float) -> Unit) {
+    val rate by rememberUpdatedState(onRate)
+    val interactions = remember { MutableInteractionSource() }
+    val scope = rememberCoroutineScope()
+    val description = pluralStringResource(R.plurals.song_info_stars, star, star)
+    val half = stringResource(R.string.song_info_rate_half_stars, formatStars(star - 0.5f))
+    Box(
+        Modifier
+            .size(48.dp)
+            .testTag("siStar$star")
+            .indication(interactions, ripple(bounded = false, radius = 20.dp))
+            .pointerInput(star) {
+                detectTapGestures(
+                    onPress = { offset ->
+                        val press = PressInteraction.Press(offset)
+                        scope.launch { interactions.emit(press) }
+                        val released = tryAwaitRelease()
+                        val end = if (released) PressInteraction.Release(press) else PressInteraction.Cancel(press)
+                        scope.launch { interactions.emit(end) }
+                    },
+                    onTap = { offset -> rate(if (offset.x < size.width / 2) star - 0.5f else star.toFloat()) },
+                )
+            }
+            .semantics {
+                contentDescription = description
+                role = Role.Button
+                onClick {
+                    rate(star.toFloat())
+                    true
+                }
+                customActions = listOf(
+                    CustomAccessibilityAction(half) {
+                        rate(star - 0.5f)
+                        true
+                    },
+                )
+            },
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(painterResource(icon), contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+    }
+}
+
+/** A number of stars as people write it: "4", or "3.5" in their language. */
+internal fun formatStars(stars: Float): String = NumberFormat.getNumberInstance().format(stars)
 
 @Composable
 private fun LyricsText(lyrics: Lyrics, onRequest: () -> Unit) {

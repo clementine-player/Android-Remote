@@ -210,6 +210,8 @@
     <string name="song_info_filename">Filename</string>
     <string name="song_info_rating">Rating</string>
     <string name="song_info_rated">Song rated $stars$ stars</string>
+    <!-- TalkBack action on a rating star, rating the song half a star less, such as 3.5: the number is already written out. -->
+    <string name="song_info_rate_half_stars">Rate %1$s stars</string>
 
 
     <string name="connection_volume">Volume</string>
