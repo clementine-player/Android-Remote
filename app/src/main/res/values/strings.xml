@@ -83,7 +83,8 @@
     <string name="shell_search_close">Close search</string>
     <string name="shell_more">More options</string>
     <string name="player_collapse">Collapse player</string>
-    <!-- Small heading at the top of the player, above the name of the playlist the song is playing from. -->
+    <!-- Small heading at the top of the player, above the name of the playlist the song is playing
+         from. -->
     <string name="player_playing_from">Playing from</string>
     <string name="queue_playing">Playing</string>
     <string name="player_love">Love on Last.fm</string>
@@ -95,7 +96,8 @@
     <string name="details_tab">Details</string>
     <string name="lyrics_tab">Lyrics</string>
     <string name="connection_connected">Connected</string>
-    <!-- Label for how long the phone has been connected to Clementine, shown next to it as a duration such as 01:23:45. -->
+    <!-- Label for how long the phone has been connected to Clementine, shown next to it as a
+         duration such as 01:23:45. -->
     <string name="connection_uptime">Connected for</string>
     <string name="connection_switch">Switch Clementine</string>
     <string name="connection_switch_summary">Pick another computer on your network</string>
@@ -133,6 +135,11 @@
     <string name="download_noti_insufficient_space">Insufficient space, aborting download.</string>
     <string name="download_noti_forbidden">Download forbidden. Activate in Clementine settings.</string>
     <string name="download_noti_not_local_network">Clementine only accepts connections from its local network.</string>
+    <!-- Notification when a download fails because of too many wrong auth codes. %s is how long
+         Clementine said to wait, from the wait_ strings below: "10 seconds", "1 minute", "3
+         minutes", "2 hours", or "a while" if Clementine didn't say. Clementine won't check a code
+         until the time is up. Translate the wait_ strings in the form that reads right in this
+         sentence. -->
     <string name="download_noti_too_many_wrong_auth_codes">Too many wrong auth codes. Clementine won\'t check another from this phone for %s.</string>
     <string name="download_noti_not_mounted">No storage device found!</string>
     <string name="download_noti_only_wifi">Download only on wifi allowed.</string>
@@ -372,8 +379,15 @@
     <string name="not_local_network_title">Clementine refused the connection</string>
     <string name="not_local_network">Clementine only accepts connections from its local network. To connect from elsewhere, turn off \"Only allow connections from the local network\" in its Network Remote settings.</string>
     <string name="too_many_wrong_auth_codes_title">Too many wrong auth codes</string>
+    <!-- %s is how long Clementine said to wait, from the wait_ strings below: "10 seconds", "1
+         minute", "3 minutes", "2 hours", or "a while" if Clementine didn't say. Clementine won't
+         check a code until the time is up. Translate the wait_ strings in the form that reads right
+         in this sentence. -->
     <string name="too_many_wrong_auth_codes">Clementine won\'t check another auth code from this phone for %s. Then enter the code shown in its Network Remote settings.</string>
-    <!-- How long Clementine said to wait, in "for %s" above. -->
+    <!-- How long Clementine said to wait: the %s in too_many_wrong_auth_codes and
+         download_noti_too_many_wrong_auth_codes ("…won't check another auth code from this
+         phone for 10 seconds."). Seconds under a minute; otherwise rounded up to minutes, or to
+         hours over an hour. Translate them in the form that fits after "for" in those strings. -->
     <plurals name="wait_seconds">
         <item quantity="one">%d second</item>
         <item quantity="other">%d seconds</item>
