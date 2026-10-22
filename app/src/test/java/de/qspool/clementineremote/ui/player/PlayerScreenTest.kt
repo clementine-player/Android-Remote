@@ -21,7 +21,6 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performCustomAccessibilityActionWithLabel
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTouchInput
@@ -288,7 +287,8 @@ class PlayerScreenTest {
         // The left half of a star is half a star less, as is TalkBack's action on it.
         compose.onNodeWithTag("siStar2").performTouchInput { click(centerLeft) }
         compose.onNodeWithTag("siStar5").performTouchInput { click(centerRight) }
-        compose.onNodeWithTag("siStar3").performCustomAccessibilityActionWithLabel("Rate 2.5 stars")
+        compose.onNodeWithTag("siStar3").fetchSemanticsNode().config[SemanticsActions.CustomActions]
+            .single { it.label == "Rate 2.5 stars" }.action()
         assertEquals(listOf(4f, 1.5f, 5f, 2.5f), rated)
     }
 
