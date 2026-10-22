@@ -286,10 +286,10 @@ class PlayerScreenTest {
         compose.onNodeWithTag("siStar4").performScrollTo().performClick()
         // The left half of a star is half a star less, as is TalkBack's action on it.
         compose.onNodeWithTag("siStar2").performTouchInput { click(centerLeft) }
-        compose.onNodeWithTag("siStar5").performTouchInput { click(centerRight) }
-        compose.onNodeWithTag("siStar3").fetchSemanticsNode().config[SemanticsActions.CustomActions]
-            .single { it.label == "Rate 2.5 stars" }.action()
-        assertEquals(listOf(4f, 1.5f, 5f, 2.5f), rated)
+        compose.onNodeWithTag("siStar3").performTouchInput { click(centerRight) }
+        compose.onNodeWithTag("siStar4").fetchSemanticsNode().config[SemanticsActions.CustomActions]
+            .single { it.label == "Rate 3.5 stars" }.action()
+        assertEquals(listOf(4f, 1.5f, 3f, 3.5f), rated)
     }
 
     @Test
