@@ -77,8 +77,6 @@
     <string name="song_info_filename">Failo pavadinimas</string>
     <string name="song_info_rating">Įvertinimas</string>
     <string name="song_info_rated">Daina įvertinta $stars$ žvaigždutėmis</string>
-
-
     <string name="connection_volume">Garsumas</string>
     <string name="connection_version">Clementine versija</string>
     <string name="connection_traffic">Duomenų Išsiuntimas / Atsiuntimas (vid. / sek.)</string>

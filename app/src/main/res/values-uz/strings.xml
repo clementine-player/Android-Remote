@@ -42,8 +42,6 @@
     <string name="song_info_filename">Fayl nomi</string>
     <string name="song_info_rating">Baholash</string>
     <string name="song_info_rated">Qo\'shiq $stars$ yuklduzcha bilan baholandi</string>
-
-
     <string name="connection_volume">Ovoz balandligi</string>
     <string name="menu_settings">Sozlamalar</string>
     <string name="menu_search">Qidirish</string>

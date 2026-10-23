@@ -72,8 +72,6 @@
     <string name="song_info_filename">Dosya adı</string>
     <string name="song_info_rating">Beğeni</string>
     <string name="song_info_rated">$stars$ yıldızla değerlendirilmiş şarkı</string>
-
-
     <string name="connection_volume">Ses</string>
     <string name="connection_version">Clementine sürümü</string>
     <string name="connection_traffic">Trafik Gönder/İndir (ort. / sn.)</string>

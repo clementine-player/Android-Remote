@@ -71,8 +71,6 @@
     <string name="song_info_filename">ファイル名</string>
     <string name="song_info_rating">評価</string>
     <string name="song_info_rated">曲の評価は $stars$ スター</string>
-
-
     <string name="connection_volume">音量</string>
     <string name="connection_version">Clementine バージョン</string>
     <string name="connection_traffic">トラフィックアップ / ダウン (平均 / 秒)</string>

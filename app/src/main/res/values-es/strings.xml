@@ -157,6 +157,8 @@
     <string name="song_info_filename">Nombre de archivo</string>
     <string name="song_info_rating">Valoración</string>
     <string name="song_info_rated">Canciones con $stars$ estrellas</string>
+    <!-- TalkBack action on a rating star, rating the song half a star less, such as 3.5: the number is already written out. -->
+    <string name="song_info_rate_half_stars">Calificar con %1$s estrellas</string>
 
 
     <string name="connection_volume">Volumen</string>
@@ -319,6 +321,8 @@
     <string name="permissions_intro">Android solicitará:</string>
     <string name="not_local_network_title">Clementine rechazó la conexión</string>
     <string name="too_many_wrong_auth_codes_title">Demasiados códigos de autenticación incorrectos</string>
+    <!-- Shown instead of a duration when Clementine doesn't say how long to wait, in the
+         sentences about too many wrong auth codes. -->
     <string name="wait_a_while">un rato</string>
     <string name="open_settings">Abrir configuración</string>
 

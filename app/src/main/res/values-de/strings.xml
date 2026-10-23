@@ -73,8 +73,6 @@
     <string name="song_info_filename">Dateiname</string>
     <string name="song_info_rating">Bewertung</string>
     <string name="song_info_rated">Lied mit $stars$ bewertet</string>
-
-
     <string name="connection_volume">Lautstärke</string>
     <string name="connection_version">Clementine-Version</string>
     <string name="connection_traffic">Datenverkehr Hoch/Runter (Mittel/Sek)</string>

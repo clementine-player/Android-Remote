@@ -73,8 +73,6 @@
     <string name="song_info_filename">Bestandsnaam</string>
     <string name="song_info_rating">Waardering</string>
     <string name="song_info_rated">Nummer gewaardeerd op $stars$ sterren</string>
-
-
     <string name="connection_volume">Volume</string>
     <string name="connection_version">Clementine versie</string>
     <string name="connection_traffic">Verkeer Uit / In (gem / sec)</string>

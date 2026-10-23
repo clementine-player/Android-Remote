@@ -40,7 +40,8 @@
 
     <string name="details_tab">Podrobnosti</string>
     <string name="connection_connected">Připojeno</string>
-    <!-- Label for how long the phone has been connected to Clementine, shown next to it as a duration such as 01:23:45. -->
+    <!-- Label for how long the phone has been connected to Clementine, shown next to it as a
+         duration such as 01:23:45. -->
     <string name="connection_uptime">Připojeno po</string>
     <string name="output_this_phone">%1$s (tento telefon)</string>
     <string name="output_choose">Vybrat, kde přehrávat</string>
@@ -104,6 +105,8 @@
     <string name="song_info_filename">Název souboru</string>
     <string name="song_info_rating">Hodnocení</string>
     <string name="song_info_rated">Píseň hodnocena $stars$ hvězdičkami</string>
+    <!-- TalkBack action on a rating star, rating the song half a star less, such as 3.5: the number is already written out. -->
+    <string name="song_info_rate_half_stars">Hodnotit %1$s hvězdičky</string>
 
 
     <string name="connection_volume">Hlasitost</string>
@@ -265,6 +268,11 @@
     <string name="permissions_required_title">Požadována oprávnění</string>
     <string name="not_local_network_title">Clementine odmítla spojení</string>
     <string name="not_local_network">Aplikace Clementine přijímá pouze připojení z místní sítě. Chcete-li se připojit z jiného místa, vypněte v nastavení pro síťové vzdálené ovládání volbu Povolit spojení pouze z místní sítě.</string>
+    <!-- The placeholder is how long Clementine said to wait before it checks another auth
+         code from this phone: "10 seconds", "1 minute", "3 minutes", "2 hours", or "a while" if it
+         didn't say. The iOS app shows the same sentence with the duration in iOS's own words,
+         which can't take another grammatical form, so write the sentence so the duration reads
+         right as it is. -->
     <string name="too_many_wrong_auth_codes">Clementine z tohoto telefonu již nebude ověřovat žádný další autorizační kód po %s. Poté zadejte kód zobrazený v nastavení pro síťové vzdálené ovládání.</string>
     <string name="notification_play">Přehrát</string>
     <string name="notification_pause">Pozastavit</string>

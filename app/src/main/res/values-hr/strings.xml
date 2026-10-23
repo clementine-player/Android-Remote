@@ -75,8 +75,6 @@
     <string name="song_info_filename">Naziv datoteke</string>
     <string name="song_info_rating">Ocjena</string>
     <string name="song_info_rated">Ocjena pjesme $stars$ zvjejzdica</string>
-
-
     <string name="connection_volume">Glasnoća zvuka</string>
     <string name="connection_version">Clementine inačica</string>
     <string name="connection_traffic">Promet Poslano / Preuzeto (pros / sek)</string>

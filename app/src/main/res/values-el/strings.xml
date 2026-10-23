@@ -61,8 +61,6 @@
     <string name="song_info_filename">Όνομα αρχείου</string>
     <string name="song_info_rating">Αξιολόγηση</string>
     <string name="song_info_rated">Τραγούδι βαθμολογία $stars$ αστέρια</string>
-
-
     <string name="connection_volume">Ένταση</string>
     <string name="connection_version">Clementine έκδοση</string>
     <string name="connection_traffic">Κυκλοφορία Πάνω / Κάτω (μέσος όρος / δευτ)</string>

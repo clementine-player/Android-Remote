@@ -73,8 +73,6 @@
     <string name="song_info_filename">Filnamn</string>
     <string name="song_info_rating">Betyg</string>
     <string name="song_info_rated">Låtbetyg $stars$ stjärnor</string>
-
-
     <string name="connection_volume">Volym</string>
     <string name="connection_version">Clementine version</string>
     <string name="connection_traffic">Trafik Upp / Ned (genomsnitt / sek)</string>

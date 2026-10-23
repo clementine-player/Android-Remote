@@ -89,6 +89,8 @@
     <string name="song_info_filename">Nama fail</string>
     <string name="song_info_rating">Penarafan</string>
     <string name="song_info_rated">Lagu ditaraf $stars$ bintang</string>
+    <!-- TalkBack action on a rating star, rating the song half a star less, such as 3.5: the number is already written out. -->
+    <string name="song_info_rate_half_stars">Ditaraf %1$s bintang</string>
 
 
     <string name="connection_volume">Volum</string>

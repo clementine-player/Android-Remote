@@ -47,8 +47,6 @@
     <string name="song_info_filename">ფაილი</string>
     <string name="song_info_rating">შეფასება</string>
     <string name="song_info_rated">სიმღერა შეფასებულია $stars$ ვარსკვლავით</string>
-
-
     <string name="connection_volume">ხმა</string>
     <string name="menu_settings">პარამეტრები</string>
     <string name="menu_search">ძებნა</string>

@@ -73,8 +73,6 @@
     <string name="song_info_filename">Fájlnév</string>
     <string name="song_info_rating">Értékelés</string>
     <string name="song_info_rated">A szám értékelése $stars$ csillag</string>
-
-
     <string name="connection_volume">Hangerő</string>
     <string name="connection_version">Clementine verzió</string>
     <string name="connection_traffic">Forgalom fel / le (átlag / mp)</string>

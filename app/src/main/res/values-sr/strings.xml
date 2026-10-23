@@ -75,8 +75,6 @@
     <string name="song_info_filename">Име фајла</string>
     <string name="song_info_rating">Оцена</string>
     <string name="song_info_rated">Песма оцењена са $stars$ звезда</string>
-
-
     <string name="connection_volume">Јачина звука</string>
     <string name="connection_version">Издање Клементине</string>
     <string name="connection_traffic">Саобраћај на/са (просек/сек)</string>

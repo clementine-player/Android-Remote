@@ -73,8 +73,6 @@
     <string name="song_info_filename">Nom del fitxer</string>
     <string name="song_info_rating">Valoració</string>
     <string name="song_info_rated">Nota de la peça $stars$ estrelles</string>
-
-
     <string name="connection_volume">Volum</string>
     <string name="connection_version">Versió del Clementine</string>
     <string name="connection_traffic">Velocitat (per segon) de pujada/baixada</string>

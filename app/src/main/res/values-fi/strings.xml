@@ -83,7 +83,8 @@
     <string name="shell_search_close">Sulje haku</string>
     <string name="shell_more">Lisäasetukset</string>
     <string name="player_collapse">Pienennä soitin</string>
-    <!-- Small heading at the top of the player, above the name of the playlist the song is playing from. -->
+    <!-- Small heading at the top of the player, above the name of the playlist the song is playing
+         from. -->
     <string name="player_playing_from">Toistetaan lähteestä</string>
     <string name="queue_playing">Toistaa</string>
     <string name="player_love">Pidetty Last.fm</string>
@@ -95,7 +96,8 @@
     <string name="details_tab">Tiedot</string>
     <string name="lyrics_tab">Sanoitukset</string>
     <string name="connection_connected">Yhteys</string>
-    <!-- Label for how long the phone has been connected to Clementine, shown next to it as a duration such as 01:23:45. -->
+    <!-- Label for how long the phone has been connected to Clementine, shown next to it as a
+         duration such as 01:23:45. -->
     <string name="connection_uptime">Yhdistettynä</string>
     <string name="connection_switch">Vaihda Clementine</string>
     <string name="connection_switch_summary">Valitse toinen tietokone verkosta</string>
@@ -133,6 +135,11 @@
     <string name="download_noti_insufficient_space">Ei riittävästi levytilaa, lopetetaan lataaminen.</string>
     <string name="download_noti_forbidden">Lataaminen on kielletty. Aktivoi lataaminen Clementinen asetuksista.</string>
     <string name="download_noti_not_local_network">Clementine hyväksyy yhteyksiä vain lähiverkosta.</string>
+    <!-- The placeholder is how long Clementine said to wait before it checks another auth
+         code from this phone: "10 seconds", "1 minute", "3 minutes", "2 hours", or "a while" if it
+         didn't say. The iOS app shows the same sentence with the duration in iOS's own words,
+         which can't take another grammatical form, so write the sentence so the duration reads
+         right as it is. -->
     <string name="download_noti_too_many_wrong_auth_codes">Liian monta virheellistä tunnistuskoodia. Clementine ei hyväksy uutta koodia tästä puhelimesta %s:n aikana.</string>
     <string name="download_noti_not_mounted">Tallennustilaa ei löytynyt!</string>
     <string name="download_noti_only_wifi">Lataus on sallittu vain wifi-yhteydellä.</string>
@@ -203,6 +210,8 @@
     <string name="song_info_filename">Tiedostonimi</string>
     <string name="song_info_rating">Arvostelu</string>
     <string name="song_info_rated">Kappaleelle annettu $stars$ tähteä</string>
+    <!-- TalkBack action on a rating star, rating the song half a star less, such as 3.5: the number is already written out. -->
+    <string name="song_info_rate_half_stars">Arvosana %1$s tähteä</string>
 
 
     <string name="connection_volume">Äänenvoimakkuus</string>
@@ -369,8 +378,16 @@
     <string name="not_local_network_title">Clementine kieltäytyi yhteydestä</string>
     <string name="not_local_network">Clementine hyväksyy yhteyksiä vain lähiverkosta. Jos haluat muodostaa yhteyden muualta, poista käytöstä asetus ”Salli yhteydet vain lähiverkosta” ohjelman verkko- ja etäkäyttöasetuksista.</string>
     <string name="too_many_wrong_auth_codes_title">Liian monta virheellistä tunnistuskoodia</string>
+    <!-- The placeholder is how long Clementine said to wait before it checks another auth
+         code from this phone: "10 seconds", "1 minute", "3 minutes", "2 hours", or "a while" if it
+         didn't say. The iOS app shows the same sentence with the duration in iOS's own words,
+         which can't take another grammatical form, so write the sentence so the duration reads
+         right as it is. -->
     <string name="too_many_wrong_auth_codes">Clementine ei tarkista toista todennuskoodia tästä puhelimesta %s. Anna asetuksissa näkyvä koodi.</string>
-    <!-- How long Clementine said to wait, in "for %s" above. -->
+    <!-- How long Clementine said to wait: the placeholder in too_many_wrong_auth_codes and
+         download_noti_too_many_wrong_auth_codes. Seconds under a minute; otherwise rounded up to
+         minutes, or to hours over an hour. Translate them as a plain duration: those sentences
+         are written so it reads right as it is, as the iOS app shows it in iOS's own words. -->
     <plurals name="wait_seconds">
         <item quantity="one">%d sekunti</item>
         <item quantity="other">%d sekuntia</item>
@@ -383,6 +400,8 @@
         <item quantity="one">%d tunti</item>
         <item quantity="other">%d tuntia</item>
     </plurals>
+    <!-- Shown instead of a duration when Clementine doesn't say how long to wait, in the
+         sentences about too many wrong auth codes. -->
     <string name="wait_a_while">hetki</string>
     <string name="local_network_on_link">Tämä osoite on verkossa, johon tämä puhelin on yhdistetty, ja Android antaa Clementine Remote -sovelluksen käyttää sitä vain lähellä olevien laitteiden luvalla. Voit sallia sen sovelluksen asetuksista.</string>
     <string name="open_settings">Avaa asetukset</string>

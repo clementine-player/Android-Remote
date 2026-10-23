@@ -89,7 +89,8 @@
     <string name="shell_search_close">Закрыть поиск</string>
     <string name="shell_more">Больше параметров</string>
     <string name="player_collapse">Свернуть проигрыватель</string>
-    <!-- Small heading at the top of the player, above the name of the playlist the song is playing from. -->
+    <!-- Small heading at the top of the player, above the name of the playlist the song is playing
+         from. -->
     <string name="player_playing_from">Играет с</string>
     <string name="queue_playing">Играет</string>
     <string name="player_love">В избранное Last.fm</string>
@@ -101,7 +102,8 @@
     <string name="details_tab">Сведения</string>
     <string name="lyrics_tab">Текст песни</string>
     <string name="connection_connected">Подключено</string>
-    <!-- Label for how long the phone has been connected to Clementine, shown next to it as a duration such as 01:23:45. -->
+    <!-- Label for how long the phone has been connected to Clementine, shown next to it as a
+         duration such as 01:23:45. -->
     <string name="connection_uptime">Подключено в течение</string>
     <string name="connection_switch">Переключить Clementine</string>
     <string name="connection_switch_summary">Выбрать другой компьютер в вашей сети</string>
@@ -143,6 +145,11 @@
     <string name="download_noti_insufficient_space">Недостаточно места, скачивание прервано.</string>
     <string name="download_noti_forbidden">Скачивание запрещено. Активируйте его в настройках Clementine.</string>
     <string name="download_noti_not_local_network">Clementine принимает подключения только из своей локальной сети.</string>
+    <!-- The placeholder is how long Clementine said to wait before it checks another auth
+         code from this phone: "10 seconds", "1 minute", "3 minutes", "2 hours", or "a while" if it
+         didn't say. The iOS app shows the same sentence with the duration in iOS's own words,
+         which can't take another grammatical form, so write the sentence so the duration reads
+         right as it is. -->
     <string name="download_noti_too_many_wrong_auth_codes">Слишком много неверных кодов аутентификации. Clementine не будет проверять коды с этого телефона в течение %s.</string>
     <string name="download_noti_not_mounted">Устройство для хранения не найдено!</string>
     <string name="download_noti_only_wifi">Скачивание разрешено только по Wi-Fi.</string>
@@ -215,6 +222,8 @@
     <string name="song_info_filename">Имя файла</string>
     <string name="song_info_rating">Рейтинг</string>
     <string name="song_info_rated">Песня оценена на $stars$ звёзд</string>
+    <!-- TalkBack action on a rating star, rating the song half a star less, such as 3.5: the number is already written out. -->
+    <string name="song_info_rate_half_stars">Оценить на %1$s звезды</string>
 
 
     <string name="connection_volume">Громкость</string>
@@ -385,8 +394,16 @@
     <string name="not_local_network_title">Clementine отклонил подключение</string>
     <string name="not_local_network">Clementine принимает подключения только из своей локальной сети. Чтобы подключиться извне, отключите «Разрешать подключения только из локальной сети» в настройках удалённого управления по сети.</string>
     <string name="too_many_wrong_auth_codes_title">Слишком много неверных кодов аутентификации</string>
+    <!-- The placeholder is how long Clementine said to wait before it checks another auth
+         code from this phone: "10 seconds", "1 minute", "3 minutes", "2 hours", or "a while" if it
+         didn't say. The iOS app shows the same sentence with the duration in iOS's own words,
+         which can't take another grammatical form, so write the sentence so the duration reads
+         right as it is. -->
     <string name="too_many_wrong_auth_codes">Clementine не будет проверять коды с этого телефона в течение %s. После этого введите код, показанный в настройках сетевого удалённого управления.</string>
-    <!-- How long Clementine said to wait, in "for %s" above. -->
+    <!-- How long Clementine said to wait: the placeholder in too_many_wrong_auth_codes and
+         download_noti_too_many_wrong_auth_codes. Seconds under a minute; otherwise rounded up to
+         minutes, or to hours over an hour. Translate them as a plain duration: those sentences
+         are written so it reads right as it is, as the iOS app shows it in iOS's own words. -->
     <plurals name="wait_seconds">
         <item quantity="one">%d секунды</item>
         <item quantity="few">%d секунд</item>
@@ -405,6 +422,8 @@
         <item quantity="many">%d часов</item>
         <item quantity="other">%d часов</item>
     </plurals>
+    <!-- Shown instead of a duration when Clementine doesn't say how long to wait, in the
+         sentences about too many wrong auth codes. -->
     <string name="wait_a_while">некоторого времени</string>
     <string name="local_network_on_link">Этот адрес находится в сети, к которой подключён телефон. Android разрешает Clementine Remote обращаться к ней только с разрешением «Устройства поблизости». Его можно предоставить в настройках приложения.</string>
     <string name="open_settings">Открыть настройки</string>

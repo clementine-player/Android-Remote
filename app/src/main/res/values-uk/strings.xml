@@ -77,8 +77,6 @@
     <string name="song_info_filename">Назва файла</string>
     <string name="song_info_rating">Оцінка</string>
     <string name="song_info_rated">Композицію оцінено у $stars$ зірок</string>
-
-
     <string name="connection_volume">Гучність</string>
     <string name="connection_version">Версія Clementine</string>
     <string name="connection_traffic">Обмін вивант./отр. (сер./за сек.)</string>

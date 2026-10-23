@@ -361,6 +361,10 @@
     <string name="internet_playing_next">Prossimo in riproduzione</string>
     <!-- The See all button's description for accessibility, with the section's name. -->
     <string name="search_see_all_of">Vedi tutti i %s</string>
+    <!-- TalkBack action on a rating star, rating the song half a star less, such as 3.5: the number is already written out. -->
+    <string name="song_info_rate_half_stars">Valuta con %1$s stelle</string>
+
+
     <string name="menu_ban">Vieta</string>
     <string name="pref_lastfm_summary">Attiva per preferire / bandire le tracce.</string>
     <string name="dialog_about_supporters">Sostenitori</string>
