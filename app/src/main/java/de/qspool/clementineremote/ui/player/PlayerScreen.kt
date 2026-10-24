@@ -178,12 +178,19 @@ internal fun PlayerContent(
     outputs: RemoteRepository.Outputs = RemoteRepository.Outputs(),
 ) {
     Column(modifier.fillMaxSize().safeDrawingPadding().testTag("player")) {
-        TopRow(playingFrom, playingOn, lastFm, actions::onCollapse, actions::onOutputs, onStop, onBan)
         var bounds by remember { mutableStateOf<Rect?>(null) }
+        val fold = foldAcross(bounds)
+        val topRow = @Composable {
+            TopRow(playingFrom, playingOn, lastFm, actions::onCollapse, actions::onOutputs, onStop, onBan)
+        }
+        // Half-open like a book, the top row goes beside the artwork with the rest, so that what's
+        // playing isn't on the fold.
+        if (fold !is Fold.Vertical) {
+            topRow()
+        }
         BoxWithConstraints(
             Modifier.weight(1f).fillMaxWidth().onGloballyPositioned { bounds = it.boundsInWindow() },
         ) {
-            val fold = foldAcross(bounds)
             val song = nowPlaying.song
             // The artwork is whatever square is left over, so short screens keep every control.
             val below: @Composable ColumnScope.() -> Unit = {
@@ -210,7 +217,13 @@ internal fun PlayerContent(
                         )
                     }
                     Spacer(Modifier.width(fold.width))
-                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) { below() }
+                    Column(Modifier.weight(1f).fillMaxHeight()) {
+                        topRow()
+                        Column(
+                            Modifier.weight(1f),
+                            verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically),
+                        ) { below() }
+                    }
                 }
             } else if (fold is Fold.Horizontal) {
                 // Set down like a laptop: the artwork above the fold, everything to tap below it.
