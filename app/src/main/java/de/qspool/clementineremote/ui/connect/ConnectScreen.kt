@@ -13,11 +13,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -48,7 +50,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -62,6 +67,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.qspool.clementineremote.R
+import de.qspool.clementineremote.ui.shell.Fold
+import de.qspool.clementineremote.ui.shell.foldAcross
 import de.qspool.clementineremote.ui.theme.ClementineBrand
 
 /** What the user does on the connect screen. */
@@ -130,8 +137,29 @@ internal fun ConnectContent(
     val body = @Composable { bodyModifier: Modifier ->
         Body(host, knownHosts, servers, searching, progress, onHostChange, actions, bodyModifier)
     }
-    BoxWithConstraints(modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface)) {
-        if (maxWidth > maxHeight) {
+    var bounds by remember { mutableStateOf<Rect?>(null) }
+    BoxWithConstraints(
+        modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface)
+            .onGloballyPositioned { bounds = it.boundsInWindow() },
+    ) {
+        val fold = foldAcross(bounds)
+        if (fold is Fold.Vertical) {
+            // Half-open like a book: the header on one side of the fold, the rest on the other.
+            Row(Modifier.fillMaxSize()) {
+                Header(actions::onSettings, fill = true, iconSize = 168.dp, Modifier.width(fold.before).fillMaxHeight())
+                Spacer(Modifier.width(fold.width))
+                body(Modifier.weight(1f).fillMaxHeight().verticalScroll(rememberScrollState()).statusBarsPadding())
+            }
+        } else if (fold is Fold.Horizontal) {
+            // Set down like a laptop: the header above the fold, the rest below it. Clementine is as
+            // large as the space above leaves room for, under the settings button and over the name.
+            val iconSize = (fold.before - SPACE_AROUND_ICON).coerceIn(48.dp, 168.dp)
+            Column(Modifier.fillMaxSize()) {
+                Header(actions::onSettings, fill = true, iconSize, Modifier.height(fold.before).fillMaxWidth())
+                Spacer(Modifier.height(fold.width))
+                body(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()))
+            }
+        } else if (maxWidth > maxHeight) {
             // Landscape: the header down the left, the rest beside it.
             Row(Modifier.fillMaxSize()) {
                 Header(actions::onSettings, fill = true, iconSize = 168.dp, Modifier.weight(1f).fillMaxHeight())
@@ -434,3 +462,6 @@ private fun Connecting(@StringRes progress: Int, onCancel: () -> Unit) {
 
 /** About what the rest of the screen needs in portrait, with the system bars. */
 private val SPACE_BELOW_ICON = 640.dp
+
+/** About what the header needs besides Clementine: the status bar, settings button and name. */
+private val SPACE_AROUND_ICON = 170.dp
