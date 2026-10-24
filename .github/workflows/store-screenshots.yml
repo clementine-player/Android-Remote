@@ -19,6 +19,7 @@ on:
   pull_request:
     paths:
       - .github/workflows/store-screenshots.yml
+      - scripts/fold_screenshots.sh
       - app/src/androidTest/java/de/qspool/clementineremote/StoreScreenshots.java
       - app/src/androidTest/java/de/qspool/clementineremote/MediaSessionDeviceTest.java
       - app/src/androidTest/java/de/qspool/clementineremote/NeedsClementine.java
@@ -43,7 +44,7 @@ env:
 jobs:
   screenshots:
     runs-on: ubuntu-26.04
-    timeout-minutes: 45
+    timeout-minutes: 60
     env:
       # A step's condition can't read secrets, so this says whether the R2 token is set.
       HAS_R2_TOKEN: ${{ secrets.R2_ACCESS_KEY_ID != '' }}
@@ -108,6 +109,20 @@ jobs:
           disable-animations: true
           script: |
             status=0; ./gradlew connectedFdroidDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=de.qspool.clementineremote.NeedsClementine -Pandroid.testInstrumentationRunnerArguments.clementineHost=10.0.2.2 -Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true || status=$?; adb pull /sdcard/Android/data/de.qspool.clementineremote/files/screenshots screenshots; exit $status
+
+      # The player on a foldable, for pull requests: on its outer screen, its inner screen, and
+      # half-open like a book (scripts/fold_screenshots.sh), with the store screenshots.
+      - uses: reactivecircus/android-emulator-runner@v2
+        if: github.event_name == 'pull_request'
+        with:
+          api-level: 36
+          target: google_apis
+          arch: x86_64
+          profile: pixel_9_pro_fold
+          avd-name: foldable
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -no-metrics
+          disable-animations: true
+          script: scripts/fold_screenshots.sh 10.0.2.2 screenshots
 
       - uses: actions/upload-artifact@v7
         if: always()
