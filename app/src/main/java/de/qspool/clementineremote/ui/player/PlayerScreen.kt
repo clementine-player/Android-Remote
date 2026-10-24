@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenu
@@ -228,11 +229,14 @@ internal fun PlayerContent(
                     ) { below() }
                 }
             } else if (maxWidth > maxHeight) {
-                // Landscape: the artwork beside the rest.
+                // Landscape: the artwork beside the rest. On a screen that's nearly square, such as
+                // a foldable's inner screen, the artwork is narrower than the height, so the rest
+                // keeps room.
                 Row(Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
                     Artwork(
                         song, { actions.onDetails(lyrics = true) },
                         Modifier.padding(start = 24.dp, top = 8.dp, bottom = 8.dp)
+                            .widthIn(max = (maxWidth - CONTROLS_MIN_WIDTH).coerceAtLeast(0.dp))
                             .fillMaxHeight().aspectRatio(1f, matchHeightConstraintsFirst = true),
                     )
                     Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) { below() }
@@ -643,3 +647,6 @@ internal fun repeatLabel(mode: Clementine.RepeatMode): Int = when (mode) {
 }
 
 private const val ARTWORK_FADE_MILLIS = 750
+
+/** The narrowest the song and controls get beside the artwork in landscape. */
+private val CONTROLS_MIN_WIDTH = 360.dp
