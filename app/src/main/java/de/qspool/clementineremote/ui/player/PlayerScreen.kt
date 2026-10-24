@@ -8,6 +8,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -19,9 +20,12 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -41,9 +45,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
@@ -60,7 +67,9 @@ import de.qspool.clementineremote.R
 import de.qspool.clementineremote.backend.Clementine
 import de.qspool.clementineremote.backend.RemoteRepository
 import de.qspool.clementineremote.backend.RemoteRepository.NowPlaying
+import de.qspool.clementineremote.ui.shell.Fold
 import de.qspool.clementineremote.ui.shell.OutputButton
+import de.qspool.clementineremote.ui.shell.foldAcross
 import de.qspool.clementineremote.ui.shell.outputIcon
 import de.qspool.clementineremote.ui.shell.switchable
 import de.qspool.clementineremote.backend.player.MySong
@@ -169,7 +178,11 @@ internal fun PlayerContent(
 ) {
     Column(modifier.fillMaxSize().safeDrawingPadding().testTag("player")) {
         TopRow(playingFrom, playingOn, lastFm, actions::onCollapse, actions::onOutputs, onStop, onBan)
-        BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
+        var bounds by remember { mutableStateOf<Rect?>(null) }
+        BoxWithConstraints(
+            Modifier.weight(1f).fillMaxWidth().onGloballyPositioned { bounds = it.boundsInWindow() },
+        ) {
+            val fold = foldAcross(bounds)
             val song = nowPlaying.song
             // The artwork is whatever square is left over, so short screens keep every control.
             val below: @Composable ColumnScope.() -> Unit = {
@@ -186,7 +199,35 @@ internal fun PlayerContent(
                 controls()
                 BottomRow(actions, volume, onVolume, outputs)
             }
-            if (maxWidth > maxHeight) {
+            if (fold is Fold.Vertical) {
+                // Half-open like a book: the artwork on one side of the fold, the rest on the other.
+                Row(Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
+                    Box(Modifier.width(fold.before).fillMaxHeight(), contentAlignment = Alignment.Center) {
+                        Artwork(
+                            song, { actions.onDetails(lyrics = true) },
+                            Modifier.padding(24.dp).aspectRatio(1f),
+                        )
+                    }
+                    Spacer(Modifier.width(fold.width))
+                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) { below() }
+                }
+            } else if (fold is Fold.Horizontal) {
+                // Set down like a laptop: the artwork above the fold, everything to tap below it.
+                Column(Modifier.fillMaxSize()) {
+                    Box(Modifier.height(fold.before).fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        Artwork(
+                            song, { actions.onDetails(lyrics = true) },
+                            Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
+                                .aspectRatio(1f, matchHeightConstraintsFirst = true),
+                        )
+                    }
+                    Spacer(Modifier.height(fold.width))
+                    Column(
+                        Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()),
+                        verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically),
+                    ) { below() }
+                }
+            } else if (maxWidth > maxHeight) {
                 // Landscape: the artwork beside the rest.
                 Row(Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
                     Artwork(
