@@ -232,11 +232,12 @@ internal fun PlayerContent(
                 // Landscape: the artwork beside the rest. On a screen that's nearly square, such as
                 // a foldable's inner screen, the artwork is narrower than the height, so the rest
                 // keeps room.
+                val artworkMaxWidth = (maxWidth - CONTROLS_MIN_WIDTH).coerceAtLeast(0.dp)
                 Row(Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
                     Artwork(
                         song, { actions.onDetails(lyrics = true) },
                         Modifier.padding(start = 24.dp, top = 8.dp, bottom = 8.dp)
-                            .widthIn(max = (maxWidth - CONTROLS_MIN_WIDTH).coerceAtLeast(0.dp))
+                            .widthIn(max = artworkMaxWidth)
                             .fillMaxHeight().aspectRatio(1f, matchHeightConstraintsFirst = true),
                     )
                     Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) { below() }
