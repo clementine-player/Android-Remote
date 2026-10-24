@@ -187,6 +187,8 @@ dependencies {
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.rules)
     androidTestImplementation(libs.androidx.test.uiautomator)
+    // A fold for the store screenshots run to lay the player out around, on a phone that has none.
+    androidTestImplementation(libs.androidx.window.testing)
     // Compose's test library brings Espresso 3.5, whose ViewActions reflect on
     // InputManager.getInstance(), which Android 17 removed: every Compose test fails with
     // NoSuchMethodException. 3.7 uses the public API.

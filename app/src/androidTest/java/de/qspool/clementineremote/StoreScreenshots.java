@@ -2,6 +2,7 @@ package de.qspool.clementineremote;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.SystemClock;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -14,6 +15,10 @@ import androidx.test.uiautomator.Direction;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.Until;
+import androidx.window.layout.DisplayFeature;
+import androidx.window.testing.layout.DisplayFeatureTesting;
+import androidx.window.testing.layout.WindowLayoutInfoPublisherRule;
+import androidx.window.testing.layout.WindowLayoutInfoTesting;
 
 import org.junit.After;
 import org.junit.Before;
@@ -25,6 +30,8 @@ import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 import de.qspool.clementineremote.ui.ConnectActivity;
 import de.qspool.clementineremote.ui.hints.Hints;
@@ -63,6 +70,10 @@ public class StoreScreenshots {
 
     @Rule
     public final GrantPermissionRule mPermissions = AppPermissions.granted();
+
+    /** Stands in for the device's folds, so the player can be shown around one (fold()). */
+    @Rule
+    public final WindowLayoutInfoPublisherRule mFolds = new WindowLayoutInfoPublisherRule();
 
     /** On failure, keeps what the screen showed, to see why. */
     @Rule
@@ -202,6 +213,20 @@ public class StoreScreenshots {
         SystemClock.sleep(SETTLE_MILLIS);
     }
 
+    /**
+     * Folds the screen across its middle, half-open, as a foldable set down on a table like a
+     * laptop; or unfolds it again. Only screens showing now see it: tell them again after the
+     * activity is recreated.
+     */
+    private void fold(boolean folded) {
+        Rect screen = new Rect(0, 0, mDevice.getDisplayWidth(), mDevice.getDisplayHeight());
+        List<DisplayFeature> features = folded
+                ? Collections.<DisplayFeature>singletonList(DisplayFeatureTesting.createFoldingFeature(screen))
+                : Collections.emptyList();
+        mFolds.overrideWindowLayoutInfo(WindowLayoutInfoTesting.createWindowLayoutInfo(features));
+        SystemClock.sleep(SETTLE_MILLIS);
+    }
+
     /** Closes the player, back to the screen below. */
     private void closePlayer() {
         waitFor(tag("btnCollapse")).click();
@@ -268,6 +293,10 @@ public class StoreScreenshots {
         // Let playback move along the seek bar.
         SystemClock.sleep(8000);
         screenshot("1_player");
+        // The player on a foldable set down like a laptop; for pull requests, not the store listing.
+        fold(true);
+        screenshot("player_fold");
+        fold(false);
         closePlayer();
 
         // The connection sheet, from the chip at the top.
@@ -351,6 +380,9 @@ public class StoreScreenshots {
         screenshot("dark_3_playlist");
         openPlayer();
         screenshot("dark_1_player");
+        fold(true);
+        screenshot("dark_player_fold");
+        fold(false);
         closePlayer();
 
         waitFor(tag("connectionChip")).click();
