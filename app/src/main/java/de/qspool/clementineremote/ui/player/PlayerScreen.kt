@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenu
@@ -242,16 +241,15 @@ internal fun PlayerContent(
                     ) { below() }
                 }
             } else if (maxWidth > maxHeight) {
-                // Landscape: the artwork beside the rest. On a screen that's nearly square, such as
-                // a foldable's inner screen, the artwork is narrower than the height, so the rest
-                // keeps room.
-                val artworkMaxWidth = (maxWidth - CONTROLS_MIN_WIDTH).coerceAtLeast(0.dp)
+                // Landscape: the artwork beside the rest, as tall as there's room for. On a screen
+                // that's nearly square, such as a foldable's inner screen, it's smaller, so the rest
+                // keeps room beside it.
+                val artworkSize = minOf(maxHeight - 16.dp, maxWidth - 24.dp - CONTROLS_MIN_WIDTH)
+                    .coerceAtLeast(0.dp)
                 Row(Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
                     Artwork(
                         song, { actions.onDetails(lyrics = true) },
-                        Modifier.padding(start = 24.dp, top = 8.dp, bottom = 8.dp)
-                            .widthIn(max = artworkMaxWidth)
-                            .fillMaxHeight().aspectRatio(1f, matchHeightConstraintsFirst = true),
+                        Modifier.padding(start = 24.dp, top = 8.dp, bottom = 8.dp).size(artworkSize),
                     )
                     Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) { below() }
                 }
