@@ -1,0 +1,3 @@
+- Updated translations, thanks to our translators on Transifex.
+- You can rate songs in half stars: tap the left half of a star.
+- On foldable phones half-open like a book or set down like a laptop, the player and the connect screen sit on either side of the fold.
