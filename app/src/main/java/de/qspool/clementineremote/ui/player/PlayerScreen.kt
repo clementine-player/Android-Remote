@@ -496,19 +496,24 @@ private fun SongInfo(song: MySong?, align: TextAlign, modifier: Modifier = Modif
 private fun SeekBar(nowPlaying: NowPlaying, onSeek: (Int) -> Unit, modifier: Modifier) {
     val song = nowPlaying.song
     val length = song?.length ?: 0
-    val position = if (nowPlaying.state == Clementine.State.STOP) 0 else nowPlaying.positionSeconds
+    val position = rememberSongPosition(nowPlaying)
     // While dragging, the thumb follows the finger; Clementine is told on release.
     var dragging by remember { mutableStateOf<Float?>(null) }
-    val shown = dragging?.roundToInt() ?: position
+    val seconds = position.seconds
+    // The time shown ticks over with each whole second, as a clock does.
+    val shown = dragging?.roundToInt() ?: seconds.toInt()
 
     // Positions read left to right in every language.
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
         Column(modifier.fillMaxWidth()) {
             Slider(
-                value = (dragging ?: position.toFloat()).coerceIn(0f, length.toFloat()),
+                value = (dragging ?: seconds).coerceIn(0f, length.toFloat()),
                 onValueChange = { dragging = it },
                 onValueChangeFinished = {
-                    dragging?.let { onSeek(it.roundToInt()) }
+                    dragging?.let {
+                        position.seek(it.roundToInt())
+                        onSeek(it.roundToInt())
+                    }
                     dragging = null
                 },
                 valueRange = 0f..length.coerceAtLeast(1).toFloat(),

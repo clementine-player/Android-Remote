@@ -91,6 +91,7 @@ import de.qspool.clementineremote.ui.player.PlayerActions
 import de.qspool.clementineremote.ui.player.PlayerScreen
 import de.qspool.clementineremote.ui.player.PlayerViewModel
 import de.qspool.clementineremote.ui.player.SongDetailsSheet
+import de.qspool.clementineremote.ui.player.rememberSongPosition
 import de.qspool.clementineremote.ui.queue.QueueScreen
 import de.qspool.clementineremote.ui.queue.QueueViewModel
 import de.qspool.clementineremote.ui.search.SearchScreen
@@ -574,6 +575,7 @@ internal fun MiniPlayer(
                 }
             }
             val length = song.length
+            val position = rememberSongPosition(nowPlaying)
             if (length > 0) {
                 // Only a glance at the position, which the player shows with its seek bar: kept out
                 // of accessibility, where its node would stand over the play/pause button.
@@ -583,7 +585,7 @@ internal fun MiniPlayer(
                         .clearAndSetSemantics {},
                 ) {
                     LinearProgressIndicator(
-                        progress = { (nowPlaying.positionSeconds.toFloat() / length).coerceIn(0f, 1f) },
+                        progress = { (position.seconds / length).coerceIn(0f, 1f) },
                         drawStopIndicator = {},
                         gapSize = 0.dp,
                         modifier = Modifier.fillMaxSize(),
