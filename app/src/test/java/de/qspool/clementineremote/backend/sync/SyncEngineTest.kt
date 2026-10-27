@@ -275,6 +275,24 @@ class SyncEngineTest {
     }
 
     @Test
+    fun aSyncCutShortKeepsWhatItDownloaded() {
+        val album = rule("library/album/Pixies/Doolittle")
+        manifest("library/album/Pixies/Doolittle", song("a"), song("b", track = 2), song("c", track = 3))
+        clementine.files.remove("/d/token/c-1")
+        val result = engine.sync(clementine)
+
+        assertTrue(result.rules[album] is RuleResult.Failed)
+        assertEquals(listOf("a", "b"), store.ruleItems(album).map { it.itemKey })
+        assertEquals(0, result.removed)
+
+        // Next time, only what's left is downloaded.
+        song("c", track = 3)
+        clementine.opened.clear()
+        engine.sync(clementine)
+        assertEquals(listOf("/d/token/c-1"), clementine.opened)
+    }
+
+    @Test
     fun namesFilesForPeople() {
         val song = SongMetadata.newBuilder().setTitle("What/Ever?").setAlbumartist("A: B")
             .setArtist("Someone").setAlbum("").build()

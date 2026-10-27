@@ -101,13 +101,21 @@ class SyncEngine(
 
         var downloaded = 0
         val keys = ArrayList<String>()
-        for (item in manifest.itemsList) {
-            val have = store.item(rule.serverId, item.itemKey)
-            if (have == null || have.version != item.version) {
-                download(connection, rule.serverId, item, have)
-                downloaded++
+        try {
+            for (item in manifest.itemsList) {
+                val have = store.item(rule.serverId, item.itemKey)
+                if (have == null || have.version != item.version) {
+                    download(connection, rule.serverId, item, have)
+                    downloaded++
+                }
+                keys += item.itemKey
             }
-            keys += item.itemKey
+        } catch (e: IOException) {
+            // Keep the songs downloaded so far as well as those it had, so a sync cut short
+            // carries on next time rather than starting again.
+            val had = store.ruleItems(rule.id).map { it.itemKey }
+            store.setRuleItems(rule.id, rule.serverId, (had + keys).distinct())
+            throw e
         }
         store.setRuleItems(rule.id, rule.serverId, keys)
         store.updateRule(rule.copy(lastSyncedAt = now()))
