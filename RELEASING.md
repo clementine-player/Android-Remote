@@ -109,6 +109,10 @@ makes a development build (`.github/workflows/dev.yml`):
 The version code is twice the number of commits on `master` (releases take the odd codes),
 and the version name is `versionName` plus the commit, such as `13-dev+6ece743`.
 
+Development builds, like debug builds, have features that are still being built: code checks
+`BuildConfig.TESTING_FEATURES`, which `dev.yml` turns on with `-PtestingFeatures=true`.
+Releases, and F-Droid's builds of them, never have them.
+
 The rest of this section sets up Google Play.
 
 There are no keys or credentials in the repository or its secrets:

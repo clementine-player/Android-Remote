@@ -57,8 +57,16 @@ android {
         }
     }
 
+    // Features still being built are on in debug builds, and in development builds when CI passes
+    // -PtestingFeatures=true (see .github/workflows/dev.yml), but never in releases.
+    val testingFeatures = project.findProperty("testingFeatures")?.toString() == "true"
+
     buildTypes {
+        debug {
+            buildConfigField("boolean", "TESTING_FEATURES", "true")
+        }
         release {
+            buildConfigField("boolean", "TESTING_FEATURES", testingFeatures.toString())
             // F-Droid removes the signingConfigs block before building, and signs with its own key.
             signingConfigs.findByName("release")?.takeIf { it.storeFile != null }?.let { signingConfig = it }
             isMinifyEnabled = true
