@@ -167,7 +167,7 @@ class SyncEngine(
                 uri = uri.toString(),
                 mimeType = item.mimeType,
                 sizeBytes = item.sizeBytes,
-                delivery = item.deliveryValue,
+                delivery = item.delivery.number,
                 artKey = null,
                 metadata = song.toByteArray(),
                 pinned = have?.pinned ?: false,
