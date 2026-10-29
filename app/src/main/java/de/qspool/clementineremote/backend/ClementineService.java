@@ -53,6 +53,7 @@ import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.streaming.Renderer;
 import de.qspool.clementineremote.backend.streaming.ThisRenderer;
+import de.qspool.clementineremote.backend.sync.Syncer;
 import de.qspool.clementineremote.utils.Utilities;
 
 public class ClementineService extends Service {
@@ -165,6 +166,7 @@ public class ClementineService extends Service {
                             App.ClementineConnection);
                     mediaSessionController.registerMediaSession();
                     Renderer.attach(this, App.ClementineConnection, this::setPlayingHere);
+                    Syncer.attach(this, App.ClementineConnection);
 
                     GlobalSearchManager.getInstance().reset();
 
