@@ -86,6 +86,7 @@ jobs:
       - name: Build the unsigned bundle and APK
         run: >
           ./gradlew bundlePlayRelease assembleFdroidRelease
+          -PtestingFeatures=true
           -PversionCodeOverride=${{ steps.version.outputs.code }}
           -PversionNameOverride=${{ steps.version.outputs.name }}
 
