@@ -3,6 +3,7 @@ package de.qspool.clementineremote.backend
 import android.os.Message
 import androidx.annotation.VisibleForTesting
 import de.qspool.clementineremote.App
+import de.qspool.clementineremote.BuildConfig
 import de.qspool.clementineremote.backend.ClementinePlayerConnection.ConnectionStatus
 import de.qspool.clementineremote.backend.listener.PlayerConnectionListener
 import de.qspool.clementineremote.backend.pb.ClementineMessage
@@ -10,6 +11,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgT
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.OutputState
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseBrowse
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseBrowseAdd
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSyncManifest
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ServerFeature
 import de.qspool.clementineremote.backend.streaming.ThisRenderer
 import de.qspool.clementineremote.backend.player.MySong
@@ -92,6 +94,21 @@ object RemoteRepository {
         data class AddResult(override val connection: Int, val response: ResponseBrowseAdd) : BrowseMessage
     }
 
+    /** Whether songs can be synced from this Clementine to the phone. */
+    data class Syncing(
+        /**
+         * Whether this Clementine syncs (SERVER_FEATURE_SYNC, with a server id), in a build with
+         * the features still being built. Without, nothing about syncing shows.
+         */
+        val supported: Boolean = false,
+        /** The Clementine's server_id, which its rules and songs are kept under. */
+        val serverId: String = "",
+        /** Whether Clementine's settings let the phone download songs. */
+        val downloadsAllowed: Boolean = false,
+    ) {
+        val available: Boolean get() = supported && downloadsAllowed
+    }
+
     /** The output id of Clementine's own computer. */
     const val LOCAL_OUTPUT = "local"
 
@@ -127,6 +144,21 @@ object RemoteRepository {
     @JvmStatic
     val browsing: StateFlow<Browsing> = _browsing.asStateFlow()
 
+    private val _syncing = MutableStateFlow(Syncing())
+
+    /** Whether this Clementine can sync songs to the phone; reset on each INFO. */
+    @JvmStatic
+    val syncing: StateFlow<Syncing> = _syncing.asStateFlow()
+
+    private val _syncManifests = MutableSharedFlow<ResponseSyncManifest>(
+        extraBufferCapacity = 16,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST,
+    )
+
+    /** Clementine's answers to REQUEST_SYNC_MANIFEST, in the order they came. */
+    @JvmStatic
+    val syncManifests: SharedFlow<ResponseSyncManifest> = _syncManifests.asSharedFlow()
+
     private val _canEnqueueNext = MutableStateFlow(false)
 
     /** Whether Clementine can queue songs it's given to play next ([AddAction.PLAY_NEXT]). */
@@ -154,6 +186,7 @@ object RemoteRepository {
                 _connection.value = status
                 if (status == ConnectionStatus.DISCONNECTED) {
                     _outputs.value = Outputs()
+                    _syncing.value = Syncing()
                 }
             }
 
@@ -183,10 +216,19 @@ object RemoteRepository {
                 )
                 _canEnqueueNext.value = ServerFeature.SERVER_FEATURE_ENQUEUE_NEXT in
                     message.message.responseClementineInfo.featuresList
+                val info = message.message.responseClementineInfo
+                _syncing.value = Syncing(
+                    supported = BuildConfig.TESTING_FEATURES &&
+                        ServerFeature.SERVER_FEATURE_SYNC in info.featuresList &&
+                        info.serverId.isNotEmpty(),
+                    serverId = info.serverId,
+                    downloadsAllowed = info.allowDownloads,
+                )
                 refresh()
             }
             MsgType.BROWSE -> _browseMessages.tryEmit(
                 BrowseMessage.Browse(_browsing.value.connection, message.message.responseBrowse))
+            MsgType.SYNC_MANIFEST -> _syncManifests.tryEmit(message.message.responseSyncManifest)
             MsgType.BROWSE_ADD_RESULT -> _browseMessages.tryEmit(
                 BrowseMessage.AddResult(_browsing.value.connection, message.message.responseBrowseAdd))
             MsgType.OUTPUTS -> _outputs.value = _outputs.value.copy(

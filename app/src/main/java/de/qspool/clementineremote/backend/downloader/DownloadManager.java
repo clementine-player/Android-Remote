@@ -221,7 +221,7 @@ public class DownloadManager {
      * taken out: they don't go elsewhere unasked.
      */
     @Nullable
-    private DownloadStorage createStorage() {
+    public DownloadStorage createStorage() {
         SharedPreferences preferences = App.getPreferences();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             String volume = DownloadVolumes.chosen(preferences);

@@ -12,6 +12,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Resp
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseBrowseAdd
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseClementineInfo
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseOutputs
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSyncManifest
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ServerFeature
 import de.qspool.clementineremote.backend.streaming.ThisRenderer
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseCurrentMetadata
@@ -216,6 +217,43 @@ class RemoteRepositoryTest {
             receive(message(MsgType.INFO).setResponseClementineInfo(ResponseClementineInfo.newBuilder().setVersion("1.4")))
             assertFalse(RemoteRepository.browsing.value.supported)
             assertEquals(before + 2, RemoteRepository.browsing.value.connection)
+        } finally {
+            collecting.cancel()
+        }
+    }
+
+    @Test
+    fun followsWhetherSongsCanBeSynced() {
+        val received = mutableListOf<ResponseSyncManifest>()
+        val collecting = CoroutineScope(Dispatchers.Unconfined).launch {
+            RemoteRepository.syncManifests.collect { received += it }
+        }
+        try {
+            // Debug builds, which tests are, have the features still being built.
+            receive(message(MsgType.INFO).setResponseClementineInfo(
+                ResponseClementineInfo.newBuilder().setVersion("1.5").setServerId("abc")
+                    .setAllowDownloads(true).addFeatures(ServerFeature.SERVER_FEATURE_SYNC)))
+            assertEquals(RemoteRepository.Syncing(true, "abc", true), RemoteRepository.syncing.value)
+            assertTrue(RemoteRepository.syncing.value.available)
+
+            receive(message(MsgType.SYNC_MANIFEST).setResponseSyncManifest(
+                ResponseSyncManifest.newBuilder().setSourceId("playlist/1")))
+            assertEquals(listOf("playlist/1"), received.map { it.sourceId })
+
+            // Not while Clementine doesn't allow downloads.
+            receive(message(MsgType.INFO).setResponseClementineInfo(
+                ResponseClementineInfo.newBuilder().setVersion("1.5").setServerId("abc")
+                    .addFeatures(ServerFeature.SERVER_FEATURE_SYNC)))
+            assertFalse(RemoteRepository.syncing.value.available)
+
+            // Nor without a server id, or the feature.
+            receive(message(MsgType.INFO).setResponseClementineInfo(
+                ResponseClementineInfo.newBuilder().setVersion("1.5").setAllowDownloads(true)
+                    .addFeatures(ServerFeature.SERVER_FEATURE_SYNC)))
+            assertFalse(RemoteRepository.syncing.value.supported)
+            receive(message(MsgType.INFO).setResponseClementineInfo(
+                ResponseClementineInfo.newBuilder().setVersion("1.4").setServerId("abc").setAllowDownloads(true)))
+            assertFalse(RemoteRepository.syncing.value.supported)
         } finally {
             collecting.cancel()
         }
