@@ -1,6 +1,9 @@
 # Runs the app's protocol code against a real, headless Clementine (the Ubuntu
 # Resolute .deb from a Clementine release), and checks the protocol definition
-# for drift from that release's.
+# for drift from that release's. By default that's the newest release,
+# development builds included: protocol changes merge in Clementine first, so
+# the app can use them once a development build has them, before a weekly
+# release does.
 name: clementine-integration
 on:
   push:
@@ -11,7 +14,7 @@ on:
   workflow_dispatch:
     inputs:
       clementine_release:
-        description: Clementine release tag to test against (default latest)
+        description: Clementine release tag to test against (default the newest, development builds included)
         default: ""
 
 concurrency:
@@ -32,7 +35,7 @@ jobs:
         env:
           REQUESTED: ${{ inputs.clementine_release }}
         run: |
-          tag=${REQUESTED:-$(gh release view --repo clementine-player/Clementine --json tagName -q .tagName)}
+          tag=${REQUESTED:-$(gh api 'repos/clementine-player/Clementine/releases?per_page=1' -q '.[0].tag_name')}
           echo "Testing against Clementine $tag"
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
 
