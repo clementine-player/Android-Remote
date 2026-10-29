@@ -9,6 +9,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Requ
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSyncManifest
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncDelivery
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncSourceKind
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncItem
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncManifestState
 import org.junit.After
@@ -109,7 +110,7 @@ class SyncEngineTest {
 
     private fun rule(sourceId: String, limitItems: Int = 0) = store.addRule(
         SyncRule(
-            serverId = SERVER, sourceId = sourceId, title = sourceId, kind = 2,
+            serverId = SERVER, sourceId = sourceId, title = sourceId, kind = SyncSourceKind.SYNC_SOURCE_KIND_ALBUM,
             refreshPolicy = RefreshPolicy.NEVER, limitItems = limitItems,
         )
     )

@@ -6,6 +6,10 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import androidx.annotation.WorkerThread
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncDelivery
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncLossless
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncQuality
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncSourceKind
 
 /** When a rule asks Clementine for its songs again. */
 enum class RefreshPolicy(val key: String) {
@@ -46,17 +50,16 @@ data class SyncRule(
     val serverId: String,
     val sourceId: String,
     val title: String,
-    /** SyncSourceKind's number, for the rule's icon. */
-    val kind: Int,
+    /** What the source is, for the rule's icon. */
+    val kind: SyncSourceKind,
     val refreshPolicy: RefreshPolicy,
     val refreshIntervalHours: Int = 0,
     val refreshAfterPercent: Int = 0,
     /** 0: no limit. */
     val limitItems: Int = 0,
     val limitBytes: Long = 0,
-    /** SyncQuality and SyncLossless numbers. */
-    val quality: Int? = null,
-    val lossless: Int? = null,
+    val quality: SyncQuality? = null,
+    val lossless: SyncLossless? = null,
     val maxBitrateKbps: Int? = null,
     val preferredMimeType: String? = null,
     /** For random sources: sent with each request until the rule refreshes. */
@@ -79,8 +82,7 @@ data class SyncedItem(
     val uri: String,
     val mimeType: String,
     val sizeBytes: Long,
-    /** SyncDelivery's number. */
-    val delivery: Int,
+    val delivery: SyncDelivery,
     /** The cover's [SyncedArt.artKey], or null for none. */
     val artKey: String?,
     val metadata: ByteArray,
@@ -406,14 +408,14 @@ class SyncStore(context: Context, name: String? = DATABASE_NAME) :
         put("server_id", serverId)
         put("source_id", sourceId)
         put("title", title)
-        put("kind", kind)
+        put("kind", kind.number)
         put("refresh_policy", refreshPolicy.key)
         put("refresh_interval_hours", refreshIntervalHours)
         put("refresh_after_percent", refreshAfterPercent)
         put("limit_items", limitItems)
         put("limit_bytes", limitBytes)
-        putOrNull("quality", quality)
-        putOrNull("lossless", lossless)
+        putOrNull("quality", quality?.number)
+        putOrNull("lossless", lossless?.number)
         putOrNull("max_bitrate_kbps", maxBitrateKbps)
         put("preferred_mime_type", preferredMimeType)
         put("seed", seed)
@@ -428,7 +430,7 @@ class SyncStore(context: Context, name: String? = DATABASE_NAME) :
         put("uri", uri)
         put("mime_type", mimeType)
         put("size_bytes", sizeBytes)
-        put("delivery", delivery)
+        put("delivery", delivery.number)
         put("art_key", artKey)
         put("metadata", metadata)
         put("pinned", if (pinned) 1 else 0)
@@ -440,14 +442,14 @@ class SyncStore(context: Context, name: String? = DATABASE_NAME) :
         serverId = cursor.string("server_id")!!,
         sourceId = cursor.string("source_id")!!,
         title = cursor.string("title")!!,
-        kind = cursor.int("kind"),
+        kind = SyncSourceKind.forNumber(cursor.int("kind")) ?: SyncSourceKind.SYNC_SOURCE_KIND_UNSPECIFIED,
         refreshPolicy = RefreshPolicy.fromKey(cursor.string("refresh_policy")),
         refreshIntervalHours = cursor.int("refresh_interval_hours"),
         refreshAfterPercent = cursor.int("refresh_after_percent"),
         limitItems = cursor.int("limit_items"),
         limitBytes = cursor.long("limit_bytes"),
-        quality = cursor.intOrNull("quality"),
-        lossless = cursor.intOrNull("lossless"),
+        quality = cursor.intOrNull("quality")?.let(SyncQuality::forNumber),
+        lossless = cursor.intOrNull("lossless")?.let(SyncLossless::forNumber),
         maxBitrateKbps = cursor.intOrNull("max_bitrate_kbps"),
         preferredMimeType = cursor.string("preferred_mime_type"),
         seed = cursor.long("seed"),
@@ -462,7 +464,7 @@ class SyncStore(context: Context, name: String? = DATABASE_NAME) :
         uri = cursor.string("uri")!!,
         mimeType = cursor.string("mime_type")!!,
         sizeBytes = cursor.long("size_bytes"),
-        delivery = cursor.int("delivery"),
+        delivery = SyncDelivery.forNumber(cursor.int("delivery")) ?: SyncDelivery.SYNC_DELIVERY_UNSPECIFIED,
         artKey = cursor.string("art_key"),
         metadata = cursor.getBlob(cursor.getColumnIndexOrThrow("metadata")),
         pinned = cursor.int("pinned") != 0,
