@@ -1,5 +1,9 @@
 package de.qspool.clementineremote.backend.sync
 
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncDelivery
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncLossless
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncQuality
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncSourceKind
 import org.junit.After
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
@@ -32,7 +36,7 @@ class SyncStoreTest {
         serverId = serverId,
         sourceId = sourceId,
         title = sourceId,
-        kind = 2,
+        kind = SyncSourceKind.SYNC_SOURCE_KIND_ALBUM,
         refreshPolicy = RefreshPolicy.NEVER,
         position = position,
     )
@@ -50,7 +54,7 @@ class SyncStoreTest {
         uri = "content://media/external/audio/media/$itemKey",
         mimeType = "audio/flac",
         sizeBytes = sizeBytes,
-        delivery = 1,
+        delivery = SyncDelivery.SYNC_DELIVERY_ORIGINAL,
         artKey = artKey,
         metadata = byteArrayOf(1, 2, 3),
         addedAt = 1_700_000_000_000,
@@ -69,14 +73,14 @@ class SyncStoreTest {
             serverId = SERVER,
             sourceId = "smart/songs/0b6e",
             title = "Newest tracks",
-            kind = 5,
+            kind = SyncSourceKind.SYNC_SOURCE_KIND_SMART_PLAYLIST,
             refreshPolicy = RefreshPolicy.AFTER_LISTENING,
             refreshIntervalHours = 24,
             refreshAfterPercent = 80,
             limitItems = 50,
             limitBytes = 2_000_000_000,
-            quality = 3,
-            lossless = 2,
+            quality = SyncQuality.SYNC_QUALITY_ALWAYS_CONVERT,
+            lossless = SyncLossless.SYNC_LOSSLESS_CONVERT,
             maxBitrateKbps = 160,
             preferredMimeType = "audio/ogg; codecs=opus",
             seed = 42,
