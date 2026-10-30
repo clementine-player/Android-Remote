@@ -13,6 +13,8 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Resp
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseBrowseAdd
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSyncManifest
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ServerFeature
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncSource
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncSourceKind
 import de.qspool.clementineremote.backend.streaming.ThisRenderer
 import de.qspool.clementineremote.backend.player.MySong
 import kotlinx.coroutines.channels.BufferOverflow
@@ -155,6 +157,15 @@ object RemoteRepository {
         onBufferOverflow = BufferOverflow.DROP_OLDEST,
     )
 
+    private val _smartPlaylists = MutableStateFlow<List<SyncSource>>(emptyList())
+
+    /**
+     * Clementine's smart playlists, which can be kept on this phone: asked for on each INFO when
+     * it syncs, and empty until it answers.
+     */
+    @JvmStatic
+    val smartPlaylists: StateFlow<List<SyncSource>> = _smartPlaylists.asStateFlow()
+
     /** Clementine's answers to REQUEST_SYNC_MANIFEST, in the order they came. */
     @JvmStatic
     val syncManifests: SharedFlow<ResponseSyncManifest> = _syncManifests.asSharedFlow()
@@ -187,6 +198,7 @@ object RemoteRepository {
                 if (status == ConnectionStatus.DISCONNECTED) {
                     _outputs.value = Outputs()
                     _syncing.value = Syncing()
+                    _smartPlaylists.value = emptyList()
                 }
             }
 
@@ -224,11 +236,17 @@ object RemoteRepository {
                     serverId = info.serverId,
                     downloadsAllowed = info.allowDownloads,
                 )
+                _smartPlaylists.value = emptyList()
+                if (_syncing.value.supported) {
+                    send(ClementineMessage.getMessage(MsgType.REQUEST_SYNC_SOURCES))
+                }
                 refresh()
             }
             MsgType.BROWSE -> _browseMessages.tryEmit(
                 BrowseMessage.Browse(_browsing.value.connection, message.message.responseBrowse))
             MsgType.SYNC_MANIFEST -> _syncManifests.tryEmit(message.message.responseSyncManifest)
+            MsgType.SYNC_SOURCES -> _smartPlaylists.value = message.message.responseSyncSources.sourcesList
+                .filter { it.kind == SyncSourceKind.SYNC_SOURCE_KIND_SMART_PLAYLIST }
             MsgType.BROWSE_ADD_RESULT -> _browseMessages.tryEmit(
                 BrowseMessage.AddResult(_browsing.value.connection, message.message.responseBrowseAdd))
             MsgType.OUTPUTS -> _outputs.value = _outputs.value.copy(

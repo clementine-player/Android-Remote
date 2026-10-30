@@ -155,6 +155,9 @@
     <string name="library_no_search_results">No songs matching your search criteria!</string>
     <string name="library_sync_error">Could not sync the library</string>
     <string name="library_title">Library</string>
+    <!-- A folder at the top of the library holding Clementine's smart playlists, such as Newest
+         tracks, as Clementine's own library shows them. -->
+    <string name="library_smart_playlists">Smart playlists</string>
     <string name="library_sync_action">Sync library</string>
     <string name="library_add_to_playlist">Add to playlist</string>
     <string name="library_add_to_queue">Add to queue</string>
