@@ -29,6 +29,8 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgT
 import de.qspool.clementineremote.backend.sync.RefreshPolicy
 import de.qspool.clementineremote.backend.sync.SyncRule
 import de.qspool.clementineremote.backend.sync.SyncSources
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncSource
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncSourceKind
 import de.qspool.clementineremote.ui.browse.BrowseLevel
 import de.qspool.clementineremote.ui.browse.ItemKind
 import de.qspool.clementineremote.ui.search.GROUP_ARTIST
@@ -272,6 +274,48 @@ class LibraryScreenTest {
         library.keep(album)
         idle()
         assertEquals(2, kept.size)
+    }
+
+    @Test
+    fun keepsSmartPlaylistsOnThisPhone() {
+        val syncFrom = MutableStateFlow(RemoteRepository.Syncing(supported = true, serverId = "studio", downloadsAllowed = true))
+        val kept = mutableListOf<SyncRule>()
+        val library = viewModel(mutableListOf(), syncFrom = syncFrom, kept = kept)
+
+        library.keep(SyncSource.newBuilder().setSourceId("smart/library/0b6e").setTitle("Newest tracks").build())
+        val rule = kept.single()
+        assertEquals("smart/library/0b6e", rule.sourceId)
+        assertEquals("Newest tracks", rule.title)
+        assertEquals(SyncSourceKind.SYNC_SOURCE_KIND_SMART_PLAYLIST, rule.kind)
+        // Made again each time, so it follows what it picks.
+        assertEquals(RefreshPolicy.ON_CONNECT, rule.refreshPolicy)
+    }
+
+    @Test
+    fun listsSmartPlaylistsInAFolderAtTheTop() {
+        val artist = item("Frédéric Chopin", 0)
+        val kept = mutableListOf<String>()
+        compose.setContent {
+            ClementineTheme(dynamicColor = false) {
+                LibraryContent(
+                    LibraryState(LibraryStatus.Ready, listOf(BrowseLevel(null, ItemKind.ARTIST, listOf(artist)))),
+                    onOpen = {},
+                    onBack = {},
+                    onSyncLibrary = {},
+                    onAdd = { _, _ -> },
+                    onDownload = {},
+                    smartPlaylists = listOf(
+                        SyncSource.newBuilder().setSourceId("smart/library/0b6e").setTitle("Newest tracks").build(),
+                    ),
+                    onKeepSmartPlaylist = { kept += it.title },
+                )
+            }
+        }
+
+        compose.onNodeWithText("Newest tracks").assertDoesNotExist()
+        compose.onNodeWithTag("librarySmartPlaylists").performClick()
+        compose.onNodeWithText("Newest tracks").performClick()
+        assertEquals(listOf("Newest tracks"), kept)
     }
 
     @Test
