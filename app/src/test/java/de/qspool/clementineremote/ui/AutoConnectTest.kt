@@ -13,6 +13,7 @@ import de.qspool.clementineremote.ui.connect.ConnectDialog
 import de.qspool.clementineremote.ui.connect.ConnectViewModel
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -103,5 +104,34 @@ class AutoConnectTest {
         val state = start(name = "studio-pc")
         fail()
         assertNull(state.dialog.value)
+    }
+
+    /**
+     * Auto-connect waits a moment after the screen shows. If the app has gone to the background
+     * by then, it waits for it to come back: Android doesn't let an app in the background start
+     * the service, and crashes it if it tries.
+     */
+    @Test
+    fun waitsForTheAppToComeBack() {
+        App.getPreferences().edit(commit = true) {
+            putString(SharedPreferencesKeys.SP_KEY_IP, "10.0.0.5")
+            putString(SharedPreferencesKeys.SP_KEY_NAME, "")
+        }
+        // Not setup(): drawing the screen moves the clock on past auto-connect's wait.
+        val controller = Robolectric.buildActivity(ConnectActivity::class.java).create().start().resume()
+        this.controller = controller
+        val application = shadowOf(RuntimeEnvironment.getApplication())
+        application.clearStartedServices()
+        val state = ViewModelProvider(controller.get())[ConnectViewModel::class.java]
+        assertFalse(state.isConnecting)
+
+        controller.pause().stop()
+        idle()
+        assertNull(application.nextStartedService)
+        assertFalse(state.isConnecting)
+
+        controller.restart().resume()
+        idle()
+        assertTrue(state.isConnecting)
     }
 }
