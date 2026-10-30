@@ -10,6 +10,7 @@ import de.qspool.clementineremote.SharedPreferencesKeys
 import de.qspool.clementineremote.backend.ClementinePlayerConnection
 import de.qspool.clementineremote.backend.RemoteRepository
 import de.qspool.clementineremote.backend.downloader.DownloadManager
+import de.qspool.clementineremote.backend.downloader.DownloadNetwork
 import de.qspool.clementineremote.backend.streaming.ThisRenderer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -34,7 +35,7 @@ data class KeptRule(
 /**
  * Syncs the rules for the connected Clementine while the app is connected to it: once when it
  * connects, and when asked ([syncNow]), such as after a rule is made ([keep]) or removed
- * ([remove]). Background sync comes later.
+ * ([remove]), over the networks Download over allows. Background sync comes later.
  */
 object Syncer {
 
@@ -45,6 +46,8 @@ object Syncer {
         val results: Map<Long, RuleResult> = emptyMap(),
         /** The last sync couldn't start: there's nowhere to save songs, say. */
         val unavailable: Boolean = false,
+        /** The last sync didn't start, because Download over doesn't allow the phone's network. */
+        val networkNotAllowed: Boolean = false,
     )
 
     private val _status = MutableStateFlow(Status())
@@ -173,12 +176,16 @@ object Syncer {
     private fun runOnce(connection: ClementinePlayerConnection) {
         val syncing = RemoteRepository.syncing.value
         if (!syncing.available) return
+        if (!DownloadNetwork.chosen(App.getPreferences()).allowsCurrentNetwork(context)) {
+            _status.value = _status.value.copy(networkNotAllowed = true)
+            return
+        }
         val storage = DownloadManager.getInstance(context).createStorage()
         if (storage == null) {
             _status.value = _status.value.copy(unavailable = true)
             return
         }
-        _status.value = _status.value.copy(running = true, unavailable = false)
+        _status.value = _status.value.copy(running = true, unavailable = false, networkNotAllowed = false)
         val engine = SyncEngine(
             store(context), storage,
             delete = { uri: Uri -> context.contentResolver.delete(uri, null, null) },
