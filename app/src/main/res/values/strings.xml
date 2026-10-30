@@ -469,6 +469,11 @@
     <!-- A button in the dialog when connecting fails, and a shortcut on the app's icon: play the
          music saved on the phone instead of connecting. -->
     <string name="sync_play_on_phone">Play on this phone</string>
+    <!-- At the top of the player while it plays the music saved on the phone, where it otherwise
+         says which playlist Clementine plays from. -->
+    <string name="sync_playing_on_this_phone">Playing on this phone</string>
+    <!-- As "Playing on this phone", on a tablet. -->
+    <string name="sync_playing_on_this_tablet">Playing on this tablet</string>
     <!-- Banner: the app can't connect to Clementine on the computer. -->
     <string name="sync_not_reachable">Clementine isn\'t reachable</string>
     <!-- Banner, under "Clementine isn't reachable". -->
