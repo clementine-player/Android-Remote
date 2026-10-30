@@ -73,7 +73,8 @@ public class MediaStoreDownloadStorage implements DownloadStorage {
     public List<StoredSong> list() {
         String[] projection = {MediaStore.Audio.Media._ID, MediaStore.Audio.Media.RELATIVE_PATH,
                 MediaStore.Audio.Media.DISPLAY_NAME, MediaStore.Audio.Media.TITLE,
-                MediaStore.Audio.Media.ARTIST};
+                MediaStore.Audio.Media.ARTIST, MediaStore.Audio.Media.ALBUM,
+                MediaStore.Audio.Media.TRACK};
         String selection = MediaStore.Audio.Media.RELATIVE_PATH + " LIKE ?";
         String[] args = {BASE_DIR + "%"};
         List<StoredSong> songs = new ArrayList<>();
@@ -90,7 +91,8 @@ public class MediaStoreDownloadStorage implements DownloadStorage {
                 songs.add(new StoredSong(
                         ContentUris.withAppendedId(mCollection, cursor.getLong(0)),
                         path.substring(BASE_DIR.length()), cursor.getString(2),
-                        known(cursor.getString(3)), known(cursor.getString(4))));
+                        known(cursor.getString(3)), known(cursor.getString(4)),
+                        known(cursor.getString(5)), cursor.getInt(6)));
             }
         }
         return songs;

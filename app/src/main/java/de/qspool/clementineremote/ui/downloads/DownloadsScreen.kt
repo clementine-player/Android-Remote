@@ -73,12 +73,26 @@ fun DownloadsScreen(viewModel: DownloadsViewModel) {
     val syncFrom by viewModel.syncFrom.collectAsStateWithLifecycle()
     val opened by viewModel.opened.collectAsStateWithLifecycle()
     val playing by viewModel.playing.collectAsStateWithLifecycle()
+    val browsing by viewModel.browsing.collectAsStateWithLifecycle()
     val context = LocalContext.current
     // Says why syncing didn't start, while this is shown.
     LaunchedEffect(syncStatus.networkNotAllowed) {
         if (syncStatus.networkNotAllowed) {
             Toast.makeText(context, R.string.download_noti_network_not_allowed, Toast.LENGTH_LONG).show()
         }
+    }
+    browsing.lastOrNull()?.let { page ->
+        BackHandler(onBack = viewModel::browseBack)
+        PhoneBrowseContent(
+            page,
+            state.onPhone,
+            playing = playing,
+            onOpen = viewModel::browse,
+            onBack = viewModel::browseBack,
+            onPlay = viewModel::play,
+            onShuffle = viewModel::shuffle,
+        )
+        return
     }
     // The rule open, as it is now; gone when it's removed.
     val openRule = opened?.let { open -> keptRules.firstOrNull { it.rule.id == open.ruleId } }
@@ -128,6 +142,9 @@ fun DownloadsScreen(viewModel: DownloadsViewModel) {
         onSyncNow = viewModel::syncNow,
         onRemoveKept = viewModel::remove,
         onOpenKept = viewModel::open,
+        playing = playing,
+        // Browsed by artist and album where the app plays them, with testing features.
+        onBrowse = if (BuildConfig.TESTING_FEATURES) viewModel::browse else null,
     )
 }
 
@@ -148,6 +165,10 @@ internal fun DownloadsContent(
     onSyncNow: () -> Unit = {},
     onRemoveKept: (KeptRule) -> Unit = {},
     onOpenKept: (KeptRule) -> Unit = {},
+    /** The item key of the song playing on this phone. */
+    playing: String? = null,
+    /** Opens an artist or album of the songs on this phone, listed by artist as the library is. */
+    onBrowse: ((BrowsePage) -> Unit)? = null,
 ) {
     // The finished download whose songs are being picked from.
     var picking by remember { mutableStateOf<Download?>(null) }
@@ -185,7 +206,17 @@ internal fun DownloadsContent(
         if (state.wifiOnly) {
             item { WifiOnly(onChangeSettings) }
         }
-        onPhone(state.onPhone, onPlay)
+        if (onBrowse == null) {
+            onPhone(state.onPhone, onPlay)
+        } else {
+            phoneArtists(
+                state.onPhone,
+                playing,
+                headed = kept.rules.isNotEmpty() || state.running.isNotEmpty() || state.finished.isNotEmpty(),
+                onBrowse,
+                onPlay,
+            )
+        }
     }
 
     picking?.let { download ->
@@ -410,7 +441,7 @@ private fun LazyListScope.suggestions(
 }
 
 @Composable
-private fun Heading(title: Int) {
+internal fun Heading(title: Int) {
     Text(
         stringResource(title),
         style = MaterialTheme.typography.titleSmall,
