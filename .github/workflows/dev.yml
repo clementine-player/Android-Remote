@@ -2,8 +2,8 @@
 #   - on Google Play's internal testing track, a private channel for up to 100 testers, its
 #     closed testing track, for the testers on its list, and its open testing track, the beta
 #     anyone can join from the store page. Releases go to production (release.yml).
-#   - as a GitHub pre-release, dev-<version code>, which replaces the last one: the APK, with
-#     the same package and signature as releases, so it updates to and from them
+#   - as a GitHub pre-release, dev-<version code>: the APK, with the same package and
+#     signature as releases, so it updates to and from them, and both builds' R8 mappings
 # Changes that don't reach the app (tests, docs, CI, store listings) don't make one.
 #
 # The keys live in Cloud KMS and cannot be exported: the builds are made unsigned and signed by
@@ -220,20 +220,19 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           TAG: dev-${{ steps.version.outputs.code }}
         run: |
-          # Releases are immutable once published, and a deleted one's tag can't be used again,
-          # so each build is a pre-release of its own. Already there when this is run again.
+          # Releases are immutable once published, so each build is a pre-release of its own,
+          # with R8's mappings from the start, as releases have: scripts/play_crashes.py puts
+          # the names back into crashes Play reports with R8's names, and a trace from logcat
+          # or the APK needs the F-Droid build's. They're all kept, so an older build's crashes
+          # can still be retraced. Already there when this is run again.
+          for flavor in play fdroid; do
+            cp "app/build/outputs/mapping/${flavor}Release/mapping.txt" \
+              "$RUNNER_TEMP/ClementineRemote-${{ steps.version.outputs.name }}-$flavor-mapping.txt"
+          done
           if ! gh release view "$TAG" > /dev/null 2>&1; then
             gh release create "$TAG" --prerelease --latest=false --target "$GITHUB_SHA" \
               --title "Development build ${{ steps.version.outputs.name }}" \
               --notes-file "$RUNNER_TEMP/dev-notes.md" \
-              "$RUNNER_TEMP/ClementineRemote-dev.apk"
+              "$RUNNER_TEMP/ClementineRemote-dev.apk" \
+              "$RUNNER_TEMP"/ClementineRemote-"${{ steps.version.outputs.name }}"-*-mapping.txt
           fi
-          # Then only the newest stays. An immutable release's tag may have to stay.
-          gh release list --limit 100 --json tagName,isPrerelease \
-            --jq '.[] | select(.isPrerelease) | .tagName | select(. == "dev" or startswith("dev-"))' |
-            while read -r old; do
-              [ "$old" != "$TAG" ] || continue
-              gh release delete "$old" --yes
-              gh api -X DELETE "repos/$GITHUB_REPOSITORY/git/refs/tags/$old" > /dev/null ||
-                echo "::notice::Kept the tag $old: GitHub protects an immutable release's tag."
-            done

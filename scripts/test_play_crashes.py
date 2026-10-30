@@ -7,6 +7,7 @@ from datetime import date
 from pathlib import Path
 
 import pytest
+import requests
 
 import play_crashes
 from play_crashes import Cluster, Json, PlayIssue
@@ -56,7 +57,7 @@ def report(text: str, code: int = 1975, time: str = "2026-10-14T20:00:00Z") -> J
     }
 
 
-def no_mapping(sha: str | None) -> Path | None:
+def no_mapping(report: Json) -> Path | None:
     return None
 
 
@@ -327,3 +328,44 @@ def test_dry_run_changes_nothing() -> None:
     github = FakeGitHub([filed("closed", 1975)])
     play_crashes.file_issues(github, [cluster(1979), cluster()], dry_run=True)
     assert github.sent == []
+
+
+# Mappings.
+
+
+class FakeReleases(play_crashes.GitHub):
+    """GitHub with releases and tags, and their mappings."""
+
+    def __init__(self, releases: dict[str, bytes], tags: dict[str, str]) -> None:
+        super().__init__("clementine-player/Android-Remote", "token")
+        self.releases = releases
+        self.tags = tags
+
+    def get(self, path: str, **params: str | int) -> Json:
+        tag = path.removeprefix("/releases/tags/")
+        if tag not in self.releases:
+            response = requests.Response()
+            response.status_code = 404
+            raise requests.HTTPError(response=response)
+        asset = {"name": f"ClementineRemote-{tag}-play-mapping.txt", "url": tag}
+        return {"assets": [asset]}
+
+    def get_list(self, path: str, **params: str | int) -> list[Json]:
+        return [{"name": t, "commit": {"sha": sha}} for t, sha in self.tags.items()]
+
+    def download(self, url: str, accept: str | None = "") -> bytes:
+        return self.releases[url]
+
+
+def test_finds_a_dev_builds_mapping_in_its_pre_release(tmp_path: Path) -> None:
+    github = FakeReleases({"dev-2064": b"dev map"}, {})
+    mapping = play_crashes.Mappings(github, str(tmp_path)).get(report(OBFUSCATED, 2064))
+    assert mapping is not None
+    assert mapping.read_bytes() == b"dev map"
+
+
+def test_finds_a_releases_mapping_by_its_tag(tmp_path: Path) -> None:
+    github = FakeReleases({"v13.7": b"release map"}, {"v13.7": SHA})
+    mapping = play_crashes.Mappings(github, str(tmp_path)).get(report(OBFUSCATED, 1885))
+    assert mapping is not None
+    assert mapping.read_bytes() == b"release map"

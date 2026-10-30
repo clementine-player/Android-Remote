@@ -100,10 +100,11 @@ makes a development build (`.github/workflows/dev.yml`):
 - on its **closed testing** track, for the testers on its list, and its **open testing**
   track, the beta anyone can join from the store page. Unlike internal testing, each build
   there goes through Google's review first, which is usually quick for testing tracks;
-- as a GitHub pre-release, `dev-<version code>`, which replaces the last one: the APK, with
-  the same package and signature as the releases, so it updates to the next release and from
-  the last one. It needs the release certificate (see *One-time setup for releases*).
-  Releases are immutable, so each build is a pre-release of its own: link to the
+- as a GitHub pre-release, `dev-<version code>`: the APK, with the same package and
+  signature as the releases, so it updates to the next release and from the last one, and
+  R8's mappings of both builds, as releases have. It needs the release certificate (see
+  *One-time setup for releases*). Releases are immutable, so each build is a pre-release of
+  its own, and they're all kept, so a crash in any of them can be retraced: link to the
   [releases](https://github.com/clementine-player/Android-Remote/releases) rather than to one.
 
 The version code is twice the number of commits on `master` (releases take the odd codes),
