@@ -63,6 +63,8 @@ public class DownloadManager {
 
     private NotificationCompat.Builder mActiveNofiticationBuilder;
 
+    // Changed on the main thread, and listed from others too (see getAllDownloaders), so only
+    // used while holding this: even reading a SparseArray can change it.
     private SparseArray<ClementineSongDownloader> mActiveDownloads = new SparseArray<>();
 
     private SparseArray<ClementineSongDownloader> mFinishedDownloads = new SparseArray<>();
@@ -147,12 +149,16 @@ public class DownloadManager {
             public void onDownloadResult(DownloaderResult result) {
                 int id = result.getId();
 
-                // Move the download to the finished list
-                mFinishedDownloads.append(id, mActiveDownloads.get(id));
-                mActiveDownloads.remove(id);
+                int running;
+                int finished;
+                synchronized (DownloadManager.this) {
+                    finish(id);
+                    running = mActiveDownloads.size();
+                    finished = mFinishedDownloads.size();
+                }
 
                 // Remove the notification if this was the last download
-                if (mActiveDownloads.size() == 0) {
+                if (running == 0) {
                     mNotifyManager.cancel(NOTIFICATION_ID_DOWNLOADS);
                 } else {
                     // Build a new active notification as the old one might be
@@ -162,9 +168,7 @@ public class DownloadManager {
 
                 //download_noti_n_finished
                 String title = mContext.getResources().getQuantityString(
-                        R.plurals.download_noti_n_finished,
-                        mFinishedDownloads.size(),
-                        mFinishedDownloads.size());
+                        R.plurals.download_noti_n_finished, finished, finished);
                 NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(
                         mContext, App.notificationChannel)
                         .setContentTitle(title)
@@ -204,7 +208,7 @@ public class DownloadManager {
         // Show a toast that the download is starting
         Toast.makeText(mContext, R.string.player_download_started, Toast.LENGTH_SHORT).show();
 
-        mActiveDownloads.append(mIds, songDownloader);
+        track(songDownloader);
 
         mIds++;
 
@@ -268,7 +272,22 @@ public class DownloadManager {
         }
     }
 
-    public List<ClementineSongDownloader> getAllDownloaders() {
+    /** Lists a download as running. */
+    synchronized void track(ClementineSongDownloader downloader) {
+        mActiveDownloads.append(downloader.getId(), downloader);
+    }
+
+    /** Moves a download to the finished ones. */
+    synchronized void finish(int id) {
+        mFinishedDownloads.append(id, mActiveDownloads.get(id));
+        mActiveDownloads.remove(id);
+    }
+
+    /**
+     * The running downloads, then the finished ones, each once: the downloads screen lists them
+     * from another thread while they finish.
+     */
+    public synchronized List<ClementineSongDownloader> getAllDownloaders() {
         LinkedList<ClementineSongDownloader> downloaders = new LinkedList<>();
 
         for (int i = 0; i < mActiveDownloads.size(); ++i) {
@@ -281,12 +300,12 @@ public class DownloadManager {
         return downloaders;
     }
 
-    public void removeDownloader(int id) {
+    public synchronized void removeDownloader(int id) {
         mActiveDownloads.remove(id);
         mFinishedDownloads.remove(id);
     }
 
-    public void shutdown() {
+    public synchronized void shutdown() {
         for (int i = 0; i < mActiveDownloads.size(); ++i) {
             mActiveDownloads.valueAt(i).cancel(true);
         }
@@ -376,7 +395,7 @@ public class DownloadManager {
         return sb.toString();
     }
 
-    private void onProgress(DownloadStatus status) {
+    private synchronized void onProgress(DownloadStatus status) {
         switch (status.getState()) {
             case IDLE:
                 mActiveNofiticationBuilder.setContentTitle(
