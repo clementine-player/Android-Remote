@@ -32,6 +32,22 @@ jobs:
           name: apk-debug
           path: app/build/outputs/apk/fdroid/debug/*.apk
 
+  # The scripts in scripts/, checked with the settings in pyproject.toml.
+  python:
+    name: Python
+    runs-on: ubuntu-26.04
+    steps:
+      - uses: actions/checkout@v5
+      # ruff and ty are pinned in pyproject.toml's dev group, so uv runs the
+      # versions uv.lock has.
+      - uses: astral-sh/setup-uv@v10.2.0
+      - name: ruff check
+        run: uv run ruff check --output-format github
+      - name: ruff format
+        run: uv run ruff format --check
+      - name: ty
+        run: uv run ty check --output-format github
+
   # Instrumented tests on an emulator. Only a real Android runtime detects StrictMode thread
   # violations (disk or network on the main thread); see StrictModeDeviceTest. First, the
   # minified release build is started, to check R8 kept what's reached by reflection.
