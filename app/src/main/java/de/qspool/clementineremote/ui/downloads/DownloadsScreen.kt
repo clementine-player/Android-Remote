@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
@@ -49,6 +50,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import de.qspool.clementineremote.BuildConfig
 import de.qspool.clementineremote.R
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem
 import de.qspool.clementineremote.backend.sync.KeptRule
@@ -58,9 +60,9 @@ import de.qspool.clementineremote.utils.Utilities
 /**
  * Downloads: what's kept on this phone, when Clementine syncs songs to it (the screen is then On
  * this phone), the downloads running, with their progress, and those finished, whose songs can be
- * played, then every song on this phone, downloaded now or before, to play. Cancelling a running download
- * stops it; on a finished one, it forgets it. With nothing downloaded, suggests some: the albums
- * played most in Clementine, and its playlists.
+ * played, then every song on this phone, downloaded now or before, to play: here, in the app, with
+ * testing features. Cancelling a running download stops it; on a finished one, it forgets it. With
+ * nothing downloaded, suggests some: the albums played most in Clementine, and its playlists.
  */
 @Composable
 fun DownloadsScreen(viewModel: DownloadsViewModel) {
@@ -105,14 +107,19 @@ fun DownloadsScreen(viewModel: DownloadsViewModel) {
                 Toast.makeText(context, R.string.download_noti_canceled, Toast.LENGTH_SHORT).show()
             }
         },
-        onPlay = { song ->
-            val intent = Intent(Intent.ACTION_VIEW)
-                .setDataAndType(song.uri, "audio/*")
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            if (intent.resolveActivity(context.packageManager) != null) {
-                context.startActivity(intent)
+        onPlay = { songs, index ->
+            if (BuildConfig.TESTING_FEATURES) {
+                viewModel.play(songs, index)
             } else {
-                Toast.makeText(context, R.string.app_not_available, Toast.LENGTH_LONG).show()
+                // Until playing on this phone is released, another app plays them.
+                val intent = Intent(Intent.ACTION_VIEW)
+                    .setDataAndType(songs[index].uri, "audio/*")
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                if (intent.resolveActivity(context.packageManager) != null) {
+                    context.startActivity(intent)
+                } else {
+                    Toast.makeText(context, R.string.app_not_available, Toast.LENGTH_LONG).show()
+                }
             }
         },
         onChangeSettings = { context.startActivity(Intent(context, ClementineSettings::class.java)) },
@@ -128,7 +135,8 @@ fun DownloadsScreen(viewModel: DownloadsViewModel) {
 internal fun DownloadsContent(
     state: DownloadsState,
     onCancel: (Download) -> Unit,
-    onPlay: (DownloadedSong) -> Unit,
+    /** Plays the songs from the one at the index, on this phone. */
+    onPlay: (songs: List<DownloadedSong>, index: Int) -> Unit,
     onChangeSettings: () -> Unit,
     modifier: Modifier = Modifier,
     suggestions: Suggestions = Suggestions(),
@@ -186,7 +194,7 @@ internal fun DownloadsContent(
             title = { Text(stringResource(R.string.downloaded_songs)) },
             text = {
                 Column {
-                    download.songs.forEach { song ->
+                    download.songs.forEachIndexed { index, song ->
                         Text(
                             "${song.artist} - ${song.title}",
                             style = MaterialTheme.typography.bodyLarge,
@@ -194,7 +202,7 @@ internal fun DownloadsContent(
                                 .fillMaxWidth()
                                 .clickable {
                                     picking = null
-                                    onPlay(song)
+                                    onPlay(download.songs, index)
                                 }
                                 .padding(vertical = 12.dp),
                         )
@@ -269,12 +277,12 @@ private fun DownloadRow(download: Download, onCancel: (Download) -> Unit, onClic
 }
 
 /** The songs on this phone, whenever they were downloaded: tap one to play it. */
-private fun LazyListScope.onPhone(songs: List<DownloadedSong>, onPlay: (DownloadedSong) -> Unit) {
+private fun LazyListScope.onPhone(songs: List<DownloadedSong>, onPlay: (List<DownloadedSong>, Int) -> Unit) {
     if (songs.isEmpty()) {
         return
     }
     item { Heading(R.string.downloads_on_phone) }
-    items(songs, key = { "song/${it.uri}" }) { song ->
+    itemsIndexed(songs, key = { _, song -> "song/${song.uri}" }) { index, song ->
         ListItem(
             headlineContent = { Text(song.title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
             supportingContent = if (song.artist.isEmpty()) {
@@ -295,7 +303,7 @@ private fun LazyListScope.onPhone(songs: List<DownloadedSong>, onPlay: (Download
                 }
             },
             colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-            modifier = Modifier.clickable { onPlay(song) }.testTag("songOnPhone"),
+            modifier = Modifier.clickable { onPlay(songs, index) }.testTag("songOnPhone"),
         )
     }
 }

@@ -241,6 +241,11 @@ class DownloadsViewModel(
         _opened.value?.songs?.let { playOnPhone(it, index, false) }
     }
 
+    /** Plays [songs], downloaded to this phone, from the one at [index]. */
+    fun play(songs: List<DownloadedSong>, index: Int) {
+        playOnPhone(songs.map { KeptSong(it.uri.toString(), it.title, it.artist, "", "", it.uri) }, index, false)
+    }
+
     /** Plays the songs of the rule open on this phone at random. */
     fun shuffle() {
         _opened.value?.songs?.let { playOnPhone(it, 0, true) }

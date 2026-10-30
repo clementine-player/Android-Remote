@@ -67,7 +67,7 @@ class DownloadsScreenTest {
                 DownloadsContent(
                     state,
                     onCancel = { done += "cancel ${it.id}" },
-                    onPlay = { done += "play ${it.title}" },
+                    onPlay = { songs, index -> done += "play ${songs[index].title} of ${songs.size}" },
                     onChangeSettings = { done += "settings" },
                     suggestions = suggestions,
                     onDownloadAlbum = { done += "album ${it.album}" },
@@ -104,7 +104,7 @@ class DownloadsScreenTest {
                 DownloadsContent(
                     DownloadsState(),
                     onCancel = {},
-                    onPlay = {},
+                    onPlay = { _, _ -> },
                     onChangeSettings = {},
                     kept = kept,
                     onThisPhone = true,
@@ -195,6 +195,27 @@ class DownloadsScreenTest {
     }
 
     @Test
+    fun viewModelPlaysDownloadedSongsOnThisPhone() {
+        val played = mutableListOf<Triple<List<KeptSong>, Int, Boolean>>()
+        val downloads = DownloadsViewModel(
+            downloads = { emptyList() },
+            storedSongs = { emptyList() },
+            freeSpace = { 0 },
+            io = Dispatchers.Unconfined,
+            refreshKept = {},
+            playOnPhone = { songs, start, shuffle -> played += Triple(songs, start, shuffle) },
+        )
+        val uri = Uri.parse("content://media/2")
+
+        downloads.play(listOf(finished.songs[0], DownloadedSong("Clair de lune", "Claude Debussy", uri)), 1)
+
+        val clairDeLune = KeptSong(uri.toString(), "Clair de lune", "Claude Debussy", "", "", uri)
+        assertEquals(1, played.size)
+        assertEquals(clairDeLune, played[0].first[1])
+        assertEquals(1 to false, played[0].second to played[0].third)
+    }
+
+    @Test
     fun withoutDownloadsOrSuggestionsSaysWhereDownloadsStart() {
         show(DownloadsState(freeSpace = "1.0 GiB"))
 
@@ -252,22 +273,24 @@ class DownloadsScreenTest {
         compose.onNodeWithText("Downloading songs Erik Satie - Gymnopédie No. 1").performClick()
         compose.onNodeWithText("Erik Satie - Gymnopédie No. 1").performClick()
 
-        assertEquals(listOf("play Gymnopédie No. 1"), done)
+        assertEquals(listOf("play Gymnopédie No. 1 of 1"), done)
     }
 
     @Test
     fun songsDownloadedBeforeAreOnThePhoneToPlay() {
         val song = DownloadedSong("Clair de lune", "Claude Debussy", Uri.parse("content://media/2"))
-        show(DownloadsState(onPhone = listOf(song)), suggestions)
+        val next = DownloadedSong("Rêverie", "Claude Debussy", Uri.parse("content://media/4"))
+        show(DownloadsState(onPhone = listOf(song, next)), suggestions)
 
         // Something is downloaded, so no suggestions.
         compose.onNodeWithTag("downloadsEmpty").assertDoesNotExist()
         compose.onNodeWithTag("suggestAlbum").assertDoesNotExist()
         compose.onNodeWithText("On this phone").assertIsDisplayed()
-        compose.onNodeWithText("Claude Debussy").assertIsDisplayed()
+        compose.onAllNodesWithText("Claude Debussy").assertCountEquals(2)
         compose.onNodeWithText("Clair de lune").performClick()
 
-        assertEquals(listOf("play Clair de lune"), done)
+        // With the songs after it, to play on.
+        assertEquals(listOf("play Clair de lune of 2"), done)
     }
 
     @Test
