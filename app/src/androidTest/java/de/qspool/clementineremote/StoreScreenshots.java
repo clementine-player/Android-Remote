@@ -159,6 +159,18 @@ public class StoreScreenshots {
     }
 
     /**
+     * Waits out a "System UI isn't responding" dialog, which the foldable emulator has shown on CI
+     * over the app it's meant to photograph, so the app can't be tapped.
+     */
+    private void dismissNotResponding() {
+        UiObject2 wait = mDevice.wait(Until.findObject(By.res("android", "aerr_wait")), 3000);
+        if (wait != null) {
+            wait.click();
+            mDevice.waitForIdle();
+        }
+    }
+
+    /**
      * Scrolls the list tagged [list] down until [selector] shows, and returns that. Whether a
      * Compose list can scroll further isn't reported reliably, so it just scrolls until then.
      */
@@ -263,6 +275,7 @@ public class StoreScreenshots {
 
         mContext.startActivity(new Intent(mContext, ConnectActivity.class)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+        dismissNotResponding();
         waitFor(tag("btnConnect")).click();
         waitFor(tag("navQueue"));
         play("Clair de lune");
