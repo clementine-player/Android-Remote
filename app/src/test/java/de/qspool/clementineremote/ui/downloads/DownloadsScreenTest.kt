@@ -345,8 +345,8 @@ class DownloadsScreenTest {
         assertEquals(
             listOf(
                 DownloadedSong("Clair de lune", "Claude Debussy", Uri.parse("content://media/4")),
-                // Named after its file and folder.
-                DownloadedSong("02 Gymnopédie No. 2", "Erik Satie/Gymnopédies", Uri.parse("content://media/3")),
+                // Named after its file, by the artist and on the album its folders are named after.
+                DownloadedSong("02 Gymnopédie No. 2", "Erik Satie", Uri.parse("content://media/3"), album = "Gymnopédies"),
             ),
             downloads.state.value.onPhone,
         )

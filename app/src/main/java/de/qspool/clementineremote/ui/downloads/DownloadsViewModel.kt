@@ -36,7 +36,14 @@ import kotlinx.coroutines.withContext
 import java.util.LinkedList
 
 /** A song downloaded, to play. */
-data class DownloadedSong(val title: String, val artist: String, val uri: Uri)
+data class DownloadedSong(
+    val title: String,
+    val artist: String,
+    val uri: Uri,
+    val album: String = "",
+    /** Its number on its album, with the disc's in the thousands; 0 when unknown. */
+    val track: Int = 0,
+)
 
 /** A rule kept on this phone, shown with its songs: null until they're read. */
 data class OpenedRule(val ruleId: Long, val songs: List<KeptSong>?)
@@ -109,6 +116,21 @@ class DownloadsViewModel(
 
     private val _opened = MutableStateFlow<OpenedRule?>(null)
 
+    private val _browsing = MutableStateFlow<List<BrowsePage>>(emptyList())
+
+    /** What's open of the songs on this phone, by artist, album or song: the last one shows. */
+    val browsing: StateFlow<List<BrowsePage>> = _browsing.asStateFlow()
+
+    /** Opens [page] of the songs on this phone, over what's open. */
+    fun browse(page: BrowsePage) {
+        _browsing.value += page
+    }
+
+    /** Goes back from the page of the songs on this phone that shows. */
+    fun browseBack() {
+        _browsing.value = _browsing.value.dropLast(1)
+    }
+
     /** The rule kept on this phone whose songs show, if one does. */
     val opened: StateFlow<OpenedRule?> = _opened.asStateFlow()
 
@@ -144,7 +166,8 @@ class DownloadsViewModel(
 
     /**
      * The songs saved, by folder and file name: with the folder settings' defaults, by artist
-     * and album, then track number. Songs without tags are named after their file and folder.
+     * and album, then track number. Songs without tags are named after their file, and their
+     * artist and album after the folders they're in ("Artist/Album/").
      */
     private fun readOnPhone(): List<DownloadedSong> = storedSongs()
         .sortedWith(
@@ -152,10 +175,13 @@ class DownloadsViewModel(
                 .thenBy(String.CASE_INSENSITIVE_ORDER) { it.fileName },
         )
         .map { song ->
+            val folders = song.relativeDir.split('/').filter { it.isNotEmpty() }
             DownloadedSong(
                 title = song.title ?: song.fileName.substringBeforeLast('.'),
-                artist = song.artist ?: song.relativeDir.trimEnd('/'),
+                artist = song.artist ?: folders.firstOrNull().orEmpty(),
                 uri = song.uri,
+                album = song.album ?: folders.getOrNull(1).orEmpty(),
+                track = song.track,
             )
         }
 
@@ -243,8 +269,15 @@ class DownloadsViewModel(
 
     /** Plays [songs], downloaded to this phone, from the one at [index]. */
     fun play(songs: List<DownloadedSong>, index: Int) {
-        playOnPhone(songs.map { KeptSong(it.uri.toString(), it.title, it.artist, "", "", it.uri) }, index, false)
+        playOnPhone(songs.map(::kept), index, false)
     }
+
+    /** Plays [songs], downloaded to this phone, at random. */
+    fun shuffle(songs: List<DownloadedSong>) {
+        playOnPhone(songs.map(::kept), 0, true)
+    }
+
+    private fun kept(song: DownloadedSong) = KeptSong(song.uri.toString(), song.title, song.artist, song.album, "", song.uri)
 
     /** Plays the songs of the rule open on this phone at random. */
     fun shuffle() {
