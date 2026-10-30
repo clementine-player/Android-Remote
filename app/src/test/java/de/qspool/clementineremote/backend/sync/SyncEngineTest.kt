@@ -185,6 +185,31 @@ class SyncEngineTest {
     }
 
     @Test
+    fun saysHowManySongsItHasDownloaded() {
+        val progress = ArrayList<Triple<Long, Int, Int>>()
+        engine = SyncEngine(
+            store, storage, storage::delete,
+            listOf(AudioFormat.newBuilder().setMimeType("audio/flac").build()),
+            onProgress = { ruleId, done, total -> progress += Triple(ruleId, done, total) },
+        )
+        val playlist = rule("playlist/1")
+        manifest("playlist/1", song("a"))
+        engine.sync(clementine)
+        progress.clear()
+
+        // Only the songs it has to download count.
+        manifest("playlist/1", song("a"), song("b"), song("c"))
+        engine.sync(clementine)
+
+        assertEquals(listOf(Triple(playlist, 0, 2), Triple(playlist, 1, 2), Triple(playlist, 2, 2)), progress)
+
+        // With nothing to download, it says nothing.
+        progress.clear()
+        engine.sync(clementine)
+        assertEquals(emptyList<Triple<Long, Int, Int>>(), progress)
+    }
+
+    @Test
     fun aRuleKeptAsItIsSyncsOnceUntilItHasItsSongs() {
         val album = rule("library/album/Pixies/Doolittle", refreshPolicy = RefreshPolicy.NEVER)
         // The first sync fails, so the next one asks again.
