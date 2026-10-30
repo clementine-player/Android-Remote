@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.session.MediaController;
+import android.net.Uri;
 import android.os.SystemClock;
 import android.view.KeyEvent;
 
@@ -27,7 +28,13 @@ import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Predicate;
 
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.RemoteRepository;
@@ -36,6 +43,8 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.player.MySong;
+import de.qspool.clementineremote.backend.sync.KeptSong;
+import de.qspool.clementineremote.backend.sync.PhonePlayer;
 import de.qspool.clementineremote.ui.ConnectActivity;
 import de.qspool.clementineremote.ui.hints.Hints;
 
@@ -289,5 +298,60 @@ public class MediaSessionDeviceTest {
                 MediaController.PlaybackInfo.PLAYBACK_TYPE_REMOTE,
                 controller.getPlaybackInfo().getPlaybackType());
         assertEquals(100, controller.getPlaybackInfo().getMaxVolume());
+    }
+
+    /**
+     * Playing songs kept on this phone closes Clementine's session until they stop: Android's
+     * media controls hide an app's local session while it also has a remote one.
+     */
+    @Test
+    public void playingOnThePhoneClosesClementinesSession() throws IOException {
+        waitForSong();
+        File silence = new File(mContext.getCacheDir(), "silence.wav");
+        writeSilence(silence, 30);
+        List<KeptSong> songs = Collections.singletonList(new KeptSong("silence", "Silence",
+                "Nobody", "", "", Uri.fromFile(silence)));
+
+        InstrumentationRegistry.getInstrumentation().runOnMainSync(
+                () -> PhonePlayer.INSTANCE.play(mContext, songs, 0, false));
+        try {
+            assertTrue("Clementine's session is still open while the phone plays",
+                    waitForSessions(sessions -> sessions.contains("id.on-this-phone")
+                            && !sessions.contains("id.clementine")));
+        } finally {
+            InstrumentationRegistry.getInstrumentation().runOnMainSync(
+                    () -> PhonePlayer.INSTANCE.stop(mContext));
+        }
+        assertTrue("Clementine's session didn't come back when the phone stopped",
+                waitForSessions(sessions -> sessions.contains("id.clementine")));
+        // Android knows the session while it's still being built, before the app has its token.
+        long end = SystemClock.uptimeMillis() + TIMEOUT;
+        while (MediaSessionController.getPlatformToken() == null
+                && SystemClock.uptimeMillis() < end) {
+            SystemClock.sleep(200);
+        }
+        assertNotNull("The volume keys have no session to go to",
+                MediaSessionController.getPlatformToken());
+    }
+
+    private boolean waitForSessions(Predicate<String> condition) {
+        long end = SystemClock.uptimeMillis() + TIMEOUT;
+        while (!condition.test(mediaSessions()) && SystemClock.uptimeMillis() < end) {
+            SystemClock.sleep(500);
+        }
+        return condition.test(mediaSessions());
+    }
+
+    /** Writes [seconds] of silence as a WAV file: 8 kHz, 16-bit, mono. */
+    private static void writeSilence(File file, int seconds) throws IOException {
+        int rate = 8000;
+        int dataSize = rate * 2 * seconds;
+        ByteBuffer wav = ByteBuffer.allocate(44 + dataSize).order(ByteOrder.LITTLE_ENDIAN);
+        wav.put("RIFF".getBytes(StandardCharsets.US_ASCII)).putInt(36 + dataSize)
+                .put("WAVEfmt ".getBytes(StandardCharsets.US_ASCII)).putInt(16)
+                .putShort((short) 1).putShort((short) 1).putInt(rate).putInt(rate * 2)
+                .putShort((short) 2).putShort((short) 16)
+                .put("data".getBytes(StandardCharsets.US_ASCII)).putInt(dataSize);
+        Files.write(file.toPath(), wav.array());
     }
 }

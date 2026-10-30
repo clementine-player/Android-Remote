@@ -99,6 +99,25 @@ public class ClementineMediaSessionNotification {
         mNotificationManager.notify(NOTIFIFCATION_ID, notification);
     }
 
+    /**
+     * While the phone plays, the service's notification just says so: the phone's own
+     * notification has the controls.
+     */
+    public void showPlayingOnPhone() {
+        Notification notification = new NotificationCompat.Builder(mContext,
+                App.notificationChannel)
+                .setSmallIcon(R.drawable.notification)
+                .setContentIntent(Utilities.getClementineRemotePendingIntent(mContext))
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setOngoing(true)
+                .setOnlyAlertOnce(true)
+                .setShowWhen(false)
+                .setContentTitle(mContext.getString(R.string.app_name))
+                .setContentText(mContext.getString(R.string.sync_playing_on_phone))
+                .build();
+        mNotificationManager.notify(NOTIFIFCATION_ID, notification);
+    }
+
     public void cancel() {
         mNotificationManager.cancel(NOTIFIFCATION_ID);
     }
