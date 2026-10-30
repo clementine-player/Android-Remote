@@ -6,6 +6,7 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.qspool.clementineremote.App
+import de.qspool.clementineremote.R
 import de.qspool.clementineremote.SharedPreferencesKeys
 import de.qspool.clementineremote.backend.AddAction
 import de.qspool.clementineremote.backend.Clementine
@@ -21,8 +22,12 @@ import de.qspool.clementineremote.backend.library.LibrarySearchQuery
 import de.qspool.clementineremote.backend.listener.OnLibraryDownloadListener
 import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.BrowseAddAction
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.BrowseAddResult
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestSyncSourceAdd
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSyncSourceAdd
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncSource
 import de.qspool.clementineremote.backend.sync.RefreshPolicy
 import de.qspool.clementineremote.backend.sync.SyncRule
@@ -45,6 +50,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -122,8 +129,12 @@ class LibraryViewModel(
     val syncFrom: StateFlow<RemoteRepository.Syncing> = RemoteRepository.syncing,
     /** Makes rules keeping music on this phone, and syncs them. */
     private val keepRules: (List<SyncRule>) -> Unit = Syncer::keep,
-    /** Clementine's smart playlists, which can be kept on this phone. */
+    /** Clementine's smart playlists, which can be played and kept on this phone. */
     val smartPlaylists: StateFlow<List<SyncSource>> = RemoteRepository.smartPlaylists,
+    /** How putting smart playlists on the playlist went. */
+    sourceAddResults: Flow<ResponseSyncSourceAdd> = RemoteRepository.sourceAddResults,
+    /** Whether Clementine is playing. */
+    private val playing: () -> Boolean = { App.Clementine.state == Clementine.State.PLAY },
     /** The albums of the library's songs with these values in these columns: see [SyncSources.albums]. */
     private val albumsOf: (List<String>, List<String>) -> List<Pair<String, String>> = { fields, values ->
         LibraryDatabaseHelper().openDatabase(SQLiteDatabase.OPEN_READONLY).use { SyncSources.albums(it, fields, values) }
@@ -158,6 +169,9 @@ class LibraryViewModel(
 
         /** [title] will be kept on this phone. */
         data class Kept(val title: String) : Message
+
+        /** How putting a smart playlist on the playlist went, when it's worth saying. */
+        data class SmartPlaylistAdded(@StringRes val text: Int) : Message
     }
 
     private var syncing = false
@@ -192,7 +206,28 @@ class LibraryViewModel(
         }
     }
 
+    // The smart playlists being put on the playlist, by source id, with what was asked.
+    private val adding = HashMap<String, BrowseAddAction>()
+
     init {
+        sourceAddResults
+            .onEach { response ->
+                val action = adding.remove(response.sourceId) ?: return@onEach
+                val text = when (response.result) {
+                    BrowseAddResult.BROWSE_ADD_RESULT_ADDED -> when (action) {
+                        BrowseAddAction.BROWSE_ADD_ACTION_PLAY_NEXT -> R.string.internet_playing_next
+                        // Playing it shows in the player.
+                        BrowseAddAction.BROWSE_ADD_ACTION_PLAY_NOW, BrowseAddAction.BROWSE_ADD_ACTION_REPLACE -> null
+                        else -> R.string.internet_added
+                    }
+                    BrowseAddResult.BROWSE_ADD_RESULT_GONE -> R.string.internet_gone
+                    else -> R.string.internet_not_playable
+                }
+                if (text != null) {
+                    _messages.trySend(Message.SmartPlaylistAdded(text))
+                }
+            }
+            .launchIn(viewModelScope)
         App.getPreferences().registerOnSharedPreferenceChangeListener(settingsListener)
         reload()
         // The library is cheap to fetch, so it's kept up to date without being asked.
@@ -431,6 +466,30 @@ class LibraryViewModel(
                 _messages.trySend(Message.Kept(item.listTitle))
             }
         }
+    }
+
+    /**
+     * Puts [smartPlaylist] on the playlist playing, doing [action], as Clementine does with a
+     * smart playlist double-clicked in its library: a dynamic one makes the playlist dynamic.
+     * Queueing and new playlists aren't offered for them, so they just add it.
+     */
+    fun play(smartPlaylist: SyncSource, action: AddAction) {
+        val add = when (action) {
+            AddAction.PLAY_NOW -> BrowseAddAction.BROWSE_ADD_ACTION_PLAY_NOW
+            AddAction.PLAY_IF_STOPPED ->
+                if (playing()) BrowseAddAction.BROWSE_ADD_ACTION_APPEND else BrowseAddAction.BROWSE_ADD_ACTION_PLAY_NOW
+            AddAction.PLAY_NEXT -> BrowseAddAction.BROWSE_ADD_ACTION_PLAY_NEXT
+            AddAction.REPLACE -> BrowseAddAction.BROWSE_ADD_ACTION_REPLACE
+            AddAction.APPEND, AddAction.QUEUE, AddAction.NEW_PLAYLIST -> BrowseAddAction.BROWSE_ADD_ACTION_APPEND
+        }
+        adding[smartPlaylist.sourceId] = add
+        send(
+            ClementineMessage(
+                ClementineMessage.getMessageBuilder(MsgType.REQUEST_SYNC_SOURCE_ADD).setRequestSyncSourceAdd(
+                    RequestSyncSourceAdd.newBuilder().setSourceId(smartPlaylist.sourceId).setAction(add),
+                ),
+            ),
+        )
     }
 
     /** Keeps the songs [smartPlaylist] makes on this phone, made again as [refreshPolicy] says. */

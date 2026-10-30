@@ -15,7 +15,9 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTouchInput
+import androidx.lifecycle.viewModelScope
 import androidx.test.core.app.ApplicationProvider
+import de.qspool.clementineremote.R
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.backend.AddAction
 import de.qspool.clementineremote.backend.Clementine
@@ -25,7 +27,10 @@ import de.qspool.clementineremote.backend.elements.DownloaderResult
 import de.qspool.clementineremote.backend.listener.OnLibraryDownloadListener
 import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.RemoteRepository
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.BrowseAddAction
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.BrowseAddResult
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSyncSourceAdd
 import de.qspool.clementineremote.backend.sync.RefreshPolicy
 import de.qspool.clementineremote.backend.sync.SyncRule
 import de.qspool.clementineremote.backend.sync.SyncSources
@@ -45,7 +50,9 @@ import de.qspool.clementineremote.ui.search.toSongSelectItem
 import de.qspool.clementineremote.ui.theme.ClementineTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.coroutines.CoroutineContext
 import org.junit.Assert.assertEquals
@@ -295,6 +302,7 @@ class LibraryScreenTest {
     fun listsSmartPlaylistsInAFolderAtTheTop() {
         val artist = item("Frédéric Chopin", 0)
         val kept = mutableListOf<String>()
+        val played = mutableListOf<String>()
         compose.setContent {
             ClementineTheme(dynamicColor = false) {
                 LibraryContent(
@@ -307,6 +315,7 @@ class LibraryScreenTest {
                     smartPlaylists = listOf(
                         SyncSource.newBuilder().setSourceId("smart/library/0b6e").setTitle("Newest tracks").build(),
                     ),
+                    onPlaySmartPlaylist = { smartPlaylist, action -> played += "${smartPlaylist.title} $action" },
                     onKeepSmartPlaylist = { kept += it.title },
                 )
             }
@@ -314,8 +323,65 @@ class LibraryScreenTest {
 
         compose.onNodeWithText("Newest tracks").assertDoesNotExist()
         compose.onNodeWithTag("librarySmartPlaylists").performClick()
+        // Tapping one plays it, as tapping a song does.
         compose.onNodeWithText("Newest tracks").performClick()
+        // A long press offers the rest: what Clementine can do with a smart playlist.
+        compose.onNodeWithText("Newest tracks").performTouchInput { longClick() }
+        compose.onNodeWithTag("addMenu_QUEUE").assertDoesNotExist()
+        compose.onNodeWithTag("addMenu_NEW_PLAYLIST").assertDoesNotExist()
+        compose.onNodeWithTag("addMenu_REPLACE").performClick()
+        compose.onNodeWithText("Newest tracks").performTouchInput { longClick() }
+        compose.onNodeWithTag("addMenu_KEEP").performClick()
+
+        assertEquals(listOf("Newest tracks PLAY_IF_STOPPED", "Newest tracks REPLACE"), played)
         assertEquals(listOf("Newest tracks"), kept)
+    }
+
+    @Test
+    fun playsASmartPlaylistAndSaysHowItWent() {
+        val sent = mutableListOf<ClementineMessage>()
+        val results = MutableSharedFlow<ResponseSyncSourceAdd>(extraBufferCapacity = 4)
+        val library = LibraryViewModel(
+            send = { sent += it },
+            newQuery = { TestQuery() },
+            io = Dispatchers.Unconfined,
+            libraryExists = { true },
+            sourceAddResults = results,
+            playing = { true },
+        )
+        idle()
+        val said = mutableListOf<LibraryViewModel.Message>()
+        val collecting = library.viewModelScope.launch { library.messages.collect { said += it } }
+        val newest = SyncSource.newBuilder().setSourceId("smart/library/0b6e").setTitle("Newest tracks").build()
+
+        // Clementine is playing, so tapping it adds it.
+        library.play(newest, AddAction.PLAY_IF_STOPPED)
+        val request = sent.single().message
+        assertEquals(MsgType.REQUEST_SYNC_SOURCE_ADD, request.type)
+        assertEquals("smart/library/0b6e", request.requestSyncSourceAdd.sourceId)
+        assertEquals(BrowseAddAction.BROWSE_ADD_ACTION_APPEND, request.requestSyncSourceAdd.action)
+        results.tryEmit(
+            ResponseSyncSourceAdd.newBuilder().setSourceId("smart/library/0b6e")
+                .setResult(BrowseAddResult.BROWSE_ADD_RESULT_ADDED).build()
+        )
+        idle()
+
+        library.play(newest, AddAction.REPLACE)
+        assertEquals(BrowseAddAction.BROWSE_ADD_ACTION_REPLACE, sent.last().message.requestSyncSourceAdd.action)
+        results.tryEmit(
+            ResponseSyncSourceAdd.newBuilder().setSourceId("smart/library/0b6e")
+                .setResult(BrowseAddResult.BROWSE_ADD_RESULT_GONE).build()
+        )
+        idle()
+        collecting.cancel()
+
+        assertEquals(
+            listOf(
+                LibraryViewModel.Message.SmartPlaylistAdded(R.string.internet_added),
+                LibraryViewModel.Message.SmartPlaylistAdded(R.string.internet_gone),
+            ),
+            said,
+        )
     }
 
     @Test

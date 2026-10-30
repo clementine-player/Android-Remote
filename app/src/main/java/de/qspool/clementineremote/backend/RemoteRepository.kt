@@ -12,6 +12,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Outp
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseBrowse
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseBrowseAdd
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSyncManifest
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSyncSourceAdd
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ServerFeature
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncSource
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncSourceKind
@@ -160,11 +161,20 @@ object RemoteRepository {
     private val _smartPlaylists = MutableStateFlow<List<SyncSource>>(emptyList())
 
     /**
-     * Clementine's smart playlists, which can be kept on this phone: asked for on each INFO when
-     * it syncs, and empty until it answers.
+     * Clementine's smart playlists, which can be played and kept on this phone: asked for on each
+     * INFO when it syncs, and empty until it answers.
      */
     @JvmStatic
     val smartPlaylists: StateFlow<List<SyncSource>> = _smartPlaylists.asStateFlow()
+
+    private val _sourceAddResults = MutableSharedFlow<ResponseSyncSourceAdd>(
+        extraBufferCapacity = 16,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST,
+    )
+
+    /** How putting smart playlists on the playlist went: Clementine's SYNC_SOURCE_ADD_RESULTs. */
+    @JvmStatic
+    val sourceAddResults: SharedFlow<ResponseSyncSourceAdd> = _sourceAddResults.asSharedFlow()
 
     /** Clementine's answers to REQUEST_SYNC_MANIFEST, in the order they came. */
     @JvmStatic
@@ -245,6 +255,7 @@ object RemoteRepository {
             MsgType.BROWSE -> _browseMessages.tryEmit(
                 BrowseMessage.Browse(_browsing.value.connection, message.message.responseBrowse))
             MsgType.SYNC_MANIFEST -> _syncManifests.tryEmit(message.message.responseSyncManifest)
+            MsgType.SYNC_SOURCE_ADD_RESULT -> _sourceAddResults.tryEmit(message.message.responseSyncSourceAdd)
             MsgType.SYNC_SOURCES -> _smartPlaylists.value = message.message.responseSyncSources.sourcesList
                 .filter { it.kind == SyncSourceKind.SYNC_SOURCE_KIND_SMART_PLAYLIST }
             MsgType.BROWSE_ADD_RESULT -> _browseMessages.tryEmit(
