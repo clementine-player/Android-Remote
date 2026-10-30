@@ -47,6 +47,8 @@ jobs:
         run: uv run ruff format --check
       - name: ty
         run: uv run ty check --output-format github
+      - name: Unit tests
+        run: uv run pytest -v
 
   # Instrumented tests on an emulator. Only a real Android runtime detects StrictMode thread
   # violations (disk or network on the main thread); see StrictModeDeviceTest. First, the

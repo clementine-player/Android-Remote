@@ -1,0 +1,52 @@
+# Files the crashes Google Play has for the app as GitHub issues labelled play-crash, one per
+# crash, and keeps them up to date (scripts/play_crashes.py). Daily on master, which alone may use
+# the Play service account; it needs Play Console's permission to view app quality information
+# (see RELEASING.md). Run it by hand with dry_run to see what it would file. The script's
+# tests run in ci.yml, with the other scripts' checks.
+name: play-crashes
+
+on:
+  schedule:
+    # Early morning in the UK (04:17 UTC; GitHub may start it late), so the issues are up to
+    # date for the day.
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Only print what would be filed or updated
+        type: boolean
+        default: false
+
+concurrency:
+  group: play-crashes-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  issues: write # to file and update the crashes' issues
+  actions: read # for development builds' R8 mappings, in their artifacts
+  id-token: write # for the OIDC token Workload Identity Federation exchanges
+
+# Created by scripts/gcp_play_setup.sh.
+env:
+  WORKLOAD_IDENTITY_PROVIDER: projects/611551928920/locations/global/workloadIdentityPools/github-actions/providers/android-remote-play
+  SERVICE_ACCOUNT: android-play-release@clementine-data.iam.gserviceaccount.com
+
+jobs:
+  crashes:
+    # Workload Identity Federation admits master alone.
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-26.04
+    steps:
+      - uses: actions/checkout@v5
+      # The script's dependencies are in pyproject.toml and uv.lock.
+      - uses: astral-sh/setup-uv@v10.2.0
+      - uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+
+      - name: File the crashes as issues
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: uv run scripts/play_crashes.py ${{ inputs.dry_run && '--dry-run' || '' }}

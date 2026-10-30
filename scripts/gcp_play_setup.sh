@@ -38,6 +38,7 @@ echo "==> Enabling required APIs"
 gcloud services enable \
   cloudkms.googleapis.com \
   androidpublisher.googleapis.com \
+  playdeveloperreporting.googleapis.com \
   iam.googleapis.com \
   iamcredentials.googleapis.com \
   sts.googleapis.com \

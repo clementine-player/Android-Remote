@@ -1,0 +1,6 @@
+Exception android.app.BackgroundServiceStartNotAllowedException:
+  at android.app.ContextImpl.startServiceCommon (ContextImpl.java:2235)
+  at android.content.ContextWrapper.startService (ContextWrapper.java:871)
+  at de.qspool.clementineremote.ui.ConnectActivity.connect (ConnectActivity.kt:341)
+  at de.qspool.clementineremote.ui.ConnectActivity.autoConnect (ConnectActivity.kt:476)
+  at de.qspool.clementineremote.ui.ConnectActivity.onResume$lambda$1 (ConnectActivity.kt:159)
