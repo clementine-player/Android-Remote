@@ -171,7 +171,8 @@ Until `app/upload_cert.pem` is committed, the workflow only builds the unsigned 
 
 4. **Let the service account upload:** in Play Console, *Users and permissions → Invite new
    users*, invite `android-play-release@clementine-data.iam.gserviceaccount.com` with
-   *Release apps to testing tracks* for this app.
+   *Release apps to testing tracks* for this app. For the *play-crashes* workflow, which files
+   Play's crashes as GitHub issues, give it the permission to view app quality information too.
 
 5. Run the *dev* workflow (*Actions → dev → Run workflow*, on `master`) to check it.
 
