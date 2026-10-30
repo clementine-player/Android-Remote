@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -88,8 +89,11 @@ internal fun BrowseItems(
     listState: LazyListState = rememberLazyListState(),
     canKeep: (SongSelectItem) -> Boolean = { false },
     onKeep: (SongSelectItem) -> Unit = {},
+    /** Rows above the items, such as the library's smart playlists. */
+    header: LazyListScope.() -> Unit = {},
 ) {
     LazyColumn(Modifier.fillMaxSize().testTag(tag), state = listState) {
+        header()
         itemsIndexed(shown.items) { index, item ->
             BrowseRow(
                 shown.kind, item, index in selection,

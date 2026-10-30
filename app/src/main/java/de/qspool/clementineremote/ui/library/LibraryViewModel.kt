@@ -23,6 +23,7 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncSource
 import de.qspool.clementineremote.backend.sync.RefreshPolicy
 import de.qspool.clementineremote.backend.sync.SyncRule
 import de.qspool.clementineremote.backend.sync.SyncSources
@@ -121,6 +122,8 @@ class LibraryViewModel(
     val syncFrom: StateFlow<RemoteRepository.Syncing> = RemoteRepository.syncing,
     /** Makes rules keeping music on this phone, and syncs them. */
     private val keepRules: (List<SyncRule>) -> Unit = Syncer::keep,
+    /** Clementine's smart playlists, which can be kept on this phone. */
+    val smartPlaylists: StateFlow<List<SyncSource>> = RemoteRepository.smartPlaylists,
     /** The albums of the library's songs with these values in these columns: see [SyncSources.albums]. */
     private val albumsOf: (List<String>, List<String>) -> List<Pair<String, String>> = { fields, values ->
         LibraryDatabaseHelper().openDatabase(SQLiteDatabase.OPEN_READONLY).use { SyncSources.albums(it, fields, values) }
@@ -428,6 +431,16 @@ class LibraryViewModel(
                 _messages.trySend(Message.Kept(item.listTitle))
             }
         }
+    }
+
+    /** Keeps the songs [smartPlaylist] makes on this phone, made again as [refreshPolicy] says. */
+    fun keep(smartPlaylist: SyncSource, refreshPolicy: RefreshPolicy = RefreshPolicy.ON_CONNECT) {
+        if (!syncFrom.value.available) {
+            return
+        }
+        val serverId = syncFrom.value.serverId
+        keepRules(listOf(SyncSources.smartPlaylistRule(serverId, smartPlaylist.sourceId, smartPlaylist.title, refreshPolicy)))
+        _messages.trySend(Message.Kept(smartPlaylist.title))
     }
 
     private companion object {

@@ -40,6 +40,23 @@ object SyncSources {
         refreshPolicy = refreshPolicy,
     )
 
+    /**
+     * A rule keeping the songs one of Clementine's smart playlists makes, made again each time it
+     * refreshes. [sourceId] is as Clementine sent it ("smart/library/<uuid>").
+     */
+    fun smartPlaylistRule(
+        serverId: String,
+        sourceId: String,
+        name: String,
+        refreshPolicy: RefreshPolicy = RefreshPolicy.ON_CONNECT,
+    ) = SyncRule(
+        serverId = serverId,
+        sourceId = sourceId,
+        title = name,
+        kind = SyncSourceKind.SYNC_SOURCE_KIND_SMART_PLAYLIST,
+        refreshPolicy = refreshPolicy,
+    )
+
     /** A rule keeping the songs of one of Clementine's playlists, as it changes. */
     fun playlistRule(
         serverId: String,
