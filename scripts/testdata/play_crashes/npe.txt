@@ -1,0 +1,7 @@
+Exception java.lang.NullPointerException: Attempt to invoke virtual method 'void android.os.Looper.quit()' on a null object reference
+  at de.qspool.clementineremote.backend.ClementinePlayerConnection.closeConnection (ClementinePlayerConnection.java:279)
+  at de.qspool.clementineremote.backend.ClementinePlayerConnection.sendRequest (ClementinePlayerConnection.java:229)
+  at de.qspool.clementineremote.backend.ClementineSimpleConnection.createConnection (ClementineSimpleConnection.java:71)
+  at de.qspool.clementineremote.backend.ClementinePlayerConnection.checkKeepAlive (ClementinePlayerConnection.java:292)
+  at de.qspool.clementineremote.backend.ClementinePlayerConnection$1.run (ClementinePlayerConnection.java:145)
+  at java.lang.Thread.run (Thread.java:1571)

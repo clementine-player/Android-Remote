@@ -1,5 +1,6 @@
 # The Python scripts in scripts/, which the workflows run: uv run scripts/<script>.py
-# CI checks them with: uv run ruff check, uv run ruff format --check, uv run ty check
+# CI checks them with: uv run ruff check, uv run ruff format --check, uv run ty check,
+# uv run pytest
 [project]
 name = "clementine-remote-scripts"
 version = "0.1.0"
@@ -17,6 +18,8 @@ dependencies = [
     "cairosvg>=2.7",
     # check-proto-drift.py, with protoc.
     "protobuf>=5",
+    # play_crashes.py: the GitHub API, and google-auth's AuthorizedSession for Play's.
+    "requests>=2.32",
 ]
 
 [tool.uv]
@@ -25,16 +28,20 @@ package = false
 
 [dependency-groups]
 dev = [
+    "pytest>=8",
     # Pinned, so CI and local runs agree on what counts as an error.
     "ruff==0.16.9",
     "ty==0.0.84",
-    # Types for protobuf's generated modules, such as descriptor_pb2.
+    # Types for protobuf's generated modules, such as descriptor_pb2, and requests.
     "types-protobuf>=5",
+    "types-requests>=2.32",
 ]
 
 [tool.ruff]
 target-version = "py311"
 line-length = 88
+# The scripts are first-party modules to their tests.
+src = ["scripts"]
 
 [tool.ruff.lint]
 select = [
@@ -53,6 +60,14 @@ select = [
 [tool.ruff.lint.flake8-annotations]
 # Not even *args: Any and **kwargs: Any without saying so.
 allow-star-arg-any = false
+
+[tool.pytest.ini_options]
+testpaths = ["scripts"]
+# The tests import the scripts they test as modules.
+pythonpath = ["scripts"]
+
+[tool.ty.environment]
+extra-paths = ["scripts"]
 
 [tool.ty.terminal]
 error-on-warning = true

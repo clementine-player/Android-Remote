@@ -1,0 +1,9 @@
+Exception java.lang.IllegalArgumentException:
+  at androidx.compose.ui.internal.InlineClassHelperKt.throwIllegalArgumentException (InlineClassHelper.kt:36)
+  at androidx.compose.ui.layout.LayoutNodeSubcompositionsState.subcompose (SubcomposeLayout.kt:1592)
+  at androidx.compose.ui.layout.LayoutNodeSubcompositionsState$Scope.subcompose (SubcomposeLayout.kt:1353)
+  at androidx.compose.foundation.lazy.layout.LazyLayoutMeasureScopeImpl.compose (LazyLayoutMeasureScope.kt:94)
+  at androidx.compose.foundation.lazy.layout.LazyLayoutMeasuredItemProvider.getPlaceables-3p2s80s (LazyLayoutMeasuredItemProvider.java:118)
+  at androidx.compose.foundation.lazy.LazyListMeasuredItemProvider.getAndMeasure-0kLqBqw (LazyListMeasuredItemProvider.kt:54)
+  at androidx.compose.ui.platform.AndroidComposeView.dispatchDraw (AndroidComposeView.android.kt:2224)
+  at android.view.View.draw (View.java:25218)
