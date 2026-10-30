@@ -170,6 +170,8 @@ internal fun keptDetails(kept: KeptRule, running: Boolean): String = when (val r
     RuleResult.Gone -> stringResource(R.string.sync_gone)
     is RuleResult.Failed -> stringResource(R.string.sync_failed)
     else -> when {
+        kept.downloading != null && running ->
+            pluralStringResource(R.plurals.sync_downloading, kept.downloading.total, kept.downloading.done, kept.downloading.total)
         kept.songs == 0 && result == null && running -> stringResource(R.string.sync_preparing)
         kept.songs == 0 && result == null -> stringResource(R.string.sync_waiting)
         else -> listOf(

@@ -12,6 +12,7 @@ import de.qspool.clementineremote.backend.RemoteRepository
 import de.qspool.clementineremote.backend.downloader.DownloadManager
 import de.qspool.clementineremote.backend.downloader.DownloadNetwork
 import de.qspool.clementineremote.backend.streaming.ThisRenderer
+import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -30,7 +31,12 @@ data class KeptRule(
     val bytes: Long,
     /** Null until it syncs while the app runs. */
     val result: RuleResult?,
+    /** How far the sync running has got with downloading its songs, if it has started. */
+    val downloading: SyncProgress? = null,
 )
+
+/** [done] of the [total] songs a sync has to download. */
+data class SyncProgress(val done: Int, val total: Int)
 
 /**
  * Syncs the rules for the connected Clementine while the app is connected to it: once when it
@@ -70,6 +76,8 @@ object Syncer {
     private var again = false
     private val context: Context get() = App.getApp()
     private var store: SyncStore? = null
+    // The rules the sync running is downloading songs for, by rule id.
+    private val progress = ConcurrentHashMap<Long, SyncProgress>()
 
     /** The store for rules and synced songs, opened once. */
     @JvmStatic
@@ -115,7 +123,7 @@ object Syncer {
         val results = _status.value.results
         _kept.value = store.rules(serverId).map { rule ->
             val songs = store.ruleItems(rule.id)
-            KeptRule(rule, songs.size, songs.sumOf { it.sizeBytes }, results[rule.id])
+            KeptRule(rule, songs.size, songs.sumOf { it.sizeBytes }, results[rule.id], progress[rule.id])
         }
     }
 
@@ -190,6 +198,11 @@ object Syncer {
             store(context), storage,
             delete = { uri: Uri -> context.contentResolver.delete(uri, null, null) },
             supportedFormats = ThisRenderer.capabilities(context).formatsList,
+            onProgress = { ruleId, done, total ->
+                val now = SyncProgress(done, total)
+                progress[ruleId] = now
+                _kept.value = _kept.value.map { if (it.rule.id == ruleId) it.copy(downloading = now) else it }
+            },
         )
         try {
             val result = engine.sync(
@@ -204,6 +217,7 @@ object Syncer {
             Log.w(TAG, "Sync failed", e)
             _status.value = _status.value.copy(running = false, unavailable = true)
         }
+        progress.clear()
         readKept()
     }
 

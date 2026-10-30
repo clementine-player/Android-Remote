@@ -26,6 +26,7 @@ import de.qspool.clementineremote.backend.sync.KeptRule
 import de.qspool.clementineremote.backend.sync.KeptSong
 import de.qspool.clementineremote.backend.sync.RefreshPolicy
 import de.qspool.clementineremote.backend.sync.RuleResult
+import de.qspool.clementineremote.backend.sync.SyncProgress
 import de.qspool.clementineremote.backend.sync.SyncRule
 import de.qspool.clementineremote.ui.theme.ClementineTheme
 import de.qspool.clementineremote.utils.Utilities
@@ -130,6 +131,34 @@ class DownloadsScreenTest {
         compose.onNodeWithTag("keptRemoveConfirm").performClick()
 
         assertEquals(listOf(1L), removed)
+    }
+
+    @Test
+    fun showsHowFarASyncHasGotWithDownloading() {
+        val kept = Kept(
+            rules = listOf(
+                KeptRule(rule(1, "Kind of Blue", SyncSourceKind.SYNC_SOURCE_KIND_ALBUM), 0, 0, null, SyncProgress(12, 51)),
+                KeptRule(rule(2, "Gymnopédies", SyncSourceKind.SYNC_SOURCE_KIND_ALBUM), 0, 0, null),
+            ),
+            running = true,
+            canSync = true,
+        )
+        compose.setContent {
+            ClementineTheme(dynamicColor = false) {
+                DownloadsContent(
+                    DownloadsState(),
+                    onCancel = {},
+                    onPlay = { _, _ -> },
+                    onChangeSettings = {},
+                    kept = kept,
+                    onThisPhone = true,
+                )
+            }
+        }
+
+        compose.onNodeWithText("Downloading 12 of 51 songs…").assertIsDisplayed()
+        // Until Clementine has listed its songs.
+        compose.onNodeWithText("Preparing…").assertIsDisplayed()
     }
 
     private val keptSongs = listOf(
