@@ -17,22 +17,41 @@ object SyncSources {
 
     fun playlist(id: Int) = "playlist/$id"
 
-    /** A rule keeping everything an album has, now and later. */
-    fun albumRule(serverId: String, albumArtist: String, album: String) = SyncRule(
+    /** A rule keeping everything an album has. */
+    fun albumRule(
+        serverId: String,
+        albumArtist: String,
+        album: String,
+        refreshPolicy: RefreshPolicy = RefreshPolicy.NEVER,
+    ) = SyncRule(
         serverId = serverId,
         sourceId = album(albumArtist, album),
         title = album,
         kind = SyncSourceKind.SYNC_SOURCE_KIND_ALBUM,
-        refreshPolicy = RefreshPolicy.NEVER,
+        refreshPolicy = refreshPolicy,
     )
 
     /** A rule keeping every song by an artist. */
-    fun artistRule(serverId: String, artist: String) = SyncRule(
+    fun artistRule(serverId: String, artist: String, refreshPolicy: RefreshPolicy = RefreshPolicy.NEVER) = SyncRule(
         serverId = serverId,
         sourceId = artist(artist),
         title = artist,
         kind = SyncSourceKind.SYNC_SOURCE_KIND_ARTIST,
-        refreshPolicy = RefreshPolicy.NEVER,
+        refreshPolicy = refreshPolicy,
+    )
+
+    /** A rule keeping the songs of one of Clementine's playlists, as it changes. */
+    fun playlistRule(
+        serverId: String,
+        id: Int,
+        name: String,
+        refreshPolicy: RefreshPolicy = RefreshPolicy.ON_CONNECT,
+    ) = SyncRule(
+        serverId = serverId,
+        sourceId = playlist(id),
+        title = name,
+        kind = SyncSourceKind.SYNC_SOURCE_KIND_PLAYLIST,
+        refreshPolicy = refreshPolicy,
     )
 
     /**

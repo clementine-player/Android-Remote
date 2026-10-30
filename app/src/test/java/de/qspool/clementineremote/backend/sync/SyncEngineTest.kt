@@ -108,10 +108,14 @@ class SyncEngineTest {
         store.close()
     }
 
-    private fun rule(sourceId: String, limitItems: Int = 0) = store.addRule(
+    private fun rule(
+        sourceId: String,
+        limitItems: Int = 0,
+        refreshPolicy: RefreshPolicy = RefreshPolicy.ON_CONNECT,
+    ) = store.addRule(
         SyncRule(
             serverId = SERVER, sourceId = sourceId, title = sourceId, kind = SyncSourceKind.SYNC_SOURCE_KIND_ALBUM,
-            refreshPolicy = RefreshPolicy.NEVER, limitItems = limitItems,
+            refreshPolicy = refreshPolicy, limitItems = limitItems,
         )
     )
 
@@ -178,6 +182,25 @@ class SyncEngineTest {
         assertEquals("2", store.item(SERVER, "b")!!.version)
         assertEquals("b 2", String(storage.files["Synced/Pixies/Doolittle/01 b.flac"]!!))
         assertEquals(2, storage.files.size)
+    }
+
+    @Test
+    fun aRuleKeptAsItIsSyncsOnceUntilItHasItsSongs() {
+        val album = rule("library/album/Pixies/Doolittle", refreshPolicy = RefreshPolicy.NEVER)
+        // The first sync fails, so the next one asks again.
+        assertTrue(engine.sync(clementine).rules[album] is RuleResult.Failed)
+
+        manifest("library/album/Pixies/Doolittle", song("a"))
+        assertEquals(RuleResult.Synced(1, 1, 0), engine.sync(clementine).rules[album])
+
+        // Once it has its songs, it isn't asked for them again, and keeps them.
+        manifest("library/album/Pixies/Doolittle", song("a"), song("b", title = "Tame"))
+        clementine.requests.clear()
+        val result = engine.sync(clementine)
+        assertNull(result.rules[album])
+        assertTrue(clementine.requests.isEmpty())
+        assertEquals(0, result.removed)
+        assertEquals(listOf("a"), store.ruleItems(album).map { it.itemKey })
     }
 
     @Test

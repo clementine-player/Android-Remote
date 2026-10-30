@@ -69,6 +69,9 @@ class SyncEngine(
         val serverId = connection.serverId
         val results = LinkedHashMap<Long, RuleResult>()
         for (rule in store.rules(serverId)) {
+            // A rule kept as it is has its songs once it has synced. The other policies refresh
+            // on every sync for now; intervals and listening come later.
+            if (rule.refreshPolicy == RefreshPolicy.NEVER && rule.lastSyncedAt > 0) continue
             results[rule.id] = try {
                 syncRule(connection, rule)
             } catch (e: IOException) {

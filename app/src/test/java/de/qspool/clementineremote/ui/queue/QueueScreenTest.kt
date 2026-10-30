@@ -20,13 +20,18 @@ import de.qspool.clementineremote.backend.Clementine
 import de.qspool.clementineremote.backend.RemoteRepository
 import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncSourceKind
 import de.qspool.clementineremote.backend.player.MyPlaylist
 import de.qspool.clementineremote.backend.player.MySong
+import de.qspool.clementineremote.backend.sync.RefreshPolicy
+import de.qspool.clementineremote.backend.sync.SyncRule
 import de.qspool.clementineremote.ui.theme.ClementineTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -220,5 +225,29 @@ class QueueScreenTest {
         state = viewModel.state.value
         assertEquals("Satie", state.shown?.name)
         assertNull(state.playingIndex)
+    }
+
+    @Test
+    fun viewModelKeepsThePlaylistShownOnThisPhone() {
+        val manager = App.Clementine.playlistManager
+        manager.addPlaylist(MyPlaylist().apply { id = 1; name = "Playlist 1"; isActive = true })
+        manager.addPlaylist(MyPlaylist().apply { id = 7; name = "Satie" })
+        val syncFrom = MutableStateFlow(RemoteRepository.Syncing())
+        val kept = mutableListOf<SyncRule>()
+        val viewModel = QueueViewModel(send = {}, syncFrom = syncFrom, keepRules = { kept += it })
+        viewModel.show(PlaylistTab(7, "Satie"))
+
+        // Not while Clementine doesn't sync.
+        assertNull(viewModel.keepPlaylist(RefreshPolicy.ON_CONNECT))
+        assertTrue(kept.isEmpty())
+
+        syncFrom.value = RemoteRepository.Syncing(supported = true, serverId = "studio", downloadsAllowed = true)
+        assertEquals("Satie", viewModel.keepPlaylist(RefreshPolicy.ON_CONNECT))
+        val rule = kept.single()
+        assertEquals("playlist/7", rule.sourceId)
+        assertEquals("Satie", rule.title)
+        assertEquals("studio", rule.serverId)
+        assertEquals(RefreshPolicy.ON_CONNECT, rule.refreshPolicy)
+        assertEquals(SyncSourceKind.SYNC_SOURCE_KIND_PLAYLIST, rule.kind)
     }
 }

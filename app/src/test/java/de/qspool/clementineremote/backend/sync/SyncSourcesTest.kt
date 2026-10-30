@@ -19,6 +19,19 @@ class SyncSourcesTest {
     }
 
     @Test
+    fun playlistsAreKeptUpToDateAndAlbumsAsTheyAre() {
+        val playlist = SyncSources.playlistRule("studio", 7, "Road trip")
+        assertEquals("playlist/7", playlist.sourceId)
+        assertEquals("Road trip", playlist.title)
+        assertEquals(RefreshPolicy.ON_CONNECT, playlist.refreshPolicy)
+        assertEquals(RefreshPolicy.NEVER, SyncSources.albumRule("studio", "Pixies", "Doolittle").refreshPolicy)
+        assertEquals(
+            RefreshPolicy.ON_CONNECT,
+            SyncSources.artistRule("studio", "Pixies", RefreshPolicy.ON_CONNECT).refreshPolicy,
+        )
+    }
+
+    @Test
     fun findsAlbumsByAlbumArtistOrArtist() {
         SQLiteDatabase.create(null).use { db ->
             db.execSQL("CREATE TABLE songs (artist TEXT, albumartist TEXT, album TEXT, genre TEXT)")

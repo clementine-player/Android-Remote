@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import de.qspool.clementineremote.R
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncSourceKind
 import de.qspool.clementineremote.backend.sync.KeptRule
+import de.qspool.clementineremote.backend.sync.RefreshPolicy
 import de.qspool.clementineremote.backend.sync.RuleResult
 import de.qspool.clementineremote.utils.Utilities
 
@@ -172,7 +173,9 @@ internal fun keptDetails(kept: KeptRule, running: Boolean): String = when (val r
         kept.songs == 0 && result == null && running -> stringResource(R.string.sync_preparing)
         kept.songs == 0 && result == null -> stringResource(R.string.sync_waiting)
         else -> listOf(
-            stringResource(R.string.sync_kept_as_it_is),
+            stringResource(
+                if (kept.rule.refreshPolicy == RefreshPolicy.NEVER) R.string.sync_kept_as_it_is else R.string.sync_every_connect
+            ),
             pluralStringResource(R.plurals.sync_songs_size, kept.songs, kept.songs, Utilities.humanReadableBytes(kept.bytes, true)),
         ).joinToString(" · ")
     }
