@@ -20,12 +20,12 @@ or the top frames if the app's code isn't on the stack (see signature()). Each G
 issue says which of Play's it holds, how often each crashed, on which versions and
 devices, and the stack trace of the latest report.
 
-Play puts R8's shortened names back with the mappings dev.yml and release.yml send it.
-When it hasn't, the names are put back here with the mapping of the commit the build
-was made from: from its release's GitHub release (release.yml attaches them), or for a
-development build, from the dev workflow's artifact while GitHub keeps it (retrace,
-from the SDK's command-line tools). Without one, the issue says the trace still has
-R8's names.
+Play puts R8's shortened names back with the mappings dev.yml and release.yml send
+it, but not always. When it hasn't, the names are put back here with the mapping of
+the build (retrace, from the SDK's command-line tools): from its GitHub release, which
+dev.yml and release.yml attach them to, or for an older development build, from the
+dev workflow's artifact while GitHub keeps it. Without one, the issue says the trace
+still has R8's names.
 
 The issues are found again by the signature in their description, so nothing is kept
 anywhere else. An issue someone closed is reopened when the crash comes back in a
@@ -292,35 +292,43 @@ def obfuscated(trace: str) -> bool:
 
 
 class Mappings:
-    """R8's mappings, by the commit the build was made from, fetched once each.
+    """R8's mappings, by the build they're from, fetched once each.
 
-    They come from the GitHub release of a release's tag, or from the dev workflow's
-    artifact for a development build.
+    A development build's is in its dev-<version code> pre-release, and a release's in
+    the GitHub release of its tag. Development builds from before their pre-releases had
+    them have it in the dev workflow's artifact
+    while GitHub keeps that.
     """
 
     def __init__(self, github: "GitHub | None", directory: str) -> None:
         self.github = github
         self.directory = Path(directory)
-        self.files: dict[str | None, Path | None] = {}
+        self.files: dict[tuple[int | None, str | None], Path | None] = {}
 
-    def get(self, sha: str | None) -> Path | None:
-        if sha not in self.files:
+    def get(self, report: Json) -> Path | None:
+        build = version_code(report), revision(report)
+        if build not in self.files:
             try:
-                self.files[sha] = self.fetch(sha)
+                self.files[build] = self.save(build, self.fetch(*build))
             except Exception as e:  # A missing mapping leaves the trace as Play has it.
-                print(f"No mapping for {sha}: {e}", file=sys.stderr)
-                self.files[sha] = None
-        return self.files[sha]
+                print(f"No mapping for {build}: {e}", file=sys.stderr)
+                self.files[build] = None
+        return self.files[build]
 
-    def fetch(self, sha: str | None) -> Path:
-        if not self.github or not sha:
+    def fetch(self, code: int | None, sha: str | None) -> bytes:
+        if not self.github:
             raise LookupError("can't look for one")
+        if code:
+            mapping = self.release_mapping(f"dev-{code}")
+            if mapping:
+                return mapping
+        if not sha:
+            raise LookupError("no release has it, and the report has no commit")
         for tag in self.github.get_list("/tags", per_page=100):
             if tag["commit"]["sha"] == sha and tag["name"].startswith("v"):
-                release = self.github.get(f"/releases/tags/{tag['name']}")
-                for asset in release["assets"]:
-                    if asset["name"].endswith("-play-mapping.txt"):
-                        return self.save(sha, self.github.download(asset["url"]))
+                mapping = self.release_mapping(tag["name"])
+                if mapping:
+                    return mapping
         runs = self.github.get("/actions/workflows/dev.yml/runs", head_sha=sha)
         for run in runs["workflow_runs"]:
             artifacts = self.github.get(f"/actions/runs/{run['id']}/artifacts")
@@ -331,11 +339,26 @@ class Mappings:
                     )
                     mapping = bundle_mapping(data)
                     if mapping:
-                        return self.save(sha, mapping)
+                        return mapping
         raise LookupError("no release or artifact has it")
 
-    def save(self, sha: str, data: bytes) -> Path:
-        path = self.directory / f"{sha}-mapping.txt"
+    def release_mapping(self, tag: str) -> bytes | None:
+        """The Play build's mapping attached to a release, if there's one."""
+        assert self.github
+        try:
+            release = self.github.get(f"/releases/tags/{tag}")
+        except requests.HTTPError as e:
+            if e.response is not None and e.response.status_code == 404:
+                return None
+            raise
+        for asset in release["assets"]:
+            if asset["name"].endswith("-play-mapping.txt"):
+                return self.github.download(asset["url"])
+        return None
+
+    def save(self, build: tuple[int | None, str | None], data: bytes) -> Path:
+        code, sha = build
+        path = self.directory / f"{code}-{sha}-mapping.txt"
         path.write_bytes(data)
         return path
 
@@ -385,11 +408,11 @@ class Cluster:
 
 
 def clusters(
-    found: Iterable[PlayIssue], mapping: Callable[[str | None], Path | None]
+    found: Iterable[PlayIssue], mapping: Callable[[Json], Path | None]
 ) -> list[Cluster]:
     """Play's issues grouped by the crash in their latest report's trace.
 
-    mapping gives the R8 mapping of a build, by its commit.
+    mapping gives the R8 mapping of the build a report came from.
     """
     grouped: dict[str, Cluster] = {}
     for issue, reports in found:
@@ -397,7 +420,7 @@ def clusters(
             continue
         latest = reports[0]
         raw = latest.get("reportText", "")
-        readable = retrace(raw, mapping(revision(latest))) if obfuscated(raw) else raw
+        readable = retrace(raw, mapping(latest)) if obfuscated(raw) else raw
         trace = scrub(readable or raw)
         sig = signature(trace)
         cluster = grouped.setdefault(
