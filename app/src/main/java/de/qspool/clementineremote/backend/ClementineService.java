@@ -53,6 +53,8 @@ import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.streaming.Renderer;
 import de.qspool.clementineremote.backend.streaming.ThisRenderer;
+import de.qspool.clementineremote.backend.sync.PhonePlayer;
+import de.qspool.clementineremote.backend.sync.PlayFrom;
 import de.qspool.clementineremote.backend.sync.Syncer;
 import de.qspool.clementineremote.utils.Utilities;
 
@@ -212,6 +214,14 @@ public class ClementineService extends Service {
                                         ClementineMessage clementineMessage) {
                                     GlobalSearchManager.getInstance().parseClementineMessage(
                                             clementineMessage);
+                                    if (clementineMessage.getMessageType() == MsgType.PLAY) {
+                                        // Clementine started playing, such as a song from the
+                                        // library: the app plays from it again, pausing the
+                                        // phone, so the player controls what's playing.
+                                        ContextCompat.getMainExecutor(ClementineService.this).execute(
+                                                () -> PhonePlayer.INSTANCE.playFrom(
+                                                        ClementineService.this, PlayFrom.CLEMENTINE));
+                                    }
                                 }
                             });
 
