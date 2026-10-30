@@ -504,6 +504,12 @@
     <string name="sync_keeping">Keeping %s on this phone</string>
     <!-- Something kept on the phone, while Clementine makes the list of its songs. -->
     <string name="sync_preparing">Preparing…</string>
+    <!-- Something kept on the phone, while its songs download from Clementine: how many have, of
+         how many there are to download, such as "Downloading 12 of 140 songs…". -->
+    <plurals name="sync_downloading">
+        <item quantity="one">Downloading %1$d of %2$d song…</item>
+        <item quantity="other">Downloading %1$d of %2$d songs…</item>
+    </plurals>
     <!-- Something kept on the phone that hasn't synced yet, because Clementine isn't reachable. -->
     <string name="sync_waiting">Waiting for Clementine</string>
     <!-- How often something kept on the phone is updated from Clementine, short: never, so it
