@@ -257,6 +257,16 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
         // Disconnect socket
         closeSocket();
 
+        // Only the connection's own thread can stop its looper. Off it, as when reconnecting
+        // fails on the thread reading from Clementine, the connection's thread closes it.
+        if (Looper.myLooper() != mHandler.getLooper()) {
+            Message msg = Message.obtain();
+            msg.obj = clementineMessage;
+            msg.arg1 = PROCESS_PROTOC;
+            mHandler.sendMessage(msg);
+            return;
+        }
+
         sendUiMessage(clementineMessage);
 
         try {
