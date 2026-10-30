@@ -13,11 +13,10 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Resp
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseBrowseAdd
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseClementineInfo
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseOutputs
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSmartPlaylists
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSyncManifest
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncSourceKind
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncSource
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSyncSources
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ServerFeature
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SmartPlaylist
 import de.qspool.clementineremote.backend.streaming.ThisRenderer
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseCurrentMetadata
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseUpdateTrackPosition
@@ -234,6 +233,27 @@ class RemoteRepositoryTest {
     }
 
     @Test
+    fun listsClementinesSmartPlaylists() {
+        // Without syncing: playing them only needs Clementine to have them.
+        receive(message(MsgType.INFO).setResponseClementineInfo(
+            ResponseClementineInfo.newBuilder().setVersion("1.5")
+                .addFeatures(ServerFeature.SERVER_FEATURE_SMART_PLAYLISTS)))
+        assertFalse(RemoteRepository.syncing.value.supported)
+        receive(message(MsgType.SMART_PLAYLISTS).setResponseSmartPlaylists(
+            ResponseSmartPlaylists.newBuilder()
+                .addSmartPlaylists(SmartPlaylist.newBuilder().setId("smart/library/0b6e").setName("Newest tracks"))
+                .addSmartPlaylists(SmartPlaylist.newBuilder().setId("smart/library/7d21").setName("Dynamic random mix"))))
+        assertEquals(
+            listOf("Newest tracks", "Dynamic random mix"),
+            RemoteRepository.smartPlaylists.value.map { it.name })
+
+        // Asked for again on each connection, and none until Clementine answers.
+        receive(message(MsgType.INFO).setResponseClementineInfo(
+            ResponseClementineInfo.newBuilder().setVersion("1.5")))
+        assertEquals(emptyList<SmartPlaylist>(), RemoteRepository.smartPlaylists.value)
+    }
+
+    @Test
     fun followsWhetherSongsCanBeSynced() {
         val received = mutableListOf<ResponseSyncManifest>()
         val collecting = CoroutineScope(Dispatchers.Unconfined).launch {
@@ -250,15 +270,6 @@ class RemoteRepositoryTest {
             receive(message(MsgType.SYNC_MANIFEST).setResponseSyncManifest(
                 ResponseSyncManifest.newBuilder().setSourceId("playlist/1")))
             assertEquals(listOf("playlist/1"), received.map { it.sourceId })
-
-            // Its smart playlists, without its playlists, which come with the queue.
-            receive(message(MsgType.SYNC_SOURCES).setResponseSyncSources(
-                ResponseSyncSources.newBuilder()
-                    .addSources(SyncSource.newBuilder().setSourceId("playlist/1").setTitle("Party")
-                        .setKind(SyncSourceKind.SYNC_SOURCE_KIND_PLAYLIST))
-                    .addSources(SyncSource.newBuilder().setSourceId("smart/library/0b6e").setTitle("Newest tracks")
-                        .setKind(SyncSourceKind.SYNC_SOURCE_KIND_SMART_PLAYLIST))))
-            assertEquals(listOf("Newest tracks"), RemoteRepository.smartPlaylists.value.map { it.title })
 
             // Not while Clementine doesn't allow downloads.
             receive(message(MsgType.INFO).setResponseClementineInfo(

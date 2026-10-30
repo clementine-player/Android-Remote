@@ -11,10 +11,10 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgT
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.OutputState
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseBrowse
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseBrowseAdd
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSmartPlaylistAdd
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSyncManifest
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ServerFeature
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncSource
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncSourceKind
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SmartPlaylist
 import de.qspool.clementineremote.backend.streaming.ThisRenderer
 import de.qspool.clementineremote.backend.player.MySong
 import kotlinx.coroutines.channels.BufferOverflow
@@ -157,14 +157,24 @@ object RemoteRepository {
         onBufferOverflow = BufferOverflow.DROP_OLDEST,
     )
 
-    private val _smartPlaylists = MutableStateFlow<List<SyncSource>>(emptyList())
+    private val _smartPlaylists = MutableStateFlow<List<SmartPlaylist>>(emptyList())
 
     /**
-     * Clementine's smart playlists, which can be kept on this phone: asked for on each INFO when
-     * it syncs, and empty until it answers.
+     * Clementine's smart playlists, which can be played, and kept on this phone when it syncs:
+     * asked for on each INFO when Clementine has them (SERVER_FEATURE_SMART_PLAYLISTS), and empty
+     * until it answers.
      */
     @JvmStatic
-    val smartPlaylists: StateFlow<List<SyncSource>> = _smartPlaylists.asStateFlow()
+    val smartPlaylists: StateFlow<List<SmartPlaylist>> = _smartPlaylists.asStateFlow()
+
+    private val _smartPlaylistAddResults = MutableSharedFlow<ResponseSmartPlaylistAdd>(
+        extraBufferCapacity = 16,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST,
+    )
+
+    /** How putting smart playlists on the playlist went: Clementine's SMART_PLAYLIST_ADD_RESULTs. */
+    @JvmStatic
+    val smartPlaylistAddResults: SharedFlow<ResponseSmartPlaylistAdd> = _smartPlaylistAddResults.asSharedFlow()
 
     /** Clementine's answers to REQUEST_SYNC_MANIFEST, in the order they came. */
     @JvmStatic
@@ -237,16 +247,16 @@ object RemoteRepository {
                     downloadsAllowed = info.allowDownloads,
                 )
                 _smartPlaylists.value = emptyList()
-                if (_syncing.value.supported) {
-                    send(ClementineMessage.getMessage(MsgType.REQUEST_SYNC_SOURCES))
+                if (ServerFeature.SERVER_FEATURE_SMART_PLAYLISTS in info.featuresList) {
+                    send(ClementineMessage.getMessage(MsgType.REQUEST_SMART_PLAYLISTS))
                 }
                 refresh()
             }
             MsgType.BROWSE -> _browseMessages.tryEmit(
                 BrowseMessage.Browse(_browsing.value.connection, message.message.responseBrowse))
             MsgType.SYNC_MANIFEST -> _syncManifests.tryEmit(message.message.responseSyncManifest)
-            MsgType.SYNC_SOURCES -> _smartPlaylists.value = message.message.responseSyncSources.sourcesList
-                .filter { it.kind == SyncSourceKind.SYNC_SOURCE_KIND_SMART_PLAYLIST }
+            MsgType.SMART_PLAYLIST_ADD_RESULT -> _smartPlaylistAddResults.tryEmit(message.message.responseSmartPlaylistAdd)
+            MsgType.SMART_PLAYLISTS -> _smartPlaylists.value = message.message.responseSmartPlaylists.smartPlaylistsList
             MsgType.BROWSE_ADD_RESULT -> _browseMessages.tryEmit(
                 BrowseMessage.AddResult(_browsing.value.connection, message.message.responseBrowseAdd))
             MsgType.OUTPUTS -> _outputs.value = _outputs.value.copy(
