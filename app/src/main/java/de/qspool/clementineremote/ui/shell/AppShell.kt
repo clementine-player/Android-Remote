@@ -154,6 +154,7 @@ fun AppShell(shell: ShellViewModel, actions: ShellActions) {
     val player: PlayerViewModel = viewModel()
     val queue: QueueViewModel = viewModel()
     val nowPlaying by player.nowPlaying.collectAsStateWithLifecycle()
+    val onPhone by player.onPhone.collectAsStateWithLifecycle()
     var connectionOpen by rememberSaveable { mutableStateOf(false) }
     // The song details sheet, and whether it shows the lyrics; null while closed.
     var details by rememberSaveable { mutableStateOf<Boolean?>(null) }
@@ -223,15 +224,15 @@ fun AppShell(shell: ShellViewModel, actions: ShellActions) {
                         onConnect = actions::onConnect,
                     )
                 }
-                // Clementine's song; without Clementine, the phone's own player plays.
-                if (nowPlaying.song != null && !shell.offline) {
+                // Clementine's song, or the phone's while songs kept on it play.
+                if (nowPlaying.song != null && (!shell.offline || onPhone)) {
                     MiniPlayer(
                         nowPlaying,
                         onOpen = { shell.playerOpen = true },
                         onPlayPause = player::playPause,
                         onNext = player::next,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
-                        outputs = outputs,
+                        outputs = if (onPhone) RemoteRepository.Outputs() else outputs,
                         onOutputs = { outputsOpen = true },
                         // Only while it's in sight, with nothing over it.
                         hints = !shell.playerOpen && !connectionOpen && !outputsOpen &&
@@ -259,8 +260,13 @@ fun AppShell(shell: ShellViewModel, actions: ShellActions) {
                         }
 
                         override fun onQueue() {
-                            queue.showPlaying()
-                            shell.destination = Destination.QUEUE
+                            // The phone plays from what's kept on it, not Clementine's queue.
+                            if (onPhone) {
+                                shell.destination = Destination.DOWNLOADS
+                            } else {
+                                queue.showPlaying()
+                                shell.destination = Destination.QUEUE
+                            }
                             shell.playerOpen = false
                         }
 

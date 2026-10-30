@@ -70,6 +70,7 @@ import de.qspool.clementineremote.backend.RemoteRepository.NowPlaying
 import de.qspool.clementineremote.ui.shell.Fold
 import de.qspool.clementineremote.ui.shell.OutputButton
 import de.qspool.clementineremote.ui.shell.foldAcross
+import de.qspool.clementineremote.ui.shell.isTablet
 import de.qspool.clementineremote.ui.shell.outputIcon
 import de.qspool.clementineremote.ui.shell.switchable
 import de.qspool.clementineremote.backend.player.MySong
@@ -109,12 +110,15 @@ fun PlayerScreen(actions: PlayerActions, viewModel: PlayerViewModel = viewModel(
         toast?.cancel()
         toast = Toast.makeText(context, text, Toast.LENGTH_SHORT).apply { show() }
     }
-    val lastFm = remember { viewModel.lastFm() }
-    val outputs by RemoteRepository.outputs.collectAsStateWithLifecycle()
+    // Following the phone's own player, the player has only what it can do.
+    val onPhone by viewModel.onPhone.collectAsStateWithLifecycle()
+    val lastFm = remember { viewModel.lastFm() } && !onPhone
+    val clementineOutputs by RemoteRepository.outputs.collectAsStateWithLifecycle()
+    val outputs = if (onPhone) RemoteRepository.Outputs() else clementineOutputs
     // Only said when it isn't Clementine's own computer.
     val playingOn = outputs.active?.takeIf { it.id != RemoteRepository.LOCAL_OUTPUT }
     // Playing on this phone, the volume is the phone's own, as with the volume keys.
-    val playingHere = outputs.active?.isThisPhone == true
+    val playingHere = onPhone || outputs.active?.isThisPhone == true
     val phoneVolume by rememberPhoneVolume()
     PlayerContent(
         nowPlaying,
@@ -130,6 +134,7 @@ fun PlayerScreen(actions: PlayerActions, viewModel: PlayerViewModel = viewModel(
             viewModel::setVolume
         },
         volume = if (playingHere) phoneVolume else nowPlaying.volume,
+        onPhone = onPhone,
         onStop = viewModel::stop,
         onLove = {
             viewModel.love()
@@ -144,8 +149,10 @@ fun PlayerScreen(actions: PlayerActions, viewModel: PlayerViewModel = viewModel(
                 nowPlaying,
                 onPlayPause = viewModel::playPause,
                 onStopAfterCurrent = {
-                    viewModel.stopAfterCurrent()
-                    show(R.string.player_stop_after_current)
+                    if (!onPhone) {
+                        viewModel.stopAfterCurrent()
+                        show(R.string.player_stop_after_current)
+                    }
                 },
                 onPrevious = viewModel::previous,
                 onNext = viewModel::next,
@@ -175,12 +182,18 @@ internal fun PlayerContent(
     volume: Int = nowPlaying.volume,
     /** Where Clementine can play, for the output button. */
     outputs: RemoteRepository.Outputs = RemoteRepository.Outputs(),
+    /**
+     * Whether it's songs kept on this phone, which have no details or lyrics to show and can't be
+     * downloaded.
+     */
+    onPhone: Boolean = false,
 ) {
     Column(modifier.fillMaxSize().safeDrawingPadding().testTag("player")) {
         var bounds by remember { mutableStateOf<Rect?>(null) }
         val fold = foldAcross(bounds)
+        val showLyrics = { if (!onPhone) actions.onDetails(lyrics = true) }
         val topRow = @Composable {
-            TopRow(playingFrom, playingOn, lastFm, actions::onCollapse, actions::onOutputs, onStop, onBan)
+            TopRow(playingFrom, playingOn, onPhone, lastFm, actions::onCollapse, actions::onOutputs, onStop, onBan)
         }
         // Half-open like a book, the top row goes beside the artwork with the rest, so that what's
         // playing isn't on the fold.
@@ -204,14 +217,14 @@ internal fun PlayerContent(
                 }
                 SeekBar(nowPlaying, onSeek, Modifier.padding(horizontal = 24.dp))
                 controls()
-                BottomRow(actions, volume, onVolume, outputs)
+                BottomRow(actions, volume, onVolume, outputs, onPhone)
             }
             if (fold is Fold.Vertical) {
                 // Half-open like a book: the artwork on one side of the fold, the rest on the other.
                 Row(Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
                     Box(Modifier.width(fold.before).fillMaxHeight(), contentAlignment = Alignment.Center) {
                         Artwork(
-                            song, { actions.onDetails(lyrics = true) },
+                            song, showLyrics,
                             Modifier.padding(24.dp).aspectRatio(1f),
                         )
                     }
@@ -229,7 +242,7 @@ internal fun PlayerContent(
                 Column(Modifier.fillMaxSize()) {
                     Box(Modifier.height(fold.before).fillMaxWidth(), contentAlignment = Alignment.Center) {
                         Artwork(
-                            song, { actions.onDetails(lyrics = true) },
+                            song, showLyrics,
                             Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
                                 .aspectRatio(1f, matchHeightConstraintsFirst = true),
                         )
@@ -248,7 +261,7 @@ internal fun PlayerContent(
                     .coerceAtLeast(0.dp)
                 Row(Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
                     Artwork(
-                        song, { actions.onDetails(lyrics = true) },
+                        song, showLyrics,
                         Modifier.padding(start = 24.dp, top = 8.dp, bottom = 8.dp).size(artworkSize),
                     )
                     Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) { below() }
@@ -256,7 +269,7 @@ internal fun PlayerContent(
             } else {
                 Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
                     Artwork(
-                        song, { actions.onDetails(lyrics = true) },
+                        song, showLyrics,
                         Modifier.padding(start = 24.dp, end = 24.dp, top = 12.dp)
                             .weight(1f, fill = false)
                             .aspectRatio(1f, matchHeightConstraintsFirst = true)
@@ -276,6 +289,7 @@ internal fun PlayerContent(
 private fun TopRow(
     playingFrom: String?,
     playingOn: RemoteRepository.Output?,
+    onPhone: Boolean,
     lastFm: Boolean,
     onCollapse: () -> Unit,
     onOutputs: () -> Unit,
@@ -300,6 +314,28 @@ private fun TopRow(
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.testTag("playingFrom"),
                 )
+            }
+            if (onPhone) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    val tablet = isTablet()
+                    Icon(
+                        painterResource(if (tablet) R.drawable.ic_tablet else R.drawable.ic_smartphone),
+                        null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(16.dp),
+                    )
+                    Text(
+                        stringResource(if (tablet) R.string.sync_playing_on_this_tablet else R.string.sync_playing_on_this_phone),
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.testTag("playingOnPhone"),
+                    )
+                }
             }
             if (playingOn != null) {
                 Row(
@@ -379,14 +415,22 @@ private fun LoveButton(song: MySong, onLove: () -> Unit) {
 }
 
 @Composable
-private fun BottomRow(actions: PlayerActions, volume: Int, onVolume: (Int) -> Unit, outputs: RemoteRepository.Outputs) {
+private fun BottomRow(
+    actions: PlayerActions,
+    volume: Int,
+    onVolume: (Int) -> Unit,
+    outputs: RemoteRepository.Outputs,
+    onPhone: Boolean,
+) {
     Row(
         Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        IconButton(onClick = { actions.onDetails(lyrics = false) }, modifier = Modifier.testTag("btnDetails")) {
-            Icon(painterResource(R.drawable.ic_lyrics), stringResource(R.string.player_details))
+        if (!onPhone) {
+            IconButton(onClick = { actions.onDetails(lyrics = false) }, modifier = Modifier.testTag("btnDetails")) {
+                Icon(painterResource(R.drawable.ic_lyrics), stringResource(R.string.player_details))
+            }
         }
         if (outputs.switchable) {
             OutputButton(outputs, actions::onOutputs)
@@ -395,8 +439,10 @@ private fun BottomRow(actions: PlayerActions, volume: Int, onVolume: (Int) -> Un
         IconButton(onClick = actions::onQueue, modifier = Modifier.testTag("btnQueue")) {
             Icon(painterResource(R.drawable.ic_queue_music), stringResource(R.string.nav_queue))
         }
-        IconButton(onClick = actions::onDownload, modifier = Modifier.testTag("btnDownload")) {
-            Icon(painterResource(R.drawable.ic_download), stringResource(R.string.player_download_song))
+        if (!onPhone) {
+            IconButton(onClick = actions::onDownload, modifier = Modifier.testTag("btnDownload")) {
+                Icon(painterResource(R.drawable.ic_download), stringResource(R.string.player_download_song))
+            }
         }
     }
 }
