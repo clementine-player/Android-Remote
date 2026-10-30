@@ -21,6 +21,8 @@ on:
       - fastlane/metadata/android/en-US/*.txt
       - fastlane/metadata/android/en-US/images/**
       - scripts/play_listing.py
+      - pyproject.toml
+      - uv.lock
       - .github/workflows/play-listing.yml
   workflow_dispatch:
 
@@ -43,13 +45,11 @@ jobs:
     runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-python@v7
-        with:
-          python-version: "3.13"
-      - run: pip install google-api-python-client google-auth pillow
+      # The scripts' dependencies are in pyproject.toml and uv.lock.
+      - uses: astral-sh/setup-uv@v10.2.0
 
       - name: Check the listing
-        run: scripts/play_listing.py --check
+        run: uv run scripts/play_listing.py --check
 
       - uses: google-github-actions/auth@v3
         # Workload Identity Federation admits master alone.
@@ -60,4 +60,4 @@ jobs:
 
       - name: Update the listing on Google Play
         if: github.ref == 'refs/heads/master'
-        run: scripts/play_listing.py
+        run: uv run scripts/play_listing.py

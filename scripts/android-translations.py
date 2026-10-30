@@ -1,9 +1,9 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run
 """Helps .github/workflows/translations.yml pull the app's translations from Transifex.
 
-    scripts/android-translations.py count > counts      # translated strings in each language
-    scripts/android-translations.py merge REVIEWED_RES  # add strings only REVIEWED_RES has
-    scripts/android-translations.py check counts        # fail if a language lost many
+    uv run scripts/android-translations.py count > counts      # translated strings in each language
+    uv run scripts/android-translations.py merge REVIEWED_RES  # add strings only REVIEWED_RES has
+    uv run scripts/android-translations.py check counts        # fail if a language lost many
 
 For Android files, Transifex's onlytranslated mode leaves reviewed translations out, and
 onlyreviewed leaves out those not reviewed yet, so the workflow pulls both: the reviewed

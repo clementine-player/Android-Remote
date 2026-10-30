@@ -165,11 +165,8 @@ jobs:
           name: store-screenshots
           path: ${{ runner.temp }}/taken
 
-      - uses: actions/setup-python@v7
-        if: steps.setup.outputs.cloud == 'true'
-        with:
-          python-version: "3.13"
-      - run: pip install google-api-python-client google-auth pillow
+      # The scripts' dependencies are in pyproject.toml and uv.lock.
+      - uses: astral-sh/setup-uv@v10.2.0
         if: steps.setup.outputs.cloud == 'true'
 
       # From the last release's, so a screen that looks the same stays the same file, and when
@@ -185,7 +182,7 @@ jobs:
             git checkout "$LAST" -- "$shots"
           fi
           if [ -n "$TAKEN" ]; then
-            scripts/store_screenshots.py "$TAKEN"
+            uv run scripts/store_screenshots.py "$TAKEN"
           else
             echo "::warning::The screenshots weren't taken, so this release keeps ${LAST:-no release}'s."
           fi
@@ -352,5 +349,5 @@ jobs:
         if: steps.setup.outputs.cloud == 'true'
         run: |
           # Publishing again checked out the tag: the listing is the tag's, the script this run's.
-          git checkout "$GITHUB_SHA" -- scripts/play_listing.py
-          scripts/play_listing.py
+          git checkout "$GITHUB_SHA" -- scripts/play_listing.py pyproject.toml uv.lock
+          uv run scripts/play_listing.py
