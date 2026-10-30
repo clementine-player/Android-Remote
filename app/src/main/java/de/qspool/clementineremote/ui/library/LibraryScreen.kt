@@ -61,8 +61,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.qspool.clementineremote.R
 import de.qspool.clementineremote.backend.AddAction
 import de.qspool.clementineremote.backend.database.SongSelectItem
-import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncSource
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SmartPlaylist
 import de.qspool.clementineremote.backend.sync.RefreshPolicy
+import de.qspool.clementineremote.ui.browse.AddMenu
 import de.qspool.clementineremote.ui.browse.BrowseItems
 import de.qspool.clementineremote.ui.browse.BrowseLevel
 import de.qspool.clementineremote.ui.browse.BrowseSelectionBar
@@ -90,7 +91,7 @@ fun LibraryScreen(viewModel: LibraryViewModel) {
     val resources = LocalResources.current
     // The item Keep on this phone was chosen for, while the sheet asks how.
     var keeping by remember { mutableStateOf<SongSelectItem?>(null) }
-    var keepingSmart by remember { mutableStateOf<SyncSource?>(null) }
+    var keepingSmart by remember { mutableStateOf<SmartPlaylist?>(null) }
     LaunchedEffect(viewModel) {
         viewModel.messages.collect { message ->
             val text = when (message) {
@@ -100,6 +101,7 @@ fun LibraryScreen(viewModel: LibraryViewModel) {
                     resources.getString(R.string.library_sync_error) + ": " +
                         resources.getString(message.reason)
                 is LibraryViewModel.Message.Kept -> resources.getString(R.string.sync_keeping, message.title)
+                is LibraryViewModel.Message.SmartPlaylistAdded -> resources.getString(message.text)
             }
             Toast.makeText(context, text, Toast.LENGTH_LONG).show()
         }
@@ -121,8 +123,9 @@ fun LibraryScreen(viewModel: LibraryViewModel) {
         canPlayNext = canPlayNext,
         canKeep = { syncFrom.available && viewModel.canKeep(it) },
         onKeep = { keeping = it },
-        smartPlaylists = if (syncFrom.available) smartPlaylists else emptyList(),
-        onKeepSmartPlaylist = { keepingSmart = it },
+        smartPlaylists = smartPlaylists,
+        onPlaySmartPlaylist = viewModel::play,
+        onKeepSmartPlaylist = if (syncFrom.available) ({ keepingSmart = it }) else null,
     )
     keeping?.let { item ->
         KeepSheet(
@@ -135,7 +138,7 @@ fun LibraryScreen(viewModel: LibraryViewModel) {
     }
     keepingSmart?.let { smartPlaylist ->
         KeepSheet(
-            smartPlaylist.title,
+            smartPlaylist.name,
             // Made again each time, so it follows what it picks, such as songs added lately.
             RefreshPolicy.ON_CONNECT,
             onKeep = { viewModel.keep(smartPlaylist, it) },
@@ -167,9 +170,10 @@ internal fun LibraryContent(
     canPlayNext: Boolean = false,
     canKeep: (SongSelectItem) -> Boolean = { false },
     onKeep: (SongSelectItem) -> Unit = {},
-    /** Clementine's smart playlists, shown at the top to keep on this phone. */
-    smartPlaylists: List<SyncSource> = emptyList(),
-    onKeepSmartPlaylist: (SyncSource) -> Unit = {},
+    /** Clementine's smart playlists, shown at the top to play, and keep on this phone. */
+    smartPlaylists: List<SmartPlaylist> = emptyList(),
+    onPlaySmartPlaylist: (SmartPlaylist, AddAction) -> Unit = { _, _ -> },
+    onKeepSmartPlaylist: ((SmartPlaylist) -> Unit)? = null,
 ) {
     val shown = state.shown
     // Whether the smart playlists are listed, as the folder holding them is opened.
@@ -248,6 +252,8 @@ internal fun LibraryContent(
                                 smartPlaylists,
                                 open = smartPlaylistsOpen,
                                 onOpen = { smartPlaylistsOpen = it },
+                                canPlayNext = canPlayNext,
+                                onPlay = onPlaySmartPlaylist,
                                 onKeep = onKeepSmartPlaylist,
                             )
                         }
@@ -262,13 +268,17 @@ private fun Set<Int>.toggle(index: Int) = if (index in this) this - index else t
 
 /**
  * Clementine's smart playlists, as a folder at the top of the library, as Clementine shows them:
- * opened, it lists them, and tapping one keeps it on this phone.
+ * opened, it lists them. Tapping one plays it, or adds it if Clementine is playing, as tapping a
+ * song does; a long press offers the other ways to put it on the playlist and, with [onKeep],
+ * keeping it on this phone.
  */
 private fun LazyListScope.smartPlaylists(
-    smartPlaylists: List<SyncSource>,
+    smartPlaylists: List<SmartPlaylist>,
     open: Boolean,
     onOpen: (Boolean) -> Unit,
-    onKeep: (SyncSource) -> Unit,
+    canPlayNext: Boolean,
+    onPlay: (SmartPlaylist, AddAction) -> Unit,
+    onKeep: ((SmartPlaylist) -> Unit)?,
 ) {
     if (smartPlaylists.isEmpty()) {
         return
@@ -294,20 +304,49 @@ private fun LazyListScope.smartPlaylists(
         )
     }
     if (open) {
-        items(smartPlaylists, key = { "smart/${it.sourceId}" }) { smartPlaylist ->
-            ListItem(
-                headlineContent = { Text(smartPlaylist.title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                supportingContent = { Text(stringResource(R.string.sync_keep), maxLines = 1) },
-                leadingContent = { BrowseTile(R.drawable.ic_auto_awesome, playable = false) },
-                colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-                modifier = Modifier
-                    .padding(start = 16.dp)
-                    .clickable { onKeep(smartPlaylist) }
-                    .testTag("librarySmartPlaylist"),
-            )
+        items(smartPlaylists, key = { "smart/${it.id}" }) { smartPlaylist ->
+            SmartPlaylistRow(smartPlaylist, canPlayNext, onPlay, onKeep)
         }
     }
 }
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun SmartPlaylistRow(
+    smartPlaylist: SmartPlaylist,
+    canPlayNext: Boolean,
+    onPlay: (SmartPlaylist, AddAction) -> Unit,
+    onKeep: ((SmartPlaylist) -> Unit)?,
+) {
+    var menu by remember { mutableStateOf(false) }
+    Box {
+        ListItem(
+            headlineContent = { Text(smartPlaylist.name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+            leadingContent = { BrowseTile(R.drawable.ic_auto_awesome, playable = false) },
+            colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+            modifier = Modifier
+                .padding(start = 16.dp)
+                .combinedClickable(
+                    onClick = { onPlay(smartPlaylist, AddAction.PLAY_IF_STOPPED) },
+                    onLongClickLabel = stringResource(R.string.shell_more),
+                    onLongClick = { menu = true },
+                )
+                .testTag("librarySmartPlaylist"),
+        )
+        AddMenu(
+            menu,
+            onDismiss = { menu = false },
+            canPlayNext = canPlayNext,
+            onAdd = { onPlay(smartPlaylist, it) },
+            onKeep = onKeep?.let { keep -> { keep(smartPlaylist) } },
+            // Clementine puts a smart playlist on the playlist, or makes it dynamic: it can't
+            // queue one, or open it in a new playlist.
+            actions = SMART_PLAYLIST_ACTIONS,
+        )
+    }
+}
+
+private val SMART_PLAYLIST_ACTIONS = setOf(AddAction.PLAY_NOW, AddAction.PLAY_NEXT, AddAction.APPEND, AddAction.REPLACE)
 
 @Composable
 private fun Progress(status: LibraryStatus) {
