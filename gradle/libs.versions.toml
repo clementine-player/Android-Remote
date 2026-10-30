@@ -42,6 +42,13 @@ protoc = { module = "com.google.protobuf:protoc", version.ref = "protobuf" }
 jmdns = { module = "org.jmdns:jmdns", version.ref = "jmdns" }
 junit = { module = "junit:junit", version.ref = "junit" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+# The Android runtimes Robolectric's tests run on, which Gradle downloads and caches instead of
+# Robolectric fetching them from Maven Central on every run (app/build.gradle.kts). Their
+# versions are the ones the Robolectric version above asks for, in its DefaultSdkProvider: when
+# it's updated, a test names the jar it can't find.
+robolectric-sdk28 = { module = "org.robolectric:android-all-instrumented", version = "9-robolectric-4913185-2-i7" }
+robolectric-sdk30 = { module = "org.robolectric:android-all-instrumented", version = "11-robolectric-6757853-i7" }
+robolectric-sdk36 = { module = "org.robolectric:android-all-instrumented", version = "16-robolectric-13921718-i7" }
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidxTest" }
 androidx-test-core = { module = "androidx.test:core", version.ref = "androidxTest" }
 androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidxTestJunit" }

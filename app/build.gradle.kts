@@ -17,6 +17,27 @@ val keyProperties = Properties().apply {
 fun signingValue(env: String, prop: String): String? =
     System.getenv(env) ?: keyProperties.getProperty(prop)
 
+// The Android runtimes the unit tests run on in Robolectric: one for each SDK the tests ask for
+// (robolectric.properties, and @Config). Gradle downloads them, so they're in its cache, which
+// CI keeps; Robolectric then runs offline from this copy rather than fetching them from Maven
+// Central itself on every run, which it rate-limits.
+val robolectricRuntimes = listOf(
+    libs.robolectric.sdk28,
+    libs.robolectric.sdk30,
+    libs.robolectric.sdk36,
+).map { runtime ->
+    // A configuration each: they're versions of one module, of which a configuration keeps
+    // only the newest.
+    configurations.detachedConfiguration(dependencies.create(runtime.get())).apply {
+        isTransitive = false
+    }
+}
+val robolectricRuntimesDir = layout.buildDirectory.dir("robolectric-runtimes")
+val syncRobolectricRuntimes by tasks.registering(Sync::class) {
+    from(robolectricRuntimes)
+    into(robolectricRuntimesDir)
+}
+
 android {
     namespace = "de.qspool.clementineremote"
     compileSdk = 37
@@ -94,6 +115,12 @@ android {
     testOptions {
         unitTests.isIncludeAndroidResources = true
         unitTests.all { test ->
+            test.dependsOn(syncRobolectricRuntimes)
+            test.systemProperty("robolectric.offline", "true")
+            test.systemProperty(
+                "robolectric.dependency.dir",
+                robolectricRuntimesDir.get().asFile.absolutePath
+            )
             // Robolectric's Android 36 runtime reaches into JDK internals.
             test.jvmArgs("--add-exports=java.base/jdk.internal.access=ALL-UNNAMED",
                     "--add-opens=java.base/java.io=ALL-UNNAMED")
