@@ -90,6 +90,15 @@ class ConnectViewModel : ViewModel() {
         _progress.value = null
     }
 
+    private val _onPhone = MutableStateFlow(0)
+
+    /** How many songs are saved on this phone, to play without Clementine; 0 for none. */
+    val onPhone: StateFlow<Int> = _onPhone.asStateFlow()
+
+    fun setOnPhone(songs: Int) {
+        _onPhone.value = songs
+    }
+
     val isConnecting: Boolean
         get() = _progress.value != null
 }
