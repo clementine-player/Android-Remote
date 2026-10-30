@@ -3,6 +3,7 @@ package de.qspool.clementineremote.ui.library
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -35,10 +38,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
@@ -56,10 +61,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.qspool.clementineremote.R
 import de.qspool.clementineremote.backend.AddAction
 import de.qspool.clementineremote.backend.database.SongSelectItem
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncSource
 import de.qspool.clementineremote.backend.sync.RefreshPolicy
 import de.qspool.clementineremote.ui.browse.BrowseItems
 import de.qspool.clementineremote.ui.browse.BrowseLevel
 import de.qspool.clementineremote.ui.browse.BrowseSelectionBar
+import de.qspool.clementineremote.ui.browse.BrowseTile
 import de.qspool.clementineremote.ui.browse.ItemKind
 import de.qspool.clementineremote.ui.browse.rememberLevelListState
 import de.qspool.clementineremote.ui.downloads.KeepSheet
@@ -78,10 +85,12 @@ fun LibraryScreen(viewModel: LibraryViewModel) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val canPlayNext by viewModel.canPlayNext.collectAsStateWithLifecycle()
     val syncFrom by viewModel.syncFrom.collectAsStateWithLifecycle()
+    val smartPlaylists by viewModel.smartPlaylists.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val resources = LocalResources.current
     // The item Keep on this phone was chosen for, while the sheet asks how.
     var keeping by remember { mutableStateOf<SongSelectItem?>(null) }
+    var keepingSmart by remember { mutableStateOf<SyncSource?>(null) }
     LaunchedEffect(viewModel) {
         viewModel.messages.collect { message ->
             val text = when (message) {
@@ -112,6 +121,8 @@ fun LibraryScreen(viewModel: LibraryViewModel) {
         canPlayNext = canPlayNext,
         canKeep = { syncFrom.available && viewModel.canKeep(it) },
         onKeep = { keeping = it },
+        smartPlaylists = if (syncFrom.available) smartPlaylists else emptyList(),
+        onKeepSmartPlaylist = { keepingSmart = it },
     )
     keeping?.let { item ->
         KeepSheet(
@@ -120,6 +131,15 @@ fun LibraryScreen(viewModel: LibraryViewModel) {
             RefreshPolicy.NEVER,
             onKeep = { viewModel.keep(item, it) },
             onDismiss = { keeping = null },
+        )
+    }
+    keepingSmart?.let { smartPlaylist ->
+        KeepSheet(
+            smartPlaylist.title,
+            // Made again each time, so it follows what it picks, such as songs added lately.
+            RefreshPolicy.ON_CONNECT,
+            onKeep = { viewModel.keep(smartPlaylist, it) },
+            onDismiss = { keepingSmart = null },
         )
     }
 }
@@ -147,8 +167,13 @@ internal fun LibraryContent(
     canPlayNext: Boolean = false,
     canKeep: (SongSelectItem) -> Boolean = { false },
     onKeep: (SongSelectItem) -> Unit = {},
+    /** Clementine's smart playlists, shown at the top to keep on this phone. */
+    smartPlaylists: List<SyncSource> = emptyList(),
+    onKeepSmartPlaylist: (SyncSource) -> Unit = {},
 ) {
     val shown = state.shown
+    // Whether the smart playlists are listed, as the folder holding them is opened.
+    var smartPlaylistsOpen by rememberSaveable { mutableStateOf(false) }
     val search = state.search
     // Selected items, by their position in the level shown; cleared when another level shows.
     var selection by remember(state.levels.size, shown?.opened) { mutableStateOf(emptySet<Int>()) }
@@ -217,6 +242,16 @@ internal fun LibraryContent(
                     listState = listState,
                     canKeep = canKeep,
                     onKeep = onKeep,
+                    header = {
+                        if (shown.opened == null && selection.isEmpty()) {
+                            smartPlaylists(
+                                smartPlaylists,
+                                open = smartPlaylistsOpen,
+                                onOpen = { smartPlaylistsOpen = it },
+                                onKeep = onKeepSmartPlaylist,
+                            )
+                        }
+                    },
                 )
             }
         }
@@ -224,6 +259,55 @@ internal fun LibraryContent(
 }
 
 private fun Set<Int>.toggle(index: Int) = if (index in this) this - index else this + index
+
+/**
+ * Clementine's smart playlists, as a folder at the top of the library, as Clementine shows them:
+ * opened, it lists them, and tapping one keeps it on this phone.
+ */
+private fun LazyListScope.smartPlaylists(
+    smartPlaylists: List<SyncSource>,
+    open: Boolean,
+    onOpen: (Boolean) -> Unit,
+    onKeep: (SyncSource) -> Unit,
+) {
+    if (smartPlaylists.isEmpty()) {
+        return
+    }
+    item(key = "smartPlaylists") {
+        ListItem(
+            headlineContent = { Text(stringResource(R.string.library_smart_playlists)) },
+            supportingContent = {
+                Text(pluralStringResource(R.plurals.number_items, smartPlaylists.size, smartPlaylists.size))
+            },
+            leadingContent = { BrowseTile(R.drawable.ic_auto_awesome, playable = false) },
+            trailingContent = {
+                Icon(
+                    painterResource(R.drawable.ic_expand_more),
+                    contentDescription = null,
+                    modifier = Modifier.rotate(if (open) 180f else 0f),
+                )
+            },
+            colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+            modifier = Modifier
+                .clickable { onOpen(!open) }
+                .testTag("librarySmartPlaylists"),
+        )
+    }
+    if (open) {
+        items(smartPlaylists, key = { "smart/${it.sourceId}" }) { smartPlaylist ->
+            ListItem(
+                headlineContent = { Text(smartPlaylist.title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                supportingContent = { Text(stringResource(R.string.sync_keep), maxLines = 1) },
+                leadingContent = { BrowseTile(R.drawable.ic_auto_awesome, playable = false) },
+                colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                modifier = Modifier
+                    .padding(start = 16.dp)
+                    .clickable { onKeep(smartPlaylist) }
+                    .testTag("librarySmartPlaylist"),
+            )
+        }
+    }
+}
 
 @Composable
 private fun Progress(status: LibraryStatus) {
