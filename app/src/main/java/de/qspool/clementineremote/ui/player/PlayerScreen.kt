@@ -93,6 +93,9 @@ interface PlayerActions {
 
     /** Chooses where Clementine plays. */
     fun onOutputs() {}
+
+    /** Chooses whether the app plays from Clementine or this phone. */
+    fun onPlayFrom() {}
 }
 
 /**
@@ -112,6 +115,7 @@ fun PlayerScreen(actions: PlayerActions, viewModel: PlayerViewModel = viewModel(
     }
     // Following the phone's own player, the player has only what it can do.
     val onPhone by viewModel.onPhone.collectAsStateWithLifecycle()
+    val choices by viewModel.choices.collectAsStateWithLifecycle()
     val lastFm = remember { viewModel.lastFm() } && !onPhone
     val clementineOutputs by RemoteRepository.outputs.collectAsStateWithLifecycle()
     val outputs = if (onPhone) RemoteRepository.Outputs() else clementineOutputs
@@ -135,6 +139,7 @@ fun PlayerScreen(actions: PlayerActions, viewModel: PlayerViewModel = viewModel(
         },
         volume = if (playingHere) phoneVolume else nowPlaying.volume,
         onPhone = onPhone,
+        onPlayFrom = if (choices != null) actions::onPlayFrom else null,
         onStop = viewModel::stop,
         onLove = {
             viewModel.love()
@@ -187,13 +192,15 @@ internal fun PlayerContent(
      * downloaded.
      */
     onPhone: Boolean = false,
+    /** Chooses where the app plays from; null when there's no choice. */
+    onPlayFrom: (() -> Unit)? = null,
 ) {
     Column(modifier.fillMaxSize().safeDrawingPadding().testTag("player")) {
         var bounds by remember { mutableStateOf<Rect?>(null) }
         val fold = foldAcross(bounds)
         val showLyrics = { if (!onPhone) actions.onDetails(lyrics = true) }
         val topRow = @Composable {
-            TopRow(playingFrom, playingOn, onPhone, lastFm, actions::onCollapse, actions::onOutputs, onStop, onBan)
+            TopRow(playingFrom, playingOn, onPhone, lastFm, actions::onCollapse, actions::onOutputs, onPlayFrom, onStop, onBan)
         }
         // Half-open like a book, the top row goes beside the artwork with the rest, so that what's
         // playing isn't on the fold.
@@ -293,6 +300,7 @@ private fun TopRow(
     lastFm: Boolean,
     onCollapse: () -> Unit,
     onOutputs: () -> Unit,
+    onPlayFrom: (() -> Unit)?,
     onStop: () -> Unit,
     onBan: () -> Unit,
 ) {
@@ -300,7 +308,14 @@ private fun TopRow(
         IconButton(onClick = onCollapse, modifier = Modifier.testTag("btnCollapse")) {
             Icon(painterResource(R.drawable.ic_expand_more), stringResource(R.string.player_collapse))
         }
-        Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
+        // Where it plays from: tapping it switches, when there's a choice.
+        val playFromLabel = stringResource(R.string.sync_play_from)
+        Column(
+            Modifier.weight(1f).then(
+                if (onPlayFrom == null) Modifier else Modifier.clickable(onClickLabel = playFromLabel, onClick = onPlayFrom),
+            ),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
             if (!playingFrom.isNullOrBlank()) {
                 Text(
                     stringResource(R.string.player_playing_from),
@@ -366,6 +381,16 @@ private fun TopRow(
                 Icon(painterResource(R.drawable.ic_more_vert), stringResource(R.string.shell_more))
             }
             DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
+                if (onPlayFrom != null) {
+                    DropdownMenuItem(
+                        text = { Text(playFromLabel) },
+                        onClick = {
+                            open = false
+                            onPlayFrom()
+                        },
+                        modifier = Modifier.testTag("menuPlayFrom"),
+                    )
+                }
                 DropdownMenuItem(
                     text = { Text(stringResource(R.string.tasker_stop)) },
                     onClick = {
