@@ -72,8 +72,9 @@ private val LevelListStatesSaver = listSaver<MutableList<LazyListState>, Int>(
 
 /**
  * The items of a level: tapping one runs [onClick]. A long press offers the ways to put it on the
- * playlist ([onAdd]) and selecting it ([onToggle]); while items are selected, it selects or
- * deselects it instead. The list is tagged [tag], for tests.
+ * playlist ([onAdd]), keeping it on this phone ([onKeep], for items it [canKeep]) and selecting it
+ * ([onToggle]); while items are selected, it selects or deselects it instead. The list is tagged
+ * [tag], for tests.
  */
 @Composable
 internal fun BrowseItems(
@@ -85,6 +86,8 @@ internal fun BrowseItems(
     canPlayNext: Boolean,
     tag: String,
     listState: LazyListState = rememberLazyListState(),
+    canKeep: (SongSelectItem) -> Boolean = { false },
+    onKeep: (SongSelectItem) -> Unit = {},
 ) {
     LazyColumn(Modifier.fillMaxSize().testTag(tag), state = listState) {
         itemsIndexed(shown.items) { index, item ->
@@ -95,6 +98,11 @@ internal fun BrowseItems(
                 canPlayNext = canPlayNext,
                 onSelect = { onToggle(index) },
                 selecting = selection.isNotEmpty(),
+                onKeep = if (canKeep(item)) {
+                    { onKeep(item) }
+                } else {
+                    null
+                },
             )
         }
     }
@@ -102,8 +110,8 @@ internal fun BrowseItems(
 
 /**
  * An item of a level, of [kind]: tapping it runs [onClick]. A long press offers the ways to put
- * it on the playlist ([onAdd]) and, with [onSelect], selecting it; while [selecting], it runs
- * [onSelect] straight away.
+ * it on the playlist ([onAdd]) and, with [onKeep] and [onSelect], keeping it on this phone and
+ * selecting it; while [selecting], it runs [onSelect] straight away.
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -116,6 +124,7 @@ internal fun BrowseRow(
     canPlayNext: Boolean,
     onSelect: (() -> Unit)? = null,
     selecting: Boolean = false,
+    onKeep: (() -> Unit)? = null,
 ) {
     var menu by remember { mutableStateOf(false) }
     Box {
@@ -134,7 +143,7 @@ internal fun BrowseRow(
                 )
                 .semantics { selected = isSelected },
         )
-        AddMenu(menu, onDismiss = { menu = false }, canPlayNext = canPlayNext, onAdd = onAdd, onSelect = onSelect)
+        AddMenu(menu, onDismiss = { menu = false }, canPlayNext = canPlayNext, onAdd = onAdd, onSelect = onSelect, onKeep = onKeep)
     }
 }
 

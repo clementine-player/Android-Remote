@@ -24,7 +24,11 @@ import de.qspool.clementineremote.backend.database.SongSelectItem
 import de.qspool.clementineremote.backend.elements.DownloaderResult
 import de.qspool.clementineremote.backend.listener.OnLibraryDownloadListener
 import de.qspool.clementineremote.backend.pb.ClementineMessage
+import de.qspool.clementineremote.backend.RemoteRepository
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType
+import de.qspool.clementineremote.backend.sync.RefreshPolicy
+import de.qspool.clementineremote.backend.sync.SyncRule
+import de.qspool.clementineremote.backend.sync.SyncSources
 import de.qspool.clementineremote.ui.browse.BrowseLevel
 import de.qspool.clementineremote.ui.browse.ItemKind
 import de.qspool.clementineremote.ui.search.GROUP_ARTIST
@@ -39,6 +43,8 @@ import de.qspool.clementineremote.ui.search.toSongSelectItem
 import de.qspool.clementineremote.ui.theme.ClementineTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlin.coroutines.CoroutineContext
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -102,6 +108,8 @@ class LibraryScreenTest {
         sent: MutableList<ClementineMessage>,
         exists: Boolean = true,
         cleared: MutableList<Int> = mutableListOf(),
+        syncFrom: StateFlow<RemoteRepository.Syncing> = MutableStateFlow(RemoteRepository.Syncing()),
+        kept: MutableList<SyncRule> = mutableListOf(),
     ) = LibraryViewModel(
         send = { sent += it },
         newQuery = { TestQuery() },
@@ -111,6 +119,9 @@ class LibraryScreenTest {
         searchLibrary = { text -> open().use { librarySearchCandidates(it, text) } },
         searchDelay = 0,
         clearPlaylist = { cleared += it },
+        syncFrom = syncFrom,
+        keepRules = { kept += it },
+        albumsOf = { fields, values -> open().use { SyncSources.albums(it, fields, values) } },
     ).also { idle() }
 
     @Test
@@ -223,6 +234,74 @@ class LibraryScreenTest {
         assertEquals(
             listOf("Frédéric Chopin PLAY_NOW", "Frédéric Chopin PLAY_NEXT", "Frédéric Chopin NEW_PLAYLIST"),
             done)
+    }
+
+    @Test
+    fun keepsArtistsAndAlbumsOnThisPhone() {
+        val syncFrom = MutableStateFlow(RemoteRepository.Syncing(supported = true, serverId = "studio", downloadsAllowed = true))
+        val kept = mutableListOf<SyncRule>()
+        val library = viewModel(mutableListOf(), syncFrom = syncFrom, kept = kept)
+
+        val chopin = library.state.value.shown!!.items.first { it.listTitle == "Frédéric Chopin" }
+        assertTrue(library.canKeep(chopin))
+        library.keep(chopin)
+        idle()
+        library.open(chopin)
+        idle()
+        val album = library.state.value.shown!!.items.single()
+        assertTrue(library.canKeep(album))
+        library.keep(album)
+        idle()
+        library.open(album)
+        idle()
+        // Songs come later: the library on the phone doesn't have Clementine's ids for them.
+        assertFalse(library.canKeep(library.state.value.shown!!.items[0]))
+
+        assertEquals(
+            listOf(
+                "library/artist/Fr%C3%A9d%C3%A9ric%20Chopin",
+                "library/album/Fr%C3%A9d%C3%A9ric%20Chopin/Nocturnes%2C%20Op.%209",
+            ),
+            kept.map { it.sourceId })
+        assertEquals(listOf("Frédéric Chopin", "Nocturnes, Op. 9"), kept.map { it.title })
+        assertEquals(listOf("studio", "studio"), kept.map { it.serverId })
+        assertEquals(listOf(RefreshPolicy.NEVER, RefreshPolicy.NEVER), kept.map { it.refreshPolicy })
+
+        // Not while Clementine doesn't let the phone download.
+        syncFrom.value = syncFrom.value.copy(downloadsAllowed = false)
+        library.keep(album)
+        idle()
+        assertEquals(2, kept.size)
+    }
+
+    @Test
+    fun aLongPressOffersKeepingWhatCanBeKept() {
+        val artist = item("Frédéric Chopin", 0)
+        val kept = mutableListOf<String>()
+        var canKeep by mutableStateOf(false)
+        compose.setContent {
+            ClementineTheme(dynamicColor = false) {
+                LibraryContent(
+                    LibraryState(LibraryStatus.Ready, listOf(BrowseLevel(null, ItemKind.ARTIST, listOf(artist)))),
+                    onOpen = {},
+                    onBack = {},
+                    onSyncLibrary = {},
+                    onAdd = { _, _ -> },
+                    onDownload = {},
+                    canKeep = { canKeep },
+                    onKeep = { kept += it.listTitle },
+                )
+            }
+        }
+
+        compose.onNodeWithText("Frédéric Chopin").performTouchInput { longClick() }
+        compose.onNodeWithTag("addMenu_KEEP").assertDoesNotExist()
+        compose.onNodeWithTag("addMenu_PLAY_NOW").performClick()
+        canKeep = true
+        compose.onNodeWithText("Frédéric Chopin").performTouchInput { longClick() }
+        compose.onNodeWithText("Keep on this phone").performClick()
+
+        assertEquals(listOf("Frédéric Chopin"), kept)
     }
 
     @Test

@@ -430,4 +430,48 @@
         <item quantity="one">%d star</item>
         <item quantity="other">%d stars</item>
     </plurals>
+
+    <!-- Keeping music on the phone: synced from Clementine, kept up to date, and played without
+         it. The iOS app shows the same strings. -->
+    <!-- Music saved on the phone, as opposed to Clementine on the computer: the title of the tab's
+         screen, and where the music plays from. -->
+    <string name="sync_on_this_phone">On this phone</string>
+    <!-- The tab with the music saved on the phone, as opposed to Clementine on the computer. Keep it
+         short: it's a tab label, under an icon, beside four others. -->
+    <string name="sync_on_phone_tab">On phone</string>
+    <!-- The same tab on a tablet. Keep it short, as for "On phone". -->
+    <string name="sync_on_tablet_tab">On tablet</string>
+    <!-- Saves the music on the phone and keeps it up to date. -->
+    <string name="sync_keep">Keep on this phone</string>
+    <!-- Heading of the things you chose to keep on the phone. -->
+    <string name="sync_kept">Kept on this phone</string>
+    <!-- Shown for a moment after choosing Keep on this phone; the placeholder is an album or an
+         artist. -->
+    <string name="sync_keeping">Keeping %s on this phone</string>
+    <!-- Something kept on the phone, while Clementine makes the list of its songs. -->
+    <string name="sync_preparing">Preparing…</string>
+    <!-- Something kept on the phone that hasn't synced yet, because Clementine isn't reachable. -->
+    <string name="sync_waiting">Waiting for Clementine</string>
+    <!-- How often something kept on the phone is updated from Clementine, short: never, so it
+         keeps the songs it has. -->
+    <string name="sync_kept_as_it_is">Kept as it is</string>
+    <!-- How much of something kept is on the phone: the number of songs, and their size, such as
+         "180 MB". -->
+    <plurals name="sync_songs_size">
+        <item quantity="one">%1$d song, %2$s</item>
+        <item quantity="other">%1$d songs, %2$s</item>
+    </plurals>
+    <!-- Menu item: syncs what's kept on the phone with Clementine now. -->
+    <string name="sync_now">Sync now</string>
+    <!-- Menu item on something kept on the phone; asks first. -->
+    <string name="sync_remove">Remove from this phone…</string>
+    <!-- Asks before removing something kept on the phone; the placeholder is its name. -->
+    <string name="sync_remove_confirm">Remove %s? Its songs are deleted from this phone, unless something else you keep has them.</string>
+    <!-- The button that removes something kept on the phone, after asking. -->
+    <string name="sync_remove_button">Remove</string>
+    <!-- Something kept on the phone that Clementine doesn't have any more, such as a deleted
+         playlist. Its songs stay on the phone. -->
+    <string name="sync_gone">No longer in Clementine</string>
+    <!-- Something kept on the phone whose sync was cut short, such as by losing the connection. -->
+    <string name="sync_failed">Couldn\'t finish syncing. It tries again when you connect.</string>
 </resources>

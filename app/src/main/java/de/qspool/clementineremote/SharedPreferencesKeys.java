@@ -85,4 +85,7 @@ public class SharedPreferencesKeys {
 
     /** This install's renderer id, so Clementine recognises the phone when it reconnects. */
     public final static String SP_RENDERER_ID = "renderer_id";
+
+    /** The server_id of the Clementine last connected that syncs, whose rules show offline. */
+    public final static String SP_SYNC_SERVER_ID = "sync_server_id";
 }

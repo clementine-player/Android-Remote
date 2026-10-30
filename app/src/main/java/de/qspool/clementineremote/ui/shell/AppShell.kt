@@ -67,6 +67,7 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -79,6 +80,7 @@ import de.qspool.clementineremote.SharedPreferencesKeys
 import de.qspool.clementineremote.backend.RemoteRepository
 import de.qspool.clementineremote.backend.RemoteRepository.NowPlaying
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory
+import de.qspool.clementineremote.backend.sync.Syncer
 import de.qspool.clementineremote.ui.hints.Hint
 import de.qspool.clementineremote.ui.hints.HintBox
 import de.qspool.clementineremote.ui.downloads.DownloadsScreen
@@ -105,6 +107,17 @@ enum class Destination(@StringRes val label: Int, @DrawableRes val icon: Int, va
     INTERNET(R.string.internet_title, R.drawable.ic_public, "navInternet"),
     SEARCH(R.string.menu_search, R.drawable.ic_search, "navSearch"),
     DOWNLOADS(R.string.downloads_title, R.drawable.ic_download, "navDownloads"),
+}
+
+/**
+ * Whether the downloads screen is On this phone, with the music kept on the phone: when Clementine
+ * syncs songs to it, or something is kept already.
+ */
+@Composable
+internal fun rememberOnThisPhone(): Boolean {
+    val syncing by RemoteRepository.syncing.collectAsStateWithLifecycle()
+    val kept by Syncer.kept.collectAsStateWithLifecycle()
+    return syncing.supported || kept.isNotEmpty()
 }
 
 /** Where the app is: the screen shown, and whether the player is open over it. */
@@ -139,6 +152,8 @@ fun AppShell(shell: ShellViewModel, actions: ShellActions) {
     var outputsOpen by rememberSaveable { mutableStateOf(false) }
     val outputs by RemoteRepository.outputs.collectAsStateWithLifecycle()
     val browsing by RemoteRepository.browsing.collectAsStateWithLifecycle()
+    val onThisPhone = rememberOnThisPhone()
+    val tablet = isTablet()
     val context = LocalContext.current
     // A Clementine that can't be browsed has no Internet screen: showing it, go to the queue.
     LaunchedEffect(browsing.supported) {
@@ -156,8 +171,29 @@ fun AppShell(shell: ShellViewModel, actions: ShellActions) {
                     item(
                         selected = shell.destination == destination,
                         onClick = { shell.destination = destination },
-                        icon = { Icon(painterResource(destination.icon), contentDescription = null) },
-                        label = { Text(stringResource(destination.label)) },
+                        icon = {
+                            val icon = when {
+                                destination != Destination.DOWNLOADS || !onThisPhone -> destination.icon
+                                tablet -> R.drawable.ic_tablet
+                                else -> R.drawable.ic_smartphone
+                            }
+                            Icon(painterResource(icon), contentDescription = null)
+                        },
+                        label = {
+                            // One line under the icon: a label that wraps pushes its icon up, out of line.
+                            Text(
+                                stringResource(
+                                    when {
+                                        destination != Destination.DOWNLOADS || !onThisPhone -> destination.label
+                                        tablet -> R.string.sync_on_tablet_tab
+                                        else -> R.string.sync_on_phone_tab
+                                    },
+                                ),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                textAlign = TextAlign.Center,
+                            )
+                        },
                         modifier = Modifier.testTag(destination.tag),
                     )
                 }

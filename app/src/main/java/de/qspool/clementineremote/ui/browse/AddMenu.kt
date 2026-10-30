@@ -14,9 +14,10 @@ import de.qspool.clementineremote.backend.AddAction
 
 /**
  * What a long press on an item of the library or search results offers, as Clementine's own
- * library does: the ways to put its songs on the playlist, and with [onSelect], selecting it to
- * act on several items at once. Play next shows only if Clementine [canPlayNext]. Its items are
- * tagged "addMenu_" and the action's name, or "addMenu_SELECT".
+ * library does: the ways to put its songs on the playlist, with [onKeep], keeping it on this
+ * phone, and with [onSelect], selecting it to act on several items at once. Play next shows only
+ * if Clementine [canPlayNext]. Its items are tagged "addMenu_" and the action's name, or
+ * "addMenu_KEEP" and "addMenu_SELECT".
  */
 @Composable
 internal fun AddMenu(
@@ -25,6 +26,7 @@ internal fun AddMenu(
     canPlayNext: Boolean,
     onAdd: (AddAction) -> Unit,
     onSelect: (() -> Unit)? = null,
+    onKeep: (() -> Unit)? = null,
 ) {
     DropdownMenu(expanded = expanded, onDismissRequest = onDismiss) {
         @Composable
@@ -49,6 +51,10 @@ internal fun AddMenu(
         add(R.string.library_add_to_playlist, AddAction.APPEND)
         add(R.string.internet_replace_playlist, AddAction.REPLACE)
         add(R.string.library_open_in_new_playlist, AddAction.NEW_PLAYLIST)
+        if (onKeep != null) {
+            HorizontalDivider()
+            item(R.string.sync_keep, "KEEP", onKeep)
+        }
         if (onSelect != null) {
             HorizontalDivider()
             item(R.string.library_select, "SELECT", onSelect)
