@@ -12,6 +12,7 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.lifecycle.viewModelScope
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.SharedPreferencesKeys
+import de.qspool.clementineremote.backend.downloader.DownloadNetwork
 import de.qspool.clementineremote.backend.downloader.StoredSong
 import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem
@@ -167,7 +168,7 @@ class DownloadsScreenTest {
 
     @Test
     fun viewModelReadsTheDownloadsAndSettings() {
-        App.getPreferences().edit().putBoolean(SharedPreferencesKeys.SP_WIFI_ONLY, true).commit()
+        App.getPreferences().edit().putString(SharedPreferencesKeys.SP_DOWNLOAD_NETWORK, DownloadNetwork.WIFI_ONLY.value).commit()
         val downloads = DownloadsViewModel(downloads = { emptyList() }, storedSongs = { emptyList() }, freeSpace = { 1L shl 30 })
         downloads.viewModelScope.launch { downloads.state.collect {} }
 

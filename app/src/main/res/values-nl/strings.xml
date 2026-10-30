@@ -50,7 +50,6 @@
     <string name="download_noti_insufficient_space">Onvoldoende ruimte, download wordt afgebroken</string>
     <string name="download_noti_forbidden">Download niet toegestaan. Activeer in Clementine instellingen.</string>
     <string name="download_noti_not_mounted">Geen opslagapparaat gevonden!</string>
-    <string name="download_noti_only_wifi">Downloaden alleen toegestaan via wifi.</string>
     <string name="download_noti_transcoding">Bestanden transcoderen</string>
     <string name="download_noti_transcoding_subtitle">Even geduld</string>
 
@@ -145,8 +144,6 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Bezoek de Clementine website</string>
 
-    <string name="pref_dl_wifi_only_title">Aleen WiFi</string>
-    <string name="pref_dl_wifi_only_summary">Download nummers alleen via een wifi netwerkverbinding.</string>
     <string name="pref_dl_dir">Downloadmap instellen</string>
     <string name="pref_dl_override">Overschrijf bestaande bestanden</string>
     <string name="pref_dl_cat_folders">Mappen</string>

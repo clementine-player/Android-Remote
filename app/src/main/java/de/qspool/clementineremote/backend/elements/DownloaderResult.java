@@ -27,7 +27,7 @@ import de.qspool.clementineremote.utils.RetryWait;
 
 public class DownloaderResult extends ClementineElement {
 
-    public enum DownloadResult {SUCCESSFUL, INSUFFIANT_SPACE, NOT_MOUNTED, CONNECTION_ERROR, FOBIDDEN, NOT_LOCAL_NETWORK, TOO_MANY_WRONG_AUTH_CODES, ONLY_WIFI, CANCELLED, ERROR}
+    public enum DownloadResult {SUCCESSFUL, INSUFFIANT_SPACE, NOT_MOUNTED, CONNECTION_ERROR, FOBIDDEN, NOT_LOCAL_NETWORK, TOO_MANY_WRONG_AUTH_CODES, NETWORK_NOT_ALLOWED, CANCELLED, ERROR}
 
     private DownloadResult mResult;
 
@@ -99,8 +99,8 @@ public class DownloaderResult extends ClementineElement {
                 return R.string.download_noti_insufficient_space;
             case NOT_MOUNTED:
                 return R.string.download_noti_not_mounted;
-            case ONLY_WIFI:
-                return R.string.download_noti_only_wifi;
+            case NETWORK_NOT_ALLOWED:
+                return R.string.download_noti_network_not_allowed;
             case SUCCESSFUL:
                 return R.string.download_noti_complete;
             case CANCELLED:

@@ -57,7 +57,11 @@ public class SharedPreferencesKeys {
 
     public final static String SP_LIBRARY_SORTING = "pref_library_sorting";
 
+    /** The switch for Wi-Fi only downloads that Download over replaced, read until it's set. */
     public final static String SP_WIFI_ONLY = "pref_dl_wifi_only";
+
+    /** The networks songs download over: a DownloadNetwork value. */
+    public final static String SP_DOWNLOAD_NETWORK = "pref_dl_network";
 
     public final static String SP_DOWNLOAD_DIR = "pref_dl_dir";
 

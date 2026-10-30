@@ -49,7 +49,6 @@
     <string name="download_noti_insufficient_space">Yetersiz alan, indirme iptal ediliyor.</string>
     <string name="download_noti_forbidden">İndirme yasak. Clementine ayarlarından etkinleştirin.</string>
     <string name="download_noti_not_mounted">Depolama aygıtı bulunamadı!</string>
-    <string name="download_noti_only_wifi">Sadece kablosuz üzerinden indirmeye izin verilir.</string>
     <string name="download_noti_transcoding">Dosyalar dönüştürülüyor</string>
     <string name="download_noti_transcoding_subtitle">Lütfen bekleyin</string>
 
@@ -145,8 +144,6 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Clementine web sitesini ziyaret et</string>
 
-    <string name="pref_dl_wifi_only_title">Sadece kablosuz</string>
-    <string name="pref_dl_wifi_only_summary">Şarkıları sadece bir kablosuz ağa bağlıyken indir.</string>
     <string name="pref_dl_dir">İndirme klasörünü belirle</string>
     <string name="pref_dl_override">Mevcut dosyaların üzerine yaz</string>
     <string name="pref_dl_cat_folders">Klasörler</string>

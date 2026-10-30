@@ -102,7 +102,6 @@
     <string name="download_noti_forbidden">Se restringió la descarga. Actívela en la configuración de Clementine.</string>
     <string name="download_noti_not_local_network">Clementine solo acepta conexiones de su red local.</string>
     <string name="download_noti_not_mounted">No se encontró ningún dispositivo de almacenamiento.</string>
-    <string name="download_noti_only_wifi">Solo se permiten las descargas al usar wifi.</string>
     <string name="download_noti_transcoding">Convirtiendo archivos</string>
     <string name="download_noti_transcoding_subtitle">Espere</string>
 
@@ -236,8 +235,6 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Visitar sitio web de Clementine</string>
 
-    <string name="pref_dl_wifi_only_title">Solo wifi</string>
-    <string name="pref_dl_wifi_only_summary">Solo descargar canciones mientras está conectado a una red wifi.</string>
     <string name="pref_dl_dir">Definir la carpeta de descargas</string>
     <string name="pref_dl_volume">Guardar descargas en</string>
     <string name="pref_dl_volume_unavailable">No disponible. Escoja dónde guardar las descargas.</string>

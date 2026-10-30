@@ -67,7 +67,7 @@ public class ClementineSongDownloader extends
 
     private String mPlaylistName;
 
-    private boolean mDownloadOnWifiOnly;
+    private DownloadNetwork mNetwork = DownloadNetwork.ANY;
 
     private boolean mIsPlaylist = false;
 
@@ -108,8 +108,8 @@ public class ClementineSongDownloader extends
         publishProgress(new DownloadStatus(mId).setState(
                 DownloadStatus.DownloaderState.IDLE));
 
-        if (mDownloadOnWifiOnly && !Utilities.onWifi()) {
-            return new DownloaderResult(mId, DownloaderResult.DownloadResult.ONLY_WIFI);
+        if (!mNetwork.allowsCurrentNetwork(App.getApp())) {
+            return new DownloaderResult(mId, DownloaderResult.DownloadResult.NETWORK_NOT_ALLOWED);
         }
 
         // First create a connection
@@ -445,8 +445,8 @@ public class ClementineSongDownloader extends
         mSongDownloaderListener = songDownloaderListener;
     }
 
-    public void setDownloadOnWifiOnly(boolean downloadOnWifiOnly) {
-        mDownloadOnWifiOnly = downloadOnWifiOnly;
+    public void setNetwork(DownloadNetwork network) {
+        mNetwork = network;
     }
 
     public void setStorage(DownloadStorage storage) {

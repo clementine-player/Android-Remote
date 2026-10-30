@@ -56,7 +56,6 @@
     <string name="download_noti_forbidden">Muat turun dilarang. Aktifkan dalam tetapan Clementine.</string>
     <string name="download_noti_not_local_network">Clementine hanya menerima sambungan daripada rangkaian setempat sahaja.</string>
     <string name="download_noti_not_mounted">Tiada peranti storan ditemui!</string>
-    <string name="download_noti_only_wifi">Hanya muat turun dengan wifi dibenarkan.</string>
     <string name="download_noti_transcoding">Mentranskod fail</string>
     <string name="download_noti_transcoding_subtitle">Tunggu sebentar</string>
 
@@ -165,8 +164,6 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Lawati laman sesawang Clementine</string>
 
-    <string name="pref_dl_wifi_only_title">WiFi sahaja</string>
-    <string name="pref_dl_wifi_only_summary">Hanya muat turun lagu bila bersambung dengan rangkaian wifi.</string>
     <string name="pref_dl_dir">Tetapkan folder muat turun</string>
     <string name="pref_dl_override">Batalkan fail sedia ada</string>
     <string name="pref_dl_cat_folders">Folder</string>

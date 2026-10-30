@@ -142,7 +142,9 @@
          right as it is. -->
     <string name="download_noti_too_many_wrong_auth_codes">Too many wrong auth codes. Clementine won\'t check another from this phone for %s.</string>
     <string name="download_noti_not_mounted">No storage device found!</string>
-    <string name="download_noti_only_wifi">Download only on wifi allowed.</string>
+    <!-- A download didn't start, because Download over, in Settings, doesn't allow the network the
+         phone is on. -->
+    <string name="download_noti_network_not_allowed">Downloads aren\'t allowed on this network</string>
     <string name="download_noti_transcoding">Transcoding files</string>
     <string name="download_noti_transcoding_subtitle">Please wait</string>
 
@@ -289,8 +291,17 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Visit Clementine website</string>
 
-    <string name="pref_dl_wifi_only_title">WiFi only</string>
-    <string name="pref_dl_wifi_only_summary">Download songs only when connected to a wifi network.</string>
+    <!-- A setting: which networks songs download over, for downloads and for what's kept on this
+         phone. Its choices follow. -->
+    <string name="pref_dl_network">Download over</string>
+    <string name="pref_dl_network_summary" translatable="false">%s</string>
+    <!-- A choice under Download over. A metered Wi-Fi, such as another phone's hotspot, counts as
+         mobile data. -->
+    <string name="pref_dl_network_wifi_only">Wi-Fi only</string>
+    <!-- A choice under Download over: Wi-Fi, and mobile data unless the phone is roaming. -->
+    <string name="pref_dl_network_mobile_data">Wi-Fi and mobile data, not when roaming</string>
+    <!-- A choice under Download over. -->
+    <string name="pref_dl_network_any">Any network</string>
     <string name="pref_dl_dir">Set download folder</string>
     <string name="pref_dl_volume">Save downloads to</string>
     <string name="pref_dl_volume_unavailable">Not available. Choose where to save downloads.</string>

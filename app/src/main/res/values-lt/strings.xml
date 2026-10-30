@@ -54,7 +54,6 @@
     <string name="download_noti_insufficient_space">Nepakanka vietos, atsiuntimas nutraukiamas.</string>
     <string name="download_noti_forbidden">Atsiuntimas uždraustas. Aktyvuokite Clementine nustatymuose.</string>
     <string name="download_noti_not_mounted">Atminties įrenginys nerastas!</string>
-    <string name="download_noti_only_wifi">Atsiuntimas leidžiamas tik naudojantis belaidžiu (wifi) tinklu.</string>
     <string name="download_noti_transcoding">Perkoduojami failai</string>
     <string name="download_noti_transcoding_subtitle">Prašome palaukti</string>
 
@@ -152,8 +151,6 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Apsilankyti Clementine svetainėje</string>
 
-    <string name="pref_dl_wifi_only_title">Tik WiFi</string>
-    <string name="pref_dl_wifi_only_summary">Atsisiųsti dainas tik tuomet, kai yra prisijungta prie belaidžio tinklo.</string>
     <string name="pref_dl_dir">Nustatyti atsiuntimo aplanką</string>
     <string name="pref_dl_override">Nustelbti esamus failus</string>
     <string name="pref_dl_cat_folders">Aplankai</string>

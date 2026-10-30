@@ -52,7 +52,6 @@
     <string name="download_noti_insufficient_space">Espaço insuficiente. A cancelar...</string>
     <string name="download_noti_forbidden">Descarga não possível. Ative-a nas definições do Clementine.</string>
     <string name="download_noti_not_mounted">Cartão de armazenamento não encontrado!</string>
-    <string name="download_noti_only_wifi">Apenas descarregar por Wi-Fi.</string>
     <string name="download_noti_transcoding">Conversão de ficheiros</string>
     <string name="download_noti_transcoding_subtitle">Por favor aguarde</string>
 
@@ -147,8 +146,6 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Aceda ao sítio web do Clementine</string>
 
-    <string name="pref_dl_wifi_only_title">Apenas Wifi</string>
-    <string name="pref_dl_wifi_only_summary">Apenas descarregar faixas se ligado a uma rede Wi-Fi.</string>
     <string name="pref_dl_dir">Definir pasta de descargas</string>
     <string name="pref_dl_override">Substituir ficheiros existentes</string>
     <string name="pref_dl_cat_folders">Pastas</string>

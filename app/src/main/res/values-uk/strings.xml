@@ -54,7 +54,6 @@
     <string name="download_noti_insufficient_space">Недостатньо місця, перериваємо отримання даних.</string>
     <string name="download_noti_forbidden">Отримання даних заборонено. Увімкніть його у параметрах Clementine.</string>
     <string name="download_noti_not_mounted">Не знайдено пристрою для зберігання даних!</string>
-    <string name="download_noti_only_wifi">Дані можна отримувати, лише якщо увімкнено Wi-Fi.</string>
     <string name="download_noti_transcoding">Перекодовуємо файли</string>
     <string name="download_noti_transcoding_subtitle">Зачекайте</string>
 
@@ -150,8 +149,6 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Відвідати сайт Clementine</string>
 
-    <string name="pref_dl_wifi_only_title">Лише Wi-Fi</string>
-    <string name="pref_dl_wifi_only_summary">Отримувати композиції, лише якщо встановлено з’єднання з мережею Wi-Fi.</string>
     <string name="pref_dl_dir">Вкажіть теку отриманих даних</string>
     <string name="pref_dl_override">Перезаписувати наявні файли</string>
     <string name="pref_dl_cat_folders">Теки</string>

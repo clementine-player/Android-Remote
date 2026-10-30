@@ -54,7 +54,6 @@
     <string name="download_noti_insufficient_space">Nedostatok miesta, preberanie sa prerušuje.</string>
     <string name="download_noti_forbidden">Preberanie je zakázané. Aktivujte ho v nastaveniach prehrávača Clementine.</string>
     <string name="download_noti_not_mounted">Nenašlo sa žiadne úložné zariadenie!</string>
-    <string name="download_noti_only_wifi">Preberanie je povolené iba počas pripojenia cez wifi.</string>
     <string name="download_noti_transcoding">Prekódovávajú sa súbory</string>
     <string name="download_noti_transcoding_subtitle">Prosím, čakajte</string>
 
@@ -152,8 +151,6 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Navštíviť webovú stránku prehrávača Clementine</string>
 
-    <string name="pref_dl_wifi_only_title">Iba cez WiFi</string>
-    <string name="pref_dl_wifi_only_summary">Prebrať skladby iba počas pripojenia k sieti wifi.</string>
     <string name="pref_dl_dir">Nastaviť priečinok pre preberania</string>
     <string name="pref_dl_override">Prevážiť existujúce súbory</string>
     <string name="pref_dl_cat_folders">Priečinky</string>

@@ -41,7 +41,6 @@
     <string name="download_noti_insufficient_space">Δεν υπάρχει αρκετός χώρος, ματαίωση λήψης.</string>
     <string name="download_noti_forbidden">Λήψη απαγορεύεται. Ενεργοποίηση στις ρυθμίσεις του Clementine.</string>
     <string name="download_noti_not_mounted">Καμία συσκευή αποθήκευσης βρέθηκε!</string>
-    <string name="download_noti_only_wifi">Λήψη μόνο στο WiFi επιτρέπεται.</string>
     <string name="download_noti_transcoding">Ανακωδικοποίηση αρχείων</string>
     <string name="download_noti_transcoding_subtitle">Παρακαλώ περιμένετε</string>
 
@@ -121,8 +120,6 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Επισκεφθείτε την ιστοσελίδα του Clementine</string>
 
-    <string name="pref_dl_wifi_only_title">WiFi μόνο</string>
-    <string name="pref_dl_wifi_only_summary">Λήψη τραγουδιών μόνο όταν είστε συνδεδεμένοι σε ένα δίκτυο Wi-Fi.</string>
     <string name="pref_dl_dir">Ορισμός φάκελου λήψης</string>
     <string name="pref_dl_override">Αντικατάσταση υπαρχόντων αρχείων</string>
     <string name="pref_dl_cat_folders">Φάκελοι</string>

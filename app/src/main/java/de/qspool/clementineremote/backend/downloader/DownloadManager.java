@@ -191,8 +191,7 @@ public class DownloadManager {
         }
 
         songDownloader.setStorage(storage);
-        songDownloader.setDownloadOnWifiOnly(
-                mSharedPref.getBoolean(SharedPreferencesKeys.SP_WIFI_ONLY, false));
+        songDownloader.setNetwork(DownloadNetwork.chosen(mSharedPref));
         songDownloader.setCreatePlaylistDir(mSharedPref
                 .getBoolean(SharedPreferencesKeys.SP_DOWNLOAD_SAVE_OWN_DIR, false));
         songDownloader.setCreateArtistDir(mSharedPref

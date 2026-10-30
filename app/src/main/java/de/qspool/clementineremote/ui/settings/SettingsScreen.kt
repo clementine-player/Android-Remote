@@ -33,9 +33,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import de.qspool.clementineremote.App
 import de.qspool.clementineremote.R
 import de.qspool.clementineremote.SharedPreferencesKeys
 import de.qspool.clementineremote.backend.Clementine
+import de.qspool.clementineremote.backend.downloader.DownloadNetwork
 import de.qspool.clementineremote.backend.downloader.DownloadVolume
 import de.qspool.clementineremote.backend.downloader.MediaStoreDownloadStorage
 import de.qspool.clementineremote.ui.hints.Hints
@@ -138,7 +140,12 @@ private fun LibrarySettings(store: PreferenceStore) {
 @Composable
 private fun DownloadSettings(store: PreferenceStore, downloadVolumes: List<DownloadVolume>, defaultDownloadDir: () -> String) {
     SettingsHeading(stringResource(R.string.pref_cat_downloads))
-    booleanSetting(store, SharedPreferencesKeys.SP_WIFI_ONLY, false, R.string.pref_dl_wifi_only_title, R.string.pref_dl_wifi_only_summary)
+    val networks = DownloadNetwork.entries
+    StringChoiceSetting(
+        store, SharedPreferencesKeys.SP_DOWNLOAD_NETWORK, DownloadNetwork.chosen(App.getPreferences()).value,
+        R.string.pref_dl_network, R.string.pref_dl_network_summary,
+        networks.map { stringResource(it.label) }, networks.map { it.value },
+    )
     // Android 10 and later save songs to the shared Music collection.
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         ActionSetting(
@@ -313,6 +320,14 @@ private fun booleanSetting(
     }
     return checked
 }
+
+/** What Download over shows for a choice. */
+private val DownloadNetwork.label: Int
+    get() = when (this) {
+        DownloadNetwork.WIFI_ONLY -> R.string.pref_dl_network_wifi_only
+        DownloadNetwork.MOBILE_DATA -> R.string.pref_dl_network_mobile_data
+        DownloadNetwork.ANY -> R.string.pref_dl_network_any
+    }
 
 /** A setting picked from [labels]; [summary] shows the label of the one picked. */
 @Composable

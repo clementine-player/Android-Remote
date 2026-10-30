@@ -5,10 +5,10 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.qspool.clementineremote.App
-import de.qspool.clementineremote.SharedPreferencesKeys
 import de.qspool.clementineremote.backend.BackgroundTask
 import de.qspool.clementineremote.backend.downloader.ClementineSongDownloader
 import de.qspool.clementineremote.backend.downloader.DownloadManager
+import de.qspool.clementineremote.backend.downloader.DownloadNetwork
 import de.qspool.clementineremote.backend.downloader.StoredSong
 import de.qspool.clementineremote.backend.library.LibraryDatabaseHelper
 import de.qspool.clementineremote.backend.pb.ClementineMessage
@@ -104,7 +104,7 @@ class DownloadsViewModel(
             running = all.filter { it.running },
             finished = all.filterNot { it.running },
             freeSpace = freeSpace().let { if (it >= 0) Utilities.humanReadableBytes(it, true) else "" },
-            wifiOnly = App.getPreferences().getBoolean(SharedPreferencesKeys.SP_WIFI_ONLY, false),
+            wifiOnly = DownloadNetwork.chosen(App.getPreferences()) == DownloadNetwork.WIFI_ONLY,
             onPhone = onPhone,
         )
     }

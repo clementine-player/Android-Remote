@@ -142,7 +142,6 @@
          right as it is. -->
     <string name="download_noti_too_many_wrong_auth_codes">För många felaktiga autentiseringskoder. Clementine kontrollerar ingen ny kod från den här telefonen förrän om %s.</string>
     <string name="download_noti_not_mounted">Ingen lagringsenhet hittades!</string>
-    <string name="download_noti_only_wifi">Hämtning tillåts endast via wifi.</string>
     <string name="download_noti_transcoding">Kodar om filer</string>
     <string name="download_noti_transcoding_subtitle">Var god vänta</string>
 
@@ -289,8 +288,6 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Besök Clementines webbplats</string>
 
-    <string name="pref_dl_wifi_only_title">Endast wifi</string>
-    <string name="pref_dl_wifi_only_summary">Hämta endast låtar när du är ansluten till ett wifi-nätverk.</string>
     <string name="pref_dl_dir">Ange hämtningsmapp</string>
     <string name="pref_dl_volume">Spara hämtningar i</string>
     <string name="pref_dl_volume_unavailable">Inte tillgänglig. Välj var hämtningar ska sparas.</string>
