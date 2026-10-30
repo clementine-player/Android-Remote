@@ -56,11 +56,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.qspool.clementineremote.R
 import de.qspool.clementineremote.backend.AddAction
 import de.qspool.clementineremote.backend.database.SongSelectItem
+import de.qspool.clementineremote.backend.sync.RefreshPolicy
 import de.qspool.clementineremote.ui.browse.BrowseItems
 import de.qspool.clementineremote.ui.browse.BrowseLevel
 import de.qspool.clementineremote.ui.browse.BrowseSelectionBar
 import de.qspool.clementineremote.ui.browse.ItemKind
 import de.qspool.clementineremote.ui.browse.rememberLevelListState
+import de.qspool.clementineremote.ui.downloads.KeepSheet
 import de.qspool.clementineremote.ui.search.SearchResultsContent
 import de.qspool.clementineremote.ui.search.SearchSection
 
@@ -78,6 +80,8 @@ fun LibraryScreen(viewModel: LibraryViewModel) {
     val syncFrom by viewModel.syncFrom.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val resources = LocalResources.current
+    // The item Keep on this phone was chosen for, while the sheet asks how.
+    var keeping by remember { mutableStateOf<SongSelectItem?>(null) }
     LaunchedEffect(viewModel) {
         viewModel.messages.collect { message ->
             val text = when (message) {
@@ -107,8 +111,17 @@ fun LibraryScreen(viewModel: LibraryViewModel) {
         ),
         canPlayNext = canPlayNext,
         canKeep = { syncFrom.available && viewModel.canKeep(it) },
-        onKeep = viewModel::keep,
+        onKeep = { keeping = it },
     )
+    keeping?.let { item ->
+        KeepSheet(
+            item.listTitle,
+            // Albums and artists change rarely: kept as they are, unless asked.
+            RefreshPolicy.NEVER,
+            onKeep = { viewModel.keep(item, it) },
+            onDismiss = { keeping = null },
+        )
+    }
 }
 
 /** What's done with the library's search results. */

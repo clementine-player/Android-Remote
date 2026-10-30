@@ -60,6 +60,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -80,11 +81,13 @@ import de.qspool.clementineremote.SharedPreferencesKeys
 import de.qspool.clementineremote.backend.RemoteRepository
 import de.qspool.clementineremote.backend.RemoteRepository.NowPlaying
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory
+import de.qspool.clementineremote.backend.sync.RefreshPolicy
 import de.qspool.clementineremote.backend.sync.Syncer
 import de.qspool.clementineremote.ui.hints.Hint
 import de.qspool.clementineremote.ui.hints.HintBox
 import de.qspool.clementineremote.ui.downloads.DownloadsScreen
 import de.qspool.clementineremote.ui.downloads.DownloadsViewModel
+import de.qspool.clementineremote.ui.downloads.KeepSheet
 import de.qspool.clementineremote.ui.internet.InternetScreen
 import de.qspool.clementineremote.ui.internet.InternetViewModel
 import de.qspool.clementineremote.ui.library.LibraryScreen
@@ -330,6 +333,9 @@ private fun Destinations(shell: ShellViewModel, onConnection: () -> Unit, onSett
                     onPauseOrDispose {}
                 }
                 var clearing by remember { mutableStateOf(false) }
+                var keeping by remember { mutableStateOf(false) }
+                val syncFrom by queue.syncFrom.collectAsStateWithLifecycle()
+                val queueState by queue.state.collectAsStateWithLifecycle()
                 FilterableTopBar(host, onConnection, onSettings, queue::setFilter) {
                     Box {
                         var open by remember { mutableStateOf(false) }
@@ -344,6 +350,16 @@ private fun Destinations(shell: ShellViewModel, onConnection: () -> Unit, onSett
                                     queue.downloadPlaylist()
                                 },
                             )
+                            if (syncFrom.available && queueState.shown != null) {
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(R.string.sync_keep)) },
+                                    onClick = {
+                                        open = false
+                                        keeping = true
+                                    },
+                                    modifier = Modifier.testTag("btnQueueKeep"),
+                                )
+                            }
                             DropdownMenuItem(
                                 text = { Text(stringResource(R.string.playlist_clear)) },
                                 onClick = {
@@ -362,6 +378,22 @@ private fun Destinations(shell: ShellViewModel, onConnection: () -> Unit, onSett
                     }
                 }
                 QueueScreen(queue)
+                val shown = queueState.shown
+                if (keeping && shown != null) {
+                    val context = LocalContext.current
+                    val resources = LocalResources.current
+                    KeepSheet(
+                        shown.name,
+                        // Playlists change: kept up to date, unless asked.
+                        RefreshPolicy.ON_CONNECT,
+                        onKeep = { policy ->
+                            queue.keepPlaylist(policy)?.let { name ->
+                                Toast.makeText(context, resources.getString(R.string.sync_keeping, name), Toast.LENGTH_LONG).show()
+                            }
+                        },
+                        onDismiss = { keeping = false },
+                    )
+                }
                 if (clearing) {
                     AlertDialog(
                         onDismissRequest = { clearing = false },

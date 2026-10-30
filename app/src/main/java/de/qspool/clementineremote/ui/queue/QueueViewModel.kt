@@ -11,6 +11,10 @@ import de.qspool.clementineremote.backend.pb.ClementineMessageFactory
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem
 import de.qspool.clementineremote.backend.player.MyPlaylist
 import de.qspool.clementineremote.backend.player.MySong
+import de.qspool.clementineremote.backend.sync.RefreshPolicy
+import de.qspool.clementineremote.backend.sync.SyncRule
+import de.qspool.clementineremote.backend.sync.SyncSources
+import de.qspool.clementineremote.backend.sync.Syncer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -46,6 +50,10 @@ data class QueueState(
  */
 class QueueViewModel(
     private val send: (ClementineMessage) -> Unit = RemoteRepository::send,
+    /** Whether the Clementine connected syncs songs to the phone. */
+    val syncFrom: StateFlow<RemoteRepository.Syncing> = RemoteRepository.syncing,
+    /** Makes rules keeping music on this phone, and syncs them. */
+    private val keepRules: (List<SyncRule>) -> Unit = Syncer::keep,
 ) : ViewModel() {
 
     private val playlists = App.Clementine.playlistManager
@@ -193,6 +201,18 @@ class QueueViewModel(
         val id = shownPlaylistId() ?: return
         playlists.clearPlaylist(id)
         changed()
+    }
+
+    /**
+     * Keeps the playlist shown on this phone, updated from Clementine as [refreshPolicy] says.
+     * Returns its name, or null when there's none, or Clementine doesn't sync.
+     */
+    fun keepPlaylist(refreshPolicy: RefreshPolicy): String? {
+        val syncing = syncFrom.value
+        val playlist = shownPlaylist() ?: return null
+        if (!syncing.available) return null
+        keepRules(listOf(SyncSources.playlistRule(syncing.serverId, playlist.id, playlist.name, refreshPolicy)))
+        return playlist.name
     }
 
     fun closePlaylist() {

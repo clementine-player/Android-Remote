@@ -445,8 +445,8 @@
     <string name="sync_keep">Keep on this phone</string>
     <!-- Heading of the things you chose to keep on the phone. -->
     <string name="sync_kept">Kept on this phone</string>
-    <!-- Shown for a moment after choosing Keep on this phone; the placeholder is an album or an
-         artist. -->
+    <!-- Shown for a moment after choosing Keep on this phone; the placeholder is an album, an
+         artist or a playlist. -->
     <string name="sync_keeping">Keeping %s on this phone</string>
     <!-- Something kept on the phone, while Clementine makes the list of its songs. -->
     <string name="sync_preparing">Preparing…</string>
@@ -455,6 +455,18 @@
     <!-- How often something kept on the phone is updated from Clementine, short: never, so it
          keeps the songs it has. -->
     <string name="sync_kept_as_it_is">Kept as it is</string>
+    <!-- How often something kept on the phone is updated from Clementine, short: each time the
+         phone connects to it. -->
+    <string name="sync_every_connect">Every time you connect</string>
+    <!-- Heading in the Keep on this phone sheet, over how often what's kept is updated from
+         Clementine. -->
+    <string name="sync_update_it">Update it</string>
+    <!-- A choice under Update it: what's kept is never updated from Clementine. -->
+    <string name="sync_refresh_never">Never</string>
+    <!-- Under Never, in the Keep on this phone sheet. -->
+    <string name="sync_refresh_never_detail">Keep the songs it has now</string>
+    <!-- A choice under Update it: what's kept is updated each time the phone connects to Clementine. -->
+    <string name="sync_refresh_on_connect">Every time I connect</string>
     <!-- How much of something kept is on the phone: the number of songs, and their size, such as
          "180 MB". -->
     <plurals name="sync_songs_size">

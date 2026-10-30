@@ -23,6 +23,7 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType
+import de.qspool.clementineremote.backend.sync.RefreshPolicy
 import de.qspool.clementineremote.backend.sync.SyncRule
 import de.qspool.clementineremote.backend.sync.SyncSources
 import de.qspool.clementineremote.backend.sync.Syncer
@@ -401,8 +402,11 @@ class LibraryViewModel(
     fun canKeep(item: SongSelectItem): Boolean =
         !item.selection.lastOrNull().isNullOrEmpty() && fields.getOrNull(item.level) in KEEPABLE
 
-    /** Keeps [item] on this phone ([canKeep]): its album, or the artist's songs. */
-    fun keep(item: SongSelectItem) {
+    /**
+     * Keeps [item] on this phone ([canKeep]): its album, or the artist's songs, updated from
+     * Clementine as [refreshPolicy] says.
+     */
+    fun keep(item: SongSelectItem, refreshPolicy: RefreshPolicy = RefreshPolicy.NEVER) {
         if (!syncFrom.value.available || !canKeep(item)) {
             return
         }
@@ -411,12 +415,12 @@ class LibraryViewModel(
         viewModelScope.launch {
             val rules = withContext(io) {
                 if (fields[item.level] == "artist") {
-                    listOf(SyncSources.artistRule(serverId, item.selection.last()))
+                    listOf(SyncSources.artistRule(serverId, item.selection.last(), refreshPolicy))
                 } else {
                     // One album here can be several in Clementine, filed under different album
                     // artists: keep each.
                     albumsOf(fields.take(item.level + 1), item.selection.toList())
-                        .map { (albumArtist, album) -> SyncSources.albumRule(serverId, albumArtist, album) }
+                        .map { (albumArtist, album) -> SyncSources.albumRule(serverId, albumArtist, album, refreshPolicy) }
                 }
             }
             if (rules.isNotEmpty()) {
