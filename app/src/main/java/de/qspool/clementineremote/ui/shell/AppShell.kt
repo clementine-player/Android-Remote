@@ -92,6 +92,7 @@ import de.qspool.clementineremote.ui.internet.InternetScreen
 import de.qspool.clementineremote.ui.internet.InternetViewModel
 import de.qspool.clementineremote.ui.library.LibraryScreen
 import de.qspool.clementineremote.ui.library.LibraryViewModel
+import de.qspool.clementineremote.ui.player.PlayFromSheet
 import de.qspool.clementineremote.ui.player.PlayerActions
 import de.qspool.clementineremote.ui.player.PlayerScreen
 import de.qspool.clementineremote.ui.player.PlayerViewModel
@@ -121,6 +122,17 @@ internal fun rememberOnThisPhone(): Boolean {
     val syncing by RemoteRepository.syncing.collectAsStateWithLifecycle()
     val kept by Syncer.kept.collectAsStateWithLifecycle()
     return syncing.supported || kept.isNotEmpty()
+}
+
+/** Clementine's computer, as Clementine names it; or else as the network does, or its address. */
+@Composable
+internal fun rememberClementineHost(): String? {
+    val outputs by RemoteRepository.outputs.collectAsStateWithLifecycle()
+    val address = remember {
+        App.Clementine.hostname?.takeIf { it.isNotBlank() }
+            ?: App.getPreferences().getString(SharedPreferencesKeys.SP_KEY_IP, null)?.takeIf { it.isNotBlank() }
+    }
+    return outputs.computerName ?: address
 }
 
 /** Where the app is: the screen shown, and whether the player is open over it. */
@@ -161,6 +173,8 @@ fun AppShell(shell: ShellViewModel, actions: ShellActions) {
     var choosingDownload by rememberSaveable { mutableStateOf(false) }
     var outputsOpen by rememberSaveable { mutableStateOf(false) }
     val outputs by RemoteRepository.outputs.collectAsStateWithLifecycle()
+    var playFromOpen by rememberSaveable { mutableStateOf(false) }
+    val choices by player.choices.collectAsStateWithLifecycle()
     val browsing by RemoteRepository.browsing.collectAsStateWithLifecycle()
     val onThisPhone = rememberOnThisPhone()
     val tablet = isTablet()
@@ -234,8 +248,14 @@ fun AppShell(shell: ShellViewModel, actions: ShellActions) {
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
                         outputs = if (onPhone) RemoteRepository.Outputs() else outputs,
                         onOutputs = { outputsOpen = true },
+                        // On the phone, Play from takes the output button's place.
+                        onPlayFrom = if (onPhone && choices != null) {
+                            { playFromOpen = true }
+                        } else {
+                            null
+                        },
                         // Only while it's in sight, with nothing over it.
-                        hints = !shell.playerOpen && !connectionOpen && !outputsOpen &&
+                        hints = !shell.playerOpen && !connectionOpen && !outputsOpen && !playFromOpen &&
                             details == null && !choosingDownload,
                     )
                 }
@@ -274,6 +294,10 @@ fun AppShell(shell: ShellViewModel, actions: ShellActions) {
                             outputsOpen = true
                         }
 
+                        override fun onPlayFrom() {
+                            playFromOpen = true
+                        }
+
                         override fun onDownload() {
                             // Only songs in Clementine's library can be downloaded, not streams.
                             val song = nowPlaying.song
@@ -308,6 +332,13 @@ fun AppShell(shell: ShellViewModel, actions: ShellActions) {
             onDismiss = { outputsOpen = false },
         )
     }
+    // Closed when there's nothing to choose between any more, such as when Clementine disconnects.
+    LaunchedEffect(choices == null) {
+        if (choices == null) playFromOpen = false
+    }
+    choices?.takeIf { playFromOpen }?.let {
+        PlayFromSheet(it, rememberClementineHost(), onPlayFrom = player::playFrom, onDismiss = { playFromOpen = false })
+    }
     if (choosingDownload) {
         DownloadChooser(
             onChoose = {
@@ -335,12 +366,7 @@ private fun Destinations(
     val libraryState by library.state.collectAsStateWithLifecycle()
     val internetState by internet.state.collectAsStateWithLifecycle()
     val outputs by RemoteRepository.outputs.collectAsStateWithLifecycle()
-    // Clementine's computer, as Clementine names it; or else as the network does, or its address.
-    val address = remember {
-        App.Clementine.hostname?.takeIf { it.isNotBlank() }
-            ?: App.getPreferences().getString(SharedPreferencesKeys.SP_KEY_IP, null)?.takeIf { it.isNotBlank() }
-    }
-    val host = outputs.computerName ?: address
+    val host = rememberClementineHost()
 
     if (shell.offline) {
         // Without Clementine: what's on this phone, and how to connect; back goes there, then out.
@@ -650,6 +676,8 @@ internal fun MiniPlayer(
     modifier: Modifier = Modifier,
     outputs: RemoteRepository.Outputs = RemoteRepository.Outputs(),
     onOutputs: () -> Unit = {},
+    /** Chooses where the app plays from, while it plays from this phone; null otherwise. */
+    onPlayFrom: (() -> Unit)? = null,
     /** Whether its hints may show: false while something covers it. */
     hints: Boolean = true,
 ) {
@@ -703,6 +731,15 @@ internal fun MiniPlayer(
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+                }
+                if (onPlayFrom != null) {
+                    IconButton(onClick = onPlayFrom, modifier = Modifier.testTag("btnPlayFrom")) {
+                        Icon(
+                            painterResource(if (isTablet()) R.drawable.ic_tablet else R.drawable.ic_smartphone),
+                            stringResource(R.string.sync_play_from),
+                            tint = MaterialTheme.colorScheme.primary,
                         )
                     }
                 }
