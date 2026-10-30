@@ -21,36 +21,45 @@ import tempfile
 
 from google.protobuf import descriptor_pb2
 
+# A message field or enum value, by its scope's name and its number.
+Key = tuple[str, int]
+# What a field or value is: its kind, name and, for a field, its type and label.
+Signature = tuple[str, ...]
 
-def load(proto_path):
+
+def load(proto_path: str) -> descriptor_pb2.FileDescriptorProto:
     with tempfile.NamedTemporaryFile(suffix=".pb") as out:
         subprocess.run(
-            [os.environ.get("PROTOC", "protoc"),
-             "-I", os.path.dirname(os.path.abspath(proto_path)),
-             "--descriptor_set_out=" + out.name,
-             os.path.basename(proto_path)],
-            check=True)
+            [
+                os.environ.get("PROTOC", "protoc"),
+                "-I",
+                os.path.dirname(os.path.abspath(proto_path)),
+                "--descriptor_set_out=" + out.name,
+                os.path.basename(proto_path),
+            ],
+            check=True,
+        )
         fds = descriptor_pb2.FileDescriptorSet()
         fds.ParseFromString(out.read())
     (file_proto,) = fds.file
     return file_proto
 
 
-def short_type(field):
+def short_type(field: descriptor_pb2.FieldDescriptorProto) -> str:
     if field.type_name:
         return field.type_name.rsplit(".", 1)[-1]
     return descriptor_pb2.FieldDescriptorProto.Type.Name(field.type)
 
 
-def flatten(file_proto):
-    """Map "Message.field#number" / "Enum.VALUE#number" to a comparable signature."""
-    entries = {}
+def flatten(file_proto: descriptor_pb2.FileDescriptorProto) -> dict[Key, Signature]:
+    """Maps each message field and enum value to a comparable signature."""
+    entries: dict[Key, Signature] = {}
 
-    def enum(prefix, e):
+    def enum(prefix: str, e: descriptor_pb2.EnumDescriptorProto) -> None:
         for v in e.value:
             entries[(prefix + e.name, v.number)] = ("enum", v.name)
 
-    def message(prefix, m):
+    def message(prefix: str, m: descriptor_pb2.DescriptorProto) -> None:
         name = prefix + m.name
         for f in m.field:
             label = descriptor_pb2.FieldDescriptorProto.Label.Name(f.label)
@@ -67,7 +76,7 @@ def flatten(file_proto):
     return entries
 
 
-def main(app_path, clementine_path):
+def main(app_path: str, clementine_path: str) -> int:
     app = flatten(load(app_path))
     upstream = flatten(load(clementine_path))
     errors, warnings = [], []
@@ -77,7 +86,10 @@ def main(app_path, clementine_path):
         if key not in upstream:
             errors.append(f"{scope} #{number} {sig[1]}: removed from Clementine")
         elif upstream[key] != sig:
-            errors.append(f"{scope} #{number}: app has {sig[1:]}, Clementine has {upstream[key][1:]}")
+            errors.append(
+                f"{scope} #{number}: app has {sig[1:]}, "
+                f"Clementine has {upstream[key][1:]}"
+            )
 
     for key, sig in sorted(upstream.items()):
         if key not in app:
@@ -85,10 +97,21 @@ def main(app_path, clementine_path):
             warnings.append(f"{scope} #{number} {sig[1]}: only in Clementine")
 
     for w in warnings:
-        print(f"::warning title=Proto drift::{w}" if os.environ.get("GITHUB_ACTIONS") else f"warning: {w}")
+        print(
+            f"::warning title=Proto drift::{w}"
+            if os.environ.get("GITHUB_ACTIONS")
+            else f"warning: {w}"
+        )
     for e in errors:
-        print(f"::error title=Proto incompatibility::{e}" if os.environ.get("GITHUB_ACTIONS") else f"error: {e}")
-    print(f"{len(errors)} incompatibilities, {len(warnings)} additions in Clementine not used by the app")
+        print(
+            f"::error title=Proto incompatibility::{e}"
+            if os.environ.get("GITHUB_ACTIONS")
+            else f"error: {e}"
+        )
+    print(
+        f"{len(errors)} incompatibilities, "
+        f"{len(warnings)} additions in Clementine not used by the app"
+    )
     return 1 if errors else 0
 
 

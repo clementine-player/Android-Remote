@@ -1,29 +1,38 @@
 #!/usr/bin/env -S uv run
-"""Sends the store listing in fastlane/ to Google Play: its text, icon, feature graphic and
-phone screenshots, the same files F-Droid reads.
+"""Sends the store listing in fastlane/ to Google Play.
 
-    uv run scripts/play_listing.py --check    # only checks the listing against Play's limits
-    uv run scripts/play_listing.py            # updates Play's listing to match
+That's its text, icon, feature graphic and phone screenshots, the same files F-Droid
+reads.
 
-Run by .github/workflows/play-listing.yml. It signs in with Application Default Credentials:
-there, the Workload Identity Federation credentials google-github-actions/auth writes; locally,
-gcloud auth application-default login --impersonate-service-account=<the Play service account>.
+    uv run scripts/play_listing.py --check  # only checks it against Play's limits
+    uv run scripts/play_listing.py          # updates Play's listing to match
 
-The listing goes to the app's default language on Play, whichever that is (it's set in Play
-Console); fastlane/ has the one listing, in en-US.
+Run by .github/workflows/play-listing.yml. It signs in with Application Default
+Credentials: there, the Workload Identity Federation credentials
+google-github-actions/auth writes; locally, gcloud auth application-default login
+--impersonate-service-account=<the Play service account>.
 
-The phone screenshots are each release's own (release.yml takes them), so they're in the
-listing only on release tags: without them, Play's are left as they are.
+The listing goes to the app's default language on Play, whichever that is (it's set in
+Play Console); fastlane/ has the one listing, in en-US.
 
-Only what differs from Play's listing is changed: text as it is, images by their SHA-256, so
-merging something else doesn't send the listing for review again. With nothing to change,
-the edit is thrown away.
+The phone screenshots are each release's own (release.yml takes them), so they're in
+the listing only on release tags: without them, Play's are left as they are.
+
+Only what differs from Play's listing is changed: text as it is, images by their
+SHA-256, so merging something else doesn't send the listing for review again. With
+nothing to change, the edit is thrown away.
 """
+
 import argparse
+import contextlib
 import hashlib
 import sys
 from pathlib import Path
 
+import google.auth
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+from googleapiclient.http import MediaFileUpload
 from PIL import Image
 
 PACKAGE = "org.clementine_player.remote"
@@ -40,7 +49,7 @@ TEXT = {  # file: (listing field, most characters)
 MIN_SCREENSHOTS, MAX_SCREENSHOTS = 2, 8
 
 
-def text():
+def text() -> dict[str, str]:
     """The listing's text fields, as Play takes them."""
     fields = {}
     for name, (field, limit) in TEXT.items():
@@ -53,22 +62,26 @@ def text():
     return fields
 
 
-def images():
+def images() -> dict[str, list[Path]]:
     """Each image type's files, in the listing's order."""
     files = {
         "icon": [IMAGES / "icon.png"],
         "featureGraphic": [IMAGES / "featureGraphic.png"],
     }
-    screenshots = sorted(IMAGES.glob("phoneScreenshots/*.png"), key=lambda p: int(p.stem))
+    screenshots = sorted(
+        IMAGES.glob("phoneScreenshots/*.png"), key=lambda p: int(p.stem)
+    )
     if screenshots:
         if not MIN_SCREENSHOTS <= len(screenshots) <= MAX_SCREENSHOTS:
-            sys.exit(f"{len(screenshots)} phone screenshots; Play takes {MIN_SCREENSHOTS} to "
-                     f"{MAX_SCREENSHOTS}")
+            sys.exit(
+                f"{len(screenshots)} phone screenshots; "
+                f"Play takes {MIN_SCREENSHOTS} to {MAX_SCREENSHOTS}"
+            )
         files["phoneScreenshots"] = screenshots
     return files
 
 
-def check_image(kind, path):
+def check_image(kind: str, path: Path) -> None:
     with Image.open(path) as image:
         width, height = image.size
         mode = image.mode
@@ -80,13 +93,19 @@ def check_image(kind, path):
             sys.exit(f"{where} is over 1 MB")
     elif kind == "featureGraphic":
         if (width, height) != (1024, 500):
-            sys.exit(f"{where} is {width}x{height}; the feature graphic must be 1024x500")
+            sys.exit(
+                f"{where} is {width}x{height}; the feature graphic must be 1024x500"
+            )
     else:
-        if not (320 <= min(width, height) and max(width, height) <= 3840):
-            sys.exit(f"{where} is {width}x{height}; screenshots' sides must be 320 to 3840")
+        if not (min(width, height) >= 320 and max(width, height) <= 3840):
+            sys.exit(
+                f"{where} is {width}x{height}; screenshots' sides must be 320 to 3840"
+            )
         if max(width, height) > 2 * min(width, height):
-            sys.exit(f"{where} is {width}x{height}; screenshots can be at most twice as long "
-                     "as they're wide")
+            sys.exit(
+                f"{where} is {width}x{height}; "
+                "screenshots can be at most twice as long as they're wide"
+            )
         if path.stat().st_size > 8 * 1024 * 1024:
             sys.exit(f"{where} is over 8 MB")
     # Play takes 24-bit PNGs for these, without transparency.
@@ -94,22 +113,25 @@ def check_image(kind, path):
         sys.exit(f"{where} is {mode}; Play needs it without transparency (RGB)")
 
 
-def sha256(path):
+def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def publish(fields, files):
-    import google.auth
-    from googleapiclient.discovery import build
-    from googleapiclient.errors import HttpError
-    from googleapiclient.http import MediaFileUpload
-
-    credentials, _ = google.auth.default(scopes=["https://www.googleapis.com/auth/androidpublisher"])
-    edits = build("androidpublisher", "v3", credentials=credentials, cache_discovery=False).edits()
+def publish(fields: dict[str, str], files: dict[str, list[Path]]) -> None:
+    credentials, _ = google.auth.default(
+        scopes=["https://www.googleapis.com/auth/androidpublisher"]
+    )
+    edits = build(
+        "androidpublisher", "v3", credentials=credentials, cache_discovery=False
+    ).edits()
     edit = edits.insert(packageName=PACKAGE, body={}).execute()["id"]
     changed = []
     try:
-        language = edits.details().get(packageName=PACKAGE, editId=edit).execute()["defaultLanguage"]
+        language = (
+            edits.details()
+            .get(packageName=PACKAGE, editId=edit)
+            .execute()["defaultLanguage"]
+        )
         where = dict(packageName=PACKAGE, editId=edit, language=language)
         try:
             current = edits.listings().get(**where).execute()
@@ -118,20 +140,27 @@ def publish(fields, files):
                 raise
             current = {}
         if any(current.get(field) != value for field, value in fields.items()):
-            # Patched, keeping what isn't ours (the video); made, when there's none yet.
+            # Patched, keeping what isn't ours (the video); made, when there's none
+            # yet.
             (edits.listings().patch if current else edits.listings().update)(
-                **where, body=fields).execute()
+                **where, body=fields
+            ).execute()
             changed.append("text")
 
         for kind, paths in files.items():
-            on_play = edits.images().list(**where, imageType=kind).execute().get("images", [])
-            if [image.get("sha256") for image in on_play] == [sha256(p) for p in paths]:
+            on_play = (
+                edits.images().list(**where, imageType=kind).execute().get("images", [])
+            )
+            hashes = [sha256(p) for p in paths]
+            if [image.get("sha256") for image in on_play] == hashes:
                 continue
             edits.images().deleteall(**where, imageType=kind).execute()
             for path in paths:
-                edits.images().upload(**where, imageType=kind,
-                                      media_body=MediaFileUpload(str(path), mimetype="image/png")
-                                      ).execute()
+                edits.images().upload(
+                    **where,
+                    imageType=kind,
+                    media_body=MediaFileUpload(str(path), mimetype="image/png"),
+                ).execute()
             changed.append(kind)
 
         if changed:
@@ -139,31 +168,38 @@ def publish(fields, files):
                 edits.commit(packageName=PACKAGE, editId=edit).execute()
                 print(f"Updated Play's listing ({language}): {', '.join(changed)}")
             except HttpError as error:
-                # When Play wants changes sent for review from Play Console (after a rejection,
-                # say), it refuses to send them itself: committed unsent, for someone to send.
+                # When Play wants changes sent for review from Play Console (after a
+                # rejection, say), it refuses to send them itself: committed unsent, for
+                # someone to send.
                 if "changesNotSentForReview" not in str(error):
                     raise
-                edits.commit(packageName=PACKAGE, editId=edit,
-                             changesNotSentForReview=True).execute()
+                edits.commit(
+                    packageName=PACKAGE, editId=edit, changesNotSentForReview=True
+                ).execute()
                 print(f"Updated Play's listing ({language}): {', '.join(changed)}")
-                print("::warning::Google Play wouldn't send the store listing for review itself, "
-                      "so it waits in Play Console: send it for review from Publishing overview.")
+                print(
+                    "::warning::Google Play wouldn't send the store listing for review "
+                    "itself, so it waits in Play Console: send it for review from "
+                    "Publishing overview."
+                )
         else:
             edits.delete(packageName=PACKAGE, editId=edit).execute()
             print(f"Play's listing ({language}) already matches")
     except BaseException:
-        # Not left open, so the next run's edit isn't refused; the error is the one to report.
-        try:
+        # Not left open, so the next run's edit isn't refused; the error is the one to
+        # report.
+        with contextlib.suppress(Exception):
             edits.delete(packageName=PACKAGE, editId=edit).execute()
-        except Exception:
-            pass
         raise
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    parser.add_argument("--check", action="store_true",
-                        help="only check the listing against Play's limits")
+def main() -> None:
+    parser = argparse.ArgumentParser(description=(__doc__ or "").split("\n\n")[0])
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="only check the listing against Play's limits",
+    )
     args = parser.parse_args()
 
     fields = text()
@@ -171,8 +207,10 @@ def main():
     for kind, paths in files.items():
         for path in paths:
             check_image(kind, path)
-    print(f"Listing: {', '.join(f'{f} {len(v)} characters' for f, v in fields.items())}; "
-          f"{len(files.get('phoneScreenshots', [])) or 'no'} phone screenshots")
+    print(
+        f"Listing: {', '.join(f'{f} {len(v)} characters' for f, v in fields.items())}; "
+        f"{len(files.get('phoneScreenshots', [])) or 'no'} phone screenshots"
+    )
 
     if not args.check:
         publish(fields, files)
