@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Debug builds' launcher icon: the app's icon with a DEV badge, so that a debug build can be
+     told from a release installed beside it when the launcher cuts its name short. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/ic_launcher" />
+    <item android:drawable="@drawable/ic_launcher_dev_badge" />
+</layer-list>

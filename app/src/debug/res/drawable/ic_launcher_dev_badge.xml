@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "DEV" in white on red across the bottom of the launcher icon. Large, because launchers
+     shrink icons that aren't adaptive. Drawn as strokes, since a vector can't hold text. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#D32F2F"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="1"
+        android:pathData="M8,29.5 H40 A4,4 0 0 1 44,33.5 V42.5 A4,4 0 0 1 40,46.5 H8 A4,4 0 0 1 4,42.5 V33.5 A4,4 0 0 1 8,29.5 Z" />
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M13.1,33.1 V42.9 H14.6 A4.9,4.9 0 0 0 14.6,33.1 Z M27,33.1 H21.6 V42.9 H27 M21.6,38 H26 M29.6,33.1 L33,42.9 L36.4,33.1" />
+</vector>
