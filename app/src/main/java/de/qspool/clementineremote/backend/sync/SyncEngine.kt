@@ -54,7 +54,8 @@ sealed interface RuleResult {
  * Covers and conversions come later.
  *
  * [supportedFormats] are what the phone plays, as for streaming, and [delete] removes a song
- * [storage] saved, by its URI.
+ * [storage] saved, by its URI. [onProgress] hears how many of a rule's songs to download have
+ * been, before the first and after each one.
  */
 @WorkerThread
 class SyncEngine(
@@ -63,6 +64,7 @@ class SyncEngine(
     private val delete: (Uri) -> Unit,
     private val supportedFormats: List<AudioFormat>,
     private val now: () -> Long = System::currentTimeMillis,
+    private val onProgress: (ruleId: Long, done: Int, total: Int) -> Unit = { _, _, _ -> },
 ) {
 
     fun sync(connection: SyncConnection): SyncResult {
@@ -92,14 +94,20 @@ class SyncEngine(
             else -> {}
         }
 
+        val wanted = manifest.itemsList.map { item ->
+            val have = store.item(rule.serverId, item.itemKey)
+            Triple(item, have, have == null || have.version != item.version)
+        }
+        val total = wanted.count { it.third }
+        if (total > 0) onProgress(rule.id, 0, total)
         var downloaded = 0
         val keys = ArrayList<String>()
         try {
-            for (item in manifest.itemsList) {
-                val have = store.item(rule.serverId, item.itemKey)
-                if (have == null || have.version != item.version) {
+            for ((item, have, changed) in wanted) {
+                if (changed) {
                     download(connection, rule.serverId, item, have)
                     downloaded++
+                    onProgress(rule.id, downloaded, total)
                 }
                 keys += item.itemKey
             }
