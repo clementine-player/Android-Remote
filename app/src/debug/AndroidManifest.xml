@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Debug builds have their own name, so they're easy to tell from a release installed beside
-     them. Set on the application, rather than by overriding app_name, so that translations of
-     app_name don't hide it. -->
+<!-- Debug builds have their own name and icon, so they're easy to tell from a release installed
+     beside them. The name is set on the application, rather than by overriding app_name, so that
+     translations of app_name don't hide it. The icon has a DEV badge for when the launcher cuts
+     the name short. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:icon="@drawable/ic_launcher_dev"
         android:label="@string/app_name_dev"
-        tools:replace="android:label" />
+        tools:replace="android:icon,android:label" />
 </manifest>
