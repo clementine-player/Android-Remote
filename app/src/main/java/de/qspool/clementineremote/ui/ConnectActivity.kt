@@ -52,6 +52,7 @@ import androidx.core.content.edit
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.BuildConfig
@@ -410,8 +411,10 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
 
     /** Connects to the address typed in. */
     private fun connect() {
-        // Not once the activity has finished.
-        if (isFinishing) {
+        // Not once the activity has finished, nor while it's out of sight: then the app is in
+        // the background, where Android doesn't let it start the service. Connecting again is
+        // left to when it's back.
+        if (isFinishing || !lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
             return
         }
 
@@ -564,7 +567,9 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
      */
     private fun autoConnect() {
         val ip = preferences.getString(SharedPreferencesKeys.SP_KEY_IP, null)
-        if (isFinishing || ip.isNullOrEmpty() || state.isConnecting || App.ClementineConnection?.isConnected == true) {
+        if (isFinishing || !lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED) || ip.isNullOrEmpty() ||
+            state.isConnecting || App.ClementineConnection?.isConnected == true
+        ) {
             return
         }
         val name = preferences.getString(SharedPreferencesKeys.SP_KEY_NAME, null)?.ifEmpty { null }
