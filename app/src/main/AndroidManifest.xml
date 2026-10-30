@@ -79,6 +79,15 @@
         <service android:name=".backend.ClementineService"
                  android:exported="false"
                  android:foregroundServiceType="connectedDevice|mediaPlayback" />
+        <!-- Plays the songs kept on this phone. Exported for media controllers, such as the
+             system's, Bluetooth and watches, to find its session. -->
+        <service android:name=".backend.sync.PhonePlaybackService"
+                 android:exported="true"
+                 android:foregroundServiceType="mediaPlayback">
+            <intent-filter>
+                <action android:name="androidx.media3.session.MediaSessionService" />
+            </intent-filter>
+        </service>
         <receiver android:name=".backend.receivers.ClementinePhoneStateCheck"
                   android:exported="true">
             <intent-filter>

@@ -3,6 +3,7 @@ package de.qspool.clementineremote.backend.sync
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import androidx.annotation.WorkerThread
 import androidx.core.content.edit
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.SharedPreferencesKeys
@@ -114,6 +115,11 @@ object Syncer {
             KeptRule(rule, songs.size, songs.sumOf { it.sizeBytes }, results[rule.id])
         }
     }
+
+    /** The songs of [ruleId] on this phone, in its order. Reads the disk. */
+    @JvmStatic
+    @WorkerThread
+    fun songs(ruleId: Long): List<KeptSong> = store(context).ruleItems(ruleId).map(KeptSong::of)
 
     /**
      * Keeps [rules] on the phone, for the Clementine connected, and syncs them. A rule for a

@@ -2,6 +2,7 @@ package de.qspool.clementineremote.ui.downloads
 
 import android.content.Intent
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -68,7 +69,24 @@ fun DownloadsScreen(viewModel: DownloadsViewModel) {
     val keptRules by viewModel.kept.collectAsStateWithLifecycle()
     val syncStatus by viewModel.syncStatus.collectAsStateWithLifecycle()
     val syncFrom by viewModel.syncFrom.collectAsStateWithLifecycle()
+    val opened by viewModel.opened.collectAsStateWithLifecycle()
+    val playing by viewModel.playing.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    // The rule open, as it is now; gone when it's removed.
+    val openRule = opened?.let { open -> keptRules.firstOrNull { it.rule.id == open.ruleId } }
+    if (openRule != null) {
+        BackHandler(onBack = viewModel::close)
+        KeptRuleContent(
+            openRule,
+            songs = opened?.songs,
+            playing = playing,
+            running = syncStatus.running,
+            onBack = viewModel::close,
+            onPlay = viewModel::play,
+            onShuffle = viewModel::shuffle,
+        )
+        return
+    }
     // Each time the screen shows: the library may have synced since.
     LaunchedEffect(viewModel) { viewModel.loadSuggestions() }
     DownloadsContent(
@@ -96,6 +114,7 @@ fun DownloadsScreen(viewModel: DownloadsViewModel) {
         onThisPhone = syncFrom.supported || keptRules.isNotEmpty(),
         onSyncNow = viewModel::syncNow,
         onRemoveKept = viewModel::remove,
+        onOpenKept = viewModel::open,
     )
 }
 
@@ -114,6 +133,7 @@ internal fun DownloadsContent(
     onThisPhone: Boolean = false,
     onSyncNow: () -> Unit = {},
     onRemoveKept: (KeptRule) -> Unit = {},
+    onOpenKept: (KeptRule) -> Unit = {},
 ) {
     // The finished download whose songs are being picked from.
     var picking by remember { mutableStateOf<Download?>(null) }
@@ -144,7 +164,7 @@ internal fun DownloadsContent(
             item { Empty(suggestions.isEmpty) }
             suggestions(suggestions, onDownloadAlbum, onDownloadPlaylist)
         }
-        keptOnPhone(kept, onSyncNow, onRemoveKept)
+        keptOnPhone(kept, onSyncNow, onRemoveKept, onOpenKept)
         section(R.string.downloads_running, state.running, onCancel) {}
         section(R.string.downloads_finished, state.finished, onCancel) { picking = it }
 

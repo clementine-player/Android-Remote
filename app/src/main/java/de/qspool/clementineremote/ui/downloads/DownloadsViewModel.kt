@@ -17,6 +17,8 @@ import de.qspool.clementineremote.backend.pb.ClementineMessageFactory
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem
 import de.qspool.clementineremote.backend.player.MyPlaylist
 import de.qspool.clementineremote.backend.sync.KeptRule
+import de.qspool.clementineremote.backend.sync.KeptSong
+import de.qspool.clementineremote.backend.sync.PhonePlayer
 import de.qspool.clementineremote.backend.sync.Syncer
 import de.qspool.clementineremote.utils.Utilities
 import kotlinx.coroutines.CoroutineDispatcher
@@ -35,6 +37,9 @@ import java.util.LinkedList
 
 /** A song downloaded, to play. */
 data class DownloadedSong(val title: String, val artist: String, val uri: Uri)
+
+/** A rule kept on this phone, shown with its songs: null until they're read. */
+data class OpenedRule(val ruleId: Long, val songs: List<KeptSong>?)
 
 /** A download, running or done. */
 data class Download(
@@ -87,6 +92,12 @@ class DownloadsViewModel(
     private val removeRule: (Long) -> Unit = Syncer::remove,
     private val startSync: () -> Unit = { Syncer.syncNow() },
     refreshKept: () -> Unit = Syncer::refresh,
+    /** A rule's songs on this phone, in its order; reads the disk. */
+    private val songsOf: (Long) -> List<KeptSong> = Syncer::songs,
+    /** The item key of the song playing on this phone. */
+    val playing: StateFlow<String?> = PhonePlayer.playing,
+    private val playOnPhone: (songs: List<KeptSong>, start: Int, shuffle: Boolean) -> Unit =
+        { songs, start, shuffle -> PhonePlayer.play(App.getApp(), songs, start, shuffle) },
 ) : ViewModel() {
 
     init {
@@ -95,6 +106,11 @@ class DownloadsViewModel(
     }
 
     private val _suggestions = MutableStateFlow(Suggestions())
+
+    private val _opened = MutableStateFlow<OpenedRule?>(null)
+
+    /** The rule kept on this phone whose songs show, if one does. */
+    val opened: StateFlow<OpenedRule?> = _opened.asStateFlow()
 
     /** What to download, for when nothing has been: see [DownloadSuggestions]. */
     val suggestions: StateFlow<Suggestions> = _suggestions.asStateFlow()
@@ -204,6 +220,31 @@ class DownloadsViewModel(
 
     /** Syncs what's kept now. */
     fun syncNow() = startSync()
+
+    /** Shows the songs of [rule] on this phone. */
+    fun open(rule: KeptRule) {
+        val id = rule.rule.id
+        _opened.value = OpenedRule(id, null)
+        viewModelScope.launch {
+            val songs = withContext(io) { songsOf(id) }
+            if (_opened.value?.ruleId == id) _opened.value = OpenedRule(id, songs)
+        }
+    }
+
+    /** Goes back from the songs of a rule. */
+    fun close() {
+        _opened.value = null
+    }
+
+    /** Plays the songs of the rule open on this phone, from the one at [index]. */
+    fun play(index: Int) {
+        _opened.value?.songs?.let { playOnPhone(it, index, false) }
+    }
+
+    /** Plays the songs of the rule open on this phone at random. */
+    fun shuffle() {
+        _opened.value?.songs?.let { playOnPhone(it, 0, true) }
+    }
 
     private companion object {
         const val REFRESH_MILLIS = 250L
