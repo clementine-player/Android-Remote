@@ -1,6 +1,7 @@
 package de.qspool.clementineremote.ui.downloads
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -51,9 +52,15 @@ data class Kept(
 
 /**
  * The rules kept on this phone, each saying how its last sync went, with a menu to sync now and to
- * stop keeping it, which asks first. Rows are tagged "kept" and the rule's id.
+ * stop keeping it, which asks first. Tapping one opens its songs ([onOpen]). Rows are tagged
+ * "kept" and the rule's id.
  */
-internal fun LazyListScope.keptOnPhone(kept: Kept, onSyncNow: () -> Unit, onRemove: (KeptRule) -> Unit) {
+internal fun LazyListScope.keptOnPhone(
+    kept: Kept,
+    onSyncNow: () -> Unit,
+    onRemove: (KeptRule) -> Unit,
+    onOpen: (KeptRule) -> Unit = {},
+) {
     if (kept.rules.isEmpty()) {
         return
     }
@@ -66,7 +73,7 @@ internal fun LazyListScope.keptOnPhone(kept: Kept, onSyncNow: () -> Unit, onRemo
         )
     }
     items(kept.rules, key = { "kept/${it.rule.id}" }) { rule ->
-        KeptRow(rule, kept.running, kept.canSync, onSyncNow, onRemove)
+        KeptRow(rule, kept.running, kept.canSync, onSyncNow, onRemove, onOpen)
     }
 }
 
@@ -77,6 +84,7 @@ private fun KeptRow(
     canSync: Boolean,
     onSyncNow: () -> Unit,
     onRemove: (KeptRule) -> Unit,
+    onOpen: (KeptRule) -> Unit,
 ) {
     var menu by remember { mutableStateOf(false) }
     var confirming by remember { mutableStateOf(false) }
@@ -131,7 +139,7 @@ private fun KeptRow(
             }
         },
         colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-        modifier = Modifier.testTag("kept${kept.rule.id}"),
+        modifier = Modifier.clickable { onOpen(kept) }.testTag("kept${kept.rule.id}"),
     )
 
     if (confirming) {
@@ -156,7 +164,7 @@ private fun KeptRow(
 
 /** How a rule stands: why it didn't sync, or what it keeps. */
 @Composable
-private fun keptDetails(kept: KeptRule, running: Boolean): String = when (val result = kept.result) {
+internal fun keptDetails(kept: KeptRule, running: Boolean): String = when (val result = kept.result) {
     is RuleResult.NeedsSetup -> result.message
     RuleResult.Gone -> stringResource(R.string.sync_gone)
     is RuleResult.Failed -> stringResource(R.string.sync_failed)

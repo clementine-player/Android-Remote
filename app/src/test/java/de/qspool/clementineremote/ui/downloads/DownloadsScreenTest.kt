@@ -3,8 +3,12 @@ package de.qspool.clementineremote.ui.downloads
 import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import android.os.Looper
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.isSelected
 import androidx.compose.ui.test.junit4.v2.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -18,6 +22,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Down
 import de.qspool.clementineremote.backend.player.MyPlaylist
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncSourceKind
 import de.qspool.clementineremote.backend.sync.KeptRule
+import de.qspool.clementineremote.backend.sync.KeptSong
 import de.qspool.clementineremote.backend.sync.RefreshPolicy
 import de.qspool.clementineremote.backend.sync.RuleResult
 import de.qspool.clementineremote.backend.sync.SyncRule
@@ -124,6 +129,68 @@ class DownloadsScreenTest {
         compose.onNodeWithTag("keptRemoveConfirm").performClick()
 
         assertEquals(listOf(1L), removed)
+    }
+
+    private val keptSongs = listOf(
+        KeptSong("a", "So What", "Miles Davis", "Kind of Blue", "9:22", Uri.parse("content://media/1")),
+        KeptSong("b", "Freddie Freeloader", "Miles Davis", "Kind of Blue", "9:46", Uri.parse("content://media/2")),
+    )
+
+    @Test
+    fun showsTheSongsOfWhatsKeptToPlayOnThisPhone() {
+        val kept = KeptRule(rule(1, "Kind of Blue", SyncSourceKind.SYNC_SOURCE_KIND_ALBUM), 2, 0, null)
+        val played = mutableListOf<String>()
+        compose.setContent {
+            ClementineTheme(dynamicColor = false) {
+                KeptRuleContent(
+                    kept,
+                    songs = keptSongs,
+                    playing = "b",
+                    running = false,
+                    onBack = { played += "back" },
+                    onPlay = { played += "play $it" },
+                    onShuffle = { played += "shuffle" },
+                )
+            }
+        }
+
+        compose.onNodeWithText("Freddie Freeloader").assertIsDisplayed()
+        compose.onAllNodesWithText("Miles Davis · Kind of Blue").assertCountEquals(2)
+        compose.onNodeWithText("9:46").assertIsDisplayed()
+        // The song playing on this phone is marked.
+        compose.onNode(hasText("Freddie Freeloader") and isSelected()).assertExists()
+        compose.onNode(hasText("So What") and isSelected()).assertDoesNotExist()
+
+        compose.onNodeWithText("So What").performClick()
+        compose.onNodeWithTag("keptShuffle").performClick()
+        compose.onNodeWithTag("keptPlay").performClick()
+        compose.onNodeWithTag("keptRuleBack").performClick()
+        assertEquals(listOf("play 0", "shuffle", "play 0", "back"), played)
+    }
+
+    @Test
+    fun viewModelOpensWhatsKeptAndPlaysItsSongs() {
+        val played = mutableListOf<Triple<List<KeptSong>, Int, Boolean>>()
+        val downloads = DownloadsViewModel(
+            downloads = { emptyList() },
+            storedSongs = { emptyList() },
+            freeSpace = { 0 },
+            io = Dispatchers.Unconfined,
+            refreshKept = {},
+            songsOf = { if (it == 1L) keptSongs else emptyList() },
+            playOnPhone = { songs, start, shuffle -> played += Triple(songs, start, shuffle) },
+        )
+
+        downloads.open(KeptRule(rule(1, "Kind of Blue", SyncSourceKind.SYNC_SOURCE_KIND_ALBUM), 2, 0, null))
+        shadowOf(Looper.getMainLooper()).idle()
+        assertEquals(OpenedRule(1, keptSongs), downloads.opened.value)
+
+        downloads.play(1)
+        downloads.shuffle()
+        assertEquals(listOf(Triple(keptSongs, 1, false), Triple(keptSongs, 0, true)), played)
+
+        downloads.close()
+        assertEquals(null, downloads.opened.value)
     }
 
     @Test
