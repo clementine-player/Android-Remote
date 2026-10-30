@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The app shortcut that plays what's on this phone: Material Icons "smartphone" (Apache 2.0)
+     in a circle, as app shortcut icons are drawn. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#DB6835"
+        android:pathData="M24,2a22,22 0,1 1,0 44a22,22 0,1 1,0 -44z" />
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M29,13.01L19,13c-1.1,0 -2,0.9 -2,2v18c0,1.1 0.9,2 2,2h10c1.1,0 2,-0.9 2,-2V15c0,-1.1 -0.9,-1.99 -2,-1.99zM29,31H19V17h10v14z" />
+</vector>

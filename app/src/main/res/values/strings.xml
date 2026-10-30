@@ -452,6 +452,27 @@
     <string name="sync_on_phone_tab">On phone</string>
     <!-- The same tab on a tablet. Keep it short, as for "On phone". -->
     <string name="sync_on_tablet_tab">On tablet</string>
+    <!-- On the connect screen, under "Or enter its address": instead of connecting, play the music
+         saved on the phone. -->
+    <string name="sync_connect_or_play">Or play what\'s on this phone</string>
+    <!-- On the connect screen, under On this phone: how many songs are saved on the phone. -->
+    <plurals name="sync_connect_songs">
+        <item quantity="one">%d song</item>
+        <item quantity="other">%d songs</item>
+    </plurals>
+    <!-- On the connect screen while it connects, under On this phone: tapping it stops connecting
+         to Clementine. The placeholder is how many songs are saved on the phone. -->
+    <plurals name="sync_connect_stops">
+        <item quantity="one">Stops connecting · %d song</item>
+        <item quantity="other">Stops connecting · %d songs</item>
+    </plurals>
+    <!-- A button in the dialog when connecting fails, and a shortcut on the app's icon: play the
+         music saved on the phone instead of connecting. -->
+    <string name="sync_play_on_phone">Play on this phone</string>
+    <!-- Banner: the app can't connect to Clementine on the computer. -->
+    <string name="sync_not_reachable">Clementine isn\'t reachable</string>
+    <!-- Banner, under "Clementine isn't reachable". -->
+    <string name="sync_playing_on_phone">Playing what\'s on this phone</string>
     <!-- Saves the music on the phone and keeps it up to date. -->
     <string name="sync_keep">Keep on this phone</string>
     <!-- Heading of the things you chose to keep on the phone. -->

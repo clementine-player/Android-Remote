@@ -128,12 +128,18 @@ class ShellViewModel : ViewModel() {
     var destination by mutableStateOf(Destination.QUEUE)
 
     var playerOpen by mutableStateOf(false)
+
+    /** Whether it's playing what's on this phone without Clementine, which isn't connected. */
+    var offline by mutableStateOf(false)
 }
 
 /** What the shell asks of the activity. */
 interface ShellActions : ConnectionActions {
     /** Downloads the song playing, its album or its playlist. */
     fun onDownloadSong(what: DownloadWhat)
+
+    /** Connects to Clementine, from playing what's on this phone without it. */
+    fun onConnect() {}
 }
 
 /**
@@ -210,9 +216,15 @@ fun AppShell(shell: ShellViewModel, actions: ShellActions) {
             }
             Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing.only(sides))) {
                 Box(Modifier.weight(1f).fillMaxWidth()) {
-                    Destinations(shell, onConnection = { connectionOpen = true }, onSettings = actions::onSettings)
+                    Destinations(
+                        shell,
+                        onConnection = { if (shell.offline) actions.onConnect() else connectionOpen = true },
+                        onSettings = actions::onSettings,
+                        onConnect = actions::onConnect,
+                    )
                 }
-                if (nowPlaying.song != null) {
+                // Clementine's song; without Clementine, the phone's own player plays.
+                if (nowPlaying.song != null && !shell.offline) {
                     MiniPlayer(
                         nowPlaying,
                         onOpen = { shell.playerOpen = true },
@@ -303,7 +315,12 @@ fun AppShell(shell: ShellViewModel, actions: ShellActions) {
 
 /** The screen [ShellViewModel.destination] names, with its top bar; back goes up, then home. */
 @Composable
-private fun Destinations(shell: ShellViewModel, onConnection: () -> Unit, onSettings: () -> Unit) {
+private fun Destinations(
+    shell: ShellViewModel,
+    onConnection: () -> Unit,
+    onSettings: () -> Unit,
+    onConnect: () -> Unit,
+) {
     val queue: QueueViewModel = viewModel()
     val library: LibraryViewModel = viewModel()
     val search: SearchViewModel = viewModel()
@@ -318,6 +335,21 @@ private fun Destinations(shell: ShellViewModel, onConnection: () -> Unit, onSett
             ?: App.getPreferences().getString(SharedPreferencesKeys.SP_KEY_IP, null)?.takeIf { it.isNotBlank() }
     }
     val host = outputs.computerName ?: address
+
+    if (shell.offline) {
+        // Without Clementine: what's on this phone, and how to connect; back goes there, then out.
+        BackHandler(shell.destination != Destination.DOWNLOADS) { shell.destination = Destination.DOWNLOADS }
+        Column(Modifier.fillMaxSize()) {
+            TopBar(host, onConnection, onSettings)
+            NotReachableBanner(onConnect)
+            if (shell.destination == Destination.DOWNLOADS) {
+                DownloadsScreen(downloads)
+            } else {
+                NotReachable(onConnect)
+            }
+        }
+        return
+    }
 
     // Back leaves search results, then the screen, for the queue.
     BackHandler(shell.destination != Destination.QUEUE) { shell.destination = Destination.QUEUE }
@@ -433,6 +465,62 @@ private fun Destinations(shell: ShellViewModel, onConnection: () -> Unit, onSett
                 DownloadsScreen(downloads)
             }
         }
+    }
+}
+
+/** Says Clementine isn't connected, so what's on this phone plays, with Connect. */
+@Composable
+private fun NotReachableBanner(onConnect: () -> Unit) {
+    Surface(
+        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+        shape = RoundedCornerShape(12.dp),
+        modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 8.dp).testTag("notReachable"),
+    ) {
+        Row(
+            Modifier.padding(start = 16.dp, end = 8.dp, top = 4.dp, bottom = 4.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                painterResource(R.drawable.ic_computer),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Column(Modifier.weight(1f).padding(vertical = 8.dp)) {
+                Text(stringResource(R.string.sync_not_reachable), style = MaterialTheme.typography.titleSmall)
+                Text(
+                    stringResource(R.string.sync_playing_on_phone),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            TextButton(onClick = onConnect, modifier = Modifier.testTag("btnNotReachableConnect")) {
+                Text(stringResource(R.string.connectdialog_connect))
+            }
+        }
+    }
+}
+
+/** A screen that needs Clementine, without it: says so, with Connect. */
+@Composable
+private fun NotReachable(onConnect: () -> Unit) {
+    Column(
+        Modifier.fillMaxSize().padding(horizontal = 32.dp, vertical = 48.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Icon(
+            painterResource(R.drawable.ic_computer),
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.size(48.dp),
+        )
+        Text(
+            stringResource(R.string.sync_not_reachable),
+            style = MaterialTheme.typography.titleMedium,
+            textAlign = TextAlign.Center,
+        )
+        TextButton(onClick = onConnect) { Text(stringResource(R.string.connectdialog_connect)) }
     }
 }
 

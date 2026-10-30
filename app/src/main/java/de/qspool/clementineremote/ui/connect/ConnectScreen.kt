@@ -56,6 +56,7 @@ import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -69,6 +70,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.qspool.clementineremote.R
 import de.qspool.clementineremote.ui.shell.Fold
 import de.qspool.clementineremote.ui.shell.foldAcross
+import de.qspool.clementineremote.ui.shell.isTablet
 import de.qspool.clementineremote.ui.theme.ClementineBrand
 
 /** What the user does on the connect screen. */
@@ -97,11 +99,15 @@ interface ConnectActions {
 
     /** Open the app's page in Android's settings, to allow a permission refused for good. */
     fun onOpenAppSettings()
+
+    /** Play what's on this phone, without Clementine: stops connecting, if it is. */
+    fun onPlayOnPhone() {}
 }
 
 /**
  * The connect screen: Clementine's header, the Clementines found on the network (or how to find
  * them), and the address to connect to by hand. While connecting, it shows how far along it is.
+ * With songs on this phone, it offers to play them instead.
  */
 @Composable
 fun ConnectScreen(viewModel: ConnectViewModel, actions: ConnectActions) {
@@ -111,6 +117,7 @@ fun ConnectScreen(viewModel: ConnectViewModel, actions: ConnectActions) {
     val searching by viewModel.searching.collectAsStateWithLifecycle()
     val progress by viewModel.progress.collectAsStateWithLifecycle()
     val dialog by viewModel.dialog.collectAsStateWithLifecycle()
+    val onPhone by viewModel.onPhone.collectAsStateWithLifecycle()
     ConnectContent(
         host = host,
         knownHosts = knownHosts,
@@ -119,6 +126,7 @@ fun ConnectScreen(viewModel: ConnectViewModel, actions: ConnectActions) {
         progress = progress,
         onHostChange = viewModel::setHost,
         actions = actions,
+        onPhone = onPhone,
     )
     ConnectDialogs(dialog, actions, viewModel::dismissDialog)
 }
@@ -133,9 +141,11 @@ internal fun ConnectContent(
     onHostChange: (String) -> Unit,
     actions: ConnectActions,
     modifier: Modifier = Modifier,
+    /** How many songs are saved on this phone, to play without Clementine; 0 for none. */
+    onPhone: Int = 0,
 ) {
     val body = @Composable { bodyModifier: Modifier ->
-        Body(host, knownHosts, servers, searching, progress, onHostChange, actions, bodyModifier)
+        Body(host, knownHosts, servers, searching, progress, onHostChange, actions, onPhone, bodyModifier)
     }
     var bounds by remember { mutableStateOf<Rect?>(null) }
     BoxWithConstraints(
@@ -227,6 +237,7 @@ private fun Body(
     @StringRes progress: Int?,
     onHostChange: (String) -> Unit,
     actions: ConnectActions,
+    onPhone: Int,
     modifier: Modifier,
 ) {
     val connecting = progress != null
@@ -302,6 +313,19 @@ private fun Body(
             }
         }
 
+        if (onPhone > 0) {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                SectionTitle(R.string.sync_connect_or_play, Modifier.padding(start = 8.dp, top = 8.dp, bottom = 8.dp))
+                Surface(
+                    color = MaterialTheme.colorScheme.surfaceContainerLow,
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    OnPhoneItem(onPhone, connecting, actions::onPlayOnPhone)
+                }
+            }
+        }
+
         Text(
             stringResource(R.string.connect_requirements, stringResource(R.string.clementine_version)),
             style = MaterialTheme.typography.bodySmall,
@@ -318,6 +342,37 @@ private fun SectionTitle(@StringRes text: Int, modifier: Modifier) {
         style = MaterialTheme.typography.titleSmall,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = modifier.semantics { heading() },
+    )
+}
+
+/** What's on this phone, to play without Clementine; while connecting, tapping it stops that. */
+@Composable
+private fun OnPhoneItem(songs: Int, connecting: Boolean, onClick: () -> Unit) {
+    ListItem(
+        headlineContent = { Text(stringResource(R.string.sync_on_this_phone)) },
+        supportingContent = {
+            Text(
+                pluralStringResource(
+                    if (connecting) R.plurals.sync_connect_stops else R.plurals.sync_connect_songs,
+                    songs,
+                    songs,
+                ),
+            )
+        },
+        leadingContent = {
+            Box(
+                Modifier.size(40.dp).clip(CircleShape).background(MaterialTheme.colorScheme.secondaryContainer),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    painterResource(if (isTablet()) R.drawable.ic_tablet else R.drawable.ic_smartphone),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurface,
+                )
+            }
+        },
+        colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+        modifier = Modifier.clickable(onClick = onClick).testTag("playOnPhone"),
     )
 }
 

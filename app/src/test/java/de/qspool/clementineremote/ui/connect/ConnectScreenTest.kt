@@ -43,6 +43,7 @@ class ConnectScreenTest {
         searching: Boolean = true,
         progress: Int? = null,
         knownHosts: List<String> = emptyList(),
+        onPhone: Int = 0,
     ) {
         compose.setContent {
             var typed by remember { mutableStateOf(host) }
@@ -55,6 +56,7 @@ class ConnectScreenTest {
                     progress = progress,
                     onHostChange = { typed = it },
                     actions = actions { typed },
+                    onPhone = onPhone,
                 )
             }
         }
@@ -91,6 +93,10 @@ class ConnectScreenTest {
 
         override fun onOpenAppSettings() {
             done += "app settings"
+        }
+
+        override fun onPlayOnPhone() {
+            done += "play on phone"
         }
     }
 
@@ -226,6 +232,42 @@ class ConnectScreenTest {
         compose.onNodeWithTag("btnCancel").performClick()
 
         assertEquals(listOf("cancel"), done)
+    }
+
+    @Test
+    fun withNothingOnThisPhoneDoesNotOfferIt() {
+        show(onPhone = 0)
+
+        compose.onNodeWithTag("playOnPhone").assertDoesNotExist()
+    }
+
+    @Test
+    fun offersWhatsOnThisPhone() {
+        show(onPhone = 3)
+        compose.onNodeWithText("Or play what's on this phone").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("3 songs").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithTag("playOnPhone").performClick()
+
+        assertEquals(listOf("play on phone"), done)
+    }
+
+    @Test
+    fun whileConnectingWhatsOnThisPhoneStopsIt() {
+        show(host = "studio-pc", progress = R.string.connectdialog_connecting, onPhone = 1)
+
+        compose.onNodeWithText("Stops connecting · 1 song").performScrollTo().assertIsDisplayed()
+    }
+
+    @Test
+    fun aFailureOffersToPlayWhatsOnThisPhone() {
+        val viewModel = ConnectViewModel()
+        viewModel.showDialog(ConnectDialog.Message("Could not reach host", "Check the address.", playOnPhone = true))
+        showDialogs(viewModel)
+
+        compose.onNodeWithTag("btnMessagePlayOnPhone").assertTextEquals("Play on this phone").performClick()
+
+        assertEquals(listOf("play on phone"), done)
+        assertNull(viewModel.dialog.value)
     }
 
     @Test

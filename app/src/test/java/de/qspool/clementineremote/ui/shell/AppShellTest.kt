@@ -56,6 +56,10 @@ class AppShellTest {
         override fun onDisconnect() {
             done += "disconnect"
         }
+
+        override fun onConnect() {
+            done += "connect"
+        }
     }
 
     private val shell = ShellViewModel()
@@ -91,6 +95,31 @@ class AppShellTest {
         compose.runOnUiThread { compose.activity.onBackPressedDispatcher.onBackPressed() }
         compose.waitForIdle()
         assertEquals(Destination.QUEUE, shell.destination)
+    }
+
+    @Test
+    fun withoutClementineSaysSoAndPlaysWhatsOnThisPhone() {
+        compose.runOnUiThread {
+            shell.offline = true
+            shell.destination = Destination.DOWNLOADS
+        }
+        compose.waitForIdle()
+
+        compose.onNodeWithTag("downloads").assertIsDisplayed()
+        compose.onNodeWithText("Clementine isn't reachable").assertIsDisplayed()
+        compose.onNodeWithText("Playing what's on this phone").assertIsDisplayed()
+
+        // The other screens need Clementine; back returns to what's on this phone.
+        compose.onNodeWithTag("navQueue").performClick()
+        compose.onNodeWithTag("downloads").assertDoesNotExist()
+        compose.runOnUiThread { compose.activity.onBackPressedDispatcher.onBackPressed() }
+        compose.waitForIdle()
+        assertEquals(Destination.DOWNLOADS, shell.destination)
+
+        compose.onNodeWithTag("btnNotReachableConnect").performClick()
+        // The connection chip connects too, rather than describing a connection there isn't.
+        compose.onNodeWithTag("connectionChip").performClick()
+        assertEquals(listOf("connect", "connect"), done)
     }
 
     /** Clementine's INFO, as on connecting: it can be browsed, or not. */

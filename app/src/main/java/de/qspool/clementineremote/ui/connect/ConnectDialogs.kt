@@ -25,8 +25,11 @@ import de.qspool.clementineremote.R
 /** A dialog over the connect screen. */
 sealed interface ConnectDialog {
 
-    /** Something to tell the user, such as why connecting failed. */
-    data class Message(val title: String, val text: String) : ConnectDialog
+    /**
+     * Something to tell the user, such as why connecting failed; with [playOnPhone], it offers to
+     * play what's on this phone instead.
+     */
+    data class Message(val title: String, val text: String, val playOnPhone: Boolean = false) : ConnectDialog
 
     /** Clementine wants the auth code shown in its network remote settings. */
     data object AuthCode : ConnectDialog
@@ -40,7 +43,10 @@ sealed interface ConnectDialog {
 internal fun ConnectDialogs(dialog: ConnectDialog?, actions: ConnectActions, onDismiss: () -> Unit) {
     when (dialog) {
         null -> {}
-        is ConnectDialog.Message -> MessageDialog(dialog, onDismiss)
+        is ConnectDialog.Message -> MessageDialog(dialog, onDismiss) {
+            onDismiss()
+            actions.onPlayOnPhone()
+        }
         ConnectDialog.AuthCode -> AuthCodeDialog(onDismiss) {
             onDismiss()
             actions.onAuthCode(it)
@@ -80,7 +86,7 @@ private fun permissionReason(permission: String): Int? = when (permission) {
 }
 
 @Composable
-private fun MessageDialog(message: ConnectDialog.Message, onDismiss: () -> Unit) {
+private fun MessageDialog(message: ConnectDialog.Message, onDismiss: () -> Unit, onPlayOnPhone: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(message.title) },
@@ -94,6 +100,15 @@ private fun MessageDialog(message: ConnectDialog.Message, onDismiss: () -> Unit)
             TextButton(onClick = onDismiss, modifier = Modifier.testTag("btnMessageClose")) {
                 Text(stringResource(R.string.dialog_close))
             }
+        },
+        dismissButton = if (message.playOnPhone) {
+            {
+                TextButton(onClick = onPlayOnPhone, modifier = Modifier.testTag("btnMessagePlayOnPhone")) {
+                    Text(stringResource(R.string.sync_play_on_phone))
+                }
+            }
+        } else {
+            null
         },
     )
 }

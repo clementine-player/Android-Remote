@@ -61,7 +61,8 @@ import de.qspool.clementineremote.utils.Utilities
 /**
  * The app while connected to Clementine: the Compose shell ([AppShell]). It follows the
  * connection, and finishes when it ends, back to [ConnectActivity]; the volume keys set
- * Clementine's volume, through the media session.
+ * Clementine's volume, through the media session. Opened with [EXTRA_ON_THIS_PHONE], it starts on
+ * the On this phone tab, and without a connection stays open to play what's on this phone.
  */
 class MainActivity : ComponentActivity(), ShellActions {
 
@@ -102,11 +103,20 @@ class MainActivity : ComponentActivity(), ShellActions {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+        setIntent(intent)
         show(intent)
     }
 
-    /** A notification opens the player, or the downloads. */
+    /** Whether opened to play what's on this phone, connected to Clementine or not. */
+    private fun onThisPhone() = intent.getBooleanExtra(EXTRA_ON_THIS_PHONE, false)
+
+    /** A notification opens the player, or the downloads; playing on this phone, the On this phone tab. */
     private fun show(intent: Intent) {
+        if (intent.getBooleanExtra(EXTRA_ON_THIS_PHONE, false)) {
+            shell.playerOpen = false
+            shell.destination = Destination.DOWNLOADS
+            return
+        }
         if (!intent.hasExtra(ClementineMediaSessionNotification.EXTRA_NOTIFICATION_ID)) {
             return
         }
@@ -133,10 +143,16 @@ class MainActivity : ComponentActivity(), ShellActions {
         openConnectScreen = true
         val connection = App.ClementineConnection
         if (connection == null || App.Clementine == null || !connection.isConnected) {
-            Log.d(TAG, "onResume - disconnect")
-            setResult(ConnectActivity.RESULT_DISCONNECT)
-            finish()
+            if (onThisPhone()) {
+                // Playing what's on this phone, without Clementine.
+                shell.offline = true
+            } else {
+                Log.d(TAG, "onResume - disconnect")
+                setResult(ConnectActivity.RESULT_DISCONNECT)
+                finish()
+            }
         } else {
+            shell.offline = false
             connection.setUiHandler(handler)
         }
 
@@ -158,7 +174,8 @@ class MainActivity : ComponentActivity(), ShellActions {
         super.onDestroy()
         // Disconnected: back to the connect screen, unless leaving.
         val connection = App.ClementineConnection
-        if ((connection == null || App.Clementine == null || !connection.isConnected) && openConnectScreen) {
+        val connected = connection != null && App.Clementine != null && connection.isConnected
+        if (!connected && openConnectScreen && !onThisPhone()) {
             Log.d(TAG, "onDestroy - disconnect")
             startActivity(
                 Intent(this, ConnectActivity::class.java)
@@ -167,9 +184,12 @@ class MainActivity : ComponentActivity(), ShellActions {
         }
     }
 
-    /** Without a media session to hand them to, the volume keys set Clementine's volume here. */
+    /**
+     * Without a media session to hand them to, the volume keys set Clementine's volume here;
+     * without Clementine, the phone's.
+     */
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        if (mediaController == null && usesVolumeKeys() && isVolumeKey(keyCode)) {
+        if (mediaController == null && !shell.offline && usesVolumeKeys() && isVolumeKey(keyCode)) {
             val step = App.getPreferences().getString(SharedPreferencesKeys.SP_VOLUME_INC, Clementine.DefaultVolumeInc)
                 ?.toIntOrNull() ?: Clementine.DefaultVolumeInc.toInt()
             val current = App.Clementine.volume
@@ -182,7 +202,7 @@ class MainActivity : ComponentActivity(), ShellActions {
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
-        if (mediaController == null && usesVolumeKeys() && isVolumeKey(keyCode)) {
+        if (mediaController == null && !shell.offline && usesVolumeKeys() && isVolumeKey(keyCode)) {
             return true
         }
         return super.onKeyUp(keyCode, event)
@@ -198,6 +218,12 @@ class MainActivity : ComponentActivity(), ShellActions {
 
     override fun onSettings() {
         startActivity(Intent(this, ClementineSettings::class.java))
+    }
+
+    override fun onConnect() {
+        openConnectScreen = false
+        setResult(ConnectActivity.RESULT_CONNECT)
+        finish()
     }
 
     override fun onDisconnect() {
@@ -228,7 +254,10 @@ class MainActivity : ComponentActivity(), ShellActions {
         toast = Toast.makeText(this, text, Toast.LENGTH_SHORT).apply { show() }
     }
 
-    private companion object {
-        const val TAG = "MainActivity"
+    companion object {
+        private const val TAG = "MainActivity"
+
+        /** Opens the On this phone tab, and stays open without a connection to play from it. */
+        const val EXTRA_ON_THIS_PHONE = "on_this_phone"
     }
 }

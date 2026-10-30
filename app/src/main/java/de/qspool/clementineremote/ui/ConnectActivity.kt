@@ -49,7 +49,12 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
+import androidx.core.content.pm.ShortcutInfoCompat
+import androidx.core.content.pm.ShortcutManagerCompat
+import androidx.core.graphics.drawable.IconCompat
+import androidx.lifecycle.lifecycleScope
 import de.qspool.clementineremote.App
+import de.qspool.clementineremote.BuildConfig
 import de.qspool.clementineremote.R
 import de.qspool.clementineremote.SharedPreferencesKeys
 import de.qspool.clementineremote.backend.Clementine
@@ -71,6 +76,9 @@ import de.qspool.clementineremote.ui.theme.ClementineTheme
 import de.qspool.clementineremote.utils.RetryWait
 import de.qspool.clementineremote.utils.Utilities
 import java.net.InetAddress
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * The connect screen, drawn in Compose ([ConnectScreen]). This activity finds Clementines on the
@@ -89,6 +97,12 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
     private var discovery: ClementineMDnsDiscovery? = null
 
     private var doAutoConnect = true
+
+    /** Whether to connect when shown next, as asked from playing on this phone. */
+    private var connectOnResume = false
+
+    /** Whether to play what's on this phone when shown next, as the app's shortcut asks. */
+    private var playOnPhoneOnResume = false
 
     /**
      * While auto-connecting, the network name of the Clementine being connected to, to look for
@@ -124,6 +138,10 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
         // The last auth code.
         authCode = preferences.getInt(SharedPreferencesKeys.SP_LAST_AUTH_CODE, 0)
 
+        if (savedInstanceState == null) {
+            takePlayOnPhone(intent)
+        }
+
         setContent {
             ClementineTheme(darkTheme = isSystemInDarkTheme(), dynamicColor = false) {
                 // Test tags as resource IDs, for UI Automator.
@@ -134,8 +152,29 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
         }
     }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        takePlayOnPhone(intent)
+    }
+
+    /** The app's shortcut plays what's on this phone, without connecting. */
+    private fun takePlayOnPhone(intent: Intent) {
+        if (intent.action == ACTION_PLAY_ON_PHONE) {
+            playOnPhoneOnResume = true
+            doAutoConnect = false
+        }
+    }
+
     override fun onResume() {
         super.onResume()
+        showOnPhone()
+
+        if (playOnPhoneOnResume) {
+            playOnPhoneOnResume = false
+            doAutoConnect = true
+            openOnPhone()
+            return
+        }
 
         // Connected already: open the player.
         if (!state.isConnecting && App.ClementineConnection?.isConnected == true) {
@@ -154,10 +193,16 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
         }
         state.setSearching(hasLocalNetwork())
 
-        if (preferences.getBoolean(SharedPreferencesKeys.SP_KEY_AC, true) && doAutoConnect) {
+        if (connectOnResume) {
+            // Back from playing on this phone, to connect: to the Clementine last connected to.
+            if (state.host.value.isNotBlank()) {
+                handler.postDelayed({ connect() }, AUTO_CONNECT_DELAY_MILLIS)
+            }
+        } else if (preferences.getBoolean(SharedPreferencesKeys.SP_KEY_AC, true) && doAutoConnect) {
             // Delayed, so the service has time to start.
             handler.postDelayed({ autoConnect() }, AUTO_CONNECT_DELAY_MILLIS)
         }
+        connectOnResume = false
         doAutoConnect = true
 
         // Remove notifications still shown.
@@ -300,6 +345,54 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
         state.hideProgress()
     }
 
+    override fun onPlayOnPhone() {
+        if (state.isConnecting) {
+            onCancel()
+        }
+        openOnPhone()
+    }
+
+    /**
+     * Counts the songs on this phone, to offer playing them without Clementine, and offers the
+     * same from the app's icon. Only with testing features, until playing on this phone is
+     * released.
+     */
+    private fun showOnPhone() {
+        if (!BuildConfig.TESTING_FEATURES) {
+            return
+        }
+        lifecycleScope.launch {
+            val context = this@ConnectActivity
+            val songs = withContext(Dispatchers.IO) { DownloadManager.getInstance(context).storedSongs.size }
+            state.setOnPhone(songs)
+            if (songs > 0) {
+                val shortcut = ShortcutInfoCompat.Builder(context, SHORTCUT_PLAY_ON_PHONE)
+                    .setShortLabel(getString(R.string.sync_play_on_phone))
+                    .setIcon(IconCompat.createWithResource(context, R.drawable.ic_shortcut_phone))
+                    .setIntent(Intent(context, ConnectActivity::class.java).setAction(ACTION_PLAY_ON_PHONE))
+                    .build()
+                ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
+            } else {
+                ShortcutManagerCompat.removeDynamicShortcuts(context, listOf(SHORTCUT_PLAY_ON_PHONE))
+            }
+        }
+    }
+
+    /** Plays what's on this phone, without Clementine: the app, on the On this phone tab. */
+    private fun openOnPhone() {
+        autoConnectName = null
+        discovery?.stopServiceDiscovery()
+        @Suppress("DEPRECATION")
+        startActivityForResult(
+            Intent(this, MainActivity::class.java)
+                .putExtra(MainActivity.EXTRA_ON_THIS_PHONE, true)
+                .setFlags(
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NO_ANIMATION,
+                ),
+            ID_PLAYER_DIALOG,
+        )
+    }
+
     override fun onAuthCode(code: Int) {
         authCode = code
         connect()
@@ -393,7 +486,9 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
             !Utilities.ToInetAddress(ip).isSiteLocalAddress -> getString(R.string.no_private_ip)
             else -> getString(R.string.check_ip, getString(R.string.clementine_version))
         }
-        state.showDialog(ConnectDialog.Message(getString(R.string.connectdialog_error), message))
+        state.showDialog(
+            ConnectDialog.Message(getString(R.string.connectdialog_error), message, playOnPhone = state.onPhone.value > 0),
+        )
     }
 
     /** Clementine speaks an older protocol: it needs updating. */
@@ -445,6 +540,8 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
         if (requestCode == ID_PLAYER_DIALOG) {
             if (resultCode == RESULT_CANCELED || resultCode == RESULT_QUIT) {
                 finish()
+            } else if (resultCode == RESULT_CONNECT) {
+                connectOnResume = true
             } else {
                 doAutoConnect = false
             }
@@ -500,6 +597,13 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
     companion object {
         const val RESULT_DISCONNECT = 1
         const val RESULT_QUIT = 2
+
+        /** From playing on this phone: connect to Clementine. */
+        const val RESULT_CONNECT = 3
+
+        /** The app's shortcut: play what's on this phone, without connecting. */
+        const val ACTION_PLAY_ON_PHONE = "de.qspool.clementineremote.PLAY_ON_PHONE"
+        private const val SHORTCUT_PLAY_ON_PHONE = "play_on_phone"
         private const val ID_PLAYER_DIALOG = 1
         private const val AUTO_CONNECT_DELAY_MILLIS = 250L
     }
