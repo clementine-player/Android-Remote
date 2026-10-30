@@ -69,7 +69,6 @@
     <string name="download_noti_forbidden">Stahování zakázáno. Zapněte je v nastavení Clementine.</string>
     <string name="download_noti_not_local_network">Clementine přijímá pouze připojení z vlastní místní sítě.</string>
     <string name="download_noti_not_mounted">Nenalezeno žádné ukládací zařízení!</string>
-    <string name="download_noti_only_wifi">Stahování povoleno jen na Wifi.</string>
     <string name="download_noti_transcoding">Probíhá překódování souborů</string>
     <string name="download_noti_transcoding_subtitle">Počkejte, prosím</string>
 
@@ -184,8 +183,6 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Navštívit stránky Clementine</string>
 
-    <string name="pref_dl_wifi_only_title">Pouze WiFi</string>
-    <string name="pref_dl_wifi_only_summary">Stahovat písně jen při připojení k síti Wifi.</string>
     <string name="pref_dl_dir">Nastavit složku pro stahování</string>
     <string name="pref_dl_override">Přepsat stávající soubory</string>
     <string name="pref_dl_cat_folders">Složky</string>

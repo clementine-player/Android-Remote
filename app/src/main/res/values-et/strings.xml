@@ -142,7 +142,6 @@
          right as it is. -->
     <string name="download_noti_too_many_wrong_auth_codes">Liiga mitu vale autentimiskoodi sisestust. Clementine ei kontrolli sellest telefonist päritud koode %s.</string>
     <string name="download_noti_not_mounted">Ühtegi andmeruumiseadet ei leidu!</string>
-    <string name="download_noti_only_wifi">Allalaadimine on lubatud ainult WiFi võrgus.</string>
     <string name="download_noti_transcoding">Kodeerin faile</string>
     <string name="download_noti_transcoding_subtitle">Palun oota</string>
 
@@ -286,8 +285,6 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Vaata Clementine\'i veebilehte</string>
 
-    <string name="pref_dl_wifi_only_title">Ainult WiFi võrgus</string>
-    <string name="pref_dl_wifi_only_summary">Laadi lood alla vaid WiFi võrgus.</string>
     <string name="pref_dl_dir">Määra allalaadimise kaust</string>
     <string name="pref_dl_volume">Salvesta allalaadimised asukohta</string>
     <string name="pref_dl_volume_unavailable">Pole saadaval. Vali kuhu salvestame allalaadimised.</string>

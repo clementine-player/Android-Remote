@@ -52,7 +52,6 @@
     <string name="download_noti_insufficient_space">Недовољно простора, прекидам преузимање.</string>
     <string name="download_noti_forbidden">Преузимање није дозвољено. Активирајте га у поставкама Клементине.</string>
     <string name="download_noti_not_mounted">Није нађен складишни уређај!</string>
-    <string name="download_noti_only_wifi">Преузимање дозвољено само на бежичној мрежи.</string>
     <string name="download_noti_transcoding">Прекодирам фајлове</string>
     <string name="download_noti_transcoding_subtitle">Сачекајте</string>
 
@@ -147,8 +146,6 @@
     <string name="pref_clementine_title">Клементина</string>
     <string name="pref_clementine_summary">Посетите Клементинин вебсајт</string>
 
-    <string name="pref_dl_wifi_only_title">Само бежични</string>
-    <string name="pref_dl_wifi_only_summary">Преузимај песме само преко бежичне мреже.</string>
     <string name="pref_dl_dir">Фасцикла преузимања</string>
     <string name="pref_dl_override">Пребриши постојеће фајлове</string>
     <string name="pref_dl_cat_folders">Фасцикле</string>

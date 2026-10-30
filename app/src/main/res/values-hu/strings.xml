@@ -50,7 +50,6 @@
     <string name="download_noti_insufficient_space">Elégtelen tárterület, letöltés megszakítása.</string>
     <string name="download_noti_forbidden">Letöltés tiltva, aktiválja a Clementine beállításaiban</string>
     <string name="download_noti_not_mounted">Tárolóeszköz nem található!</string>
-    <string name="download_noti_only_wifi">A letöltés csak WiFi-n engedélyezett.</string>
     <string name="download_noti_transcoding">Fájlok átkódolása</string>
     <string name="download_noti_transcoding_subtitle">Kérem várjon</string>
 
@@ -146,8 +145,6 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">A Clementine weblapjának meglátogatása</string>
 
-    <string name="pref_dl_wifi_only_title">Csak WiFi-n</string>
-    <string name="pref_dl_wifi_only_summary">A számok csak WiFi hálózaton töltődjenek le.</string>
     <string name="pref_dl_dir">Letöltési mappa beállítása</string>
     <string name="pref_dl_override">Létező fájlok felülírása</string>
     <string name="pref_dl_cat_folders">Mappák</string>

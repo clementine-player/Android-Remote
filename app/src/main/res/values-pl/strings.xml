@@ -54,7 +54,6 @@
     <string name="download_noti_insufficient_space">Brak miejsca, anulowanie pobierania.</string>
     <string name="download_noti_forbidden">Pobieranie zabronione. Aktywuj w opcjach Clementine.</string>
     <string name="download_noti_not_mounted">Nie znaleziono dysków!</string>
-    <string name="download_noti_only_wifi">Pobieranie dozwolone jedynie przez wifi</string>
     <string name="download_noti_transcoding">Kodowanie plików</string>
     <string name="download_noti_transcoding_subtitle">Proszę czekać</string>
 
@@ -152,8 +151,6 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Odwiedź stronę Clementine</string>
 
-    <string name="pref_dl_wifi_only_title">Tylko WiFi</string>
-    <string name="pref_dl_wifi_only_summary">Pobieraj utwory tylko kiedy w zasięgu sieci wifi</string>
     <string name="pref_dl_dir">Ustaw katalog pobierania</string>
     <string name="pref_dl_override">Nadpisuj istniejące pliki</string>
     <string name="pref_dl_cat_folders">Foldery</string>

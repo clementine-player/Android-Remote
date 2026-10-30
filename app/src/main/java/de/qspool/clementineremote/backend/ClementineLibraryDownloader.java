@@ -28,6 +28,7 @@ import java.util.LinkedList;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.SharedPreferencesKeys;
+import de.qspool.clementineremote.backend.downloader.DownloadNetwork;
 import de.qspool.clementineremote.backend.elements.DownloaderResult;
 import de.qspool.clementineremote.backend.elements.DownloaderResult.DownloadResult;
 import de.qspool.clementineremote.backend.library.LibraryDatabaseHelper;
@@ -83,9 +84,8 @@ public class ClementineLibraryDownloader extends
 
     @Override
     protected DownloaderResult doInBackground(ClementineMessage message) {
-        if (mSharedPref.getBoolean(SharedPreferencesKeys.SP_WIFI_ONLY, false)
-                && !Utilities.onWifi()) {
-            return new DownloaderResult(0, DownloaderResult.DownloadResult.ONLY_WIFI);
+        if (!DownloadNetwork.chosen(mSharedPref).allowsCurrentNetwork(mContext)) {
+            return new DownloaderResult(0, DownloaderResult.DownloadResult.NETWORK_NOT_ALLOWED);
         }
 
         // First create a connection

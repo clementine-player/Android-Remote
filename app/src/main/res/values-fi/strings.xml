@@ -142,7 +142,6 @@
          right as it is. -->
     <string name="download_noti_too_many_wrong_auth_codes">Liian monta virheellistä tunnistuskoodia. Clementine ei hyväksy uutta koodia tästä puhelimesta %s:n aikana.</string>
     <string name="download_noti_not_mounted">Tallennustilaa ei löytynyt!</string>
-    <string name="download_noti_only_wifi">Lataus on sallittu vain wifi-yhteydellä.</string>
     <string name="download_noti_transcoding">Muunnetaan tiedostoja</string>
     <string name="download_noti_transcoding_subtitle">Odota hetki</string>
 
@@ -286,8 +285,6 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Käy Clementinen verkkosivustolla</string>
 
-    <string name="pref_dl_wifi_only_title">Vain wifi</string>
-    <string name="pref_dl_wifi_only_summary">Lataa kappaleet vain wifi-yhteydellä.</string>
     <string name="pref_dl_dir">Aseta latauskansio</string>
     <string name="pref_dl_volume">Tallenna lataukset kohteeseen</string>
     <string name="pref_dl_volume_unavailable">Ei käytettävissä. Valitse, mihin lataukset tallennetaan.</string>

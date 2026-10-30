@@ -34,7 +34,6 @@
     <string name="download_noti_insufficient_space">공간이 부족하여 다운로드 중단 중</string>
     <string name="download_noti_forbidden">다운로드 금지됨. Clementine 설정에서 활성화</string>
     <string name="download_noti_not_mounted">저장 장치를 찾지 못했습니다!</string>
-    <string name="download_noti_only_wifi">다운로드는 Wifi에서만 가능</string>
     <string name="library_optimize">데이터베이스 최적화 중</string>
     <string name="song_info_album">앨범</string>
     <string name="song_info_genre">장르</string>
@@ -84,8 +83,6 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Clementine 웹 사이트 방문</string>
 
-    <string name="pref_dl_wifi_only_title">WiFi 전용</string>
-    <string name="pref_dl_wifi_only_summary">음악 다운로드는 Wifi 네트워크에 연결 되었을 때에만 가능합니다.</string>
     <string name="pref_dl_dir">다운로드 폴더 설정</string>
     <string name="pref_dl_override">존재하는 파일 덮어쓰기</string>
     <string name="pref_dl_pl_save_own_dir_title">재생목록 폴더에서 트랙 저장</string>

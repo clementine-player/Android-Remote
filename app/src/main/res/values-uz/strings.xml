@@ -30,7 +30,6 @@
     <string name="download_noti_canceled">Yuklab olish bekor qilindi</string>
     <string name="download_noti_insufficient_space">Joy yetarli emas, yuklab olish to\'xtatilmoqda.</string>
     <string name="download_noti_forbidden">Yuklab olish taqiqlangan. Clementine sozlamalarida faollashtiring.</string>
-    <string name="download_noti_only_wifi">Faqat wifi ro\'xsat etilganda yuklab olish.</string>
     <string name="song_info_album">Albom</string>
     <string name="song_info_genre">Janr</string>
     <string name="song_info_year">Yil</string>
@@ -76,8 +75,6 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Clementine veb-sahifasiga o\'tish</string>
 
-    <string name="pref_dl_wifi_only_title">Faqat WiFi</string>
-    <string name="pref_dl_wifi_only_summary">Faqat wifi tarmog\'iga ulanganda qo\'shiqlarni yuklab olish.</string>
     <string name="pref_dl_dir">Yuklab olish jildini o\'rnatish</string>
     <string name="pref_dl_override">Mavjud fayllarni almashtirish</string>
     <string name="pref_dl_pl_save_own_dir_title">Yo\'lakchalarni ijro ro\'yxati jildida saqlash</string>

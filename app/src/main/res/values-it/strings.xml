@@ -124,7 +124,6 @@
     <string name="download_noti_not_local_network">Clementine accetta connessioni solo dalla sua rete locale.</string>
     <string name="download_noti_too_many_wrong_auth_codes">Troppi codici di autenticazione errati. Clementine non ne verificherà altri da questo telefono per %s.</string>
     <string name="download_noti_not_mounted">Nessun dispositivo di memoria trovato!</string>
-    <string name="download_noti_only_wifi">Scaricamento consentito solo su wifi.</string>
     <string name="download_noti_transcoding">Transcodifica dei file</string>
     <string name="download_noti_transcoding_subtitle">Attendi</string>
     <string name="library_syncing">Sincronizzazione della raccolta da Clementine</string>
@@ -239,8 +238,6 @@
     <string name="pref_about_summary">Persone che lavorano a questo progetto</string>
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Visita il sito web di Clementine</string>
-    <string name="pref_dl_wifi_only_title">Solo WiFi</string>
-    <string name="pref_dl_wifi_only_summary">Scarica i brani solo quando connesso a una rete wifi.</string>
     <string name="pref_dl_dir">Imposta la cartella di scaricamento</string>
     <string name="pref_dl_volume">Salva gli scaricamenti in</string>
     <string name="pref_dl_volume_unavailable">Non disponibile. Scegli dove salvare gli scaricamenti.</string>

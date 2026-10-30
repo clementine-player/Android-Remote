@@ -34,7 +34,6 @@
     <string name="download_noti_insufficient_space">სივრცე საკმარისი არ არის, ჩამოტვირთვა გაუქმდა.</string>
     <string name="download_noti_forbidden">ჩამოტვირთვა აკრძალულია. გააქტიურეთ ის Clementine-ის პარამეტრებში.</string>
     <string name="download_noti_not_mounted">საცავი მოწყობილობ ვერ მოიძებნა!</string>
-    <string name="download_noti_only_wifi">ჩამოტვირთვა მხოლოდ wifi-ით.</string>
     <string name="library_optimize">ბაზის ოპტიმიზება</string>
     <string name="song_info_album">ალბომი</string>
     <string name="song_info_genre">ჟანრი</string>
@@ -81,8 +80,6 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">მოინახულეთ Clementine-ის ვებგვერდი</string>
 
-    <string name="pref_dl_wifi_only_title">მხოლოდ WiFi-ით</string>
-    <string name="pref_dl_wifi_only_summary">სიმღერების ჩამოტვირთვა, მხოლოდ wifi კავშირის არსებობის დროს.</string>
     <string name="pref_dl_dir">ჩამოტვირთვების დასტის მითითება</string>
     <string name="pref_dl_override">არსებული ფაილების ჩანაცვლება</string>
     <string name="pref_dl_pl_save_own_dir_title">ჩანაწერების რეპერტუარის დასტაში შენახვა</string>

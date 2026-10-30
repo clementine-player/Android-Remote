@@ -50,7 +50,6 @@
     <string name="download_noti_insufficient_space">Espai insuficient: s\'interromp la baixada</string>
     <string name="download_noti_forbidden">Baixada no autoritzada. Es pot activar a la configuració del Clementine.</string>
     <string name="download_noti_not_mounted">No s\'ha trobat cap dispositiu d\'emmagatzematge.</string>
-    <string name="download_noti_only_wifi">Baixa només amb connexió Wi-Fi.</string>
     <string name="download_noti_transcoding">S\'estan convertint els arxius</string>
     <string name="download_noti_transcoding_subtitle">Espereu-vos</string>
 
@@ -147,8 +146,6 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Lloc web del Clementine</string>
 
-    <string name="pref_dl_wifi_only_title">Només Wi-Fi</string>
-    <string name="pref_dl_wifi_only_summary">Baixa les peces només quan s\'estigui connectat a una xarxa Wi-Fi.</string>
     <string name="pref_dl_dir">Estableix el directori de baixades</string>
     <string name="pref_dl_override">Sobreescriu els arxius existents</string>
     <string name="pref_dl_cat_folders">Carpetes</string>

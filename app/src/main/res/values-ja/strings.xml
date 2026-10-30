@@ -48,7 +48,6 @@
     <string name="download_noti_insufficient_space">空き容量が足りません、ダウンロードを中止します</string>
     <string name="download_noti_forbidden">ダウンロードが禁止されています。Clementine の設定で有効にしてください。</string>
     <string name="download_noti_not_mounted">ストレージデバイスが見つかりません!</string>
-    <string name="download_noti_only_wifi">WiFi でのみダウンロード可能です。</string>
     <string name="download_noti_transcoding">ファイルのトランスコード中</string>
     <string name="download_noti_transcoding_subtitle">しばらくお待ちください</string>
 
@@ -143,8 +142,6 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Clementine Webサイトを訪問</string>
 
-    <string name="pref_dl_wifi_only_title">WiFi のみ</string>
-    <string name="pref_dl_wifi_only_summary">WiFi ネットワークに接続したときのみ、曲をダウンロードします。</string>
     <string name="pref_dl_dir">ダウンロード フォルダーを設定</string>
     <string name="pref_dl_override">既存のファイルを上書きする</string>
     <string name="pref_dl_cat_folders">フォルダー</string>

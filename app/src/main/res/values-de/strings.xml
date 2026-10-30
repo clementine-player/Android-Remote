@@ -50,7 +50,6 @@
     <string name="download_noti_insufficient_space">Zu wenig Speicher, Übertragung abgebrochen</string>
     <string name="download_noti_forbidden">Herunterladen verboten. In den Clementine-Einstellungen aktivieren.</string>
     <string name="download_noti_not_mounted">Kein Speichergerät gefunden!</string>
-    <string name="download_noti_only_wifi">Herunterladen nur über WLAN erlaubt.</string>
     <string name="download_noti_transcoding">Dateien werden umgewandelt</string>
     <string name="download_noti_transcoding_subtitle">Bitte warten</string>
 
@@ -145,8 +144,6 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Clementine-Internetseite besuchen</string>
 
-    <string name="pref_dl_wifi_only_title">Nur WLAN</string>
-    <string name="pref_dl_wifi_only_summary">Lieder nur herunterladen, wenn mit einen WLAN-Netzwerk verbunden.</string>
     <string name="pref_dl_dir">Speicherort einstellen</string>
     <string name="pref_dl_override">Existierende Dateien überschreiben</string>
     <string name="pref_dl_cat_folders">Ordner</string>

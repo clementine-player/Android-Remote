@@ -52,7 +52,6 @@
     <string name="download_noti_insufficient_space">Espace disque insuffisant : téléchargement annulé.</string>
     <string name="download_noti_forbidden">Téléchargement interdit. Vous pouvez l\'activer dans les préférences de Clementine.</string>
     <string name="download_noti_not_mounted">Pas de périphérique de stockage trouvé !</string>
-    <string name="download_noti_only_wifi">Téléchargement seulement autorisé en Wifi. </string>
     <string name="download_noti_transcoding">Transcodage des fichiers</string>
     <string name="download_noti_transcoding_subtitle">Veuillez patienter</string>
 
@@ -147,8 +146,6 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Visiter le site web de Clementine</string>
 
-    <string name="pref_dl_wifi_only_title">Wifi uniquement</string>
-    <string name="pref_dl_wifi_only_summary">Télécharger les morceaux uniquement lorsque connecté à un réseau Wifi.</string>
     <string name="pref_dl_dir">Dossier pour les téléchargements</string>
     <string name="pref_dl_override">Remplacer les fichiers existants</string>
     <string name="pref_dl_cat_folders">Dossiers</string>

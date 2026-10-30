@@ -52,7 +52,6 @@
     <string name="download_noti_insufficient_space">Nedovoljno slobodnog prostora, prekidam preuzimanje.</string>
     <string name="download_noti_forbidden">Preuzimanje zabranjeno. Aktivirajte ga u Clementine postavkama.</string>
     <string name="download_noti_not_mounted">Nema pronađenih uređaja pohrane!</string>
-    <string name="download_noti_only_wifi">Preuzimanje je samo dopušteno putem WI-FI-a.</string>
     <string name="download_noti_transcoding">Datoteke enkôdiranja</string>
     <string name="download_noti_transcoding_subtitle">Molim pričekajte</string>
 
@@ -150,8 +149,6 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Posjetite Clementine web stranicu</string>
 
-    <string name="pref_dl_wifi_only_title">Samo WI-FI</string>
-    <string name="pref_dl_wifi_only_summary">Preuzmi pjesme samo kada je povezana WI-FI mreža.</string>
     <string name="pref_dl_dir">Postavi mapu preuzimanja</string>
     <string name="pref_dl_override">Prepiši postojeće datoteke</string>
     <string name="pref_dl_cat_folders">Mape</string>
