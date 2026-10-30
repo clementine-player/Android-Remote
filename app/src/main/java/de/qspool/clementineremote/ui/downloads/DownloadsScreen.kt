@@ -72,6 +72,12 @@ fun DownloadsScreen(viewModel: DownloadsViewModel) {
     val opened by viewModel.opened.collectAsStateWithLifecycle()
     val playing by viewModel.playing.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    // Says why syncing didn't start, while this is shown.
+    LaunchedEffect(syncStatus.networkNotAllowed) {
+        if (syncStatus.networkNotAllowed) {
+            Toast.makeText(context, R.string.download_noti_network_not_allowed, Toast.LENGTH_LONG).show()
+        }
+    }
     // The rule open, as it is now; gone when it's removed.
     val openRule = opened?.let { open -> keptRules.firstOrNull { it.rule.id == open.ruleId } }
     if (openRule != null) {
