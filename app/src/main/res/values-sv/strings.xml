@@ -427,4 +427,12 @@
         <item quantity="one">%d stjärna</item>
         <item quantity="other">%d stjärnor</item>
     </plurals>
-</resources>
+
+    <!-- Keeping music on the phone: synced from Clementine, kept up to date, and played without
+         it. The iOS app shows the same strings. -->
+    <!-- Music saved on the phone, as opposed to Clementine on the computer: the title of the tab's
+         screen, and where the music plays from. -->
+    <string name="sync_on_this_phone">På denna telefon</string>
+    <!-- Button: plays, on the phone, the songs of something kept on it, in order. -->
+    <string name="sync_play">Spela</string>
+    </resources>

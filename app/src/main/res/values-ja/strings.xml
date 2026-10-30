@@ -228,4 +228,6 @@
     <string name="player_download_what_album">アルバム</string>
     <string name="player_download_what_playlist">プレイリスト</string>
 
+    <!-- Button: plays, on the phone, the songs of something kept on it, in order. -->
+    <string name="sync_play">再生</string>
     </resources>

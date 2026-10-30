@@ -232,4 +232,6 @@
     <string name="player_download_what_album">Album</string>
     <string name="player_download_what_playlist">Wiedergabeliste</string>
 
+    <!-- Button: plays, on the phone, the songs of something kept on it, in order. -->
+    <string name="sync_play">Wiedergabe</string>
     </resources>

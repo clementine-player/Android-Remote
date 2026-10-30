@@ -236,4 +236,6 @@
     <string name="player_download_what_album">Álbum</string>
     <string name="player_download_what_playlist">Lista de reprodução</string>
 
+    <!-- Button: plays, on the phone, the songs of something kept on it, in order. -->
+    <string name="sync_play">Reproduzir</string>
     </resources>

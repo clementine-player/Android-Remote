@@ -243,4 +243,6 @@
     <string name="player_download_what_album">Albumas</string>
     <string name="player_download_what_playlist">Grojaraštis</string>
 
+    <!-- Button: plays, on the phone, the songs of something kept on it, in order. -->
+    <string name="sync_play">Groti</string>
     </resources>

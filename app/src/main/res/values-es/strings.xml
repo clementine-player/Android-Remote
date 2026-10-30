@@ -113,6 +113,7 @@
     <string name="library_title">Fonoteca</string>
     <string name="library_sync_action">Sincronizar fonoteca</string>
     <string name="library_add_to_playlist">Añadir a lista</string>
+    <string name="library_select">Seleccionar</string>
     <string name="library_back">Volver</string>
 
     <!-- Browsing Clementine's internet services: its Internet sidebar. -->
@@ -318,6 +319,25 @@
     <string name="permissions_intro">Android solicitará:</string>
     <string name="not_local_network_title">Clementine rechazó la conexión</string>
     <string name="too_many_wrong_auth_codes_title">Demasiados códigos de autenticación incorrectos</string>
+    <!-- How long Clementine said to wait: the placeholder in too_many_wrong_auth_codes and
+         download_noti_too_many_wrong_auth_codes. Seconds under a minute; otherwise rounded up to
+         minutes, or to hours over an hour. Translate them as a plain duration: those sentences
+         are written so it reads right as it is, as the iOS app shows it in iOS's own words. -->
+    <plurals name="wait_seconds">
+        <item quantity="one">%d segundo</item>
+        <item quantity="many">%d de segundos</item>
+        <item quantity="other">%d segundos</item>
+    </plurals>
+    <plurals name="wait_minutes">
+        <item quantity="one">%d minuto</item>
+        <item quantity="many">%d de minutos</item>
+        <item quantity="other">%d minutos</item>
+    </plurals>
+    <plurals name="wait_hours">
+        <item quantity="one">%d hora</item>
+        <item quantity="many">%d de horas</item>
+        <item quantity="other">%d horas</item>
+    </plurals>
     <!-- Shown instead of a duration when Clementine doesn't say how long to wait, in the
          sentences about too many wrong auth codes. -->
     <string name="wait_a_while">un rato</string>
@@ -340,4 +360,6 @@
 
     <string name="cd_cover_image">Imagen de portada de álbum</string>
     <string name="cd_cancel_download">Cancelar la descarga</string>
+    <!-- Button: plays, on the phone, the songs of something kept on it, in order. -->
+    <string name="sync_play">Reproducir</string>
     </resources>

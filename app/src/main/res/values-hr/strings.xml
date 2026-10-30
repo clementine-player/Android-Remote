@@ -239,4 +239,6 @@
     <string name="player_download_what_album">Album</string>
     <string name="player_download_what_playlist">Popis izvođenja</string>
 
+    <!-- Button: plays, on the phone, the songs of something kept on it, in order. -->
+    <string name="sync_play">Reprodukcija</string>
     </resources>

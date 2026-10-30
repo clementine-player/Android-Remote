@@ -236,4 +236,6 @@
     <string name="player_download_what_album">Албум</string>
     <string name="player_download_what_playlist">Листа нумера</string>
 
+    <!-- Button: plays, on the phone, the songs of something kept on it, in order. -->
+    <string name="sync_play">Пусти</string>
     </resources>
