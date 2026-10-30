@@ -1,8 +1,7 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run
 """Builds the Google Play listing graphics from the project's own artwork.
 
-    pip install pillow cairosvg
-    scripts/store_graphics.py
+    uv run scripts/store_graphics.py
 
 - icon.png (512x512): Clementine's logo, store/clementine-icon.svg, copied from
   clementine-player/Clementine's data/icon.svg.

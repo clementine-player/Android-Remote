@@ -92,6 +92,8 @@ jobs:
         with:
           ref: master
           ssh-key: ${{ secrets.TX_KEY }}
+      - uses: astral-sh/setup-uv@v10.2.0
+        if: env.TX_TOKEN != '' && env.HAS_TX_KEY == 'true'
       - name: Install the Transifex client
         if: env.TX_TOKEN != '' && env.HAS_TX_KEY == 'true'
         run: |
@@ -106,7 +108,7 @@ jobs:
           # For Android files, onlytranslated leaves reviewed translations out, and onlyreviewed
           # those not reviewed yet: the reviewed ones are pulled first and kept aside, then merged
           # into the rest. Only translated strings: Android shows English for the others itself.
-          scripts/android-translations.py count > "$RUNNER_TEMP/before"
+          uv run scripts/android-translations.py count > "$RUNNER_TEMP/before"
           tx pull --all --force --mode onlyreviewed --silent
           scripts/android-language-folders.sh
           mkdir "$RUNNER_TEMP/reviewed"
@@ -116,8 +118,8 @@ jobs:
           done
           tx pull --all --force --mode onlytranslated --silent
           scripts/android-language-folders.sh
-          scripts/android-translations.py merge "$RUNNER_TEMP/reviewed"
-          if ! scripts/android-translations.py check "$RUNNER_TEMP/before"; then
+          uv run scripts/android-translations.py merge "$RUNNER_TEMP/reviewed"
+          if ! uv run scripts/android-translations.py check "$RUNNER_TEMP/before"; then
             git diff --stat
             exit 1
           fi

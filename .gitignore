@@ -44,3 +44,7 @@ key.properties
 .claude/worktrees/
 # Kotlin 2 compiler caches
 .kotlin/
+
+# The scripts' Python environment (pyproject.toml), and Python's caches
+.venv/
+__pycache__/

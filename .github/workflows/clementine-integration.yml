@@ -50,9 +50,10 @@ jobs:
           ref: ${{ needs.release.outputs.tag }}
           path: clementine-src
           sparse-checkout: ext/libclementine-remote
-      - run: sudo apt-get update && sudo apt-get install -y protobuf-compiler python3-protobuf
+      - run: sudo apt-get update && sudo apt-get install -y protobuf-compiler
+      - uses: astral-sh/setup-uv@v10.2.0
       - run: >
-          python3 scripts/check-proto-drift.py
+          uv run scripts/check-proto-drift.py
           app/src/main/proto/remotecontrolmessages.proto
           clementine-src/ext/libclementine-remote/remotecontrolmessages.proto
 

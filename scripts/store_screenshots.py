@@ -1,9 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run
 """Makes the store listing's phone screenshots from a store-screenshots run. Run by
 .github/workflows/release.yml, so each release's listing shows the app as released:
 
-    pip install pillow
-    scripts/store_screenshots.py <screenshots dir>
+    uv run scripts/store_screenshots.py <screenshots dir>
 
 They're the numbered screens in the dark theme, which most people use, then the player in
 the light theme, to show there's one: Play shows at most eight. They go in

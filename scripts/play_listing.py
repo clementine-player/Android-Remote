@@ -1,10 +1,9 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run
 """Sends the store listing in fastlane/ to Google Play: its text, icon, feature graphic and
 phone screenshots, the same files F-Droid reads.
 
-    pip install google-api-python-client google-auth pillow
-    scripts/play_listing.py --check    # only checks the listing against Play's limits
-    scripts/play_listing.py            # updates Play's listing to match
+    uv run scripts/play_listing.py --check    # only checks the listing against Play's limits
+    uv run scripts/play_listing.py            # updates Play's listing to match
 
 Run by .github/workflows/play-listing.yml. It signs in with Application Default Credentials:
 there, the Workload Identity Federation credentials google-github-actions/auth writes; locally,

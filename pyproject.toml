@@ -1,0 +1,23 @@
+# The Python scripts in scripts/, which the workflows run: uv run scripts/<script>.py
+[project]
+name = "clementine-remote-scripts"
+version = "0.1.0"
+description = "Scripts for building, translating and releasing Clementine Remote"
+requires-python = ">=3.11"
+license = "GPL-3.0-or-later"
+dependencies = [
+    # play_listing.py: the Play Developer API, with Application Default Credentials, which
+    # google-github-actions/auth sets up.
+    "google-api-python-client>=2.150",
+    "google-auth>=2.35",
+    # play_listing.py, store_graphics.py and store_screenshots.py.
+    "pillow>=11",
+    # store_graphics.py: the logo, from its SVG.
+    "cairosvg>=2.7",
+    # check-proto-drift.py, with protoc.
+    "protobuf>=5",
+]
+
+[tool.uv]
+# Scripts, not a package to build.
+package = false

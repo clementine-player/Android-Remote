@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run
 """Compare the app's copy of remotecontrolmessages.proto with Clementine's.
 
 Both files are compiled with protoc and compared structurally (message fields
@@ -10,8 +10,8 @@ and enum values by number), so formatting and package differences are ignored.
     a field or enum value with the same number but a different name, type or
     label, or one that no longer exists.
 
-Usage: check-proto-drift.py APP_PROTO CLEMENTINE_PROTO
-Requires protoc on PATH (or $PROTOC) and the Python protobuf package.
+Usage: uv run scripts/check-proto-drift.py APP_PROTO CLEMENTINE_PROTO
+Requires protoc on PATH (or $PROTOC).
 """
 
 import os
