@@ -67,7 +67,7 @@ import de.qspool.clementineremote.ui.search.SearchSection
 /**
  * The library: Clementine's library, browsed level by level (artists, their albums, their songs).
  * Tapping a song adds it to the playlist; a long press offers the other ways to put an item on the
- * playlist, and selecting items to add or download.
+ * playlist, keeping artists and albums on this phone, and selecting items to add or download.
  * Searching it shows what matched in sections, as the Search screen does. Pulling down downloads
  * the library from Clementine again.
  */
@@ -75,6 +75,7 @@ import de.qspool.clementineremote.ui.search.SearchSection
 fun LibraryScreen(viewModel: LibraryViewModel) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val canPlayNext by viewModel.canPlayNext.collectAsStateWithLifecycle()
+    val syncFrom by viewModel.syncFrom.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val resources = LocalResources.current
     LaunchedEffect(viewModel) {
@@ -85,6 +86,7 @@ fun LibraryScreen(viewModel: LibraryViewModel) {
                 is LibraryViewModel.Message.SyncFailed ->
                     resources.getString(R.string.library_sync_error) + ": " +
                         resources.getString(message.reason)
+                is LibraryViewModel.Message.Kept -> resources.getString(R.string.sync_keeping, message.title)
             }
             Toast.makeText(context, text, Toast.LENGTH_LONG).show()
         }
@@ -104,6 +106,8 @@ fun LibraryScreen(viewModel: LibraryViewModel) {
             onDownload = viewModel::downloadResults,
         ),
         canPlayNext = canPlayNext,
+        canKeep = { syncFrom.available && viewModel.canKeep(it) },
+        onKeep = viewModel::keep,
     )
 }
 
@@ -128,6 +132,8 @@ internal fun LibraryContent(
     modifier: Modifier = Modifier,
     results: ResultActions = ResultActions(),
     canPlayNext: Boolean = false,
+    canKeep: (SongSelectItem) -> Boolean = { false },
+    onKeep: (SongSelectItem) -> Unit = {},
 ) {
     val shown = state.shown
     val search = state.search
@@ -196,6 +202,8 @@ internal fun LibraryContent(
                     canPlayNext = canPlayNext,
                     tag = "library",
                     listState = listState,
+                    canKeep = canKeep,
+                    onKeep = onKeep,
                 )
             }
         }

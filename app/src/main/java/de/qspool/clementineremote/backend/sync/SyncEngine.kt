@@ -77,17 +77,7 @@ class SyncEngine(
         }
 
         // Only once every rule has had its say: a song moving from one rule to another stays.
-        var removed = 0
-        for (item in store.unwantedItems(serverId)) {
-            try {
-                delete(Uri.parse(item.uri))
-            } catch (e: RuntimeException) {
-                // Already gone, say if the user deleted it: forget it all the same.
-            }
-            store.removeItem(serverId, item.itemKey)
-            removed++
-        }
-        return SyncResult(results, removed)
+        return SyncResult(results, removeUnwanted(store, serverId, delete))
     }
 
     private fun syncRule(connection: SyncConnection, rule: SyncRule): RuleResult {
@@ -175,4 +165,20 @@ class SyncEngine(
             )
         )
     }
+}
+
+/** Deletes [serverId]'s songs that no rule wants, as after a rule is removed. Returns how many. */
+@WorkerThread
+fun removeUnwanted(store: SyncStore, serverId: String, delete: (Uri) -> Unit): Int {
+    var removed = 0
+    for (item in store.unwantedItems(serverId)) {
+        try {
+            delete(Uri.parse(item.uri))
+        } catch (e: RuntimeException) {
+            // Already gone, say if the user deleted it: forget it all the same.
+        }
+        store.removeItem(serverId, item.itemKey)
+        removed++
+    }
+    return removed
 }

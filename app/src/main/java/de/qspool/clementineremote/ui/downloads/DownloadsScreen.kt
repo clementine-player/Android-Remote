@@ -50,12 +50,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.qspool.clementineremote.R
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem
+import de.qspool.clementineremote.backend.sync.KeptRule
 import de.qspool.clementineremote.ui.settings.ClementineSettings
 import de.qspool.clementineremote.utils.Utilities
 
 /**
- * Downloads: those running, with their progress, and those finished, whose songs can be played,
- * then every song on this phone, downloaded now or before, to play. Cancelling a running download
+ * Downloads: what's kept on this phone, when Clementine syncs songs to it (the screen is then On
+ * this phone), the downloads running, with their progress, and those finished, whose songs can be
+ * played, then every song on this phone, downloaded now or before, to play. Cancelling a running download
  * stops it; on a finished one, it forgets it. With nothing downloaded, suggests some: the albums
  * played most in Clementine, and its playlists.
  */
@@ -63,6 +65,9 @@ import de.qspool.clementineremote.utils.Utilities
 fun DownloadsScreen(viewModel: DownloadsViewModel) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val suggestions by viewModel.suggestions.collectAsStateWithLifecycle()
+    val keptRules by viewModel.kept.collectAsStateWithLifecycle()
+    val syncStatus by viewModel.syncStatus.collectAsStateWithLifecycle()
+    val syncFrom by viewModel.syncFrom.collectAsStateWithLifecycle()
     val context = LocalContext.current
     // Each time the screen shows: the library may have synced since.
     LaunchedEffect(viewModel) { viewModel.loadSuggestions() }
@@ -87,6 +92,10 @@ fun DownloadsScreen(viewModel: DownloadsViewModel) {
             }
         },
         onChangeSettings = { context.startActivity(Intent(context, ClementineSettings::class.java)) },
+        kept = Kept(keptRules, syncStatus.running, syncFrom.available),
+        onThisPhone = syncFrom.supported || keptRules.isNotEmpty(),
+        onSyncNow = viewModel::syncNow,
+        onRemoveKept = viewModel::remove,
     )
 }
 
@@ -100,6 +109,11 @@ internal fun DownloadsContent(
     suggestions: Suggestions = Suggestions(),
     onDownloadAlbum: (AlbumSuggestion) -> Unit = {},
     onDownloadPlaylist: (PlaylistSuggestion) -> Unit = {},
+    kept: Kept = Kept(),
+    /** Whether the screen is On this phone: Clementine syncs, or something is kept. */
+    onThisPhone: Boolean = false,
+    onSyncNow: () -> Unit = {},
+    onRemoveKept: (KeptRule) -> Unit = {},
 ) {
     // The finished download whose songs are being picked from.
     var picking by remember { mutableStateOf<Download?>(null) }
@@ -108,7 +122,7 @@ internal fun DownloadsContent(
         item {
             Column(Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)) {
                 Text(
-                    stringResource(R.string.downloads_title),
+                    stringResource(if (onThisPhone) R.string.sync_on_this_phone else R.string.downloads_title),
                     style = MaterialTheme.typography.headlineLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.semantics { heading() },
@@ -124,10 +138,13 @@ internal fun DownloadsContent(
             }
         }
 
-        if (state.loaded && state.running.isEmpty() && state.finished.isEmpty() && state.onPhone.isEmpty()) {
+        if (state.loaded && state.running.isEmpty() && state.finished.isEmpty() && state.onPhone.isEmpty() &&
+            kept.rules.isEmpty()
+        ) {
             item { Empty(suggestions.isEmpty) }
             suggestions(suggestions, onDownloadAlbum, onDownloadPlaylist)
         }
+        keptOnPhone(kept, onSyncNow, onRemoveKept)
         section(R.string.downloads_running, state.running, onCancel) {}
         section(R.string.downloads_finished, state.finished, onCancel) { picking = it }
 

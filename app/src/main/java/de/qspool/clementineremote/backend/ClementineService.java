@@ -166,7 +166,7 @@ public class ClementineService extends Service {
                             App.ClementineConnection);
                     mediaSessionController.registerMediaSession();
                     Renderer.attach(this, App.ClementineConnection, this::setPlayingHere);
-                    Syncer.attach(this, App.ClementineConnection);
+                    Syncer.attach(App.ClementineConnection);
 
                     GlobalSearchManager.getInstance().reset();
 

@@ -139,4 +139,4 @@ internal fun outputIcon(output: RemoteRepository.Output): Int = when {
 
 /** Whether this device is a tablet: at least 600dp wide whichever way it's held. */
 @Composable
-private fun isTablet(): Boolean = LocalConfiguration.current.smallestScreenWidthDp >= 600
+internal fun isTablet(): Boolean = LocalConfiguration.current.smallestScreenWidthDp >= 600

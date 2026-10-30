@@ -44,6 +44,9 @@ class SongBrowser(private val newQuery: () -> DynamicSongQuery) {
         }
     }
 
+    /** The columns the levels group by, from the top down; "title" for songs. */
+    fun fields(): List<String> = newQuery().let { query -> (0 until query.maxLevels).map(query::getField) }
+
     private fun <T> query(block: (DynamicSongQuery) -> T): T {
         val query = newQuery()
         query.openDatabase()

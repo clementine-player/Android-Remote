@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.SharedPreferencesKeys
 import de.qspool.clementineremote.backend.BackgroundTask
+import de.qspool.clementineremote.backend.RemoteRepository
 import de.qspool.clementineremote.backend.downloader.ClementineSongDownloader
 import de.qspool.clementineremote.backend.downloader.DownloadManager
 import de.qspool.clementineremote.backend.downloader.StoredSong
@@ -15,6 +16,8 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem
 import de.qspool.clementineremote.backend.player.MyPlaylist
+import de.qspool.clementineremote.backend.sync.KeptRule
+import de.qspool.clementineremote.backend.sync.Syncer
 import de.qspool.clementineremote.utils.Utilities
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -75,7 +78,21 @@ class DownloadsViewModel(
     private val playlists: () -> List<MyPlaylist> = { App.Clementine.playlistManager.allPlaylists },
     private val startDownload: (ClementineMessage) -> Unit = { DownloadManager.getInstance().addJob(it) },
     private val io: CoroutineDispatcher = Dispatchers.IO,
+    /** The music kept on this phone, by rule. */
+    val kept: StateFlow<List<KeptRule>> = Syncer.kept,
+    /** Whether a sync is running. */
+    val syncStatus: StateFlow<Syncer.Status> = Syncer.status,
+    /** Whether the Clementine connected syncs songs to the phone. */
+    val syncFrom: StateFlow<RemoteRepository.Syncing> = RemoteRepository.syncing,
+    private val removeRule: (Long) -> Unit = Syncer::remove,
+    private val startSync: () -> Unit = { Syncer.syncNow() },
+    refreshKept: () -> Unit = Syncer::refresh,
 ) : ViewModel() {
+
+    init {
+        // What's kept shows before connecting, for the Clementine last connected.
+        refreshKept()
+    }
 
     private val _suggestions = MutableStateFlow(Suggestions())
 
@@ -181,6 +198,12 @@ class DownloadsViewModel(
     fun download(playlist: PlaylistSuggestion) {
         startDownload(ClementineMessageFactory.buildDownloadSongsMessage(DownloadItem.APlaylist, playlist.id))
     }
+
+    /** Stops keeping [rule] on this phone, deleting its songs that nothing else kept has. */
+    fun remove(rule: KeptRule) = removeRule(rule.rule.id)
+
+    /** Syncs what's kept now. */
+    fun syncNow() = startSync()
 
     private companion object {
         const val REFRESH_MILLIS = 250L

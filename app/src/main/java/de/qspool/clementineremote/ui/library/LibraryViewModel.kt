@@ -23,6 +23,9 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType
+import de.qspool.clementineremote.backend.sync.SyncRule
+import de.qspool.clementineremote.backend.sync.SyncSources
+import de.qspool.clementineremote.backend.sync.Syncer
 import de.qspool.clementineremote.ui.browse.BrowseLevel
 import de.qspool.clementineremote.ui.browse.ItemKind
 import de.qspool.clementineremote.ui.browse.SongBrowser
@@ -113,11 +116,22 @@ class LibraryViewModel(
     val canPlayNext: StateFlow<Boolean> = RemoteRepository.canEnqueueNext,
     /** Empties a playlist, by its id. */
     private val clearPlaylist: (Int) -> Unit = { App.Clementine.playlistManager.clearPlaylist(it) },
+    /** Whether songs can be synced from the Clementine connected, so kept on this phone. */
+    val syncFrom: StateFlow<RemoteRepository.Syncing> = RemoteRepository.syncing,
+    /** Makes rules keeping music on this phone, and syncs them. */
+    private val keepRules: (List<SyncRule>) -> Unit = Syncer::keep,
+    /** The albums of the library's songs with these values in these columns: see [SyncSources.albums]. */
+    private val albumsOf: (List<String>, List<String>) -> List<Pair<String, String>> = { fields, values ->
+        LibraryDatabaseHelper().openDatabase(SQLiteDatabase.OPEN_READONLY).use { SyncSources.albums(it, fields, values) }
+    },
 ) : ViewModel() {
 
     private val browser = SongBrowser(newQuery)
 
     private val searchBrowser = SongBrowser(newSearchQuery)
+
+    /** The columns the library's levels group by, read again when the grouping changes. */
+    private var fields: List<String> = browser.fields()
 
     private var searching: Job? = null
 
@@ -137,6 +151,9 @@ class LibraryViewModel(
 
         /** The library couldn't be synced, for [reason]. */
         data class SyncFailed(@StringRes val reason: Int) : Message
+
+        /** [title] will be kept on this phone. */
+        data class Kept(val title: String) : Message
     }
 
     private var syncing = false
@@ -187,6 +204,7 @@ class LibraryViewModel(
 
     /** Shows the top level again, from the database on this phone if there is one. */
     fun reload() {
+        fields = browser.fields()
         viewModelScope.launch {
             val top = withContext(io) {
                 if (libraryExists()) browser.level(null) else null
@@ -375,8 +393,44 @@ class LibraryViewModel(
 
     private fun songUrls(items: List<SongSelectItem>) = browser.songs(items).mapNotNull { it.url }
 
+    /**
+     * Whether [item] can be kept on this phone, when Clementine syncs ([syncFrom]): an artist or
+     * an album, by name. Albums are kept by album artist, as Clementine files them; artists by
+     * artist.
+     */
+    fun canKeep(item: SongSelectItem): Boolean =
+        !item.selection.lastOrNull().isNullOrEmpty() && fields.getOrNull(item.level) in KEEPABLE
+
+    /** Keeps [item] on this phone ([canKeep]): its album, or the artist's songs. */
+    fun keep(item: SongSelectItem) {
+        if (!syncFrom.value.available || !canKeep(item)) {
+            return
+        }
+        val serverId = syncFrom.value.serverId
+        val fields = fields
+        viewModelScope.launch {
+            val rules = withContext(io) {
+                if (fields[item.level] == "artist") {
+                    listOf(SyncSources.artistRule(serverId, item.selection.last()))
+                } else {
+                    // One album here can be several in Clementine, filed under different album
+                    // artists: keep each.
+                    albumsOf(fields.take(item.level + 1), item.selection.toList())
+                        .map { (albumArtist, album) -> SyncSources.albumRule(serverId, albumArtist, album) }
+                }
+            }
+            if (rules.isNotEmpty()) {
+                keepRules(rules)
+                _messages.trySend(Message.Kept(item.listTitle))
+            }
+        }
+    }
+
     private companion object {
         /** Search results are browsed by album artist, album and title. */
         const val SEARCH_SONG_LEVEL = 2
+
+        /** The levels whose items can be kept on this phone. */
+        val KEEPABLE = setOf("artist", "album")
     }
 }

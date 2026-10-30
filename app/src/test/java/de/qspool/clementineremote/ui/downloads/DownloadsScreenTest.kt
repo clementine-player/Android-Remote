@@ -16,6 +16,11 @@ import de.qspool.clementineremote.backend.downloader.StoredSong
 import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem
 import de.qspool.clementineremote.backend.player.MyPlaylist
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncSourceKind
+import de.qspool.clementineremote.backend.sync.KeptRule
+import de.qspool.clementineremote.backend.sync.RefreshPolicy
+import de.qspool.clementineremote.backend.sync.RuleResult
+import de.qspool.clementineremote.backend.sync.SyncRule
 import de.qspool.clementineremote.ui.theme.ClementineTheme
 import de.qspool.clementineremote.utils.Utilities
 import kotlinx.coroutines.Dispatchers
@@ -71,6 +76,55 @@ class DownloadsScreenTest {
         mostPlayed = true,
         playlists = listOf(PlaylistSuggestion(3, "Piano evenings", songs = 13, playing = true, favorite = false)),
     )
+
+    private fun rule(id: Long, title: String, kind: SyncSourceKind) = SyncRule(
+        id = id, serverId = "studio", sourceId = "library/album/x/$id", title = title, kind = kind,
+        refreshPolicy = RefreshPolicy.NEVER,
+    )
+
+    @Test
+    fun showsWhatsKeptOnThisPhoneAndRemovesItAfterAsking() {
+        val bytes = 290L shl 20
+        val kept = Kept(
+            rules = listOf(
+                KeptRule(rule(1, "Kind of Blue", SyncSourceKind.SYNC_SOURCE_KIND_ALBUM), 5, bytes, RuleResult.Synced(5, 5, 0)),
+                KeptRule(rule(2, "Erik Satie", SyncSourceKind.SYNC_SOURCE_KIND_ARTIST), 0, 0, RuleResult.NeedsSetup("Downloads are off in Clementine")),
+                KeptRule(rule(3, "Gymnopédies", SyncSourceKind.SYNC_SOURCE_KIND_ALBUM), 0, 0, null),
+            ),
+        )
+        val removed = mutableListOf<Long>()
+        compose.setContent {
+            ClementineTheme(dynamicColor = false) {
+                DownloadsContent(
+                    DownloadsState(),
+                    onCancel = {},
+                    onPlay = {},
+                    onChangeSettings = {},
+                    kept = kept,
+                    onThisPhone = true,
+                    onRemoveKept = { removed += it.rule.id },
+                )
+            }
+        }
+
+        compose.onNodeWithText("On this phone").assertIsDisplayed()
+        compose.onNodeWithText("Kept on this phone").assertIsDisplayed()
+        compose.onNodeWithTag("downloadsEmpty").assertDoesNotExist()
+        compose.onNodeWithText("Kept as it is · 5 songs, " + Utilities.humanReadableBytes(bytes, true)).assertIsDisplayed()
+        compose.onNodeWithText("Downloads are off in Clementine").assertIsDisplayed()
+        compose.onNodeWithText("Waiting for Clementine").assertIsDisplayed()
+
+        compose.onNodeWithTag("keptMenu1").performClick()
+        // Not connected to a Clementine that syncs: nothing to sync with.
+        compose.onNodeWithTag("keptSyncNow").assertDoesNotExist()
+        compose.onNodeWithTag("keptRemove").performClick()
+        compose.onNodeWithText(
+            "Remove Kind of Blue? Its songs are deleted from this phone, unless something else you keep has them."
+        ).assertIsDisplayed()
+        compose.onNodeWithTag("keptRemoveConfirm").performClick()
+
+        assertEquals(listOf(1L), removed)
+    }
 
     @Test
     fun withoutDownloadsOrSuggestionsSaysWhereDownloadsStart() {
