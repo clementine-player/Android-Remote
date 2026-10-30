@@ -13,12 +13,15 @@ import de.qspool.clementineremote.backend.pb.ClementineMessageFactory
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType
 import de.qspool.clementineremote.backend.player.MySong
 import de.qspool.clementineremote.backend.sync.PhonePlayer
+import de.qspool.clementineremote.backend.sync.PlayFrom
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+
+/** Where Play from can switch to, and what each one plays. */
+data class PlayFromChoices(val clementine: NowPlaying, val phone: NowPlaying, val playFrom: PlayFrom)
 
 /** The current song's lyrics, which Clementine looks up when asked. */
 sealed interface Lyrics {
@@ -34,10 +37,16 @@ sealed interface Lyrics {
     data class Found(val title: String, val content: String) : Lyrics
 }
 
-/** The phone's own player, which the player follows while songs kept on this phone play. */
+/** The phone's own player, which the player follows while the app plays from this phone. */
 interface PhonePlayback {
     /** What plays on this phone, or is paused there; null when nothing is. */
     val nowPlaying: StateFlow<NowPlaying?>
+
+    /** Where the app plays from. */
+    val playFrom: StateFlow<PlayFrom>
+
+    /** Switches where the app plays from, pausing the one it leaves. */
+    fun playFrom(place: PlayFrom)
     fun playPause()
     fun next()
     fun previous()
@@ -49,6 +58,8 @@ interface PhonePlayback {
 
 private object PhonePlayerPlayback : PhonePlayback {
     override val nowPlaying get() = PhonePlayer.nowPlaying
+    override val playFrom get() = PhonePlayer.playFrom
+    override fun playFrom(place: PlayFrom) = PhonePlayer.playFrom(App.getApp(), place)
     override fun playPause() = PhonePlayer.playPause(App.getApp())
     override fun next() = PhonePlayer.next(App.getApp())
     override fun previous() = PhonePlayer.previous(App.getApp())
@@ -62,8 +73,8 @@ private object PhonePlayerPlayback : PhonePlayback {
  * The player's state and actions: what Clementine is playing, and the commands the player
  * sends it. Commands are sent to Clementine, whose answer then updates [nowPlaying].
  *
- * While songs kept on this phone play, or are paused there, the player follows the phone's own
- * player instead, and its commands go there.
+ * While the app plays from this phone, the player follows the phone's own player instead, and its
+ * commands go there.
  */
 class PlayerViewModel(
     private val send: (ClementineMessage) -> Unit = RemoteRepository::send,
@@ -71,15 +82,34 @@ class PlayerViewModel(
     private val phone: PhonePlayback = PhonePlayerPlayback,
 ) : ViewModel() {
 
-    val nowPlaying: StateFlow<NowPlaying> = combine(RemoteRepository.nowPlaying, phone.nowPlaying) { clementine, phone ->
-        phone ?: clementine
-    }.stateIn(viewModelScope, SharingStarted.Eagerly, phone.nowPlaying.value ?: RemoteRepository.nowPlaying.value)
+    /** What the phone plays while the app plays from it; null otherwise. */
+    private fun followed(nowPlaying: NowPlaying?, from: PlayFrom) = nowPlaying.takeIf { from == PlayFrom.PHONE }
+
+    val nowPlaying: StateFlow<NowPlaying> =
+        combine(RemoteRepository.nowPlaying, phone.nowPlaying, phone.playFrom) { clementine, phone, from ->
+            followed(phone, from) ?: clementine
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, followedNow ?: RemoteRepository.nowPlaying.value)
 
     /** Whether the player follows the phone's own player. */
-    val onPhone: StateFlow<Boolean> = phone.nowPlaying.map { it != null }
-        .stateIn(viewModelScope, SharingStarted.Eagerly, phone.nowPlaying.value != null)
+    val onPhone: StateFlow<Boolean> = combine(phone.nowPlaying, phone.playFrom) { phone, from ->
+        followed(phone, from) != null
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, followedNow != null)
 
-    private val playingOnPhone: Boolean get() = phone.nowPlaying.value != null
+    /**
+     * What Play from offers: Clementine (while connected) and the phone's own player (while
+     * something plays or is paused there), with what each plays; null when there's no choice.
+     */
+    val choices: StateFlow<PlayFromChoices?> =
+        combine(RemoteRepository.nowPlaying, RemoteRepository.connection, phone.nowPlaying, phone.playFrom) { clementine, connection, onPhone, from ->
+            if (connection == ConnectionStatus.CONNECTED && onPhone != null) PlayFromChoices(clementine, onPhone, from) else null
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
+    /** Switches where the app plays from, pausing the one it leaves. */
+    fun playFrom(place: PlayFrom) = phone.playFrom(place)
+
+    private val followedNow: NowPlaying? get() = followed(phone.nowPlaying.value, phone.playFrom.value)
+
+    private val playingOnPhone: Boolean get() = followedNow != null
 
     val connection: StateFlow<ConnectionStatus> = RemoteRepository.connection
 

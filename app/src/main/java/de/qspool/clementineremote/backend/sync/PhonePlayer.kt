@@ -23,6 +23,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
+/** Where the app plays from: Clementine, or songs kept on this phone. */
+enum class PlayFrom { CLEMENTINE, PHONE }
+
 /**
  * Plays songs kept on this phone, through [PhonePlaybackService], says what's playing, and
  * controls it for the app's player. Starting to play here pauses Clementine, so only one plays.
@@ -51,38 +54,76 @@ object PhonePlayer {
     /** The songs being played, by item key, for what the player shows of them. */
     private var songs: Map<String, KeptSong> = emptyMap()
 
+    private val _playFrom = MutableStateFlow(PlayFrom.CLEMENTINE)
+
+    /**
+     * Where the app plays from: this phone from when it starts playing here until Play from
+     * switches back to Clementine, or it stops here.
+     */
+    val playFrom: StateFlow<PlayFrom> = _playFrom.asStateFlow()
+
     private val activeListeners = mutableListOf<Consumer<Boolean>>()
+
+    /** Whether the app plays from this phone, with something playing (or paused) here. */
+    private var active = false
 
     private val listener = object : Player.Listener {
         override fun onEvents(player: Player, events: Player.Events) {
-            val wasActive = _playing.value != null
             _playing.value = if (player.playbackState == Player.STATE_IDLE || player.playbackState == Player.STATE_ENDED) {
                 null
             } else {
                 player.currentMediaItem?.mediaId
             }
             _nowPlaying.value = _playing.value?.let { nowPlaying(player, it) }
-            val active = _playing.value != null
-            if (active != wasActive) {
-                activeListeners.forEach { it.accept(active) }
+            if (_playing.value == null) {
+                _playFrom.value = PlayFrom.CLEMENTINE
             }
+            updateActive()
         }
     }
 
     /**
-     * Tells [listener], on the main thread, when something starts or stops playing (or being
-     * paused) on this phone.
+     * Tells [listener], on the main thread, when the app starts or stops playing from this phone,
+     * with something playing (or paused) here.
      */
     fun addActiveListener(listener: Consumer<Boolean>) {
         activeListeners += listener
     }
 
-    /** Plays [songs] on this phone from the one at [start], shuffled if [shuffle]. */
-    fun play(context: Context, songs: List<KeptSong>, start: Int, shuffle: Boolean = false) {
-        if (songs.isEmpty()) return
+    private fun updateActive() {
+        val active = _playFrom.value == PlayFrom.PHONE && _playing.value != null
+        if (active != this.active) {
+            this.active = active
+            activeListeners.forEach { it.accept(active) }
+        }
+    }
+
+    /**
+     * Switches where the app plays from, pausing the one it leaves; the other stays paused until
+     * it's played. This phone only when something is playing (or paused) here.
+     */
+    fun playFrom(context: Context, place: PlayFrom) {
+        if (place == _playFrom.value || (place == PlayFrom.PHONE && _playing.value == null)) return
+        when (place) {
+            PlayFrom.PHONE -> pauseClementine()
+            PlayFrom.CLEMENTINE -> withController(context) { it.pause() }
+        }
+        _playFrom.value = place
+        updateActive()
+    }
+
+    private fun pauseClementine() {
         if (App.Clementine.state == Clementine.State.PLAY) {
             RemoteRepository.send(ClementineMessage.getMessage(MsgType.PAUSE))
         }
+    }
+
+    /** Plays [songs] on this phone from the one at [start], shuffled if [shuffle]. */
+    fun play(context: Context, songs: List<KeptSong>, start: Int, shuffle: Boolean = false) {
+        if (songs.isEmpty()) return
+        pauseClementine()
+        _playFrom.value = PlayFrom.PHONE
+        updateActive()
         this.songs = songs.associateBy { it.itemKey }
         withController(context) {
             it.shuffleModeEnabled = shuffle

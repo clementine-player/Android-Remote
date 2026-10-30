@@ -9,6 +9,7 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType
 import de.qspool.clementineremote.backend.player.LyricsProvider
 import de.qspool.clementineremote.backend.player.MySong
+import de.qspool.clementineremote.backend.sync.PlayFrom
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.junit.Assert.assertEquals
@@ -76,7 +77,11 @@ class PlayerViewModelTest {
 
     private class FakePhone : PhonePlayback {
         override val nowPlaying = MutableStateFlow<RemoteRepository.NowPlaying?>(null)
+        override val playFrom = MutableStateFlow(PlayFrom.PHONE)
         val done = mutableListOf<String>()
+        override fun playFrom(place: PlayFrom) {
+            playFrom.value = place
+        }
         override fun playPause() { done += "playPause" }
         override fun next() { done += "next" }
         override fun previous() { done += "previous" }
@@ -110,6 +115,15 @@ class PlayerViewModelTest {
         player.requestLyrics()
         assertEquals(listOf("playPause", "next", "seek 30", "shuffle"), phone.done)
         assertEquals(emptyList<MsgType>(), sent)
+
+        // Switched to Clementine with Play from, the player follows Clementine, and back.
+        player.playFrom(PlayFrom.CLEMENTINE)
+        idle()
+        assertEquals(song, player.nowPlaying.value.song)
+        assertEquals(false, player.onPhone.value)
+        player.playFrom(PlayFrom.PHONE)
+        idle()
+        assertEquals(kept, player.nowPlaying.value.song)
 
         // Stopped on the phone, the player follows Clementine again.
         phone.nowPlaying.value = null
