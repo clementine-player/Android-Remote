@@ -58,7 +58,7 @@ object PhonePlayer {
 
     /**
      * Where the app plays from: this phone from when it starts playing here until Play from
-     * switches back to Clementine, or it stops here.
+     * switches back to Clementine, Clementine starts playing, or it stops here.
      */
     val playFrom: StateFlow<PlayFrom> = _playFrom.asStateFlow()
 
