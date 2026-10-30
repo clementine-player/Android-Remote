@@ -40,6 +40,7 @@ import de.qspool.clementineremote.backend.ClementinePlayerConnection;
 import de.qspool.clementineremote.backend.listener.PlayerConnectionListener;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.player.MySong;
+import de.qspool.clementineremote.backend.sync.PhonePlayer;
 import de.qspool.clementineremote.utils.Utilities;
 import de.qspool.clementineremote.widget.ClementineWidget;
 
@@ -47,6 +48,10 @@ import de.qspool.clementineremote.widget.ClementineWidget;
  * Publishes Clementine's playback to the rest of the system while connected: a Media3 media
  * session (lockscreen, Bluetooth, watches, other apps' media controllers), the player
  * notification, the home-screen widget, and the "music changed" broadcasts scrobblers read.
+ *
+ * <p>While songs kept on this phone play, or are paused there, the phone's own session has the
+ * controls, so Clementine's session is closed until they stop. Clementine's session plays
+ * remotely, and Android's media controls hide an app's local session while it has a remote one.
  *
  * <p>The connection reports on its own thread; the session lives on the main thread.
  */
@@ -77,6 +82,12 @@ public class MediaSessionController {
     /** Set when the connection was lost, so the service's "connection lost" notice stays. */
     private volatile boolean mLostConnection;
 
+    /** Main thread only. */
+    private boolean mConnected;
+
+    /** Whether something plays, or is paused, on this phone. Main thread only. */
+    private boolean mPlayingOnPhone;
+
     public MediaSessionController(Context context,
             ClementinePlayerConnection clementinePlayerConnection) {
         mContext = context;
@@ -86,6 +97,10 @@ public class MediaSessionController {
     }
 
     public void registerMediaSession() {
+        PhonePlayer.INSTANCE.addActiveListener(active -> {
+            mPlayingOnPhone = active;
+            updateSession();
+        });
         mClementinePlayerConnection.addPlayerConnectionListener(new PlayerConnectionListener() {
             @Override
             public void onConnectionStatusChanged(
@@ -93,14 +108,20 @@ public class MediaSessionController {
                 switch (status) {
                     case CONNECTED:
                         mLostConnection = false;
-                        mMainHandler.post(MediaSessionController.this::startSession);
+                        mMainHandler.post(() -> {
+                            mConnected = true;
+                            updateSession();
+                        });
                         break;
                     case LOST_CONNECTION:
                         mLostConnection = true;
                         break;
                     case DISCONNECTED:
                         boolean keepNotification = mLostConnection;
-                        mMainHandler.post(() -> stopSession(keepNotification));
+                        mMainHandler.post(() -> {
+                            mConnected = false;
+                            stopSession(keepNotification);
+                        });
                         break;
                     default:
                         break;
@@ -148,6 +169,20 @@ public class MediaSessionController {
         });
     }
 
+    /** Opens Clementine's session while connected, unless the phone is playing. */
+    private void updateSession() {
+        if (!mConnected) {
+            return;
+        }
+        if (mPlayingOnPhone) {
+            releaseSession();
+            mNotification.showPlayingOnPhone();
+        } else {
+            startSession();
+            updateNotification();
+        }
+    }
+
     private void startSession() {
         if (mSession == null) {
             mSession = new MediaSession.Builder(mContext, mPlayer.asSessionPlayer())
@@ -176,13 +211,17 @@ public class MediaSessionController {
 
     private void stopSession(boolean keepNotification) {
         mPlayer.setConnected(false);
+        releaseSession();
+        if (!keepNotification) {
+            mNotification.cancel();
+        }
+    }
+
+    private void releaseSession() {
         if (mSession != null) {
             sPlatformToken = null;
             mSession.release();
             mSession = null;
-        }
-        if (!keepNotification) {
-            mNotification.cancel();
         }
     }
 

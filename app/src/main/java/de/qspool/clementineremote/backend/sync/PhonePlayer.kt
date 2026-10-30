@@ -3,6 +3,7 @@ package de.qspool.clementineremote.backend.sync
 import android.content.ComponentName
 import android.content.Context
 import androidx.core.content.ContextCompat
+import androidx.core.util.Consumer
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
@@ -31,14 +32,29 @@ object PhonePlayer {
     /** The item key of the song playing on this phone, or paused there; null when nothing is. */
     val playing: StateFlow<String?> = _playing.asStateFlow()
 
+    private val activeListeners = mutableListOf<Consumer<Boolean>>()
+
     private val listener = object : Player.Listener {
         override fun onEvents(player: Player, events: Player.Events) {
+            val wasActive = _playing.value != null
             _playing.value = if (player.playbackState == Player.STATE_IDLE || player.playbackState == Player.STATE_ENDED) {
                 null
             } else {
                 player.currentMediaItem?.mediaId
             }
+            val active = _playing.value != null
+            if (active != wasActive) {
+                activeListeners.forEach { it.accept(active) }
+            }
         }
+    }
+
+    /**
+     * Tells [listener], on the main thread, when something starts or stops playing (or being
+     * paused) on this phone.
+     */
+    fun addActiveListener(listener: Consumer<Boolean>) {
+        activeListeners += listener
     }
 
     /** Plays [songs] on this phone from the one at [start], shuffled if [shuffle]. */
@@ -52,6 +68,14 @@ object PhonePlayer {
             it.setMediaItems(songs.map(::mediaItem), if (shuffle) songs.indices.random() else start.coerceIn(songs.indices), 0)
             it.prepare()
             it.play()
+        }
+    }
+
+    /** Stops playing on this phone, and forgets what was playing. */
+    fun stop(context: Context) {
+        withController(context) {
+            it.stop()
+            it.clearMediaItems()
         }
     }
 
