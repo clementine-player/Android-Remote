@@ -236,6 +236,14 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Visitar sitio web de Clementine</string>
 
+    <!-- A setting: which networks songs download over, for downloads and for what's kept on this
+         phone. Its choices follow. -->
+    <string name="pref_dl_network">Descargar por</string>
+    <!-- A choice under Download over. A metered Wi-Fi, such as another phone's hotspot, counts as
+         mobile data. -->
+    <string name="pref_dl_network_wifi_only">Wifi solamente</string>
+    <!-- A choice under Download over. -->
+    <string name="pref_dl_network_any">Cualquier red</string>
     <string name="pref_dl_dir">Definir la carpeta de descargas</string>
     <string name="pref_dl_volume">Guardar descargas en</string>
     <string name="pref_dl_volume_unavailable">No disponible. Escoja dónde guardar las descargas.</string>
@@ -360,6 +368,20 @@
 
     <string name="cd_cover_image">Imagen de portada de álbum</string>
     <string name="cd_cancel_download">Cancelar la descarga</string>
+    <!-- On the connect screen, under On this phone: how many songs are saved on the phone. -->
+    <plurals name="sync_connect_songs">
+        <item quantity="one">%d canción</item>
+        <item quantity="many">%d de canciones</item>
+        <item quantity="other">%d canciones</item>
+    </plurals>
+    <!-- Something kept on the phone, while Clementine makes the list of its songs. -->
+    <string name="sync_preparing">Preparando…</string>
+    <!-- A choice under Update it: what's kept is never updated from Clementine. -->
+    <string name="sync_refresh_never">Nunca</string>
+    <!-- Menu item: syncs what's kept on the phone with Clementine now. -->
+    <string name="sync_now">Sincronizar ahora</string>
     <!-- Button: plays, on the phone, the songs of something kept on it, in order. -->
     <string name="sync_play">Reproducir</string>
-    </resources>
+    <!-- Button: plays, on the phone, the songs of something kept on it, in random order. -->
+    <string name="sync_shuffle">Aleatorizar</string>
+</resources>

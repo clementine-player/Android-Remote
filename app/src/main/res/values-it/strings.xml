@@ -370,6 +370,12 @@
     <!-- Music saved on the phone, as opposed to Clementine on the computer: the title of the tab's
          screen, and where the music plays from. -->
     <string name="sync_on_this_phone">Su questo telefono</string>
+    <!-- On the connect screen, under On this phone: how many songs are saved on the phone. -->
+    <plurals name="sync_connect_songs">
+        <item quantity="one">%d brano</item>
+        <item quantity="many">%d brani</item>
+        <item quantity="other">%d brani</item>
+    </plurals>
     <!-- Button: plays, on the phone, the songs of something kept on it, in order. -->
     <string name="sync_play">Riproduci</string>
     </resources>
