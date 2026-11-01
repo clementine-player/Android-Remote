@@ -185,6 +185,18 @@ class SyncEngineTest {
     }
 
     @Test
+    fun keepsASongAPlaylistHasTwiceOnce() {
+        val playlist = rule("playlist/1")
+        manifest("playlist/1", song("a"), song("b"), song("a"))
+
+        val result = engine.sync(clementine)
+
+        assertEquals(RuleResult.Synced(songs = 2, downloaded = 2, skipped = 0), result.rules[playlist])
+        assertEquals(listOf("a", "b"), store.ruleItems(playlist).map { it.itemKey })
+        assertEquals(listOf("/d/token/a-1", "/d/token/b-1"), clementine.opened)
+    }
+
+    @Test
     fun saysHowManySongsItHasDownloaded() {
         val progress = ArrayList<Triple<Long, Int, Int>>()
         engine = SyncEngine(
