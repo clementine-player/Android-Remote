@@ -98,7 +98,8 @@ class SyncEngine(
             else -> {}
         }
 
-        val wanted = manifest.itemsList.map { item ->
+        // A playlist can have a song more than once; the phone keeps it once, where it first comes.
+        val wanted = manifest.itemsList.distinctBy { it.itemKey }.map { item ->
             val have = store.item(rule.serverId, item.itemKey)
             Triple(item, have, have == null || have.version != item.version)
         }
