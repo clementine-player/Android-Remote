@@ -363,6 +363,8 @@
     <string name="input_auth_code">Authentication Code</string>
     <string name="done">Done</string>
     <string name="unknown">Unknown</string>
+    <!-- In the library, the artist that albums by several artists (compilations) are listed under, as Clementine lists them. -->
+    <string name="various_artists">Various artists</string>
     <plurals name="number_items">
         <item quantity="one">%d item</item>
         <item quantity="other">%d items</item>

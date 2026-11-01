@@ -12,6 +12,12 @@ import de.qspool.clementineremote.R;
 
 public abstract class DynamicSongQuery {
 
+    /**
+     * The artist songs on compilations are grouped under, by queries that group them so: shown
+     * as "Various artists", and listed before the others. It's char(1) in SQL.
+     */
+    public static final String VARIOUS_ARTISTS = "\u0001";
+
     protected Context mContext;
 
     private SQLiteDatabase mDatabase;
@@ -31,6 +37,9 @@ public abstract class DynamicSongQuery {
     abstract protected String getTable();
     abstract protected SQLiteDatabase getReadableDatabase();
     protected String getHiddenWhere() { return ""; }
+
+    /** The SQL a level's {@code field} stands for: the column of that name, unless overridden. */
+    protected String getExpression(String field) { return field; }
 
     public DynamicSongQuery(Context context) {
         mContext = context;
@@ -69,7 +78,7 @@ public abstract class DynamicSongQuery {
 
         for (String field : mSelectedFields) {
             query.append(", ");
-            query.append(field);
+            query.append(getExpression(field));
         }
 
         query.append(", cast(filename as TEXT) "); // URL
@@ -83,7 +92,7 @@ public abstract class DynamicSongQuery {
         if (mSelection.length > 0) {
             query.append(" WHERE ");
             for (int i = 0; i < mSelection.length; i++) {
-                query.append(mSelectedFields[i]);
+                query.append(getExpression(mSelectedFields[i]));
                 query.append(" = ? ");
                 if (i < mSelection.length - 1)
                     query.append(" and ");
@@ -107,10 +116,12 @@ public abstract class DynamicSongQuery {
             query.append(" album COLLATE LOCALIZED, album, disc, track ");
             query.append(mSort);
         } else {
-            String field = mSelectedFields[mLevel];
+            String field = getExpression(mSelectedFields[mLevel]);
             query.append(" GROUP BY ");
             query.append(field);
             query.append(" ORDER BY ");
+            // Various artists first, as Clementine lists them.
+            query.append("(" + field + ") IS char(1) DESC, ");
             query.append(field + " COLLATE LOCALIZED " + mSort + ", " + field + " " + mSort);
         }
 
@@ -129,7 +140,7 @@ public abstract class DynamicSongQuery {
         StringBuilder query = new StringBuilder();
         query.append("SELECT ");
         query.append(" COUNT(DISTINCT(");
-        query.append(mSelectedFields[selection.length]);
+        query.append(getExpression(mSelectedFields[selection.length]));
         query.append("))");
 
         query.append(" FROM ");
@@ -139,7 +150,7 @@ public abstract class DynamicSongQuery {
         if (selection.length > 0) {
             query.append(" WHERE ");
             for (int i = 0; i < selection.length; i++) {
-                query.append(mSelectedFields[i]);
+                query.append(getExpression(mSelectedFields[i]));
                 query.append(" = ? ");
                 if (i < selection.length - 1)
                     query.append(" and ");
@@ -188,6 +199,8 @@ public abstract class DynamicSongQuery {
 
         if (selection[mLevel].isEmpty()) {
             item.setListTitle(unknownItem);
+        } else if (selection[mLevel].equals(VARIOUS_ARTISTS)) {
+            item.setListTitle(mContext.getString(R.string.various_artists));
         } else {
             item.setListTitle(selection[mLevel]);
             if (mSelectedFields[mLevel].equals("year")) {

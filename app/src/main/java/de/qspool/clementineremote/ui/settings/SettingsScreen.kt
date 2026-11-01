@@ -40,6 +40,7 @@ import de.qspool.clementineremote.backend.Clementine
 import de.qspool.clementineremote.backend.downloader.DownloadNetwork
 import de.qspool.clementineremote.backend.downloader.DownloadVolume
 import de.qspool.clementineremote.backend.downloader.MediaStoreDownloadStorage
+import de.qspool.clementineremote.backend.library.LibraryQuery
 import de.qspool.clementineremote.ui.hints.Hints
 
 /** What the settings do outside themselves. */
@@ -119,7 +120,7 @@ private fun PlayerSettings(store: PreferenceStore) {
 private fun LibrarySettings(store: PreferenceStore) {
     SettingsHeading(stringResource(R.string.pref_cat_library))
     StringChoiceSetting(
-        store, SharedPreferencesKeys.SP_LIBRARY_GROUPING, "artist-album", R.string.pref_library_grouping_title,
+        store, SharedPreferencesKeys.SP_LIBRARY_GROUPING, LibraryQuery.DEFAULT_GROUPING, R.string.pref_library_grouping_title,
         R.string.pref_library_grouping_summary,
         listOf(
             R.string.pref_library_grouping_artist, R.string.pref_library_grouping_artist_album,

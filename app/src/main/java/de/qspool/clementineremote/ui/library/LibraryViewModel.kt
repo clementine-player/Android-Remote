@@ -398,9 +398,9 @@ class LibraryViewModel(
     private fun songUrls(items: List<SongSelectItem>) = browser.songs(items).mapNotNull { it.url }
 
     /**
-     * Whether [item] can be kept on this phone, when Clementine syncs ([syncFrom]): an artist or
-     * an album, by name. Albums are kept by album artist, as Clementine files them; artists by
-     * artist.
+     * Whether [item] can be kept on this phone, when Clementine syncs ([syncFrom]): an artist, an
+     * album artist or an album, by name. Albums are kept by album artist, as Clementine files them;
+     * artists by artist, and album artists and Various artists as their albums.
      */
     fun canKeep(item: SongSelectItem): Boolean =
         !item.selection.lastOrNull().isNullOrEmpty() && fields.getOrNull(item.level) in KEEPABLE
@@ -417,7 +417,7 @@ class LibraryViewModel(
         val fields = fields
         viewModelScope.launch {
             val rules = withContext(io) {
-                if (fields[item.level] == "artist") {
+                if (fields[item.level] == "artist" && item.selection.last() != DynamicSongQuery.VARIOUS_ARTISTS) {
                     listOf(SyncSources.artistRule(serverId, item.selection.last(), refreshPolicy))
                 } else {
                     // One album here can be several in Clementine, filed under different album
@@ -448,6 +448,6 @@ class LibraryViewModel(
         const val SEARCH_SONG_LEVEL = 2
 
         /** The levels whose items can be kept on this phone. */
-        val KEEPABLE = setOf("artist", "album")
+        val KEEPABLE = setOf("artist", "albumartist", "album")
     }
 }

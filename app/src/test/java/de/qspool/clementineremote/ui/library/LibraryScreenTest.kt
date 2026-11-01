@@ -101,6 +101,7 @@ class LibraryScreenTest {
             // Indexed for searching, as the library is once it's synced.
             db.execSQL("CREATE VIRTUAL TABLE songs_fts USING fts3(artist, albumartist, album, title, filename, disc, track)")
             db.execSQL("INSERT INTO songs_fts SELECT * FROM songs")
+            db.execSQL("ALTER TABLE songs ADD COLUMN effective_compilation INTEGER NOT NULL DEFAULT 0")
         }
     }
 
