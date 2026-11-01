@@ -1,6 +1,7 @@
 package de.qspool.clementineremote.backend.sync
 
 import android.database.sqlite.SQLiteDatabase
+import de.qspool.clementineremote.backend.database.DynamicSongQuery
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,20 +35,35 @@ class SyncSourcesTest {
     @Test
     fun findsAlbumsByAlbumArtistOrArtist() {
         SQLiteDatabase.create(null).use { db ->
-            db.execSQL("CREATE TABLE songs (artist TEXT, albumartist TEXT, album TEXT, genre TEXT)")
-            db.execSQL("INSERT INTO songs VALUES ('Pixies', '', 'Doolittle', 'Rock')")
-            db.execSQL("INSERT INTO songs VALUES ('Blur', 'Various Artists', 'Now 30', 'Pop')")
-            db.execSQL("INSERT INTO songs VALUES ('Oasis', 'Various Artists', 'Now 30', 'Pop')")
-            db.execSQL("INSERT INTO songs VALUES ('Blur', '', 'Parklife', 'Pop')")
-            db.execSQL("INSERT INTO songs VALUES ('Blur', '', '', 'Pop')")
+            db.execSQL(
+                "CREATE TABLE songs (artist TEXT, albumartist TEXT, album TEXT, genre TEXT, effective_compilation INTEGER)",
+            )
+            db.execSQL("INSERT INTO songs VALUES ('Pixies', '', 'Doolittle', 'Rock', 0)")
+            db.execSQL("INSERT INTO songs VALUES ('Blur', 'Various Artists', 'Now 30', 'Pop', 0)")
+            db.execSQL("INSERT INTO songs VALUES ('Oasis', 'Various Artists', 'Now 30', 'Pop', 0)")
+            db.execSQL("INSERT INTO songs VALUES ('Blur', '', 'Parklife', 'Pop', 0)")
+            db.execSQL("INSERT INTO songs VALUES ('Blur', '', '', 'Pop', 0)")
+            // A compilation Clementine found, with no album artist: filed under each song's artist.
+            db.execSQL("INSERT INTO songs VALUES ('Pulp', '', 'Britpop', 'Pop', 1)")
+            db.execSQL("INSERT INTO songs VALUES ('Suede', '', 'Britpop', 'Pop', 1)")
 
             assertEquals(
                 listOf("Various Artists" to "Now 30"),
                 SyncSources.albums(db, listOf("artist", "album"), listOf("Blur", "Now 30")),
             )
             assertEquals(
-                listOf("Blur" to "Parklife", "Various Artists" to "Now 30"),
+                listOf("Blur" to "Parklife", "Pulp" to "Britpop", "Suede" to "Britpop", "Various Artists" to "Now 30"),
                 SyncSources.albums(db, listOf("genre"), listOf("Pop")),
+            )
+            assertEquals(
+                listOf("Blur" to "Parklife", "Various Artists" to "Now 30"),
+                SyncSources.albums(db, listOf("albumartist"), listOf("Blur")).plus(
+                    SyncSources.albums(db, listOf("albumartist"), listOf("Various Artists")),
+                ),
+            )
+            assertEquals(
+                listOf("Pulp" to "Britpop", "Suede" to "Britpop"),
+                SyncSources.albums(db, listOf("albumartist"), listOf(DynamicSongQuery.VARIOUS_ARTISTS)),
             )
         }
     }

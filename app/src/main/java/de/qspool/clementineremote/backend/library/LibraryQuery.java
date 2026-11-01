@@ -12,6 +12,27 @@ import de.qspool.clementineremote.backend.database.DynamicSongQuery;
 
 public class LibraryQuery extends DynamicSongQuery {
 
+    /** Clementine's library groups by album artist, then album, unless told otherwise. */
+    public static final String DEFAULT_GROUPING = "albumartist-album";
+
+    /**
+     * The SQL the library's songs are grouped by for {@code field}. As Clementine groups them,
+     * songs it finds are on compilations (a various artists album) are under
+     * {@link DynamicSongQuery#VARIOUS_ARTISTS}, not their artist, and an album artist is the
+     * artist where a song has none.
+     */
+    public static String expression(String field) {
+        switch (field) {
+            case "artist":
+                return "CASE WHEN effective_compilation = 1 THEN char(1) ELSE artist END";
+            case "albumartist":
+                return "CASE WHEN effective_compilation = 1 THEN char(1) "
+                        + "WHEN albumartist <> '' THEN albumartist ELSE artist END";
+            default:
+                return field;
+        }
+    }
+
     public LibraryQuery(Context context) {
         super(context);
     }
@@ -21,7 +42,7 @@ public class LibraryQuery extends DynamicSongQuery {
         SharedPreferences sharedPreferences = App.getPreferences();
 
         String grouping = sharedPreferences.getString(SharedPreferencesKeys.SP_LIBRARY_GROUPING,
-                "artist-album");
+                DEFAULT_GROUPING);
         String[] selectedFields = new String[] {"artist", "title"};
 
         switch (grouping) {
@@ -55,6 +76,11 @@ public class LibraryQuery extends DynamicSongQuery {
         SharedPreferences sharedPreferences = App.getPreferences();
 
         return sharedPreferences.getString(SharedPreferencesKeys.SP_LIBRARY_SORTING, "ASC");
+    }
+
+    @Override
+    protected String getExpression(String field) {
+        return expression(field);
     }
 
     @Override

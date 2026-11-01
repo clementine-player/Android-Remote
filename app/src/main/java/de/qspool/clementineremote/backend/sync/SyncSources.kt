@@ -2,6 +2,7 @@ package de.qspool.clementineremote.backend.sync
 
 import android.database.sqlite.SQLiteDatabase
 import androidx.annotation.WorkerThread
+import de.qspool.clementineremote.backend.library.LibraryQuery
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncSourceKind
 
 /**
@@ -57,12 +58,13 @@ object SyncSources {
     /**
      * The albums of the library's songs where each of [fields] has the value [values] gives it, as
      * the library's levels select them: an album artist (the artist where there's none) and an
-     * album. [fields] are column names of the library's songs table. Reads the disk.
+     * album. [fields] are the library's levels' fields, such as "artist" ([LibraryQuery.expression]).
+     * Reads the disk.
      */
     @WorkerThread
     fun albums(library: SQLiteDatabase, fields: List<String>, values: List<String>): List<Pair<String, String>> {
         require(fields.size == values.size && fields.all { it.matches(COLUMN) })
-        val where = fields.joinToString(" AND ") { "$it = ?" }
+        val where = fields.joinToString(" AND ") { "${LibraryQuery.expression(it)} = ?" }
         return library.rawQuery(
             "SELECT DISTINCT CASE WHEN albumartist <> '' THEN albumartist ELSE artist END AS album_artist, album " +
                 "FROM songs WHERE album <> '' AND album_artist <> ''" +
