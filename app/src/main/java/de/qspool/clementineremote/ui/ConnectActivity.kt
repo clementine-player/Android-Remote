@@ -195,10 +195,9 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
         state.setSearching(hasLocalNetwork())
 
         if (connectOnResume) {
-            // Back from playing on this phone, to connect: to the Clementine last connected to.
-            if (state.host.value.isNotBlank()) {
-                handler.postDelayed({ connect() }, AUTO_CONNECT_DELAY_MILLIS)
-            }
+            // Back from playing on this phone, to connect: to the Clementine last connected to,
+            // found by name on the network if its address has changed.
+            handler.postDelayed({ autoConnect() }, AUTO_CONNECT_DELAY_MILLIS)
         } else if (preferences.getBoolean(SharedPreferencesKeys.SP_KEY_AC, true) && doAutoConnect) {
             // Delayed, so the service has time to start.
             handler.postDelayed({ autoConnect() }, AUTO_CONNECT_DELAY_MILLIS)

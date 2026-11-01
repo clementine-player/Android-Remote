@@ -103,26 +103,32 @@ class MainActivity : ComponentActivity(), ShellActions {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        setIntent(intent)
         show(intent)
+        // Still playing what's on this phone, without Clementine, whatever opened it this time,
+        // such as the phone player's notification: otherwise onResume would close it, back to
+        // the connect screen.
+        if (onThisPhone()) {
+            intent.putExtra(EXTRA_ON_THIS_PHONE, true)
+        }
+        setIntent(intent)
     }
 
     /** Whether opened to play what's on this phone, connected to Clementine or not. */
     private fun onThisPhone() = intent.getBooleanExtra(EXTRA_ON_THIS_PHONE, false)
 
-    /** A notification opens the player, or the downloads; playing on this phone, the On this phone tab. */
+    /**
+     * A notification opens the player, or the downloads; playing on this phone, the On this phone
+     * tab, unless it's the phone player's notification, which opens the player.
+     */
     private fun show(intent: Intent) {
-        if (intent.getBooleanExtra(EXTRA_ON_THIS_PHONE, false)) {
-            shell.playerOpen = false
-            shell.destination = Destination.DOWNLOADS
-            return
-        }
-        if (!intent.hasExtra(ClementineMediaSessionNotification.EXTRA_NOTIFICATION_ID)) {
-            return
-        }
-        if (intent.getIntExtra(ClementineMediaSessionNotification.EXTRA_NOTIFICATION_ID, 0) == -1) {
-            shell.playerOpen = true
-        } else {
+        if (intent.hasExtra(ClementineMediaSessionNotification.EXTRA_NOTIFICATION_ID)) {
+            if (intent.getIntExtra(ClementineMediaSessionNotification.EXTRA_NOTIFICATION_ID, 0) == -1) {
+                shell.playerOpen = true
+            } else {
+                shell.playerOpen = false
+                shell.destination = Destination.DOWNLOADS
+            }
+        } else if (intent.getBooleanExtra(EXTRA_ON_THIS_PHONE, false)) {
             shell.playerOpen = false
             shell.destination = Destination.DOWNLOADS
         }

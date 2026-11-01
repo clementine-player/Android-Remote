@@ -1,6 +1,9 @@
 package de.qspool.clementineremote.backend.sync
 
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
+import androidx.core.app.TaskStackBuilder
 import androidx.annotation.OptIn
 import androidx.core.app.NotificationCompat
 import androidx.media3.common.AudioAttributes
@@ -17,7 +20,8 @@ import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import de.qspool.clementineremote.R
-import de.qspool.clementineremote.utils.Utilities
+import de.qspool.clementineremote.backend.mediasession.ClementineMediaSessionNotification
+import de.qspool.clementineremote.ui.MainActivity
 
 /**
  * Plays the songs kept on this phone, without Clementine: ExoPlayer in a media session, so the
@@ -44,7 +48,7 @@ class PhonePlaybackService : MediaSessionService() {
             .build()
         session = MediaSession.Builder(this, player)
             .setId(SESSION_ID)
-            .setSessionActivity(Utilities.getClementineRemotePendingIntent(this))
+            .setSessionActivity(playerIntent())
             .setCallback(object : MediaSession.Callback {
                 // Controllers send items without their URIs, so each says its own in its request.
                 override fun onAddMediaItems(
@@ -59,6 +63,20 @@ class PhonePlaybackService : MediaSessionService() {
             })
             .build()
         setMediaNotificationProvider(OnThisPhoneNotification(this))
+    }
+
+    /**
+     * Opens the player, playing on this phone: without Clementine too, rather than back to the
+     * connect screen, which would connect to it.
+     */
+    private fun playerIntent(): PendingIntent {
+        val intent = Intent(this, MainActivity::class.java)
+            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            .putExtra(ClementineMediaSessionNotification.EXTRA_NOTIFICATION_ID, -1)
+            .putExtra(MainActivity.EXTRA_ON_THIS_PHONE, true)
+        return TaskStackBuilder.create(this)
+            .addNextIntentWithParentStack(intent)
+            .getPendingIntent(PLAYER_REQUEST_CODE, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)!!
     }
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? = session
@@ -92,5 +110,8 @@ class PhonePlaybackService : MediaSessionService() {
 
     companion object {
         const val SESSION_ID = "on-this-phone"
+
+        /** Not the Clementine notification's, 9912, which would replace this one's extras. */
+        private const val PLAYER_REQUEST_CODE = 9913
     }
 }
