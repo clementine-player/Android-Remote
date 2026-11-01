@@ -202,6 +202,9 @@ object Syncer {
                 val now = SyncProgress(done, total)
                 progress[ruleId] = now
                 _kept.value = _kept.value.map { if (it.rule.id == ruleId) it.copy(downloading = now) else it }
+                _kept.value.firstOrNull { it.rule.id == ruleId }?.let {
+                    SyncNotification.show(context, it.rule.title, done, total)
+                }
             },
         )
         try {
@@ -218,6 +221,7 @@ object Syncer {
             _status.value = _status.value.copy(running = false, unavailable = true)
         }
         progress.clear()
+        SyncNotification.hide(context)
         readKept()
     }
 
