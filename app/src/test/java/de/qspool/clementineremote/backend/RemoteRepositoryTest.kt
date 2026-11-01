@@ -1,5 +1,6 @@
 package de.qspool.clementineremote.backend
 
+import android.os.Looper
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementinePbParser
@@ -33,6 +34,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.Shadows.shadowOf
 
 /**
  * Clementine's messages, parsed as the connection does, show up in [RemoteRepository.nowPlaying];
@@ -56,6 +58,9 @@ class RemoteRepositoryTest {
     }
 
     private fun message(type: MsgType) = ClementineMessage.getMessageBuilder(type)
+
+    /** Lets the player's state catch up with what it combines, as the main thread does. */
+    private fun idle() = shadowOf(Looper.getMainLooper()).idle()
 
     @Test
     fun followsTheCurrentSong() {
@@ -128,6 +133,7 @@ class RemoteRepositoryTest {
         val player = PlayerViewModel(send = {})
 
         player.seekTo(61)
+        idle()
 
         assertEquals(61, player.nowPlaying.value.positionSeconds)
     }
@@ -138,6 +144,7 @@ class RemoteRepositoryTest {
         val player = PlayerViewModel(send = { sent += it })
 
         assertEquals(Clementine.ShuffleMode.ALL, player.cycleShuffle())
+        idle()
 
         assertEquals(Clementine.ShuffleMode.ALL, player.nowPlaying.value.shuffle)
         assertEquals(MsgType.SHUFFLE, sent.single().messageType)
@@ -165,6 +172,7 @@ class RemoteRepositoryTest {
         App.Clementine.currentSong = MySong()
 
         player.rate(4f)
+        idle()
 
         assertEquals(0.8f, player.nowPlaying.value.song!!.rating, 0.001f)
     }

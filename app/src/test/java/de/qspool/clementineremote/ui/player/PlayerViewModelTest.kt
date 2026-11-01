@@ -9,6 +9,7 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType
 import de.qspool.clementineremote.backend.player.LyricsProvider
 import de.qspool.clementineremote.backend.player.MySong
+import de.qspool.clementineremote.backend.sync.PlayFrom
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.junit.Assert.assertEquals
@@ -18,7 +19,10 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
 
-/** Lyrics are asked for once, and found or not when Clementine answers. */
+/**
+ * Lyrics are asked for once, and found or not when Clementine answers; while songs kept on this
+ * phone play, the player follows the phone.
+ */
 @RunWith(RobolectricTestRunner::class)
 class PlayerViewModelTest {
 
@@ -69,5 +73,63 @@ class PlayerViewModelTest {
         // Already there, so not asked for again.
         player.requestLyrics()
         assertEquals(listOf(MsgType.GET_LYRICS), sent)
+    }
+
+    private class FakePhone : PhonePlayback {
+        override val nowPlaying = MutableStateFlow<RemoteRepository.NowPlaying?>(null)
+        override val playFrom = MutableStateFlow(PlayFrom.PHONE)
+        val done = mutableListOf<String>()
+        override fun playFrom(place: PlayFrom) {
+            playFrom.value = place
+        }
+        override fun playPause() { done += "playPause" }
+        override fun next() { done += "next" }
+        override fun previous() { done += "previous" }
+        override fun seekTo(seconds: Int) { done += "seek $seconds" }
+        override fun toggleShuffle() { done += "shuffle" }
+        override fun cycleRepeat() { done += "repeat" }
+        override fun stop() { done += "stop" }
+    }
+
+    @Test
+    fun followsThePhoneWhileItPlays() {
+        val phone = FakePhone()
+        val player = PlayerViewModel(send = { message: ClementineMessage -> sent += message.messageType }, phone = phone)
+        idle()
+        assertEquals(song, player.nowPlaying.value.song)
+        assertEquals(false, player.onPhone.value)
+
+        val kept = MySong().apply { title = "Gymnopédie No. 1" }
+        phone.nowPlaying.value = RemoteRepository.NowPlaying(
+            kept, Clementine.State.PLAY, 12, 0, Clementine.ShuffleMode.OFF, Clementine.RepeatMode.OFF,
+        )
+        idle()
+        assertEquals(kept, player.nowPlaying.value.song)
+        assertEquals(true, player.onPhone.value)
+        assertEquals(null, player.playingFrom())
+
+        player.playPause()
+        player.next()
+        player.seekTo(30)
+        assertEquals(Clementine.ShuffleMode.ALL, player.cycleShuffle())
+        player.requestLyrics()
+        assertEquals(listOf("playPause", "next", "seek 30", "shuffle"), phone.done)
+        assertEquals(emptyList<MsgType>(), sent)
+
+        // Switched to Clementine with Play from, the player follows Clementine, and back.
+        player.playFrom(PlayFrom.CLEMENTINE)
+        idle()
+        assertEquals(song, player.nowPlaying.value.song)
+        assertEquals(false, player.onPhone.value)
+        player.playFrom(PlayFrom.PHONE)
+        idle()
+        assertEquals(kept, player.nowPlaying.value.song)
+
+        // Stopped on the phone, the player follows Clementine again.
+        phone.nowPlaying.value = null
+        idle()
+        assertEquals(song, player.nowPlaying.value.song)
+        player.playPause()
+        assertEquals(listOf(MsgType.PLAYPAUSE), sent)
     }
 }
