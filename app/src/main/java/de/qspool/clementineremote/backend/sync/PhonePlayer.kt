@@ -2,6 +2,8 @@ package de.qspool.clementineremote.backend.sync
 
 import android.content.ComponentName
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import androidx.core.content.ContextCompat
 import androidx.core.util.Consumer
 import androidx.media3.common.C
@@ -79,7 +81,23 @@ object PhonePlayer {
                 _playFrom.value = PlayFrom.CLEMENTINE
             }
             updateActive()
+            tick(player)
         }
+    }
+
+    private val ticks = Handler(Looper.getMainLooper())
+
+    /**
+     * Says where the song is once a second while it plays, as Clementine does: the player
+     * stops moving the position when that stops coming. The player doesn't say it otherwise.
+     */
+    private fun tick(player: Player) {
+        ticks.removeCallbacksAndMessages(null)
+        if (!player.isPlaying) return
+        ticks.postDelayed({
+            _nowPlaying.value = _playing.value?.let { nowPlaying(player, it) }
+            tick(player)
+        }, TICK_MILLIS)
     }
 
     /**
@@ -253,4 +271,6 @@ object PhonePlayer {
                 .build()
         )
         .build()
+
+    private const val TICK_MILLIS = 1000L
 }
