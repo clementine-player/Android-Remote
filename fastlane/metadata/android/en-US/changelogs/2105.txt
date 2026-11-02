@@ -1,0 +1,6 @@
+- The song's position moves smoothly, and its time counts up every second without skipping.
+- Settings has a new Download over choice: Wi-Fi only, Wi-Fi and mobile data, or any network.
+- Updated translations, thanks to our translators on Transifex.
+- Fixed a crash on the Downloads tab when a download finished.
+- Fixed a crash when the connection to Clementine was lost and couldn't be restored.
+- And more fixes and improvements.
