@@ -87,7 +87,8 @@ public class ClementineSongDownloader extends
 
     private int mTotalDownloaded;
 
-    private DownloadSpeedCalculator mDownloadSpeed;
+    /** Made once connected, on the download's thread; until then, there's no speed. */
+    private volatile DownloadSpeedCalculator mDownloadSpeed;
 
     public ClementineSongDownloader() {
         mDownloadStatus = new DownloadStatus(mId).setState(
@@ -430,7 +431,8 @@ public class ClementineSongDownloader extends
     }
 
     public int getDownloadSpeedPerSecond() {
-        return mDownloadSpeed.getDownloadSpeed();
+        DownloadSpeedCalculator speed = mDownloadSpeed;
+        return speed == null ? 0 : speed.getDownloadSpeed();
     }
 
     public int getId() {
