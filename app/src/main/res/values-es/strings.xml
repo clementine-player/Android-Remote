@@ -19,6 +19,9 @@
     <string name="connect_not_searching_help">Sin el permiso «Dispositivos cercanos», el control remoto de Clementine no puede encontrar Clementine en su red. Introduzca su dirección a continuación o active el permiso.</string>
     <string name="connect_enter_address">O introduzca su dirección</string>
     <string name="connect_address">Dirección</string>
+    <string name="connect_requirements">Requiere Clementine %1$s o una versión posterior, con la opción Herramientas ▸ Preferencias ▸ Mando de red.</string>
+
+
     <string name="player_nosong">Ahora no suena ninguna canción</string>
     <string name="player_disconnected">Desconectado</string>
     <string name="playler_volume">Volumen</string>
@@ -54,13 +57,21 @@
 
 
     <string name="downloads_empty">No se ha descargado nada aún</string>
+    <string name="downloads_empty_summary">Descargue música a este teléfono para escucharla lejos de Clementine.</string>
     <string name="downloads_suggest_most_played">Sus álbumes más reproducidos</string>
     <string name="downloads_suggest_recent">Álbumes añadidos recientemente</string>
     <string name="downloads_suggest_playlists">Listas</string>
+    <plurals name="downloads_plays">
+        <item quantity="one">%d reproducción</item>
+        <item quantity="many">%d de reproducciones</item>
+        <item quantity="other">%d reproducciones</item>
+    </plurals>
     <string name="downloads_playlist_playing">Ahora suena</string>
+    <string name="downloads_download">Descargar %1$s</string>
     <string name="downloaded_songs">Canciones descargadas. Toque para reproducirlas</string>
     <string name="downloads_title">Descargas</string>
     <string name="downloads_running">Descargando</string>
+    <string name="downloads_on_phone">En este teléfono</string>
     <string name="downloads_wifi_only">Las descargas solo se ejecutan con wifi.</string>
     <string name="downloads_change">Cambiar</string>
 
@@ -138,7 +149,11 @@
     <string name="search_stations">Emisoras</string>
     <string name="search_other_matches">Otras coincidencias</string>
     <string name="search_see_all">Ver todo</string>
+    <!-- The top result's second line: what it is, and whose. -->
+    <string name="search_top_song">Canción • %s</string>
     <string name="search_top_artist">Artista</string>
+    <string name="search_top_album">Álbum • %s</string>
+    <string name="search_top_station">Emisora • %s</string>
     <plurals name="search_number_albums">
         <item quantity="one">%d álbum</item>
         <item quantity="many">%d álbumes</item>
@@ -368,6 +383,11 @@
 
     <string name="cd_cover_image">Imagen de portada de álbum</string>
     <string name="cd_cancel_download">Cancelar la descarga</string>
+    <!-- Keeping music on the phone: synced from Clementine, kept up to date, and played without
+         it. The iOS app shows the same strings. -->
+    <!-- Music saved on the phone, as opposed to Clementine on the computer: the title of the tab's
+         screen, and where the music plays from. -->
+    <string name="sync_on_this_phone">En este teléfono</string>
     <!-- On the connect screen, under On this phone: how many songs are saved on the phone. -->
     <plurals name="sync_connect_songs">
         <item quantity="one">%d canción</item>
