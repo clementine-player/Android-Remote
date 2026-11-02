@@ -47,12 +47,14 @@ import zipfile
 from collections.abc import Callable, Iterable, Iterator
 from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
-from typing import Any, Protocol
+from typing import Any, Protocol, TypeVar
 
 import google.auth
 import requests
 from google.auth.transport.requests import AuthorizedSession
 from google.oauth2.credentials import Credentials
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 PACKAGE = "org.clementine_player.remote"
 APP_PACKAGE = "de.qspool.clementineremote."
@@ -170,6 +172,26 @@ def title(trace: str) -> str:
 # Play.
 
 
+Session = TypeVar("Session", bound=requests.Session)
+
+
+def retrying(session: Session) -> Session:
+    """The session, retrying requests that fail with a server error or rate limit.
+
+    Play and GitHub both sometimes answer with a 503 for a moment, which would
+    otherwise fail the day's run. Only idempotent requests are retried (not filing an
+    issue), a few times over about half a minute, honouring Retry-After.
+    """
+    retry = Retry(
+        total=4,
+        backoff_factor=2,
+        status_forcelist=(429, 500, 502, 503, 504),
+        raise_on_status=False,
+    )
+    session.mount("https://", HTTPAdapter(max_retries=retry))
+    return session
+
+
 def play_session() -> AuthorizedSession:
     if os.environ.get("PLAY_ACCESS_TOKEN"):
         # A token already made, say by gcloud auth print-access-token for the service
@@ -177,7 +199,7 @@ def play_session() -> AuthorizedSession:
         credentials = Credentials(os.environ["PLAY_ACCESS_TOKEN"])
     else:
         credentials, _ = google.auth.default(scopes=[SCOPE])
-    return AuthorizedSession(credentials)
+    return retrying(AuthorizedSession(credentials))
 
 
 def today() -> date:
@@ -527,7 +549,7 @@ class IssueTracker(Protocol):
 
 class GitHub:
     def __init__(self, repository: str, token: str) -> None:
-        self.session = requests.Session()
+        self.session = retrying(requests.Session())
         self.session.headers.update(
             {
                 "Authorization": f"Bearer {token}",
