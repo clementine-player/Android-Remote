@@ -8,6 +8,7 @@ from pathlib import Path
 
 import pytest
 import requests
+from requests.adapters import HTTPAdapter
 
 import play_crashes
 from play_crashes import Cluster, Json, PlayIssue
@@ -165,6 +166,18 @@ def test_searches_reports_a_week_at_a_time() -> None:
     assert found[0]["interval.endTime.day"] == 30
     assert found[2]["interval.startTime.day"] == 14
     assert found[2]["interval.endTime.day"] == 16
+
+
+def test_retries_a_server_error_but_not_filing_an_issue() -> None:
+    session = play_crashes.retrying(requests.Session())
+    adapter = session.get_adapter("https://example.com")
+    assert isinstance(adapter, HTTPAdapter)
+    retry = adapter.max_retries
+    assert retry.is_retry("GET", 503)
+    assert retry.is_retry("GET", 429)
+    assert not retry.is_retry("GET", 404)
+    assert not retry.is_retry("POST", 503)
+    assert not retry.is_retry("PATCH", 503)
 
 
 def zipped(files: dict[str, bytes]) -> bytes:
