@@ -271,8 +271,13 @@ def test_says_a_trace_could_not_be_retraced() -> None:
 
 
 class FakeGitHub:
-    def __init__(self, issues: list[Json] | None = None) -> None:
+    def __init__(
+        self,
+        issues: list[Json] | None = None,
+        released: tuple[str, int] | None = None,
+    ) -> None:
         self.issues = issues or []
+        self.released = released
         self.sent: list[tuple[str, str, Json]] = []
 
     def crash_issues(self) -> dict[str, tuple[Json, Json]]:
@@ -281,6 +286,10 @@ class FakeGitHub:
             state = marker(issue["body"])
             found[state["signature"]] = (issue, state)
         return found
+
+    def released_by(self, when: str) -> tuple[str, int] | None:
+        assert when == CLOSED_AT
+        return self.released
 
     def send(self, method: str, path: str, body: Json) -> Json:
         self.sent.append((method, path, body))
@@ -298,6 +307,9 @@ def cluster(code: int = 1975) -> Cluster:
     return found
 
 
+CLOSED_AT = "2026-11-02T20:01:21Z"
+
+
 def filed(state: str, max_version: int) -> Json:
     state_json = json.dumps(
         {"signature": cluster().signature, "max_version": max_version}
@@ -305,6 +317,7 @@ def filed(state: str, max_version: int) -> Json:
     return {
         "number": 7,
         "state": state,
+        "closed_at": CLOSED_AT if state == "closed" else None,
         "body": f"<!-- play-crash: {state_json} -->\nolder",
     }
 
@@ -335,6 +348,21 @@ def test_reopens_a_closed_issue_seen_in_a_newer_version() -> None:
     play_crashes.file_issues(github, [cluster(1979)], dry_run=False)
     assert github.requests() == [("POST", "/issues/7/comments"), ("PATCH", "/issues/7")]
     assert github.sent[-1][2]["state"] == "open"
+
+
+def test_leaves_a_closed_issue_closed_for_builds_older_than_its_release() -> None:
+    # Closed once its fix was released, in 13.11; 13.10 users report it later.
+    github = FakeGitHub([filed("closed", 1885)], released=("v13.11", 2105))
+    play_crashes.file_issues(github, [cluster(2017)], dry_run=False)
+    assert github.requests() == []
+
+
+def test_reopens_a_closed_issue_seen_in_its_release() -> None:
+    github = FakeGitHub([filed("closed", 2017)], released=("v13.11", 2105))
+    play_crashes.file_issues(github, [cluster(2105)], dry_run=False)
+    assert github.requests() == [("POST", "/issues/7/comments"), ("PATCH", "/issues/7")]
+    comment = next(b for _, path, b in github.sent if path.endswith("/comments"))
+    assert "v13.11" in comment["body"]
 
 
 def test_dry_run_changes_nothing() -> None:
@@ -375,6 +403,46 @@ def test_finds_a_dev_builds_mapping_in_its_pre_release(tmp_path: Path) -> None:
     mapping = play_crashes.Mappings(github, str(tmp_path)).get(report(OBFUSCATED, 2064))
     assert mapping is not None
     assert mapping.read_bytes() == b"dev map"
+
+
+class FakeReleaseList(play_crashes.GitHub):
+    """GitHub with a list of releases, and their tags' build.gradle.kts."""
+
+    def __init__(self, releases: list[Json], codes: dict[str, int]) -> None:
+        super().__init__("clementine-player/Android-Remote", "token")
+        self.releases = releases
+        self.codes = codes
+
+    def get_list(self, path: str, **params: str | int) -> list[Json]:
+        assert path == "/releases"
+        return self.releases
+
+    def file(self, path: str, ref: str) -> str:
+        assert path == "app/build.gradle.kts"
+        return f"android {{\n        versionCode = {self.codes[ref]}\n}}\n"
+
+
+def release(tag: str, published: str, prerelease: bool = False) -> Json:
+    return {"tag_name": tag, "published_at": published, "prerelease": prerelease}
+
+
+def test_finds_the_release_out_when_an_issue_was_closed() -> None:
+    github = FakeReleaseList(
+        [
+            release("dev-2110", "2026-11-02T20:05:05Z", prerelease=True),
+            release("dev-2106", "2026-11-02T20:03:54Z", prerelease=True),
+            release("v13.11", "2026-11-02T16:12:37Z"),
+            release("v13.12", "2026-11-09T16:00:00Z"),
+            release("v13.10", "2026-10-26T16:00:00Z"),
+        ],
+        {"v13.11": 2105},
+    )
+    assert github.released_by("2026-11-02T20:04:00Z") == ("v13.11", 2105)
+
+
+def test_no_release_out_yet() -> None:
+    github = FakeReleaseList([release("v13.11", "2026-11-02T16:12:37Z")], {})
+    assert github.released_by("2026-11-01T00:00:00Z") is None
 
 
 def test_finds_a_releases_mapping_by_its_tag(tmp_path: Path) -> None:

@@ -29,7 +29,9 @@ still has R8's names.
 
 The issues are found again by the signature in their description, so nothing is kept
 anywhere else. An issue someone closed is reopened when the crash comes back in a
-version newer than any it was seen in before.
+version newer than any it was seen in before, and no older than the release that was
+out when it was closed. Issues are closed once the fix is released, so a late report
+from a build older than that release doesn't reopen one.
 """
 
 import argparse
@@ -539,10 +541,20 @@ def describe(cluster: Cluster, days: int = DAYS) -> str:
 # GitHub.
 
 
+def version_code_of(gradle: str) -> int:
+    """The versionCode set in app/build.gradle.kts."""
+    match = re.search(r"^\s*versionCode = (\d+)\s*$", gradle, re.MULTILINE)
+    if not match:
+        raise ValueError("app/build.gradle.kts sets no versionCode")
+    return int(match.group(1))
+
+
 class IssueTracker(Protocol):
     """Where the crashes are filed: GitHub, or in tests, a fake."""
 
     def crash_issues(self) -> dict[str, tuple[Json, Json]]: ...
+
+    def released_by(self, when: str) -> tuple[str, int] | None: ...
 
     def send(self, method: str, path: str, body: Json) -> Json: ...
 
@@ -558,6 +570,7 @@ class GitHub:
             }
         )
         self.base = f"{GITHUB}/repos/{repository}"
+        self.version_codes: dict[str, int] = {}
 
     def get(self, path: str, **params: str | int) -> Json:
         response = self.session.get(self.base + path, params=params)
@@ -568,6 +581,16 @@ class GitHub:
         response = self.session.get(self.base + path, params=params)
         response.raise_for_status()
         return response.json()
+
+    def file(self, path: str, ref: str) -> str:
+        """A file in the repository, as it is at ref."""
+        response = self.session.get(
+            f"{self.base}/contents/{path}",
+            params={"ref": ref},
+            headers={"Accept": "application/vnd.github.raw+json"},
+        )
+        response.raise_for_status()
+        return response.text
 
     def download(
         self, url: str, accept: str | None = "application/octet-stream"
@@ -584,6 +607,39 @@ class GitHub:
         response = self.session.request(method, self.base + path, json=body)
         response.raise_for_status()
         return response.json()
+
+    def released_by(self, when: str) -> tuple[str, int] | None:
+        """The newest release published by then (an ISO time), and its version code.
+
+        Pre-releases, the development builds, don't count: fixes are released in a
+        release. Its code is in its tag's app/build.gradle.kts, which the release commit
+        sets.
+        """
+        newest = None
+        page = 1
+        while True:
+            releases = self.get_list("/releases", per_page=100, page=page)
+            for release in releases:
+                published = release.get("published_at")
+                if (
+                    release.get("draft")
+                    or release.get("prerelease")
+                    or not published
+                    or published > when
+                ):
+                    continue
+                if newest is None or published > newest["published_at"]:
+                    newest = release
+            if len(releases) < 100:
+                break
+            page += 1
+        if newest is None:
+            return None
+        tag = newest["tag_name"]
+        if tag not in self.version_codes:
+            gradle = self.file("app/build.gradle.kts", tag)
+            self.version_codes[tag] = version_code_of(gradle)
+        return tag, self.version_codes[tag]
 
     def crash_issues(self) -> dict[str, tuple[Json, Json]]:
         """The issues filed before, open or closed, with their state, by signature."""
@@ -637,6 +693,9 @@ def file_issues(
         newer = [c for c in versions(cluster) if c > state.get("max_version", 0)]
         change = {}
         if issue["state"] == "closed":
+            released = github.released_by(issue["closed_at"]) if github else None
+            if released:
+                newer = [c for c in newer if c >= released[1]]
             if not newer:
                 print(f"Closed, not seen in a newer version: #{issue['number']}")
                 continue
@@ -644,8 +703,14 @@ def file_issues(
             change["state"] = "open"
             comment = (
                 f"Google Play has this crash again, in version code {max(newer)}, "
-                "newer than any it was seen in before."
+                "newer than any it was seen in before"
             )
+            if released:
+                comment += (
+                    f", and no older than {released[0]} (version code "
+                    f"{released[1]}), the release out when this issue was closed"
+                )
+            comment += "."
             send("POST", f"/issues/{issue['number']}/comments", {"body": comment})
         if issue.get("body") != body:
             print(f"Updating #{issue['number']}: {cluster.title}")
