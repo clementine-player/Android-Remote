@@ -242,7 +242,7 @@ public class ClementineService extends Service {
      */
     @VisibleForTesting
     static boolean startsPlaying(ClementineMessage message) {
-        return message.getMessageType() == MsgType.PLAY;
+        return !message.isErrorMessage() && message.getMessageType() == MsgType.PLAY;
     }
 
     @Override
