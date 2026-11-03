@@ -1,0 +1,2 @@
+- Updated translations, thanks to our translators on Transifex.
+- Fixed a crash when Clementine closed, or the network dropped, while connected to it.
