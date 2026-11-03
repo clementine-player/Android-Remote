@@ -214,10 +214,7 @@ public class ClementineService extends Service {
                                         ClementineMessage clementineMessage) {
                                     GlobalSearchManager.getInstance().parseClementineMessage(
                                             clementineMessage);
-                                    if (clementineMessage.getMessageType() == MsgType.PLAY) {
-                                        // Clementine started playing, such as a song from the
-                                        // library: the app plays from it again, pausing the
-                                        // phone, so the player controls what's playing.
+                                    if (startsPlaying(clementineMessage)) {
                                         ContextCompat.getMainExecutor(ClementineService.this).execute(
                                                 () -> PhonePlayer.INSTANCE.playFrom(
                                                         ClementineService.this, PlayFrom.CLEMENTINE));
@@ -237,6 +234,15 @@ public class ClementineService extends Service {
             default:
                 break;
         }
+    }
+
+    /**
+     * Whether the message says Clementine started playing, such as a song from the library: the
+     * app then plays from it again, pausing the phone, so the player controls what's playing.
+     */
+    @VisibleForTesting
+    static boolean startsPlaying(ClementineMessage message) {
+        return message.getMessageType() == MsgType.PLAY;
     }
 
     @Override
