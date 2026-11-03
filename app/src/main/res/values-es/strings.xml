@@ -91,6 +91,11 @@
     <string name="output_choose">Elija dónde reproducir</string>
     <string name="hint_done">Entiendo</string>
     <string name="hint_outputs_title">Reproducir en este dispositivo</string>
+    <string name="pref_hints_reset">Mostrar consejos de nuevo</string>
+    <string name="pref_hints_reset_done">Se mostrarán los consejos otra vez</string>
+    <string name="pref_renderer">Permitir que Clementine reproduzca en este teléfono</string>
+    <string name="pref_renderer_summary">Clementine puede enviar aquí su música cuando reproduce en otros dispositivos</string>
+
     <string name="download_noti_title">Iniciando la descarga</string>
     <plurals name="download_noti_n_downloads">
         <item quantity="one">%d descarga en curso</item>
@@ -112,7 +117,16 @@
     <string name="download_noti_insufficient_space">No hay espacio suficiente; se interrumpió la descarga.</string>
     <string name="download_noti_forbidden">Se restringió la descarga. Actívela en la configuración de Clementine.</string>
     <string name="download_noti_not_local_network">Clementine solo acepta conexiones de su red local.</string>
+    <!-- The placeholder is how long Clementine said to wait before it checks another auth
+         code from this phone: "10 seconds", "1 minute", "3 minutes", "2 hours", or "a while" if it
+         didn't say. The iOS app shows the same sentence with the duration in iOS's own words,
+         which can't take another grammatical form, so write the sentence so the duration reads
+         right as it is. -->
+    <string name="download_noti_too_many_wrong_auth_codes">Demasiados códigos de autenticación erróneos. Clementine no comprobará otro de este teléfono por %s.</string>
     <string name="download_noti_not_mounted">No se encontró ningún dispositivo de almacenamiento.</string>
+    <!-- A download didn't start, because Download over, in Settings, doesn't allow the network the
+         phone is on. -->
+    <string name="download_noti_network_not_allowed">Las descargas no están permitidas en esta red</string>
     <string name="download_noti_transcoding">Convirtiendo archivos</string>
     <string name="download_noti_transcoding_subtitle">Espere</string>
 
@@ -122,8 +136,13 @@
     <string name="library_no_search_results">Ninguna canción coincide con los criterios de búsqueda.</string>
     <string name="library_sync_error">No se pudo sincronizar la fonoteca</string>
     <string name="library_title">Fonoteca</string>
+    <!-- A folder at the top of the library holding Clementine's smart playlists, such as Newest
+         tracks, as Clementine's own library shows them. -->
+    <string name="library_smart_playlists">Listas inteligentes</string>
     <string name="library_sync_action">Sincronizar fonoteca</string>
     <string name="library_add_to_playlist">Añadir a lista</string>
+    <string name="library_add_to_queue">Añadir a cola</string>
+    <string name="library_open_in_new_playlist">Abrir en lista nueva</string>
     <string name="library_select">Seleccionar</string>
     <string name="library_back">Volver</string>
 
@@ -218,12 +237,12 @@
     <string name="pref_library_grouping_title">Agrupación</string>
     <string name="pref_library_grouping_summary">La colección está agrupada por %1$s.</string>
     <string name="pref_library_grouping_artist">Artista</string>
-    <string name="pref_library_grouping_artist_album">Artista / álbum</string>
-    <string name="pref_library_grouping_albumartist_album">Artista / año</string>
-    <string name="pref_library_grouping_artist_year">Artista / año</string>
+    <string name="pref_library_grouping_artist_album">Artista/álbum</string>
+    <string name="pref_library_grouping_albumartist_album">Artista de álbum/año</string>
+    <string name="pref_library_grouping_artist_year">Artista/año</string>
     <string name="pref_library_grouping_album">Álbum</string>
-    <string name="pref_library_grouping_genre_album">Género / álbum</string>
-    <string name="pref_library_grouping_genre_artist_album">Género / artista / álbum</string>
+    <string name="pref_library_grouping_genre_album">Género/álbum</string>
+    <string name="pref_library_grouping_genre_artist_album">Género/artista/álbum</string>
 
     <string name="pref_autoconnect_title">Conexión automática</string>
     <string name="pref_autoconnect_summary">Conectar automáticamente con Clementine al iniciar el control remoto.
@@ -257,6 +276,8 @@
     <!-- A choice under Download over. A metered Wi-Fi, such as another phone's hotspot, counts as
          mobile data. -->
     <string name="pref_dl_network_wifi_only">Wifi solamente</string>
+    <!-- A choice under Download over: Wi-Fi, and mobile data unless the phone is roaming. -->
+    <string name="pref_dl_network_mobile_data">Wifi y datos móviles, pero no en itinerancia</string>
     <!-- A choice under Download over. -->
     <string name="pref_dl_network_any">Cualquier red</string>
     <string name="pref_dl_dir">Definir la carpeta de descargas</string>
@@ -313,6 +334,8 @@
     <string name="input_auth_code">Código de autenticación</string>
     <string name="done">Hecho</string>
     <string name="unknown">Desconocido</string>
+    <!-- In the library, the artist that albums by several artists (compilations) are listed under, as Clementine lists them. -->
+    <string name="various_artists">Varios artistas</string>
     <plurals name="number_items">
         <item quantity="one">%d elemento</item>
         <item quantity="many">%d elementos</item>
