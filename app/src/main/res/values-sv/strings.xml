@@ -7,25 +7,25 @@
     <string name="connectdialog_connect">Anslut</string>
     <string name="connectdialog_connecting">Ansluter till Clementine</string>
     <string name="connectdialog_download_data">Hämtar data</string>
-    <string name="connectdialog_error">Kunde inte nå värden</string>
+    <string name="connectdialog_error">Det gick inte att nå datorn</string>
     <string name="connectdialog_ip_hint">Ange IP-adress</string>
-    <string name="connect_intro">Välj den Clementine du vill styra. Den måste finnas på samma wifi-nätverk som den här telefonen.</string>
+    <string name="connect_intro">Välj vilken dator med Clementine du vill ansluta till. Datorn och telefonen måste vara anslutna till samma wifi-nätverk.</string>
     <string name="connect_on_network">På ditt nätverk</string>
     <string name="connect_search_again">Sök igen</string>
     <string name="connect_searching">Söker efter Clementine…</string>
-    <string name="connect_searching_help">Visas den inte? Kontrollera att nätverksfjärrkontrollen är aktiverad eller ange adressen nedan.</string>
+    <string name="connect_searching_help">Hittar du inte Clementine? Kontrollera att nätverksfjärrkontrollen är aktiverad i Clementine eller ange datorns adress nedan.</string>
     <string name="connect_server_address">%1$s · port %2$d</string>
     <string name="connect_not_searching">Söker inte på det här nätverket</string>
     <string name="connect_not_searching_help">Utan behörigheten Enheter i närheten kan Clementine Remote inte hitta Clementine på ditt nätverk. Ange adressen nedan eller aktivera behörigheten.</string>
     <string name="connect_enter_address">Eller ange adressen</string>
     <string name="connect_address">Adress</string>
-    <string name="connect_requirements">Kräver Clementine %1$s eller senare, med Verktyg → Inställningar → Nätverksfjärrkontroll aktiverad.</string>
+    <string name="connect_requirements">Kräver Clementine %1$s eller senare. Aktivera nätverksfjärrkontrollen under Verktyg → Inställningar → Nätverksfjärrkontroll.</string>
 
 
     <string name="player_nosong">Ingen låt spelas för tillfället</string>
     <string name="player_disconnected">Ej ansluten</string>
     <string name="playler_volume">Volym</string>
-    <string name="player_stop_after_current">Aktivera eller inaktivera stopp efter aktuell låt.</string>
+    <string name="player_stop_after_current">Inställningen för att stoppa uppspelningen efter den här låten har ändrats.</string>
     <string name="player_download_lyrics">Hämtar låttext</string>
     <string name="player_no_lyrics">Hittade ingen låttext.</string>
     <string name="player_download_started">Hämtningen har startat!</string>
@@ -33,13 +33,13 @@
     <string name="player_stream">[S]</string>
 
 
-    <string name="playlist_search_hint">Sök låt</string>
+    <string name="playlist_search_hint">Sök efter en låt</string>
     <string name="playlist_empty">Spellistan är tom!</string>
-    <string name="playlist_context_play">Spela objekt</string>
+    <string name="playlist_context_play">Spela upp</string>
     <string name="playlist_context_remove">Ta bort från spellistan</string>
     <string name="playlist_close">Stäng spellistan</string>
     <string name="playlist_clear">Töm spellistan</string>
-    <string name="playlist_clear_content">Detta tar oåterkalleligen bort alla låtar från spellistan. Vill du fortsätta?</string>
+    <string name="playlist_clear_content">Alla låtar tas bort från spellistan. Det går inte att ångra. Vill du fortsätta?</string>
     <string name="playlist_clear_confirm">Töm spellistan</string>
     <plurals name="queue_songs">
         <item quantity="one">%d låt</item>
@@ -56,7 +56,7 @@
 
     <string name="downloads_empty">Inget har hämtats än</string>
     <string name="downloads_empty_summary">Hämta musik till den här telefonen för att lyssna även utan anslutning till Clementine.</string>
-    <string name="downloads_empty_how">Hämta en låt från spelaren, ett album från musikbiblioteket eller en spellista från dess meny.</string>
+    <string name="downloads_empty_how">Hämta en låt från spelaren eller ett album från musikbiblioteket. Du kan hämta en spellista via spellistans meny.</string>
     <string name="downloads_suggest_most_played">Dina mest spelade album</string>
     <string name="downloads_suggest_recent">Nyligen tillagda album</string>
     <string name="downloads_suggest_playlists">Spellistor</string>
@@ -87,10 +87,10 @@
          from. -->
     <string name="player_playing_from">Spelar från</string>
     <string name="queue_playing">Spelas</string>
-    <string name="player_love">Markera som favorit på Last.fm</string>
+    <string name="player_love">Gilla på Last.fm</string>
     <string name="player_details">Låttext och detaljer</string>
     <string name="player_download_song">Hämta låt</string>
-    <string name="player_volume_level">Clementines volym, %1$d%%</string>
+    <string name="player_volume_level">Volym i Clementine, %1$d %%</string>
     <string name="player_volume_up">Höj volymen</string>
     <string name="player_volume_down">Sänk volymen</string>
     <string name="details_tab">Detaljer</string>
@@ -99,29 +99,29 @@
     <!-- Label for how long the phone has been connected to Clementine, shown next to it as a
          duration such as 01:23:45. -->
     <string name="connection_uptime">Ansluten i</string>
-    <string name="connection_switch">Byt Clementine</string>
+    <string name="connection_switch">Byt dator</string>
     <string name="connection_switch_summary">Välj en annan dator på ditt nätverk</string>
     <string name="output_title">Spela på</string>
     <string name="output_this_phone">%1$s (den här telefonen)</string>
     <string name="output_this_tablet">%1$s (den här surfplattan)</string>
     <string name="output_switching">Byter…</string>
     <string name="output_playing_on">Spelar på %1$s</string>
-    <string name="output_choose">Välj var musiken ska spelas</string>
+    <string name="output_choose">Välj uppspelningsenhet</string>
     <string name="hint_done">Jag förstår</string>
     <string name="hint_outputs_title">Spela på den här enheten</string>
-    <string name="hint_outputs">Använd den här knappen för att lyssna på Clementine på den här enheten eller växla tillbaka till datorn.</string>
+    <string name="hint_outputs">Med den här knappen kan du spela upp musiken på den här enheten eller växla tillbaka till datorn.</string>
     <string name="pref_hints_reset">Visa tips igen</string>
-    <string name="pref_hints_reset_summary">Visa funktionerna igen, som vid första användningen</string>
-    <string name="pref_hints_reset_done">Tipsen kommer att visas igen</string>
-    <string name="pref_renderer">Låt Clementine spela på den här telefonen</string>
-    <string name="pref_renderer_summary">Clementine kan skicka sin musik hit när den spelar på andra enheter</string>
+    <string name="pref_hints_reset_summary">Visa samma tips om funktionerna som när du öppnade appen första gången</string>
+    <string name="pref_hints_reset_done">Tipsen visas igen</string>
+    <string name="pref_renderer">Låt Clementine spela musik på den här telefonen</string>
+    <string name="pref_renderer_summary">Clementine kan skicka musik till den här telefonen när du väljer den som uppspelningsenhet</string>
 
     <string name="download_noti_title">Startar hämtning</string>
     <plurals name="download_noti_n_downloads">
         <item quantity="one">%d aktiv hämtning</item>
         <item quantity="other">%d aktiva hämtningar</item>
     </plurals>
-    <string name="download_noti_n_progress">Totalt hämtat: %d %</string>
+    <string name="download_noti_n_progress">Totalt hämtat: %d %</string>
     <string name="download_noti_title_song">[Låt]</string>
     <string name="download_noti_title_album">[Album]</string>
     <string name="download_noti_title_playlist">[Spellista]</string>
@@ -132,27 +132,33 @@
     </plurals>
     <string name="download_noti_complete">Hämtningen är klar</string>
     <string name="download_noti_canceled">Hämtningen avbröts</string>
-    <string name="download_noti_insufficient_space">Otillräckligt utrymme, avbryter hämtningen.</string>
-    <string name="download_noti_forbidden">Hämtning är inte tillåten. Aktivera den i Clementines inställningar.</string>
+    <string name="download_noti_insufficient_space">Det finns inte tillräckligt med lagringsutrymme. Hämtningen avbryts.</string>
+    <string name="download_noti_forbidden">Clementine tillåter inte hämtningar. Du kan tillåta dem i Clementines inställningar.</string>
     <string name="download_noti_not_local_network">Clementine accepterar endast anslutningar från sitt lokala nätverk.</string>
     <!-- The placeholder is how long Clementine said to wait before it checks another auth
          code from this phone: "10 seconds", "1 minute", "3 minutes", "2 hours", or "a while" if it
          didn't say. The iOS app shows the same sentence with the duration in iOS's own words,
          which can't take another grammatical form, so write the sentence so the duration reads
          right as it is. -->
-    <string name="download_noti_too_many_wrong_auth_codes">För många felaktiga autentiseringskoder. Clementine kontrollerar ingen ny kod från den här telefonen förrän om %s.</string>
+    <string name="download_noti_too_many_wrong_auth_codes">För många felaktiga autentiseringskoder. Vänta %s innan Clementine kan kontrollera en ny kod från den här telefonen.</string>
     <string name="download_noti_not_mounted">Ingen lagringsenhet hittades!</string>
+    <!-- A download didn't start, because Download over, in Settings, doesn't allow the network the
+         phone is on. -->
+    <string name="download_noti_network_not_allowed">Hämtningar är inte tillåtna på det här nätverket</string>
     <string name="download_noti_transcoding">Kodar om filer</string>
-    <string name="download_noti_transcoding_subtitle">Var god vänta</string>
+    <string name="download_noti_transcoding_subtitle">Vänta…</string>
 
 
     <string name="library_syncing">Synkroniserar musikbiblioteket från Clementine</string>
     <string name="library_optimize">Optimerar databasen</string>
-    <string name="library_empty">Musikbiblioteket finns inte på den här telefonen än. Dra nedåt för att synkronisera det från Clementine.</string>
-    <string name="library_no_search_results">Ingen låt matchar dina sökkriterier!</string>
+    <string name="library_empty">Musikbiblioteket finns inte på den här telefonen än. Dra nedåt för att hämta det från Clementine.</string>
+    <string name="library_no_search_results">Inga låtar matchar sökningen.</string>
     <string name="library_sync_error">Kunde inte synkronisera musikbiblioteket</string>
     <string name="library_title">Musikbibliotek</string>
-    <string name="library_sync_action">Synkronisera musikbibliotek</string>
+    <!-- A folder at the top of the library holding Clementine's smart playlists, such as Newest
+         tracks, as Clementine's own library shows them. -->
+    <string name="library_smart_playlists">Smarta spellistor</string>
+    <string name="library_sync_action">Synkronisera musikbiblioteket</string>
     <string name="library_add_to_playlist">Lägg till i spellistan</string>
     <string name="library_add_to_queue">Lägg till i uppspelningskön</string>
     <string name="library_open_in_new_playlist">Öppna i en ny spellista</string>
@@ -175,7 +181,7 @@
 
 
     <string name="global_search_empty">Ange söktermer ovan för att hitta musik på din dator och på nätet</string>
-    <string name="global_search_search">Sök efter någonting</string>
+    <string name="global_search_search">Sök efter musik eller radiostationer</string>
     <string name="search_searching">Söker efter ”%s”…</string>
     <string name="search_clear">Rensa sökningen</string>
     <string name="search_top_result">Bästa träff</string>
@@ -186,7 +192,7 @@
     <string name="search_other_matches">Övriga träffar</string>
     <string name="search_see_all">Visa alla</string>
     <!-- The See all button's description for accessibility, with the section's name. -->
-    <string name="search_see_all_of">Visa alla %s</string>
+    <string name="search_see_all_of">Visa alla träffar i kategorin %s</string>
     <!-- The top result's second line: what it is, and whose. -->
     <string name="search_top_song">Låt • %s</string>
     <string name="search_top_artist">Artist</string>
@@ -208,7 +214,7 @@
     <string name="song_info_size">Storlek</string>
     <string name="song_info_filename">Filnamn</string>
     <string name="song_info_rating">Betyg</string>
-    <string name="song_info_rated">Låten har fått betyget $stars$ stjärnor</string>
+    <string name="song_info_rated">Du gav låten $stars$ av 5 stjärnor</string>
     <!-- TalkBack action on a rating star, rating the song half a star less, such as 3.5: the number is already written out. -->
     <string name="song_info_rate_half_stars">Ge betyget %1$s stjärnor</string>
 
@@ -221,7 +227,7 @@
 
     <string name="menu_settings">Inställningar</string>
     <string name="menu_search">Sök</string>
-    <string name="menu_ban">Uteslut</string>
+    <string name="menu_ban">Blockera</string>
     <string name="menu_download">Hämta</string>
     <string name="menu_download_playlist">Hämta spellista</string>
 
@@ -232,45 +238,45 @@
     <string name="pref_cat_connection">Anslutning</string>
     <string name="pref_cat_about">Om</string>
 
-    <string name="pref_volume_title">Använd volymknappar</string>
-    <string name="pref_volume_summary">Använd volymknapparna för att justera volymen på Clementine.</string>
+    <string name="pref_volume_title">Använd volymknapparna</string>
+    <string name="pref_volume_summary">Använd volymknapparna för att justera volymen i Clementine.</string>
     <string name="pref_trackno_title">Visa spårnummer</string>
     <string name="pref_trackno_summary">Visa eller dölj spårnumren i spellistorna.</string>
     <string name="pref_lastfm_title">Last.fm</string>
-    <string name="pref_lastfm_summary">Aktivera för att markera låtar som favoriter eller utesluta dem.</string>
+    <string name="pref_lastfm_summary">Aktivera för att kunna gilla eller blockera låtar på Last.fm.</string>
     <string name="pref_lower_volume_title">Sänk volymen</string>
-    <string name="pref_lower_volume_summary">Sänk volymen vid inkommande / utgående samtal.</string>
+    <string name="pref_lower_volume_summary">Sänk volymen vid inkommande och utgående samtal.</string>
     <string name="pref_call_volume_title">Volym vid samtal</string>
-    <string name="pref_call_volume_summary">Nuvarande volymnivå vid samtal: %s</string>
+    <string name="pref_call_volume_summary">Volym vid samtal: %s</string>
     <string name="pref_volume_inc_title">Volymsteg</string>
-    <string name="pref_volume_inc_summary">Nuvarande volymsteg: %s</string>
+    <string name="pref_volume_inc_summary">Volymsteg: %s</string>
 
     <string name="pref_library_sorting_title">Sortering</string>
-    <string name="pref_library_sorting_summary">Musikbibliotekets sorteringsordning: %1$s.</string>
+    <string name="pref_library_sorting_summary">Sorteringsordning i musikbiblioteket: %1$s</string>
     <!-- Choices are separate strings, not a string-array: Transifex leaves an array's untranslated
          items out, which moves the translated ones onto the wrong choices. -->
     <string name="pref_library_sorting_asc">Stigande</string>
     <string name="pref_library_sorting_desc">Fallande</string>
 
     <string name="pref_library_grouping_title">Gruppering</string>
-    <string name="pref_library_grouping_summary">Musikbibliotekets gruppering: %1$s.</string>
+    <string name="pref_library_grouping_summary">Gruppering i musikbiblioteket: %1$s</string>
     <string name="pref_library_grouping_artist">Artist</string>
     <string name="pref_library_grouping_artist_album">Artist / Album</string>
     <string name="pref_library_grouping_albumartist_album">Albumartist / Album</string>
-    <string name="pref_library_grouping_artist_year">Artist / Årtal</string>
+    <string name="pref_library_grouping_artist_year">Artist / År</string>
     <string name="pref_library_grouping_album">Album</string>
     <string name="pref_library_grouping_genre_album">Genre / Album</string>
     <string name="pref_library_grouping_genre_artist_album">Genre / Artist / Album</string>
 
     <string name="pref_autoconnect_title">Anslut automatiskt</string>
-    <string name="pref_autoconnect_summary">Anslut till Clementine automatiskt när du startar fjärrkontrollen.
+    <string name="pref_autoconnect_summary">Anslut automatiskt till Clementine när du startar fjärrkontrollen.
     </string>
     <string name="pref_port_title">Port</string>
-    <string name="pref_port_summary">Nuvarande port:</string>
+    <string name="pref_port_summary">Aktuell port:</string>
     <string name="pref_port_error">Ogiltig port!</string>
 
     <string name="pref_wake_lock_title">Håll processorn vaken</string>
-    <string name="pref_wake_lock_summary">Aktivera om appen tappar anslutningen ibland när den körs i bakgrunden. Kan göra att batteriet laddas ur snabbare.
+    <string name="pref_wake_lock_summary">Aktivera om appen ibland tappar anslutningen i bakgrunden. Det kan öka batteriförbrukningen.
     </string>
     <string name="pref_keep_screen_on_title">Håll skärmen tänd</string>
     <string name="pref_keep_screen_on_summary">Förhindra att skärmen släcks medan Clementine Remote är ansluten till Clementine.
@@ -288,22 +294,32 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Besök Clementines webbplats</string>
 
+    <!-- A setting: which networks songs download over, for downloads and for what's kept on this
+         phone. Its choices follow. -->
+    <string name="pref_dl_network">Hämta via</string>
+    <!-- A choice under Download over. A metered Wi-Fi, such as another phone's hotspot, counts as
+         mobile data. -->
+    <string name="pref_dl_network_wifi_only">Endast wifi</string>
+    <!-- A choice under Download over: Wi-Fi, and mobile data unless the phone is roaming. -->
+    <string name="pref_dl_network_mobile_data">Wifi och mobildata, utom vid roaming</string>
+    <!-- A choice under Download over. -->
+    <string name="pref_dl_network_any">Alla nätverk</string>
     <string name="pref_dl_dir">Ange hämtningsmapp</string>
-    <string name="pref_dl_volume">Spara hämtningar i</string>
-    <string name="pref_dl_volume_unavailable">Inte tillgänglig. Välj var hämtningar ska sparas.</string>
+    <string name="pref_dl_volume">Spara hämtningar på</string>
+    <string name="pref_dl_volume_unavailable">Lagringsplatsen är inte tillgänglig. Välj var hämtningarna ska sparas.</string>
     <string name="pref_dl_override">Skriv över befintliga filer</string>
-    <string name="pref_dl_override_summary">Hämtar låtar igen när de skiljer sig från dem på den här telefonen.</string>
+    <string name="pref_dl_override_summary">Hämta låtar på nytt om de skiljer sig från kopiorna på telefonen.</string>
     <string name="pref_dl_cat_folders">Mappar</string>
     <string name="pref_dl_pl_save_own_dir_title">Spara låtar i spellistans mapp</string>
     <string name="pref_dl_pl_save_own_dir_summary">Skapar en mapp med spellistans namn och sparar låtarna där.</string>
-    <string name="pref_dl_pl_artist_dir_title">Skapa en undermapp för artist</string>
-    <string name="pref_dl_pl_artist_dir_summary">Skapa en artistundermapp för varje enskild låt.</string>
-    <string name="pref_dl_pl_album_dir_title">Skapa en undermapp för album</string>
-    <string name="pref_dl_pl_album_dir_summary">Skapa en albumundermapp i artistmappen för varje enskild låt.</string>
+    <string name="pref_dl_pl_artist_dir_title">Skapa undermappar för artister</string>
+    <string name="pref_dl_pl_artist_dir_summary">Spara varje låt i en undermapp med artistens namn.</string>
+    <string name="pref_dl_pl_album_dir_title">Skapa undermappar för album</string>
+    <string name="pref_dl_pl_album_dir_summary">Spara varje låt i en undermapp för albumet under artistens mapp.</string>
 
     <string name="file_dialog_set_dir">Välj mapp</string>
-    <string name="file_dialog_not_writable">Mappen är inte skrivbar</string>
-    <string name="file_dialog_custom_paths_available">Välj annan</string>
+    <string name="file_dialog_not_writable">Det går inte att skriva till mappen</string>
+    <string name="file_dialog_custom_paths_available">Välj en annan mapp</string>
 
 
     <string name="dialog_about_authors">Upphovspersoner</string>
@@ -314,23 +330,23 @@
     <string name="dialog_license_top"> Detta program distribueras i hopp om att det ska vara användbart, dock HELT UTAN GARANTIER</string>
 
     <string name="tasker_intro">Välj en åtgärd.</string>
-    <string name="tasker_ip_help">Ange anslutningsuppgifterna om du valde \"Anslut\" ovan. Autentiseringskoden är valfri om kravet på den är inaktiverat i Clementine.</string>
+    <string name="tasker_ip_help">Ange anslutningsuppgifterna om du valde \"Anslut\" ovan. Om Clementine inte kräver någon autentiseringskod kan du lämna kodfältet tomt.</string>
     <string name="tasker_action">Åtgärd:</string>
     <string name="tasker_connect">Anslut</string>
     <string name="tasker_disconnect">Koppla från</string>
     <string name="tasker_play">Spela</string>
     <string name="tasker_pause">Pausa</string>
-    <string name="tasker_playpause">Spela / Pausa</string>
+    <string name="tasker_playpause">Spela/pausa</string>
     <string name="tasker_stop">Stoppa</string>
     <string name="tasker_next">Nästa låt</string>
     <string name="tasker_port_hint">Ange port</string>
     <string name="tasker_auth_hint">Ange autentiseringskod</string>
 
     <string name="widget_connect_to">Tryck för att ansluta</string>
-    <string name="widget_not_connected">Ej ansluten</string>
+    <string name="widget_not_connected">Inte ansluten</string>
     <string name="widget_open_clementine">Tryck för att starta Clementine Remote</string>
     <string name="widget_couldnt_connect">Kunde inte ansluta</string>
-    <string name="widget_description">Låten som Clementine spelar, med knappar för spela/pausa och nästa låt</string>
+    <string name="widget_description">Visar låten som spelas i Clementine. Du kan pausa, fortsätta spela eller gå till nästa låt.</string>
 
     <string name="dialog_close">Stäng</string>
     <string name="dialog_cancel">Avbryt</string>
@@ -339,13 +355,15 @@
     <string name="error_versions">Okompatibel version</string>
     <string name="old_proto">Uppdatera Clementine! Du behöver Clementine %1$s eller senare.</string>
 
-    <string name="no_private_ip">Din Android-enhet har en IP-adress som inte är lokal. Prova att inaktivera \"Använd endast lokala IP-adresser\" i Clementines inställningar.</string>
+    <string name="no_private_ip">Android-enhetens IP-adress är inte lokal. Prova att stänga av \"Använd endast lokala IP-adresser\" i Clementines inställningar.</string>
     <string name="check_ip">1) Körs Clementine?\n2) Använder du Clementine %1$s eller senare?\n3) Har du aktiverat nätverksfjärrkontrollen i Clementines inställningar?\n4) Kontrollera att du har angett rätt IP-adress.\n</string>
-    <string name="wifi_disabled">Wifi är inaktiverat. Om du vill ansluta till Clementine via internet ska du se till att portarna vidarebefordras korrekt och att du har inaktiverat \"Använd endast lokala IP-adresser\".</string>
+    <string name="wifi_disabled">Wifi är avstängt. Om du vill ansluta till Clementine via internet, kontrollera att portvidarebefordran är rätt inställd och att inställningen \"Använd endast lokala IP-adresser\" är avstängd.</string>
 
     <string name="input_auth_code">Autentiseringskod</string>
     <string name="done">Klart</string>
     <string name="unknown">Okänd</string>
+    <!-- In the library, the artist that albums by several artists (compilations) are listed under, as Clementine lists them. -->
+    <string name="various_artists">Diverse artister</string>
     <plurals name="number_items">
         <item quantity="one">%d post</item>
         <item quantity="other">%d poster</item>
@@ -367,23 +385,23 @@
     <string name="shuffle_albums">Blanda album</string>
 
 
-    <string name="track_loved">Låten har markerats som favorit &lt;3</string>
-    <string name="track_banned">Låt utesluten :-(</string>
+    <string name="track_loved">Du gillar låten &lt;3</string>
+    <string name="track_banned">Låten har blockerats :-(</string>
     <string name="permissions_required_title">Behörigheter krävs</string>
     <string name="permissions_intro">Android kommer att be om följande:</string>
-    <string name="permission_local_network">Enheter i närheten: Clementine Remote hittar och kommunicerar med Clementine på ditt lokala nätverk.</string>
-    <string name="permission_notifications">Aviseringar: för spelarens kontroller och dina hämtningars förlopp.</string>
+    <string name="permission_local_network">Enheter i närheten: för att hitta och kommunicera med Clementine i ditt lokala nätverk.</string>
+    <string name="permission_notifications">Aviseringar: för att visa uppspelningsknappar och hur långt hämtningarna har kommit.</string>
     <string name="permission_phone">Telefon: för att sänka Clementines volym under samtal.</string>
     <string name="permission_storage">Lagring: för att spara låtarna du hämtar.</string>
     <string name="not_local_network_title">Clementine nekade anslutningen</string>
-    <string name="not_local_network">Clementine accepterar endast anslutningar från sitt lokala nätverk. För att ansluta från annat håll ska du inaktivera \"Tillåt endast anslutningar från det lokala nätverket\" i inställningarna för Nätverksfjärrkontroll.</string>
+    <string name="not_local_network">Clementine tillåter bara anslutningar från sitt lokala nätverk. Om du vill ansluta utifrån, stäng av \"Tillåt endast anslutningar från det lokala nätverket\" under Nätverksfjärrkontroll i Clementines inställningar.</string>
     <string name="too_many_wrong_auth_codes_title">För många felaktiga autentiseringskoder</string>
     <!-- The placeholder is how long Clementine said to wait before it checks another auth
          code from this phone: "10 seconds", "1 minute", "3 minutes", "2 hours", or "a while" if it
          didn't say. The iOS app shows the same sentence with the duration in iOS's own words,
          which can't take another grammatical form, so write the sentence so the duration reads
          right as it is. -->
-    <string name="too_many_wrong_auth_codes">Clementine kontrollerar ingen ny autentiseringskod från den här telefonen förrän om %s. Ange då koden som visas i inställningarna för Nätverksfjärrkontroll.</string>
+    <string name="too_many_wrong_auth_codes">Du kan försöka igen från den här telefonen om %s. Ange då koden som visas under Nätverksfjärrkontroll i Clementines inställningar.</string>
     <!-- How long Clementine said to wait: the placeholder in too_many_wrong_auth_codes and
          download_noti_too_many_wrong_auth_codes. Seconds under a minute; otherwise rounded up to
          minutes, or to hours over an hour. Translate them as a plain duration: those sentences
@@ -403,7 +421,7 @@
     <!-- Shown instead of a duration when Clementine doesn't say how long to wait, in the
          sentences about too many wrong auth codes. -->
     <string name="wait_a_while">en stund</string>
-    <string name="local_network_on_link">Adressen finns på det nätverk som den här telefonen är ansluten till. Android låter bara Clementine Remote nå det med behörigheten Enheter i närheten. Du kan ge behörigheten i appens inställningar.</string>
+    <string name="local_network_on_link">Adressen finns i det nätverk som telefonen är ansluten till. Android kräver behörigheten Enheter i närheten för att Clementine Remote ska få ansluta dit. Du kan ge behörigheten i appens inställningar.</string>
     <string name="open_settings">Öppna inställningar</string>
 
     <string name="notification_previous">Föregående</string>
@@ -432,12 +450,105 @@
          it. The iOS app shows the same strings. -->
     <!-- Music saved on the phone, as opposed to Clementine on the computer: the title of the tab's
          screen, and where the music plays from. -->
-    <string name="sync_on_this_phone">På denna telefon</string>
+    <string name="sync_on_this_phone">På den här telefonen</string>
+    <!-- The tab with the music saved on the phone, as opposed to Clementine on the computer. Keep it
+         short: it's a tab label, under an icon, beside four others. -->
+    <string name="sync_on_phone_tab">På telefonen</string>
+    <!-- The same tab on a tablet. Keep it short, as for "On phone". -->
+    <string name="sync_on_tablet_tab">På surfplattan</string>
+    <!-- On the connect screen, under "Or enter its address": instead of connecting, play the music
+         saved on the phone. -->
+    <string name="sync_connect_or_play">Eller spela musik som finns på telefonen</string>
     <!-- On the connect screen, under On this phone: how many songs are saved on the phone. -->
     <plurals name="sync_connect_songs">
         <item quantity="one">%d låt</item>
         <item quantity="other">%d låtar</item>
     </plurals>
+    <!-- On the connect screen while it connects, under On this phone: tapping it stops connecting
+         to Clementine. The placeholder is how many songs are saved on the phone. -->
+    <plurals name="sync_connect_stops">
+        <item quantity="one">Avbryter anslutningsförsöket · %d låt</item>
+        <item quantity="other">Avbryter anslutningsförsöket · %d låtar</item>
+    </plurals>
+    <!-- A button in the dialog when connecting fails, and a shortcut on the app's icon: play the
+         music saved on the phone instead of connecting. -->
+    <string name="sync_play_on_phone">Spela på den här telefonen</string>
+    <!-- At the top of the player while it plays the music saved on the phone, where it otherwise
+         says which playlist Clementine plays from. -->
+    <string name="sync_playing_on_this_phone">Spelar på den här telefonen</string>
+    <!-- As "Playing on this phone", on a tablet. -->
+    <string name="sync_playing_on_this_tablet">Spelar på den här surfplattan</string>
+    <!-- As "On this phone", on a tablet: music saved on the tablet, as opposed to Clementine on the
+         computer. -->
+    <string name="sync_on_this_tablet">På den här surfplattan</string>
+    <!-- Title of a sheet, and a button's label: choose where the music plays from, Clementine or
+         this phone. -->
+    <string name="sync_play_from">Spela från</string>
+    <!-- In Play from, under Clementine or On this phone: it's playing the song the placeholder
+         names. -->
+    <string name="sync_play_from_playing">Spelar · %s</string>
+    <!-- In Play from, under Clementine or On this phone: it's paused on the song the placeholder
+         names. -->
+    <string name="sync_play_from_paused">Pausad · %s</string>
+    <!-- At the bottom of Play from. -->
+    <string name="sync_play_from_pauses">När du byter källa pausas uppspelningen från den tidigare källan.</string>
+    <!-- Banner: the app can't connect to Clementine on the computer. -->
+    <string name="sync_not_reachable">Det går inte att nå Clementine</string>
+    <!-- Banner, under "Clementine isn't reachable". -->
+    <string name="sync_playing_on_phone">Spelar musik som finns på telefonen</string>
+    <!-- Saves the music on the phone and keeps it up to date. -->
+    <string name="sync_keep">Spara på den här telefonen</string>
+    <!-- Heading of the things you chose to keep on the phone. -->
+    <string name="sync_kept">Sparat på den här telefonen</string>
+    <!-- Shown for a moment after choosing Keep on this phone; the placeholder is an album, an
+         artist or a playlist. -->
+    <string name="sync_keeping">Sparar %s på den här telefonen</string>
+    <!-- Something kept on the phone, while Clementine makes the list of its songs. -->
+    <string name="sync_preparing">Förbereder…</string>
+    <!-- Something kept on the phone, while its songs download from Clementine: how many have, of
+         how many there are to download, such as "Downloading 12 of 140 songs…". -->
+    <plurals name="sync_downloading">
+        <item quantity="one">Hämtar låt (%1$d av %2$d)…</item>
+        <item quantity="other">Hämtar låtar (%1$d av %2$d)…</item>
+    </plurals>
+    <!-- Something kept on the phone that hasn't synced yet, because Clementine isn't reachable. -->
+    <string name="sync_waiting">Väntar på Clementine</string>
+    <!-- How often something kept on the phone is updated from Clementine, short: never, so it
+         keeps the songs it has. -->
+    <string name="sync_kept_as_it_is">Behålls oförändrat</string>
+    <!-- How often something kept on the phone is updated from Clementine, short: each time the
+         phone connects to it. -->
+    <string name="sync_every_connect">Uppdateras vid varje anslutning</string>
+    <!-- Heading in the Keep on this phone sheet, over how often what's kept is updated from
+         Clementine. -->
+    <string name="sync_update_it">Uppdatera innehållet</string>
+    <!-- A choice under Update it: what's kept is never updated from Clementine. -->
+    <string name="sync_refresh_never">Aldrig</string>
+    <!-- Under Never, in the Keep on this phone sheet. -->
+    <string name="sync_refresh_never_detail">Behåll de låtar som finns nu</string>
+    <!-- A choice under Update it: what's kept is updated each time the phone connects to Clementine. -->
+    <string name="sync_refresh_on_connect">Varje gång jag ansluter</string>
+    <!-- How much of something kept is on the phone: the number of songs, and their size, such as
+         "180 MB". -->
+    <plurals name="sync_songs_size">
+        <item quantity="one">%1$d låt, %2$s</item>
+        <item quantity="other">%1$d låtar, %2$s</item>
+    </plurals>
+    <!-- Menu item: syncs what's kept on the phone with Clementine now. -->
+    <string name="sync_now">Synkronisera nu</string>
+    <!-- Menu item on something kept on the phone; asks first. -->
+    <string name="sync_remove">Ta bort från den här telefonen…</string>
+    <!-- Asks before removing something kept on the phone; the placeholder is its name. -->
+    <string name="sync_remove_confirm">Vill du ta bort %s från telefonen? Låtarna raderas om de inte också ingår i något annat du har sparat här.</string>
+    <!-- The button that removes something kept on the phone, after asking. -->
+    <string name="sync_remove_button">Ta bort</string>
+    <!-- Something kept on the phone that Clementine doesn't have any more, such as a deleted
+         playlist. Its songs stay on the phone. -->
+    <string name="sync_gone">Finns inte längre i Clementine</string>
+    <!-- Something kept on the phone whose sync was cut short, such as by losing the connection. -->
+    <string name="sync_failed">Synkroniseringen kunde inte slutföras. Appen försöker igen nästa gång du ansluter.</string>
     <!-- Button: plays, on the phone, the songs of something kept on it, in order. -->
     <string name="sync_play">Spela</string>
-    </resources>
+    <!-- Button: plays, on the phone, the songs of something kept on it, in random order. -->
+    <string name="sync_shuffle">Blanda och spela</string>
+</resources>
