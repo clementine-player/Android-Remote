@@ -9,6 +9,19 @@
     <string name="connectdialog_download_data">Λήψη δεδομένων</string>
     <string name="connectdialog_error">Αδυναμία επικοινωνίας με το host</string>
     <string name="connectdialog_ip_hint">Εισάγετε διεύθυνση IP</string>
+    <string name="connect_intro">Επιλέξτε το Clementine που θέλετε να ελέγχετε. Πρέπει να βρίσκεται στο ίδιο δίκτυο Wi-Fi με αυτό το τηλέφωνο.</string>
+    <string name="connect_on_network">Στο δίκτυό σας</string>
+    <string name="connect_search_again">Νέα αναζήτηση</string>
+    <string name="connect_searching">Αναζήτηση του Clementine…</string>
+    <string name="connect_searching_help">Δεν εμφανίζεται; Βεβαιωθείτε ότι το τηλεχειριστήριο δικτύου του είναι ενεργοποιημένο ή εισαγάγετε τη διεύθυνσή του παρακάτω.</string>
+    <string name="connect_server_address">%1$s · θύρα %2$d</string>
+    <string name="connect_not_searching">Δεν γίνεται αναζήτηση σε αυτό το δίκτυο</string>
+    <string name="connect_not_searching_help">Χωρίς την άδεια «Συσκευές σε κοντινή απόσταση», το Clementine Remote δεν μπορεί να βρει το Clementine στο δίκτυό σας. Εισαγάγετε τη διεύθυνσή του παρακάτω ή ενεργοποιήστε την άδεια.</string>
+    <string name="connect_enter_address">Ή εισαγάγετε τη διεύθυνσή του</string>
+    <string name="connect_address">Διεύθυνση</string>
+    <string name="connect_requirements">Απαιτείται Clementine %1$s ή νεότερο, με ενεργοποιημένο το τηλεχειριστήριο δικτύου από τα Εργαλεία → Προτιμήσεις → Τηλεχειριστήριο δικτύου.</string>
+
+
     <string name="player_nosong">Κανένα Τραγούδι δεν παίζει τώρα</string>
     <string name="player_disconnected">Αποσυνδέθηκε</string>
     <string name="playler_volume">Ένταση</string>
@@ -26,29 +39,171 @@
     <string name="playlist_context_remove">Αφαίρεση από τη λίστα αναπαραγωγής</string>
     <string name="playlist_close">Κλείσιμο λίστας αναπαραγωγής</string>
     <string name="playlist_clear">Εκκαθαριση λίστας αναπαραγωγης</string>
+    <string name="playlist_clear_content">Αυτό θα αφαιρέσει οριστικά όλα τα τραγούδια από τη λίστα αναπαραγωγής. Θέλετε να συνεχίσετε;</string>
     <string name="playlist_clear_confirm">Εκκαθαριση λίστας αναπαραγωγης</string>
+    <plurals name="queue_songs">
+        <item quantity="one">%d τραγούδι</item>
+        <item quantity="other">%d τραγούδια</item>
+    </plurals>
+    <string name="queue_minutes">%d λεπ.</string>
+    <string name="queue_hours_minutes">%1$d ώρ. %2$d λεπ.</string>
+    <plurals name="queue_selected">
+        <item quantity="one">%d επιλεγμένο</item>
+        <item quantity="other">%d επιλεγμένα</item>
+    </plurals>
+    <string name="queue_clear_selection">Εκκαθάριση επιλογής</string>
+
+
     <string name="downloads_empty">Οχι λήψεις!</string>
+    <string name="downloads_empty_summary">Κάντε λήψη μουσικής σε αυτό το τηλέφωνο για να την ακούτε μακριά από το Clementine.</string>
+    <string name="downloads_empty_how">Κάντε λήψη ενός τραγουδιού από την προβολή αναπαραγωγής, ενός άλμπουμ από τη βιβλιοθήκη ή μιας λίστας αναπαραγωγής από το μενού της.</string>
+    <string name="downloads_suggest_most_played">Τα άλμπουμ που ακούτε συχνότερα</string>
+    <string name="downloads_suggest_recent">Άλμπουμ που προστέθηκαν πρόσφατα</string>
+    <string name="downloads_suggest_playlists">Λίστες αναπαραγωγής</string>
+    <plurals name="downloads_plays">
+        <item quantity="one">%d αναπαραγωγή</item>
+        <item quantity="other">%d αναπαραγωγές</item>
+    </plurals>
+    <string name="downloads_playlist_playing">Αναπαράγεται τώρα</string>
+    <string name="downloads_playlist_favorite">Αγαπημένη</string>
+    <string name="downloads_download">Λήψη του %1$s</string>
     <string name="downloaded_songs">Κατεβάσμενα τραγούδια - κάντε κλικ για να αναπαραχθουν</string>
     <string name="downloads_title">Λήψεις</string>
+    <string name="downloads_free_space">%s ελεύθερα σε αυτό το τηλέφωνο</string>
+    <string name="downloads_running">Λήψη σε εξέλιξη</string>
+    <string name="downloads_finished">Ολοκληρώθηκε</string>
+    <string name="downloads_on_phone">Σε αυτό το τηλέφωνο</string>
+    <string name="downloads_wifi_only">Οι λήψεις εκτελούνται μόνο μέσω Wi-Fi.</string>
+    <string name="downloads_change">Αλλαγή</string>
+
+    <!-- The app's shell: navigation, mini player, player and sheets. -->
+    <string name="nav_queue">Λίστα αναμονής</string>
+    <string name="shell_open_player">Άνοιγμα προβολής αναπαραγωγής: %s</string>
+    <string name="shell_connected_to">Συνδεδεμένο στο %s</string>
+    <string name="shell_search_close">Κλείσιμο αναζήτησης</string>
+    <string name="shell_more">Περισσότερες επιλογές</string>
+    <string name="player_collapse">Σύμπτυξη προβολής αναπαραγωγής</string>
+    <!-- Small heading at the top of the player, above the name of the playlist the song is playing
+         from. -->
+    <string name="player_playing_from">Αναπαραγωγή από</string>
+    <string name="queue_playing">Αναπαράγεται</string>
+    <string name="player_love">Προσθήκη στα αγαπημένα του Last.fm</string>
+    <string name="player_details">Στίχοι και λεπτομέρειες</string>
+    <string name="player_download_song">Λήψη τραγουδιού</string>
+    <string name="player_volume_level">Ένταση ήχου Clementine, %1$d%%</string>
+    <string name="player_volume_up">Αύξηση έντασης ήχου</string>
+    <string name="player_volume_down">Μείωση έντασης ήχου</string>
+    <string name="details_tab">Λεπτομέρειες</string>
+    <string name="lyrics_tab">Στίχοι</string>
+    <string name="connection_connected">Συνδεδεμένο</string>
+    <!-- Label for how long the phone has been connected to Clementine, shown next to it as a
+         duration such as 01:23:45. -->
+    <string name="connection_uptime">Διάρκεια σύνδεσης</string>
+    <string name="connection_switch">Αλλαγή Clementine</string>
+    <string name="connection_switch_summary">Επιλέξτε άλλον υπολογιστή στο δίκτυό σας</string>
+    <string name="output_title">Αναπαραγωγή σε</string>
+    <string name="output_this_phone">%1$s (αυτό το τηλέφωνο)</string>
+    <string name="output_this_tablet">%1$s (αυτό το tablet)</string>
+    <string name="output_switching">Αλλαγή…</string>
+    <string name="output_playing_on">Αναπαραγωγή στη συσκευή %1$s</string>
+    <string name="output_choose">Επιλογή συσκευής αναπαραγωγής</string>
+    <string name="hint_done">Κατάλαβα</string>
+    <string name="hint_outputs_title">Αναπαραγωγή σε αυτήν τη συσκευή</string>
+    <string name="hint_outputs">Με αυτό το κουμπί μπορείτε να ακούσετε το Clementine σε αυτήν τη συσκευή ή να επιστρέψετε στην αναπαραγωγή στον υπολογιστή σας.</string>
+    <string name="pref_hints_reset">Εμφάνιση συμβουλών ξανά</string>
+    <string name="pref_hints_reset_summary">Επισήμανση των δυνατοτήτων ξανά, όπως κατά την πρώτη χρήση</string>
+    <string name="pref_hints_reset_done">Οι συμβουλές θα εμφανιστούν ξανά</string>
+    <string name="pref_renderer">Να επιτρέπεται στο Clementine η αναπαραγωγή σε αυτό το τηλέφωνο</string>
+    <string name="pref_renderer_summary">Το Clementine μπορεί να στέλνει τη μουσική του εδώ όταν αναπαράγει μουσική σε άλλες συσκευές</string>
+
     <string name="download_noti_title">Έναρξη λήψης </string>
+    <plurals name="download_noti_n_downloads">
+        <item quantity="one">%d ενεργή λήψη</item>
+        <item quantity="other">%d ενεργές λήψεις</item>
+    </plurals>
     <string name="download_noti_n_progress">Συνολική πρόοδος: %d %</string>
     <string name="download_noti_title_song">[Τραγούδι]</string>
     <string name="download_noti_title_album">[Αλμπουμ]</string>
     <string name="download_noti_title_playlist">[Λίστα αναπαραγωγής]</string>
     <string name="download_noti_title_songs">[Τραγούδια]</string>
+    <plurals name="download_noti_n_finished">
+        <item quantity="one">Ολοκληρώθηκε %d λήψη</item>
+        <item quantity="other">Ολοκληρώθηκαν %d λήψεις</item>
+    </plurals>
     <string name="download_noti_complete">Η λήψη ολοκληρώθηκε</string>
     <string name="download_noti_canceled">Η λήψη ακυρώθηκε</string>
     <string name="download_noti_insufficient_space">Δεν υπάρχει αρκετός χώρος, ματαίωση λήψης.</string>
     <string name="download_noti_forbidden">Λήψη απαγορεύεται. Ενεργοποίηση στις ρυθμίσεις του Clementine.</string>
+    <string name="download_noti_not_local_network">Το Clementine δέχεται συνδέσεις μόνο από το τοπικό του δίκτυο.</string>
+    <!-- The placeholder is how long Clementine said to wait before it checks another auth
+         code from this phone: "10 seconds", "1 minute", "3 minutes", "2 hours", or "a while" if it
+         didn't say. The iOS app shows the same sentence with the duration in iOS's own words,
+         which can't take another grammatical form, so write the sentence so the duration reads
+         right as it is. -->
+    <string name="download_noti_too_many_wrong_auth_codes">Πάρα πολλοί λανθασμένοι κωδικοί πιστοποίησης. Το Clementine δεν θα ελέγξει άλλον κωδικό από αυτό το τηλέφωνο για %s.</string>
     <string name="download_noti_not_mounted">Καμία συσκευή αποθήκευσης βρέθηκε!</string>
+    <!-- A download didn't start, because Download over, in Settings, doesn't allow the network the
+         phone is on. -->
+    <string name="download_noti_network_not_allowed">Δεν επιτρέπονται λήψεις σε αυτό το δίκτυο</string>
     <string name="download_noti_transcoding">Ανακωδικοποίηση αρχείων</string>
     <string name="download_noti_transcoding_subtitle">Παρακαλώ περιμένετε</string>
 
 
+    <string name="library_syncing">Συγχρονισμός της βιβλιοθήκης από το Clementine</string>
     <string name="library_optimize">Βελτιστοποίηση βάσης δεδομένων</string>
+    <string name="library_empty">Η βιβλιοθήκη δεν βρίσκεται ακόμη σε αυτό το τηλέφωνο. Σύρετε προς τα κάτω για να τη συγχρονίσετε από το Clementine.</string>
     <string name="library_no_search_results">Δεν υπάρχουν τραγούδια που ταιριάζουν στα κριτήρια της αναζήτησής σας!</string>
+    <string name="library_sync_error">Δεν ήταν δυνατός ο συγχρονισμός της βιβλιοθήκης</string>
     <string name="library_title">Βιβλιοθήκη</string>
+    <!-- A folder at the top of the library holding Clementine's smart playlists, such as Newest
+         tracks, as Clementine's own library shows them. -->
+    <string name="library_smart_playlists">Έξυπνες λίστες αναπαραγωγής</string>
+    <string name="library_sync_action">Συγχρονισμός βιβλιοθήκης</string>
+    <string name="library_add_to_playlist">Προσθήκη στη λίστα αναπαραγωγής</string>
+    <string name="library_add_to_queue">Προσθήκη στη λίστα αναμονής</string>
+    <string name="library_open_in_new_playlist">Άνοιγμα σε νέα λίστα αναπαραγωγής</string>
+    <string name="library_select">Επιλογή</string>
+    <string name="library_back">Πίσω</string>
+
+    <!-- Browsing Clementine's internet services: its Internet sidebar. -->
+    <string name="internet_title">Διαδίκτυο</string>
+    <string name="internet_loading">Φόρτωση…</string>
+    <string name="internet_needs_setup">Ρύθμιση στο Clementine</string>
+    <string name="internet_empty">Δεν υπάρχει τίποτα εδώ</string>
     <string name="internet_play">Αναπαραγωγή</string>
+    <string name="internet_play_now">Αναπαραγωγή τώρα</string>
+    <string name="internet_play_next">Αναπαραγωγή στη συνέχεια</string>
+    <string name="internet_replace_playlist">Αντικατάσταση λίστας αναπαραγωγής</string>
+    <string name="internet_added">Προστέθηκε στη λίστα αναπαραγωγής</string>
+    <string name="internet_playing_next">Επόμενα προς αναπαραγωγή</string>
+    <string name="internet_not_playable">Το Clementine δεν μπορεί να το προσθέσει στη λίστα αναπαραγωγής</string>
+    <string name="internet_gone">Αυτό δεν υπάρχει πλέον στο Clementine</string>
+
+
+    <string name="global_search_empty">Εισαγάγετε όρους αναζήτησης παραπάνω για να βρείτε μουσική στον υπολογιστή σας και στο διαδίκτυο</string>
+    <string name="global_search_search">Αναζήτηση για οτιδήποτε</string>
+    <string name="search_searching">Αναζήτηση για «%s»…</string>
+    <string name="search_clear">Εκκαθάριση αναζήτησης</string>
+    <string name="search_top_result">Κορυφαίο αποτέλεσμα</string>
+    <string name="search_songs">Τραγούδια</string>
+    <string name="search_artists">Καλλιτέχνες</string>
+    <string name="search_albums">Άλμπουμ</string>
+    <string name="search_stations">Σταθμοί</string>
+    <string name="search_other_matches">Άλλα αποτελέσματα</string>
+    <string name="search_see_all">Προβολή όλων</string>
+    <!-- The See all button's description for accessibility, with the section's name. -->
+    <string name="search_see_all_of">Προβολή όλων των %s</string>
+    <!-- The top result's second line: what it is, and whose. -->
+    <string name="search_top_song">Τραγούδι • %s</string>
+    <string name="search_top_artist">Καλλιτέχνης</string>
+    <string name="search_top_album">Άλμπουμ • %s</string>
+    <string name="search_top_station">Σταθμός • %s</string>
+    <plurals name="search_number_albums">
+        <item quantity="one">%d άλμπουμ</item>
+        <item quantity="other">%d άλμπουμ</item>
+    </plurals>
+
+
     <string name="song_info_album">Αλμπουμ</string>
     <string name="song_info_genre">Είδος μουσικής</string>
     <string name="song_info_year">Χρονολογία</string>
@@ -60,6 +215,10 @@
     <string name="song_info_filename">Όνομα αρχείου</string>
     <string name="song_info_rating">Αξιολόγηση</string>
     <string name="song_info_rated">Τραγούδι βαθμολογία $stars$ αστέρια</string>
+    <!-- TalkBack action on a rating star, rating the song half a star less, such as 3.5: the number is already written out. -->
+    <string name="song_info_rate_half_stars">Αξιολόγηση με %1$s αστέρια</string>
+
+
     <string name="connection_volume">Ένταση</string>
     <string name="connection_version">Clementine έκδοση</string>
     <string name="connection_traffic">Κυκλοφορία Πάνω / Κάτω (μέσος όρος / δευτ)</string>
@@ -94,9 +253,21 @@
 
     <string name="pref_library_sorting_title">Ταξινόμηση </string>
     <string name="pref_library_sorting_summary">Η βιβλιοθήκη είναι ταξινομημένη στην %1$s σειρα.</string>
+    <!-- Choices are separate strings, not a string-array: Transifex leaves an array's untranslated
+         items out, which moves the translated ones onto the wrong choices. -->
+    <string name="pref_library_sorting_asc">Αύξουσα σειρά</string>
+    <string name="pref_library_sorting_desc">Φθίνουσα σειρά</string>
+
     <string name="pref_library_grouping_title">Ομαδοποίηση</string>
     <string name="pref_library_grouping_summary">Η βιβλιοθήκη είναι ομαδοποιημένη  κατά %1$s.</string>
+    <string name="pref_library_grouping_artist">Καλλιτέχνης</string>
+    <string name="pref_library_grouping_artist_album">Καλλιτέχνης / Άλμπουμ</string>
+    <string name="pref_library_grouping_albumartist_album">Καλλιτέχνης άλμπουμ / Άλμπουμ</string>
+    <string name="pref_library_grouping_artist_year">Καλλιτέχνης / Χρονολογία</string>
     <string name="pref_library_grouping_album">Αλμπουμ</string>
+    <string name="pref_library_grouping_genre_album">Είδος μουσικής / Άλμπουμ</string>
+    <string name="pref_library_grouping_genre_artist_album">Είδος μουσικής / Καλλιτέχνης / Άλμπουμ</string>
+
     <string name="pref_autoconnect_title">Αυτόματη Σύνδεση</string>
     <string name="pref_autoconnect_summary">Αυτόματη σύνδεση με το Clementine κατά την εκκίνηση του τηλεχειριστηρίου.</string>
     <string name="pref_port_title">Θυρα</string>
@@ -120,8 +291,21 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Επισκεφθείτε την ιστοσελίδα του Clementine</string>
 
+    <!-- A setting: which networks songs download over, for downloads and for what's kept on this
+         phone. Its choices follow. -->
+    <string name="pref_dl_network">Λήψη μέσω</string>
+    <!-- A choice under Download over. A metered Wi-Fi, such as another phone's hotspot, counts as
+         mobile data. -->
+    <string name="pref_dl_network_wifi_only">Μόνο Wi-Fi</string>
+    <!-- A choice under Download over: Wi-Fi, and mobile data unless the phone is roaming. -->
+    <string name="pref_dl_network_mobile_data">Wi-Fi και δεδομένα κινητού χωρίς περιαγωγή</string>
+    <!-- A choice under Download over. -->
+    <string name="pref_dl_network_any">Οποιοδήποτε δίκτυο</string>
     <string name="pref_dl_dir">Ορισμός φάκελου λήψης</string>
+    <string name="pref_dl_volume">Αποθήκευση λήψεων σε</string>
+    <string name="pref_dl_volume_unavailable">Μη διαθέσιμο. Επιλέξτε πού θα αποθηκεύονται οι λήψεις.</string>
     <string name="pref_dl_override">Αντικατάσταση υπαρχόντων αρχείων</string>
+    <string name="pref_dl_override_summary">Πραγματοποιεί νέα λήψη των τραγουδιών όταν διαφέρουν από εκείνα σε αυτό το τηλέφωνο.</string>
     <string name="pref_dl_cat_folders">Φάκελοι</string>
     <string name="pref_dl_pl_save_own_dir_title">Αποθήκευση τραγουδιών στο φάκελο λίστας αναπαραγωγής</string>
     <string name="pref_dl_pl_save_own_dir_summary">Δημιουργείται ένας φάκελος λίστας αναπαραγωγής και αποθηκεύει τα τραγουδια εκεί.</string>
@@ -138,6 +322,8 @@
     <string name="dialog_about_authors">Δημιουργοι</string>
     <string name="dialog_about_supporters">Υποστηρικτες</string>
     <string name="dialog_about_others">Αλλοι</string>
+    <!-- %1$s is the address of the app's contributors, %2$s of its translators. -->
+    <string name="dialog_about_thanks">Ευχαριστούμε όλους τους &lt;a href=\"%1$s\"&gt;συντελεστές&lt;/a&gt; και τους &lt;a href=\"%2$s\"&gt;μεταφραστές&lt;/a&gt;!</string>
     <string name="dialog_license_top">Αυτό το πρόγραμμα διανέμεται με την ελπίδα ότι θα είναι χρήσιμο, αλλά ΧΩΡΙΣ ΟΠΟΙΑΔΗΠΟΤΕ ΕΓΓΥΗΣΗ</string>
 
     <string name="tasker_intro">Παρακαλώ επιλέξτε μια ενέργεια.</string>
@@ -157,13 +343,35 @@
     <string name="widget_not_connected">Δεν υπάρχει σύνδεση</string>
     <string name="widget_open_clementine">Αγγίξτε για να ξεκινήσει το Clementine Remote</string>
     <string name="widget_couldnt_connect">Δεν ήταν δυνατή η σύνδεση</string>
+    <string name="widget_description">Το τραγούδι που αναπαράγει το Clementine, με αναπαραγωγή/παύση και μετάβαση στο επόμενο</string>
+
     <string name="dialog_close">Κλείσιμο</string>
+    <string name="dialog_cancel">Ακύρωση</string>
+    <string name="dialog_continue">Συνέχεια</string>
+
     <string name="error_versions">Ασυμβίβαστη έκδοση</string>
+    <string name="old_proto">Ενημερώστε το Clementine! Απαιτείται Clementine %1$s ή νεότερο.</string>
+
     <string name="no_private_ip">Η Android συσκευή σας έχει μια μη τοπική διεύθυνση IP. Προσπαθήστε να την απενεργοποιήσετε \"Χρηση μόνο τοπικων διευθύνσεων IP» στις ρυθμίσεις του Clementine.</string>
+    <string name="check_ip">1) Εκτελείται το Clementine;\n2) Χρησιμοποιείτε το Clementine %1$s ή νεότερο;\n3) Έχετε ενεργοποιήσει το τηλεχειριστήριο δικτύου στις ρυθμίσεις του Clementine;\n4) Ελέγξτε αν έχετε εισαγάγει τη σωστή διεύθυνση IP.\n</string>
     <string name="wifi_disabled">Η ασύρματη σύνδεση είναι απενεργοποιημένη. Αν θέλετε να συνδεθείτε στο Clementine μέσω διαδικτύου βεβαιωθείτε ότι έχετε διαβίβασε τις θύρες σωστά και έχετε ειδικές ανάγκες \"Χρησιμοποιείτε μόνο τοπικές διευθύνσεις IP\" \".</string>
 
     <string name="input_auth_code">Κωδικός πιστοποίησης</string>
     <string name="done">Ολοκληρώθηκε</string>
+    <string name="unknown">Άγνωστο</string>
+    <!-- In the library, the artist that albums by several artists (compilations) are listed under, as Clementine lists them. -->
+    <string name="various_artists">Διάφοροι καλλιτέχνες</string>
+    <plurals name="number_items">
+        <item quantity="one">%d στοιχείο</item>
+        <item quantity="other">%d στοιχεία</item>
+    </plurals>
+
+    <plurals name="songs_added">
+        <item quantity="one">Προστέθηκε %d τραγούδι στην τρέχουσα λίστα αναπαραγωγής</item>
+        <item quantity="other">Προστέθηκαν %d τραγούδια στην τρέχουσα λίστα αναπαραγωγής</item>
+    </plurals>
+
+
     <string name="repeat_off">Να μην γίνει επανάληψη</string>
     <string name="repeat_track">Επανάληψη τραγουδιου</string>
     <string name="repeat_album">Επανάληψη άλμπουμ</string>
@@ -176,8 +384,47 @@
 
     <string name="track_loved">Αγαπημενο τραγουδι &lt;3</string>
     <string name="track_banned">Το τραγουδι αφαιρεθηκε :-(</string>
+    <string name="permissions_required_title">Απαιτούνται άδειες</string>
+    <string name="permissions_intro">Το Android θα ζητήσει άδεια για:</string>
+    <string name="permission_local_network">Συσκευές σε κοντινή απόσταση: το Clementine Remote εντοπίζει το Clementine στο τοπικό σας δίκτυο και επικοινωνεί μαζί του.</string>
+    <string name="permission_notifications">Ειδοποιήσεις: για τα χειριστήρια αναπαραγωγής και την πρόοδο των λήψεών σας.</string>
+    <string name="permission_phone">Τηλέφωνο: για τη μείωση της έντασης ήχου του Clementine κατά τις κλήσεις.</string>
+    <string name="permission_storage">Αποθηκευτικός χώρος: για την αποθήκευση των τραγουδιών που λαμβάνετε.</string>
+    <string name="not_local_network_title">Το Clementine αρνήθηκε τη σύνδεση</string>
+    <string name="not_local_network">Το Clementine δέχεται συνδέσεις μόνο από το τοπικό του δίκτυο. Για να συνδεθείτε από αλλού, απενεργοποιήστε την επιλογή «Να επιτρέπονται μόνο συνδέσεις από το τοπικό δίκτυο» στις ρυθμίσεις τηλεχειριστηρίου δικτύου του.</string>
+    <string name="too_many_wrong_auth_codes_title">Πάρα πολλοί λανθασμένοι κωδικοί πιστοποίησης</string>
+    <!-- The placeholder is how long Clementine said to wait before it checks another auth
+         code from this phone: "10 seconds", "1 minute", "3 minutes", "2 hours", or "a while" if it
+         didn't say. The iOS app shows the same sentence with the duration in iOS's own words,
+         which can't take another grammatical form, so write the sentence so the duration reads
+         right as it is. -->
+    <string name="too_many_wrong_auth_codes">Το Clementine δεν θα ελέγξει άλλον κωδικό πιστοποίησης από αυτό το τηλέφωνο για %s. Έπειτα, εισαγάγετε τον κωδικό που εμφανίζεται στις ρυθμίσεις τηλεχειριστηρίου δικτύου του.</string>
+    <!-- How long Clementine said to wait: the placeholder in too_many_wrong_auth_codes and
+         download_noti_too_many_wrong_auth_codes. Seconds under a minute; otherwise rounded up to
+         minutes, or to hours over an hour. Translate them as a plain duration: those sentences
+         are written so it reads right as it is, as the iOS app shows it in iOS's own words. -->
+    <plurals name="wait_seconds">
+        <item quantity="one">%d δευτερόλεπτο</item>
+        <item quantity="other">%d δευτερόλεπτα</item>
+    </plurals>
+    <plurals name="wait_minutes">
+        <item quantity="one">%d λεπτό</item>
+        <item quantity="other">%d λεπτά</item>
+    </plurals>
+    <plurals name="wait_hours">
+        <item quantity="one">%d ώρα</item>
+        <item quantity="other">%d ώρες</item>
+    </plurals>
+    <!-- Shown instead of a duration when Clementine doesn't say how long to wait, in the
+         sentences about too many wrong auth codes. -->
+    <string name="wait_a_while">λίγο</string>
+    <string name="local_network_on_link">Αυτή η διεύθυνση βρίσκεται στο δίκτυο στο οποίο είναι συνδεδεμένο αυτό το τηλέφωνο. Το Android επιτρέπει στο Clementine Remote να συνδεθεί σε αυτήν μόνο με την άδεια «Συσκευές σε κοντινή απόσταση». Μπορείτε να την παραχωρήσετε από τις ρυθμίσεις της εφαρμογής.</string>
+    <string name="open_settings">Άνοιγμα ρυθμίσεων</string>
+
+    <string name="notification_previous">Προηγούμενο</string>
     <string name="notification_play">Αναπαραγωγή</string>
     <string name="notification_pause">Παυση</string>
+    <string name="notification_next">Επόμενο</string>
     <string name="notification_disconnect_keep_alive">Χάθηκε η σύνδεση. Αγγίξτε για επανασύνδεση.</string>
 
     <string name="fragment_title_connection">Clementine</string>
@@ -185,7 +432,120 @@
     <string name="navigation_drawer_clementine_on">Clementine σε %s</string>
 
     <string name="player_download_what">Τι να κατεβάσω;</string>
+    <string name="player_download_what_song">Τραγούδι</string>
     <string name="player_download_what_album">Αλμπουμ</string>
+    <string name="player_download_what_playlist">Λίστα αναπαραγωγής</string>
+
+    <string name="cd_cover_image">Εικόνα εξωφύλλου άλμπουμ</string>
+    <string name="cd_cancel_download">Ακύρωση της λήψης</string>
+    <plurals name="song_info_stars">
+        <item quantity="one">%d αστέρι</item>
+        <item quantity="other">%d αστέρια</item>
+    </plurals>
+
+    <!-- Keeping music on the phone: synced from Clementine, kept up to date, and played without
+         it. The iOS app shows the same strings. -->
+    <!-- Music saved on the phone, as opposed to Clementine on the computer: the title of the tab's
+         screen, and where the music plays from. -->
+    <string name="sync_on_this_phone">Σε αυτό το τηλέφωνο</string>
+    <!-- The tab with the music saved on the phone, as opposed to Clementine on the computer. Keep it
+         short: it's a tab label, under an icon, beside four others. -->
+    <string name="sync_on_phone_tab">Στο τηλέφωνο</string>
+    <!-- The same tab on a tablet. Keep it short, as for "On phone". -->
+    <string name="sync_on_tablet_tab">Στο tablet</string>
+    <!-- On the connect screen, under "Or enter its address": instead of connecting, play the music
+         saved on the phone. -->
+    <string name="sync_connect_or_play">Ή αναπαραγάγετε τη μουσική αυτού του τηλεφώνου</string>
+    <!-- On the connect screen, under On this phone: how many songs are saved on the phone. -->
+    <plurals name="sync_connect_songs">
+        <item quantity="one">%d τραγούδι</item>
+        <item quantity="other">%d τραγούδια</item>
+    </plurals>
+    <!-- On the connect screen while it connects, under On this phone: tapping it stops connecting
+         to Clementine. The placeholder is how many songs are saved on the phone. -->
+    <plurals name="sync_connect_stops">
+        <item quantity="one">Διακοπή προσπάθειας σύνδεσης · %d τραγούδι</item>
+        <item quantity="other">Διακοπή προσπάθειας σύνδεσης · %d τραγούδια</item>
+    </plurals>
+    <!-- A button in the dialog when connecting fails, and a shortcut on the app's icon: play the
+         music saved on the phone instead of connecting. -->
+    <string name="sync_play_on_phone">Αναπαραγωγή σε αυτό το τηλέφωνο</string>
+    <!-- At the top of the player while it plays the music saved on the phone, where it otherwise
+         says which playlist Clementine plays from. -->
+    <string name="sync_playing_on_this_phone">Αναπαραγωγή σε αυτό το τηλέφωνο</string>
+    <!-- As "Playing on this phone", on a tablet. -->
+    <string name="sync_playing_on_this_tablet">Αναπαραγωγή σε αυτό το tablet</string>
+    <!-- As "On this phone", on a tablet: music saved on the tablet, as opposed to Clementine on the
+         computer. -->
+    <string name="sync_on_this_tablet">Σε αυτό το tablet</string>
+    <!-- Title of a sheet, and a button's label: choose where the music plays from, Clementine or
+         this phone. -->
+    <string name="sync_play_from">Αναπαραγωγή από</string>
+    <!-- In Play from, under Clementine or On this phone: it's playing the song the placeholder
+         names. -->
+    <string name="sync_play_from_playing">Αναπαραγωγή · %s</string>
+    <!-- In Play from, under Clementine or On this phone: it's paused on the song the placeholder
+         names. -->
+    <string name="sync_play_from_paused">Σε παύση · %s</string>
+    <!-- At the bottom of Play from. -->
+    <string name="sync_play_from_pauses">Κατά την αλλαγή, η αναπαραγωγή στην προηγούμενη πηγή τίθεται σε παύση.</string>
+    <!-- Banner: the app can't connect to Clementine on the computer. -->
+    <string name="sync_not_reachable">Δεν είναι δυνατή η επικοινωνία με το Clementine</string>
+    <!-- Banner, under "Clementine isn't reachable". -->
+    <string name="sync_playing_on_phone">Αναπαραγωγή της μουσικής αυτού του τηλεφώνου</string>
+    <!-- Saves the music on the phone and keeps it up to date. -->
+    <string name="sync_keep">Διατήρηση σε αυτό το τηλέφωνο</string>
+    <!-- Heading of the things you chose to keep on the phone. -->
+    <string name="sync_kept">Διατηρούνται σε αυτό το τηλέφωνο</string>
+    <!-- Shown for a moment after choosing Keep on this phone; the placeholder is an album, an
+         artist or a playlist. -->
+    <string name="sync_keeping">Διατήρηση στο τηλέφωνο: %s</string>
+    <!-- Something kept on the phone, while Clementine makes the list of its songs. -->
+    <string name="sync_preparing">Προετοιμασία…</string>
+    <!-- Something kept on the phone, while its songs download from Clementine: how many have, of
+         how many there are to download, such as "Downloading 12 of 140 songs…". -->
+    <plurals name="sync_downloading">
+        <item quantity="one">Λήψη %1$d από %2$d τραγούδι…</item>
+        <item quantity="other">Λήψη %1$d από %2$d τραγούδια…</item>
+    </plurals>
+    <!-- Something kept on the phone that hasn't synced yet, because Clementine isn't reachable. -->
+    <string name="sync_waiting">Αναμονή για το Clementine</string>
+    <!-- How often something kept on the phone is updated from Clementine, short: never, so it
+         keeps the songs it has. -->
+    <string name="sync_kept_as_it_is">Διατήρηση ως έχει</string>
+    <!-- How often something kept on the phone is updated from Clementine, short: each time the
+         phone connects to it. -->
+    <string name="sync_every_connect">Σε κάθε σύνδεση</string>
+    <!-- Heading in the Keep on this phone sheet, over how often what's kept is updated from
+         Clementine. -->
+    <string name="sync_update_it">Ενημέρωση</string>
+    <!-- A choice under Update it: what's kept is never updated from Clementine. -->
+    <string name="sync_refresh_never">Ποτέ</string>
+    <!-- Under Never, in the Keep on this phone sheet. -->
+    <string name="sync_refresh_never_detail">Διατήρηση των τραγουδιών που περιέχει τώρα</string>
+    <!-- A choice under Update it: what's kept is updated each time the phone connects to Clementine. -->
+    <string name="sync_refresh_on_connect">Σε κάθε σύνδεσή μου</string>
+    <!-- How much of something kept is on the phone: the number of songs, and their size, such as
+         "180 MB". -->
+    <plurals name="sync_songs_size">
+        <item quantity="one">%1$d τραγούδι, %2$s</item>
+        <item quantity="other">%1$d τραγούδια, %2$s</item>
+    </plurals>
+    <!-- Menu item: syncs what's kept on the phone with Clementine now. -->
+    <string name="sync_now">Συγχρονισμός τώρα</string>
+    <!-- Menu item on something kept on the phone; asks first. -->
+    <string name="sync_remove">Αφαίρεση από αυτό το τηλέφωνο…</string>
+    <!-- Asks before removing something kept on the phone; the placeholder is its name. -->
+    <string name="sync_remove_confirm">Να αφαιρεθεί το %s; Τα τραγούδια του θα διαγραφούν από αυτό το τηλέφωνο, εκτός αν περιλαμβάνονται και σε άλλο στοιχείο που διατηρείτε.</string>
+    <!-- The button that removes something kept on the phone, after asking. -->
+    <string name="sync_remove_button">Αφαίρεση</string>
+    <!-- Something kept on the phone that Clementine doesn't have any more, such as a deleted
+         playlist. Its songs stay on the phone. -->
+    <string name="sync_gone">Δεν υπάρχει πλέον στο Clementine</string>
+    <!-- Something kept on the phone whose sync was cut short, such as by losing the connection. -->
+    <string name="sync_failed">Δεν ήταν δυνατή η ολοκλήρωση του συγχρονισμού. Θα γίνει νέα προσπάθεια όταν συνδεθείτε.</string>
     <!-- Button: plays, on the phone, the songs of something kept on it, in order. -->
     <string name="sync_play">Αναπαραγωγή</string>
-    </resources>
+    <!-- Button: plays, on the phone, the songs of something kept on it, in random order. -->
+    <string name="sync_shuffle">Τυχαία αναπαραγωγή</string>
+</resources>
