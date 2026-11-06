@@ -200,6 +200,21 @@ public class DownloadStorageTest {
     }
 
     @Test
+    public void savesNothingOutsideTheDownloadLocation() {
+        ClementineSongDownloader downloader = new ClementineSongDownloader();
+        downloader.setCreateArtistDir(true);
+        downloader.setCreateAlbumDir(true);
+        downloader.setIsPlaylist(true, "...");
+        downloader.setCreatePlaylistDir(true);
+        assertEquals("", downloader.buildRelativeDir(chunk("..", "", " .. ")));
+
+        ResponseSongFileChunk chunk = ResponseSongFileChunk.newBuilder()
+                .setSongMetadata(SongMetadata.newBuilder().setFilename("..").setTitle("Aria"))
+                .build();
+        assertEquals("Aria", ClementineSongDownloader.buildFileName(chunk));
+    }
+
+    @Test
     public void unknownFileTypesAreSavedAsAudio() {
         assertEquals("audio/mpeg", MediaStoreDownloadStorage.mimeType("song"));
         assertEquals("audio/mpeg", MediaStoreDownloadStorage.mimeType("song.txt"));
