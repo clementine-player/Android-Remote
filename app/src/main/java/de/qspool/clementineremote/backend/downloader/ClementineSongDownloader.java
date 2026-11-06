@@ -401,14 +401,25 @@ public class ClementineSongDownloader extends
     }
 
     private static void appendDir(StringBuilder sb, String name) {
-        String dir = Utilities.removeInvalidFileCharacters(name).trim();
+        String dir = safeName(name).trim();
         if (!dir.isEmpty()) {
             sb.append(dir).append('/');
         }
     }
 
+    /** The song's file name, or its title if that leaves nothing. */
     static String buildFileName(ResponseSongFileChunk chunk) {
-        return Utilities.removeInvalidFileCharacters(chunk.getSongMetadata().getFilename());
+        String name = safeName(chunk.getSongMetadata().getFilename());
+        return name.isEmpty() ? safeName(chunk.getSongMetadata().getTitle()) : name;
+    }
+
+    /**
+     * [name] without the characters file names can't have. A name of only dots, such as "..", is
+     * dropped too, so no song is saved outside the download location.
+     */
+    private static String safeName(String name) {
+        String safe = Utilities.removeInvalidFileCharacters(name);
+        return safe.trim().matches("\\.*") ? "" : safe;
     }
 
     public DownloadItem getItem() {
