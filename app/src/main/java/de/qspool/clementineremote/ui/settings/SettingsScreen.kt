@@ -34,6 +34,7 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import de.qspool.clementineremote.App
+import de.qspool.clementineremote.BuildConfig
 import de.qspool.clementineremote.R
 import de.qspool.clementineremote.SharedPreferencesKeys
 import de.qspool.clementineremote.backend.Clementine
@@ -147,6 +148,12 @@ private fun DownloadSettings(store: PreferenceStore, downloadVolumes: List<Downl
         R.string.pref_dl_network, R.string.pref_dl_network_summary,
         networks.map { stringResource(it.label) }, networks.map { it.value },
     )
+    if (BuildConfig.TESTING_FEATURES) {
+        booleanSetting(
+            store, SharedPreferencesKeys.SP_BACKGROUND_SYNC, true, R.string.pref_background_sync,
+            R.string.pref_background_sync_summary,
+        )
+    }
     // Android 10 and later save songs to the shared Music collection.
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         ActionSetting(

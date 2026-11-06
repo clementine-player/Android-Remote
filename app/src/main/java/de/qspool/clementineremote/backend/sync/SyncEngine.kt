@@ -58,7 +58,9 @@ sealed interface RuleResult {
  *
  * [supportedFormats] are what the phone plays, as for streaming, and [delete] removes a song
  * [storage] saved, by its URI. [onProgress] hears how many of a rule's songs to download have
- * been, before the first and after each one.
+ * been, before the first and after each one. Once [stopped] says so, as when Android ends a
+ * background sync, it downloads nothing more: the rule being synced fails, the rules after it
+ * aren't tried, and every song downloaded so far stays.
  */
 @WorkerThread
 class SyncEngine(
@@ -68,12 +70,14 @@ class SyncEngine(
     private val supportedFormats: List<AudioFormat>,
     private val now: () -> Long = System::currentTimeMillis,
     private val onProgress: (ruleId: Long, done: Int, total: Int) -> Unit = { _, _, _ -> },
+    private val stopped: () -> Boolean = { false },
 ) {
 
     fun sync(connection: SyncConnection): SyncResult {
         val serverId = connection.serverId
         val results = LinkedHashMap<Long, RuleResult>()
         for (rule in store.rules(serverId)) {
+            if (stopped()) break
             // A rule kept as it is has its songs once it has synced. The other policies refresh
             // on every sync for now; intervals and listening come later.
             if (rule.refreshPolicy == RefreshPolicy.NEVER && rule.lastSyncedAt > 0) continue
@@ -111,6 +115,7 @@ class SyncEngine(
         try {
             for ((item, have, changed) in wanted) {
                 if (changed) {
+                    if (stopped()) throw IOException("The sync was stopped")
                     download(connection, rule.serverId, item, have)
                     downloaded++
                     onProgress(rule.id, downloaded, total)

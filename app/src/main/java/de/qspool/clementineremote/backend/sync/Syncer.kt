@@ -41,7 +41,8 @@ data class SyncProgress(val done: Int, val total: Int)
 /**
  * Syncs the rules for the connected Clementine while the app is connected to it: once when it
  * connects, and when asked ([syncNow]), such as after a rule is made ([keep]) or removed
- * ([remove]), over the networks Download over allows. Background sync comes later.
+ * ([remove]), over the networks Download over allows. [SyncWorker] syncs in the background, over a
+ * connection of its own ([syncInBackground]).
  */
 object Syncer {
 
@@ -176,14 +177,36 @@ object Syncer {
         job = scope.launch {
             do {
                 synchronized(this@Syncer) { again = false }
-                runOnce(conn)
+                val syncing = RemoteRepository.syncing.value
+                if (syncing.available) {
+                    runOnce(
+                        ClementineSyncConnection(
+                            syncing.serverId, RemoteRepository::send, RemoteRepository.syncManifests,
+                            conn::getServerAddress,
+                        )
+                    )
+                }
             } while (synchronized(this@Syncer) { again })
         }
     }
 
-    private fun runOnce(connection: ClementinePlayerConnection) {
-        val syncing = RemoteRepository.syncing.value
-        if (!syncing.available) return
+    /**
+     * Syncs over [connection], a background sync's own connection, unless a sync is running
+     * already, and returns whether it did. Once [stopped] says so, it downloads nothing more. A
+     * sync asked for meanwhile, such as by the app connecting, runs after it.
+     */
+    suspend fun syncInBackground(connection: SyncConnection, stopped: () -> Boolean): Boolean {
+        val started = synchronized(this) {
+            if (job?.isActive == true) return false
+            again = false
+            scope.launch { runOnce(connection, stopped) }.also { job = it }
+        }
+        started.join()
+        if (synchronized(this) { again }) syncNow()
+        return true
+    }
+
+    private fun runOnce(connection: SyncConnection, stopped: () -> Boolean = { false }) {
         if (!DownloadNetwork.chosen(App.getPreferences()).allowsCurrentNetwork(context)) {
             _status.value = _status.value.copy(networkNotAllowed = true)
             return
@@ -206,14 +229,10 @@ object Syncer {
                     SyncNotification.show(context, it.rule.title, done, total)
                 }
             },
+            stopped = stopped,
         )
         try {
-            val result = engine.sync(
-                ClementineSyncConnection(
-                    syncing.serverId, RemoteRepository::send, RemoteRepository.syncManifests,
-                    connection::getServerAddress,
-                )
-            )
+            val result = engine.sync(connection)
             _status.value = _status.value.copy(running = false, results = result.rules)
         } catch (e: RuntimeException) {
             // The store or storage failing: try again next time rather than stop the app.
