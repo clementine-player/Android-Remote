@@ -520,6 +520,12 @@
     <!-- How often something kept on the phone is updated from Clementine, short: each time the
          phone connects to it. -->
     <string name="sync_every_connect">Every time you connect</string>
+    <!-- When something kept on the phone was last updated from Clementine. The placeholder is a
+         relative time, such as "2 hours ago" or "yesterday". iOS and Android write it in their own
+         words, so the sentence must read right with it as it is. -->
+    <string name="sync_updated">Updated %s</string>
+    <!-- When something kept on the phone was last updated from Clementine: less than a minute ago. -->
+    <string name="sync_updated_just_now">Updated just now</string>
     <!-- Heading in the Keep on this phone sheet, over how often what's kept is updated from
          Clementine. -->
     <string name="sync_update_it">Update it</string>

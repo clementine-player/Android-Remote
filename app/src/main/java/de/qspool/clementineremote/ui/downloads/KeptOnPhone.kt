@@ -1,5 +1,6 @@
 package de.qspool.clementineremote.ui.downloads
 
+import android.text.format.DateUtils
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -163,9 +164,12 @@ private fun KeptRow(
     }
 }
 
-/** How a rule stands: why it didn't sync, or what it keeps. */
+/**
+ * How a rule stands: why it didn't sync, or what it keeps and, for a rule that's updated, when it
+ * last was, as of [now].
+ */
 @Composable
-internal fun keptDetails(kept: KeptRule, running: Boolean): String = when (val result = kept.result) {
+internal fun keptDetails(kept: KeptRule, running: Boolean, now: Long = System.currentTimeMillis()): String = when (val result = kept.result) {
     is RuleResult.NeedsSetup -> result.message
     RuleResult.Gone -> stringResource(R.string.sync_gone)
     is RuleResult.Failed -> stringResource(R.string.sync_failed)
@@ -174,13 +178,26 @@ internal fun keptDetails(kept: KeptRule, running: Boolean): String = when (val r
             pluralStringResource(R.plurals.sync_downloading, kept.downloading.total, kept.downloading.done, kept.downloading.total)
         kept.songs == 0 && result == null && running -> stringResource(R.string.sync_preparing)
         kept.songs == 0 && result == null -> stringResource(R.string.sync_waiting)
-        else -> listOf(
+        else -> listOfNotNull(
             stringResource(
                 if (kept.rule.refreshPolicy == RefreshPolicy.NEVER) R.string.sync_kept_as_it_is else R.string.sync_every_connect
             ),
+            if (kept.rule.refreshPolicy != RefreshPolicy.NEVER && kept.rule.lastSyncedAt > 0) {
+                updated(kept.rule.lastSyncedAt, now)
+            } else {
+                null
+            },
             pluralStringResource(R.plurals.sync_songs_size, kept.songs, kept.songs, Utilities.humanReadableBytes(kept.bytes, true)),
         ).joinToString(" · ")
     }
+}
+
+/** "Updated 2 hours ago", for a sync at [at] as of [now]. */
+@Composable
+private fun updated(at: Long, now: Long): String = if (now - at < DateUtils.MINUTE_IN_MILLIS) {
+    stringResource(R.string.sync_updated_just_now)
+} else {
+    stringResource(R.string.sync_updated, DateUtils.getRelativeTimeSpanString(at, now, DateUtils.MINUTE_IN_MILLIS))
 }
 
 private fun kindIcon(kind: SyncSourceKind): Int = when (kind) {
