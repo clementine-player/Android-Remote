@@ -1,8 +1,11 @@
 package de.qspool.clementineremote.ui.downloads
 
 import android.database.sqlite.SQLiteDatabase
+import android.text.format.DateUtils
 import android.net.Uri
 import android.os.Looper
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Text
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasText
@@ -131,6 +134,31 @@ class DownloadsScreenTest {
         compose.onNodeWithTag("keptRemoveConfirm").performClick()
 
         assertEquals(listOf(1L), removed)
+    }
+
+    @Test
+    fun saysWhenWhatsUpdatedLastWas() {
+        val now = 1_800_000_000_000L
+        val bytes = 290L shl 20
+        val size = Utilities.humanReadableBytes(bytes, true)
+        fun updated(id: Long, lastSyncedAt: Long, policy: RefreshPolicy = RefreshPolicy.ON_CONNECT) = KeptRule(
+            rule(id, "Rule $id", SyncSourceKind.SYNC_SOURCE_KIND_PLAYLIST).copy(refreshPolicy = policy, lastSyncedAt = lastSyncedAt),
+            5, bytes, RuleResult.Synced(5, 0, 0),
+        )
+        compose.setContent {
+            ClementineTheme(dynamicColor = false) {
+                Column {
+                    Text(keptDetails(updated(1, now - 2 * DateUtils.HOUR_IN_MILLIS), running = false, now = now))
+                    Text(keptDetails(updated(2, now - 20 * DateUtils.SECOND_IN_MILLIS), running = false, now = now))
+                    // Kept as it is: it isn't updated, so when it synced doesn't matter.
+                    Text(keptDetails(updated(3, now - DateUtils.HOUR_IN_MILLIS, RefreshPolicy.NEVER), running = false, now = now))
+                }
+            }
+        }
+
+        compose.onNodeWithText("Every time you connect · Updated 2 hours ago · 5 songs, $size").assertIsDisplayed()
+        compose.onNodeWithText("Every time you connect · Updated just now · 5 songs, $size").assertIsDisplayed()
+        compose.onNodeWithText("Kept as it is · 5 songs, $size").assertIsDisplayed()
     }
 
     @Test
