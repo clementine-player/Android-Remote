@@ -354,6 +354,30 @@ class SyncEngineTest {
     }
 
     @Test
+    fun aStoppedSyncDownloadsNothingMoreAndKeepsWhatItHas() {
+        var stop = false
+        engine = SyncEngine(
+            store, storage, storage::delete,
+            listOf(AudioFormat.newBuilder().setMimeType("audio/flac").build()),
+            onProgress = { _, done, _ -> if (done == 1) stop = true },
+            stopped = { stop },
+        )
+        val album = rule("library/album/Pixies/Doolittle")
+        val playlist = rule("playlist/1")
+        manifest("library/album/Pixies/Doolittle", song("a"), song("b", track = 2))
+        manifest("playlist/1", song("c"))
+
+        val result = engine.sync(clementine)
+
+        // Stopped after the first song: the album keeps it, and the playlist isn't tried.
+        assertTrue(result.rules[album] is RuleResult.Failed)
+        assertNull(result.rules[playlist])
+        assertEquals(listOf("a"), store.ruleItems(album).map { it.itemKey })
+        assertEquals(listOf("/d/token/a-1"), clementine.opened)
+        assertEquals(0, result.removed)
+    }
+
+    @Test
     fun namesFilesForPeople() {
         val song = SongMetadata.newBuilder().setTitle("What/Ever?").setAlbumartist("A: B")
             .setArtist("Someone").setAlbum("").build()

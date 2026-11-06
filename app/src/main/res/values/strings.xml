@@ -305,6 +305,12 @@
     <string name="pref_dl_network_mobile_data">Wi-Fi and mobile data, not when roaming</string>
     <!-- A choice under Download over. -->
     <string name="pref_dl_network_any">Any network</string>
+    <!-- A switch, under Download over: lets the phone update what's kept on it from Clementine by
+         itself. -->
+    <string name="pref_background_sync">Update kept music in the background</string>
+    <!-- Under the switch above. "Every time I connect" is the choice in the Keep on this phone
+         sheet. -->
+    <string name="pref_background_sync_summary">While the phone is charging, on a network Download over allows, music set to Every time I connect is updated from the last Clementine you connected to, if it\'s on.</string>
     <string name="pref_dl_dir">Set download folder</string>
     <string name="pref_dl_volume">Save downloads to</string>
     <string name="pref_dl_volume_unavailable">Not available. Choose where to save downloads.</string>

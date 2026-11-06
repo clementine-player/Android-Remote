@@ -24,13 +24,21 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.StrictMode;
 
+import androidx.annotation.NonNull;
+import androidx.work.Configuration;
+
 import de.qspool.clementineremote.backend.Clementine;
 import de.qspool.clementineremote.backend.ClementinePlayerConnection;
 import de.qspool.clementineremote.backend.downloader.DownloadManager;
+import de.qspool.clementineremote.backend.sync.BackgroundSync;
 import de.qspool.clementineremote.widget.ClementineWidget;
 import de.qspool.clementineremote.utils.StrictModePolicies;
 
-public class App extends Application {
+/**
+ * The app. It sets WorkManager up when it's first used, rather than at startup, so that it's
+ * there wherever the app runs, as in tests.
+ */
+public class App extends Application implements Configuration.Provider {
 
     public static ClementinePlayerConnection ClementineConnection = null;
 
@@ -62,6 +70,14 @@ public class App extends Application {
         DownloadManager.getInstance(this);
 
         ClementineWidget.publishPreview(this);
+
+        BackgroundSync.start(this);
+    }
+
+    @NonNull
+    @Override
+    public Configuration getWorkManagerConfiguration() {
+        return new Configuration.Builder().build();
     }
 
     private void createNotificationChannel() {

@@ -92,4 +92,7 @@ public class SharedPreferencesKeys {
 
     /** The server_id of the Clementine last connected that syncs, whose rules show offline. */
     public final static String SP_SYNC_SERVER_ID = "sync_server_id";
+
+    /** Whether what's kept on the phone is updated in the background (BackgroundSync). */
+    public final static String SP_BACKGROUND_SYNC = "pref_background_sync";
 }
