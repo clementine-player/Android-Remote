@@ -1,7 +1,9 @@
 package de.qspool.clementineremote.backend.sync
 
+import android.content.Context
 import de.qspool.clementineremote.backend.downloader.DownloadStorage
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata
+import java.io.File
 
 /** Where synced songs go, under the download location: Synced/<artist>/<album>/<track> <title>. */
 object SyncFiles {
@@ -16,6 +18,20 @@ object SyncFiles {
     fun relativeDir(song: SongMetadata): String {
         val artist = song.albumartist.ifBlank { song.artist }
         return DIR + part(artist, "Unknown artist") + "/" + part(song.album, "Unknown album") + "/"
+    }
+
+    /** The app's own folder of synced covers, apart from the songs: they aren't music. */
+    fun coversDir(context: Context) = File(context.filesDir, "covers")
+
+    /**
+     * Where the cover with [key] goes in [covers]; null for a key that isn't a hash, so it can't
+     * name a file somewhere else.
+     */
+    fun artFile(covers: File, key: String): File? {
+        if (key.isEmpty() || key.length > 128 || !key.all { it in '0'..'9' || it in 'a'..'f' || it in 'A'..'F' }) {
+            return null
+        }
+        return File(covers, key.lowercase())
     }
 
     fun fileName(song: SongMetadata, mimeType: String): String {

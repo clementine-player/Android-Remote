@@ -131,7 +131,10 @@ object Syncer {
     /** The songs of [ruleId] on this phone, in its order. Reads the disk. */
     @JvmStatic
     @WorkerThread
-    fun songs(ruleId: Long): List<KeptSong> = store(context).ruleItems(ruleId).map(KeptSong::of)
+    fun songs(ruleId: Long): List<KeptSong> {
+        val covers = SyncFiles.coversDir(context)
+        return store(context).ruleItems(ruleId).map { KeptSong.of(it, covers) }
+    }
 
     /**
      * Keeps [rules] on the phone, for the Clementine connected, and syncs them. A rule for a
@@ -218,7 +221,7 @@ object Syncer {
         }
         _status.value = _status.value.copy(running = true, unavailable = false, networkNotAllowed = false)
         val engine = SyncEngine(
-            store(context), storage,
+            store(context), storage, SyncFiles.coversDir(context),
             delete = { uri: Uri -> context.contentResolver.delete(uri, null, null) },
             supportedFormats = ThisRenderer.capabilities(context).formatsList,
             onProgress = { ruleId, done, total ->

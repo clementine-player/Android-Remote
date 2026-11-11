@@ -10,9 +10,11 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Requ
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSyncManifest
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncItem
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncManifestState
+import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
+import java.util.UUID
 
 /** How the engine talks to the Clementine it syncs with, while connected to it. */
 @WorkerThread
@@ -24,7 +26,7 @@ interface SyncConnection {
     @Throws(IOException::class)
     fun manifest(request: RequestSyncManifest): ResponseSyncManifest
 
-    /** Opens a path Clementine gave, such as a song's /d/ URL, on its HTTP server. */
+    /** Opens a path Clementine gave, such as a song's /d/ or cover's /a/ URL, on its HTTP server. */
     @Throws(IOException::class)
     fun open(path: String): InputStream
 }
@@ -52,9 +54,9 @@ sealed interface RuleResult {
 
 /**
  * Brings what's on the phone in line with the rules for one Clementine: asks for each rule's
- * manifest, downloads the songs that are new or changed into [storage] (Music/Clementine/Synced/),
- * and deletes the songs that no rule wants any more. A song in several rules is downloaded once.
- * Covers and conversions come later.
+ * manifest, downloads the songs that are new or changed into [storage] (Music/Clementine/Synced/)
+ * with their covers into [covers], and deletes the songs that no rule wants any more. A song in
+ * several rules is downloaded once, and a cover many songs share is too. Conversions come later.
  *
  * [supportedFormats] are what the phone plays, as for streaming, and [delete] removes a song
  * [storage] saved, by its URI. [onProgress] hears how many of a rule's songs to download have
@@ -66,6 +68,7 @@ sealed interface RuleResult {
 class SyncEngine(
     private val store: SyncStore,
     private val storage: DownloadStorage,
+    private val covers: File,
     private val delete: (Uri) -> Unit,
     private val supportedFormats: List<AudioFormat>,
     private val now: () -> Long = System::currentTimeMillis,
@@ -119,6 +122,9 @@ class SyncEngine(
                     download(connection, rule.serverId, item, have)
                     downloaded++
                     onProgress(rule.id, downloaded, total)
+                } else if (have != null && have.artKey != item.artKey()) {
+                    // The same song with another cover, or one kept before covers were.
+                    store.putItem(have.copy(artKey = art(connection, item)))
                 }
                 keys += item.itemKey
             }
@@ -187,14 +193,44 @@ class SyncEngine(
                 mimeType = item.mimeType,
                 sizeBytes = item.sizeBytes,
                 delivery = item.delivery,
-                artKey = null,
+                artKey = art(connection, item),
                 metadata = song.toByteArray(),
                 pinned = have?.pinned ?: false,
                 addedAt = have?.addedAt ?: now(),
             )
         )
     }
+
+    /**
+     * The key of [item]'s cover, downloading it if the phone doesn't have it yet; null if it has
+     * none, or it couldn't be downloaded, so it's tried again next time. A song without a cover of
+     * its own from Clementine shows the one in its file, if any.
+     */
+    private fun art(connection: SyncConnection, item: SyncItem): String? {
+        val key = item.artKey() ?: return null
+        val file = SyncFiles.artFile(covers, key) ?: return null
+        if (store.art(key) != null) return key
+
+        // Downloaded beside it first, so a download cut short leaves no half a cover.
+        val partial = File(covers, ".${UUID.randomUUID()}.part")
+        return try {
+            covers.mkdirs()
+            connection.open(item.art.url).use { input ->
+                partial.outputStream().use { input.copyTo(it) }
+            }
+            if (!partial.renameTo(file)) throw IOException("Couldn't save the cover $key")
+            store.putArt(SyncedArt(key, Uri.fromFile(file).toString(), file.length()))
+            key
+        } catch (e: IOException) {
+            Log.w(TAG, "Couldn't download the cover of ${item.itemKey}", e)
+            partial.delete()
+            null
+        }
+    }
 }
+
+/** The key of the cover Clementine sent with the song, or null if it sent none. */
+private fun SyncItem.artKey(): String? = if (hasArt() && art.key.isNotEmpty()) art.key else null
 
 /** Copies [input] to [output], timing the reads (the network) and the writes (MediaStore). */
 private fun copy(input: InputStream, output: OutputStream, timing: DownloadTiming) {
@@ -274,6 +310,10 @@ fun removeUnwanted(store: SyncStore, serverId: String, delete: (Uri) -> Unit): I
         }
         store.removeItem(serverId, item.itemKey)
         removed++
+    }
+    for (art in store.unusedArt()) {
+        Uri.parse(art.uri).path?.let { File(it).delete() }
+        store.removeArt(art.artKey)
     }
     return removed
 }
