@@ -2,6 +2,7 @@ package de.qspool.clementineremote.backend.sync
 
 import android.content.ComponentName
 import android.content.Context
+import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import androidx.core.content.ContextCompat
@@ -21,6 +22,8 @@ import de.qspool.clementineremote.backend.RemoteRepository.NowPlaying
 import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType
 import de.qspool.clementineremote.backend.player.MySong
+import java.io.File
+import java.io.IOException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -55,6 +58,10 @@ object PhonePlayer {
 
     /** The songs being played, by item key, for what the player shows of them. */
     private var songs: Map<String, KeptSong> = emptyMap()
+
+    /** The last cover read, so it isn't read again on every update. */
+    private var coverUri: Uri? = null
+    private var coverData: ByteArray? = null
 
     private val _playFrom = MutableStateFlow(PlayFrom.CLEMENTINE)
 
@@ -185,13 +192,13 @@ object PhonePlayer {
 
     private fun nowPlaying(player: Player, itemKey: String): NowPlaying {
         // What the song was kept as, with what that doesn't say from the file's tags, which come
-        // in once the file is read; and the cover in the file, if it has one.
+        // in once the file is read; and the cover Clementine sent, or else the one in the file.
         val metadata = player.mediaMetadata
         val kept = songs[itemKey]
         val title = metadata.title?.toString() ?: kept?.title.orEmpty()
         val artist = metadata.artist?.toString() ?: kept?.artist.orEmpty()
         val album = metadata.albumTitle?.toString() ?: kept?.album.orEmpty()
-        val art = metadata.artworkData
+        val art = kept?.art?.let(::cover) ?: metadata.artworkData
         val known = song?.takeIf {
             it.filename == itemKey && it.title == title && it.artist == artist && it.album == album &&
                 (art == null || it.artData != null)
@@ -227,6 +234,19 @@ object PhonePlayer {
                 else -> Clementine.RepeatMode.OFF
             },
         )
+    }
+
+    /** The cover at [uri], a file of the app's; read once for each song played. */
+    private fun cover(uri: Uri): ByteArray? {
+        if (uri != coverUri) {
+            coverUri = uri
+            coverData = try {
+                uri.path?.let { File(it).readBytes() }
+            } catch (e: IOException) {
+                null
+            }
+        }
+        return coverData
     }
 
     private fun withController(context: Context, use: (MediaController) -> Unit) {
@@ -266,6 +286,8 @@ object PhonePlayer {
                 .setTitle(song.title.ifEmpty { null })
                 .setArtist(song.artist.ifEmpty { null })
                 .setAlbumTitle(song.album.ifEmpty { null })
+                // For the notification and lock screen.
+                .setArtworkUri(song.art)
                 .setIsPlayable(true)
                 .setIsBrowsable(false)
                 .build()

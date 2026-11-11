@@ -3,9 +3,10 @@ package de.qspool.clementineremote.backend.sync
 import android.net.Uri
 import com.google.protobuf.InvalidProtocolBufferException
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata
+import java.io.File
 
 /** A song kept on this phone, to show and play. */
-data class KeptSong(
+data class KeptSong @JvmOverloads constructor(
     val itemKey: String,
     val title: String,
     val artist: String,
@@ -13,10 +14,15 @@ data class KeptSong(
     /** As Clementine writes it, such as "5:36"; empty if it didn't say. */
     val length: String,
     val uri: Uri,
+    /** The cover Clementine sent with the song, if it did; otherwise the one in its file shows. */
+    val art: Uri? = null,
 ) {
     companion object {
-        /** [item] as its tags have it; a song without a title is named after its file. */
-        fun of(item: SyncedItem): KeptSong {
+        /**
+         * [item] as its tags have it, with its cover in [covers]; a song without a title is named
+         * after its file.
+         */
+        fun of(item: SyncedItem, covers: File): KeptSong {
             val song = try {
                 SongMetadata.parseFrom(item.metadata)
             } catch (e: InvalidProtocolBufferException) {
@@ -30,6 +36,7 @@ data class KeptSong(
                 album = song.album,
                 length = song.prettyLength,
                 uri = uri,
+                art = item.artKey?.let { SyncFiles.artFile(covers, it) }?.let(Uri::fromFile),
             )
         }
     }

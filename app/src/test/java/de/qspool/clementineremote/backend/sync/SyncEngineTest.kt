@@ -8,22 +8,27 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Audi
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestSyncManifest
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSyncManifest
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncArt
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncDelivery
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncSourceKind
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncItem
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncManifestState
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -91,13 +96,16 @@ class SyncEngineTest {
     private lateinit var store: SyncStore
     private val storage = FakeStorage()
     private val clementine = FakeClementine()
+
+    @get:Rule
+    val covers = TemporaryFolder()
     private lateinit var engine: SyncEngine
 
     @Before
     fun setUp() {
         store = SyncStore(RuntimeEnvironment.getApplication(), name = null)
         engine = SyncEngine(
-            store, storage, storage::delete,
+            store, storage, covers.root, storage::delete,
             listOf(AudioFormat.newBuilder().setMimeType("audio/flac").build()),
             now = { 1_700_000_000_000 },
         )
@@ -200,7 +208,7 @@ class SyncEngineTest {
     fun saysHowManySongsItHasDownloaded() {
         val progress = ArrayList<Triple<Long, Int, Int>>()
         engine = SyncEngine(
-            store, storage, storage::delete,
+            store, storage, covers.root, storage::delete,
             listOf(AudioFormat.newBuilder().setMimeType("audio/flac").build()),
             onProgress = { ruleId, done, total -> progress += Triple(ruleId, done, total) },
         )
@@ -357,7 +365,7 @@ class SyncEngineTest {
     fun aStoppedSyncDownloadsNothingMoreAndKeepsWhatItHas() {
         var stop = false
         engine = SyncEngine(
-            store, storage, storage::delete,
+            store, storage, covers.root, storage::delete,
             listOf(AudioFormat.newBuilder().setMimeType("audio/flac").build()),
             onProgress = { _, done, _ -> if (done == 1) stop = true },
             stopped = { stop },
@@ -375,6 +383,80 @@ class SyncEngineTest {
         assertEquals(listOf("a"), store.ruleItems(album).map { it.itemKey })
         assertEquals(listOf("/d/token/a-1"), clementine.opened)
         assertEquals(0, result.removed)
+    }
+
+    /** [item] with the cover [key], which Clementine serves. */
+    private fun withArt(item: SyncItem, key: String): SyncItem {
+        val url = "/a/token/$key"
+        clementine.files[url] = "cover $key".toByteArray()
+        return item.toBuilder().setArt(SyncArt.newBuilder().setKey(key).setUrl(url)).build()
+    }
+
+    private fun cover(key: String) = File(covers.root, key)
+
+    @Test
+    fun downloadsEachCoverOnce() {
+        rule("smart/library/0b6e")
+        manifest("smart/library/0b6e", withArt(song("a"), "c0ffee"), withArt(song("b"), "c0ffee"), song("c"))
+        engine.sync(clementine)
+
+        assertEquals(listOf("/a/token/c0ffee"), clementine.opened.filter { it.startsWith("/a/") })
+        assertEquals("c0ffee", store.item(SERVER, "a")!!.artKey)
+        assertEquals("c0ffee", store.item(SERVER, "b")!!.artKey)
+        assertNull(store.item(SERVER, "c")!!.artKey)
+        assertEquals(Uri.fromFile(cover("c0ffee")).toString(), store.art("c0ffee")!!.uri)
+        assertEquals("cover c0ffee", cover("c0ffee").readText())
+        // Not with the songs: covers aren't music.
+        assertEquals(3, storage.files.size)
+
+        assertEquals(Uri.fromFile(cover("c0ffee")), KeptSong.of(store.item(SERVER, "a")!!, covers.root).art)
+    }
+
+    @Test
+    fun songsKeptBeforeTheirCoverGetIt() {
+        val playlist = rule("playlist/1")
+        manifest("playlist/1", song("a"))
+        engine.sync(clementine)
+
+        // The same song, now with a cover: only the cover's downloaded.
+        manifest("playlist/1", withArt(song("a"), "beef"))
+        clementine.opened.clear()
+        val result = engine.sync(clementine)
+        assertEquals(listOf("/a/token/beef"), clementine.opened)
+        assertEquals(RuleResult.Synced(songs = 1, downloaded = 0, skipped = 0), result.rules[playlist])
+        assertEquals("beef", store.item(SERVER, "a")!!.artKey)
+    }
+
+    @Test
+    fun aCoverThatCantBeDownloadedIsTriedAgain() {
+        val playlist = rule("playlist/1")
+        val item = withArt(song("a"), "beef")
+        clementine.files.remove(item.art.url)
+        manifest("playlist/1", item)
+        val result = engine.sync(clementine)
+        // The song's kept all the same.
+        assertEquals(RuleResult.Synced(songs = 1, downloaded = 1, skipped = 0), result.rules[playlist])
+        assertNull(store.item(SERVER, "a")!!.artKey)
+
+        clementine.files[item.art.url] = "cover beef".toByteArray()
+        engine.sync(clementine)
+        assertEquals("beef", store.item(SERVER, "a")!!.artKey)
+    }
+
+    @Test
+    fun coversNoSongUsesAreDeleted() {
+        rule("playlist/1")
+        manifest("playlist/1", withArt(song("a"), "beef"), withArt(song("b"), "f00d"))
+        engine.sync(clementine)
+
+        // One song goes, and the other's cover changes.
+        manifest("playlist/1", withArt(song("b"), "cafe"))
+        engine.sync(clementine)
+        assertNull(store.art("beef"))
+        assertNull(store.art("f00d"))
+        assertFalse(cover("beef").exists())
+        assertFalse(cover("f00d").exists())
+        assertEquals("cover cafe", cover("cafe").readText())
     }
 
     @Test
