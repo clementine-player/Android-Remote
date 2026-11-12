@@ -31,7 +31,7 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
-      - uses: actions/checkout@v5.1.0
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
       - name: Install gh-actions-lock
