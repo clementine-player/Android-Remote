@@ -31,7 +31,7 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5.1.0
         with:
           persist-credentials: false
       - name: Install gh-actions-lock
@@ -47,7 +47,7 @@ jobs:
           cat actions-lock-fix.patch
       - name: Keep the fix
         if: failure()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: actions-lock-fix
           path: actions-lock-fix.patch

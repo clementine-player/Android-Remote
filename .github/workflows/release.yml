@@ -60,7 +60,7 @@ jobs:
     outputs:
       release: ${{ steps.plan.outputs.release }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5.1.0
         with:
           fetch-depth: 0
       - name: Plan the release
@@ -96,7 +96,7 @@ jobs:
       group: play
       cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5.1.0
         with:
           # All of master's history and tags: the notes and version come from them.
           fetch-depth: 0
@@ -160,7 +160,7 @@ jobs:
         if: >
           steps.setup.outputs.cloud == 'true' && steps.plan.outputs.again != 'true'
           && needs.screenshots.result == 'success'
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v8.0.2
         with:
           name: store-screenshots
           path: ${{ runner.temp }}/taken
@@ -207,12 +207,12 @@ jobs:
           git commit -q -m "Release $NAME" -m "$(cat "$NOTES/notes.md")"
           git show --stat HEAD
 
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@v5.7.0
         if: steps.setup.outputs.cloud == 'true'
         with:
           distribution: temurin
           java-version: 21
-      - uses: gradle/actions/setup-gradle@v5
+      - uses: gradle/actions/setup-gradle@v5.0.2
         if: steps.setup.outputs.cloud == 'true'
 
       - name: Build the unsigned APK and bundle
@@ -232,7 +232,7 @@ jobs:
           unzip -q "$RUNNER_TEMP/$zip" -d "$RUNNER_TEMP"
           echo "KMS_SIGNER=$RUNNER_TEMP/kms-signer-$KMS_SIGNER_VERSION/bin/kms-signer" >> "$GITHUB_ENV"
 
-      - uses: google-github-actions/auth@v3
+      - uses: google-github-actions/auth@v3.0.0
         if: steps.setup.outputs.cloud == 'true'
         id: auth
         with:
@@ -309,7 +309,7 @@ jobs:
         # Play may refuse to send changes for review itself (below).
         continue-on-error: true
         if: steps.setup.outputs.play == 'true'
-        uses: r0adkll/upload-google-play@v1
+        uses: r0adkll/upload-google-play@v1.1.5
         with:
           # The federated credentials from the auth step, not a service account key.
           serviceAccountJson: ${{ steps.auth.outputs.credentials_file_path }}
@@ -326,7 +326,7 @@ jobs:
       # refuses to send them itself: commit them unsent, for someone to send there.
       - name: Upload to Google Play, without sending it for review
         if: steps.setup.outputs.play == 'true' && steps.upload.outcome == 'failure'
-        uses: r0adkll/upload-google-play@v1
+        uses: r0adkll/upload-google-play@v1.1.5
         with:
           # The federated credentials from the auth step, not a service account key.
           serviceAccountJson: ${{ steps.auth.outputs.credentials_file_path }}
