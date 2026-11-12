@@ -152,6 +152,9 @@
          right as it is. -->
     <string name="download_noti_too_many_wrong_auth_codes">Слишком много неверных кодов аутентификации. Clementine не будет проверять коды с этого телефона в течение %s.</string>
     <string name="download_noti_not_mounted">Устройство для хранения не найдено!</string>
+    <!-- A download didn't start, because Download over, in Settings, doesn't allow the network the
+         phone is on. -->
+    <string name="download_noti_network_not_allowed">В этой сети загрузки запрещены</string>
     <string name="download_noti_transcoding">Конвертация файлов</string>
     <string name="download_noti_transcoding_subtitle">Пожалуйста, подождите</string>
 
@@ -162,6 +165,9 @@
     <string name="library_no_search_results">По данному запросу песен не найдено!</string>
     <string name="library_sync_error">Не удалось синхронизировать фонотеку</string>
     <string name="library_title">Фонотека</string>
+    <!-- A folder at the top of the library holding Clementine's smart playlists, such as Newest
+         tracks, as Clementine's own library shows them. -->
+    <string name="library_smart_playlists">Умные плейлисты</string>
     <string name="library_sync_action">Синхронизировать фонотеку</string>
     <string name="library_add_to_playlist">Добавить в плейлист</string>
     <string name="library_add_to_queue">Добавить в очередь</string>
@@ -297,6 +303,22 @@
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Посетить страницу Clementine</string>
 
+    <!-- A setting: which networks songs download over, for downloads and for what's kept on this
+         phone. Its choices follow. -->
+    <string name="pref_dl_network">Загрузка завершена</string>
+    <!-- A choice under Download over. A metered Wi-Fi, such as another phone's hotspot, counts as
+         mobile data. -->
+    <string name="pref_dl_network_wifi_only">Только Wi-Fi</string>
+    <!-- A choice under Download over: Wi-Fi, and mobile data unless the phone is roaming. -->
+    <string name="pref_dl_network_mobile_data">Wi-Fi и мобильные данные, но не в роуминге</string>
+    <!-- A choice under Download over. -->
+    <string name="pref_dl_network_any">Любая сеть</string>
+    <!-- A switch, under Download over: lets the phone update what's kept on it from Clementine by
+         itself. -->
+    <string name="pref_background_sync">Обновлять сохранённую музыку в фоновом режиме</string>
+    <!-- Under the switch above. "Every time I connect" is the choice in the Keep on this phone
+         sheet. -->
+    <string name="pref_background_sync_summary">Пока телефон заряжается, в сети, разрешённой в настройке «Загрузка», музыка, для которой выбрано «При каждом подключении», обновляется из последнего Clementine, к которому вы подключались, если он включён.</string>
     <string name="pref_dl_dir">Задать папку для скачиваний</string>
     <string name="pref_dl_volume">Сохранять скачивания в</string>
     <string name="pref_dl_volume_unavailable">Недоступно. Выберите, куда сохранять скачивания.</string>
@@ -355,6 +377,8 @@
     <string name="input_auth_code">Код авторизации</string>
     <string name="done">Готово</string>
     <string name="unknown">Неизвестно</string>
+    <!-- In the library, the artist that albums by several artists (compilations) are listed under, as Clementine lists them. -->
+    <string name="various_artists">Разные исполнители</string>
     <plurals name="number_items">
         <item quantity="one">%d элемент</item>
         <item quantity="few">%d элемента</item>
@@ -454,6 +478,14 @@
     <!-- Music saved on the phone, as opposed to Clementine on the computer: the title of the tab's
          screen, and where the music plays from. -->
     <string name="sync_on_this_phone">На этом телефоне</string>
+    <!-- The tab with the music saved on the phone, as opposed to Clementine on the computer. Keep it
+         short: it's a tab label, under an icon, beside four others. -->
+    <string name="sync_on_phone_tab">На телефоне</string>
+    <!-- The same tab on a tablet. Keep it short, as for "On phone". -->
+    <string name="sync_on_tablet_tab">На планшете</string>
+    <!-- On the connect screen, under "Or enter its address": instead of connecting, play the music
+         saved on the phone. -->
+    <string name="sync_connect_or_play">Или воспроизводить то, что есть на этом телефоне</string>
     <!-- On the connect screen, under On this phone: how many songs are saved on the phone. -->
     <plurals name="sync_connect_songs">
         <item quantity="one">%d песня</item>
@@ -461,6 +493,103 @@
         <item quantity="many">%d песен</item>
         <item quantity="other">%d песен</item>
     </plurals>
+    <!-- On the connect screen while it connects, under On this phone: tapping it stops connecting
+         to Clementine. The placeholder is how many songs are saved on the phone. -->
+    <plurals name="sync_connect_stops">
+        <item quantity="one">Перестаёт подключаться · %d песня</item>
+        <item quantity="few">Перестаёт подключаться · %d песни</item>
+        <item quantity="many">Перестаёт подключаться · %d песен</item>
+        <item quantity="other">Перестаёт подключаться · %d песен</item>
+    </plurals>
+    <!-- A button in the dialog when connecting fails, and a shortcut on the app's icon: play the
+         music saved on the phone instead of connecting. -->
+    <string name="sync_play_on_phone">Играть на этом телефоне</string>
+    <!-- At the top of the player while it plays the music saved on the phone, where it otherwise
+         says which playlist Clementine plays from. -->
+    <string name="sync_playing_on_this_phone">Воспроизведение на этом телефоне</string>
+    <!-- As "Playing on this phone", on a tablet. -->
+    <string name="sync_playing_on_this_tablet">Воспроизведение на этом планшете</string>
+    <!-- As "On this phone", on a tablet: music saved on the tablet, as opposed to Clementine on the
+         computer. -->
+    <string name="sync_on_this_tablet">На этом планшете</string>
+    <!-- Title of a sheet, and a button's label: choose where the music plays from, Clementine or
+         this phone. -->
+    <string name="sync_play_from">Играть с</string>
+    <!-- In Play from, under Clementine or On this phone: it's playing the song the placeholder
+         names. -->
+    <string name="sync_play_from_playing">Играет · %s</string>
+    <!-- In Play from, under Clementine or On this phone: it's paused on the song the placeholder
+         names. -->
+    <string name="sync_play_from_paused">Приостановлено · %s</string>
+    <!-- At the bottom of Play from. -->
+    <string name="sync_play_from_pauses">При переключении покидаемое устройство ставится на паузу.</string>
+    <!-- Banner: the app can't connect to Clementine on the computer. -->
+    <string name="sync_not_reachable">Clementine недоступен</string>
+    <!-- Banner, under "Clementine isn't reachable". -->
+    <string name="sync_playing_on_phone">Воспроизведение того, что на этом телефоне</string>
+    <!-- Saves the music on the phone and keeps it up to date. -->
+    <string name="sync_keep">Хранить на этом телефоне</string>
+    <!-- Heading of the things you chose to keep on the phone. -->
+    <string name="sync_kept">Хранится на этом телефоне</string>
+    <!-- Shown for a moment after choosing Keep on this phone; the placeholder is an album, an
+         artist or a playlist. -->
+    <string name="sync_keeping">Хранение %s на этом телефоне</string>
+    <!-- Something kept on the phone, while Clementine makes the list of its songs. -->
+    <string name="sync_preparing">Подготовка…</string>
+    <!-- Something kept on the phone, while its songs download from Clementine: how many have, of
+         how many there are to download, such as "Downloading 12 of 140 songs…". -->
+    <plurals name="sync_downloading">
+        <item quantity="one">Загрузка %1$d из %2$d песни…</item>
+        <item quantity="few">Загрузка %1$d из %2$d песен…</item>
+        <item quantity="many">Загрузка %1$d из %2$d песен…</item>
+        <item quantity="other">Загрузка %1$d из %2$d песен…</item>
+    </plurals>
+    <!-- Something kept on the phone that hasn't synced yet, because Clementine isn't reachable. -->
+    <string name="sync_waiting">Ожидание Clementine</string>
+    <!-- How often something kept on the phone is updated from Clementine, short: never, so it
+         keeps the songs it has. -->
+    <string name="sync_kept_as_it_is">Оставлено как есть</string>
+    <!-- How often something kept on the phone is updated from Clementine, short: each time the
+         phone connects to it. -->
+    <string name="sync_every_connect">При каждом вашем подключении</string>
+    <!-- When something kept on the phone was last updated from Clementine. The placeholder is a
+         relative time, such as "2 hours ago" or "yesterday". iOS and Android write it in their own
+         words, so the sentence must read right with it as it is. -->
+    <string name="sync_updated">Обновлено %s</string>
+    <!-- When something kept on the phone was last updated from Clementine: less than a minute ago. -->
+    <string name="sync_updated_just_now">Обновлено только что</string>
+    <!-- Heading in the Keep on this phone sheet, over how often what's kept is updated from
+         Clementine. -->
+    <string name="sync_update_it">Обновить его</string>
+    <!-- A choice under Update it: what's kept is never updated from Clementine. -->
+    <string name="sync_refresh_never">Никогда</string>
+    <!-- Under Never, in the Keep on this phone sheet. -->
+    <string name="sync_refresh_never_detail">Хранить песни, которые есть сейчас</string>
+    <!-- A choice under Update it: what's kept is updated each time the phone connects to Clementine. -->
+    <string name="sync_refresh_on_connect">При каждом моём подключении</string>
+    <!-- How much of something kept is on the phone: the number of songs, and their size, such as
+         "180 MB". -->
+    <plurals name="sync_songs_size">
+        <item quantity="one">%1$d песня, %2$s</item>
+        <item quantity="few">%1$d песни, %2$s</item>
+        <item quantity="many">%1$d песен, %2$s</item>
+        <item quantity="other">%1$d песен, %2$s</item>
+    </plurals>
+    <!-- Menu item: syncs what's kept on the phone with Clementine now. -->
+    <string name="sync_now">Синхронизировать сейчас</string>
+    <!-- Menu item on something kept on the phone; asks first. -->
+    <string name="sync_remove">Удалить с этого телефона…</string>
+    <!-- Asks before removing something kept on the phone; the placeholder is its name. -->
+    <string name="sync_remove_confirm">Удалить %s\? Его песни будут удалены с этого телефона, если только они не входят в что-то другое, что вы храните.</string>
+    <!-- The button that removes something kept on the phone, after asking. -->
+    <string name="sync_remove_button">Удалить</string>
+    <!-- Something kept on the phone that Clementine doesn't have any more, such as a deleted
+         playlist. Its songs stay on the phone. -->
+    <string name="sync_gone">Больше нет в Clementine</string>
+    <!-- Something kept on the phone whose sync was cut short, such as by losing the connection. -->
+    <string name="sync_failed">Не удалось завершить синхронизацию. Она повторится при подключении.</string>
     <!-- Button: plays, on the phone, the songs of something kept on it, in order. -->
     <string name="sync_play">Играть</string>
-    </resources>
+    <!-- Button: plays, on the phone, the songs of something kept on it, in random order. -->
+    <string name="sync_shuffle">Перемешать</string>
+</resources>
