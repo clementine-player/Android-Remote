@@ -49,7 +49,7 @@ jobs:
       # A step's condition can't read secrets, so this says whether the R2 token is set.
       HAS_R2_TOKEN: ${{ secrets.R2_ACCESS_KEY_ID != '' }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5.1.0
 
       - name: Download the latest Clementine release
         run: |
@@ -58,9 +58,9 @@ jobs:
           gh release download "$tag" --repo clementine-player/Clementine \
             --pattern '*resolute_amd64.deb' --dir clementine-it
 
-      - uses: docker/setup-buildx-action@v3
+      - uses: docker/setup-buildx-action@v3.12.0
       - name: Build headless Clementine with the showcase library
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v6.19.2
         with:
           context: clementine-it
           tags: clementine-it
@@ -83,11 +83,11 @@ jobs:
           docker logs clementine
           exit 1
 
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@v5.7.0
         with:
           distribution: temurin
           java-version: 21
-      - uses: gradle/actions/setup-gradle@v5
+      - uses: gradle/actions/setup-gradle@v5.0.2
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -97,7 +97,7 @@ jobs:
       # A 1080x1920 phone: Google Play takes screenshots up to a 2:1 aspect ratio. The
       # emulator reaches the host's Clementine at 10.0.2.2. The APKs stay installed so the screenshots can be pulled, also after
       # a failure (with failure.png and failure.xml, the screen and its views).
-      - uses: reactivecircus/android-emulator-runner@v2
+      - uses: reactivecircus/android-emulator-runner@v2.38.0
         with:
           api-level: 36
           target: google_apis
@@ -112,7 +112,7 @@ jobs:
 
       # The player on a foldable, for pull requests: on its outer screen, its inner screen, and
       # half-open like a book (scripts/fold_screenshots.sh), with the store screenshots.
-      - uses: reactivecircus/android-emulator-runner@v2
+      - uses: reactivecircus/android-emulator-runner@v2.38.0
         if: github.event_name == 'pull_request'
         with:
           api-level: 36
@@ -124,7 +124,7 @@ jobs:
           disable-animations: true
           script: scripts/fold_screenshots.sh 10.0.2.2 screenshots
 
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@v7.0.2
         if: always()
         with:
           name: store-screenshots
