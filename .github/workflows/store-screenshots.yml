@@ -49,7 +49,7 @@ jobs:
       # A step's condition can't read secrets, so this says whether the R2 token is set.
       HAS_R2_TOKEN: ${{ secrets.R2_ACCESS_KEY_ID != '' }}
     steps:
-      - uses: actions/checkout@v5.1.0
+      - uses: actions/checkout@v7.0.1
 
       - name: Download the latest Clementine release
         run: |
@@ -58,9 +58,9 @@ jobs:
           gh release download "$tag" --repo clementine-player/Clementine \
             --pattern '*resolute_amd64.deb' --dir clementine-it
 
-      - uses: docker/setup-buildx-action@v3.12.0
+      - uses: docker/setup-buildx-action@v4.4.1
       - name: Build headless Clementine with the showcase library
-        uses: docker/build-push-action@v6.19.2
+        uses: docker/build-push-action@v7.4.0
         with:
           context: clementine-it
           tags: clementine-it
@@ -83,11 +83,11 @@ jobs:
           docker logs clementine
           exit 1
 
-      - uses: actions/setup-java@v5.7.0
+      - uses: actions/setup-java@v6.2.0
         with:
           distribution: temurin
           java-version: 21
-      - uses: gradle/actions/setup-gradle@v5.0.2
+      - uses: gradle/actions/setup-gradle@v6.4.1
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules

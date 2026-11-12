@@ -50,7 +50,7 @@ jobs:
     env:
       TX_TOKEN: ${{ secrets.TX_TOKEN }}
     steps:
-      - uses: actions/checkout@v5.1.0
+      - uses: actions/checkout@v7.0.1
       - name: Install the Transifex client
         if: env.TX_TOKEN != ''
         run: |
@@ -87,12 +87,12 @@ jobs:
         run: echo "::notice::The TX_TOKEN or TX_KEY secret isn't set, so no translations were pulled. See RELEASING.md."
       # Checked out with the deploy key, so the push below runs ci.yml on the new commit, as a
       # push with the workflow's own token wouldn't.
-      - uses: actions/checkout@v5.1.0
+      - uses: actions/checkout@v7.0.1
         if: env.TX_TOKEN != '' && env.HAS_TX_KEY == 'true'
         with:
           ref: master
           ssh-key: ${{ secrets.TX_KEY }}
-      - uses: astral-sh/setup-uv@v10.2.0
+      - uses: astral-sh/setup-uv@v10.3.3
         if: env.TX_TOKEN != '' && env.HAS_TX_KEY == 'true'
       - name: Install the Transifex client
         if: env.TX_TOKEN != '' && env.HAS_TX_KEY == 'true'
@@ -132,12 +132,12 @@ jobs:
           fi
       # A translation can break the build (a mistyped %1$s, say): lint catches it here, rather
       # than on master.
-      - uses: actions/setup-java@v5.7.0
+      - uses: actions/setup-java@v6.2.0
         if: steps.pull.outputs.changed
         with:
           distribution: temurin
           java-version: 21
-      - uses: gradle/actions/setup-gradle@v5.0.2
+      - uses: gradle/actions/setup-gradle@v6.4.1
         if: steps.pull.outputs.changed
       - name: Lint
         if: steps.pull.outputs.changed

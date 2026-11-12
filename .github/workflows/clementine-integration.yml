@@ -43,15 +43,15 @@ jobs:
     needs: release
     runs-on: ubuntu-26.04
     steps:
-      - uses: actions/checkout@v5.1.0
-      - uses: actions/checkout@v5.1.0
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/checkout@v7.0.1
         with:
           repository: clementine-player/Clementine
           ref: ${{ needs.release.outputs.tag }}
           path: clementine-src
           sparse-checkout: ext/libclementine-remote
       - run: sudo apt-get update && sudo apt-get install -y protobuf-compiler
-      - uses: astral-sh/setup-uv@v10.2.0
+      - uses: astral-sh/setup-uv@v10.3.3
       - run: >
           uv run scripts/check-proto-drift.py
           app/src/main/proto/remotecontrolmessages.proto
@@ -62,7 +62,7 @@ jobs:
     runs-on: ubuntu-26.04
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v5.1.0
+      - uses: actions/checkout@v7.0.1
       - name: Download Clementine ${{ needs.release.outputs.tag }}
         env:
           TAG: ${{ needs.release.outputs.tag }}
@@ -76,9 +76,9 @@ jobs:
           fi
           ls -l clementine-it/*.deb
 
-      - uses: docker/setup-buildx-action@v3.12.0
+      - uses: docker/setup-buildx-action@v4.4.1
       - name: Build headless Clementine
-        uses: docker/build-push-action@v6.19.2
+        uses: docker/build-push-action@v7.4.0
         with:
           context: clementine-it
           tags: clementine-it
@@ -100,11 +100,11 @@ jobs:
           docker logs clementine
           exit 1
 
-      - uses: actions/setup-java@v5.7.0
+      - uses: actions/setup-java@v6.2.0
         with:
           distribution: temurin
           java-version: 21
-      - uses: gradle/actions/setup-gradle@v5.0.2
+      - uses: gradle/actions/setup-gradle@v6.4.1
       - name: Integration tests
         run: >
           ./gradlew testFdroidDebugUnitTest --tests 'de.qspool.clementineremote.integration.*'

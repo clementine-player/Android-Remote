@@ -44,9 +44,9 @@ jobs:
   listing:
     runs-on: ubuntu-26.04
     steps:
-      - uses: actions/checkout@v5.1.0
+      - uses: actions/checkout@v7.0.1
       # The scripts' dependencies are in pyproject.toml and uv.lock.
-      - uses: astral-sh/setup-uv@v10.2.0
+      - uses: astral-sh/setup-uv@v10.3.3
 
       - name: Check the listing
         run: uv run scripts/play_listing.py --check
