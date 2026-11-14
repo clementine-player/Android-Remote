@@ -74,7 +74,7 @@
     <string name="downloads_playlist_favorite">Избранное</string>
     <string name="downloads_download">Скачать %1$s</string>
     <string name="downloaded_songs">Скачанные песни — нажмите для воспроизведения</string>
-    <string name="downloads_title">Скачивания</string>
+    <string name="downloads_title">Загрузки</string>
     <string name="downloads_free_space">%s свободно на этом телефоне</string>
     <string name="downloads_running">Скачивается</string>
     <string name="downloads_finished">Завершено</string>
@@ -117,7 +117,7 @@
     <string name="hint_outputs_title">Играть на этом устройстве</string>
     <string name="hint_outputs">Слушайте Clementine на этом устройстве или вернитесь к своему компьютеру с помощью этой кнопки.</string>
     <string name="pref_hints_reset">Показывать подсказки снова</string>
-    <string name="pref_hints_reset_summary">Снова объяснять возможности, как при первом использовании</string>
+    <string name="pref_hints_reset_summary">Снова объяснить возможности, как при первом использовании</string>
     <string name="pref_hints_reset_done">Подсказки будут снова показаны</string>
     <string name="pref_renderer">Разрешить проигрывание Clementine на этом телефоне</string>
     <string name="pref_renderer_summary">Clementine может отправлять сюда свою музыку, когда воспроизводит её на других устройствах</string>
@@ -245,7 +245,7 @@
 
     <string name="pref_cat_player">Плеер</string>
     <string name="pref_cat_library">Фонотека</string>
-    <string name="pref_cat_downloads">Скачивания</string>
+    <string name="pref_cat_downloads">Загрузки</string>
     <string name="pref_cat_advanced">Дополнительно</string>
     <string name="pref_cat_connection">Подключение</string>
     <string name="pref_cat_about">О программе</string>
@@ -286,7 +286,7 @@
     <string name="pref_port_summary">Текущий порт:</string>
     <string name="pref_port_error">Неверный порт!</string>
 
-    <string name="pref_wake_lock_title">Держать CPU включённым</string>
+    <string name="pref_wake_lock_title">Держать ЦП включённым</string>
     <string name="pref_wake_lock_summary">Включите, если приложение произвольно отключается в фоновом режиме. Может ускорить разряд батареи.\n    </string>
     <string name="pref_keep_screen_on_title">Держать экран включённым</string>
     <string name="pref_keep_screen_on_summary">Не давать экрану выключаться, пока Clementine Remote подключён к Clementine.\n    </string>
@@ -299,7 +299,7 @@
     <string name="pref_opensource_summary">Показать лицензии открытого программного обеспечения</string>
     <string name="pref_opensource">Лицензии открытого программного обеспечения</string>
     <string name="pref_about_title">О программе</string>
-    <string name="pref_about_summary">Люди, работающие над проектом</string>
+    <string name="pref_about_summary">Разработчики этого проекта</string>
     <string name="pref_clementine_title">Clementine</string>
     <string name="pref_clementine_summary">Посетить страницу Clementine</string>
 
@@ -327,9 +327,9 @@
     <string name="pref_dl_cat_folders">Папки</string>
     <string name="pref_dl_pl_save_own_dir_title">Сохранять композиции в папке плейлиста</string>
     <string name="pref_dl_pl_save_own_dir_summary">Создавать папку с именем плейлиста и сохранять дорожки в неё.</string>
-    <string name="pref_dl_pl_artist_dir_title">Создать подпапку с именем артиста</string>
+    <string name="pref_dl_pl_artist_dir_title">Создавать подпапку с именем артиста</string>
     <string name="pref_dl_pl_artist_dir_summary">Создавать подпапку с именем артиста для каждого трека.</string>
-    <string name="pref_dl_pl_album_dir_title">Создать подпапку с именем альбома</string>
+    <string name="pref_dl_pl_album_dir_title">Создавать подпапку с именем альбома</string>
     <string name="pref_dl_pl_album_dir_summary">Создавать подпапку с именем альбома внтури папки артиста для каждого трека.</string>
 
     <string name="file_dialog_set_dir">Выберите папку</string>
@@ -380,10 +380,10 @@
     <!-- In the library, the artist that albums by several artists (compilations) are listed under, as Clementine lists them. -->
     <string name="various_artists">Разные исполнители</string>
     <plurals name="number_items">
-        <item quantity="one">%d элемент</item>
-        <item quantity="few">%d элемента</item>
-        <item quantity="many">%d элементов</item>
-        <item quantity="other">%d элементов</item>
+        <item quantity="one">%d объект</item>
+        <item quantity="few">%d объекта</item>
+        <item quantity="many">%d объектов</item>
+        <item quantity="other">%d объектов</item>
     </plurals>
 
     <plurals name="songs_added">
