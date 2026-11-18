@@ -22,7 +22,8 @@ import android.net.Uri;
 import androidx.annotation.Nullable;
 
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.ClementineSimpleConnection;
@@ -81,7 +82,7 @@ public class ClementineSongDownloader extends
 
     private DownloadItem mItem;
 
-    private LinkedList<DownloadedSong> mDownloadedSongs = new LinkedList<>();
+    private List<DownloadedSong> mDownloadedSongs = new ArrayList<>();
 
     private int mTotalFileSize;
 
@@ -429,7 +430,7 @@ public class ClementineSongDownloader extends
     /**
      * Get the downloaded songs
      */
-    public LinkedList<DownloadedSong> getDownloadedSongs() {
+    public List<DownloadedSong> getDownloadedSongs() {
         return mDownloadedSongs;
     }
 

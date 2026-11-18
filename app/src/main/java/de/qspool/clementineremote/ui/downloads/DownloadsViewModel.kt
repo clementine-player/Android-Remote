@@ -33,7 +33,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.LinkedList
 
 /** A song downloaded, to play. */
 data class DownloadedSong(
@@ -232,7 +231,7 @@ class DownloadsViewModel(
         viewModelScope.launch {
             val urls = withContext(io) { library()?.use { DownloadSuggestions.urls(it, album) }.orEmpty() }
             if (urls.isNotEmpty()) {
-                startDownload(ClementineMessageFactory.buildDownloadSongsMessage(DownloadItem.Urls, LinkedList(urls)))
+                startDownload(ClementineMessageFactory.buildDownloadSongsMessage(DownloadItem.Urls, urls))
             }
         }
     }

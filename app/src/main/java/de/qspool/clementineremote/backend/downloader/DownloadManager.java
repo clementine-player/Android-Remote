@@ -37,8 +37,8 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import de.qspool.clementineremote.App;
@@ -288,7 +288,7 @@ public class DownloadManager {
      * from another thread while they finish.
      */
     public synchronized List<ClementineSongDownloader> getAllDownloaders() {
-        LinkedList<ClementineSongDownloader> downloaders = new LinkedList<>();
+        List<ClementineSongDownloader> downloaders = new ArrayList<>();
 
         for (int i = 0; i < mActiveDownloads.size(); ++i) {
             downloaders.add(mActiveDownloads.valueAt(i));

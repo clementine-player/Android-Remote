@@ -6,7 +6,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.qspool.clementineremote.R;
 
@@ -236,8 +237,8 @@ public abstract class DynamicSongQuery {
      *
      * @return The list of items
      */
-    public LinkedList<SongSelectItem> selectData() {
-        LinkedList<SongSelectItem> itemList = new LinkedList<>();
+    public List<SongSelectItem> selectData() {
+        List<SongSelectItem> itemList = new ArrayList<>();
 
         Cursor c = buildQuery();
 

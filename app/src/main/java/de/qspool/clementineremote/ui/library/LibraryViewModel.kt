@@ -56,7 +56,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.LinkedList
 
 /** Where the library is. */
 sealed interface LibraryStatus {
@@ -425,7 +424,7 @@ class LibraryViewModel(
             val urls = withContext(io) { urls() }
             if (urls.isNotEmpty()) {
                 DownloadManager.getInstance().addJob(
-                    ClementineMessageFactory.buildDownloadSongsMessage(DownloadItem.Urls, LinkedList(urls)))
+                    ClementineMessageFactory.buildDownloadSongsMessage(DownloadItem.Urls, urls))
             }
         }
     }

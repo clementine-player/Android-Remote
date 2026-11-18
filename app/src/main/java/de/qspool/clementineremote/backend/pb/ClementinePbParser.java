@@ -21,7 +21,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
 import android.util.Log;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import de.qspool.clementineremote.App;
@@ -269,7 +269,7 @@ public class ClementinePbParser {
         Playlist playlist = response.getRequestedPlaylist();
 
         List<SongMetadata> songs = response.getSongsList();
-        List<MySong> mySongs = new LinkedList<MySong>();
+        List<MySong> mySongs = new ArrayList<MySong>();
 
         // Clementine sends the songs in order, numbered by their place, except a song it can't
         // read (a missing file, say), which comes with no fields set: index 0, the first song's.

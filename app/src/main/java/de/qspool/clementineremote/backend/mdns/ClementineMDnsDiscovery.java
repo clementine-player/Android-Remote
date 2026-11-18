@@ -27,7 +27,7 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.net.Inet4Address;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -110,7 +110,7 @@ public class ClementineMDnsDiscovery {
     /**
      * Get the services on the network
      *
-     * @return A LinkedList of ServiceInfo with the services.
+     * @return A list of ServiceInfo with the services.
      */
     public List<ServiceInfo> getServices() {
         return mServices;
@@ -136,10 +136,10 @@ public class ClementineMDnsDiscovery {
     /**
      * Get the Hosts on the network
      *
-     * @return A LinkedList of Hosts found
+     * @return A list of Hosts found
      */
-    public LinkedList<String> getHosts() {
-        LinkedList<String> hosts = new LinkedList<String>();
+    public List<String> getHosts() {
+        List<String> hosts = new ArrayList<String>();
         for (ServiceInfo info : mServices) {
             hosts.add(info.getName());
         }
