@@ -2,8 +2,9 @@ package de.qspool.clementineremote.backend.pb;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.List;
 
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.AudioFormat;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.BrowseAddAction;
@@ -106,7 +107,7 @@ public class ClementineMessageFactoryTest {
 
     @Test
     public void insertUrls() throws Exception {
-        LinkedList<String> urls = new LinkedList<>(Arrays.asList("file:///a.mp3", "file:///b.mp3"));
+        List<String> urls = new ArrayList<>(Arrays.asList("file:///a.mp3", "file:///b.mp3"));
         Message parsed = roundTrip(ClementineMessageFactory.buildInsertUrl(2, urls));
         assertEquals(MsgType.INSERT_URLS, parsed.getType());
         assertEquals(2, parsed.getRequestInsertUrls().getPlaylistId());
@@ -119,7 +120,7 @@ public class ClementineMessageFactoryTest {
 
     @Test
     public void downloadSongs() throws Exception {
-        LinkedList<String> urls = new LinkedList<>(Arrays.asList("file:///a.mp3"));
+        List<String> urls = new ArrayList<>(Arrays.asList("file:///a.mp3"));
         Message parsed = roundTrip(ClementineMessageFactory
                 .buildDownloadSongsMessage(DownloadItem.Urls, 4, urls));
         assertEquals(MsgType.DOWNLOAD_SONGS, parsed.getType());

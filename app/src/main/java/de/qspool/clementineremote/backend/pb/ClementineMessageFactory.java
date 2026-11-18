@@ -17,7 +17,6 @@
 
 package de.qspool.clementineremote.backend.pb;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import de.qspool.clementineremote.App;
@@ -74,7 +73,7 @@ public class ClementineMessageFactory {
         return buildDownloadSongsMessage(downloadItem, playlistId, null);
     }
 
-    public static ClementineMessage buildDownloadSongsMessage(DownloadItem downloadItem, LinkedList<String> urls) {
+    public static ClementineMessage buildDownloadSongsMessage(DownloadItem downloadItem, List<String> urls) {
         return buildDownloadSongsMessage(downloadItem, -1, urls);
     }
 
@@ -83,7 +82,7 @@ public class ClementineMessageFactory {
      *
      * @return The built request
      */
-    public static ClementineMessage buildDownloadSongsMessage(DownloadItem downloadItem, int playlistId, LinkedList<String> urls) {
+    public static ClementineMessage buildDownloadSongsMessage(DownloadItem downloadItem, int playlistId, List<String> urls) {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.DOWNLOAD_SONGS);
         RequestDownloadSongs.Builder request = RequestDownloadSongs.newBuilder();
 
@@ -284,7 +283,7 @@ public class ClementineMessageFactory {
      * @param urls      The urls to the items
      * @return the Clementine Message
      */
-    public static ClementineMessage buildInsertUrl(int playistId, LinkedList<String> urls) {
+    public static ClementineMessage buildInsertUrl(int playistId, List<String> urls) {
         return buildInsertUrl(playistId, urls, false);
     }
 
@@ -296,7 +295,7 @@ public class ClementineMessageFactory {
      * @param playNow   Whether Clementine plays the first of them
      * @return the Clementine Message
      */
-    public static ClementineMessage buildInsertUrl(int playistId, LinkedList<String> urls,
+    public static ClementineMessage buildInsertUrl(int playistId, List<String> urls,
             boolean playNow) {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.INSERT_URLS);
 
@@ -313,13 +312,13 @@ public class ClementineMessageFactory {
     }
 
     public static ClementineMessage buildInsertSongs(int playistId,
-            LinkedList<ClementineRemoteProtocolBuffer.SongMetadata> songs) {
+            List<ClementineRemoteProtocolBuffer.SongMetadata> songs) {
         return buildInsertSongs(playistId, songs, false);
     }
 
     /** Inserts songs, described in full, into given playlist; with playNow, plays the first. */
     public static ClementineMessage buildInsertSongs(int playistId,
-            LinkedList<ClementineRemoteProtocolBuffer.SongMetadata> songs, boolean playNow) {
+            List<ClementineRemoteProtocolBuffer.SongMetadata> songs, boolean playNow) {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.INSERT_URLS);
 
         RequestInsertUrls.Builder insertSongs = RequestInsertUrls.newBuilder();
@@ -345,7 +344,7 @@ public class ClementineMessageFactory {
     }
 
     public static ClementineMessage buildRemoveMultipleSongsFromPlaylist(int playlistId,
-            LinkedList<MySong> songs) {
+            List<MySong> songs) {
         Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.REMOVE_SONGS);
 
         RequestRemoveSongs.Builder removeItems = RequestRemoveSongs.newBuilder();

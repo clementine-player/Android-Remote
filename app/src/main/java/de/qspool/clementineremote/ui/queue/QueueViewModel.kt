@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
-import java.util.LinkedList
 
 /** One of Clementine's playlists, to pick. */
 data class PlaylistTab(val id: Int, val name: String)
@@ -182,13 +181,13 @@ class QueueViewModel(
         val urls = songs.mapNotNull { it.url }
         if (urls.isNotEmpty()) {
             DownloadManager.getInstance().addJob(
-                ClementineMessageFactory.buildDownloadSongsMessage(DownloadItem.Urls, LinkedList(urls)))
+                ClementineMessageFactory.buildDownloadSongsMessage(DownloadItem.Urls, urls))
         }
     }
 
     fun remove(songs: Collection<MySong>) {
         val id = shownPlaylistId() ?: return
-        send(ClementineMessageFactory.buildRemoveMultipleSongsFromPlaylist(id, LinkedList(songs)))
+        send(ClementineMessageFactory.buildRemoveMultipleSongsFromPlaylist(id, songs.toList()))
     }
 
     fun downloadPlaylist() {

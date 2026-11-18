@@ -17,7 +17,8 @@
 
 package de.qspool.clementineremote.backend.globalsearch;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.AnyThread;
 import androidx.annotation.WorkerThread;
@@ -36,7 +37,7 @@ public class GlobalSearchManager {
     private GlobalSearchDatabaseHelper mGlobalSearchDatabaseHelper = new GlobalSearchDatabaseHelper(
             App.getApp());
 
-    private LinkedList<OnGlobalSearchResponseListener> mListeners = new LinkedList<>();
+    private List<OnGlobalSearchResponseListener> mListeners = new ArrayList<>();
 
     private GlobalSearchProviderIconStore mGlobalSearchProviderIconStore
             = new GlobalSearchProviderIconStore();

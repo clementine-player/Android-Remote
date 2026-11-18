@@ -20,8 +20,9 @@ package de.qspool.clementineremote.backend.player;
 import android.os.Message;
 import android.util.SparseArray;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
+import java.util.List;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.listener.OnPlaylistReceivedListener;
@@ -29,14 +30,14 @@ import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 
 public class PlaylistManager {
 
-    private LinkedList<OnPlaylistReceivedListener> listeners
-            = new LinkedList<OnPlaylistReceivedListener>();
+    private List<OnPlaylistReceivedListener> listeners
+            = new ArrayList<OnPlaylistReceivedListener>();
 
     private SparseArray<MyPlaylist> mPlaylists = new SparseArray<MyPlaylist>();
 
     private int mActivePlaylist;
 
-    private LinkedList<Integer> mPlaylistsToDownload = new LinkedList<Integer>();
+    private List<Integer> mPlaylistsToDownload = new ArrayList<Integer>();
 
     public boolean hasPlaylist(int id) {
         return mPlaylists.get(id) != null;
@@ -103,8 +104,8 @@ public class PlaylistManager {
         return mActivePlaylist;
     }
 
-    public LinkedList<MyPlaylist> getAllPlaylists() {
-        LinkedList<MyPlaylist> playlists = new LinkedList<MyPlaylist>();
+    public List<MyPlaylist> getAllPlaylists() {
+        List<MyPlaylist> playlists = new ArrayList<MyPlaylist>();
         for (int i = 0; i < mPlaylists.size(); ++i) {
             playlists.add(mPlaylists.valueAt(i));
         }

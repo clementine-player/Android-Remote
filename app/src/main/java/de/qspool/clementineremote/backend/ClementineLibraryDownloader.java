@@ -24,7 +24,8 @@ import android.database.sqlite.SQLiteException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.SharedPreferencesKeys;
@@ -52,8 +53,8 @@ public class ClementineLibraryDownloader extends
 
     private LibraryDatabaseHelper mLibrary;
 
-    private LinkedList<OnLibraryDownloadListener> listeners
-            = new LinkedList<>();
+    private List<OnLibraryDownloadListener> listeners
+            = new ArrayList<>();
 
     private int mTotalSize;
 

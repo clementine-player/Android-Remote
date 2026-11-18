@@ -26,8 +26,8 @@ import android.graphics.BitmapFactory;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import de.qspool.clementineremote.App;
@@ -72,7 +72,7 @@ public class MySong {
 
     private boolean loved;
 
-    private List<LyricsProvider> mLyricsProvider = new LinkedList<LyricsProvider>();
+    private List<LyricsProvider> mLyricsProvider = new ArrayList<LyricsProvider>();
 
     private String filename = "";
 

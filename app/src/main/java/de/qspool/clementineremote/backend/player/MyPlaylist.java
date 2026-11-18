@@ -17,8 +17,9 @@
 
 package de.qspool.clementineremote.backend.player;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Representation of a playlist
@@ -37,7 +38,7 @@ public class MyPlaylist {
      * Clementine's messages set the songs on the connection's thread while the screens read them on
      * the main thread, so the methods that touch them are synchronized.
      */
-    private final LinkedList<MySong> mPlaylistSongs = new LinkedList<MySong>();
+    private final List<MySong> mPlaylistSongs = new ArrayList<MySong>();
 
     private boolean mClosed;
 
@@ -78,8 +79,8 @@ public class MyPlaylist {
         this.mActive = mActive;
     }
 
-    public synchronized LinkedList<MySong> getPlaylistSongs() {
-        return new LinkedList<MySong>(mPlaylistSongs);
+    public synchronized List<MySong> getPlaylistSongs() {
+        return new ArrayList<MySong>(mPlaylistSongs);
     }
 
     public synchronized boolean hasSongs() {
