@@ -33,7 +33,11 @@ public class MyPlaylist {
 
     private boolean mActive;
 
-    private LinkedList<MySong> mPlaylistSongs = new LinkedList<MySong>();
+    /**
+     * Clementine's messages set the songs on the connection's thread while the screens read them on
+     * the main thread, so the methods that touch them are synchronized.
+     */
+    private final LinkedList<MySong> mPlaylistSongs = new LinkedList<MySong>();
 
     private boolean mClosed;
 
@@ -74,11 +78,11 @@ public class MyPlaylist {
         this.mActive = mActive;
     }
 
-    public LinkedList<MySong> getPlaylistSongs() {
+    public synchronized LinkedList<MySong> getPlaylistSongs() {
         return new LinkedList<MySong>(mPlaylistSongs);
     }
 
-    public boolean hasSongs() {
+    public synchronized boolean hasSongs() {
         return !mPlaylistSongs.isEmpty();
     }
 
@@ -88,7 +92,7 @@ public class MyPlaylist {
      *
      * @param songs The songs from the playlist
      */
-    public void setSongs(Collection<MySong> songs) {
+    public synchronized void setSongs(Collection<MySong> songs) {
         mPlaylistSongs.clear();
         mPlaylistSongs.addAll(songs);
     }
