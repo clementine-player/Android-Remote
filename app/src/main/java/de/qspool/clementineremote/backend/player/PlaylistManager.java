@@ -22,6 +22,7 @@ import android.util.SparseArray;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import de.qspool.clementineremote.App;
@@ -144,7 +145,7 @@ public class PlaylistManager {
                 mPlaylists.get(id).getPlaylistSongs());
         App.ClementineConnection.mHandler.sendMessage(msg);
 
-        mPlaylists.get(id).getPlaylistSongs().clear();
+        mPlaylists.get(id).setSongs(Collections.<MySong>emptyList());
     }
 
     public void addOnPlaylistReceivedListener(OnPlaylistReceivedListener l) {

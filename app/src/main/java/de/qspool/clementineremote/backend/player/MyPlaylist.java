@@ -19,6 +19,7 @@ package de.qspool.clementineremote.backend.player;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -79,8 +80,9 @@ public class MyPlaylist {
         this.mActive = mActive;
     }
 
+    /** The songs, as an unmodifiable copy. */
     public synchronized List<MySong> getPlaylistSongs() {
-        return new ArrayList<MySong>(mPlaylistSongs);
+        return Collections.unmodifiableList(new ArrayList<MySong>(mPlaylistSongs));
     }
 
     public synchronized boolean hasSongs() {

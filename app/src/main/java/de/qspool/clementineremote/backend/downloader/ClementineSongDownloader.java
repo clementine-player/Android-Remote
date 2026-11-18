@@ -23,6 +23,7 @@ import androidx.annotation.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.qspool.clementineremote.App;
@@ -82,7 +83,11 @@ public class ClementineSongDownloader extends
 
     private DownloadItem mItem;
 
-    private List<DownloadedSong> mDownloadedSongs = new ArrayList<>();
+    /**
+     * Added to on the download's thread while the Downloads tab reads it on the main thread, so
+     * the methods that touch it are synchronized.
+     */
+    private final List<DownloadedSong> mDownloadedSongs = new ArrayList<>();
 
     private int mTotalFileSize;
 
@@ -265,7 +270,7 @@ public class ClementineSongDownloader extends
 
                 // Have we downloaded all chunks?
                 if (chunk.getChunkCount() == chunk.getChunkNumber()) {
-                    mDownloadedSongs.add(new DownloadedSong(currentSong, pending.commit()));
+                    addDownloadedSong(new DownloadedSong(currentSong, pending.commit()));
                     pending = null;
                 }
 
@@ -331,7 +336,7 @@ public class ClementineSongDownloader extends
         // A refused song is listed with the downloaded ones, as it is already here. An
         // accepted one is listed once it is saved.
         if (!accept) {
-            mDownloadedSongs.add(new DownloadedSong(song, existing.uri));
+            addDownloadedSong(new DownloadedSong(song, existing.uri));
         }
 
         return accept;
@@ -427,11 +432,13 @@ public class ClementineSongDownloader extends
         return mItem;
     }
 
-    /**
-     * Get the downloaded songs
-     */
-    public List<DownloadedSong> getDownloadedSongs() {
-        return mDownloadedSongs;
+    synchronized void addDownloadedSong(DownloadedSong song) {
+        mDownloadedSongs.add(song);
+    }
+
+    /** The songs downloaded so far, as an unmodifiable copy. */
+    public synchronized List<DownloadedSong> getDownloadedSongs() {
+        return Collections.unmodifiableList(new ArrayList<>(mDownloadedSongs));
     }
 
     public int getTotalFileSize() {
