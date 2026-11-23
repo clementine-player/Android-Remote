@@ -22,6 +22,7 @@ import org.robolectric.util.ReflectionHelpers.ClassParameter;
 import java.net.InetAddress;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.robolectric.Shadows.shadowOf;
 
@@ -97,5 +98,11 @@ public class LocalNetworkAddressTest {
         addNetwork("100.68.237.114", NetworkCapabilities.TRANSPORT_VPN);
         addNetwork("10.20.30.40", NetworkCapabilities.TRANSPORT_CELLULAR);
         assertNull(localAddress());
+    }
+
+    @Test
+    public void onWifiReturnsFalseWhenNoActiveNetwork() {
+        shadowOf(mConnectivity).setActiveNetworkInfo(null);
+        assertFalse(Utilities.onWifi());
     }
 }

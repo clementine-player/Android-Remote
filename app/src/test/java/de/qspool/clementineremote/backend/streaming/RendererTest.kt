@@ -258,4 +258,22 @@ class RendererTest {
         assertEquals(RendererErrorScope.RENDERER_ERROR_SCOPE_ITEM, error.scope)
         assertFalse(statuses().any { it.state == RendererState.RENDERER_STATE_PLAYING })
     }
+
+    @Test
+    fun ignoresMessagesQueuedBeforeRelease() {
+        renderer.onMessage(
+            ClementineMessage.getMessageBuilder(MsgType.RENDER_LOAD)
+                .setRequestRenderLoad(
+                    RequestRenderLoad.newBuilder()
+                        .setItem(item(9))
+                        .setStartState(LoadStartState.LOAD_START_STATE_PLAYING),
+                )
+                .build(),
+        )
+        renderer.release()
+        shadowOf(Looper.getMainLooper()).idle()
+
+        assertNull(playback.url)
+        assertTrue(sent.isEmpty())
+    }
 }

@@ -732,6 +732,8 @@ internal fun repeatLabel(mode: Clementine.RepeatMode): Int = when (mode) {
     Clementine.RepeatMode.TRACK -> R.string.repeat_track
     Clementine.RepeatMode.ALBUM -> R.string.repeat_album
     Clementine.RepeatMode.PLAYLIST -> R.string.repeat_playlist
+    Clementine.RepeatMode.ONE_BY_ONE -> R.string.repeat_one_by_one
+    Clementine.RepeatMode.INTRO -> R.string.repeat_intro
 }
 
 private const val ARTWORK_FADE_MILLIS = 750

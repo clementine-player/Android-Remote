@@ -5,7 +5,6 @@ import android.os.Handler
 import android.os.Looper
 import de.qspool.clementineremote.backend.ClementinePlayerConnection
 import de.qspool.clementineremote.backend.ClementinePlayerConnection.ConnectionStatus
-import de.qspool.clementineremote.backend.RemoteRepository
 import de.qspool.clementineremote.backend.listener.PlayerConnectionListener
 import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.LoadStartState
@@ -66,8 +65,15 @@ class Renderer(
     /** Whether [activeListener] was last told there's something to play. */
     private var active = false
 
+    private var transientFailureItemId: Int? = null
+    private var transientFailureCount = 0
+
+    @Volatile
+    private var released = false
+
     private val statusTick = object : Runnable {
         override fun run() {
+            if (released) return
             sendStatus()
             handler.postDelayed(this, STATUS_INTERVAL_MS)
         }
@@ -79,24 +85,58 @@ class Renderer(
 
     /** A message from Clementine, on any thread. */
     fun onMessage(message: Message) {
-        if (message.type in HANDLED) {
-            handler.post { handle(message) }
+        if (!released && message.type in HANDLED) {
+            handler.post { if (!released) handle(message) }
+        }
+    }
+
+    /** Stops active streaming across a reconnect while keeping this listener attached. */
+    fun reset() {
+        if (released) return
+        handler.post {
+            // Desktop destroys its RemoteEngine on TCP drop, so stop the dead
+            // HTTP stream and clear item state while keeping playback reusable.
+            if (released) return@post
+            handler.removeCallbacks(statusTick)
+            current = null
+            next = null
+            offsetMs = 0
+            playing = false
+            reported = null
+            transientFailureItemId = null
+            transientFailureCount = 0
+            playback.stop()
+            setActive(false)
         }
     }
 
     /** Stops playing, when the connection to Clementine has gone. */
     fun release() {
-        handler.post {
-            handler.removeCallbacks(statusTick)
+        // Mark released and drop queued handler work before posting stop,
+        // running ExoPlayer.release() on the main looper thread it requires.
+        released = true
+        handler.removeCallbacksAndMessages(null)
+        val stop = Runnable {
             current = null
             next = null
+            offsetMs = 0
+            playing = false
+            reported = null
+            transientFailureItemId = null
+            transientFailureCount = 0
             playback.listener = null
             playback.release()
             setActive(false)
         }
+        if (Looper.myLooper() == handler.looper) {
+            stop.run()
+        } else {
+            handler.post(stop)
+        }
     }
 
     private fun handle(message: Message) {
+        if (released) return
         when (message.type) {
             MsgType.RENDER_LOAD -> {
                 val load = message.requestRenderLoad
@@ -104,7 +144,10 @@ class Renderer(
                 start(load.item, load.startMs)
             }
             MsgType.RENDER_PRELOAD -> {
-                next = message.requestRenderPreload.item
+                val preload = message.requestRenderPreload
+                // Desktop sends an empty preload to clear the queued track;
+                // drop it here so resolve() is not asked to resolve "".
+                next = if (preload.hasItem() && preload.item.url.isNotEmpty()) preload.item else null
                 if (current != null) playback.queue(next?.let { resolve(it.url, server()) })
             }
             MsgType.RENDER_PLAY -> if (current != null) {
@@ -138,7 +181,13 @@ class Renderer(
         reported = null
         val url = resolve(item.url, server())
         if (url == null) {
+            // Stop previous audio and report item failure before clearing
+            // current so onStateChanged() updates active=false.
+            playback.stop()
             onError("Not a URL: ${item.url}", transient = false)
+            current = null
+            playing = false
+            onStateChanged()
             return
         }
         when (item.seekMethod) {
@@ -181,7 +230,13 @@ class Renderer(
     }
 
     override fun onStateChanged() {
+        if (released) return
         val state = rendererState()
+        if (state == RendererState.RENDERER_STATE_PLAYING) {
+            // Reset transient retry budget once playback recovers.
+            transientFailureItemId = null
+            transientFailureCount = 0
+        }
         if (state == RendererState.RENDERER_STATE_PLAYING ||
             state == RendererState.RENDERER_STATE_BUFFERING
         ) {
@@ -207,6 +262,7 @@ class Renderer(
     }
 
     override fun onAdvanced() {
+        if (released) return
         val ended = current ?: return
         current = next
         next = null
@@ -219,6 +275,7 @@ class Renderer(
     }
 
     override fun onEnded() {
+        if (released) return
         val ended = current ?: return
         current = null
         offsetMs = 0
@@ -228,8 +285,21 @@ class Renderer(
     }
 
     override fun onError(message: String, transient: Boolean) {
+        if (released) return
         val item = current ?: return
-        val scope = if (transient) {
+        // Cap consecutive transient retries per item and escalate to ITEM scope
+        // to avoid an infinite RENDER_LOAD <-> RENDERER_ERROR reload storm.
+        val effectiveTransient = if (!transient) {
+            false
+        } else {
+            if (transientFailureItemId != item.itemId) {
+                transientFailureItemId = item.itemId
+                transientFailureCount = 0
+            }
+            transientFailureCount++
+            transientFailureCount < MAX_CONSECUTIVE_TRANSIENT_ERRORS
+        }
+        val scope = if (effectiveTransient) {
             RendererErrorScope.RENDERER_ERROR_SCOPE_TRANSIENT
         } else {
             RendererErrorScope.RENDERER_ERROR_SCOPE_ITEM
@@ -278,15 +348,25 @@ class Renderer(
          * only sends it when this phone registered as a renderer ([ThisRenderer]).
          */
         @JvmStatic
-        fun attach(context: Context, connection: ClementinePlayerConnection, activeListener: ActiveListener) {
+        fun attach(context: Context, connection: ClementinePlayerConnection, activeListener: ActiveListener): Renderer {
             val renderer = Renderer(
-                ExoPlayback(context.applicationContext), connection::getServerAddress, RemoteRepository::send,
+                ExoPlayback(context.applicationContext),
+                connection::getServerAddress,
+                // Send via the bound connection rather than RemoteRepository so
+                // a dying Renderer cannot emit onto a newer connection.
+                { msg ->
+                    if (connection.isConnected) {
+                        connection.mHandler?.sendMessage(android.os.Message.obtain().apply { obj = msg })
+                    }
+                },
             )
             renderer.activeListener = activeListener
             connection.addPlayerConnectionListener(object : PlayerConnectionListener {
                 override fun onConnectionStatusChanged(status: ConnectionStatus) {
-                    if (status == ConnectionStatus.DISCONNECTED) {
-                        renderer.release()
+                    when (status) {
+                        ConnectionStatus.RECONNECTING -> renderer.reset()
+                        ConnectionStatus.DISCONNECTED -> renderer.release()
+                        else -> {}
                     }
                 }
 
@@ -296,6 +376,7 @@ class Renderer(
                     }
                 }
             })
+            return renderer
         }
 
         /**
@@ -306,6 +387,8 @@ class Renderer(
          */
         @JvmStatic
         fun resolve(url: String, server: InetSocketAddress?): String? {
+            // Empty relative URL would resolve to the server root; reject it.
+            if (url.isBlank()) return null
             val uri = try {
                 URI(url)
             } catch (e: URISyntaxException) {
@@ -323,6 +406,8 @@ class Renderer(
 
         /** How often to report the position while playing, as Clementine expects. */
         private const val STATUS_INTERVAL_MS = 1000L
+
+        private const val MAX_CONSECUTIVE_TRANSIENT_ERRORS = 3
 
         private val HANDLED = setOf(
             MsgType.RENDER_LOAD, MsgType.RENDER_PRELOAD, MsgType.RENDER_PLAY,

@@ -57,12 +57,27 @@ public class ClementinePbParser {
     }
 
     /**
-     * Create a protocol buffer object from the binary data
+     * Create a protocol buffer object from the binary data and update global state.
      *
      * @param bs The binary representation of the protocol buffer
      * @return The parsed Element
      */
     public ClementineMessage parse(byte[] bs) {
+        return parse(bs, true);
+    }
+
+    /**
+     * Decode a protocol buffer frame without mutating {@link App#Clementine} or
+     * {@link PlaylistManager}, for background connections and downloaders.
+     *
+     * @param bs The binary representation of the protocol buffer
+     * @return The decoded ClementineMessage or an ErrorMessage
+     */
+    public ClementineMessage decode(byte[] bs) {
+        return parse(bs, false);
+    }
+
+    private ClementineMessage parse(byte[] bs, boolean mutateState) {
         ClementineMessage parsedElement = null;
 
         try {
@@ -73,7 +88,7 @@ public class ClementinePbParser {
                     || msg.getVersion() < Message.getDefaultInstance().getVersion()) {
                 parsedElement = new ClementineMessage(ErrorMessage.OLD_PROTO);
             } else {
-                parsedElement = parseMsg(msg);
+                parsedElement = mutateState ? parseMsg(msg) : new ClementineMessage(msg);
             }
         } catch (InvalidProtocolBufferException e) {
             Log.d("Parser", "InvalidProtocolBufferException");
@@ -158,17 +173,20 @@ public class ClementinePbParser {
      * @param responseLyrics The protocolbuffer message with the lyrics
      */
     private void parseLyrics(ResponseLyrics responseLyrics) {
-        // Read all lyric providers
+        MySong currentSong = App.Clementine.getCurrentSong();
+        if (currentSong == null) {
+            return;
+        }
+        // Read all lyric providers atomically, replacing any previous lyrics
+        List<LyricsProvider> providers = new ArrayList<>();
         for (Lyric lyric : responseLyrics.getLyricsList()) {
-            // Save them into the structure
             LyricsProvider provider = new LyricsProvider();
             provider.setId(lyric.getId());
             provider.setTitle(lyric.getTitle());
             provider.setContent(lyric.getContent());
-
-            // And save them into the song
-            App.Clementine.getCurrentSong().getLyricsProvider().add(provider);
+            providers.add(provider);
         }
+        currentSong.setLyricsProvider(providers);
     }
 
     /**
@@ -240,12 +258,10 @@ public class ClementinePbParser {
      * @param responsePlaylists The Playlist Elements
      */
     private void parsePlaylists(ResponsePlaylists responsePlaylists) {
-        mPlaylistManager.removeAll();
-
         List<Playlist> playlists = responsePlaylists.getPlaylistList();
+        List<MyPlaylist> updated = new ArrayList<>(playlists.size());
 
         for (Playlist playlist : playlists) {
-            // Create the playlist and add the information
             MyPlaylist myPlaylist = new MyPlaylist();
             myPlaylist.setId(playlist.getId());
             myPlaylist.setName(playlist.getName());
@@ -253,11 +269,10 @@ public class ClementinePbParser {
             myPlaylist.setItemCount(playlist.getItemCount());
             myPlaylist.setClosed(playlist.getClosed());
             myPlaylist.setFavorite(playlist.getFavorite());
-
-            mPlaylistManager.addPlaylist(myPlaylist);
+            updated.add(myPlaylist);
         }
 
-        mPlaylistManager.allPlaylistsReceived();
+        mPlaylistManager.replaceAll(updated);
     }
 
     /**
@@ -302,6 +317,12 @@ public class ClementinePbParser {
                 break;
             case Repeat_Playlist:
                 App.Clementine.setRepeatMode(RepeatMode.PLAYLIST);
+                break;
+            case Repeat_OneByOne:
+                App.Clementine.setRepeatMode(RepeatMode.ONE_BY_ONE);
+                break;
+            case Repeat_Intro:
+                App.Clementine.setRepeatMode(RepeatMode.INTRO);
                 break;
             default:
                 break;

@@ -17,6 +17,9 @@
 
 package de.qspool.clementineremote.backend;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.backend.player.PlaylistManager;
 
@@ -28,7 +31,7 @@ public class Clementine {
 
     public static enum State {PLAY, PAUSE, STOP}
 
-    public static enum RepeatMode {OFF, TRACK, ALBUM, PLAYLIST}
+    public static enum RepeatMode {OFF, TRACK, ALBUM, PLAYLIST, ONE_BY_ONE, INTRO}
 
     public static enum ShuffleMode {OFF, ALL, INSIDE_ALBUM, ALBUMS}
 
@@ -38,23 +41,27 @@ public class Clementine {
 
     public final static String DefaultVolumeInc = "10";
 
-    private String mHostname;
+    private static final Pattern VERSION_PATTERN = Pattern.compile("(\\d+)\\.(\\d+)");
 
-    private String mVersion;
+    // Written by the connection/parser thread and read on UI, MediaSession, and
+    // receiver threads.
+    private volatile String mHostname;
 
-    private MySong mCurrentSong;
+    private volatile String mVersion;
 
-    private int mVolume;
+    private volatile MySong mCurrentSong;
 
-    private State mState;
+    private volatile int mVolume;
 
-    private RepeatMode mRepeatMode = RepeatMode.OFF;
+    private volatile State mState;
 
-    private ShuffleMode mShuffleMode = ShuffleMode.OFF;
+    private volatile RepeatMode mRepeatMode = RepeatMode.OFF;
 
-    private int mSongPosition;
+    private volatile ShuffleMode mShuffleMode = ShuffleMode.OFF;
 
-    private PlaylistManager mPlaylistManager = new PlaylistManager();
+    private volatile int mSongPosition;
+
+    private final PlaylistManager mPlaylistManager = new PlaylistManager();
 
     public int getSongPosition() {
         return mSongPosition;
@@ -69,6 +76,26 @@ public class Clementine {
         mCurrentSong = null;
         mVolume = 100;
         mState = State.STOP;
+    }
+
+    // Desktop added RequestUpdatePlaylist.clear_playlist in 1.4; older
+    // servers ignore it and require explicit REMOVE_SONGS indices.
+    public boolean supportsClearPlaylist() {
+        String version = mVersion;
+        if (version == null || version.isEmpty()) {
+            return false;
+        }
+        Matcher matcher = VERSION_PATTERN.matcher(version);
+        if (!matcher.find()) {
+            return false;
+        }
+        try {
+            int major = Integer.parseInt(matcher.group(1));
+            int minor = Integer.parseInt(matcher.group(2));
+            return major > 1 || (major == 1 && minor >= 4);
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     public String getVersion() {
@@ -122,7 +149,10 @@ public class Clementine {
             case ALBUM:
                 mRepeatMode = RepeatMode.PLAYLIST;
                 break;
+            // PLAYLIST, and Desktop-only One-by-one / Intro, all cycle to OFF.
             case PLAYLIST:
+            case ONE_BY_ONE:
+            case INTRO:
                 mRepeatMode = RepeatMode.OFF;
                 break;
         }

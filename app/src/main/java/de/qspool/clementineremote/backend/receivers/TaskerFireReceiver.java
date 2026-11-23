@@ -21,65 +21,85 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 
 import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.backend.ClementinePlayerConnection;
 import de.qspool.clementineremote.backend.ClementineService;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.ui.TaskerSettings;
+import de.qspool.clementineremote.utils.bundle.BundleScrubber;
 import de.qspool.clementineremote.utils.bundle.PluginBundleManager;
 
 public class TaskerFireReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (de.qspool.clementineremote.utils.bundle.LocalePluginIntent.ACTION_FIRE_SETTING.equals(intent.getAction())) {
-            final Bundle bundle = intent.getBundleExtra(
-                    de.qspool.clementineremote.utils.bundle.LocalePluginIntent.EXTRA_BUNDLE);
+        if (intent == null
+                || !de.qspool.clementineremote.utils.bundle.LocalePluginIntent.ACTION_FIRE_SETTING
+                        .equals(intent.getAction())) {
+            return;
+        }
+        // Scrub untrusted exported-broadcast extras before reading keys so
+        // injected custom Parcelables cannot throw BadParcelableException.
+        BundleScrubber.scrub(intent);
+        final Bundle bundle = intent.getBundleExtra(
+                de.qspool.clementineremote.utils.bundle.LocalePluginIntent.EXTRA_BUNDLE);
+        BundleScrubber.scrub(bundle);
+        if (!PluginBundleManager.isBundleValid(bundle)) {
+            return;
+        }
 
-            Message msg = Message.obtain();
+        Message msg = Message.obtain();
 
-            switch (bundle.getInt(PluginBundleManager.BUNDLE_EXTRA_INT_TYPE)) {
-                case TaskerSettings.ACTION_CONNECT:
-                    String ip = bundle.getString(PluginBundleManager.BUNDLE_EXTRA_STRING_IP);
-                    int port = bundle.getInt(PluginBundleManager.BUNDLE_EXTRA_INT_PORT);
-                    int auth = bundle.getInt(PluginBundleManager.BUNDLE_EXTRA_INT_AUTH);
+        switch (bundle.getInt(PluginBundleManager.BUNDLE_EXTRA_INT_TYPE)) {
+            case TaskerSettings.ACTION_CONNECT:
+                String ip = bundle.getString(PluginBundleManager.BUNDLE_EXTRA_STRING_IP);
+                int port = bundle.getInt(PluginBundleManager.BUNDLE_EXTRA_INT_PORT, -1);
+                int auth = bundle.getInt(PluginBundleManager.BUNDLE_EXTRA_INT_AUTH, 0);
+                // Reject empty hosts or out-of-range ports before InetSocketAddress.
+                if (ip == null || ip.trim().isEmpty() || port < 1 || port > 65535) {
+                    return;
+                }
 
-                    // Start the background service
-                    Intent serviceIntent = new Intent(context, ClementineService.class);
-                    serviceIntent.putExtra(ClementineService.SERVICE_ID,
-                            ClementineService.SERVICE_START);
-                    serviceIntent.putExtra(ClementineService.EXTRA_STRING_IP, ip);
-                    serviceIntent.putExtra(ClementineService.EXTRA_INT_PORT, port);
-                    serviceIntent.putExtra(ClementineService.EXTRA_INT_AUTH, auth);
-                    ClementineService.startConnection(context, serviceIntent);
-                    break;
-                case TaskerSettings.ACTION_DISCONNECT:
-                    msg.obj = ClementineMessage.getMessage(MsgType.DISCONNECT);
-                    break;
-                case TaskerSettings.ACTION_PLAY:
-                    msg.obj = ClementineMessage.getMessage(MsgType.PLAY);
-                    break;
-                case TaskerSettings.ACTION_PAUSE:
-                    msg.obj = ClementineMessage.getMessage(MsgType.PAUSE);
-                    break;
-                case TaskerSettings.ACTION_PLAYPAUSE:
-                    msg.obj = ClementineMessage.getMessage(MsgType.PLAYPAUSE);
-                    break;
-                case TaskerSettings.ACTION_NEXT:
-                    msg.obj = ClementineMessage.getMessage(MsgType.NEXT);
-                    break;
-                case TaskerSettings.ACTION_STOP:
-                    msg.obj = ClementineMessage.getMessage(MsgType.STOP);
-                    break;
-            }
+                // Start the background service
+                Intent serviceIntent = new Intent(context, ClementineService.class);
+                serviceIntent.putExtra(ClementineService.SERVICE_ID,
+                        ClementineService.SERVICE_START);
+                serviceIntent.putExtra(ClementineService.EXTRA_STRING_IP, ip.trim());
+                serviceIntent.putExtra(ClementineService.EXTRA_INT_PORT, port);
+                serviceIntent.putExtra(ClementineService.EXTRA_INT_AUTH, auth);
+                ClementineService.startConnection(context, serviceIntent);
+                break;
+            case TaskerSettings.ACTION_DISCONNECT:
+                msg.obj = ClementineMessage.getMessage(MsgType.DISCONNECT);
+                break;
+            case TaskerSettings.ACTION_PLAY:
+                msg.obj = ClementineMessage.getMessage(MsgType.PLAY);
+                break;
+            case TaskerSettings.ACTION_PAUSE:
+                msg.obj = ClementineMessage.getMessage(MsgType.PAUSE);
+                break;
+            case TaskerSettings.ACTION_PLAYPAUSE:
+                msg.obj = ClementineMessage.getMessage(MsgType.PLAYPAUSE);
+                break;
+            case TaskerSettings.ACTION_NEXT:
+                msg.obj = ClementineMessage.getMessage(MsgType.NEXT);
+                break;
+            case TaskerSettings.ACTION_STOP:
+                msg.obj = ClementineMessage.getMessage(MsgType.STOP);
+                break;
+            default:
+                return;
+        }
 
-            // Now send the message
-            if (msg != null && msg.obj != null
-                    && App.ClementineConnection != null) {
-                App.ClementineConnection.mHandler.sendMessage(msg);
-            }
+        // Now send the message
+        ClementinePlayerConnection connection = App.ClementineConnection;
+        Handler handler = connection != null ? connection.mHandler : null;
+        if (msg.obj != null && handler != null) {
+            handler.sendMessage(msg);
         }
     }
 }

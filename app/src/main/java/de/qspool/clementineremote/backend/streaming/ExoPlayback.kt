@@ -21,22 +21,30 @@ class ExoPlayback(private val context: Context) : Playback, Player.Listener {
 
     private var player: ExoPlayer? = null
 
-    private fun player(): ExoPlayer = player ?: ExoPlayer.Builder(context)
-        .setAudioAttributes(
-            AudioAttributes.Builder()
-                .setUsage(C.USAGE_MEDIA)
-                .setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
-                .build(),
-            /* handleAudioFocus= */ true,
-        )
-        .setHandleAudioBecomingNoisy(true)
-        // Keeps the CPU and Wi-Fi awake while streaming with the screen off.
-        .setWakeMode(C.WAKE_MODE_NETWORK)
-        .build()
-        .also {
-            it.addListener(this)
-            player = it
-        }
+    // Prevents late load/volume/callback events from lazily recreating an
+    // ExoPlayer or emitting events after release().
+    @Volatile
+    private var released = false
+
+    private fun player(): ExoPlayer? {
+        if (released) return null
+        return player ?: ExoPlayer.Builder(context)
+            .setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setUsage(C.USAGE_MEDIA)
+                    .setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
+                    .build(),
+                /* handleAudioFocus= */ true,
+            )
+            .setHandleAudioBecomingNoisy(true)
+            // Keeps the CPU and Wi-Fi awake while streaming with the screen off.
+            .setWakeMode(C.WAKE_MODE_NETWORK)
+            .build()
+            .also {
+                it.addListener(this)
+                player = it
+            }
+    }
 
     override val state: Playback.State
         get() {
@@ -56,7 +64,7 @@ class ExoPlayback(private val context: Context) : Playback, Player.Listener {
         get() = player?.bufferedPercentage ?: 0
 
     override fun load(url: String, startMs: Long, playing: Boolean) {
-        player().run {
+        player()?.run {
             setMediaItem(MediaItem.fromUri(url), startMs)
             playWhenReady = playing
             prepare()
@@ -64,6 +72,7 @@ class ExoPlayback(private val context: Context) : Playback, Player.Listener {
     }
 
     override fun queue(url: String?) {
+        if (released) return
         val player = player ?: return
         // Only what's playing stays; anything queued after it is replaced.
         val after = player.currentMediaItemIndex + 1
@@ -76,22 +85,23 @@ class ExoPlayback(private val context: Context) : Playback, Player.Listener {
     }
 
     override fun play() {
-        player?.play()
+        if (!released) player?.play()
     }
 
     override fun pause() {
-        player?.pause()
+        if (!released) player?.pause()
     }
 
     override fun seekTo(positionMs: Long) {
-        player?.seekTo(positionMs)
+        if (!released) player?.seekTo(positionMs)
     }
 
     override fun setVolume(volume: Float) {
-        player().volume = volume
+        player()?.volume = volume
     }
 
     override fun stop() {
+        if (released) return
         player?.run {
             stop()
             clearMediaItems()
@@ -99,11 +109,14 @@ class ExoPlayback(private val context: Context) : Playback, Player.Listener {
     }
 
     override fun release() {
+        released = true
+        player?.removeListener(this)
         player?.release()
         player = null
     }
 
     override fun onEvents(player: Player, events: Player.Events) {
+        if (released) return
         if (events.containsAny(
                 Player.EVENT_PLAYBACK_STATE_CHANGED,
                 Player.EVENT_IS_PLAYING_CHANGED,
@@ -115,18 +128,19 @@ class ExoPlayback(private val context: Context) : Playback, Player.Listener {
     }
 
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
-        if (reason == Player.MEDIA_ITEM_TRANSITION_REASON_AUTO) {
+        if (!released && reason == Player.MEDIA_ITEM_TRANSITION_REASON_AUTO) {
             listener?.onAdvanced()
         }
     }
 
     override fun onPlaybackStateChanged(playbackState: Int) {
-        if (playbackState == Player.STATE_ENDED) {
+        if (!released && playbackState == Player.STATE_ENDED) {
             listener?.onEnded()
         }
     }
 
     override fun onPlayerError(error: PlaybackException) {
+        if (released) return
         val transient = error.errorCode == PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED ||
             error.errorCode == PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_TIMEOUT
         listener?.onError(error.message ?: error.errorCodeName, transient)

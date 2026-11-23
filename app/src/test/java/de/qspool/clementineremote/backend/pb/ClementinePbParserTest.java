@@ -1,5 +1,8 @@
 package de.qspool.clementineremote.backend.pb;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import com.google.protobuf.ByteString;
 
 import org.junit.Before;
@@ -13,6 +16,7 @@ import java.util.List;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.Clementine;
+import de.qspool.clementineremote.backend.ClementinePlayerConnection;
 import de.qspool.clementineremote.backend.pb.ClementineMessage.ErrorMessage;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.EngineState;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message;
@@ -185,5 +189,80 @@ public class ClementinePbParserTest {
 
         assertEquals(ShuffleMode.Shuffle_InsideAlbum, shuffle.getShuffle().getShuffleMode());
         assertEquals(RepeatMode.Repeat_Track, repeat.getRepeat().getRepeatMode());
+    }
+
+    @Test
+    public void repeatOneByOneAndIntroRoundTrip() throws Exception {
+        parse(message(MsgType.REPEAT)
+                .setRepeat(Repeat.newBuilder().setRepeatMode(RepeatMode.Repeat_OneByOne)));
+        assertEquals(Clementine.RepeatMode.ONE_BY_ONE, App.Clementine.getRepeatMode());
+        Message oneByOne = Message.parseFrom(
+                ClementineMessageFactory.buildRepeat().getMessage().toByteArray());
+        assertEquals(RepeatMode.Repeat_OneByOne, oneByOne.getRepeat().getRepeatMode());
+
+        parse(message(MsgType.REPEAT)
+                .setRepeat(Repeat.newBuilder().setRepeatMode(RepeatMode.Repeat_Intro)));
+        assertEquals(Clementine.RepeatMode.INTRO, App.Clementine.getRepeatMode());
+        Message intro = Message.parseFrom(
+                ClementineMessageFactory.buildRepeat().getMessage().toByteArray());
+        assertEquals(RepeatMode.Repeat_Intro, intro.getRepeat().getRepeatMode());
+    }
+
+    @Test
+    public void playlistsPreserveCachedSongsForUnchangedNonActivePlaylists() {
+        parse(message(MsgType.PLAYLISTS).setResponsePlaylists(ResponsePlaylists.newBuilder()
+                .addPlaylist(Playlist.newBuilder().setId(1).setName("One").setItemCount(2))
+                .addPlaylist(Playlist.newBuilder().setId(2).setName("Two").setItemCount(1).setActive(true))));
+        List<MySong> cachedOne = Arrays.asList(new MySong(), new MySong());
+        List<MySong> cachedTwo = Arrays.asList(new MySong());
+        App.Clementine.getPlaylistManager().playlistSongsDownloaded(1, cachedOne);
+        App.Clementine.getPlaylistManager().playlistSongsDownloaded(2, cachedTwo);
+
+        parse(message(MsgType.PLAYLISTS).setResponsePlaylists(ResponsePlaylists.newBuilder()
+                .addPlaylist(Playlist.newBuilder().setId(1).setName("One").setItemCount(2))
+                .addPlaylist(Playlist.newBuilder().setId(2).setName("Two").setItemCount(1).setActive(true))));
+
+        assertEquals(2, App.Clementine.getPlaylistManager().getPlaylist(1).getPlaylistSongs().size());
+        // Active playlist must drop cached songs so fresh PLAYLIST_SONGS repopulate even when length matches.
+        assertEquals(0, App.Clementine.getPlaylistManager().getPlaylist(2).getPlaylistSongs().size());
+    }
+
+    @Test
+    public void clearPlaylistUsesClearFlagOnClementine14Plus() {
+        final List<Message> sent = new ArrayList<>();
+        ClementinePlayerConnection previousConnection = App.ClementineConnection;
+        ClementinePlayerConnection connection = new ClementinePlayerConnection();
+        // Constructed on the test thread so mHandler dispatches on main looper.
+        connection.mHandler = new de.qspool.clementineremote.backend.ClementineConnectionHandler(connection) {
+            @Override
+            public void handleMessage(android.os.Message msg) {
+                if (msg.obj instanceof ClementineMessage) {
+                    sent.add(((ClementineMessage) msg.obj).getMessage());
+                }
+            }
+        };
+        App.ClementineConnection = connection;
+        try {
+            parse(message(MsgType.PLAYLISTS).setResponsePlaylists(ResponsePlaylists.newBuilder()
+                    .addPlaylist(Playlist.newBuilder().setId(1).setName("One").setItemCount(1).setActive(true))));
+            MySong song = new MySong();
+            song.setIndex(0);
+            App.Clementine.getPlaylistManager().playlistSongsDownloaded(1, Arrays.asList(song));
+
+            App.Clementine.setVersion("Clementine 1.4.0rc2");
+            App.Clementine.getPlaylistManager().clearPlaylist(1);
+            org.robolectric.Shadows.shadowOf(Looper.getMainLooper()).idle();
+            assertEquals(MsgType.UPDATE_PLAYLIST, sent.get(0).getType());
+            assertTrue(sent.get(0).getRequestUpdatePlaylist().getClearPlaylist());
+
+            sent.clear();
+            App.Clementine.getPlaylistManager().playlistSongsDownloaded(1, Arrays.asList(song));
+            App.Clementine.setVersion("Clementine 1.3.1");
+            App.Clementine.getPlaylistManager().clearPlaylist(1);
+            org.robolectric.Shadows.shadowOf(Looper.getMainLooper()).idle();
+            assertEquals(MsgType.REMOVE_SONGS, sent.get(0).getType());
+        } finally {
+            App.ClementineConnection = previousConnection;
+        }
     }
 }

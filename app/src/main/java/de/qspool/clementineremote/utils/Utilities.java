@@ -19,8 +19,11 @@ import androidx.annotation.Nullable;
 import androidx.core.app.TaskStackBuilder;
 
 import java.net.Inet4Address;
+import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import de.qspool.clementineremote.App;
@@ -73,17 +76,7 @@ public class Utilities {
     }
 
     /**
-     * Get the free space on the internal storage device
-     *
-     * @return The free space in byte
-     */
-    public static double getFreeSpaceInternal() {
-        StatFs stat = new StatFs(App.getApp().getFilesDir().getPath());
-        return (double) stat.getAvailableBlocksLong() * (double) stat.getBlockSizeLong();
-    }
-
-    /**
-     * Is the device connceted to a wifi network?
+     * Is the device connected to a wifi network?
      *
      * @return true if connected to a wifi network
      */
@@ -91,20 +84,33 @@ public class Utilities {
     public static boolean onWifi() {
         ConnectivityManager connManager = (ConnectivityManager) App.getApp()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
-        boolean onWifi = false;
+        if (connManager == null) {
+            return false;
+        }
 
         Network[] networks = connManager.getAllNetworks();
-        NetworkInfo networkInfo;
         for (Network mNetwork : networks) {
-            networkInfo = connManager.getNetworkInfo(mNetwork);
-            if (networkInfo.getState().equals(NetworkInfo.State.CONNECTED) &&
-                    networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-                onWifi = true;
-                break;
+            NetworkCapabilities capabilities = connManager.getNetworkCapabilities(mNetwork);
+            if (capabilities != null
+                    && !capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN)
+                    && capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                // getNetworkInfo() is deprecated and may return null; treat a
+                // matching non-VPN Wi-Fi capability as connected unless explicitly not.
+                NetworkInfo networkInfo = connManager.getNetworkInfo(mNetwork);
+                if (networkInfo == null || networkInfo.getState() == NetworkInfo.State.CONNECTED) {
+                    return true;
+                }
+            } else {
+                NetworkInfo networkInfo = connManager.getNetworkInfo(mNetwork);
+                if (networkInfo != null
+                        && networkInfo.getState() == NetworkInfo.State.CONNECTED
+                        && networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                    return true;
+                }
             }
         }
 
-        return onWifi;
+        return false;
     }
 
     /**
@@ -153,7 +159,10 @@ public class Utilities {
      * @return A string that is a vaild file name
      */
     public static String removeInvalidFileCharacters(String str) {
-        String illegal = "[\\\\~#%&*{}/:<>?|\\\"-]";
+        if (str == null) {
+            return "";
+        }
+        String illegal = "[\\u0000-\\u001f\\\\~#%&*{}/:<>?|\\\"-]";
         return str.replaceAll(illegal, "");
     }
 
@@ -176,13 +185,29 @@ public class Utilities {
      * the first address of any interface can well be a VPN's, such as Tailscale's.
      */
     @Nullable
+    public static Inet4Address getLocalNetworkIp4Address(Context context) {
+        for (InetAddress address : getLocalNetworkAddresses(context)) {
+            if (address instanceof Inet4Address) {
+                return (Inet4Address) address;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Local non-VPN Wi-Fi/Ethernet IPv4 and IPv6 addresses where Clementine can announce itself
+     * via mDNS, ordered IPv4 first, then routable IPv6, then link-local IPv6.
+     */
     // getAllNetworks() is deprecated for NetworkCallback, but that reports networks as they come
     // and go; this needs the ones there now, including Wi-Fi under a VPN, which the default isn't.
     @SuppressWarnings("deprecation")
-    public static Inet4Address getLocalNetworkIp4Address(Context context) {
+    public static List<InetAddress> getLocalNetworkAddresses(Context context) {
+        List<InetAddress> ipv4 = new ArrayList<>();
+        List<InetAddress> ipv6Global = new ArrayList<>();
+        List<InetAddress> ipv6LinkLocal = new ArrayList<>();
         ConnectivityManager connectivity = context.getSystemService(ConnectivityManager.class);
         if (connectivity == null) {
-            return null;
+            return ipv4;
         }
         for (Network network : connectivity.getAllNetworks()) {
             NetworkCapabilities capabilities = connectivity.getNetworkCapabilities(network);
@@ -192,12 +217,27 @@ public class Utilities {
             }
             for (LinkAddress linkAddress : link.getLinkAddresses()) {
                 InetAddress address = linkAddress.getAddress();
-                if (address instanceof Inet4Address && !address.isLoopbackAddress()) {
-                    return (Inet4Address) address;
+                if (address == null || address.isLoopbackAddress() || address.isMulticastAddress()) {
+                    continue;
+                }
+                if (address instanceof Inet4Address) {
+                    ipv4.add(address);
+                } else if (address instanceof Inet6Address) {
+                    if (address.isLinkLocalAddress()) {
+                        ipv6LinkLocal.add(address);
+                    } else {
+                        ipv6Global.add(address);
+                    }
                 }
             }
         }
-        return null;
+        // Order IPv4 first, then routable IPv6, then link-local IPv6 so callers
+        // prefer IPv4/routable paths while still reaching IPv6-only servers.
+        List<InetAddress> result = new ArrayList<>(ipv4.size() + ipv6Global.size() + ipv6LinkLocal.size());
+        result.addAll(ipv4);
+        result.addAll(ipv6Global);
+        result.addAll(ipv6LinkLocal);
+        return result;
     }
 
     /** A VPN can also report the Wi-Fi it runs over as a transport, so it is ruled out first. */

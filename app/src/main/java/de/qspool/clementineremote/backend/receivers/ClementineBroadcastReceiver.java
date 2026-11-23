@@ -21,11 +21,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.os.Message;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.SharedPreferencesKeys;
 import de.qspool.clementineremote.backend.Clementine;
+import de.qspool.clementineremote.backend.ClementinePlayerConnection;
 import de.qspool.clementineremote.backend.ClementineService;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
@@ -48,6 +50,9 @@ public class ClementineBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        if (intent == null || intent.getAction() == null) {
+            return;
+        }
         Message msg = Message.obtain();
 
         // Check which key was pressed
@@ -55,16 +60,28 @@ public class ClementineBroadcastReceiver extends BroadcastReceiver {
             case CONNECT:
                 SharedPreferences prefs = App.getPreferences();
                 String ip = prefs.getString(SharedPreferencesKeys.SP_KEY_IP, "");
-                int port = Integer.valueOf(
-                        prefs.getString(SharedPreferencesKeys.SP_KEY_PORT,
-                                String.valueOf(Clementine.DefaultPort)));
+                if (ip == null || ip.trim().isEmpty()) {
+                    return;
+                }
+                int port;
+                try {
+                    // Blank or corrupt saved port preferences fall back safely.
+                    port = Integer.parseInt(
+                            prefs.getString(SharedPreferencesKeys.SP_KEY_PORT,
+                                    String.valueOf(Clementine.DefaultPort)).trim());
+                    if (port < 1 || port > 65535) {
+                        port = Clementine.DefaultPort;
+                    }
+                } catch (NumberFormatException e) {
+                    port = Clementine.DefaultPort;
+                }
                 int auth = prefs.getInt(SharedPreferencesKeys.SP_LAST_AUTH_CODE, 0);
 
                 // Start the background service
                 Intent serviceIntent = new Intent(context, ClementineService.class);
                 serviceIntent.putExtra(ClementineService.SERVICE_ID,
                         ClementineService.SERVICE_START);
-                serviceIntent.putExtra(ClementineService.EXTRA_STRING_IP, ip);
+                serviceIntent.putExtra(ClementineService.EXTRA_STRING_IP, ip.trim());
                 serviceIntent.putExtra(ClementineService.EXTRA_INT_PORT, port);
                 serviceIntent.putExtra(ClementineService.EXTRA_INT_AUTH, auth);
                 ClementineService.startConnection(context, serviceIntent);
@@ -87,12 +104,15 @@ public class ClementineBroadcastReceiver extends BroadcastReceiver {
             case PREVIOUS:
                 msg.obj = ClementineMessage.getMessage(MsgType.PREVIOUS);
                 break;
+            default:
+                return;
         }
 
         // Now send the message
-        if (msg != null && msg.obj != null
-                && App.ClementineConnection != null) {
-            App.ClementineConnection.mHandler.sendMessage(msg);
+        ClementinePlayerConnection connection = App.ClementineConnection;
+        Handler handler = connection != null ? connection.mHandler : null;
+        if (msg.obj != null && handler != null) {
+            handler.sendMessage(msg);
         }
     }
 }

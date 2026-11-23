@@ -22,8 +22,13 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
-import java.util.ArrayList;
+import androidx.annotation.VisibleForTesting;
+
+import java.net.Socket;
 import java.util.Date;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.listener.PlayerConnectionListener;
@@ -42,26 +47,37 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Resp
 public class ClementinePlayerConnection extends ClementineSimpleConnection
         implements Runnable {
 
-    public ClementineConnectionHandler mHandler;
+    public volatile ClementineConnectionHandler mHandler;
 
     public final static int PROCESS_PROTOC = 874456;
 
-    public enum ConnectionStatus {IDLE, CONNECTING, NO_CONNECTION, CONNECTED, LOST_CONNECTION, DISCONNECTED}
+    public enum ConnectionStatus {
+        IDLE,
+        CONNECTING,
+        NO_CONNECTION,
+        CONNECTED,
+        RECONNECTING,
+        RECONNECTED,
+        LOST_CONNECTION,
+        DISCONNECTED,
+    }
 
     private final long KEEP_ALIVE_TIMEOUT = 25000; // 25 Second timeout
 
     private final int MAX_RECONNECTS = 5;
 
-    private Handler mUiHandler;
+    private volatile Handler mUiHandler;
 
-    private int mLeftReconnects;
+    private volatile int mLeftReconnects;
 
-    private long mLastKeepAlive;
+    private volatile long mLastKeepAlive;
 
-    private ArrayList<PlayerConnectionListener> mListeners
-            = new ArrayList<>();
+    // CopyOnWriteArrayList lets connection/reader threads iterate safely while
+    // service/UI code registers listeners.
+    private final List<PlayerConnectionListener> mListeners
+            = new CopyOnWriteArrayList<>();
 
-    private ClementineMessage mRequestConnect;
+    private volatile ClementineMessage mRequestConnect;
 
     private long mStartTx;
 
@@ -69,7 +85,19 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 
     private long mStartTime;
 
-    private Thread mIncomingThread;
+    private volatile Thread mIncomingThread;
+
+    // Serializes reconnect() attempts across keep-alive and sendRequest().
+    private final Object mReconnectLock = new Object();
+
+    // Incremented on each reconnect/teardown so ClementineIncoming distinguishes
+    // a socket closed for replacement from a failure on the current socket.
+    private final AtomicInteger mGeneration = new AtomicInteger(0);
+
+    private volatile boolean mClosing = false;
+
+    // Ensures closeConnection() emits DISCONNECTED and quits the looper once.
+    private boolean mClosedFired = false;
 
     /**
      * Add a new listener for closed connections
@@ -90,6 +118,10 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
         Looper.loop();
     }
 
+    public synchronized boolean isClosedOrClosing() {
+        return mClosing || mClosedFired;
+    }
+
     /**
      * Try to connect to Clementine
      *
@@ -99,15 +131,40 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
     public boolean createConnection(ClementineMessage message) {
         fireOnConnectionStatusChanged(ConnectionStatus.CONNECTING);
 
-        // Reset the connected flag
+        // Tear down any prior socket/reader/reconnect loop before reinitializing connection state.
+        mClosing = true;
+        mGeneration.incrementAndGet();
+        abortConnecting();
+        closeSocket();
+        Thread previousIncoming = mIncomingThread;
+        if (previousIncoming != null && previousIncoming != Thread.currentThread()) {
+            previousIncoming.interrupt();
+            try {
+                previousIncoming.join();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                sendUiMessage(new ClementineMessage(ErrorMessage.NO_CONNECTION));
+                fireOnConnectionStatusChanged(ConnectionStatus.NO_CONNECTION);
+                return false;
+            }
+        }
+        synchronized (mReconnectLock) {
+            // Wait until any exiting reconnect() loop sees mClosing / incremented generation.
+        }
+        mIncomingThread = null;
+
+        // Reset the connected flag and lifecycle state
         mLastKeepAlive = 0;
+        mClosing = false;
+        mClosedFired = false;
 
         // Now try to connect and set the input and output streams
         boolean connected = super.createConnection(message);
 
         // Check if Clementine dropped the connection.
         // Is possible when we connect from a public ip and clementine rejects it
-        if (connected && !mSocket.isClosed()) {
+        Socket socket = mSocket;
+        if (connected && socket != null && !socket.isClosed()) {
             // Now we are connected
 
             // We can now reconnect MAX_RECONNECTS times when
@@ -138,27 +195,61 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
             // Create a new thread for reading data from Clementine.
             // This is done blocking, so we receive the data directly instead of
             // waiting for the handler and still be able to send commands directly.
-            mIncomingThread = new Thread(new Runnable() {
+            Thread incomingThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    while (isConnected() && !mIncomingThread.isInterrupted()) {
-                        checkKeepAlive();
+                    while (!mClosing && !Thread.currentThread().isInterrupted()) {
+                        if (!checkKeepAlive()) {
+                            break;
+                        }
+
+                        int loopGen;
+                        synchronized (mReconnectLock) {
+                            if (mClosing || !isConnected()) {
+                                break;
+                            }
+                            // Capture generation before reading so we can ignore
+                            // socket errors caused by reconnect() swapping sockets.
+                            loopGen = mGeneration.get();
+                        }
 
                         ClementineMessage m = getProtoc(3000);
-                        if (!m.isErrorMessage() || m.getErrorMessage() != ErrorMessage.TIMEOUT) {
+                        if (mClosing) {
+                            // closeSocket() unblocks getProtoc() during teardown.
+                            break;
+                        }
+                        if (m.isErrorMessage()) {
+                            if (m.getErrorMessage() == ErrorMessage.TIMEOUT) {
+                                continue;
+                            }
+                            synchronized (mReconnectLock) {
+                                // Socket was replaced while getProtoc() blocked;
+                                // keep reading on the new socket instead of closing.
+                                if (mClosing || loopGen != mGeneration.get()) {
+                                    continue;
+                                }
+                            }
+                        }
+
+                        ClementineConnectionHandler handler = mHandler;
+                        if (handler != null) {
                             Message msg = Message.obtain();
                             msg.obj = m;
                             msg.arg1 = PROCESS_PROTOC;
-                            mHandler.sendMessage(msg);
+                            handler.sendMessage(msg);
+                        }
+                        if (m.isErrorMessage() || m.getMessageType() == MsgType.DISCONNECT) {
+                            break;
                         }
                     }
                 }
-            });
-            mIncomingThread.start();
+            }, "ClementineIncoming");
+            mIncomingThread = incomingThread;
+            incomingThread.start();
 
             // Get hostname
-            if (mSocket.getInetAddress() != null) {
-                App.Clementine.setHostname(mSocket.getInetAddress().getHostName());
+            if (socket.getInetAddress() != null) {
+                App.Clementine.setHostname(socket.getInetAddress().getHostName());
             }
 
             fireOnConnectionStatusChanged(ConnectionStatus.CONNECTED);
@@ -166,6 +257,7 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
         } else {
             sendUiMessage(new ClementineMessage(ErrorMessage.NO_CONNECTION));
             fireOnConnectionStatusChanged(ConnectionStatus.NO_CONNECTION);
+            connected = false;
         }
 
         return connected;
@@ -211,16 +303,18 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
      */
     @Override
     public boolean sendRequest(ClementineMessage message) {
+        if (mClosing) {
+            return false;
+        }
         // Send the request to Clementine
         boolean ret = super.sendRequest(message);
 
-        // If we lost connection, try to reconnect
-        if (!ret) {
-            //
-            if (mRequestConnect != null) {
-                ret = super.createConnection(mRequestConnect);
+        // If we lost connection, try to reconnect once and resend the command
+        if (!ret && !mClosing) {
+            if (reconnect(1, 0L)) {
+                ret = super.sendRequest(message);
             }
-            if (!ret) {
+            if (!ret && !mClosing) {
                 // Failed. Close connection
                 Builder builder = ClementineMessage.getMessageBuilder(MsgType.DISCONNECT);
                 ResponseDisconnect.Builder disc = ResponseDisconnect.newBuilder();
@@ -240,44 +334,59 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
      */
     @Override
     public void disconnect(ClementineMessage message) {
+        // Always mark closing and drive closeConnection even if already disconnected, so the
+        // looper and listeners never stay stranded.
+        mClosing = true;
         if (isConnected()) {
-            // Set the Connected flag to false, so the loop in
-            // checkForData() is interrupted
             super.disconnect(message);
-
-            // and close the connection
-            closeConnection(message);
         }
+        closeConnection(message);
     }
 
     /**
      * Close the socket and the streams
      */
-    private void closeConnection(ClementineMessage clementineMessage) {
+    void closeConnection(ClementineMessage clementineMessage) {
+        mClosing = true;
         // Disconnect socket
         closeSocket();
 
         // Only the connection's own thread can stop its looper. Off it, as when reconnecting
         // fails on the thread reading from Clementine, the connection's thread closes it.
-        if (Looper.myLooper() != mHandler.getLooper()) {
+        ClementineConnectionHandler handler = mHandler;
+        if (handler != null && Looper.myLooper() != handler.getLooper()) {
             Message msg = Message.obtain();
             msg.obj = clementineMessage;
             msg.arg1 = PROCESS_PROTOC;
-            mHandler.sendMessage(msg);
+            handler.sendMessage(msg);
             return;
+        }
+
+        synchronized (this) {
+            // Multiple paths (reader error, server DISCONNECT, local disconnect)
+            // can invoke closeConnection(); notify listeners only once.
+            if (mClosedFired) {
+                return;
+            }
+            mClosedFired = true;
         }
 
         sendUiMessage(clementineMessage);
 
-        try {
-            mIncomingThread.interrupt();
-            mIncomingThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        Thread incoming = mIncomingThread;
+        // Skip self-join if somehow called directly on ClementineIncoming.
+        if (incoming != null && incoming != Thread.currentThread()) {
+            try {
+                incoming.interrupt();
+                incoming.join();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
+        mIncomingThread = null;
 
         // Fire the listener
-        if (clementineMessage.isErrorMessage() &&
+        if (clementineMessage != null && clementineMessage.isErrorMessage() &&
                 (clementineMessage.getErrorMessage() == ErrorMessage.IO_EXCEPTION ||
                         clementineMessage.getErrorMessage() == ErrorMessage.KEEP_ALIVE_TIMEOUT)) {
             fireOnConnectionStatusChanged(ConnectionStatus.LOST_CONNECTION);
@@ -285,35 +394,107 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
 
         fireOnConnectionStatusChanged(ConnectionStatus.DISCONNECTED);
 
-        // Close thread
-        Looper.myLooper().quit();
+        // Close thread (only quit the connection thread's own handler looper)
+        if (handler != null && Looper.myLooper() == handler.getLooper()) {
+            handler.getLooper().quit();
+        }
     }
 
     /**
      * Check the keep alive timeout.
-     * If we reached the timeout, we can assume, that we lost the connection
+     * If we reached the timeout, we can assume, that we lost the connection.
+     *
+     * @return true if the connection remains usable, false if reconnect attempts exhausted.
      */
-    private void checkKeepAlive() {
-        if (mLastKeepAlive > 0
-                && (System.currentTimeMillis() - mLastKeepAlive) > KEEP_ALIVE_TIMEOUT) {
-            // Check if we shall reconnect
-            while (mLeftReconnects > 0) {
-                closeSocket();
-                if (super.createConnection(mRequestConnect)) {
-                    mLeftReconnects = MAX_RECONNECTS;
-                    break;
+    private boolean checkKeepAlive() {
+        long lastKeepAlive = mLastKeepAlive;
+        if (lastKeepAlive > 0
+                && (System.currentTimeMillis() - lastKeepAlive) > KEEP_ALIVE_TIMEOUT) {
+            if (reconnect(MAX_RECONNECTS, KEEP_ALIVE_TIMEOUT)) {
+                return true;
+            }
+            mLeftReconnects = 0;
+            if (!mClosing) {
+                ClementineConnectionHandler handler = mHandler;
+                if (handler != null) {
+                    Message msg = Message.obtain();
+                    msg.obj = new ClementineMessage(ErrorMessage.KEEP_ALIVE_TIMEOUT);
+                    msg.arg1 = PROCESS_PROTOC;
+                    handler.sendMessage(msg);
                 }
-
-                mLeftReconnects--;
             }
+            return false;
+        }
+        return true;
+    }
 
-            // We tried, but the server isn't there anymore
-            if (mLeftReconnects == 0) {
-                Message msg = Message.obtain();
-                msg.obj = new ClementineMessage(ErrorMessage.KEEP_ALIVE_TIMEOUT);
-                msg.arg1 = PROCESS_PROTOC;
-                mHandler.sendMessage(msg);
+    private boolean reconnect(int maxAttempts, long requiredExpiredMs) {
+        boolean reconnected = false;
+        final int reconnectGen;
+        synchronized (mReconnectLock) {
+            if (mClosing || mRequestConnect == null) {
+                return false;
             }
+            if (requiredExpiredMs > 0L) {
+                // Re-check keep-alive under the lock: sendRequest() may already
+                // have reconnected while checkKeepAlive() waited to enter.
+                long latestKeepAlive = mLastKeepAlive;
+                if (latestKeepAlive <= 0L
+                        || (System.currentTimeMillis() - latestKeepAlive) <= requiredExpiredMs) {
+                    Socket active = mSocket;
+                    if (active != null && !active.isClosed()) {
+                        return true;
+                    }
+                }
+            }
+            // Bump generation before closing so ClementineIncoming ignores the
+            // resulting IOException on the old socket.
+            reconnectGen = mGeneration.incrementAndGet();
+            closeSocket();
+            postConnectionStatusChanged(ConnectionStatus.RECONNECTING, reconnectGen);
+            for (int attempt = 0;
+                 attempt < maxAttempts && !mClosing && mGeneration.get() == reconnectGen;
+                 attempt++) {
+                if (super.createConnection(mRequestConnect)) {
+                    Socket socket = mSocket;
+                    // Discard if disconnect() raced while connect() was blocking.
+                    if (mClosing || mGeneration.get() != reconnectGen) {
+                        closeSocket();
+                        return false;
+                    }
+                    if (socket != null && !socket.isClosed()) {
+                        mLeftReconnects = MAX_RECONNECTS;
+                        // Refresh keep-alive timestamp immediately so the next
+                        // reader loop does not trigger another reconnect storm.
+                        setLastKeepAlive(System.currentTimeMillis());
+                        reconnected = true;
+                        break;
+                    }
+                    closeSocket();
+                }
+            }
+        }
+        // Emit RECONNECTED outside mReconnectLock so listeners cannot deadlock.
+        if (reconnected && !mClosing && mGeneration.get() == reconnectGen) {
+            postConnectionStatusChanged(ConnectionStatus.RECONNECTED, reconnectGen);
+        }
+        return reconnected && !mClosing && mGeneration.get() == reconnectGen;
+    }
+
+    /** Delivers status changes on the connection's handler thread rather than under mReconnectLock. */
+    private void postConnectionStatusChanged(ConnectionStatus status, int expectedGen) {
+        ClementineConnectionHandler handler = mHandler;
+        if (handler != null && Looper.myLooper() != handler.getLooper()) {
+            handler.post(() -> {
+                // Terminal statuses still deliver after mClosing becomes true.
+                if ((!mClosing && mGeneration.get() == expectedGen)
+                        || status == ConnectionStatus.DISCONNECTED
+                        || status == ConnectionStatus.LOST_CONNECTION) {
+                    fireOnConnectionStatusChanged(status);
+                }
+            });
+        } else if (!mClosing && mGeneration.get() == expectedGen) {
+            fireOnConnectionStatusChanged(status);
         }
     }
 
@@ -322,7 +503,8 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
      *
      * @param status The current connection status
      */
-    private void fireOnConnectionStatusChanged(ConnectionStatus status) {
+    @VisibleForTesting
+    void fireOnConnectionStatusChanged(ConnectionStatus status) {
         for (PlayerConnectionListener listener : mListeners) {
             listener.onConnectionStatusChanged(status);
         }
@@ -331,7 +513,8 @@ public class ClementinePlayerConnection extends ClementineSimpleConnection
     /**
      * Fire the event to all listeners
      */
-    private void fireOnClementineMessageReceived(ClementineMessage msg) {
+    @VisibleForTesting
+    void fireOnClementineMessageReceived(ClementineMessage msg) {
         for (PlayerConnectionListener listener : mListeners) {
             listener.onClementineMessageReceived(msg);
         }

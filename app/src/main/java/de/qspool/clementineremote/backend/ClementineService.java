@@ -39,6 +39,7 @@ import androidx.annotation.VisibleForTesting;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.ServiceCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.util.Consumer;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
@@ -91,6 +92,16 @@ public class ClementineService extends Service {
     /** Whether Clementine is playing its music on this phone (remote streaming). */
     private boolean mPlayingHere = false;
 
+    private MediaSessionController mMediaSessionController;
+
+    private Renderer mRenderer;
+
+    private volatile int mLatestStartId = -1;
+
+    private volatile int mConnectionStartId = -1;
+
+    private volatile ClementinePlayerConnection mActiveConnection;
+
     /**
      * Starts the service to connect to Clementine. Works from the background too (widget,
      * notification, Tasker): the service is started as a foreground service and goes to the
@@ -125,6 +136,9 @@ public class ClementineService extends Service {
         PowerManager pm = (PowerManager) getSystemService(
                 Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "clementine:service");
+        // Non-reference-counted so repeated CONNECTED/DISCONNECTED cycles never
+        // unbalance acquire/release counts or throw under-locked exceptions.
+        mWakeLock.setReferenceCounted(false);
 
         SharedPreferences prefs = App.getPreferences();
         mUseWakeLock = prefs.getBoolean(SharedPreferencesKeys.SP_WAKE_LOCK, false);
@@ -137,6 +151,7 @@ public class ClementineService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        mLatestStartId = startId;
         if (intent != null && intent.hasExtra(EXTRA_STRING_IP)) {
             // A connect request, possibly started with startForegroundService().
             enterForeground();
@@ -145,7 +160,19 @@ public class ClementineService extends Service {
             handleServiceAction(intent);
         }
 
-        return START_STICKY;
+        // START_NOT_STICKY avoids restarting an unconfigured zombie foreground
+        // service with a null intent after OS process kill.
+        return START_NOT_STICKY;
+    }
+
+    private void stopServiceForStartId(int startId) {
+        // Stop only if startId is still the latest so a stale disconnect cannot
+        // kill a newer SERVICE_START; fall back to stopSelf() when there is no startId.
+        if (startId >= 0) {
+            stopSelfResult(startId);
+        } else {
+            stopSelf();
+        }
     }
 
     /**
@@ -159,59 +186,94 @@ public class ClementineService extends Service {
         int action = intent.getIntExtra(SERVICE_ID, 0);
         switch (action) {
             case SERVICE_START:
+                // Replace a dying or dead connection instead of sending onto
+                // its looper, and clear mActiveConnection before releasing so
+                // late callbacks from the old connection are ignored.
+                if (App.ClementineConnection != null
+                        && (App.ClementineConnection.isClosedOrClosing()
+                                || mPlayerThread == null
+                                || !mPlayerThread.isAlive())) {
+                    mActiveConnection = null;
+                    if (mMediaSessionController != null) {
+                        mMediaSessionController.release();
+                        mMediaSessionController = null;
+                    }
+                    if (mRenderer != null) {
+                        mRenderer.release();
+                        mRenderer = null;
+                    }
+                    stopPlayerThread();
+                    App.ClementineConnection = null;
+                }
+                mConnectionStartId = mLatestStartId;
                 // Create a new instance
                 if (App.ClementineConnection == null) {
-                    App.ClementineConnection = new ClementinePlayerConnection();
-                    App.ClementineConnection.setUiHandler(mUiHandler);
-                    RemoteRepository.attach(App.ClementineConnection);
-                    MediaSessionController mediaSessionController = new MediaSessionController(this,
-                            App.ClementineConnection);
-                    mediaSessionController.registerMediaSession();
-                    Renderer.attach(this, App.ClementineConnection, this::setPlayingHere);
-                    Syncer.attach(App.ClementineConnection);
+                    final ClementinePlayerConnection connection = new ClementinePlayerConnection();
+                    mActiveConnection = connection;
+                    App.ClementineConnection = connection;
+                    connection.setUiHandler(mUiHandler);
+                    RemoteRepository.attach(connection);
+                    mMediaSessionController = new MediaSessionController(this, connection);
+                    mMediaSessionController.registerMediaSession();
+                    mRenderer = Renderer.attach(this, connection, this::setPlayingHere);
+                    Syncer.attach(connection);
 
                     GlobalSearchManager.getInstance().reset();
 
-                    App.ClementineConnection.addPlayerConnectionListener(
+                    connection.addPlayerConnectionListener(
                             new PlayerConnectionListener() {
                                 @Override
                                 public void onConnectionStatusChanged(
                                         ClementinePlayerConnection.ConnectionStatus status) {
+                                    if (connection != mActiveConnection) {
+                                        return;
+                                    }
                                     switch (status) {
                                         case IDLE:
                                             sendConnectMessageIfPossible(intent);
                                             break;
                                         case CONNECTING:
+                                        case RECONNECTING:
                                             enterForeground();
                                             break;
-                                        case NO_CONNECTION:
-                                            // Nothing worth keeping: drop "Connecting…".
-                                            leaveForeground(false);
-                                            sendDisconnectServiceMessage();
-                                            break;
-                                        case CONNECTED:
-                                            enterForeground();
-                                            if (mUseWakeLock) {
-                                                mWakeLock.acquire();
+                                        case NO_CONNECTION: {
+                                            // Only drop foreground if no newer
+                                            // start command superseded this one.
+                                            int stopId = mConnectionStartId;
+                                            if (mLatestStartId == stopId) {
+                                                leaveForeground(false);
                                             }
+                                            stopServiceForStartId(stopId);
+                                            break;
+                                        }
+                                        case CONNECTED:
+                                        case RECONNECTED:
+                                            enterForeground();
+                                            acquireWakeLock();
                                             break;
                                         case LOST_CONNECTION:
                                             showKeepAliveDisconnectNotification();
                                             break;
-                                        case DISCONNECTED:
-                                            leaveForeground(true);
-                                            sendDisconnectServiceMessage();
-
-                                            if (mUseWakeLock) {
-                                                mWakeLock.release();
+                                        case DISCONNECTED: {
+                                            // Only detach/stop for the startId
+                                            // that owned this connection.
+                                            int stopId = mConnectionStartId;
+                                            if (mLatestStartId == stopId) {
+                                                leaveForeground(true);
                                             }
+                                            stopServiceForStartId(stopId);
+                                            releaseWakeLock();
                                             break;
+                                        }
                                     }
                                 }
 
                                 @Override
                                 public void onClementineMessageReceived(
                                         ClementineMessage clementineMessage) {
+                                    if (connection != mActiveConnection) {
+                                        return;
+                                    }
                                     GlobalSearchManager.getInstance().parseClementineMessage(
                                             clementineMessage);
                                     if (startsPlaying(clementineMessage)) {
@@ -222,14 +284,15 @@ public class ClementineService extends Service {
                                 }
                             });
 
-                    mPlayerThread = new Thread(App.ClementineConnection);
+                    mPlayerThread = new Thread(connection);
                     mPlayerThread.start();
                 } else {
+                    mActiveConnection = App.ClementineConnection;
                     sendConnectMessageIfPossible(intent);
                 }
                 break;
             case SERVICE_DISCONNECTED:
-                stopSelf();
+                stopServiceForStartId(mLatestStartId);
                 break;
             default:
                 break;
@@ -247,18 +310,55 @@ public class ClementineService extends Service {
 
     @Override
     public void onDestroy() {
-        if (App.ClementineConnection != null
-                && App.ClementineConnection.isConnected()) {
+        ClementinePlayerConnection connection = App.ClementineConnection;
+        Handler handler = connection != null ? connection.mHandler : null;
+        if (connection != null && connection.isConnected() && handler != null) {
             // Move the request to the message
             Message msg = Message.obtain();
             msg.obj = ClementineMessage.getMessage(MsgType.DISCONNECT);
 
             // Send the request to the thread
-            App.ClementineConnection.mHandler.sendMessage(msg);
+            handler.sendMessage(msg);
         }
         interruptThread();
+        // Release session, renderer, and wake lock here too because OS kill or
+        // unbind can destroy the service without a clean DISCONNECTED event.
+        if (mMediaSessionController != null) {
+            mMediaSessionController.release();
+            mMediaSessionController = null;
+        }
+        if (mRenderer != null) {
+            mRenderer.release();
+            mRenderer = null;
+        }
+        releaseWakeLock();
+        mActiveConnection = null;
         App.ClementineConnection = null;
         leaveForeground(false);
+        super.onDestroy();
+    }
+
+    private void acquireWakeLock() {
+        if (mUseWakeLock && mWakeLock != null && !mWakeLock.isHeld()) {
+            mWakeLock.acquire();
+        }
+    }
+
+    private void releaseWakeLock() {
+        if (mWakeLock != null && mWakeLock.isHeld()) {
+            mWakeLock.release();
+        }
+    }
+
+    private Notification buildConnectingNotification() {
+        return new NotificationCompat.Builder(this, App.notificationChannel)
+                .setSmallIcon(R.drawable.notification)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(getString(R.string.connectdialog_connecting))
+                .setOngoing(true)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setContentIntent(Utilities.getClementineRemotePendingIntent(this))
+                .build();
     }
 
     /**
@@ -269,16 +369,8 @@ public class ClementineService extends Service {
         if (mInForeground) {
             return;
         }
-        Notification notification = new NotificationCompat.Builder(this, App.notificationChannel)
-                .setSmallIcon(R.drawable.notification)
-                .setContentTitle(getString(R.string.app_name))
-                .setContentText(getString(R.string.connectdialog_connecting))
-                .setOngoing(true)
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setContentIntent(Utilities.getClementineRemotePendingIntent(this))
-                .build();
         ServiceCompat.startForeground(this, ClementineMediaSessionNotification.NOTIFIFCATION_ID,
-                notification, foregroundServiceTypes());
+                buildConnectingNotification(), foregroundServiceTypes());
         mInForeground = true;
     }
 
@@ -308,13 +400,19 @@ public class ClementineService extends Service {
             return;
         }
         NotificationManager notifications = getSystemService(NotificationManager.class);
-        for (StatusBarNotification shown : notifications.getActiveNotifications()) {
-            if (shown.getId() == ClementineMediaSessionNotification.NOTIFIFCATION_ID) {
-                ServiceCompat.startForeground(this, shown.getId(), shown.getNotification(),
-                        foregroundServiceTypes());
-                return;
+        if (notifications != null) {
+            for (StatusBarNotification shown : notifications.getActiveNotifications()) {
+                if (shown.getId() == ClementineMediaSessionNotification.NOTIFIFCATION_ID) {
+                    ServiceCompat.startForeground(this, shown.getId(), shown.getNotification(),
+                            foregroundServiceTypes());
+                    return;
+                }
             }
         }
+        // Fallback to the connecting notification if the media notification is
+        // not active yet so Android still gets the updated FGS type.
+        ServiceCompat.startForeground(this, ClementineMediaSessionNotification.NOTIFIFCATION_ID,
+                buildConnectingNotification(), foregroundServiceTypes());
     }
 
     /**
@@ -335,33 +433,32 @@ public class ClementineService extends Service {
         mUiHandler = uiHandler;
     }
 
-    private void sendDisconnectServiceMessage() {
-        Intent mServiceIntent = new Intent(
-                ClementineService.this,
-                ClementineService.class);
-        mServiceIntent
-                .putExtra(SERVICE_ID, SERVICE_DISCONNECTED);
-        startService(mServiceIntent);
-    }
-
-    private void interruptThread() {
+    private void stopPlayerThread() {
         if (mPlayerThread != null) {
             mPlayerThread.interrupt();
         }
 
-        if (App.ClementineConnection != null
-                && App.ClementineConnection.mHandler != null
+        ClementinePlayerConnection connection = App.ClementineConnection;
+        Handler handler = connection != null ? connection.mHandler : null;
+        if (handler != null
+                && mPlayerThread != null
                 && mPlayerThread.isAlive()) {
-            App.ClementineConnection.mHandler.post(new Runnable() {
+            handler.post(new Runnable() {
 
                 @Override
                 public void run() {
-                    Looper.myLooper().quit();
+                    Looper looper = Looper.myLooper();
+                    if (looper != null) {
+                        looper.quit();
+                    }
                 }
 
             });
         }
+    }
 
+    private void interruptThread() {
+        stopPlayerThread();
         DownloadManager.getInstance().shutdown();
     }
 
@@ -392,7 +489,9 @@ public class ClementineService extends Service {
     }
 
     private void sendConnectMessageIfPossible(Intent intent) {
-        if (intent.hasExtra(EXTRA_STRING_IP)) {
+        ClementinePlayerConnection connection = App.ClementineConnection;
+        Handler handler = connection != null ? connection.mHandler : null;
+        if (intent != null && intent.hasExtra(EXTRA_STRING_IP) && handler != null) {
             final String ip = intent.getStringExtra(EXTRA_STRING_IP);
             final int port = intent.getIntExtra(EXTRA_INT_PORT, 0);
             final int auth = intent.getIntExtra(EXTRA_INT_AUTH, 0);
@@ -401,7 +500,7 @@ public class ClementineService extends Service {
             msg.obj = ClementineMessageFactory
                     .buildConnectMessage(ip, port, auth, true, false,
                             ThisRenderer.capabilitiesIfEnabled());
-            App.ClementineConnection.mHandler.sendMessage(msg);
+            handler.sendMessage(msg);
         }
     }
 }

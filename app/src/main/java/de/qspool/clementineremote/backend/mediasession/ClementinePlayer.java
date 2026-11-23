@@ -105,10 +105,14 @@ public class ClementinePlayer extends SimpleBasePlayer {
     }
 
     private static void sendToClementine(ClementineMessage message) {
-        if (App.ClementineConnection != null) {
+        // Snapshot connection and handler locally in case disconnect clears them.
+        de.qspool.clementineremote.backend.ClementinePlayerConnection connection =
+                App.ClementineConnection;
+        Handler handler = connection != null ? connection.mHandler : null;
+        if (handler != null) {
             Message msg = Message.obtain();
             msg.obj = message;
-            App.ClementineConnection.mHandler.sendMessage(msg);
+            handler.sendMessage(msg);
         }
     }
 

@@ -3,12 +3,14 @@ package de.qspool.clementineremote.backend.sync
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Process
 import androidx.core.app.TaskStackBuilder
 import androidx.annotation.OptIn
 import androidx.core.app.NotificationCompat
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.CommandButton
@@ -50,16 +52,66 @@ class PhonePlaybackService : MediaSessionService() {
             .setId(SESSION_ID)
             .setSessionActivity(playerIntent())
             .setCallback(object : MediaSession.Callback {
+                override fun onConnect(
+                    mediaSession: MediaSession,
+                    controller: MediaSession.ControllerInfo,
+                ): MediaSession.ConnectionResult {
+                    val result = super.onConnect(mediaSession, controller)
+                    // Service is exported for system/watch/Auto controllers;
+                    // allow playback controls but block third-party URI injection.
+                    if (controller.uid != Process.myUid()) {
+                        val commands = result.availablePlayerCommands.buildUpon()
+                            .remove(Player.COMMAND_SET_MEDIA_ITEM)
+                            .remove(Player.COMMAND_CHANGE_MEDIA_ITEMS)
+                            .build()
+                        return MediaSession.ConnectionResult.accept(
+                            result.availableSessionCommands,
+                            commands,
+                        )
+                    }
+                    return result
+                }
+
                 // Controllers send items without their URIs, so each says its own in its request.
                 override fun onAddMediaItems(
                     mediaSession: MediaSession,
                     controller: MediaSession.ControllerInfo,
                     mediaItems: MutableList<MediaItem>,
-                ): ListenableFuture<MutableList<MediaItem>> = Futures.immediateFuture(
-                    mediaItems.mapTo(mutableListOf()) { item ->
-                        item.requestMetadata.mediaUri?.let { item.buildUpon().setUri(it).build() } ?: item
+                ): ListenableFuture<MutableList<MediaItem>> {
+                    if (controller.uid != Process.myUid()) {
+                        // Reject external apps directly too, not just via onConnect().
+                        return Futures.immediateFailedFuture(
+                            SecurityException("External media items are not allowed"),
+                        )
                     }
-                )
+                    return Futures.immediateFuture(
+                        mediaItems.mapTo(mutableListOf()) { item ->
+                            item.requestMetadata.mediaUri?.let { item.buildUpon().setUri(it).build() } ?: item
+                        },
+                    )
+                }
+
+                override fun onSetMediaItems(
+                    mediaSession: MediaSession,
+                    controller: MediaSession.ControllerInfo,
+                    mediaItems: MutableList<MediaItem>,
+                    startIndex: Int,
+                    startPositionMs: Long,
+                ): ListenableFuture<MediaSession.MediaItemsWithStartPosition> {
+                    if (controller.uid != Process.myUid()) {
+                        // Reject external apps directly too, not just via onConnect().
+                        return Futures.immediateFailedFuture(
+                            SecurityException("External media items are not allowed"),
+                        )
+                    }
+                    return super.onSetMediaItems(
+                        mediaSession,
+                        controller,
+                        mediaItems,
+                        startIndex,
+                        startPositionMs,
+                    )
+                }
             })
             .build()
         setMediaNotificationProvider(OnThisPhoneNotification(this))

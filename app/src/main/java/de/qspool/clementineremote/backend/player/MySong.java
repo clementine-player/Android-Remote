@@ -26,9 +26,11 @@ import android.graphics.BitmapFactory;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.R;
@@ -70,9 +72,13 @@ public class MySong {
     /** The decoded cover, or null if there is none or it could not be decoded. */
     private Bitmap artBitmap;
 
+    // Shared fallback bitmap so tracks without art avoid re-decoding nocover.
+    private static volatile Bitmap sNoCoverBitmap;
+
     private boolean loved;
 
-    private List<LyricsProvider> mLyricsProvider = new ArrayList<LyricsProvider>();
+    // Volatile so reference swaps publish safely; CopyOnWriteArrayList so readers can iterate while the parser appends.
+    private volatile List<LyricsProvider> mLyricsProvider = new CopyOnWriteArrayList<LyricsProvider>();
 
     private String filename = "";
 
@@ -84,17 +90,66 @@ public class MySong {
 
     private String url;
 
-    public boolean equals(MySong song) {
-        if (song.id == this.id
-                && song.index == this.index
-                && song.artist.equals(this.artist)
-                && song.title.equals(this.title)
-                && song.album.equals(this.album)
-                && song.albumartist.equals(this.albumartist)) {
+    public MySong() {
+    }
+
+    public MySong(MySong other) {
+        this.id = other.id;
+        this.index = other.index;
+        this.title = other.title;
+        this.artist = other.artist;
+        this.album = other.album;
+        this.albumartist = other.albumartist;
+        this.prettyLength = other.prettyLength;
+        this.length = other.length;
+        this.genre = other.genre;
+        this.year = other.year;
+        this.track = other.track;
+        this.disc = other.disc;
+        this.playcount = other.playcount;
+        this.art = other.art;
+        this.artBitmap = other.artBitmap;
+        this.loved = other.loved;
+        this.mLyricsProvider = new CopyOnWriteArrayList<LyricsProvider>(other.mLyricsProvider);
+        this.filename = other.filename;
+        this.size = other.size;
+        this.local = other.local;
+        this.rating = other.rating;
+        this.url = other.url;
+    }
+
+    /**
+     * Compares song metadata and cover art bytes explicitly without overriding
+     * {@link Object#equals}, which {@code RemoteRepository.NowPlaying} relies on
+     * to distinguish new {@link MySong} instances by reference identity.
+     */
+    public boolean sameMetadata(@Nullable MySong song) {
+        if (this == song) {
             return true;
-        } else {
+        }
+        if (song == null) {
             return false;
         }
+        return this.id == song.id
+                && this.index == song.index
+                && this.length == song.length
+                && this.track == song.track
+                && this.disc == song.disc
+                && this.playcount == song.playcount
+                && this.loved == song.loved
+                && this.local == song.local
+                && this.size == song.size
+                && Float.compare(song.rating, this.rating) == 0
+                && Objects.equals(this.artist, song.artist)
+                && Objects.equals(this.title, song.title)
+                && Objects.equals(this.album, song.album)
+                && Objects.equals(this.albumartist, song.albumartist)
+                && Objects.equals(this.prettyLength, song.prettyLength)
+                && Objects.equals(this.genre, song.genre)
+                && Objects.equals(this.year, song.year)
+                && Objects.equals(this.filename, song.filename)
+                && Objects.equals(this.url, song.url)
+                && Arrays.equals(this.art, song.art);
     }
 
     @SuppressLint("DefaultLocale")
@@ -277,7 +332,18 @@ public class MySong {
         if (artBitmap != null) {
             return artBitmap;
         }
-        return BitmapFactory.decodeResource(App.getApp().getResources(), R.drawable.nocover);
+        Bitmap cached = sNoCoverBitmap;
+        if (cached == null) {
+            synchronized (MySong.class) {
+                cached = sNoCoverBitmap;
+                if (cached == null) {
+                    cached = BitmapFactory.decodeResource(
+                            App.getApp().getResources(), R.drawable.nocover);
+                    sNoCoverBitmap = cached;
+                }
+            }
+        }
+        return cached;
     }
 
     /** The cover art as Clementine sent it (compressed), or null if the song has none. */
@@ -295,6 +361,12 @@ public class MySong {
     public void setArt(ByteString byteString) {
         this.art = byteString.toByteArray();
         this.artBitmap = BitmapFactory.decodeByteArray(art, 0, art.length);
+    }
+
+    /** Attaches pre-decoded art from a worker thread so UI never decodes it. */
+    public void setArt(@Nullable byte[] artBytes, @Nullable Bitmap decodedBitmap) {
+        this.art = artBytes;
+        this.artBitmap = decodedBitmap;
     }
 
     /**
@@ -315,6 +387,10 @@ public class MySong {
 
     public List<LyricsProvider> getLyricsProvider() {
         return mLyricsProvider;
+    }
+
+    public void setLyricsProvider(Collection<LyricsProvider> providers) {
+        mLyricsProvider = new CopyOnWriteArrayList<LyricsProvider>(providers);
     }
 
     public String getFilename() {
