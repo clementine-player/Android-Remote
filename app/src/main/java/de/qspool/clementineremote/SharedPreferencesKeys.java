@@ -39,8 +39,6 @@ public class SharedPreferencesKeys {
 
     public final static String SP_LAST_AUTH_CODE = "last_auth_code";
 
-    public final static String SP_SHOW_TRACKNO = "pref_show_trackno";
-
     public final static String SP_LASTFM = "pref_show_lastfm";
 
     public final static String SP_KEEP_SCREEN_ON = "pref_keep_screen_on";
@@ -75,10 +73,6 @@ public class SharedPreferencesKeys {
     public final static String SP_DOWNLOAD_PLAYLIST_CRT_ARTIST_DIR = "pref_dl_artist_dir";
 
     public final static String SP_DOWNLOAD_PLAYLIST_CRT_ALBUM_DIR = "pref_dl_album_dir";
-
-    public final static String SP_LAST_STACKTRACE = "last_stacktrace";
-
-    public final static String SP_LAST_SEND_STACKTRACE = "last_send_stacktrace";
 
     public final static String SP_LIBRARY_IP = "library_ip";
 
