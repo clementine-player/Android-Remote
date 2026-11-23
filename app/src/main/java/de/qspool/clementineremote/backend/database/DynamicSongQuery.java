@@ -167,12 +167,24 @@ public abstract class DynamicSongQuery {
 
         Cursor c = mDatabase.rawQuery(query.toString(), selection);
 
-        if (c != null && c.moveToFirst()) {
-            items = c.getInt(0);
-            c.close();
+        if (c != null) {
+            // Close even on 0-row results or exceptions to avoid leaking cursors/FDs.
+            try {
+                if (c.moveToFirst()) {
+                    items = c.getInt(0);
+                }
+            } finally {
+                c.close();
+            }
         }
 
         return items;
+    }
+
+    private static String nonNullString(Cursor c, int columnIndex) {
+        // SQLite NULL columns return null from getString(); coalesce so callers don't NPE.
+        String value = c.getString(columnIndex);
+        return value != null ? value : "";
     }
 
     public SongSelectItem fillSongSelectItem(Cursor c) {
@@ -181,13 +193,13 @@ public abstract class DynamicSongQuery {
 
         String[] values = new String[mSelectedFields.length];
         for (int i=0;i<mSelectedFields.length;i++) {
-            values[i] = c.getString(i+1); // 0 is _id, selected fields begin at index 1!
+            values[i] = nonNullString(c, i+1); // 0 is _id, selected fields begin at index 1!
         }
 
         // Get default fields
-        String url = c.getString(mSelectedFields.length+1);
-        String artist = c.getString(mSelectedFields.length+2);
-        String album = c.getString(mSelectedFields.length+3);
+        String url = nonNullString(c, mSelectedFields.length+1);
+        String artist = nonNullString(c, mSelectedFields.length+2);
+        String album = nonNullString(c, mSelectedFields.length+3);
 
         // Fill the selection and list items
         String[] selection = new String[mLevel+1];
@@ -242,12 +254,17 @@ public abstract class DynamicSongQuery {
 
         Cursor c = buildQuery();
 
-        if (c != null && c.getCount() != 0) {
-            c.moveToFirst();
-            do {
-                itemList.add(fillSongSelectItem(c));
-            } while (c.moveToNext());
-            c.close();
+        if (c != null) {
+            // Close even on empty results or exceptions to avoid leaking cursors/FDs.
+            try {
+                if (c.moveToFirst()) {
+                    do {
+                        itemList.add(fillSongSelectItem(c));
+                    } while (c.moveToNext());
+                }
+            } finally {
+                c.close();
+            }
         }
 
         return itemList;

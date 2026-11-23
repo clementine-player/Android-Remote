@@ -17,53 +17,68 @@
 
 package de.qspool.clementineremote.utils;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.concurrent.TimeUnit;
 
+/** Computes speed on demand from timestamped byte samples over a sliding window; no background Timer thread. */
 public class DownloadSpeedCalculator {
 
-    private final static int HISTORY_CYCLES = 6;
+    private static final long WINDOW_NANOS = TimeUnit.SECONDS.toNanos(3);
 
-    private final static int INTERVALL = 500;
+    private static final long SAMPLE_INTERVAL_NANOS = TimeUnit.MILLISECONDS.toNanos(250);
 
-    private int index = 0;
+    private static final long MIN_ELAPSED_NANOS = TimeUnit.MILLISECONDS.toNanos(100);
 
-    private List<Integer> mLastDownloadCycles = Arrays.asList(new Integer[HISTORY_CYCLES]);
+    private static final class Sample {
+        final long timeNanos;
+        final int totalBytes;
 
-    private int lastDownloaded;
-
-    private int mDownloadSpeed;
-
-    public DownloadSpeedCalculator(final IDownloadCalculatorSource dataSource) {
-
-        // Get the average download speed of the past 5 seconds
-        new Timer().scheduleAtFixedRate(new TimerTask() {
-
-            @Override
-            public void run() {
-                int totalBytes = dataSource.getBytesTotalDownloaded();
-                mLastDownloadCycles.set(index, totalBytes - lastDownloaded);
-
-                int sum = 0;
-                int count = 0;
-                for (Integer i : mLastDownloadCycles) {
-                    if (i != null) {
-                        sum += i;
-                        count++;
-                    }
-                }
-
-                mDownloadSpeed = (sum / count) * (1000 / INTERVALL);
-
-                index = (index + 1) % mLastDownloadCycles.size();
-                lastDownloaded = totalBytes;
-            }
-        }, 0, INTERVALL);
+        Sample(long timeNanos, int totalBytes) {
+            this.timeNanos = timeNanos;
+            this.totalBytes = totalBytes;
+        }
     }
 
-    public int getDownloadSpeed() {
-        return mDownloadSpeed;
+    private final IDownloadCalculatorSource mDataSource;
+
+    private final Deque<Sample> mSamples = new ArrayDeque<>();
+
+    public DownloadSpeedCalculator(final IDownloadCalculatorSource dataSource) {
+        mDataSource = dataSource;
+        long now = System.nanoTime();
+        int initialBytes = dataSource != null ? dataSource.getBytesTotalDownloaded() : 0;
+        mSamples.addLast(new Sample(now, initialBytes));
+    }
+
+    public synchronized int getDownloadSpeed() {
+        if (mDataSource == null) {
+            return 0;
+        }
+        long now = System.nanoTime();
+        int totalBytes = mDataSource.getBytesTotalDownloaded();
+
+        Sample last = mSamples.peekLast();
+        if (last == null || (now - last.timeNanos) >= SAMPLE_INTERVAL_NANOS) {
+            mSamples.addLast(new Sample(now, totalBytes));
+        }
+
+        // Prune expired samples, keeping at least two so an anchor stays available across pauses.
+        while (mSamples.size() > 2 && (now - mSamples.peekFirst().timeNanos) > WINDOW_NANOS) {
+            mSamples.removeFirst();
+        }
+
+        Sample anchor = mSamples.peekFirst();
+        if (anchor == null) {
+            return 0;
+        }
+        long elapsedNanos = now - anchor.timeNanos;
+        // Widen before subtracting to prevent 32-bit int wraparound on large byte counts.
+        long bytesDelta = (long) totalBytes - anchor.totalBytes;
+        if (elapsedNanos < MIN_ELAPSED_NANOS || bytesDelta <= 0) {
+            return 0;
+        }
+        long bytesPerSecond = (bytesDelta * TimeUnit.SECONDS.toNanos(1)) / elapsedNanos;
+        return (int) Math.min(Integer.MAX_VALUE, bytesPerSecond);
     }
 }

@@ -71,6 +71,9 @@ public class DownloadManager {
 
     private int mIds;
 
+    // Prevents late cancel/progress callbacks from re-posting notifications cleared by shutdown().
+    private volatile boolean mShuttingDown = false;
+
     private SharedPreferences mSharedPref;
 
     private static DownloadManager instance;
@@ -135,6 +138,7 @@ public class DownloadManager {
     }
 
     public boolean addJob(ClementineMessage clementineMessage) {
+        mShuttingDown = false;
         ClementineSongDownloader songDownloader = new ClementineSongDownloader();
         songDownloader.setId(mIds);
         songDownloader.setSongDownloaderListener(new SongDownloaderListener() {
@@ -151,10 +155,18 @@ public class DownloadManager {
 
                 int running;
                 int finished;
+                boolean moved;
                 synchronized (DownloadManager.this) {
-                    finish(id);
+                    // Skip notification updates after shutdown(); finish() below returns false if shutdown()/removeDownloader() already dropped the entry.
+                    if (mShuttingDown) {
+                        return;
+                    }
+                    moved = finish(id);
                     running = mActiveDownloads.size();
                     finished = mFinishedDownloads.size();
+                }
+                if (!moved) {
+                    return;
                 }
 
                 // Remove the notification if this was the last download
@@ -277,10 +289,16 @@ public class DownloadManager {
         mActiveDownloads.append(downloader.getId(), downloader);
     }
 
-    /** Moves a download to the finished ones. */
-    synchronized void finish(int id) {
-        mFinishedDownloads.append(id, mActiveDownloads.get(id));
+    /** Moves a download to the finished ones, if it is still active. */
+    synchronized boolean finish(int id) {
+        // Guard against null when shutdown() or removeDownloader() already removed the entry.
+        ClementineSongDownloader downloader = mActiveDownloads.get(id);
+        if (downloader == null) {
+            return false;
+        }
+        mFinishedDownloads.append(id, downloader);
         mActiveDownloads.remove(id);
+        return true;
     }
 
     /**
@@ -306,9 +324,12 @@ public class DownloadManager {
     }
 
     public synchronized void shutdown() {
+        // Set mShuttingDown before cancelling so in-flight callbacks bail out instead of re-posting notifications.
+        mShuttingDown = true;
         for (int i = 0; i < mActiveDownloads.size(); ++i) {
             mActiveDownloads.valueAt(i).cancel(true);
         }
+        mActiveDownloads.clear();
 
         mNotifyManager.cancel(NOTIFICATION_ID_DOWNLOADS);
         mNotifyManager.cancel(NOTIFICATION_ID_DOWNLOADS_FINISHED);
@@ -316,6 +337,10 @@ public class DownloadManager {
 
     public String getTitleForItem(ClementineSongDownloader downloader) {
         DownloadStatus status = downloader.getDownloadStatus();
+        if (status == null) {
+            return mContext.getString(R.string.download_noti_title);
+        }
+        de.qspool.clementineremote.backend.player.MySong song = status.getSong();
 
         StringBuilder sb = new StringBuilder();
 
@@ -331,25 +356,34 @@ public class DownloadManager {
                 switch (downloader.getItem()) {
                     case APlaylist:
                         sb.append(mContext.getString(R.string.download_noti_title_playlist));
-                        sb.append(" ");
-                        sb.append(downloader.getPlaylistName());
+                        String playlistName = downloader.getPlaylistName();
+                        if (playlistName != null && !playlistName.isEmpty()) {
+                            sb.append(" ");
+                            sb.append(playlistName);
+                        }
                         break;
                     case CurrentItem:
                         sb.append(mContext.getString(R.string.download_noti_title_song));
-                        sb.append(" ");
-                        sb.append(status.getSong().getTitle());
+                        if (song != null && !song.getTitle().isEmpty()) {
+                            sb.append(" ");
+                            sb.append(song.getTitle());
+                        }
                         break;
                     case Urls:
                         sb.append(mContext.getString(R.string.download_noti_title_songs));
-                        sb.append(" ");
-                        sb.append(status.getSong().getArtist());
-                        sb.append(" - ");
-                        sb.append(status.getSong().getTitle());
+                        if (song != null) {
+                            sb.append(" ");
+                            sb.append(song.getArtist());
+                            sb.append(" - ");
+                            sb.append(song.getTitle());
+                        }
                         break;
                     case ItemAlbum:
                         sb.append(mContext.getString(R.string.download_noti_title_album));
-                        sb.append(" ");
-                        sb.append(status.getSong().getAlbum());
+                        if (song != null && !song.getAlbum().isEmpty()) {
+                            sb.append(" ");
+                            sb.append(song.getAlbum());
+                        }
                         break;
                 }
         }
@@ -359,6 +393,10 @@ public class DownloadManager {
 
     public String getSubtitleForItem(ClementineSongDownloader downloader) {
         DownloadStatus status = downloader.getDownloadStatus();
+        if (status == null) {
+            return "";
+        }
+        de.qspool.clementineremote.backend.player.MySong song = status.getSong();
 
         StringBuilder sb = new StringBuilder();
         switch (status.getState()) {
@@ -378,24 +416,35 @@ public class DownloadManager {
                 sb.append(status.getCurrentFileIndex());
                 sb.append("/");
                 sb.append(status.getTotalFiles());
-                sb.append(") ");
-                sb.append(status.getSong().getArtist());
-                sb.append(" - ");
-                sb.append(status.getSong().getTitle());
+                sb.append(")");
+                if (song != null) {
+                    sb.append(" ");
+                    sb.append(song.getArtist());
+                    sb.append(" - ");
+                    sb.append(song.getTitle());
+                }
                 break;
             case FINISHED:
                 sb.append("(");
                 sb.append(status.getCurrentFileIndex());
                 sb.append("/");
                 sb.append(status.getTotalFiles());
-                sb.append(") ");
-                sb.append(downloader.getDownloaderResult().getMessage(mContext));
+                sb.append(")");
+                DownloaderResult result = downloader.getDownloaderResult();
+                if (result != null) {
+                    sb.append(" ");
+                    sb.append(result.getMessage(mContext));
+                }
                 break;
         }
         return sb.toString();
     }
 
     private synchronized void onProgress(DownloadStatus status) {
+        // Drop main-thread progress updates queued before shutdown() or removeDownloader().
+        if (mShuttingDown || mActiveDownloads.get(status.getId()) == null) {
+            return;
+        }
         switch (status.getState()) {
             case IDLE:
                 mActiveNofiticationBuilder.setContentTitle(
@@ -405,7 +454,7 @@ public class DownloadManager {
                 break;
             case TRANSCODING:
             case DOWNLOADING:
-                if (mActiveDownloads.size() == 1) {
+                if (mActiveDownloads.size() <= 1) {
                     setNotificationSingleDownload(mActiveNofiticationBuilder, status);
                 } else {
                     setNotificationMultipleDownloads(mActiveNofiticationBuilder);
@@ -420,6 +469,9 @@ public class DownloadManager {
     private void setNotificationSingleDownload(NotificationCompat.Builder notificationBuilder,
             DownloadStatus status) {
         ClementineSongDownloader downloader = mActiveDownloads.get(status.getId());
+        if (downloader == null) {
+            return;
+        }
 
         notificationBuilder.setProgress(100, (int) status.getProgress(), false);
 
@@ -431,18 +483,23 @@ public class DownloadManager {
     }
 
     private void setNotificationMultipleDownloads(NotificationCompat.Builder notificationBuilder) {
+        // Snapshot active count once and return if 0 so average progress cannot divide by zero.
+        int activeCount = mActiveDownloads.size();
+        if (activeCount == 0) {
+            return;
+        }
         NotificationCompat.InboxStyle downloadItems =
                 new NotificationCompat.InboxStyle();
 
         // Title
         String title = mContext.getResources().getQuantityString(R.plurals.download_noti_n_downloads,
-                mActiveDownloads.size(),
-                mActiveDownloads.size());
+                activeCount,
+                activeCount);
         notificationBuilder.setContentTitle(title);
 
         // Total progress in subtitle
         int progress = 0;
-        for (int i = 0; i < mActiveDownloads.size(); ++i) {
+        for (int i = 0; i < activeCount; ++i) {
             ClementineSongDownloader downloader = mActiveDownloads.valueAt(i);
             DownloadStatus status = downloader.getDownloadStatus();
             progress += status.getProgress();
@@ -451,7 +508,8 @@ public class DownloadManager {
         }
 
         String subtitle = mContext.getString(R.string.download_noti_n_progress);
-        subtitle = subtitle.replace("%d", String.valueOf(progress / mActiveDownloads.size()));
+        // R.string.download_noti_n_progress escapes "%" as "%%" for String.format; unescape after replace().
+        subtitle = subtitle.replace("%d", String.valueOf(progress / activeCount)).replace("%%", "%");
         notificationBuilder.setContentText(subtitle);
         downloadItems.setBigContentTitle(subtitle); // Show the status on expanded notification
 

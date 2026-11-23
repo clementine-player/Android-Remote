@@ -242,6 +242,37 @@ class SyncStoreTest {
         assertEquals(emptyList<PlayLogEntry>(), store.playLog(OTHER_SERVER))
     }
 
+    @Test
+    fun atomicSourceCheckedRuleUpdatesRejectReplacedRowId() {
+        val originalId = store.addRule(rule("playlist/original"))
+        store.putItem(item("library/1"))
+        store.putItem(item("library/2"))
+        assertTrue(
+            store.setRuleItemsIfSource(
+                originalId, "playlist/original", SERVER, listOf("library/1"), lastSyncedAt = 123L
+            )
+        )
+        assertEquals(listOf("library/1"), store.ruleItems(originalId).map { it.itemKey })
+        assertEquals(123L, store.rule(originalId)!!.lastSyncedAt)
+
+        store.removeRule(originalId)
+        val reusedId = store.addRule(rule("playlist/replacement"))
+        assertEquals(originalId, reusedId)
+
+        assertTrue(
+            !store.setRuleItemsIfSource(
+                originalId, "playlist/original", SERVER, listOf("library/2"), lastSyncedAt = 456L
+            )
+        )
+        assertTrue(
+            !store.mergeRuleItemsIfSource(
+                originalId, "playlist/original", SERVER, listOf("library/2")
+            )
+        )
+        assertTrue(store.ruleItems(reusedId).isEmpty())
+        assertEquals(0L, store.rule(reusedId)!!.lastSyncedAt)
+    }
+
     private companion object {
         const val SERVER = "4f1c2d6e-8a0b-4c8e-9b7a-2e3f5d6c7b8a"
         const val OTHER_SERVER = "9d8c7b6a-5f4e-4d3c-8b2a-1f0e9d8c7b6a"

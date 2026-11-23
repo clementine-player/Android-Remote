@@ -19,6 +19,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 /**
  * Saves songs to the shared Music collection through MediaStore, under Music/Clementine/ on
@@ -112,13 +113,15 @@ public class MediaStoreDownloadStorage implements DownloadStorage {
     @Override
     public PendingSong create(String relativeDir, String fileName) throws IOException {
         SavedSong existing = find(relativeDir, fileName);
-        if (existing != null) {
-            mResolver.delete(existing.uri, null, null);
-        }
+        // Stage under a unique DISPLAY_NAME while IS_PENDING=1 instead of deleting the existing
+        // song up front, keeping the working file intact if replacement fails or is cancelled.
+        String stagingName = existing != null
+                ? "pending-" + UUID.randomUUID() + "-" + fileName
+                : fileName;
 
         ContentValues values = new ContentValues();
         values.put(MediaStore.Audio.Media.RELATIVE_PATH, BASE_DIR + relativeDir);
-        values.put(MediaStore.Audio.Media.DISPLAY_NAME, fileName);
+        values.put(MediaStore.Audio.Media.DISPLAY_NAME, stagingName);
         values.put(MediaStore.Audio.Media.MIME_TYPE, mimeType(fileName));
         values.put(MediaStore.Audio.Media.IS_PENDING, 1);
         final Uri uri = mResolver.insert(mCollection, values);
@@ -146,7 +149,13 @@ public class MediaStoreDownloadStorage implements DownloadStorage {
             @Override
             public Uri commit() throws IOException {
                 out.close();
+                // Delete any prior song with the target name only once the new stream is complete.
+                SavedSong previous = find(relativeDir, fileName);
+                if (previous != null && !previous.uri.equals(uri)) {
+                    mResolver.delete(previous.uri, null, null);
+                }
                 ContentValues published = new ContentValues();
+                published.put(MediaStore.Audio.Media.DISPLAY_NAME, fileName);
                 published.put(MediaStore.Audio.Media.IS_PENDING, 0);
                 mResolver.update(uri, published, null, null);
                 return uri;

@@ -20,18 +20,21 @@ package de.qspool.clementineremote.backend.globalsearch;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer;
 
 public class GlobalSearchRequest {
-    private int mId;
+    private final int mId;
 
-    private GlobalSearchDatabaseHelper mGlobalSearchDatabaseHelper;
+    private final GlobalSearchDatabaseHelper mGlobalSearchDatabaseHelper;
 
-    private ClementineRemoteProtocolBuffer.GlobalSearchStatus mStatus;
+    private volatile ClementineRemoteProtocolBuffer.GlobalSearchStatus mStatus;
 
-    private HashMap<String, ClementineRemoteProtocolBuffer.SongMetadata> mUrlMetadata = new HashMap<>();
+    // Populated on the incoming connection thread while UI/search threads resolve getSongFromUrl().
+    private final Map<String, ClementineRemoteProtocolBuffer.SongMetadata> mUrlMetadata =
+            new ConcurrentHashMap<>();
 
     public GlobalSearchRequest(int id, GlobalSearchDatabaseHelper db) {
         mId = id;
@@ -57,44 +60,48 @@ public class GlobalSearchRequest {
 
         SQLiteDatabase db = mGlobalSearchDatabaseHelper.getWritableDatabase();
         db.beginTransaction();
+        try {
+            for (ClementineRemoteProtocolBuffer.SongMetadata song : searchResult.getSongMetadataList()) {
+                ContentValues contentValues = new ContentValues();
 
-        for (ClementineRemoteProtocolBuffer.SongMetadata song : searchResult.getSongMetadataList()) {
-            ContentValues contentValues = new ContentValues();
+                contentValues.put("global_search_id", getId());
+                contentValues.put("search_query", searchResult.getQuery());
+                contentValues.put("search_provider", searchResult.getSearchProvider());
 
-            contentValues.put("global_search_id", getId());
-            contentValues.put("search_query", searchResult.getQuery());
-            contentValues.put("search_provider", searchResult.getSearchProvider());
+                contentValues.put("title", song.getTitle());
+                contentValues.put("album", song.getAlbum());
+                contentValues.put("artist", song.getArtist());
+                contentValues.put("albumartist", song.getAlbumartist());
+                contentValues.put("track", song.getTrack());
+                contentValues.put("disc", song.getDisc());
+                contentValues.put("pretty_year", song.getPrettyYear());
+                contentValues.put("genre", song.getGenre());
+                contentValues.put("pretty_length", song.getPrettyLength());
+                try {
+                    contentValues.put("year", Integer.parseInt(song.getPrettyYear()));
+                } catch (NumberFormatException e) {
+                    contentValues.put("year", -1);
+                }
+                contentValues.put("filename", song.getUrl()); // filename is url
+                contentValues.put("is_local", song.getIsLocal() ? 1 : 0);
+                contentValues.put("filesize", song.getFileSize());
+                contentValues.put("rating", song.getRating());
 
-            contentValues.put("title", song.getTitle());
-            contentValues.put("album", song.getAlbum());
-            contentValues.put("artist", song.getArtist());
-            contentValues.put("albumartist", song.getAlbumartist());
-            contentValues.put("track", song.getTrack());
-            contentValues.put("disc", song.getDisc());
-            contentValues.put("pretty_year", song.getPrettyYear());
-            contentValues.put("genre", song.getGenre());
-            contentValues.put("pretty_length", song.getPrettyLength());
-            try {
-                contentValues.put("year", Integer.parseInt(song.getPrettyYear()));
-            } catch (NumberFormatException e) {
-                contentValues.put("year", -1);
+                db.insert(GlobalSearchDatabaseHelper.TABLE_NAME, null, contentValues);
+
+                // Key by raw encoded URL so lookups match SongSelectItem.setUrl() verbatim.
+                mUrlMetadata.put(song.getUrl(), song);
             }
-            contentValues.put("filename", song.getUrl()); // filename is url
-            contentValues.put("is_local", song.getIsLocal() ? 1 : 0);
-            contentValues.put("filesize", song.getFileSize());
-            contentValues.put("rating", song.getRating());
 
-            db.insert(GlobalSearchDatabaseHelper.TABLE_NAME, null, contentValues);
-
-            mUrlMetadata.put(song.getUrl(), song);
+            db.setTransactionSuccessful();
+        } finally {
+            // Always close transaction and DB handle so failed inserts don't leave DB locked.
+            db.endTransaction();
+            db.close();
         }
-
-        db.setTransactionSuccessful();
-        db.endTransaction();
-        db.close();
     }
 
     public ClementineRemoteProtocolBuffer.SongMetadata getSongFromUrl(String url) {
-        return mUrlMetadata.get(url);
+        return url != null ? mUrlMetadata.get(url) : null;
     }
 }

@@ -21,5 +21,12 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer;
 
 public interface OnGlobalSearchResponseListener {
     void onStatusChanged(int id, ClementineRemoteProtocolBuffer.GlobalSearchStatus status);
+
+    // Default bridge keeps existing two-arg listeners working until UI adopts query-aware updates.
+    default void onStatusChanged(int id, String query,
+            ClementineRemoteProtocolBuffer.GlobalSearchStatus status) {
+        onStatusChanged(id, status);
+    }
+
     void onResultsReceived(int id);
 }

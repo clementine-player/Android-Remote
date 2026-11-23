@@ -272,6 +272,18 @@ class SyncStore(context: Context, name: String? = DATABASE_NAME) :
         )
     }
 
+    /** Removes [itemKey] for [serverId] only if still unpinned and unreferenced by any rule. */
+    @WorkerThread
+    fun removeItemIfUnwanted(serverId: String, itemKey: String): Int =
+        // Re-check pinned and rule_items at DELETE time in case a rule or pin changed while
+        // audio files were being deleted outside storeMutex.
+        writableDatabase.delete(
+            "items",
+            "server_id = ? AND item_key = ? AND pinned = 0 AND NOT EXISTS" +
+                " (SELECT 1 FROM rule_items r WHERE r.server_id = items.server_id AND r.item_key = items.item_key)",
+            arrayOf(serverId, itemKey)
+        )
+
     /**
      * Sets the songs [ruleId] wants, in its order, replacing what it wanted before. Each must be
      * in [items] already.
@@ -281,18 +293,95 @@ class SyncStore(context: Context, name: String? = DATABASE_NAME) :
         val db = writableDatabase
         db.beginTransaction()
         try {
-            db.delete("rule_items", "rule_id = ?", arrayOf(ruleId.toString()))
-            itemKeys.forEachIndexed { position, itemKey ->
-                db.insertOrThrow("rule_items", null, ContentValues().apply {
-                    put("rule_id", ruleId)
-                    put("server_id", serverId)
-                    put("item_key", itemKey)
-                    put("position", position)
-                })
-            }
+            replaceRuleItems(db, ruleId, serverId, itemKeys)
             db.setTransactionSuccessful()
         } finally {
             db.endTransaction()
+        }
+    }
+
+    /**
+     * Atomically verifies [ruleId] still exists with [expectedSourceId] before replacing its
+     * items and optionally updating `last_synced_at`. Returns true if the rule matched.
+     */
+    @WorkerThread
+    fun setRuleItemsIfSource(
+        ruleId: Long,
+        expectedSourceId: String,
+        serverId: String,
+        itemKeys: List<String>,
+        lastSyncedAt: Long? = null,
+    ): Boolean {
+        val db = writableDatabase
+        db.beginTransaction()
+        try {
+            // Verify source_id inside the transaction: SQLite INTEGER PRIMARY KEY can reuse a
+            // deleted rule's rowid if a new rule is inserted concurrently.
+            if (currentSource(db, ruleId) != expectedSourceId) return false
+            replaceRuleItems(db, ruleId, serverId, itemKeys)
+            if (lastSyncedAt != null) {
+                db.update(
+                    "rules",
+                    ContentValues().apply { put("last_synced_at", lastSyncedAt) },
+                    "id = ? AND source_id = ?",
+                    arrayOf(ruleId.toString(), expectedSourceId)
+                )
+            }
+            db.setTransactionSuccessful()
+            return true
+        } finally {
+            db.endTransaction()
+        }
+    }
+
+    /**
+     * Atomically merges [downloadedKeys] after any existing items of [ruleId] when [ruleId] still
+     * exists with [expectedSourceId], returning true if updated.
+     */
+    @WorkerThread
+    fun mergeRuleItemsIfSource(
+        ruleId: Long,
+        expectedSourceId: String,
+        serverId: String,
+        downloadedKeys: List<String>,
+    ): Boolean {
+        val db = writableDatabase
+        db.beginTransaction()
+        try {
+            // Same SQLite rowid-reuse check as setRuleItemsIfSource for partial-sync checkpoints.
+            if (currentSource(db, ruleId) != expectedSourceId) return false
+            val had = db.rawQuery(
+                "SELECT item_key FROM rule_items WHERE rule_id = ? ORDER BY position",
+                arrayOf(ruleId.toString())
+            ).use { cursor -> cursor.all { it.string("item_key")!! } }
+            val merged = (had + downloadedKeys).distinct()
+            replaceRuleItems(db, ruleId, serverId, merged)
+            db.setTransactionSuccessful()
+            return true
+        } finally {
+            db.endTransaction()
+        }
+    }
+
+    private fun currentSource(db: SQLiteDatabase, ruleId: Long): String? =
+        db.query(
+            "rules", arrayOf("source_id"), "id = ?", arrayOf(ruleId.toString()), null, null, null
+        ).use { if (it.moveToFirst()) it.string("source_id") else null }
+
+    private fun replaceRuleItems(
+        db: SQLiteDatabase,
+        ruleId: Long,
+        serverId: String,
+        itemKeys: List<String>,
+    ) {
+        db.delete("rule_items", "rule_id = ?", arrayOf(ruleId.toString()))
+        itemKeys.forEachIndexed { position, itemKey ->
+            db.insertOrThrow("rule_items", null, ContentValues().apply {
+                put("rule_id", ruleId)
+                put("server_id", serverId)
+                put("item_key", itemKey)
+                put("position", position)
+            })
         }
     }
 
@@ -394,14 +483,17 @@ class SyncStore(context: Context, name: String? = DATABASE_NAME) :
             }
         }
 
-    /** Drops plays Clementine has accepted. */
+    /** Drops plays Clementine has accepted, chunked under SQLite's bind-parameter limit. */
     @WorkerThread
     fun removePlays(ids: Collection<Long>) {
         if (ids.isEmpty()) return
-        writableDatabase.delete(
-            "play_log", "id IN (${ids.joinToString(",") { "?" }})",
-            ids.map { it.toString() }.toTypedArray()
-        )
+        // Stay well below the 999-variable limit of SQLite < 3.32 (Android 11 and older).
+        for (chunk in ids.chunked(500)) {
+            writableDatabase.delete(
+                "play_log", "id IN (${chunk.joinToString(",") { "?" }})",
+                chunk.map { it.toString() }.toTypedArray()
+            )
+        }
     }
 
     private fun SyncRule.toValues() = ContentValues().apply {

@@ -27,15 +27,18 @@ import java.util.Collections;
 import java.util.List;
 
 import de.qspool.clementineremote.App;
+import de.qspool.clementineremote.backend.ClementinePlayerConnection;
 import de.qspool.clementineremote.backend.ClementineSimpleConnection;
 import de.qspool.clementineremote.backend.elements.DownloaderResult;
 import de.qspool.clementineremote.backend.elements.DownloaderResult.DownloadResult;
 import de.qspool.clementineremote.backend.pb.ClementineMessage;
+import de.qspool.clementineremote.backend.pb.ClementineMessage.ErrorMessage;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongFileChunk;
+import de.qspool.clementineremote.backend.player.MyPlaylist;
 import de.qspool.clementineremote.backend.player.MySong;
 import de.qspool.clementineremote.utils.DownloadSpeedCalculator;
 import de.qspool.clementineremote.utils.IDownloadCalculatorSource;
@@ -44,6 +47,10 @@ import de.qspool.clementineremote.utils.Utilities;
 
 public class ClementineSongDownloader extends
         BackgroundTask<ClementineMessage, DownloadStatus, DownloaderResult> {
+
+    private static final int READ_TIMEOUT_MS = 3000;
+
+    private static final long IDLE_TIMEOUT_MS = 120_000L;
 
     public static class DownloadedSong {
         public MySong song;
@@ -142,8 +149,18 @@ public class ClementineSongDownloader extends
     }
 
     @Override
+    protected void onCancelRequested() {
+        // Socket.connect() ignores Thread.interrupt(); close an in-flight handshake socket immediately.
+        mClient.abortConnecting();
+    }
+
+    @Override
     protected void onCancelled(DownloaderResult result) {
-        onPostExecute(result);
+        // Preserve an explicit failure result (e.g., NOT_MOUNTED) if it raced with cancellation.
+        DownloaderResult cancelled = (result != null && result.getResult() != DownloadResult.SUCCESSFUL)
+                ? result
+                : new DownloaderResult(mId, DownloadResult.CANCELLED);
+        onPostExecute(cancelled);
     }
 
     @Override
@@ -160,7 +177,12 @@ public class ClementineSongDownloader extends
      * @return true if the connection was established, false if not
      */
     private boolean connect() {
-        ClementineMessage connectMessage = App.ClementineConnection.getRequestConnect();
+        // Global connection may have been torn down between queueing and running the task.
+        ClementinePlayerConnection connection = App.ClementineConnection;
+        ClementineMessage connectMessage = connection != null ? connection.getRequestConnect() : null;
+        if (connectMessage == null || connectMessage.isErrorMessage()) {
+            return false;
+        }
         int authCode = connectMessage.getMessage().getRequestConnect().getAuthCode();
 
         return mClient.createConnection(
@@ -174,124 +196,191 @@ public class ClementineSongDownloader extends
     }
 
     /**
-     * Start the Downlaod
+     * Start the Download
      */
     private DownloaderResult startDownloading(ClementineMessage clementineMessage) {
         DownloaderResult result = new DownloaderResult(mId, DownloadResult.SUCCESSFUL);
 
         DownloadStorage.PendingSong pending = null;
         MySong currentSong = new MySong();
+        long pendingWritten = 0;
+        long pendingExpectedSize = 0;
+        long lastActivityMs = System.currentTimeMillis();
 
         // Do we have a playlist?
         checkIsPlaylist(clementineMessage);
 
-        // Now request the songs
-        mClient.sendRequest(clementineMessage);
-
-        while (true) {
-            // Check if the user canceled the process
-            if (isCancelled()) {
-                result = new DownloaderResult(mId, DownloadResult.CANCELLED);
-                break;
+        try {
+            // Now request the songs
+            if (!mClient.sendRequest(clementineMessage)) {
+                return new DownloaderResult(mId, DownloadResult.CONNECTION_ERROR);
             }
 
-            // Get the raw protocol buffer
-            ClementineMessage message = mClient.getProtoc(0);
-
-            // Check if an error occured
-            if (message.isErrorMessage()) {
-                result = new DownloaderResult(mId, DownloadResult.CONNECTION_ERROR);
-                break;
-            }
-
-            // Is the download forbidden?
-            if (message.getMessageType() == MsgType.DISCONNECT) {
-                result = new DownloaderResult(mId, message);
-                break;
-            }
-
-            // Download finished?
-            if (message.getMessageType() == MsgType.DOWNLOAD_QUEUE_EMPTY) {
-                break;
-            }
-
-            // Total file size
-            if (message.getMessageType() == MsgType.DOWNLOAD_TOTAL_SIZE) {
-                mTotalFileSize = message.getMessage().getResponseDownloadTotalSize().getTotalSize();
-                continue;
-            }
-
-            // Transcoding files?
-            if (message.getMessageType() == MsgType.TRANSCODING_FILES) {
-                parseTranscodingMessage(message);
-                continue;
-            }
-
-            // Ignore other elements!
-            if (message.getMessageType() != MsgType.SONG_FILE_CHUNK) {
-                continue;
-            }
-
-            ResponseSongFileChunk chunk = message.getMessage().getResponseSongFileChunk();
-
-            // If we received chunk no 0, then we have to decide wether to
-            // accept the song offered or not
-            if (chunk.getChunkNumber() == 0) {
-                currentSong = MySong.fromProtocolBuffer(chunk.getSongMetadata());
-                boolean accepted = processSongOffer(currentSong, chunk);
-
-                // If we don't accept the file, add the size so the DownloadManager can show it correctly
-                if (!accepted) {
-                    mTotalDownloaded += chunk.getSize();
-                    updateProgress(chunk, currentSong);
+            while (true) {
+                // Check if the user canceled the process
+                if (isCancelled()) {
+                    result = new DownloaderResult(mId, DownloadResult.CANCELLED);
+                    break;
                 }
 
-                continue;
-            }
+                // Read raw frames (without mutating global player state) using a finite timeout so
+                // cancellation unblocks promptly while allowing IDLE_TIMEOUT_MS for transcoding/stalls.
+                ClementineMessage message = mClient.readRawProtoc(READ_TIMEOUT_MS);
 
-            try {
-                // Check if we need to create a new file
-                if (pending == null) {
-                    // Check if we have enough free space where the song goes
-                    long freeSpace = mStorage.freeSpace();
-                    if (freeSpace >= 0 && chunk.getSize() > freeSpace) {
-                        result = new DownloaderResult(mId, DownloadResult.INSUFFIANT_SPACE);
-                        break;
+                // Check if an error occurred
+                if (message.isErrorMessage()) {
+                    if (message.getErrorMessage() == ErrorMessage.TIMEOUT) {
+                        if ((System.currentTimeMillis() - lastActivityMs) >= IDLE_TIMEOUT_MS) {
+                            result = new DownloaderResult(mId, DownloadResult.CONNECTION_ERROR);
+                            break;
+                        }
+                        continue;
+                    }
+                    result = new DownloaderResult(mId, DownloadResult.CONNECTION_ERROR);
+                    break;
+                }
+                lastActivityMs = System.currentTimeMillis();
+
+                // Is the download forbidden?
+                if (message.getMessageType() == MsgType.DISCONNECT) {
+                    result = new DownloaderResult(mId, message);
+                    break;
+                }
+
+                // Download finished?
+                if (message.getMessageType() == MsgType.DOWNLOAD_QUEUE_EMPTY) {
+                    // Older Desktop versions can send chunk_count off by one on 100 KB multiples,
+                    // leaving pending open at queue end; commit iff all expected bytes arrived.
+                    if (pending != null) {
+                        if (pendingExpectedSize > 0 && pendingWritten == pendingExpectedSize) {
+                            try {
+                                addDownloadedSong(new DownloadedSong(currentSong, pending.commit()));
+                            } catch (IOException | RuntimeException e) {
+                                result = new DownloaderResult(mId, DownloadResult.NOT_MOUNTED);
+                                pending.abort();
+                            }
+                        } else {
+                            pending.abort();
+                        }
+                        pending = null;
+                        pendingWritten = 0;
+                        pendingExpectedSize = 0;
+                    }
+                    break;
+                }
+
+                // Total file size
+                if (message.getMessageType() == MsgType.DOWNLOAD_TOTAL_SIZE) {
+                    mTotalFileSize = message.getMessage().getResponseDownloadTotalSize().getTotalSize();
+                    continue;
+                }
+
+                // Transcoding files?
+                if (message.getMessageType() == MsgType.TRANSCODING_FILES) {
+                    parseTranscodingMessage(message);
+                    continue;
+                }
+
+                // Ignore other elements!
+                if (message.getMessageType() != MsgType.SONG_FILE_CHUNK) {
+                    continue;
+                }
+
+                ResponseSongFileChunk chunk = message.getMessage().getResponseSongFileChunk();
+
+                // If we received chunk no 0, then we have to decide whether to
+                // accept the song offered or not
+                if (chunk.getChunkNumber() == 0) {
+                    // Same 100 KB chunk_count off-by-one guard across consecutive songs: finalize or
+                    // abort the previous song before opening the next offer so chunks don't mix.
+                    if (pending != null) {
+                        boolean commitFailed = false;
+                        if (pendingExpectedSize > 0 && pendingWritten == pendingExpectedSize) {
+                            try {
+                                addDownloadedSong(new DownloadedSong(currentSong, pending.commit()));
+                            } catch (IOException | RuntimeException e) {
+                                result = new DownloaderResult(mId, DownloadResult.NOT_MOUNTED);
+                                pending.abort();
+                                commitFailed = true;
+                            }
+                        } else {
+                            pending.abort();
+                        }
+                        pending = null;
+                        pendingWritten = 0;
+                        pendingExpectedSize = 0;
+                        if (commitFailed) {
+                            break;
+                        }
                     }
 
-                    // This replaces an existing song. processSongOffer() only accepted the
-                    // song if there is none, or the user wants to override it and it differs.
-                    pending = mStorage.create(buildRelativeDir(chunk), buildFileName(chunk));
+                    currentSong = MySong.fromProtocolBuffer(chunk.getSongMetadata());
+                    boolean accepted = processSongOffer(currentSong, chunk);
+
+                    // If we don't accept the file, add the size so the DownloadManager can show it correctly
+                    if (!accepted) {
+                        mTotalDownloaded += chunk.getSize();
+                        updateProgress(chunk, currentSong);
+                    }
+
+                    continue;
                 }
 
-                chunk.getData().writeTo(pending.getOutputStream());
+                try {
+                    // Chunk 1 carries the actual metadata/filename after any lossless transcoding (X-08).
+                    if (chunk.getChunkNumber() == 1 && chunk.hasSongMetadata()) {
+                        currentSong = MySong.fromProtocolBuffer(chunk.getSongMetadata());
+                    }
 
-                mTotalDownloaded += chunk.getData().size();
+                    // Check if we need to create a new file
+                    if (pending == null) {
+                        // Check if we have enough free space where the song goes
+                        long freeSpace = mStorage.freeSpace();
+                        if (freeSpace >= 0 && chunk.getSize() > freeSpace) {
+                            result = new DownloaderResult(mId, DownloadResult.INSUFFIANT_SPACE);
+                            break;
+                        }
 
-                // Have we downloaded all chunks?
-                if (chunk.getChunkCount() == chunk.getChunkNumber()) {
-                    addDownloadedSong(new DownloadedSong(currentSong, pending.commit()));
-                    pending = null;
+                        // This replaces an existing song. processSongOffer() only accepted the
+                        // song if there is none, or the user wants to override it and it differs.
+                        pending = mStorage.create(buildRelativeDir(chunk), buildFileName(chunk));
+                        pendingWritten = 0;
+                        pendingExpectedSize = chunk.getSize();
+                    }
+
+                    chunk.getData().writeTo(pending.getOutputStream());
+
+                    int bytesWritten = chunk.getData().size();
+                    pendingWritten += bytesWritten;
+                    mTotalDownloaded += bytesWritten;
+
+                    // Have we downloaded all chunks?
+                    if (chunk.getChunkCount() == chunk.getChunkNumber()) {
+                        addDownloadedSong(new DownloadedSong(currentSong, pending.commit()));
+                        pending = null;
+                        pendingWritten = 0;
+                        pendingExpectedSize = 0;
+                    }
+
+                    // Update notification
+                    updateProgress(chunk, currentSong);
+                } catch (IOException | RuntimeException e) {
+                    // MediaStore reports some failures, such as a full or missing volume, as
+                    // runtime exceptions.
+                    result = new DownloaderResult(mId, DownloaderResult.DownloadResult.NOT_MOUNTED);
+                    break;
                 }
 
-                // Update notification
-                updateProgress(chunk, currentSong);
-            } catch (IOException | RuntimeException e) {
-                // MediaStore reports some failures, such as a full or missing volume, as
-                // runtime exceptions.
-                result = new DownloaderResult(mId, DownloaderResult.DownloadResult.NOT_MOUNTED);
-                break;
+            }
+        } finally {
+            // Delete an incomplete song
+            if (pending != null) {
+                pending.abort();
             }
 
+            // Disconnect at the end
+            mClient.disconnect(ClementineMessage.getMessage(MsgType.DISCONNECT));
         }
-
-        // Delete an incomplete song
-        if (pending != null) {
-            pending.abort();
-        }
-
-        // Disconnect at the end
-        mClient.disconnect(ClementineMessage.getMessage(MsgType.DISCONNECT));
 
         return result;
     }
@@ -311,7 +400,8 @@ public class ClementineSongDownloader extends
                 == DownloadItem.APlaylist);
         if (mIsPlaylist) {
             int id = clementineMessage.getMessage().getRequestDownloadSongs().getPlaylistId();
-            mPlaylistName = App.Clementine.getPlaylistManager().getPlaylist(id).getName();
+            MyPlaylist playlist = App.Clementine.getPlaylistManager().getPlaylist(id);
+            mPlaylistName = playlist != null ? playlist.getName() : "";
         }
     }
 
@@ -335,7 +425,7 @@ public class ClementineSongDownloader extends
 
         // A refused song is listed with the downloaded ones, as it is already here. An
         // accepted one is listed once it is saved.
-        if (!accept) {
+        if (!accept && existing != null) {
             addDownloadedSong(new DownloadedSong(song, existing.uri));
         }
 
@@ -416,7 +506,11 @@ public class ClementineSongDownloader extends
     /** The song's file name, or its title if that leaves nothing. */
     static String buildFileName(ResponseSongFileChunk chunk) {
         String name = safeName(chunk.getSongMetadata().getFilename());
-        return name.isEmpty() ? safeName(chunk.getSongMetadata().getTitle()) : name;
+        if (name.isEmpty()) {
+            name = safeName(chunk.getSongMetadata().getTitle());
+        }
+        // safeName() can strip every character (e.g., all-dots/invalid names); never return empty.
+        return name.isEmpty() ? "Untitled" : name;
     }
 
     /**

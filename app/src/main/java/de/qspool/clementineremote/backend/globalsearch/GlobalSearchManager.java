@@ -17,8 +17,8 @@
 
 package de.qspool.clementineremote.backend.globalsearch;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import androidx.annotation.AnyThread;
 import androidx.annotation.WorkerThread;
@@ -30,23 +30,31 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer;
 
 public class GlobalSearchManager {
 
-    private int mCurrentId = -1;
+    private volatile int mCurrentId = -1;
 
-    private GlobalSearchRequest mRequest;
+    private volatile GlobalSearchRequest mRequest;
 
-    private GlobalSearchDatabaseHelper mGlobalSearchDatabaseHelper = new GlobalSearchDatabaseHelper(
+    private final GlobalSearchDatabaseHelper mGlobalSearchDatabaseHelper = new GlobalSearchDatabaseHelper(
             App.getApp());
 
-    private List<OnGlobalSearchResponseListener> mListeners = new ArrayList<>();
+    private final List<OnGlobalSearchResponseListener> mListeners = new CopyOnWriteArrayList<>();
 
-    private GlobalSearchProviderIconStore mGlobalSearchProviderIconStore
+    private final GlobalSearchProviderIconStore mGlobalSearchProviderIconStore
             = new GlobalSearchProviderIconStore();
 
-    private static GlobalSearchManager mInstance;
+    // Synchronizes (mCurrentId, mRequest) updates between @AnyThread reset() and @WorkerThread parsing.
+    private final Object mStateLock = new Object();
+
+    private static volatile GlobalSearchManager mInstance;
 
     public static GlobalSearchManager getInstance() {
         if (mInstance == null) {
-            mInstance = new GlobalSearchManager();
+            // Double-checked locking with volatile ensures no caller observes a partial instance.
+            synchronized (GlobalSearchManager.class) {
+                if (mInstance == null) {
+                    mInstance = new GlobalSearchManager();
+                }
+            }
         }
         return mInstance;
     }
@@ -63,8 +71,10 @@ public class GlobalSearchManager {
      */
     @AnyThread
     public void reset() {
-        mRequest = null;
-        mCurrentId = -1;
+        synchronized (mStateLock) {
+            mRequest = null;
+            mCurrentId = -1;
+        }
     }
 
     @WorkerThread
@@ -91,11 +101,16 @@ public class GlobalSearchManager {
         int id = responseGlobalSearch.getId();
 
         // Parse only results for the current request
-        if (id != mCurrentId) {
-            return;
+        // Snapshot mRequest under mStateLock so a concurrent reset() cannot null it after the check.
+        GlobalSearchRequest request;
+        synchronized (mStateLock) {
+            if (id != mCurrentId || mRequest == null) {
+                return;
+            }
+            request = mRequest;
         }
 
-        mRequest.addSearchResults(responseGlobalSearch);
+        request.addSearchResults(responseGlobalSearch);
 
         // Add the icon to the store
         getGlobalSearchProviderIconStore().insertProvider(responseGlobalSearch.getSearchProvider(),
@@ -111,19 +126,26 @@ public class GlobalSearchManager {
 
         switch (responseGlobalSearchStatus.getStatus()) {
             case GlobalSearchStarted:
-                // On the thread reading from Clementine, which the results are written on too.
+                // Clear on the connection thread before locking mStateLock so disk I/O won't stall reset().
                 mGlobalSearchDatabaseHelper.deleteAll();
-                mRequest = new GlobalSearchRequest(id, mGlobalSearchDatabaseHelper);
-                mCurrentId = id;
+                synchronized (mStateLock) {
+                    mRequest = new GlobalSearchRequest(id, mGlobalSearchDatabaseHelper);
+                    mCurrentId = id;
+                }
                 break;
             case GlobalSearchFinished:
-                if (id == mCurrentId) {
-                    mRequest.setStatus(responseGlobalSearchStatus.getStatus());
+                synchronized (mStateLock) {
+                    if (id == mCurrentId && mRequest != null) {
+                        mRequest.setStatus(responseGlobalSearchStatus.getStatus());
+                    }
                 }
                 break;
         }
 
-        fireOnStatusChanged(id, responseGlobalSearchStatus.getStatus());
+        fireOnStatusChanged(
+                id,
+                responseGlobalSearchStatus.hasQuery() ? responseGlobalSearchStatus.getQuery() : "",
+                responseGlobalSearchStatus.getStatus());
     }
 
     public void addOnGlobalSearchResponseListerner(OnGlobalSearchResponseListener l) {
@@ -134,10 +156,10 @@ public class GlobalSearchManager {
         mListeners.remove(l);
     }
 
-    private void fireOnStatusChanged(int id,
+    private void fireOnStatusChanged(int id, String query,
             ClementineRemoteProtocolBuffer.GlobalSearchStatus status) {
         for (OnGlobalSearchResponseListener l : mListeners) {
-            l.onStatusChanged(id, status);
+            l.onStatusChanged(id, query, status);
         }
     }
 

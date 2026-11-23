@@ -1,20 +1,34 @@
 package de.qspool.clementineremote.backend.sync
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.SystemClock
 import android.util.Log
 import androidx.annotation.WorkerThread
 import de.qspool.clementineremote.backend.downloader.DownloadStorage
+import de.qspool.clementineremote.backend.downloader.FileDownloadStorage
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.AudioFormat
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestSyncManifest
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSyncManifest
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncItem
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SyncManifestState
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
+import java.security.MessageDigest
 import java.util.UUID
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+
+/** An opened HTTP response stream for a synced song, with optional partial/ETag state. */
+data class OpenedSyncStream(
+    val stream: InputStream,
+    val partial: Boolean = false,
+    val etag: String? = null,
+)
 
 /** How the engine talks to the Clementine it syncs with, while connected to it. */
 @WorkerThread
@@ -29,6 +43,11 @@ interface SyncConnection {
     /** Opens a path Clementine gave, such as a song's /d/ or cover's /a/ URL, on its HTTP server. */
     @Throws(IOException::class)
     fun open(path: String): InputStream
+
+    /** Opens [path], asking to resume from [offset] when [ifRange] still matches Clementine's ETag. */
+    @Throws(IOException::class)
+    fun open(path: String, offset: Long, ifRange: String?): OpenedSyncStream =
+        OpenedSyncStream(open(path), partial = false, etag = null)
 }
 
 /** What a sync did for each rule, by rule id. */
@@ -74,17 +93,41 @@ class SyncEngine(
     private val now: () -> Long = System::currentTimeMillis,
     private val onProgress: (ruleId: Long, done: Int, total: Int) -> Unit = { _, _, _ -> },
     private val stopped: () -> Boolean = { false },
+    private val isRuleStopped: (Long, String) -> Boolean = { _, _ -> false },
 ) {
 
+    // Track the active (id, sourceId) across threads so copy() aborts mid-transfer if
+    // Syncer.remove() deletes that rule, without matching a reused SQLite rowid.
+    @Volatile
+    private var activeRuleId: Long = -1L
+
+    @Volatile
+    private var activeRuleSourceId: String = ""
+
     fun sync(connection: SyncConnection): SyncResult {
+        // Drop expired or 0-byte staging files while preserving recent resumable .part files.
+        sweepOrphanPartials()
+        val result = syncRules(connection)
+        // Once a sync finishes cleanly without interruptions or failed rules, no item in any active
+        // manifest should still have an incomplete .part file; anything left is stale.
+        if (!stopped() && result.rules.values.none { it is RuleResult.Failed }) {
+            sweepAllPartials()
+        }
+        return result
+    }
+
+    private fun syncRules(connection: SyncConnection): SyncResult {
         val serverId = connection.serverId
         val results = LinkedHashMap<Long, RuleResult>()
         for (rule in store.rules(serverId)) {
             if (stopped()) break
+            if (isRuleStopped(rule.id, rule.sourceId)) continue
             // A rule kept as it is has its songs once it has synced. The other policies refresh
             // on every sync for now; intervals and listening come later.
             if (rule.refreshPolicy == RefreshPolicy.NEVER && rule.lastSyncedAt > 0) continue
             results[rule.id] = try {
+                activeRuleId = rule.id
+                activeRuleSourceId = rule.sourceId
                 syncRule(connection, rule)
             } catch (e: IOException) {
                 Log.w(TAG, "Couldn't sync \"${rule.title}\"", e)
@@ -99,10 +142,14 @@ class SyncEngine(
     private fun syncRule(connection: SyncConnection, rule: SyncRule): RuleResult {
         val manifest = connection.manifest(request(rule))
         when (manifest.state) {
+            SyncManifestState.SYNC_MANIFEST_STATE_UNSPECIFIED,
+            SyncManifestState.SYNC_MANIFEST_STATE_READY -> {}
             SyncManifestState.SYNC_MANIFEST_STATE_NEEDS_SETUP ->
                 return RuleResult.NeedsSetup(manifest.message)
             SyncManifestState.SYNC_MANIFEST_STATE_GONE -> return RuleResult.Gone
-            else -> {}
+            // Never treat unknown/error states as READY, or an empty itemsList would wipe rule_items.
+            else ->
+                throw IOException("Unsupported manifest state ${manifest.state}")
         }
 
         // A playlist can have a song more than once; the phone keeps it once, where it first comes.
@@ -117,8 +164,8 @@ class SyncEngine(
         val keys = ArrayList<String>()
         try {
             for ((item, have, changed) in wanted) {
+                if (stopped() || isRuleStopped(rule.id, rule.sourceId)) throw IOException("The sync was stopped")
                 if (changed) {
-                    if (stopped()) throw IOException("The sync was stopped")
                     download(connection, rule.serverId, item, have)
                     downloaded++
                     onProgress(rule.id, downloaded, total)
@@ -129,14 +176,27 @@ class SyncEngine(
                 keys += item.itemKey
             }
         } catch (e: IOException) {
+            if (isRuleStopped(rule.id, rule.sourceId)) {
+                return RuleResult.Gone
+            }
             // Keep the songs downloaded so far as well as those it had, so a sync cut short
-            // carries on next time rather than starting again.
-            val had = store.ruleItems(rule.id).map { it.itemKey }
-            store.setRuleItems(rule.id, rule.serverId, (had + keys).distinct())
+            // carries on next time rather than starting again. Source-checked writes prevent a
+            // concurrently removed rule from modifying a new rule that reused its SQLite rowid.
+            if (!store.mergeRuleItemsIfSource(rule.id, rule.sourceId, rule.serverId, keys)) {
+                return RuleResult.Gone
+            }
             throw e
+        } finally {
+            activeRuleId = -1L
+            activeRuleSourceId = ""
         }
-        store.setRuleItems(rule.id, rule.serverId, keys)
-        store.updateRule(rule.copy(lastSyncedAt = now()))
+        // Reject finalizing rule_items if the rule was removed (or replaced at the same rowid)
+        // during the download loop.
+        if (isRuleStopped(rule.id, rule.sourceId) ||
+            !store.setRuleItemsIfSource(rule.id, rule.sourceId, rule.serverId, keys, now())
+        ) {
+            return RuleResult.Gone
+        }
         return RuleResult.Synced(keys.size, downloaded, manifest.skipped)
     }
 
@@ -152,29 +212,128 @@ class SyncEngine(
 
     /** Downloads [item], replacing the older version [have] if there is one. */
     private fun download(connection: SyncConnection, serverId: String, item: SyncItem, have: SyncedItem?) {
+        // Snapshot both volatile fields together so a concurrent finally clear can't tear them.
+        val transferStopped = {
+            val id = activeRuleId
+            val sourceId = activeRuleSourceId
+            stopped() || (id >= 0L && isRuleStopped(id, sourceId))
+        }
+        if (transferStopped()) throw IOException("The sync was stopped")
+
+        // Fail before opening HTTP streams or staging space when destination already lacks room.
+        val destFree = storage.freeSpace()
+        if (destFree >= 0L && item.sizeBytes > 0L && destFree < item.sizeBytes) {
+            throw IOException("Insufficient free space for ${item.itemKey}")
+        }
+
         val song = item.song
         val dir = SyncFiles.relativeDir(song)
         val name = SyncFiles.freeName(storage, dir, SyncFiles.fileName(song, item.mimeType), have?.uri)
 
         val timing = DownloadTiming(item.itemKey, item.sizeBytes)
-        val pending = storage.create(dir, name)
-        timing.phase("created")
-        val uri = try {
-            connection.open(item.url).use { input ->
-                timing.phase("opened")
-                copy(input, pending.outputStream, timing)
+        val fileStorage = storage as? FileDownloadStorage
+        val partialDir = fileStorage?.partialDir() ?: File(covers, ".partial")
+        val partialKey = partialCacheKey(serverId, item.itemKey)
+        val partialFile = File(partialDir, "$partialKey.part")
+        val metaFile = File(partialDir, "$partialKey.meta")
+        val itemVersion = item.version.toString()
+        val (resumeOffset, resumeEtag) = readPartialMeta(partialFile, metaFile, itemVersion)
+
+        val extraStaging = if (item.sizeBytes > 0L) (item.sizeBytes - resumeOffset).coerceAtLeast(0L) else 0L
+        val stagingFree = availableBytes(partialDir)
+        // Stage on destination volume for FileDownloadStorage (zero-copy rename), or in internal cache
+        // only when staging won't risk filling internal storage or requiring 2x free space on destination.
+        val stageLocally = fileStorage != null ||
+            item.sizeBytes <= 0L ||
+            ((stagingFree < 0L || stagingFree >= extraStaging * 2L) &&
+                (destFree < 0L || destFree >= item.sizeBytes + extraStaging))
+
+        val uri: Uri = if (stageLocally) {
+            val opened = connection.open(item.url, resumeOffset, resumeEtag)
+            timing.phase("opened")
+            val activeEtag = opened.etag ?: resumeEtag ?: "${item.itemKey}:${item.version}"
+            try {
+                partialDir.mkdirs()
+                writePartialMeta(metaFile, itemVersion, activeEtag)
+                opened.stream.use { input ->
+                    // Append only when the server returned 206 at our offset; 200/416 retries start at 0.
+                    FileOutputStream(partialFile, opened.partial && resumeOffset > 0).use { out ->
+                        copy(input, out, timing, transferStopped)
+                    }
+                }
+                timing.phase("copied")
+            } catch (e: IOException) {
+                timing.failed(e)
+                throw e
             }
-            timing.phase("copied")
-            pending.commit().also { timing.phase("committed") }
-        } catch (e: IOException) {
-            timing.failed(e)
-            pending.abort()
-            throw e
-        } catch (e: RuntimeException) {
-            // MediaStore reports some failures, such as a full volume, as runtime exceptions.
-            timing.failed(e)
-            pending.abort()
-            throw IOException(e)
+
+            if (fileStorage != null) {
+                try {
+                    fileStorage.commitPartial(dir, name, partialFile).also {
+                        timing.phase("committed")
+                    }
+                } catch (e: IOException) {
+                    timing.failed(e)
+                    throw e
+                }
+            } else {
+                val pending = storage.create(dir, name)
+                timing.phase("created")
+                try {
+                    FileInputStream(partialFile).use { input ->
+                        input.copyTo(pending.outputStream)
+                    }
+                    pending.commit().also { timing.phase("committed") }
+                } catch (e: IOException) {
+                    timing.failed(e)
+                    pending.abort()
+                    throw e
+                } catch (e: RuntimeException) {
+                    // MediaStore reports some failures, such as a full volume, as runtime exceptions.
+                    timing.failed(e)
+                    pending.abort()
+                    throw IOException(e)
+                } finally {
+                    // Network copy failures already threw above (leaving .part/.meta to resume);
+                    // once staging finishes and MediaStore copy begins, discard .part either way.
+                    partialFile.delete()
+                }
+            }.also {
+                partialFile.delete()
+                metaFile.delete()
+            }
+        } else {
+            partialFile.delete()
+            metaFile.delete()
+            // Tight storage: stream straight to PendingSong, opening HTTP before creating the
+            // pending entry so a failed open doesn't leave an orphan MediaStore row.
+            val opened = connection.open(item.url, 0L, null)
+            timing.phase("opened")
+            val pending = try {
+                storage.create(dir, name)
+            } catch (e: IOException) {
+                opened.stream.close()
+                throw e
+            } catch (e: RuntimeException) {
+                opened.stream.close()
+                throw IOException(e)
+            }
+            timing.phase("created")
+            try {
+                opened.stream.use { input ->
+                    copy(input, pending.outputStream, timing, transferStopped)
+                }
+                timing.phase("copied")
+                pending.commit().also { timing.phase("committed") }
+            } catch (e: IOException) {
+                timing.failed(e)
+                pending.abort()
+                throw e
+            } catch (e: RuntimeException) {
+                timing.failed(e)
+                pending.abort()
+                throw IOException(e)
+            }
         }
         timing.done()
 
@@ -199,6 +358,85 @@ class SyncEngine(
                 addedAt = have?.addedAt ?: now(),
             )
         )
+    }
+
+    private fun partialCacheKey(serverId: String, itemKey: String): String {
+        // NUL separator prevents collisions when serverId or itemKey contains delimiters.
+        val digest = MessageDigest.getInstance("SHA-256")
+            .digest("$serverId\u0000$itemKey".toByteArray(Charsets.UTF_8))
+        return digest.joinToString("") { "%02x".format(it) }
+    }
+
+    private fun readPartialMeta(partial: File, meta: File, expectedVersion: String): Pair<Long, String?> {
+        if (!partial.isFile || partial.length() <= 0L || !meta.isFile) {
+            return 0L to null
+        }
+        val lines = try {
+            meta.readLines()
+        } catch (e: IOException) {
+            return 0L to null
+        }
+        val version = lines.getOrNull(0)
+        val etag = lines.getOrNull(1)?.takeIf { it.isNotBlank() }
+        // Discard mismatched or incomplete pairs so stale bytes from another version aren't resumed.
+        if (version != expectedVersion || etag == null) {
+            partial.delete()
+            meta.delete()
+            return 0L to null
+        }
+        return partial.length() to etag
+    }
+
+    private fun writePartialMeta(meta: File, version: String, etag: String?) {
+        try {
+            meta.writeText(version + "\n" + etag.orEmpty())
+        } catch (ignored: IOException) {
+        }
+    }
+
+    @SuppressLint("UsableSpace")
+    private fun availableBytes(dir: File): Long {
+        // File.usableSpace returns 0 for non-existent dirs; walk up to the first existing ancestor.
+        var existing: File? = dir
+        while (existing != null && !existing.exists()) {
+            existing = existing.parentFile
+        }
+        return existing?.usableSpace ?: -1L
+    }
+
+    private fun partialDirs(): List<File> = buildList {
+        add(File(covers, ".partial"))
+        (storage as? FileDownloadStorage)?.partialDir()?.let { add(it) }
+    }
+
+    private fun sweepOrphanPartials() {
+        val staleCutoff = now() - STALE_PARTIAL_AGE_MS
+        for (dir in partialDirs()) {
+            val files = dir.listFiles() ?: continue
+            for (file in files) {
+                val name = file.name
+                // Delete 0-byte or >7-day .part files and orphaned .meta files whose .part is gone.
+                if (name.endsWith(".part") &&
+                    (file.length() == 0L || file.lastModified() in 1L until staleCutoff)
+                ) {
+                    val key = name.removeSuffix(".part")
+                    file.delete()
+                    File(dir, "$key.meta").delete()
+                } else if (name.endsWith(".meta")) {
+                    val key = name.removeSuffix(".meta")
+                    val part = File(dir, "$key.part")
+                    if (!part.isFile || part.length() == 0L) {
+                        file.delete()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun sweepAllPartials() {
+        for (dir in partialDirs()) {
+            dir.listFiles()?.forEach { it.delete() }
+        }
     }
 
     /**
@@ -232,12 +470,15 @@ class SyncEngine(
 /** The key of the cover Clementine sent with the song, or null if it sent none. */
 private fun SyncItem.artKey(): String? = if (hasArt() && art.key.isNotEmpty()) art.key else null
 
-/** Copies [input] to [output], timing the reads (the network) and the writes (MediaStore). */
-private fun copy(input: InputStream, output: OutputStream, timing: DownloadTiming) {
+/** Copies [input] to [output], timing the reads (the network) and the writes (storage). */
+private fun copy(input: InputStream, output: OutputStream, timing: DownloadTiming, stopped: () -> Boolean) {
     val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
     while (true) {
+        if (stopped()) throw IOException("The sync was stopped")
         val read = timing.reading { input.read(buffer) }
         if (read < 0) return
+        // Re-check after blocking read() so cancellation aborts before writing more bytes.
+        if (stopped()) throw IOException("The sync was stopped")
         timing.writing { output.write(buffer, 0, read) }
         timing.copied(read)
     }
@@ -297,23 +538,82 @@ private class DownloadTiming(private val itemKey: String, private val expectedBy
 }
 
 private const val TAG = "SyncEngine"
+private const val STALE_PARTIAL_AGE_MS = 7L * 24 * 60 * 60 * 1000L
 
 /** Deletes [serverId]'s songs that no rule wants, as after a rule is removed. Returns how many. */
 @WorkerThread
 fun removeUnwanted(store: SyncStore, serverId: String, delete: (Uri) -> Unit): Int {
+    val items = store.unwantedItems(serverId)
+    deleteItemUris(items, delete)
     var removed = 0
-    for (item in store.unwantedItems(serverId)) {
+    for (item in items) {
+        removed += store.removeItemIfUnwanted(serverId, item.itemKey)
+    }
+    deleteArtPaths(pruneUnusedArt(store))
+    return removed
+}
+
+/**
+ * Deletes unwanted synced songs and newly unused covers for [serverIds] without holding [storeMutex]
+ * across file/MediaStore I/O.
+ *
+ * Callers must hold `Syncer.syncMutex` so no sync adds rule references concurrently; the
+ * snapshot-to-delete window relies on keeping rules/items un-pinned while outside a sync
+ * (`removeItemIfUnwanted` re-checks rule references and `pinned` before deleting rows).
+ */
+suspend fun removeUnwantedOutsideLock(
+    store: SyncStore,
+    storeMutex: Mutex,
+    serverIds: Collection<String>,
+    delete: (Uri) -> Unit,
+    onServerSnapshotted: (String) -> Unit = {},
+    onFinishedLocked: () -> Unit = {},
+): Int {
+    if (serverIds.isEmpty()) return 0
+    val itemsToDelete = storeMutex.withLock {
+        serverIds.map { serverId ->
+            onServerSnapshotted(serverId)
+            serverId to store.unwantedItems(serverId)
+        }
+    }
+    for ((_, items) in itemsToDelete) {
+        deleteItemUris(items, delete)
+    }
+    var removed = 0
+    val artPaths = storeMutex.withLock {
+        for ((serverId, items) in itemsToDelete) {
+            for (item in items) {
+                removed += store.removeItemIfUnwanted(serverId, item.itemKey)
+            }
+        }
+        val unusedPaths = pruneUnusedArt(store)
+        onFinishedLocked()
+        unusedPaths
+    }
+    deleteArtPaths(artPaths)
+    return removed
+}
+
+private fun deleteItemUris(items: List<SyncedItem>, delete: (Uri) -> Unit) {
+    for (item in items) {
         try {
             delete(Uri.parse(item.uri))
-        } catch (e: RuntimeException) {
+        } catch (_: RuntimeException) {
             // Already gone, say if the user deleted it: forget it all the same.
         }
-        store.removeItem(serverId, item.itemKey)
-        removed++
     }
-    for (art in store.unusedArt()) {
-        Uri.parse(art.uri).path?.let { File(it).delete() }
+}
+
+private fun pruneUnusedArt(store: SyncStore): List<String> {
+    val unused = store.unusedArt()
+    for (art in unused) {
         store.removeArt(art.artKey)
     }
-    return removed
+    return unused.mapNotNull { Uri.parse(it.uri).path }
+}
+
+private fun deleteArtPaths(paths: List<String>) {
+    for (path in paths) {
+        File(path).delete()
+    }
 }
