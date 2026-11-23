@@ -34,11 +34,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -55,6 +57,8 @@ import de.qspool.clementineremote.R
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.BrowseAddAction
 import de.qspool.clementineremote.ui.browse.BrowseTile
 import de.qspool.clementineremote.ui.browse.rememberLevelListState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * Internet: Clementine's internet services (SomaFM, Radio Browser, Subsonic, saved radio
@@ -125,7 +129,8 @@ internal fun InternetContent(
                     "internetNeedsSetup",
                 )
                 shown.nodes.isNotEmpty() -> LazyColumn(Modifier.fillMaxSize().testTag("internetNodes"), state = listState) {
-                    itemsIndexed(shown.nodes) { index, node ->
+                    // Pair node.id with index so duplicate IDs across nodes never crash LazyColumn.
+                    itemsIndexed(shown.nodes, key = { index, node -> "${node.id}:$index" }) { index, node ->
                         NodeRow(node, onTap = { onTap(node) }, onAdd = { onAdd(node, it) })
                         if (index == shown.nodes.lastIndex && shown.hasMore) {
                             LaunchedEffect(shown.nodes.size) { onLoadMore() }
@@ -264,8 +269,16 @@ private fun NodeRow(node: InternetNode, onTap: () -> Unit, onAdd: (BrowseAddActi
 /** A node's tile: a service's own icon (or a globe), or an icon for what kind of node it is. */
 @Composable
 private fun NodeTile(node: InternetNode) {
-    val image = remember(node.icon) {
-        node.icon?.toByteArray()?.let { BitmapFactory.decodeByteArray(it, 0, it.size) }?.asImageBitmap()
+    // Decode service PNG bytes off the composition thread to avoid jank while scrolling.
+    val image by produceState<ImageBitmap?>(null, node.icon) {
+        val bytes = node.icon?.toByteArray()
+        value = if (bytes == null) {
+            null
+        } else {
+            withContext(Dispatchers.Default) {
+                BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.asImageBitmap()
+            }
+        }
     }
     val icon = when (node.kind) {
         NodeKind.SERVICE -> R.drawable.ic_public

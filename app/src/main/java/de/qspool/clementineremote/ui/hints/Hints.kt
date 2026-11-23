@@ -64,7 +64,8 @@ object Hints {
     internal var showing by mutableStateOf<Hint?>(null)
 
     fun isSeen(hint: Hint): Boolean =
-        seen.getOrPut(hint) { App.getPreferences().getBoolean(hint.key, false) }
+        // Read-only fallback: mutating SnapshotStateMap here would write state during composition.
+        seen[hint] ?: App.getPreferences().getBoolean(hint.key, false)
 
     /** Won't show [hint] again: its feature was used, or the hint was closed. */
     fun seen(hint: Hint) {
@@ -221,8 +222,12 @@ private fun rememberHintPosition(above: Boolean): HintPosition {
 private fun Caret(position: HintPosition, color: Color, up: Boolean) {
     Canvas(Modifier.fillMaxWidth().height(CARET_HEIGHT)) {
         val half = CARET_WIDTH.toPx() / 2
+        val minX = half + 12.dp.toPx()
+        val maxX = size.width - half - 12.dp.toPx()
+        // Skip drawing when narrower than caret + corner margins, where coerceIn() would throw.
+        if (maxX < minX) return@Canvas
         // Not past the hint's rounded corners.
-        val x = position.caretX.toFloat().coerceIn(half + 12.dp.toPx(), size.width - half - 12.dp.toPx())
+        val x = position.caretX.toFloat().coerceIn(minX, maxX)
         val tip = if (up) 0f else size.height
         val base = if (up) size.height else 0f
         drawPath(

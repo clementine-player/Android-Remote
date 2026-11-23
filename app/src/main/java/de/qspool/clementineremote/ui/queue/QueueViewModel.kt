@@ -19,7 +19,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 
 /** One of Clementine's playlists, to pick. */
 data class PlaylistTab(val id: Int, val name: String)
@@ -66,16 +69,22 @@ class QueueViewModel(
 
     private val loading = MutableStateFlow<Pair<Int, Int>?>(null)
 
-    private val listener = object : OnPlaylistReceivedListener {
-        override fun onPlaylistReceived(p: MyPlaylist) = changed()
+    // Listener fires on the connection thread while load() runs on main; synchronize loading.
+    private val loadLock = Any()
 
-        override fun onPlaylistSongsReceived(p: MyPlaylist) {
-            loading.value = loading.value?.let { (done, total) -> (done + 1).coerceAtMost(total) to total }
+    private val listener = object : OnPlaylistReceivedListener {
+        // PlaylistManager can pass null if the playlist was closed or missing concurrently.
+        override fun onPlaylistReceived(p: MyPlaylist?) = changed()
+
+        override fun onPlaylistSongsReceived(p: MyPlaylist?) {
+            loading.update { it?.let { (done, total) -> (done + 1).coerceAtMost(total) to total } }
             changed()
         }
 
         override fun onAllRequestedPlaylistSongsReceived() {
-            loading.value = null
+            synchronized(loadLock) {
+                loading.value = null
+            }
             changed()
         }
 
@@ -94,12 +103,19 @@ class QueueViewModel(
     }
 
     private fun changed() {
-        changes.value++
+        // Atomic update because listener callbacks arrive from the connection thread.
+        changes.update { it + 1 }
     }
 
+    // Filter out 1s positionSeconds ticks so snapshot() doesn't copy and filter the full queue
+    // every second; === preserves updates when MySong is replaced for metadata/rating changes.
+    private val trackPlayback = RemoteRepository.nowPlaying
+        .map { it.song to it.isPlaying }
+        .distinctUntilChanged { a, b -> a.first === b.first && a.second == b.second }
+
     val state: StateFlow<QueueState> =
-        combine(changes, shownId, filter, loading, RemoteRepository.nowPlaying) { _, shown, filter, loading, nowPlaying ->
-            snapshot(shown, filter, loading, nowPlaying.song, nowPlaying.isPlaying)
+        combine(changes, shownId, filter, loading, trackPlayback) { _, shown, filter, loading, (song, isPlaying) ->
+            snapshot(shown, filter, loading, song, isPlaying)
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), QueueState())
 
     private fun snapshot(
@@ -138,12 +154,14 @@ class QueueViewModel(
 
     /** Asks Clementine for the songs of the playlists not yet downloaded. */
     fun load() {
-        if (App.ClementineConnection?.isConnected != true || loading.value != null) {
-            return
-        }
-        val requests = playlists.requestAllPlaylistSongs()
-        if (requests > 0) {
-            loading.value = 0 to requests
+        synchronized(loadLock) {
+            if (App.ClementineConnection?.isConnected != true || loading.value != null) {
+                return
+            }
+            val requests = playlists.requestAllPlaylistSongs()
+            if (requests > 0) {
+                loading.value = 0 to requests
+            }
         }
         changed()
     }

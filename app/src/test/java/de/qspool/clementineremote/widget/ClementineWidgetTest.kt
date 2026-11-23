@@ -67,6 +67,15 @@ class ClementineWidgetTest {
         val failed = widgetState(ConnectionStatus.NO_CONNECTION, nowPlaying, "10.0.2.2")
         assertEquals(WidgetText.Resource(R.string.widget_couldnt_connect), failed.title)
         assertEquals(WidgetTap.OPEN_CONNECT, failed.tap)
+
+        val reconnecting = widgetState(ConnectionStatus.RECONNECTING, nowPlaying, "10.0.2.2")
+        assertEquals(WidgetText.Resource(R.string.connectdialog_connecting), reconnecting.title)
+        assertEquals(WidgetTap.OPEN_CONNECT, reconnecting.tap)
+
+        val reconnected = widgetState(ConnectionStatus.RECONNECTED, nowPlaying, "10.0.2.2")
+        assertEquals(WidgetText.Plain("Clair de lune"), reconnected.title)
+        assertEquals(true, reconnected.controls)
+        assertEquals(WidgetTap.OPEN_PLAYER, reconnected.tap)
     }
 
     private fun show(size: DpSize) = runGlanceAppWidgetUnitTest {

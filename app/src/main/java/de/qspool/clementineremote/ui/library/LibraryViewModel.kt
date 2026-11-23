@@ -2,6 +2,7 @@ package de.qspool.clementineremote.ui.library
 
 import android.content.SharedPreferences
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteException
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -149,6 +150,10 @@ class LibraryViewModel(
 
     private var searching: Job? = null
 
+    private var openingLevel: Job? = null
+
+    private var openingResult: Job? = null
+
     private val _state = MutableStateFlow(LibraryState())
 
     val state: StateFlow<LibraryState> = _state.asStateFlow()
@@ -164,7 +169,7 @@ class LibraryViewModel(
         data class Added(val count: Int) : Message
 
         /** The library couldn't be synced, for [reason]. */
-        data class SyncFailed(@StringRes val reason: Int) : Message
+        data class SyncFailed(val reason: DownloaderResult) : Message
 
         /** [title] will be kept on this phone. */
         data class Kept(val title: String) : Message
@@ -193,7 +198,7 @@ class LibraryViewModel(
             // A failed sync leaves the library that was on the phone, if there was one.
             refresh()
             if (!succeeded) {
-                _messages.trySend(Message.SyncFailed(result.messageStringId))
+                _messages.trySend(Message.SyncFailed(result))
             }
         }
     }
@@ -245,7 +250,11 @@ class LibraryViewModel(
         fields = browser.fields()
         viewModelScope.launch {
             val top = withContext(io) {
-                if (libraryExists()) browser.level(null) else null
+                try {
+                    if (libraryExists()) browser.level(null) else null
+                } catch (_: SQLiteException) {
+                    null
+                }
             }
             _state.update {
                 it.copy(
@@ -283,11 +292,16 @@ class LibraryViewModel(
             while (true) {
                 val opened = _state.value.levels.map { it.opened }
                 val levels = withContext(io) {
-                    if (!libraryExists()) {
+                    try {
+                        if (!libraryExists()) {
+                            emptyList()
+                        } else {
+                            opened.map { browser.level(it) }.takeIf { it.isNotEmpty() && it.last().items.isNotEmpty() }
+                                ?: listOf(browser.level(null))
+                        }
+                    } catch (_: SQLiteException) {
+                        // A concurrent library sync can swap or delete library.db mid-query.
                         emptyList()
-                    } else {
-                        opened.map { browser.level(it) }.takeIf { it.isNotEmpty() && it.last().items.isNotEmpty() }
-                            ?: listOf(browser.level(null))
                     }
                 }
                 // A level was opened or closed while reading: read what's shown now instead,
@@ -315,14 +329,27 @@ class LibraryViewModel(
             addToPlaylist(listOf(item), AddAction.PLAY_IF_STOPPED)
             return
         }
-        viewModelScope.launch {
-            val below = withContext(io) { browser.level(item) }
-            _state.update { it.copy(levels = it.levels + below) }
+        // Cancel any prior pending open and check depth/identity to prevent double-tap duplicates
+        // or stale IO results landing after back()/refresh().
+        openingLevel?.cancel()
+        val depth = _state.value.levels.size
+        openingLevel = viewModelScope.launch {
+            val below = withContext(io) {
+                try {
+                    browser.level(item)
+                } catch (_: SQLiteException) {
+                    null
+                }
+            } ?: return@launch
+            _state.update {
+                if (it.levels.size == depth && it.shown === shown) it.copy(levels = it.levels + below) else it
+            }
         }
     }
 
     /** Goes up a level; false at the top. */
     fun back(): Boolean {
+        openingLevel?.cancel()
         if (_state.value.levels.size <= 1) {
             return false
         }
@@ -367,19 +394,32 @@ class LibraryViewModel(
             addResults(listOf(item), AddAction.PLAY_IF_STOPPED)
             return
         }
-        viewModelScope.launch {
-            val below = withContext(io) { searchBrowser.level(item) }
-            _state.update { it.copy(search = it.search?.opened(below)) }
+        // Cancel earlier opens and check search identity so double-taps or seeAll/back don't race.
+        val expected = _state.value.search ?: return
+        openingResult?.cancel()
+        openingResult = viewModelScope.launch {
+            val below = withContext(io) {
+                try {
+                    searchBrowser.level(item)
+                } catch (_: SQLiteException) {
+                    null
+                }
+            } ?: return@launch
+            _state.update {
+                if (it.search === expected) it.copy(search = it.search.opened(below)) else it
+            }
         }
     }
 
     /** Shows all of a [section] of the search results. */
     fun seeAll(section: SearchSection) {
+        openingResult?.cancel()
         _state.update { it.copy(search = it.search?.seeAll(section)) }
     }
 
     /** Closes the search results' page shown; false at their sections. */
     fun backInResults(): Boolean {
+        openingResult?.cancel()
         val search = _state.value.search?.back() ?: return false
         _state.update { it.copy(search = search) }
         return true
@@ -401,7 +441,13 @@ class LibraryViewModel(
 
     private fun add(items: List<SongSelectItem>, action: AddAction, urls: () -> List<String>) {
         viewModelScope.launch {
-            val urls = withContext(io) { urls() }
+            val urls = withContext(io) {
+                try {
+                    urls()
+                } catch (_: SQLiteException) {
+                    emptyList()
+                }
+            }
             if (urls.isEmpty()) {
                 return@launch
             }
@@ -421,7 +467,13 @@ class LibraryViewModel(
 
     private fun download(urls: () -> List<String>) {
         viewModelScope.launch {
-            val urls = withContext(io) { urls() }
+            val urls = withContext(io) {
+                try {
+                    urls()
+                } catch (_: SQLiteException) {
+                    emptyList()
+                }
+            }
             if (urls.isNotEmpty()) {
                 DownloadManager.getInstance().addJob(
                     ClementineMessageFactory.buildDownloadSongsMessage(DownloadItem.Urls, urls))
@@ -451,13 +503,17 @@ class LibraryViewModel(
         val fields = fields
         viewModelScope.launch {
             val rules = withContext(io) {
-                if (fields[item.level] == "artist" && item.selection.last() != DynamicSongQuery.VARIOUS_ARTISTS) {
-                    listOf(SyncSources.artistRule(serverId, item.selection.last(), refreshPolicy))
-                } else {
-                    // One album here can be several in Clementine, filed under different album
-                    // artists: keep each.
-                    albumsOf(fields.take(item.level + 1), item.selection.toList())
-                        .map { (albumArtist, album) -> SyncSources.albumRule(serverId, albumArtist, album, refreshPolicy) }
+                try {
+                    if (fields[item.level] == "artist" && item.selection.last() != DynamicSongQuery.VARIOUS_ARTISTS) {
+                        listOf(SyncSources.artistRule(serverId, item.selection.last(), refreshPolicy))
+                    } else {
+                        // One album here can be several in Clementine, filed under different album
+                        // artists: keep each.
+                        albumsOf(fields.take(item.level + 1), item.selection.toList())
+                            .map { (albumArtist, album) -> SyncSources.albumRule(serverId, albumArtist, album, refreshPolicy) }
+                    }
+                } catch (_: SQLiteException) {
+                    emptyList()
                 }
             }
             if (rules.isNotEmpty()) {

@@ -38,6 +38,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -99,7 +100,7 @@ fun LibraryScreen(viewModel: LibraryViewModel) {
                     resources.getQuantityString(R.plurals.songs_added, message.count, message.count)
                 is LibraryViewModel.Message.SyncFailed ->
                     resources.getString(R.string.library_sync_error) + ": " +
-                        resources.getString(message.reason)
+                        message.reason.getMessage(context)
                 is LibraryViewModel.Message.Kept -> resources.getString(R.string.sync_keeping, message.title)
                 is LibraryViewModel.Message.SmartPlaylistAdded -> resources.getString(message.text)
             }
@@ -179,17 +180,28 @@ internal fun LibraryContent(
     // Whether the smart playlists are listed, as the folder holding them is opened.
     var smartPlaylistsOpen by rememberSaveable { mutableStateOf(false) }
     val search = state.search
-    // Selected items, by their position in the level shown; cleared when another level shows.
-    var selection by remember(state.levels.size, shown?.opened) { mutableStateOf(emptySet<Int>()) }
+    // Selected items, by their position in the level shown; preserved across rotation and cleared
+    // when another level shows or a refresh removes all selected rows (preventing "0 selected").
+    var selection by rememberSaveable(
+        state.levels.size,
+        shown?.opened?.url,
+        shown?.opened?.listTitle,
+        stateSaver = LibrarySelectionSaver,
+    ) { mutableStateOf(emptySet()) }
     // Held here, so a level keeps its place while another branch shows (no results, say).
     val listState = rememberLevelListState(state.levels.size)
     val selected = shown?.items?.filterIndexed { index, _ -> index in selection }.orEmpty()
+    LaunchedEffect(selected.isEmpty(), selection.isEmpty()) {
+        if (selection.isNotEmpty() && selected.isEmpty()) {
+            selection = emptySet()
+        }
+    }
 
     Column(modifier.fillMaxSize()) {
         Progress(state.status)
         when {
             search != null -> if (search.pages.isEmpty()) Top(null)
-            selection.isNotEmpty() -> BrowseSelectionBar(
+            selected.isNotEmpty() -> BrowseSelectionBar(
                 count = selected.size,
                 onClear = { selection = emptySet() },
                 onAdd = {
@@ -233,7 +245,7 @@ internal fun LibraryContent(
                     shown,
                     selection,
                     onClick = { index, item ->
-                        if (selection.isEmpty()) {
+                        if (selected.isEmpty()) {
                             onOpen(item)
                         } else {
                             selection = selection.toggle(index)
@@ -247,7 +259,7 @@ internal fun LibraryContent(
                     canKeep = canKeep,
                     onKeep = onKeep,
                     header = {
-                        if (shown.opened == null && selection.isEmpty()) {
+                        if (shown.opened == null && selected.isEmpty()) {
                             smartPlaylists(
                                 smartPlaylists,
                                 open = smartPlaylistsOpen,
@@ -265,6 +277,11 @@ internal fun LibraryContent(
 }
 
 private fun Set<Int>.toggle(index: Int) = if (index in this) this - index else this + index
+
+private val LibrarySelectionSaver = listSaver<Set<Int>, Int>(
+    save = { it.toList() },
+    restore = { it.toSet() },
+)
 
 /**
  * Clementine's smart playlists, as a folder at the top of the library, as Clementine shows them:

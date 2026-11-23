@@ -88,18 +88,28 @@ class TaskerSettings : ComponentActivity() {
         }
     }
 
-    /** Saves the action, unless Connect's port is invalid, which is then shown. */
+    /** Saves the action, unless Connect's host is blank or port is invalid, which are then shown. */
     private fun done() {
-        if (form.action == TaskerAction.CONNECT && form.validPort == null) {
-            form.portErrors++
-            return
+        if (form.action == TaskerAction.CONNECT) {
+            // Check both fields without short-circuiting so both errors appear together.
+            var blocked = false
+            if (!form.validHost) {
+                form.hostErrors++
+                blocked = true
+            }
+            if (form.validPort == null) {
+                form.portErrors++
+                blocked = true
+            }
+            if (blocked) return
         }
         finish()
     }
 
     override fun finish() {
         val port = form.validPort
-        if (form.action != TaskerAction.CONNECT || port != null) {
+        // Also guard back-navigation exit against saving a blank host or invalid port.
+        if (form.action != TaskerAction.CONNECT || (form.validHost && port != null)) {
             setResult(RESULT_OK, result(port ?: Clementine.DefaultPort))
         }
         super.finish()
@@ -108,10 +118,11 @@ class TaskerSettings : ComponentActivity() {
     /** The bundle Tasker keeps for the action, and the blurb it shows for it. */
     private fun result(port: Int): Intent {
         val auth = form.authCode.toIntOrNull() ?: 0
-        val bundle = PluginBundleManager.generateBundle(applicationContext, form.action.code, form.host, port, auth)
+        val host = form.host.trim()
+        val bundle = PluginBundleManager.generateBundle(applicationContext, form.action.code, host, port, auth)
         var blurb = getString(R.string.tasker_action) + " " + getString(form.action.label)
         if (form.action == TaskerAction.CONNECT) {
-            blurb += " / ${form.host}:$port"
+            blurb += " / $host:$port"
         }
         return Intent()
             .putExtra(LocalePluginIntent.EXTRA_BUNDLE, bundle)

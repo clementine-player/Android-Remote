@@ -155,8 +155,10 @@ internal fun ConnectContent(
         val fold = foldAcross(bounds)
         if (fold is Fold.Vertical) {
             // Half-open like a book: the header on one side of the fold, the rest on the other.
+            // Bound icon size by both pane width and height so the wrapped title doesn't clip.
+            val iconSize = minOf(fold.before - 48.dp, maxHeight - SPACE_AROUND_LANDSCAPE_ICON).coerceIn(48.dp, 168.dp)
             Row(Modifier.fillMaxSize()) {
-                Header(actions::onSettings, fill = true, iconSize = 168.dp, Modifier.width(fold.before).fillMaxHeight())
+                Header(actions::onSettings, fill = true, iconSize = iconSize, Modifier.width(fold.before).fillMaxHeight())
                 Spacer(Modifier.width(fold.width))
                 body(Modifier.weight(1f).fillMaxHeight().verticalScroll(rememberScrollState()).statusBarsPadding())
             }
@@ -171,8 +173,10 @@ internal fun ConnectContent(
             }
         } else if (maxWidth > maxHeight) {
             // Landscape: the header down the left, the rest beside it.
+            // Scale down on short screens or narrow split panes so the header fits vertically.
+            val iconSize = minOf(maxWidth / 2 - 48.dp, maxHeight - SPACE_AROUND_LANDSCAPE_ICON).coerceIn(48.dp, 168.dp)
             Row(Modifier.fillMaxSize()) {
-                Header(actions::onSettings, fill = true, iconSize = 168.dp, Modifier.weight(1f).fillMaxHeight())
+                Header(actions::onSettings, fill = true, iconSize = iconSize, Modifier.weight(1f).fillMaxHeight())
                 body(Modifier.weight(1f).fillMaxHeight().verticalScroll(rememberScrollState()).statusBarsPadding())
             }
         } else {
@@ -348,8 +352,9 @@ private fun SectionTitle(@StringRes text: Int, modifier: Modifier) {
 /** What's on this phone, to play without Clementine; while connecting, tapping it stops that. */
 @Composable
 private fun OnPhoneItem(songs: Int, connecting: Boolean, onClick: () -> Unit) {
+    val tablet = isTablet()
     ListItem(
-        headlineContent = { Text(stringResource(R.string.sync_on_this_phone)) },
+        headlineContent = { Text(stringResource(if (tablet) R.string.sync_on_this_tablet else R.string.sync_on_this_phone)) },
         supportingContent = {
             Text(
                 pluralStringResource(
@@ -365,7 +370,7 @@ private fun OnPhoneItem(songs: Int, connecting: Boolean, onClick: () -> Unit) {
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
-                    painterResource(if (isTablet()) R.drawable.ic_tablet else R.drawable.ic_smartphone),
+                    painterResource(if (tablet) R.drawable.ic_tablet else R.drawable.ic_smartphone),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurface,
                 )
@@ -520,3 +525,6 @@ private val SPACE_BELOW_ICON = 640.dp
 
 /** About what the header needs besides Clementine: the status bar, settings button and name. */
 private val SPACE_AROUND_ICON = 170.dp
+
+/** Extra vertical allowance in side-by-side landscape where the title can wrap onto two lines. */
+private val SPACE_AROUND_LANDSCAPE_ICON = 220.dp

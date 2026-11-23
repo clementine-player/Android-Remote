@@ -114,6 +114,16 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
     /** Whether connecting was canceled: what the attempt says afterwards isn't shown. */
     private var canceled = false
 
+    /** Pending bind waiting for [ClementineService], unbound if the activity goes away first. */
+    private var pendingServiceConnection: ServiceConnection? = null
+
+    /** `(host, port)` that already failed during this auto-connect pass, to avoid silent loops. */
+    private var failedAutoConnectTarget: Pair<String, Int>? = null
+
+    // Reusable Runnable references so handler.removeCallbacks() cancels pending delayed retries.
+    private val autoConnectRunnable = Runnable { autoConnect() }
+
+    private val retryDiscoveryRunnable = Runnable { autoConnect(state.servers.value) }
 
     /** The network name of the Clementine being connected to, if it was picked from the network. */
     private var serverName: String? = null
@@ -190,17 +200,19 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
             // mDNS discovery runs even when auto-connecting, so that if the saved address no
             // longer works, the Clementines on the network are there to pick from, and the last
             // one can be found there by name.
+            stopDiscovery()
             discovery = ClementineMDnsDiscovery(handler).also { it.discoverServices() }
         }
         state.setSearching(hasLocalNetwork())
 
+        handler.removeCallbacks(autoConnectRunnable)
         if (connectOnResume) {
             // Back from playing on this phone, to connect: to the Clementine last connected to,
             // found by name on the network if its address has changed.
-            handler.postDelayed({ autoConnect() }, AUTO_CONNECT_DELAY_MILLIS)
+            handler.postDelayed(autoConnectRunnable, AUTO_CONNECT_DELAY_MILLIS)
         } else if (preferences.getBoolean(SharedPreferencesKeys.SP_KEY_AC, true) && doAutoConnect) {
             // Delayed, so the service has time to start.
-            handler.postDelayed({ autoConnect() }, AUTO_CONNECT_DELAY_MILLIS)
+            handler.postDelayed(autoConnectRunnable, AUTO_CONNECT_DELAY_MILLIS)
         }
         connectOnResume = false
         doAutoConnect = true
@@ -214,7 +226,33 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
 
     override fun onPause() {
         super.onPause()
+        handler.removeCallbacks(autoConnectRunnable)
+        handler.removeCallbacks(retryDiscoveryRunnable)
+        stopDiscovery()
+    }
+
+    override fun onDestroy() {
+        handler.removeCallbacksAndMessages(null)
+        stopDiscovery()
+        unbindPendingService()
+        super.onDestroy()
+    }
+
+    private fun stopDiscovery() {
+        // Null out discovery so back-to-back calls (e.g., onPause + onDestroy) don't double-stop
+        // and under-lock WifiManager.MulticastLock.
         discovery?.stopServiceDiscovery()
+        discovery = null
+    }
+
+    private fun unbindPendingService() {
+        // Clean up any bind whose onServiceConnected hasn't fired yet so the activity won't leak.
+        val connection = pendingServiceConnection ?: return
+        pendingServiceConnection = null
+        try {
+            unbindService(connection)
+        } catch (_: IllegalArgumentException) {
+        }
     }
 
     override fun onPostResume() {
@@ -290,9 +328,14 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
         if (hasLocalNetwork() || !InetAddresses.isNumericAddress(host)) {
             return false
         }
-        val connectivity = getSystemService(ConnectivityManager::class.java)
+        // Guard missing ConnectivityManager or unparseable literals so diagnostics never crash.
+        val connectivity = getSystemService(ConnectivityManager::class.java) ?: return false
         val network = connectivity.activeNetwork ?: return false
-        val address = InetAddress.getByName(host)
+        val address = try {
+            InetAddress.getByName(host)
+        } catch (_: Exception) {
+            return false
+        }
         return connectivity.getLinkProperties(network)?.routes.orEmpty().any {
             !it.hasGateway() && it.matches(address)
         }
@@ -324,7 +367,7 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
             requestLocalNetwork()
             return
         }
-        discovery?.stopServiceDiscovery()
+        stopDiscovery()
         state.setServers(emptyList())
         discovery = ClementineMDnsDiscovery(handler).also { it.discoverServices() }
     }
@@ -381,7 +424,7 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
     /** Plays what's on this phone, without Clementine: the app, on the On this phone tab. */
     private fun openOnPhone() {
         autoConnectName = null
-        discovery?.stopServiceDiscovery()
+        stopDiscovery()
         @Suppress("DEPRECATION")
         startActivityForResult(
             Intent(this, MainActivity::class.java)
@@ -434,22 +477,42 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
         // Started, so it isn't stopped on unbindService.
         val serviceIntent = Intent(this, ClementineService::class.java)
         startService(serviceIntent)
-        bindService(serviceIntent, object : ServiceConnection {
+        // Drop any earlier unfinished bind before creating a new ServiceConnection.
+        unbindPendingService()
+        val connection = object : ServiceConnection {
             override fun onServiceConnected(name: ComponentName, service: IBinder) {
-                val clementine = (service as ClementineService.ClementineServiceBinder).clementineService
-                clementine.setUiHandler(handler)
-                clementine.handleServiceAction(
-                    Intent(this@ConnectActivity, ClementineService::class.java)
-                        .putExtra(ClementineService.SERVICE_ID, ClementineService.SERVICE_START)
-                        .putExtra(ClementineService.EXTRA_STRING_IP, ip)
-                        .putExtra(ClementineService.EXTRA_INT_PORT, port())
-                        .putExtra(ClementineService.EXTRA_INT_AUTH, authCode),
-                )
-                unbindService(this)
+                if (pendingServiceConnection === this) {
+                    pendingServiceConnection = null
+                }
+                // Skip starting if the activity closed while binding, and always unbind on exit.
+                try {
+                    if (!isFinishing && !isDestroyed) {
+                        val clementine = (service as ClementineService.ClementineServiceBinder).clementineService
+                        clementine.setUiHandler(handler)
+                        clementine.handleServiceAction(
+                            Intent(this@ConnectActivity, ClementineService::class.java)
+                                .putExtra(ClementineService.SERVICE_ID, ClementineService.SERVICE_START)
+                                .putExtra(ClementineService.EXTRA_STRING_IP, ip)
+                                .putExtra(ClementineService.EXTRA_INT_PORT, port())
+                                .putExtra(ClementineService.EXTRA_INT_AUTH, authCode),
+                        )
+                    }
+                } finally {
+                    try {
+                        unbindService(this)
+                    } catch (_: IllegalArgumentException) {
+                    }
+                }
             }
 
-            override fun onServiceDisconnected(name: ComponentName) {}
-        }, BIND_AUTO_CREATE)
+            override fun onServiceDisconnected(name: ComponentName) {
+                if (pendingServiceConnection === this) {
+                    pendingServiceConnection = null
+                }
+            }
+        }
+        pendingServiceConnection = connection
+        bindService(serviceIntent, connection, BIND_AUTO_CREATE)
     }
 
     private fun port(): Int =
@@ -458,7 +521,8 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
     /** Connected to Clementine: open the player. */
     fun showPlayerDialog() {
         autoConnectName = null
-        discovery?.stopServiceDiscovery()
+        failedAutoConnectTarget = null
+        stopDiscovery()
         @Suppress("DEPRECATION")
         startActivityForResult(
             Intent(this, MainActivity::class.java).setFlags(
@@ -473,14 +537,22 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
         if (isFinishing || canceled) {
             return
         }
-        if (autoConnectName != null) {
+        // Only wait for mDNS discovery when local-network searching is actually active; otherwise
+        // fail immediately so a denied local-network permission shows its explanation dialog.
+        if (autoConnectName != null && state.searching.value) {
+            failedAutoConnectTarget = state.host.value to port()
             // Not at its saved address: look for it on the network by name instead. Delayed, so
             // the service has time to stop.
-            handler.postDelayed({ autoConnect(state.servers.value) }, AUTO_CONNECT_DELAY_MILLIS)
+            handler.removeCallbacks(retryDiscoveryRunnable)
+            handler.postDelayed(retryDiscoveryRunnable, AUTO_CONNECT_DELAY_MILLIS)
             return
         }
+        autoConnectName = null
+        failedAutoConnectTarget = null
+        // WifiManager is null on devices without Wi-Fi hardware (e.g., Ethernet-only TV boxes).
+        val wifi = applicationContext.getSystemService(WifiManager::class.java)
         @Suppress("DEPRECATION")
-        val ip = applicationContext.getSystemService(WifiManager::class.java).connectionInfo.ipAddress
+        val ip = wifi?.connectionInfo?.ipAddress ?: 0
         val message = when {
             // Android drops this silently, so nothing else says why the attempt went nowhere.
             isLocalNetworkBlocked(state.host.value) -> getString(R.string.local_network_on_link)
@@ -506,15 +578,10 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
 
     /** Clementine closed the connection; if for the auth code, ask for it. */
     fun disconnected(clementineMessage: ClementineMessage) {
-        // Restart the background service.
-        startService(
-            Intent(this, ClementineService::class.java)
-                .putExtra(ClementineService.SERVICE_ID, ClementineService.SERVICE_START),
-        )
-
         if (!clementineMessage.isErrorMessage) {
             // Clementine answered, so it was found.
             autoConnectName = null
+            failedAutoConnectTarget = null
             val reason = clementineMessage.message.responseDisconnect.reasonDisconnect
             if (reason == ReasonDisconnect.Wrong_Auth_Code || reason == ReasonDisconnect.Not_Authenticated) {
                 state.showDialog(ConnectDialog.AuthCode)
@@ -553,7 +620,11 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
     /** The Clementines found on the network changed. */
     fun serviceFound() {
         val servers = discovery?.services.orEmpty().mapNotNull { service ->
-            service.inet4Addresses.firstOrNull()?.let { Server(service.name, it.hostAddress.orEmpty(), service.port) }
+            // Prefer IPv4, then routable/ULA IPv6 over link-local IPv6 (which needs a scope ID).
+            val addr = service.inet4Addresses.firstOrNull()
+                ?: service.inet6Addresses.firstOrNull { !it.isLinkLocalAddress }
+                ?: service.inet6Addresses.firstOrNull()
+            addr?.hostAddress?.takeIf { it.isNotBlank() }?.let { Server(service.name, it, service.port) }
         }
         state.setServers(servers)
         autoConnect(servers)
@@ -571,6 +642,7 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
         ) {
             return
         }
+        failedAutoConnectTarget = null
         val name = preferences.getString(SharedPreferencesKeys.SP_KEY_NAME, null)?.ifEmpty { null }
         state.setHost(ip)
         serverName = name
@@ -590,9 +662,17 @@ class ConnectActivity : ComponentActivity(), ConnectActions {
             return
         }
         if (state.isConnecting) {
-            if (server.host != state.host.value) {
+            // Check both host and port because Clementine may have restarted on a new port at the same IP.
+            if (server.host != state.host.value || server.port != port()) {
                 App.ClementineConnection?.abortConnecting()
             }
+            return
+        }
+        // Avoid retrying if mDNS resolved the exact (host, port) that just failed this pass.
+        if (failedAutoConnectTarget == (server.host to server.port)) {
+            autoConnectName = null
+            failedAutoConnectTarget = null
+            noConnection()
             return
         }
         onServer(server)

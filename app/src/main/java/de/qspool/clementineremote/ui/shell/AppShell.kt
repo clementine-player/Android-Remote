@@ -128,7 +128,9 @@ internal fun rememberOnThisPhone(): Boolean {
 @Composable
 internal fun rememberClementineHost(): String? {
     val outputs by RemoteRepository.outputs.collectAsStateWithLifecycle()
-    val address = remember {
+    val connection by RemoteRepository.connection.collectAsStateWithLifecycle()
+    // Key on connection so reconnecting to a different Clementine refreshes the fallback host/IP.
+    val address = remember(connection) {
         App.Clementine.hostname?.takeIf { it.isNotBlank() }
             ?: App.getPreferences().getString(SharedPreferencesKeys.SP_KEY_IP, null)?.takeIf { it.isNotBlank() }
     }
@@ -143,6 +145,11 @@ class ShellViewModel : ViewModel() {
 
     /** Whether it's playing what's on this phone without Clementine, which isn't connected. */
     var offline by mutableStateOf(false)
+
+    /** Kept here because switching tabs unmounts FilterableTopBar and would drop local state. */
+    internal var queueFilterOpen by mutableStateOf(false)
+
+    internal var libraryFilterOpen by mutableStateOf(false)
 }
 
 /** What the shell asks of the activity. */
@@ -179,9 +186,10 @@ fun AppShell(shell: ShellViewModel, actions: ShellActions) {
     val onThisPhone = rememberOnThisPhone()
     val tablet = isTablet()
     val context = LocalContext.current
-    // A Clementine that can't be browsed has no Internet screen: showing it, go to the queue.
-    LaunchedEffect(browsing.supported) {
-        if (!browsing.supported && shell.destination == Destination.INTERNET) {
+    // A Clementine that can't be browsed (or offline playback) has no Internet screen: go to Queue.
+    val showInternet = !shell.offline && browsing.supported
+    LaunchedEffect(showInternet) {
+        if (!showInternet && shell.destination == Destination.INTERNET) {
             shell.destination = Destination.QUEUE
         }
     }
@@ -191,7 +199,7 @@ fun AppShell(shell: ShellViewModel, actions: ShellActions) {
         NavigationSuiteScaffold(
             layoutType = layout,
             navigationSuiteItems = {
-                Destination.entries.filter { it != Destination.INTERNET || browsing.supported }.forEach { destination ->
+                Destination.entries.filter { it != Destination.INTERNET || showInternet }.forEach { destination ->
                     item(
                         selected = shell.destination == destination,
                         onClick = { shell.destination = destination },
@@ -319,7 +327,11 @@ fun AppShell(shell: ShellViewModel, actions: ShellActions) {
         }
     }
 
-    details?.let { lyrics ->
+    // Close details when switching to phone playback, which has no remote lyrics or rating.
+    LaunchedEffect(onPhone) {
+        if (onPhone) details = null
+    }
+    details?.takeIf { !onPhone }?.let { lyrics ->
         SongDetailsSheet(showLyrics = lyrics, onDismiss = { details = null }, viewModel = player)
     }
     if (connectionOpen) {
@@ -365,7 +377,6 @@ private fun Destinations(
     val internet: InternetViewModel = viewModel()
     val libraryState by library.state.collectAsStateWithLifecycle()
     val internetState by internet.state.collectAsStateWithLifecycle()
-    val outputs by RemoteRepository.outputs.collectAsStateWithLifecycle()
     val host = rememberClementineHost()
 
     if (shell.offline) {
@@ -396,11 +407,19 @@ private fun Destinations(
                     queue.load()
                     onPauseOrDispose {}
                 }
-                var clearing by remember { mutableStateOf(false) }
-                var keeping by remember { mutableStateOf(false) }
+                var clearing by rememberSaveable { mutableStateOf(false) }
+                var keeping by rememberSaveable { mutableStateOf(false) }
                 val syncFrom by queue.syncFrom.collectAsStateWithLifecycle()
                 val queueState by queue.state.collectAsStateWithLifecycle()
-                FilterableTopBar(host, onConnection, onSettings, queue::setFilter) {
+                FilterableTopBar(
+                    host,
+                    onConnection,
+                    onSettings,
+                    text = queueState.filter,
+                    open = shell.queueFilterOpen,
+                    onOpenChange = { shell.queueFilterOpen = it },
+                    onFilter = queue::setFilter,
+                ) {
                     Box {
                         var open by remember { mutableStateOf(false) }
                         IconButton(onClick = { open = true }, modifier = Modifier.testTag("btnQueueMore")) {
@@ -476,7 +495,15 @@ private fun Destinations(
                 }
             }
             Destination.LIBRARY -> {
-                FilterableTopBar(host, onConnection, onSettings, library::setFilter)
+                FilterableTopBar(
+                    host,
+                    onConnection,
+                    onSettings,
+                    text = libraryState.filter,
+                    open = shell.libraryFilterOpen,
+                    onOpenChange = { shell.libraryFilterOpen = it },
+                    onFilter = library::setFilter,
+                )
                 LibraryScreen(library)
             }
             Destination.INTERNET -> {
@@ -590,19 +617,22 @@ private fun FilterableTopBar(
     host: String?,
     onConnection: () -> Unit,
     onSettings: () -> Unit,
+    text: String,
+    open: Boolean,
+    onOpenChange: (Boolean) -> Unit,
     onFilter: (String) -> Unit,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
-    var filter by rememberSaveable { mutableStateOf<String?>(null) }
+    // Keep the bar open while ViewModel filter text is non-empty so users can always clear it.
+    val active = open || text.isNotEmpty()
     fun close() {
-        filter = null
+        onOpenChange(false)
         onFilter("")
     }
-    BackHandler(filter != null) { close() }
-    val text = filter
-    if (text == null) {
+    BackHandler(active) { close() }
+    if (!active) {
         TopBar(host, onConnection, onSettings) {
-            IconButton(onClick = { filter = "" }, modifier = Modifier.testTag("btnFilter")) {
+            IconButton(onClick = { onOpenChange(true) }, modifier = Modifier.testTag("btnFilter")) {
                 Icon(painterResource(R.drawable.ic_search), stringResource(R.string.menu_search))
             }
             actions()
@@ -614,10 +644,7 @@ private fun FilterableTopBar(
         ) {
             TextField(
                 value = text,
-                onValueChange = {
-                    filter = it
-                    onFilter(it)
-                },
+                onValueChange = onFilter,
                 placeholder = { Text(stringResource(R.string.playlist_search_hint)) },
                 leadingIcon = { Icon(painterResource(R.drawable.ic_search), null) },
                 singleLine = true,
@@ -774,8 +801,9 @@ internal fun MiniPlayer(
                 }
             }
             val length = song.length
-            val position = rememberSongPosition(nowPlaying)
             if (length > 0) {
+                // Only attach the frame-rate position clock when a known length renders the bar.
+                val position = rememberSongPosition(nowPlaying)
                 // Only a glance at the position, which the player shows with its seek bar: kept out
                 // of accessibility, where its node would stand over the play/pause button.
                 Box(

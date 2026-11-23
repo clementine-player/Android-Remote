@@ -87,8 +87,13 @@ fun SongDetailsSheet(showLyrics: Boolean, onDismiss: () -> Unit, viewModel: Play
             onRequestLyrics = viewModel::requestLyrics,
             onRate = { stars ->
                 viewModel.rate(stars)
-                Toast.makeText(context, rated.replace("\$stars\$", formatStars(stars)), Toast.LENGTH_SHORT)
-                    .show()
+                val formatted = formatStars(stars)
+                // Support both legacy $stars$ translations and updated %1$s format strings.
+                Toast.makeText(
+                    context,
+                    rated.replace("\$stars\$", formatted).replace("%1\$s", formatted),
+                    Toast.LENGTH_SHORT,
+                ).show()
             },
         )
     }

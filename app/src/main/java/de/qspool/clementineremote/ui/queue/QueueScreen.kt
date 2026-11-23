@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,6 +31,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -76,9 +78,17 @@ internal fun QueueContent(
     onRemove: (List<MySong>) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // Selected songs, by their index in the playlist; cleared when another playlist shows.
-    var selection by remember(state.shown?.id) { mutableStateOf(emptySet<Int>()) }
+    // Selected songs, by their index in the playlist; preserved across rotation and cleared when
+    // switching playlists, filtering, or when playlist updates drop every selected index.
+    var selection by rememberSaveable(state.shown?.id, state.filter, stateSaver = QueueSelectionSaver) {
+        mutableStateOf(emptySet())
+    }
     val selected = state.songs.filter { it.index in selection }
+    LaunchedEffect(selected.isEmpty(), selection.isEmpty()) {
+        if (selection.isNotEmpty() && selected.isEmpty()) {
+            selection = emptySet()
+        }
+    }
     // The song last tapped to play: the list stays where it is when it starts playing.
     var tapped by remember { mutableStateOf<Int?>(null) }
     val play = { song: MySong ->
@@ -93,7 +103,7 @@ internal fun QueueContent(
                 modifier = Modifier.fillMaxWidth().testTag("queueLoading"),
             )
         }
-        if (selection.isEmpty()) {
+        if (selected.isEmpty()) {
             Header(state, onShow)
         } else {
             SelectionBar(
@@ -123,7 +133,7 @@ internal fun QueueContent(
                 tapped,
                 onPlayingTapped = { tapped = null },
                 onClick = { song ->
-                    if (selection.isEmpty()) {
+                    if (selected.isEmpty()) {
                         play(song)
                     } else {
                         selection = selection.toggle(song.index)
@@ -135,6 +145,11 @@ internal fun QueueContent(
         }
     }
 }
+
+private val QueueSelectionSaver = listSaver<Set<Int>, Int>(
+    save = { it.toList() },
+    restore = { it.toSet() },
+)
 
 private fun Set<Int>.toggle(index: Int) = if (index in this) this - index else this + index
 
@@ -230,15 +245,23 @@ private fun Songs(
     modifier: Modifier,
 ) {
     val listState = rememberLazyListState()
-    // Show the song playing, a few rows down, when another playlist shows, or when another song
-    // plays, unless it was tapped to play.
+    // Track which playlist has already auto-scrolled so initial opening scrolls once songs arrive.
+    var scrolledForPlaylist by remember { mutableStateOf<Int?>(null) }
+    // Show the song playing, a few rows down, when another playlist shows (including once its
+    // songs arrive), or when another song plays, unless it was tapped to play.
     suspend fun showPlaying() {
         val row = state.songs.indexOfFirst { it.index == state.playingIndex }
         if (row >= 0) {
             listState.scrollToItem((row - 3).coerceAtLeast(0))
         }
     }
-    LaunchedEffect(state.shown?.id) { showPlaying() }
+    LaunchedEffect(state.shown?.id, state.songs.isEmpty(), state.playingIndex) {
+        val shownId = state.shown?.id
+        if (state.songs.isNotEmpty() && scrolledForPlaylist != shownId) {
+            scrolledForPlaylist = shownId
+            showPlaying()
+        }
+    }
     LaunchedEffect(state.playingIndex) {
         val wasTapped = state.playingIndex == tapped
         onPlayingTapped()
@@ -246,8 +269,18 @@ private fun Songs(
             showPlaying()
         }
     }
+    // Deduplicate keys because duplicate tracks or transient optimistic edits can share index/URL.
+    val rowKeys = remember(state.songs) {
+        val seen = HashMap<String, Int>(state.songs.size)
+        state.songs.map { song ->
+            val base = "${song.index}:${song.url.orEmpty()}"
+            val occurrence = seen[base] ?: 0
+            seen[base] = occurrence + 1
+            if (occurrence == 0) base else "$base#$occurrence"
+        }
+    }
     LazyColumn(modifier.fillMaxWidth().testTag("queueSongs"), state = listState) {
-        items(state.songs, key = { it.index }) { song ->
+        itemsIndexed(state.songs, key = { pos, _ -> rowKeys[pos] }) { _, song ->
             val playing = song.index == state.playingIndex
             val isSelected = song.index in selection
             ListItem(

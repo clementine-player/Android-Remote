@@ -38,6 +38,7 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -126,7 +127,8 @@ fun PlayerScreen(actions: PlayerActions, viewModel: PlayerViewModel = viewModel(
     val phoneVolume by rememberPhoneVolume()
     PlayerContent(
         nowPlaying,
-        playingFrom = remember(nowPlaying.song) { viewModel.playingFrom() },
+        // Key on onPhone too because switching Play from changes playingFrom() on the same song.
+        playingFrom = remember(nowPlaying.song, onPhone) { viewModel.playingFrom() },
         playingOn = playingOn,
         outputs = outputs,
         lastFm = lastFm,
@@ -138,16 +140,13 @@ fun PlayerScreen(actions: PlayerActions, viewModel: PlayerViewModel = viewModel(
             viewModel::setVolume
         },
         volume = if (playingHere) phoneVolume else nowPlaying.volume,
+        volumeOnPhone = playingHere,
         onPhone = onPhone,
         onPlayFrom = if (choices != null) actions::onPlayFrom else null,
         onStop = viewModel::stop,
         onLove = {
             viewModel.love()
             show(R.string.track_loved)
-        },
-        onBan = {
-            viewModel.ban()
-            show(R.string.track_banned)
         },
         controls = {
             PlayerControlsContent(
@@ -178,7 +177,6 @@ internal fun PlayerContent(
     onVolume: (Int) -> Unit,
     onStop: () -> Unit,
     onLove: () -> Unit,
-    onBan: () -> Unit,
     controls: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     /** The device Clementine plays on, when it isn't its own computer. */
@@ -192,15 +190,17 @@ internal fun PlayerContent(
      * downloaded.
      */
     onPhone: Boolean = false,
+    /** Whether the volume button controls this phone's stream rather than Clementine's. */
+    volumeOnPhone: Boolean = onPhone,
     /** Chooses where the app plays from; null when there's no choice. */
     onPlayFrom: (() -> Unit)? = null,
 ) {
     Column(modifier.fillMaxSize().safeDrawingPadding().testTag("player")) {
         var bounds by remember { mutableStateOf<Rect?>(null) }
         val fold = foldAcross(bounds)
-        val showLyrics = { if (!onPhone) actions.onDetails(lyrics = true) }
+        val showLyrics: (() -> Unit)? = if (onPhone) null else ({ actions.onDetails(lyrics = true) })
         val topRow = @Composable {
-            TopRow(playingFrom, playingOn, onPhone, lastFm, actions::onCollapse, actions::onOutputs, onPlayFrom, onStop, onBan)
+            TopRow(playingFrom, playingOn, onPhone, actions::onCollapse, actions::onOutputs, onPlayFrom, onStop)
         }
         // Half-open like a book, the top row goes beside the artwork with the rest, so that what's
         // playing isn't on the fold.
@@ -224,16 +224,18 @@ internal fun PlayerContent(
                 }
                 SeekBar(nowPlaying, onSeek, Modifier.padding(horizontal = 24.dp))
                 controls()
-                BottomRow(actions, volume, onVolume, outputs, onPhone)
+                BottomRow(actions, volume, onVolume, outputs, onPhone, volumeOnPhone)
             }
             if (fold is Fold.Vertical) {
                 // Half-open like a book: the artwork on one side of the fold, the rest on the other.
                 Row(Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
-                    Box(Modifier.width(fold.before).fillMaxHeight(), contentAlignment = Alignment.Center) {
-                        Artwork(
-                            song, showLyrics,
-                            Modifier.padding(24.dp).aspectRatio(1f),
-                        )
+                    BoxWithConstraints(
+                        Modifier.width(fold.before).fillMaxHeight(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        // Size explicitly to the smaller dimension; aspectRatio(1f) overflows vertically when wide.
+                        val size = minOf(maxWidth, maxHeight)
+                        Artwork(song, showLyrics, Modifier.size(size).padding(24.dp))
                     }
                     Spacer(Modifier.width(fold.width))
                     Column(Modifier.weight(1f).fillMaxHeight()) {
@@ -297,12 +299,10 @@ private fun TopRow(
     playingFrom: String?,
     playingOn: RemoteRepository.Output?,
     onPhone: Boolean,
-    lastFm: Boolean,
     onCollapse: () -> Unit,
     onOutputs: () -> Unit,
     onPlayFrom: (() -> Unit)?,
     onStop: () -> Unit,
-    onBan: () -> Unit,
 ) {
     Row(Modifier.fillMaxWidth().padding(4.dp), verticalAlignment = Alignment.CenterVertically) {
         IconButton(onClick = onCollapse, modifier = Modifier.testTag("btnCollapse")) {
@@ -399,16 +399,6 @@ private fun TopRow(
                     },
                     modifier = Modifier.testTag("menuStop"),
                 )
-                if (lastFm) {
-                    DropdownMenuItem(
-                        text = { Text(stringResource(R.string.menu_ban)) },
-                        onClick = {
-                            open = false
-                            onBan()
-                        },
-                        modifier = Modifier.testTag("menuBan"),
-                    )
-                }
             }
         }
     }
@@ -446,6 +436,7 @@ private fun BottomRow(
     onVolume: (Int) -> Unit,
     outputs: RemoteRepository.Outputs,
     onPhone: Boolean,
+    volumeOnPhone: Boolean,
 ) {
     Row(
         Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 4.dp),
@@ -460,7 +451,7 @@ private fun BottomRow(
         if (outputs.switchable) {
             OutputButton(outputs, actions::onOutputs)
         }
-        VolumeButton(volume, onVolume)
+        VolumeButton(volume, onVolume, onPhone = volumeOnPhone)
         IconButton(onClick = actions::onQueue, modifier = Modifier.testTag("btnQueue")) {
             Icon(painterResource(R.drawable.ic_queue_music), stringResource(R.string.nav_queue))
         }
@@ -473,7 +464,7 @@ private fun BottomRow(
 }
 
 @Composable
-private fun Artwork(song: MySong?, onClick: () -> Unit, modifier: Modifier) {
+private fun Artwork(song: MySong?, onClick: (() -> Unit)?, modifier: Modifier) {
     // Decoded once per cover, and faded over when the cover changes. A song without a cover gets
     // a placeholder here, not MySong's "no cover" image, which isn't square and would be cropped.
     val art = remember(song == null, song?.artData) {
@@ -483,6 +474,12 @@ private fun Artwork(song: MySong?, onClick: () -> Unit, modifier: Modifier) {
             else -> Artwork.Cover(song.art.asImageBitmap())
         }
     }
+    // Omit clickable() on phone playback so TalkBack doesn't announce an inactive Lyrics action.
+    val clickModifier = if (onClick != null) {
+        Modifier.clickable(onClickLabel = stringResource(R.string.lyrics_tab), onClick = onClick)
+    } else {
+        Modifier
+    }
     Crossfade(
         targetState = art,
         animationSpec = tween(ARTWORK_FADE_MILLIS),
@@ -490,7 +487,7 @@ private fun Artwork(song: MySong?, onClick: () -> Unit, modifier: Modifier) {
         modifier = modifier
             .clip(RoundedCornerShape(28.dp))
             .background(MaterialTheme.colorScheme.surfaceContainerHighest)
-            .clickable(onClickLabel = stringResource(R.string.lyrics_tab), onClick = onClick)
+            .then(clickModifier)
             .testTag("imgArt"),
     ) { artwork ->
         when (artwork) {
@@ -566,40 +563,26 @@ private fun SongInfo(song: MySong?, align: TextAlign, modifier: Modifier = Modif
 @Composable
 private fun SeekBar(nowPlaying: NowPlaying, onSeek: (Int) -> Unit, modifier: Modifier) {
     val song = nowPlaying.song
-    val length = song?.length ?: 0
+    // Streams report length == -1, which would throw in coerceIn(0f, maxSeconds); clamp to 0.
+    val length = (song?.length ?: 0).coerceAtLeast(0)
     val position = rememberSongPosition(nowPlaying)
     // While dragging, the thumb follows the finger; Clementine is told on release.
-    var dragging by remember { mutableStateOf<Float?>(null) }
-    val seconds = position.seconds
-    // The time shown ticks over with each whole second, as a clock does.
-    val shown = dragging?.roundToInt() ?: seconds.toInt()
+    // Key on (song, length > 0) so a drag never sticks across track changes.
+    var dragging by remember(song, length > 0) { mutableStateOf<Float?>(null) }
 
     // Positions read left to right in every language.
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
         Column(modifier.fillMaxWidth()) {
-            Slider(
-                value = (dragging ?: seconds).coerceIn(0f, length.toFloat()),
-                onValueChange = { dragging = it },
-                onValueChangeFinished = {
-                    dragging?.let {
-                        position.seek(it.roundToInt())
-                        onSeek(it.roundToInt())
-                    }
-                    dragging = null
-                },
-                valueRange = 0f..length.coerceAtLeast(1).toFloat(),
-                enabled = length > 0,
-                modifier = Modifier.fillMaxWidth().testTag("sbPosition"),
+            SeekSlider(
+                position = position,
+                length = length,
+                dragging = dragging,
+                onDragging = { dragging = it },
+                onSeek = onSeek,
             )
             if (song != null) {
                 Row(Modifier.fillMaxWidth()) {
-                    val stream = if (song.isLocal) "" else stringResource(R.string.player_stream) + " "
-                    Text(
-                        stream + Utilities.PrettyTime(shown),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.testTag("tvPosition"),
-                    )
+                    PositionText(position, dragging, song.isLocal)
                     Spacer(Modifier.weight(1f))
                     if (length > 0) {
                         Text(
@@ -613,6 +596,48 @@ private fun SeekBar(nowPlaying: NowPlaying, onSeek: (Int) -> Unit, modifier: Mod
             }
         }
     }
+}
+
+// Isolated from SeekBar so 60-120fps position.seconds reads only recompose the Slider.
+@Composable
+private fun SeekSlider(
+    position: SongPosition,
+    length: Int,
+    dragging: Float?,
+    onDragging: (Float?) -> Unit,
+    onSeek: (Int) -> Unit,
+) {
+    val maxSeconds = length.toFloat()
+    Slider(
+        value = (dragging ?: position.seconds).coerceIn(0f, maxSeconds),
+        onValueChange = onDragging,
+        onValueChangeFinished = {
+            dragging?.let {
+                val target = it.roundToInt().coerceIn(0, length)
+                position.seek(target)
+                onSeek(target)
+            }
+            onDragging(null)
+        },
+        valueRange = 0f..length.coerceAtLeast(1).toFloat(),
+        enabled = length > 0,
+        modifier = Modifier.fillMaxWidth().testTag("sbPosition"),
+    )
+}
+
+@Composable
+private fun PositionText(position: SongPosition, dragging: Float?, isLocal: Boolean) {
+    // derivedStateOf ensures the label only recomposes when the whole second changes (1 Hz).
+    val shown by remember(position, dragging) {
+        derivedStateOf { dragging?.roundToInt() ?: position.seconds.toInt() }
+    }
+    val stream = if (isLocal) "" else stringResource(R.string.player_stream) + " "
+    Text(
+        stream + Utilities.PrettyTime(shown.coerceAtLeast(0)),
+        style = MaterialTheme.typography.labelMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.testTag("tvPosition"),
+    )
 }
 
 @Composable

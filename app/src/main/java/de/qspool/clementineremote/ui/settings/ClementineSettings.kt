@@ -55,7 +55,7 @@ class ClementineSettings : ComponentActivity(), SettingsActions {
         super.onCreate(savedInstanceState)
 
         // Keep the screen on if asked to in the settings.
-        if (App.getPreferences().getBoolean(SharedPreferencesKeys.SP_KEEP_SCREEN_ON, true) &&
+        if (App.getPreferences().getBoolean(SharedPreferencesKeys.SP_KEEP_SCREEN_ON, false) &&
             Utilities.isRemoteConnected()
         ) {
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)

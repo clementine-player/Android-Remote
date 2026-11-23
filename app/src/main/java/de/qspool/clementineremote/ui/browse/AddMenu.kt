@@ -45,21 +45,36 @@ internal fun AddMenu(
             if (action in actions) item(label, action.name) { onAdd(action) }
         }
 
+        // Only draw dividers between actually rendered sections so filtered action sets never
+        // show leading, trailing, or consecutive dividers.
+        val hasPlayGroup = AddAction.PLAY_NOW in actions ||
+            (canPlayNext && AddAction.PLAY_NEXT in actions) ||
+            AddAction.QUEUE in actions
+        val hasPlaylistGroup = AddAction.APPEND in actions ||
+            AddAction.REPLACE in actions ||
+            AddAction.NEW_PLAYLIST in actions
+
         add(R.string.internet_play_now, AddAction.PLAY_NOW)
         if (canPlayNext) {
             add(R.string.internet_play_next, AddAction.PLAY_NEXT)
         }
         add(R.string.library_add_to_queue, AddAction.QUEUE)
-        HorizontalDivider()
+        if (hasPlayGroup && hasPlaylistGroup) {
+            HorizontalDivider()
+        }
         add(R.string.library_add_to_playlist, AddAction.APPEND)
         add(R.string.internet_replace_playlist, AddAction.REPLACE)
         add(R.string.library_open_in_new_playlist, AddAction.NEW_PLAYLIST)
         if (onKeep != null) {
-            HorizontalDivider()
+            if (hasPlayGroup || hasPlaylistGroup) {
+                HorizontalDivider()
+            }
             item(R.string.sync_keep, "KEEP", onKeep)
         }
         if (onSelect != null) {
-            HorizontalDivider()
+            if (hasPlayGroup || hasPlaylistGroup || onKeep != null) {
+                HorizontalDivider()
+            }
             item(R.string.library_select, "SELECT", onSelect)
         }
     }

@@ -21,7 +21,8 @@ object RetryWait {
             return resources.getQuantityString(R.plurals.wait_seconds, seconds, seconds)
         }
         val minutes = (seconds + 59) / 60
-        if (minutes <= 60) {
+        // Strictly < 60 so 3600s formats as "1 hour" rather than "60 minutes", matching iOS.
+        if (minutes < 60) {
             return resources.getQuantityString(R.plurals.wait_minutes, minutes, minutes)
         }
         val hours = (minutes + 59) / 60

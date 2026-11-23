@@ -1,6 +1,9 @@
 package de.qspool.clementineremote.ui.player
 
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.database.ContentObserver
 import android.media.AudioManager
 import android.os.Handler
@@ -12,6 +15,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
 import kotlin.math.roundToInt
 
 /** The phone's media volume, from 0 to 100: what plays when Clementine plays on this phone. */
@@ -42,8 +46,34 @@ internal fun rememberPhoneVolume(): State<Int> {
                 volume.intValue = PhoneVolume.percent(context)
             }
         }
+        // Settings.System doesn't fire for Bluetooth A2DP/LE Audio volume changes; also observe
+        // the system VOLUME_CHANGED_ACTION broadcast for STREAM_MUSIC.
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(ctx: Context, intent: Intent) {
+                val stream = intent.getIntExtra(EXTRA_VOLUME_STREAM_TYPE, -1)
+                if (stream == AudioManager.STREAM_MUSIC || stream == -1) {
+                    volume.intValue = PhoneVolume.percent(context)
+                }
+            }
+        }
         context.contentResolver.registerContentObserver(Settings.System.CONTENT_URI, true, observer)
-        onDispose { context.contentResolver.unregisterContentObserver(observer) }
+        ContextCompat.registerReceiver(
+            context,
+            receiver,
+            IntentFilter(ACTION_VOLUME_CHANGED),
+            ContextCompat.RECEIVER_EXPORTED,
+        )
+        onDispose {
+            context.contentResolver.unregisterContentObserver(observer)
+            try {
+                context.unregisterReceiver(receiver)
+            } catch (_: IllegalArgumentException) {
+                // Ignore if already unregistered during rapid composition/context teardown.
+            }
+        }
     }
     return volume
 }
+
+private const val ACTION_VOLUME_CHANGED = "android.media.VOLUME_CHANGED_ACTION"
+private const val EXTRA_VOLUME_STREAM_TYPE = "android.media.EXTRA_VOLUME_STREAM_TYPE"

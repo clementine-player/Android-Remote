@@ -373,4 +373,20 @@ class InternetBrowserTest {
         browser.add(InternetNode("f", "Folder", hasChildren = true), BrowseAddAction.BROWSE_ADD_ACTION_APPEND)
         assertTrue(sent.isEmpty())
     }
+
+    @Test
+    fun refreshDiscardsStaleTailPages() {
+        showServices()
+        browser.open(browser.shown.nodes[0])
+        answer("soma", nodes(0, 500), total = 1000)
+        answer("soma", nodes(500, 500), offset = 500, total = 1000)
+        assertEquals(1000, browser.shown.nodes.size)
+
+        browser.refresh()
+        answer("soma", nodes(0, 500).map { it.toBuilder().setTitle("Fresh").build() }, total = 1000)
+
+        assertEquals(500, browser.shown.nodes.size)
+        assertEquals("Fresh", browser.shown.nodes[0].title)
+        assertTrue(browser.shown.hasMore)
+    }
 }
