@@ -1,0 +1,2 @@
+- Fixed a crash when switching playlists while they were still loading.
+- Clearing a playlist empties it on the phone straight away, and the Downloads tab no longer risks crashing while songs download.
