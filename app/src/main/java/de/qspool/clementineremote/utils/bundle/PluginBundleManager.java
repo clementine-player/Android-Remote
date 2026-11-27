@@ -86,7 +86,7 @@ public final class PluginBundleManager
             if (Constants.IS_LOGGABLE)
             {
                 Log.e(Constants.LOG_TAG,
-                      String.format("bundle must contain 2 keys, but currently contains %d keys: %s", bundle.keySet().size(), bundle.keySet())); //$NON-NLS-1$
+                      String.format("bundle must contain 5 keys, but currently contains %d keys: %s", bundle.keySet().size(), bundle.keySet())); //$NON-NLS-1$
             }
             return false;
         }
