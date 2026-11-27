@@ -94,6 +94,14 @@ public abstract class BackgroundTask<Params, Progress, Result> {
     }
 
     /**
+     * Called immediately on the caller thread when {@link #cancel} cancels a pending/running task,
+     * allowing subclasses to abort blocking operations (such as {@code Socket.connect()}) that
+     * ignore {@link Thread#interrupt()}.
+     */
+    protected void onCancelRequested() {
+    }
+
+    /**
      * Cancels the task: {@link #isCancelled()} is true from now on, and its result goes to
      * {@link #onCancelled} instead of {@link #onPostExecute}.
      *
@@ -105,6 +113,7 @@ public abstract class BackgroundTask<Params, Progress, Result> {
             return false;
         }
         mCancelled = true;
+        onCancelRequested();
         if (mayInterruptIfRunning) {
             // With the lock, the thread is still this task's when it's interrupted.
             synchronized (this) {

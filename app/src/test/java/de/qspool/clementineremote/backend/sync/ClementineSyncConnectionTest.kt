@@ -91,4 +91,51 @@ class ClementineSyncConnectionTest {
     fun cantFetchWhileDisconnected() {
         assertThrows(IOException::class.java) { connection({ emptyList() }).open("/d/token/1") }
     }
+
+    @Test
+    fun resumesWithRangeAndIfRangeHeadersAndFallsBackOn416() {
+        val payload = "0123456789".toByteArray()
+        val seenRanges = mutableListOf<Pair<String?, String?>>()
+        val http = HttpServer.create(InetSocketAddress(InetAddress.getLoopbackAddress(), 0), 0)
+        http.createContext("/d/song") { exchange ->
+            val range = exchange.requestHeaders.getFirst("Range")
+            val ifRange = exchange.requestHeaders.getFirst("If-Range")
+            seenRanges += range to ifRange
+            when (range) {
+                "bytes=4-" -> {
+                    val tail = payload.copyOfRange(4, payload.size)
+                    exchange.responseHeaders.add("Content-Range", "bytes 4-9/10")
+                    exchange.responseHeaders.add("ETag", "\"v1\"")
+                    exchange.sendResponseHeaders(206, tail.size.toLong())
+                    exchange.responseBody.use { it.write(tail) }
+                }
+                "bytes=99-" -> {
+                    exchange.sendResponseHeaders(416, -1)
+                    exchange.close()
+                }
+                else -> {
+                    exchange.responseHeaders.add("ETag", "\"v2\"")
+                    exchange.sendResponseHeaders(200, payload.size.toLong())
+                    exchange.responseBody.use { it.write(payload) }
+                }
+            }
+        }
+        http.start()
+        server = http
+        val conn = connection({ emptyList() }, InetSocketAddress(InetAddress.getLoopbackAddress(), http.address.port))
+
+        val resumed = conn.open("/d/song", offset = 4L, ifRange = "\"v1\"")
+        assertEquals(true, resumed.partial)
+        assertEquals("\"v1\"", resumed.etag)
+        assertEquals("456789", resumed.stream.use { String(it.readBytes()) })
+
+        val retried = conn.open("/d/song", offset = 99L, ifRange = "\"v1\"")
+        assertEquals(false, retried.partial)
+        assertEquals("\"v2\"", retried.etag)
+        assertEquals("0123456789", retried.stream.use { String(it.readBytes()) })
+        assertEquals(
+            listOf("bytes=4-" to "\"v1\"", "bytes=99-" to "\"v1\"", null to null),
+            seenRanges,
+        )
+    }
 }

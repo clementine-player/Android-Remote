@@ -43,6 +43,8 @@ class SyncEngineTest {
         private var next = 1
         private val uris = HashMap<String, Uri>()
 
+        var freeBytes: Long = -1L
+
         fun path(uri: String) = uris.entries.first { it.value.toString() == uri }.key
 
         override fun find(relativeDir: String, fileName: String): SavedSong? {
@@ -51,7 +53,7 @@ class SyncEngineTest {
             return SavedSong(uris[path], data.size.toLong())
         }
 
-        override fun freeSpace() = -1L
+        override fun freeSpace() = freeBytes
 
         override fun list(): List<StoredSong> = emptyList()
 
@@ -467,6 +469,91 @@ class SyncEngineTest {
         assertEquals("What_Ever_.opus", SyncFiles.fileName(song, "audio/ogg; codecs=opus"))
         assertEquals("mp3", SyncFiles.extension("audio/mpeg"))
         assertEquals("ogg", SyncFiles.extension("audio/ogg; codecs=vorbis"))
+    }
+
+    @Test
+    fun freeNameHandlesDotlessNamesAndPartTrimsDotsAndControlChars() {
+        val longTrailingDot = "a".repeat(99) + ".bc"
+        val song = SongMetadata.newBuilder().setTitle(longTrailingDot).setAlbumartist("Artist.")
+            .setAlbum("Album..\u0007").build()
+        assertEquals("Synced/Artist/Album.._/", SyncFiles.relativeDir(song))
+        assertEquals("${"a".repeat(99)}.mp3", SyncFiles.fileName(song, "audio/mpeg"))
+
+        val trailingDotTitle = SongMetadata.newBuilder().setTitle("Track...").build()
+        assertEquals("Track.mp3", SyncFiles.fileName(trailingDotTitle, "audio/mpeg"))
+
+        storage.create("Synced/", "Track").apply {
+            getOutputStream().write(byteArrayOf(1))
+            commit()
+        }
+        assertEquals("Track (2)", SyncFiles.freeName(storage, "Synced/", "Track", null))
+    }
+
+    @Test
+    fun failsEarlyWhenDestinationLacksFreeSpace() {
+        val album = rule("library/album/Pixies/Doolittle")
+        manifest("library/album/Pixies/Doolittle", song("a"))
+        storage.freeBytes = 10L
+
+        val result = engine.sync(clementine)
+
+        assertTrue(result.rules[album] is RuleResult.Failed)
+        assertTrue(clementine.opened.isEmpty())
+    }
+
+    @Test
+    fun sweepsStalePartialsAfterCleanSync() {
+        val partialDir = File(covers.root, ".partial").apply { mkdirs() }
+        val stalePart = File(partialDir, "orphan.part").apply { writeBytes(byteArrayOf(1, 2, 3)) }
+        val staleMeta = File(partialDir, "orphan.meta").apply { writeText("1\netag") }
+        rule("library/album/Pixies/Doolittle")
+        manifest("library/album/Pixies/Doolittle", song("a"))
+
+        engine.sync(clementine)
+
+        assertFalse(stalePart.exists())
+        assertFalse(staleMeta.exists())
+        assertFalse(partialDir.listFiles().orEmpty().any())
+    }
+
+    @Test
+    fun stoppedRuleDoesNotWriteOrReuseReplacedRowId() {
+        val originalId = rule("playlist/original")
+        manifest("playlist/original", song("a"), song("b"))
+        // Simulate deleting originalId and a new rule taking the same SQLite rowid mid-download.
+        var cancelled = false
+        var reusedId = -1L
+        val cancelingConnection = object : SyncConnection by clementine {
+            override fun open(path: String, offset: Long, ifRange: String?): OpenedSyncStream {
+                if (path.startsWith("/d/") && !cancelled) {
+                    cancelled = true
+                    store.removeRule(originalId)
+                    reusedId = store.addRule(
+                        SyncRule(
+                            serverId = SERVER,
+                            sourceId = "playlist/new",
+                            title = "New",
+                            kind = SyncSourceKind.SYNC_SOURCE_KIND_PLAYLIST,
+                            refreshPolicy = RefreshPolicy.ON_CONNECT,
+                        )
+                    )
+                }
+                return super.open(path, offset, ifRange)
+            }
+        }
+        val stoppedEngine = SyncEngine(
+            store, storage, covers.root, storage::delete,
+            listOf(AudioFormat.newBuilder().setMimeType("audio/flac").build()),
+            now = { 1_700_000_000_000 },
+            isRuleStopped = { id, sourceId ->
+                cancelled && id == originalId && sourceId == "playlist/original"
+            },
+        )
+        val result = stoppedEngine.sync(cancelingConnection)
+        assertEquals(originalId, reusedId)
+        assertEquals(RuleResult.Gone, result.rules[originalId])
+        assertTrue(store.ruleItems(originalId).isEmpty())
+        assertEquals(listOf("/d/token/a-1"), clementine.opened)
     }
 
     private companion object {

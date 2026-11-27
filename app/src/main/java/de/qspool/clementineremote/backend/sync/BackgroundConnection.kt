@@ -10,6 +10,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Resp
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
 import java.io.Closeable
@@ -24,14 +25,21 @@ internal class BackgroundConnection private constructor(
     private val connection: Connection,
     val info: ResponseClementineInfo,
     private val manifests: MutableSharedFlow<ResponseSyncManifest>,
+    private val disconnected: MutableStateFlow<Boolean>,
 ) : Closeable {
 
     /** For [SyncEngine]: songs come from Clementine's HTTP server, on the same address. */
     fun syncConnection(): SyncConnection = ClementineSyncConnection(
-        info.serverId, { connection.sendRequest(it) }, manifests, connection::getServerAddress,
+        info.serverId,
+        { connection.sendRequest(it) },
+        manifests,
+        connection::getServerAddress,
+        isConnected = { !disconnected.value && connection.isConnected },
+        disconnected = disconnected,
     )
 
     override fun close() {
+        disconnected.value = true
         connection.disconnect(ClementineMessage.getMessage(MsgType.DISCONNECT))
         connection.close()
     }
@@ -40,8 +48,9 @@ internal class BackgroundConnection private constructor(
     private class Connection : ClementineSimpleConnection() {
         @Synchronized
         fun close() {
-            // Without streams, it never connected.
-            if (mOut != null && !mSocket.isClosed) closeSocket()
+            // Unconditionally close even if mOut is still null: createConnection() may have opened
+            // mSocket before failing or timing out.
+            closeSocket()
         }
     }
 
@@ -66,9 +75,13 @@ internal class BackgroundConnection private constructor(
                 extraBufferCapacity = 16, onBufferOverflow = BufferOverflow.DROP_OLDEST,
             )
             val info = CompletableDeferred<ResponseClementineInfo?>()
+            // Shared with ClementineSyncConnection so manifest waits fail at once if the socket drops.
+            val disconnected = MutableStateFlow(false)
             thread(name = "BackgroundConnection", isDaemon = true) {
                 while (connection.isConnected) {
-                    val message = connection.getProtoc(READ_TIMEOUT_MS)
+                    // Use readRawProtoc so background INFO/PLAYLISTS frames never run through
+                    // ClementinePbParser and clobber global App.Clementine or PlaylistManager state.
+                    val message = connection.readRawProtoc(READ_TIMEOUT_MS)
                     if (message.isErrorMessage) {
                         if (message.errorMessage == ErrorMessage.TIMEOUT) continue
                         break
@@ -81,15 +94,17 @@ internal class BackgroundConnection private constructor(
                         else -> {}
                     }
                 }
+                disconnected.value = true
                 connection.close()
                 info.complete(null)
             }
             val answer = runBlocking { withTimeoutOrNull(timeoutMs) { info.await() } }
             if (answer == null) {
+                disconnected.value = true
                 connection.close()
                 return null
             }
-            return BackgroundConnection(connection, answer, manifests)
+            return BackgroundConnection(connection, answer, manifests, disconnected)
         }
     }
 }

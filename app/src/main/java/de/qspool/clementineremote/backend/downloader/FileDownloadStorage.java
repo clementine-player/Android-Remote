@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Saves songs as files under a directory the user picked, for Android 9 and earlier, where
@@ -102,14 +103,61 @@ public class FileDownloadStorage implements DownloadStorage {
         return dir == null ? -1 : dir.getUsableSpace();
     }
 
+    public File partialDir() {
+        // Keep staging partials on mBaseDir's volume so commitPartial() renames with zero copy.
+        return new File(mBaseDir, ".partial");
+    }
+
+    /** Moves an already-written staging file on the same storage volume directly into place. */
+    public Uri commitPartial(String relativeDir, String fileName, File partialFile)
+            throws IOException {
+        final File target = file(relativeDir, fileName);
+        File parent = target.getParentFile();
+        if (parent != null && !parent.exists() && !parent.mkdirs() && !parent.isDirectory()) {
+            throw new IOException("Cannot create download directory " + parent);
+        }
+        if (!renameReplacingTarget(parent, partialFile, target)) {
+            partialFile.delete();
+            throw new IOException("Cannot finalize download " + target);
+        }
+        MediaScannerConnection.scanFile(mContext,
+                new String[]{target.getAbsolutePath()}, null, null);
+        return contentUri(target);
+    }
+
+    private static boolean renameReplacingTarget(File parent, File part, File target) {
+        if (part.renameTo(target)) {
+            return true;
+        }
+        if (!target.exists()) {
+            return false;
+        }
+        // File.renameTo() does not reliably overwrite an existing target on all filesystems;
+        // back up target first so a failed swap can restore the original song.
+        File backup = new File(parent, ".bak-" + UUID.randomUUID() + ".tmp");
+        boolean backedUp = target.renameTo(backup);
+        if (!backedUp) {
+            return false;
+        }
+        if (part.renameTo(target)) {
+            backup.delete();
+            return true;
+        }
+        backup.renameTo(target);
+        return false;
+    }
+
     @Override
     public PendingSong create(String relativeDir, String fileName) throws IOException {
-        final File file = file(relativeDir, fileName);
-        if (file.exists()) {
-            file.delete();
+        final File target = file(relativeDir, fileName);
+        final File parent = target.getParentFile();
+        if (parent != null && !parent.exists() && !parent.mkdirs() && !parent.isDirectory()) {
+            throw new IOException("Cannot create download directory " + parent);
         }
-        file.getParentFile().mkdirs();
-        final OutputStream out = new FileOutputStream(file);
+        // Stage to a fixed-length temp file and swap on commit() so failed downloads keep existing
+        // songs intact and long target filenames never exceed filesystem name limits with a prefix.
+        final File part = new File(parent, ".dl-" + UUID.randomUUID() + ".tmp");
+        final OutputStream out = new FileOutputStream(part);
 
         return new PendingSong() {
             @Override
@@ -120,9 +168,13 @@ public class FileDownloadStorage implements DownloadStorage {
             @Override
             public Uri commit() throws IOException {
                 out.close();
+                if (!renameReplacingTarget(parent, part, target)) {
+                    part.delete();
+                    throw new IOException("Cannot finalize download " + target);
+                }
                 MediaScannerConnection.scanFile(mContext,
-                        new String[]{file.getAbsolutePath()}, null, null);
-                return contentUri(file);
+                        new String[]{target.getAbsolutePath()}, null, null);
+                return contentUri(target);
             }
 
             @Override
@@ -131,7 +183,7 @@ public class FileDownloadStorage implements DownloadStorage {
                     out.close();
                 } catch (IOException ignored) {
                 }
-                file.delete();
+                part.delete();
             }
         };
     }

@@ -19,9 +19,6 @@ package de.qspool.clementineremote.backend.database;
 
 import android.graphics.Bitmap;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-
 public class SongSelectItem {
 
     private int mLevel;
@@ -56,12 +53,10 @@ public class SongSelectItem {
         return mUrl;
     }
 
-    public void setUrl(String mUrl) {
-        try {
-            this.mUrl = URLDecoder.decode(mUrl.replace("+", "%2B"), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            this.mUrl = mUrl;
-        }
+    public void setUrl(String url) {
+        // Keep Clementine's QUrl::toEncoded() string verbatim: URLDecoder turns %23/%3F into
+        // URL fragments/queries (#/?) and throws IllegalArgumentException on literal '%' chars.
+        this.mUrl = url == null ? "" : url;
     }
 
     public String getListTitle() {

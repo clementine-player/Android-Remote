@@ -90,7 +90,12 @@ object BackgroundSync {
         val host = preferences.getString(SharedPreferencesKeys.SP_KEY_IP, null)?.takeIf { it.isNotBlank() } ?: return null
         val serverId = preferences.getString(SharedPreferencesKeys.SP_SYNC_SERVER_ID, null)?.takeIf { it.isNotEmpty() }
             ?: return null
-        val port = preferences.getString(SharedPreferencesKeys.SP_KEY_PORT, null)?.toIntOrNull() ?: Clementine.DefaultPort
+        // Clamp corrupt/out-of-range stored ports before InetSocketAddress throws IllegalArgumentException.
+        val port = preferences.getString(SharedPreferencesKeys.SP_KEY_PORT, null)
+            ?.trim()
+            ?.toIntOrNull()
+            ?.takeIf { it in 1..65535 }
+            ?: Clementine.DefaultPort
         return LastClementine(host, port, preferences.getInt(SharedPreferencesKeys.SP_LAST_AUTH_CODE, 0), serverId)
     }
 

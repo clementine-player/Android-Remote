@@ -16,6 +16,6 @@
 */
 package de.qspool.clementineremote.backend.elements;
 
-public class ServiceFound extends ClementineElement {
+public class ServiceFound {
 
 }

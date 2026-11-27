@@ -26,15 +26,42 @@ enum class DownloadNetwork(val value: String) {
     fun allowsCurrentNetwork(context: Context): Boolean {
         if (this == ANY) return true
         val manager = context.getSystemService(ConnectivityManager::class.java) ?: return true
+        // Check activeNetwork first, then fall back to allNetworks (ignoring VPNs so an active VPN
+        // checks its underlying Wi-Fi/Ethernet, while non-internet IMS stays excluded by allowsNetwork).
+        val active = manager.activeNetwork
+        if (active != null) {
+            val capabilities = manager.getNetworkCapabilities(active)
+            if (capabilities != null &&
+                !capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN) &&
+                allowsNetwork(manager, active, capabilities)
+            ) {
+                return true
+            }
+        }
         @Suppress("DEPRECATION")
         return manager.allNetworks.any { network ->
             val capabilities = manager.getNetworkCapabilities(network)
-            capabilities != null && !capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN) &&
-                allows(
-                    unmetered = capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED),
-                    roaming = roaming(manager, network, capabilities),
-                )
+            capabilities != null &&
+                !capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN) &&
+                allowsNetwork(manager, network, capabilities)
         }
+    }
+
+    private fun allowsNetwork(
+        manager: ConnectivityManager,
+        network: Network,
+        capabilities: NetworkCapabilities,
+    ): Boolean {
+        // Local-only Wi-Fi / Ethernet (without INTERNET capability) can still reach Clementine on the LAN,
+        // while non-internet cellular transports (e.g., carrier IMS) should not satisfy WIFI_ONLY.
+        val usableTransport = capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ||
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+        return usableTransport &&
+            allows(
+                unmetered = capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED),
+                roaming = roaming(manager, network, capabilities),
+            )
     }
 
     /** Whether this allows a network that's [unmetered], or not, and [roaming], or not. */

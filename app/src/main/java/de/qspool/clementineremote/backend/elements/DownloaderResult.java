@@ -25,7 +25,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Reas
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseDisconnect;
 import de.qspool.clementineremote.utils.RetryWait;
 
-public class DownloaderResult extends ClementineElement {
+public class DownloaderResult {
 
     public enum DownloadResult {SUCCESSFUL, INSUFFIANT_SPACE, NOT_MOUNTED, CONNECTION_ERROR, FOBIDDEN, NOT_LOCAL_NETWORK, TOO_MANY_WRONG_AUTH_CODES, NETWORK_NOT_ALLOWED, CANCELLED, ERROR}
 
@@ -105,9 +105,12 @@ public class DownloaderResult extends ClementineElement {
                 return R.string.download_noti_complete;
             case CANCELLED:
                 return R.string.download_noti_canceled;
+            case ERROR:
+                return R.string.download_noti_error;
         }
 
-        return -1;
+        // Fall back to a valid string resource rather than -1, which crashes Resources.getString().
+        return R.string.download_noti_error;
     }
 
 }

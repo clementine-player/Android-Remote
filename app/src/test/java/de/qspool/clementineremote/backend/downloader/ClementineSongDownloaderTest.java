@@ -15,6 +15,7 @@ import org.robolectric.RuntimeEnvironment;
 
 import java.util.List;
 
+import de.qspool.clementineremote.R;
 import de.qspool.clementineremote.backend.BackgroundTask;
 import de.qspool.clementineremote.backend.elements.DownloaderResult;
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory;
@@ -83,5 +84,13 @@ public class ClementineSongDownloaderTest {
     public void readingTheDownloadedSongsWaitsForTheLock() throws InterruptedException {
         ClementineSongDownloader downloader = new ClementineSongDownloader();
         assertWaitsForLock(downloader, downloader::getDownloadedSongs);
+    }
+
+    @Test
+    public void downloaderErrorMapsToDownloadFailedString() {
+        Context context = RuntimeEnvironment.getApplication();
+        DownloaderResult error = new DownloaderResult(1, DownloaderResult.DownloadResult.ERROR);
+        assertEquals(R.string.download_noti_error, error.getMessageStringId());
+        assertEquals(context.getString(R.string.download_noti_error), error.getMessage(context));
     }
 }

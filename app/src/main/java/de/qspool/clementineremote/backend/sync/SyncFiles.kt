@@ -45,9 +45,10 @@ object SyncFiles {
      * URI of the song being replaced, which may keep its name.
      */
     fun freeName(storage: DownloadStorage, dir: String, name: String, own: String?): String {
+        // Guard against dotless filenames (e.g., fallback names without an extension).
         val dot = name.lastIndexOf('.')
-        val base = name.substring(0, dot)
-        val extension = name.substring(dot)
+        val base = if (dot >= 0) name.substring(0, dot) else name
+        val extension = if (dot >= 0) name.substring(dot) else ""
         var candidate = name
         var n = 2
         while (true) {
@@ -74,7 +75,12 @@ object SyncFiles {
     }
 
     private fun part(text: String, otherwise: String): String {
-        val safe = text.replace(UNSAFE, "_").trim().trim('.').take(MAX_NAME)
+        // Trim spaces/dots both before and after take(MAX_NAME): truncation can expose an internal
+        // space or dot at the end, which FAT filesystems and MediaStore reject or silently strip.
+        val safe = text.replace(UNSAFE, "_")
+            .trim { it <= ' ' || it == '.' }
+            .take(MAX_NAME)
+            .trimEnd { it <= ' ' || it == '.' }
         return safe.ifEmpty { otherwise }
     }
 }

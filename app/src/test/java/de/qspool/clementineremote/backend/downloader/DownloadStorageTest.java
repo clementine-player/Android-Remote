@@ -219,4 +219,13 @@ public class DownloadStorageTest {
         assertEquals("audio/mpeg", MediaStoreDownloadStorage.mimeType("song"));
         assertEquals("audio/mpeg", MediaStoreDownloadStorage.mimeType("song.txt"));
     }
+
+    @Test
+    public void savesSongNearMaxFilenameLength() throws Exception {
+        char[] chars = new char[251];
+        Arrays.fill(chars, 'a');
+        String longName = new String(chars) + ".mp3";
+        Uri uri = save("Artist/", longName, "payload");
+        assertEquals("payload", read(uri));
+    }
 }

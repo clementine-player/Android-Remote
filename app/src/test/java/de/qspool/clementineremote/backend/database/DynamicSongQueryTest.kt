@@ -100,4 +100,12 @@ class DynamicSongQueryTest {
         }
         assertEquals(listOf("zebra", "Été", "apple", "Apple"), names(albums))
     }
+
+    @Test
+    fun songSelectItemPreservesPercentHashAndQuestionMarksInUrl() {
+        val item = SongSelectItem()
+        val raw = "file:///music/100% Real #1?take=2.mp3"
+        item.url = raw
+        assertEquals(raw, item.url)
+    }
 }

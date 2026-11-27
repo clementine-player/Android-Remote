@@ -71,6 +71,12 @@ public class GlobalSearchDatabaseHelper extends SQLiteOpenHelper {
 
     @WorkerThread
     public void deleteAll() {
-        getWritableDatabase().execSQL("DELETE FROM " + TABLE_NAME);
+        SQLiteDatabase db = getWritableDatabase();
+        // Close deterministically so GlobalSearchQuery's separate helper instance isn't blocked.
+        try {
+            db.execSQL("DELETE FROM " + TABLE_NAME);
+        } finally {
+            db.close();
+        }
     }
 }

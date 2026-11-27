@@ -22,22 +22,27 @@ import com.google.protobuf.ByteString;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class GlobalSearchProviderIconStore {
-    private HashMap<String, Bitmap> mProvider = new HashMap<>();
+    // ConcurrentHashMap serves concurrent UI reads and forbids null keys or values.
+    private final Map<String, Bitmap> mProvider = new ConcurrentHashMap<>();
 
     public void insertProvider(String name, ByteString buf) {
-        if (buf == null || buf.size() == 0) {
+        if (name == null || buf == null || buf.isEmpty()) {
             return;
         }
 
         byte[] b = buf.toByteArray();
         Bitmap icon = BitmapFactory.decodeByteArray(b, 0, b.length);
-        mProvider.put(name, icon);
+        // decodeByteArray returns null on corrupt icon bytes; skip put() so ConcurrentHashMap won't throw.
+        if (icon != null) {
+            mProvider.put(name, icon);
+        }
     }
 
     public Bitmap getProviderIcon(String name) {
-        return mProvider.get(name);
+        return name != null ? mProvider.get(name) : null;
     }
 }

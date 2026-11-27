@@ -8,10 +8,12 @@ import androidx.core.content.edit
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.SharedPreferencesKeys
 import de.qspool.clementineremote.backend.ClementinePlayerConnection
+import de.qspool.clementineremote.backend.ClementinePlayerConnection.ConnectionStatus
 import de.qspool.clementineremote.backend.RemoteRepository
 import de.qspool.clementineremote.backend.downloader.DownloadManager
 import de.qspool.clementineremote.backend.downloader.DownloadNetwork
 import de.qspool.clementineremote.backend.streaming.ThisRenderer
+import java.util.Collections
 import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,8 +23,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 /** A rule, with the songs of it on the phone, and how its last sync went. */
 data class KeptRule(
@@ -72,6 +78,16 @@ object Syncer {
     val kept: StateFlow<List<KeptRule>> = _kept.asStateFlow()
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    // Lock hierarchy: syncMutex (outer, held over a sync/cleanup pass) -> storeMutex (inner,
+    // short-lived SQLite + _kept snapshot updates only; never held across network/MediaStore I/O).
+    private val storeMutex = Mutex()
+    private val syncMutex = Mutex()
+    // Removed (ruleId, sourceId) pairs so an active sync stops that deleted rule without matching
+    // a newly added rule that reused its SQLite rowid.
+    private val cancelledRunRules =
+        Collections.newSetFromMap(ConcurrentHashMap<Pair<Long, String>, Boolean>())
+    // Servers awaiting removeUnwantedOutsideLock after rule removal once syncMutex is available.
+    private val cleanupServers = Collections.newSetFromMap(ConcurrentHashMap<String, Boolean>())
     private var job: Job? = null
     private var following: Job? = null
     private var again = false
@@ -97,7 +113,7 @@ object Syncer {
             .onEach {
                 if (it.supported) {
                     App.getPreferences().edit { putString(SharedPreferencesKeys.SP_SYNC_SERVER_ID, it.serverId) }
-                    readKept()
+                    storeMutex.withLock { readKept() }
                 }
                 if (it.available && !wasAvailable) syncNow(connection)
                 wasAvailable = it.available
@@ -114,7 +130,7 @@ object Syncer {
     /** Reads the rules again, for [kept], such as when they're first shown. */
     @JvmStatic
     fun refresh() {
-        scope.launch { readKept() }
+        scope.launch { storeMutex.withLock { readKept() } }
     }
 
     private fun readKept() {
@@ -143,14 +159,18 @@ object Syncer {
     @JvmStatic
     fun keep(rules: List<SyncRule>) {
         scope.launch {
-            val store = store(context)
-            for (rule in rules) {
-                val kept = store.rules(rule.serverId)
-                if (kept.none { it.sourceId == rule.sourceId }) {
-                    store.addRule(rule.copy(position = (kept.maxOfOrNull { it.position } ?: -1) + 1))
+            storeMutex.withLock {
+                val store = store(context)
+                for (rule in rules) {
+                    val kept = store.rules(rule.serverId)
+                    if (kept.none { it.sourceId == rule.sourceId }) {
+                        store.addRule(
+                            rule.copy(position = (kept.maxOfOrNull { it.position } ?: -1) + 1)
+                        )
+                    }
                 }
+                readKept()
             }
-            readKept()
             syncNow()
         }
     }
@@ -159,13 +179,47 @@ object Syncer {
     @JvmStatic
     fun remove(ruleId: Long) {
         scope.launch {
-            val store = store(context)
-            val rule = store.rule(ruleId) ?: return@launch
-            store.removeRule(ruleId)
-            removeUnwanted(store, rule.serverId) { uri: Uri -> context.contentResolver.delete(uri, null, null) }
-            _status.value = _status.value.copy(results = _status.value.results - ruleId)
-            readKept()
+            val serverId = storeMutex.withLock {
+                val store = store(context)
+                val rule = store.rule(ruleId) ?: return@withLock null
+                // Mark rule stopped and enqueue server cleanup atomically with rule deletion; file
+                // deletion runs after storeMutex releases and under syncMutex so an in-flight sync
+                // aborts cleanly first and UI reads aren't stalled on MediaStore I/O.
+                cancelledRunRules.add(ruleId to rule.sourceId)
+                cleanupServers.add(rule.serverId)
+                store.removeRule(ruleId)
+                _status.update { it.copy(results = it.results - ruleId) }
+                readKept()
+                rule.serverId
+            } ?: return@launch
+            cleanupServers.add(serverId)
+            drainPendingCleanupWhenIdle()
         }
+    }
+
+    private suspend fun drainPendingCleanupWhenIdle() {
+        // Use tryLock() so remove() never blocks behind an active sync (which already drains
+        // cleanupServers before unlocking); looping catches removals queued right before unlock.
+        while (cleanupServers.isNotEmpty() && syncMutex.tryLock()) {
+            try {
+                drainPendingCleanupLocked()
+            } finally {
+                syncMutex.unlock()
+            }
+        }
+    }
+
+    private suspend fun drainPendingCleanupLocked() {
+        val servers = cleanupServers.toList()
+        if (servers.isEmpty()) return
+        removeUnwantedOutsideLock(
+            store = store(context),
+            storeMutex = storeMutex,
+            serverIds = servers,
+            delete = { uri -> context.contentResolver.delete(uri, null, null) },
+            onServerSnapshotted = { cleanupServers.remove(it) },
+            onFinishedLocked = ::readKept,
+        )
     }
 
     /** Syncs now, or once more after the sync that's running. */
@@ -177,19 +231,45 @@ object Syncer {
             return
         }
         val conn = connection ?: App.ClementineConnection ?: return
+        again = false
         job = scope.launch {
-            do {
-                synchronized(this@Syncer) { again = false }
-                val syncing = RemoteRepository.syncing.value
-                if (syncing.available) {
-                    runOnce(
-                        ClementineSyncConnection(
-                            syncing.serverId, RemoteRepository::send, RemoteRepository.syncManifests,
-                            conn::getServerAddress,
+            var currentConn: ClementinePlayerConnection? = conn
+            while (true) {
+                syncMutex.withLock {
+                    // Re-read syncing state and active connection each pass in case a reconnect happened.
+                    val syncing = RemoteRepository.syncing.value
+                    val activeConn = currentConn ?: App.ClementineConnection
+                    if (syncing.available && activeConn != null) {
+                        runOnce(
+                            ClementineSyncConnection(
+                                syncing.serverId,
+                                RemoteRepository::send,
+                                RemoteRepository.syncManifests,
+                                activeConn::getServerAddress,
+                                isConnected = {
+                                    val status = RemoteRepository.connection.value
+                                    status == ConnectionStatus.CONNECTED || status == ConnectionStatus.RECONNECTED
+                                },
+                                disconnected = RemoteRepository.connection.map {
+                                    it == ConnectionStatus.DISCONNECTED || it == ConnectionStatus.RECONNECTING
+                                },
+                            )
                         )
-                    )
+                    }
+                    drainPendingCleanupLocked()
                 }
-            } while (synchronized(this@Syncer) { again })
+                drainPendingCleanupWhenIdle()
+                // Check again and clear job under the Syncer lock so a concurrent syncNow() cannot
+                // set again = true after we decide to exit and lose its wakeup.
+                synchronized(this@Syncer) {
+                    if (!again) {
+                        job = null
+                        return@launch
+                    }
+                    again = false
+                    currentConn = App.ClementineConnection
+                }
+            }
         }
     }
 
@@ -202,24 +282,34 @@ object Syncer {
         val started = synchronized(this) {
             if (job?.isActive == true) return false
             again = false
-            scope.launch { runOnce(connection, stopped) }.also { job = it }
+            scope.launch {
+                syncMutex.withLock {
+                    runOnce(connection, stopped)
+                    drainPendingCleanupLocked()
+                }
+                drainPendingCleanupWhenIdle()
+                synchronized(this@Syncer) {
+                    job = null
+                }
+            }.also { job = it }
         }
         started.join()
+        // If syncNow() arrived while the background sync held job, start the deferred sync now.
         if (synchronized(this) { again }) syncNow()
         return true
     }
 
-    private fun runOnce(connection: SyncConnection, stopped: () -> Boolean = { false }) {
+    private suspend fun runOnce(connection: SyncConnection, stopped: () -> Boolean = { false }) {
         if (!DownloadNetwork.chosen(App.getPreferences()).allowsCurrentNetwork(context)) {
-            _status.value = _status.value.copy(networkNotAllowed = true)
+            _status.update { it.copy(networkNotAllowed = true) }
             return
         }
         val storage = DownloadManager.getInstance(context).createStorage()
         if (storage == null) {
-            _status.value = _status.value.copy(unavailable = true)
+            _status.update { it.copy(unavailable = true) }
             return
         }
-        _status.value = _status.value.copy(running = true, unavailable = false, networkNotAllowed = false)
+        _status.update { it.copy(running = true, unavailable = false, networkNotAllowed = false) }
         val engine = SyncEngine(
             store(context), storage, SyncFiles.coversDir(context),
             delete = { uri: Uri -> context.contentResolver.delete(uri, null, null) },
@@ -227,24 +317,39 @@ object Syncer {
             onProgress = { ruleId, done, total ->
                 val now = SyncProgress(done, total)
                 progress[ruleId] = now
-                _kept.value = _kept.value.map { if (it.rule.id == ruleId) it.copy(downloading = now) else it }
-                _kept.value.firstOrNull { it.rule.id == ruleId }?.let {
-                    SyncNotification.show(context, it.rule.title, done, total)
+                var title: String? = null
+                // MutableStateFlow.update may retry on contention: reset title per attempt and post
+                // the notification only once after the update succeeds.
+                _kept.update { current ->
+                    title = null
+                    current.map {
+                        if (it.rule.id == ruleId) {
+                            title = it.rule.title
+                            it.copy(downloading = now)
+                        } else {
+                            it
+                        }
+                    }
                 }
+                title?.let { SyncNotification.show(context, it, done, total) }
             },
             stopped = stopped,
+            isRuleStopped = { id, sourceId -> cancelledRunRules.contains(id to sourceId) },
         )
         try {
             val result = engine.sync(connection)
-            _status.value = _status.value.copy(running = false, results = result.rules)
+            _status.update { it.copy(running = false, results = result.rules) }
         } catch (e: RuntimeException) {
             // The store or storage failing: try again next time rather than stop the app.
             Log.w(TAG, "Sync failed", e)
-            _status.value = _status.value.copy(running = false, unavailable = true)
+            _status.update { it.copy(running = false, unavailable = true) }
+        } finally {
+            cancelledRunRules.clear()
+            progress.clear()
+            SyncNotification.hide(context)
+            // Refresh _kept under storeMutex so UI reflects downloaded counts and cleared progress.
+            storeMutex.withLock { readKept() }
         }
-        progress.clear()
-        SyncNotification.hide(context)
-        readKept()
     }
 
     private const val TAG = "Syncer"

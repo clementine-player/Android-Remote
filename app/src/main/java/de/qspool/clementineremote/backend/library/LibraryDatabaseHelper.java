@@ -65,15 +65,14 @@ public class LibraryDatabaseHelper {
 
         // Check the consistency of the database
         if (databaseExists()) {
-
             try {
                 openDatabase(SQLiteDatabase.OPEN_READWRITE);
-
                 dbConsistent = databaseIntegrityOk();
-
-                closeDatabase();
             } catch (SQLiteException e) {
                 dbConsistent = false;
+            } finally {
+                // Close db even if openDatabase/integrity check throws on a corrupt file.
+                closeDatabase();
             }
 
             if (!dbConsistent) {
@@ -84,15 +83,21 @@ public class LibraryDatabaseHelper {
         return dbConsistent;
     }
 
+    private static File storageDir() {
+        // Fall back to internal filesDir when external storage is unavailable so
+        // new File(..., LIBRARY_DB_FILE_NAME) never resolves as a relative path.
+        File external = App.getApp().getExternalFilesDir(null);
+        return external != null ? external : App.getApp().getFilesDir();
+    }
+
     /**
-     * Get the file path to the library database file. The file is stored on the
-     * external storage in die android dir. Filename is library.db
+     * Get the file path to the library database file. The file is stored on external
+     * storage (or app-private files dir if unavailable). Filename is library.db
      *
      * @return The path incl. filename to the database file
      */
     public File getLibraryDb() {
-        return new File(App.getApp().getExternalFilesDir(null),
-                LIBRARY_DB_FILE_NAME);
+        return new File(storageDir(), LIBRARY_DB_FILE_NAME);
     }
 
     /**
@@ -100,8 +105,7 @@ public class LibraryDatabaseHelper {
      * {@link #getLibraryDb()}. Until then, the library on the phone stays usable.
      */
     public File getPartialLibraryDb() {
-        return new File(App.getApp().getExternalFilesDir(null),
-                LIBRARY_DB_FILE_NAME + ".part");
+        return new File(storageDir(), LIBRARY_DB_FILE_NAME + ".part");
     }
 
     /**
@@ -141,35 +145,46 @@ public class LibraryDatabaseHelper {
     /** Prepares a library just received in {@code file} for browsing and searching. */
     public void optimizeTable(File file) {
         openDatabase(file, SQLiteDatabase.OPEN_READWRITE);
+        try {
+            // Remove unavailable songs
+            db.execSQL("DELETE from SONGS where unavailable <> 0");
 
-        // Remove unavailable songs
-        db.execSQL("DELETE from SONGS where unavailable <> 0");
-
-        StringBuilder sb = new StringBuilder();
-        Cursor c = db.rawQuery("PRAGMA table_info(songs);", new String[]{});
-
-        if (c != null && c.moveToFirst()) {
-            do {
-                if (sb.length() != 0) {
-                    sb.append(", ");
+            StringBuilder sb = new StringBuilder();
+            Cursor c = db.rawQuery("PRAGMA table_info(songs);", new String[]{});
+            if (c != null) {
+                try {
+                    if (c.moveToFirst()) {
+                        do {
+                            if (sb.length() != 0) {
+                                sb.append(", ");
+                            }
+                            sb.append(c.getString(1));
+                        } while (c.moveToNext());
+                    }
+                } finally {
+                    c.close();
                 }
-                sb.append(c.getString(1));
-            } while (c.moveToNext());
-            c.close();
+            }
+
+            // Fail explicitly before building malformed fts3() SQL if the songs table is absent.
+            if (sb.length() == 0) {
+                throw new SQLiteException("Missing songs table in library database");
+            }
+
+            // FTS Table for search
+            db.execSQL("CREATE VIRTUAL TABLE " + SONGS_FTS
+                    + " USING fts3(" + sb.toString() + ");");
+            db.execSQL("INSERT INTO " + SONGS_FTS + " SELECT * FROM songs");
+
+            // Indices for fragment
+            db.execSQL("CREATE INDEX " + SONGS_ARTIST + " ON songs (artist);");
+            db.execSQL("CREATE INDEX " + SONGS_ALBUM + " ON songs (artist, album);");
+            db.execSQL("CREATE INDEX " + SONGS_TITLE
+                    + " ON songs (artist, album, title);");
+        } finally {
+            // Always close db so the caller can safely delete or rename the partial file on error.
+            closeDatabase();
         }
-
-        // FTS Table for search
-        db.execSQL("CREATE VIRTUAL TABLE " + SONGS_FTS
-                + " USING fts3(" + sb.toString() + ");");
-        db.execSQL("INSERT INTO " + SONGS_FTS + " SELECT * FROM songs");
-
-        // Indices for fragment
-        db.execSQL("CREATE INDEX " + SONGS_ARTIST + " ON songs (artist);");
-        db.execSQL("CREATE INDEX " + SONGS_ALBUM + " ON songs (artist, album);");
-        db.execSQL("CREATE INDEX " + SONGS_TITLE
-                + " ON songs (artist, album, title);");
-
-        closeDatabase();
     }
 
     public boolean databaseExists() {
@@ -177,14 +192,20 @@ public class LibraryDatabaseHelper {
     }
 
     private boolean databaseIntegrityOk() {
-        boolean result;
+        boolean result = false;
         try {
             Cursor c = db.rawQuery("PRAGMA main.integrity_check(1)", null);
-            c.moveToFirst();
-
-            result = c.getString(0).equalsIgnoreCase("ok");
-
-            c.close();
+            if (c != null) {
+                // Always close cursor and guard empty/null rows on malformed DB files.
+                try {
+                    if (c.moveToFirst()) {
+                        String value = c.getString(0);
+                        result = value != null && value.equalsIgnoreCase("ok");
+                    }
+                } finally {
+                    c.close();
+                }
+            }
         } catch (SQLiteException e) {
             result = false;
         }
