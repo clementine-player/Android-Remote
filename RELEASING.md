@@ -1,14 +1,29 @@
 # Releasing
 
-The app is built in two flavors that differ only in their application ID:
+The app is `org.clementine_player.remote` wherever it's distributed, signed by each with its
+own key:
 
-| Flavor   | Application ID                 | Distributed through                |
-|----------|--------------------------------|------------------------------------|
-| `fdroid` | `de.qspool.clementineremote`   | F-Droid, GitHub Releases           |
-| `play`   | `org.clementine_player.remote` | Google Play                        |
+| Flavor   | Distributed through      | Signed with                                         |
+|----------|--------------------------|-----------------------------------------------------|
+| `fdroid` | F-Droid                  | F-Droid's key for the app                           |
+| `fdroid` | GitHub Releases          | the release key in Cloud KMS (`release_cert.pem`)   |
+| `play`   | Google Play              | Play's app signing key                              |
 
-Google Play keeps `de.qspool.clementineremote` reserved for the original author's account,
-so the Play build needs its own ID. F-Droid keeps the original so existing installs upgrade.
+The flavors are the same app; they only name the builds. So one phone has one of them: moving
+between stores means uninstalling first.
+
+Up to and including release 13.4, F-Droid and GitHub Releases used the original app's ID,
+`de.qspool.clementineremote`. Android's developer verification registers each package name
+to the developer whose signing key most installs use, and for that name it's the original
+author's key, so the app moved to the ID it has on Google Play.
+
+**Developer verification.** Play registers `org.clementine_player.remote` with Play's key.
+Its other two keys are registered as well, in Play Console's *Android developer
+verification* page for the app, so F-Droid's and GitHub's builds stay installable on
+certified devices: the release key (SHA-256
+`97:B9:D5:C5:B1:FA:9B:14:D9:FE:0C:7C:CC:D3:F4:9E:C4:6C:49:E7:82:5E:89:C2:66:05:5A:07:B1:42:BB:E4`),
+and F-Droid's key for the app (which F-Droid makes when it first builds it; its fingerprint is
+in F-Droid's APK, `apksigner verify --print-certs`).
 
 ## Releases
 
