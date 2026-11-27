@@ -3,9 +3,11 @@ package de.qspool.clementineremote.ui.search
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.os.Looper
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.v2.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -208,6 +210,29 @@ class SearchScreenTest {
 
         compose.onNodeWithTag("searchTitle").assertTextEquals("Gymnopédies")
         compose.onNodeWithText("Gymnopédie No. 2").assertIsDisplayed()
+    }
+
+    @Test
+    fun showsTwoCopiesOfTheSameSong() {
+        // A library can have a song twice in the same album, such as an MP3 and a FLAC of it. The
+        // search matches neither field well, so there's no top result and both list as songs.
+        SQLiteDatabase.openDatabase(database.path, null, SQLiteDatabase.OPEN_READWRITE).use { db ->
+            db.execSQL("INSERT INTO ${GlobalSearchDatabaseHelper.TABLE_NAME} VALUES (8, 'Library', 'Erik Satie', '', 'Pièces', 'Vexations', 'vexations.mp3', 1, 1, 1)")
+            db.execSQL("INSERT INTO ${GlobalSearchDatabaseHelper.TABLE_NAME} VALUES (8, 'Library', 'Erik Satie', '', 'Pièces', 'Vexations', 'vexations.flac', 1, 1, 1)")
+        }
+        val search = viewModel(mutableListOf())
+        search.search("satie vexations")
+        compose.setContent {
+            ClementineTheme(dynamicColor = false) {
+                SearchScreen(search)
+            }
+        }
+
+        search.update(8, finished = true)
+        compose.waitForIdle()
+
+        assertEquals(2, search.state.value.results!!.sections.songs.size)
+        compose.onAllNodesWithText("Vexations").assertCountEquals(2)
     }
 
     @Test

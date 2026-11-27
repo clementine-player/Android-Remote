@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
@@ -81,6 +81,20 @@ data class SearchResults(
 
     /** Closes the page shown; null at the sections. */
     fun back(): SearchResults? = if (pages.isEmpty()) null else copy(pages = pages.dropLast(1))
+}
+
+/**
+ * The list's key for each of [results] in [section]: its section and selection, and how many
+ * before it had the same. Two results can have the same selection, such as two copies of a song
+ * in one album, and a list's keys must differ.
+ */
+internal fun uniqueKeys(section: SearchSection, results: List<SearchItem>): List<Triple<SearchSection, List<String>, Int>> {
+    val seen = mutableMapOf<List<String>, Int>()
+    return results.map { result ->
+        val copies = seen[result.selection] ?: 0
+        seen[result.selection] = copies + 1
+        Triple(section, result.selection, copies)
+    }
 }
 
 /** How many of each section show before See all. */
@@ -163,7 +177,9 @@ private fun Sections(
             item(key = section) {
                 Header(stringResource(section.title), seeAll = if (shown.size > SHOWN) ({ onSeeAll(section) }) else null)
             }
-            items(shown.take(SHOWN), key = { section to it.selection }) { result ->
+            val first = shown.take(SHOWN)
+            val keys = uniqueKeys(section, first)
+            itemsIndexed(first, key = { index, _ -> keys[index] }) { _, result ->
                 val item = remember(result) { result.toSongSelectItem(resources, section, icon) }
                 BrowseRow(
                     section.kind, item,
