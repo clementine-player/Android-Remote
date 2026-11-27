@@ -92,7 +92,7 @@ jobs:
         with:
           ref: master
           ssh-key: ${{ secrets.TX_KEY }}
-      - uses: astral-sh/setup-uv@v10.3.3
+      - uses: astral-sh/setup-uv@v10.4.0
         if: env.TX_TOKEN != '' && env.HAS_TX_KEY == 'true'
       - name: Install the Transifex client
         if: env.TX_TOKEN != '' && env.HAS_TX_KEY == 'true'
@@ -132,7 +132,7 @@ jobs:
           fi
       # A translation can break the build (a mistyped %1$s, say): lint catches it here, rather
       # than on master.
-      - uses: actions/setup-java@v6.2.0
+      - uses: actions/setup-java@v6.3.0
         if: steps.pull.outputs.changed
         with:
           distribution: temurin
