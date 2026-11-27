@@ -37,6 +37,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Requ
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestRemoveSongs;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestSetTrackPosition;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestSetVolume;
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.RequestUpdatePlaylist;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseSongOffer;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Shuffle;
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ShuffleMode;
@@ -202,6 +203,13 @@ public class ClementineMessageFactory {
             case PLAYLIST:
                 repeat.setRepeatMode(ClementineRemoteProtocolBuffer.RepeatMode.Repeat_Playlist);
                 break;
+            // Preserve Desktop-only repeat modes when round-tripping current state.
+            case ONE_BY_ONE:
+                repeat.setRepeatMode(ClementineRemoteProtocolBuffer.RepeatMode.Repeat_OneByOne);
+                break;
+            case INTRO:
+                repeat.setRepeatMode(ClementineRemoteProtocolBuffer.RepeatMode.Repeat_Intro);
+                break;
         }
         msg.setRepeat(repeat);
 
@@ -366,6 +374,19 @@ public class ClementineMessageFactory {
         requestClosePlaylist.setPlaylistId(playlistId);
 
         msg.setRequestClosePlaylist(requestClosePlaylist);
+
+        return new ClementineMessage(msg);
+    }
+
+    // Clementine 1.4+ clears playlists directly without needing local song indices.
+    public static ClementineMessage buildClearPlaylist(int playlistId) {
+        Message.Builder msg = ClementineMessage.getMessageBuilder(MsgType.UPDATE_PLAYLIST);
+
+        RequestUpdatePlaylist.Builder request = RequestUpdatePlaylist.newBuilder();
+        request.setPlaylistId(playlistId);
+        request.setClearPlaylist(true);
+
+        msg.setRequestUpdatePlaylist(request);
 
         return new ClementineMessage(msg);
     }

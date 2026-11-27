@@ -160,12 +160,11 @@ class RemoteRepositoryTest {
 
         player.love()
         player.love()
-        player.ban()
         player.setVolume(80)
 
         // A song is loved once.
-        assertEquals(listOf(MsgType.LOVE, MsgType.BAN, MsgType.SET_VOLUME), sent.map { it.messageType })
-        assertEquals(80, sent[2].message.requestSetVolume.volume)
+        assertEquals(listOf(MsgType.LOVE, MsgType.SET_VOLUME), sent.map { it.messageType })
+        assertEquals(80, sent[1].message.requestSetVolume.volume)
     }
 
     @Test

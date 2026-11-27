@@ -386,6 +386,10 @@
     <string name="repeat_track">Repeat track</string>
     <string name="repeat_album">Repeat album</string>
     <string name="repeat_playlist">Repeat playlist</string>
+    <!-- Repeat mode label: pauses after each track completes. -->
+    <string name="repeat_one_by_one">Stop after each track</string>
+    <!-- Repeat mode label: plays only the beginning of each track. -->
+    <string name="repeat_intro">Intro tracks</string>
     <string name="shuffle_off">Don\'t shuffle</string>
     <string name="shuffle_all">Shuffle all</string>
     <string name="shuffle_inside_album">Shuffle tracks in this album</string>

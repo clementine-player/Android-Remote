@@ -41,6 +41,11 @@ public class ClementineConnectionHandler extends Handler {
     @Override
     public void handleMessage(Message msg) {
         ClementinePlayerConnection myClementineConnection = mClementineConnection.get();
+        // WeakReference can be cleared after GC, and only ClementineMessage
+        // payloads are valid here.
+        if (myClementineConnection == null || !(msg.obj instanceof ClementineMessage)) {
+            return;
+        }
 
         if (msg.arg1 == ClementinePlayerConnection.PROCESS_PROTOC) {
             myClementineConnection.processProtocolBuffer((ClementineMessage) msg.obj);
@@ -48,7 +53,9 @@ public class ClementineConnectionHandler extends Handler {
             // Act on the message
             ClementineMessage message = (ClementineMessage) msg.obj;
             if (message.isErrorMessage()) {
-                myClementineConnection.disconnect(message);
+                // Local error messages tear down locally instead of writing a
+                // DISCONNECT frame onto a broken socket.
+                myClementineConnection.closeConnection(message);
             } else {
                 switch (message.getMessageType()) {
                     case CONNECT:

@@ -47,6 +47,28 @@ object RemoteRepository {
         val repeat: Clementine.RepeatMode,
     ) {
         val isPlaying: Boolean get() = state == Clementine.State.PLAY
+
+        // Compare song by reference so a new MySong instance from CURRENT_METAINFO, rating,
+        // or tests is never dropped by StateFlow conflation even when metadata matches.
+        override fun equals(other: Any?): Boolean = this === other || (
+            other is NowPlaying &&
+                song === other.song &&
+                state == other.state &&
+                positionSeconds == other.positionSeconds &&
+                volume == other.volume &&
+                shuffle == other.shuffle &&
+                repeat == other.repeat
+            )
+
+        override fun hashCode(): Int {
+            var result = System.identityHashCode(song)
+            result = 31 * result + state.hashCode()
+            result = 31 * result + positionSeconds
+            result = 31 * result + volume
+            result = 31 * result + shuffle.hashCode()
+            result = 31 * result + repeat.hashCode()
+            return result
+        }
     }
 
     /** Somewhere Clementine can play: its own computer, or a renderer such as this phone. */
@@ -186,6 +208,11 @@ object RemoteRepository {
     @JvmStatic
     val canEnqueueNext: StateFlow<Boolean> = _canEnqueueNext.asStateFlow()
 
+    @Volatile
+    private var activeConnection: ClementinePlayerConnection? = null
+
+    private val connectionLock = Any()
+
     private val _browseMessages = MutableSharedFlow<BrowseMessage>(
         extraBufferCapacity = 64,
         onBufferOverflow = BufferOverflow.DROP_OLDEST,
@@ -199,21 +226,50 @@ object RemoteRepository {
     @JvmStatic
     fun isPlayingHere(): Boolean = _outputs.value.active?.isThisPhone == true
 
+    private fun resetConnectionState() {
+        _outputs.value = Outputs()
+        _syncing.value = Syncing()
+        _smartPlaylists.value = emptyList()
+        // Keep the monotonic connection counter so in-flight BrowseMessages
+        // from a prior connection still fail the epoch check after reset.
+        _browsing.value = Browsing(connection = _browsing.value.connection)
+        _canEnqueueNext.value = false
+    }
+
     /** Follows a new connection: its status, and the messages that change what's playing. */
     @JvmStatic
     fun attach(connection: ClementinePlayerConnection) {
+        synchronized(connectionLock) {
+            // Drop stale per-connection capabilities immediately and ignore late
+            // events from any superseded connection instance.
+            if (activeConnection !== connection) {
+                activeConnection = connection
+                _connection.value = ConnectionStatus.IDLE
+                resetConnectionState()
+            }
+        }
         connection.addPlayerConnectionListener(object : PlayerConnectionListener {
             override fun onConnectionStatusChanged(status: ConnectionStatus) {
-                _connection.value = status
-                if (status == ConnectionStatus.DISCONNECTED) {
-                    _outputs.value = Outputs()
-                    _syncing.value = Syncing()
-                    _smartPlaylists.value = emptyList()
+                synchronized(connectionLock) {
+                    if (activeConnection !== connection) {
+                        return
+                    }
+                    _connection.value = status
+                    // Reset on RECONNECTING as well as DISCONNECTED: Desktop
+                    // drops old RemoteEngine, MediaSync, and browse ids on drop.
+                    if (status == ConnectionStatus.DISCONNECTED || status == ConnectionStatus.RECONNECTING) {
+                        resetConnectionState()
+                    }
                 }
             }
 
             override fun onClementineMessageReceived(message: ClementineMessage) {
-                onMessage(message)
+                synchronized(connectionLock) {
+                    if (activeConnection !== connection) {
+                        return
+                    }
+                    onMessage(message)
+                }
             }
         })
     }

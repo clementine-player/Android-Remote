@@ -161,4 +161,73 @@ public class ClementineSimpleConnectionTest {
             assertTrue(mConnection.isConnected());
         }
     }
+
+    @Test
+    public void completesInFlightFrameAcrossReadTimeouts() throws Exception {
+        assertTrue(mConnection.createConnection(connectMessage(0)));
+        try (Socket client = mServer.accept()) {
+            Message info = ClementineMessage.getMessageBuilder(MsgType.INFO)
+                    .setResponseClementineInfo(ResponseClementineInfo.newBuilder()
+                            .setVersion("Clementine chunked")
+                            .setState(EngineState.Playing))
+                    .build();
+            byte[] data = info.toByteArray();
+            int split = data.length / 2;
+
+            DataOutputStream out = new DataOutputStream(client.getOutputStream());
+            Thread writer = new Thread(() -> {
+                try {
+                    out.writeInt(data.length);
+                    out.write(data, 0, split);
+                    out.flush();
+                    // Exceed the 100 ms SO_TIMEOUT mid-frame so readFrameRemaining must retry.
+                    Thread.sleep(250);
+                    out.write(data, split, data.length - split);
+                    out.flush();
+                } catch (Exception ignored) {
+                }
+            });
+            writer.start();
+
+            ClementineMessage reply = mConnection.getProtoc(100);
+            writer.join(2000);
+            assertEquals(MsgType.INFO, reply.getMessageType());
+            assertEquals("Clementine chunked", App.Clementine.getVersion());
+        }
+    }
+
+    @Test
+    public void failsWhenInFlightFrameExceedsIdleBudget() throws Exception {
+        assertTrue(mConnection.createConnection(connectMessage(0)));
+        try (Socket client = mServer.accept()) {
+            // Send 4 of 100 expected payload bytes then stall past the 120 ms
+            // mid-frame idle budget across 50 ms SO_TIMEOUT reads.
+            DataOutputStream out = new DataOutputStream(client.getOutputStream());
+            out.writeInt(100);
+            out.write(new byte[] {1, 2, 3, 4});
+            out.flush();
+
+            ClementineMessage reply = mConnection.readProtoc(50, 120, false);
+            assertEquals(ErrorMessage.IO_EXCEPTION, reply.getErrorMessage());
+        }
+    }
+
+    @Test
+    public void readRawProtocDoesNotMutateGlobalAppState() throws Exception {
+        App.Clementine.setVersion("Foreground Server");
+        assertTrue(mConnection.createConnection(connectMessage(0)));
+        try (Socket client = mServer.accept()) {
+            DataOutputStream out = new DataOutputStream(client.getOutputStream());
+            writeFrame(out, ClementineMessage.getMessageBuilder(MsgType.INFO)
+                    .setResponseClementineInfo(ResponseClementineInfo.newBuilder()
+                            .setVersion("Background Server")
+                            .setState(EngineState.Empty))
+                    .build());
+
+            ClementineMessage raw = mConnection.readRawProtoc(1000);
+            assertEquals(MsgType.INFO, raw.getMessageType());
+            assertEquals("Background Server", raw.getMessage().getResponseClementineInfo().getVersion());
+            assertEquals("Foreground Server", App.Clementine.getVersion());
+        }
+    }
 }

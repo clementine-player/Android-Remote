@@ -118,4 +118,52 @@ public class ClementinePlayerConnectionTest {
         assertFalse(mConnectionThread.isAlive());
         assertTrue(mStatuses.contains(ConnectionStatus.DISCONNECTED));
     }
+
+    @Test
+    public void reconnectDoesNotRecursivelyCallOverriddenSendRequest() throws Exception {
+        // Bind and immediately close mServer so every connect attempt fails without blocking.
+        Socket client = connect();
+        client.setSoLinger(true, 0);
+        client.close();
+        mServer.close();
+
+        // A server listening and immediately resetting after accept exercises writeRequest failure
+        // inside super.createConnection(mRequestConnect) during reconnect().
+        ServerSocket resettingServer = new ServerSocket(0, 1, InetAddress.getLoopbackAddress());
+        Thread acceptor = new Thread(() -> {
+            while (!resettingServer.isClosed()) {
+                try {
+                    Socket s = resettingServer.accept();
+                    s.setSoLinger(true, 0);
+                    s.close();
+                } catch (Exception ignored) {
+                    break;
+                }
+            }
+        });
+        acceptor.setDaemon(true);
+        acceptor.start();
+
+        try {
+            mConnection.sendRequest(ClementineMessage.getMessage(MsgType.PLAY));
+            mConnectionThread.join(5000);
+            long reconnectingEvents = mStatuses.stream()
+                    .filter(s -> s == ConnectionStatus.RECONNECTING)
+                    .count();
+            // Exactly 1 RECONNECTING event proves reconnect() never re-entered sendRequest().
+            assertTrue(reconnectingEvents <= 1);
+            assertTrue(mStatuses.contains(ConnectionStatus.DISCONNECTED));
+        } finally {
+            resettingServer.close();
+        }
+    }
+
+    @Test
+    public void disconnectWhenNotConnectedStillClosesAndQuitsLooper() throws Exception {
+        mConnection.disconnect(ClementineMessage.getMessage(MsgType.DISCONNECT));
+        mConnectionThread.join(5000);
+        assertTrue(mConnection.isClosedOrClosing());
+        assertFalse(mConnectionThread.isAlive());
+        assertTrue(mStatuses.contains(ConnectionStatus.DISCONNECTED));
+    }
 }

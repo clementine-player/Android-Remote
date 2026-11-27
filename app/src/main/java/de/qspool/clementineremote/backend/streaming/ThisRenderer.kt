@@ -23,7 +23,11 @@ object ThisRenderer {
     /** What Clementine sends, mapped from the Android decoder that plays it. */
     private val FORMATS = listOf(
         MediaFormat.MIMETYPE_AUDIO_MPEG to listOf("audio/mpeg"),
-        MediaFormat.MIMETYPE_AUDIO_AAC to listOf("audio/mp4", "audio/aac"),
+        // Specify codecs=mp4a* for AAC so Desktop does not treat Android as
+        // supporting ALAC in .m4a (X-18); ALAC is advertised only if a device
+        // decoder exists.
+        MediaFormat.MIMETYPE_AUDIO_AAC to listOf("audio/mp4; codecs=mp4a.40.2", "audio/mp4; codecs=mp4a", "audio/aac"),
+        "audio/alac" to listOf("audio/mp4; codecs=alac"),
         MediaFormat.MIMETYPE_AUDIO_FLAC to listOf("audio/flac", "audio/ogg; codecs=flac"),
         MediaFormat.MIMETYPE_AUDIO_VORBIS to listOf("audio/ogg; codecs=vorbis"),
         MediaFormat.MIMETYPE_AUDIO_OPUS to listOf("audio/ogg; codecs=opus"),

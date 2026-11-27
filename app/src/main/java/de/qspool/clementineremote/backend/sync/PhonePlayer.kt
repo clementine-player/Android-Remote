@@ -2,6 +2,8 @@ package de.qspool.clementineremote.backend.sync
 
 import android.content.ComponentName
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
@@ -14,7 +16,6 @@ import androidx.media3.common.Player
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import com.google.common.util.concurrent.ListenableFuture
-import com.google.protobuf.ByteString
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.backend.Clementine
 import de.qspool.clementineremote.backend.RemoteRepository
@@ -24,9 +25,15 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgT
 import de.qspool.clementineremote.backend.player.MySong
 import java.io.File
 import java.io.IOException
+import java.util.Arrays
+import java.util.concurrent.CopyOnWriteArrayList
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 /** Where the app plays from: Clementine, or songs kept on this phone. */
 enum class PlayFrom { CLEMENTINE, PHONE }
@@ -59,9 +66,13 @@ object PhonePlayer {
     /** The songs being played, by item key, for what the player shows of them. */
     private var songs: Map<String, KeptSong> = emptyMap()
 
-    /** The last cover read, so it isn't read again on every update. */
-    private var coverUri: Uri? = null
+    /** The last cover loaded off the main thread, so it isn't decoded on every update. */
+    private var coverKey: String? = null
     private var coverData: ByteArray? = null
+    private var coverBitmap: Bitmap? = null
+    private var loadingCoverKey: String? = null
+    private var currentPlayer: Player? = null
+    private val coverScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     private val _playFrom = MutableStateFlow(PlayFrom.CLEMENTINE)
 
@@ -71,13 +82,17 @@ object PhonePlayer {
      */
     val playFrom: StateFlow<PlayFrom> = _playFrom.asStateFlow()
 
-    private val activeListeners = mutableListOf<Consumer<Boolean>>()
+    // Kept in a CopyOnWriteArrayList so service attach/release can subscribe
+    // and unsubscribe without risking ConcurrentModificationException.
+    private val activeListeners = CopyOnWriteArrayList<Consumer<Boolean>>()
 
     /** Whether the app plays from this phone, with something playing (or paused) here. */
+    @Volatile
     private var active = false
 
     private val listener = object : Player.Listener {
         override fun onEvents(player: Player, events: Player.Events) {
+            currentPlayer = player
             _playing.value = if (player.playbackState == Player.STATE_IDLE || player.playbackState == Player.STATE_ENDED) {
                 null
             } else {
@@ -107,12 +122,18 @@ object PhonePlayer {
         }, TICK_MILLIS)
     }
 
+    fun isActive(): Boolean = active
+
     /**
      * Tells [listener], on the main thread, when the app starts or stops playing from this phone,
      * with something playing (or paused) here.
      */
     fun addActiveListener(listener: Consumer<Boolean>) {
-        activeListeners += listener
+        activeListeners.addIfAbsent(listener)
+    }
+
+    fun removeActiveListener(listener: Consumer<Boolean>) {
+        activeListeners.remove(listener)
     }
 
     private fun updateActive() {
@@ -198,12 +219,37 @@ object PhonePlayer {
         val title = metadata.title?.toString() ?: kept?.title.orEmpty()
         val artist = metadata.artist?.toString() ?: kept?.artist.orEmpty()
         val album = metadata.albumTitle?.toString() ?: kept?.album.orEmpty()
-        val art = kept?.art?.let(::cover) ?: metadata.artworkData
-        val known = song?.takeIf {
-            it.filename == itemKey && it.title == title && it.artist == artist && it.album == album &&
-                (art == null || it.artData != null)
+        val durationSeconds = if (player.duration != C.TIME_UNSET && player.duration >= 0) {
+            (player.duration / 1000).toInt()
+        } else {
+            0
         }
-        // A new song when what's shown of it changes, so the player shows the change.
+
+        val keptUri = kept?.art
+        val embedded = metadata.artworkData
+        val wantedCoverKey = when {
+            keptUri != null -> "uri:$keptUri"
+            embedded != null && embedded.isNotEmpty() ->
+                "embedded:$itemKey:${embedded.size}:${embedded.contentHashCode()}"
+            else -> null
+        }
+        if (wantedCoverKey != null && wantedCoverKey != coverKey) {
+            loadCoverAsync(itemKey, wantedCoverKey, keptUri, embedded)
+        }
+        val readyArtBytes = if (wantedCoverKey != null && wantedCoverKey == coverKey) coverData else null
+        val readyArtBitmap = if (wantedCoverKey != null && wantedCoverKey == coverKey) coverBitmap else null
+
+        val known = song?.takeIf {
+            // Check duration and cover too: NowPlaying compares song by identity
+            // so mutating MySong in place would cause StateFlow to drop updates.
+            it.filename == itemKey &&
+                it.title == title &&
+                it.artist == artist &&
+                it.album == album &&
+                it.length == durationSeconds &&
+                (readyArtBytes == null || Arrays.equals(it.artData, readyArtBytes))
+        }
+        // A new MySong instance whenever metadata, duration, or art updates so StateFlow emits it.
         val song = known ?: MySong().apply {
             filename = itemKey
             // A file on the phone, not a stream.
@@ -211,16 +257,15 @@ object PhonePlayer {
             this.title = title
             this.artist = artist
             this.album = album
-            if (art != null) {
-                setArt(ByteString.copyFrom(art))
+            if (durationSeconds > 0) {
+                this.length = durationSeconds
+                this.prettyLength = "%d:%02d".format(durationSeconds / 60, durationSeconds % 60)
+            }
+            if (readyArtBytes != null) {
+                setArt(readyArtBytes, readyArtBitmap)
             }
         }
         this.song = song
-        if (player.duration != C.TIME_UNSET) {
-            val seconds = (player.duration / 1000).toInt()
-            song.length = seconds
-            song.prettyLength = "%d:%02d".format(seconds / 60, seconds % 60)
-        }
         val playing = player.playWhenReady && player.playbackState != Player.STATE_ENDED
         return NowPlaying(
             song = song,
@@ -236,20 +281,37 @@ object PhonePlayer {
         )
     }
 
-    /** The cover at [uri], a file of the app's; read once for each song played. */
-    private fun cover(uri: Uri): ByteArray? {
-        if (uri != coverUri) {
-            coverUri = uri
-            coverData = try {
-                uri.path?.let { File(it).readBytes() }
-            } catch (e: IOException) {
-                null
+    private fun loadCoverAsync(itemKey: String, key: String, uri: Uri?, embedded: ByteArray?) {
+        // Deduplicate concurrent loads and perform file I/O + BitmapFactory
+        // decode off the main thread, dropping stale results if track changed.
+        if (loadingCoverKey == key) return
+        loadingCoverKey = key
+        coverScope.launch {
+            val bytes = if (uri != null) {
+                try {
+                    uri.path?.let { File(it).readBytes() }
+                } catch (e: IOException) {
+                    null
+                } ?: embedded
+            } else {
+                embedded
+            }
+            val bitmap = bytes?.let { BitmapFactory.decodeByteArray(it, 0, it.size) }
+            ticks.post {
+                if (loadingCoverKey != key) return@post
+                coverKey = key
+                coverData = bytes
+                coverBitmap = bitmap
+                loadingCoverKey = null
+                // Re-emit NowPlaying if this track is still active when art finishes.
+                if (_playing.value == itemKey) {
+                    _nowPlaying.value = currentPlayer?.let { p -> nowPlaying(p, itemKey) }
+                }
             }
         }
-        return coverData
     }
 
-    private fun withController(context: Context, use: (MediaController) -> Unit) {
+    private fun withController(context: Context, allowRetry: Boolean = true, use: (MediaController) -> Unit) {
         // The controller is used on the main thread, where it was made.
         val main = ContextCompat.getMainExecutor(context)
         val future = controller ?: MediaController.Builder(
@@ -258,7 +320,12 @@ object PhonePlayer {
         ).buildAsync().also { future ->
             controller = future
             future.addListener({
-                runCatching { future.get() }.onSuccess { it.addListener(listener) }.onFailure { controller = null }
+                runCatching { future.get() }.onSuccess {
+                    currentPlayer = it
+                    it.addListener(listener)
+                }.onFailure {
+                    if (controller === future) controller = null
+                }
             }, main)
         }
         future.addListener({
@@ -267,9 +334,14 @@ object PhonePlayer {
                     use(it)
                 } else {
                     // The service stopped since, such as when the app was swiped away paused.
+                    it.removeListener(listener)
+                    if (currentPlayer === it) currentPlayer = null
                     it.release()
-                    controller = null
-                    withController(context, use)
+                    if (controller === future) controller = null
+                    // Bound retry to once so a dead service cannot loop forever.
+                    if (allowRetry) {
+                        withController(context, allowRetry = false, use = use)
+                    }
                 }
             }
         }, main)

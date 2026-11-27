@@ -24,6 +24,7 @@ import android.os.Looper;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.OptIn;
+import androidx.core.util.Consumer;
 import androidx.media3.common.Rating;
 import androidx.media3.common.StarRating;
 import androidx.media3.common.util.UnstableApi;
@@ -33,6 +34,8 @@ import androidx.media3.session.SessionResult;
 
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
+
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import de.qspool.clementineremote.App;
 import de.qspool.clementineremote.backend.Clementine;
@@ -79,6 +82,9 @@ public class MediaSessionController {
     @Nullable
     private static volatile android.media.session.MediaSession.Token sPlatformToken;
 
+    private static final CopyOnWriteArrayList<Consumer<android.media.session.MediaSession.Token>> sTokenListeners =
+            new CopyOnWriteArrayList<>();
+
     /** Set when the connection was lost, so the service's "connection lost" notice stays. */
     private volatile boolean mLostConnection;
 
@@ -87,6 +93,17 @@ public class MediaSessionController {
 
     /** Whether something plays, or is paused, on this phone. Main thread only. */
     private boolean mPlayingOnPhone;
+
+    private volatile boolean mReleased;
+
+    // Retained as a field so release() can unregister it from singleton PhonePlayer.
+    private final Consumer<Boolean> mPhoneActiveListener = active -> {
+        if (mReleased) {
+            return;
+        }
+        mPlayingOnPhone = active;
+        updateSession();
+    };
 
     public MediaSessionController(Context context,
             ClementinePlayerConnection clementinePlayerConnection) {
@@ -97,18 +114,24 @@ public class MediaSessionController {
     }
 
     public void registerMediaSession() {
-        PhonePlayer.INSTANCE.addActiveListener(active -> {
-            mPlayingOnPhone = active;
-            updateSession();
-        });
+        // Seed initial state in case PhonePlayer was already active before attach.
+        mPlayingOnPhone = PhonePlayer.INSTANCE.isActive();
+        PhonePlayer.INSTANCE.addActiveListener(mPhoneActiveListener);
         mClementinePlayerConnection.addPlayerConnectionListener(new PlayerConnectionListener() {
             @Override
             public void onConnectionStatusChanged(
                     ClementinePlayerConnection.ConnectionStatus status) {
+                if (mReleased) {
+                    return;
+                }
                 switch (status) {
                     case CONNECTED:
+                    case RECONNECTED:
                         mLostConnection = false;
                         mMainHandler.post(() -> {
+                            if (mReleased) {
+                                return;
+                            }
                             mConnected = true;
                             updateSession();
                         });
@@ -119,6 +142,9 @@ public class MediaSessionController {
                     case DISCONNECTED:
                         boolean keepNotification = mLostConnection;
                         mMainHandler.post(() -> {
+                            if (mReleased) {
+                                return;
+                            }
                             mConnected = false;
                             stopSession(keepNotification);
                         });
@@ -131,7 +157,7 @@ public class MediaSessionController {
 
             @Override
             public void onClementineMessageReceived(ClementineMessage clementineMessage) {
-                if (clementineMessage.isErrorMessage()) {
+                if (mReleased || clementineMessage.isErrorMessage()) {
                     return;
                 }
 
@@ -171,7 +197,7 @@ public class MediaSessionController {
 
     /** Opens Clementine's session while connected, unless the phone is playing. */
     private void updateSession() {
-        if (!mConnected) {
+        if (mReleased || !mConnected) {
             return;
         }
         if (mPlayingOnPhone) {
@@ -184,6 +210,9 @@ public class MediaSessionController {
     }
 
     private void startSession() {
+        if (mReleased) {
+            return;
+        }
         if (mSession == null) {
             mSession = new MediaSession.Builder(mContext, mPlayer.asSessionPlayer())
                     .setId("clementine")
@@ -204,7 +233,7 @@ public class MediaSessionController {
                         }
                     })
                     .build();
-            sPlatformToken = mSession.getPlatformToken();
+            setPlatformToken(mSession.getPlatformToken());
         }
         mPlayer.setConnected(true);
     }
@@ -217,11 +246,37 @@ public class MediaSessionController {
         }
     }
 
+    public void release() {
+        // Stop queued/in-flight callbacks and ensure MediaSession("clementine")
+        // is released on the main thread before a new connection builds one.
+        mReleased = true;
+        PhonePlayer.INSTANCE.removeActiveListener(mPhoneActiveListener);
+        mMainHandler.removeCallbacksAndMessages(null);
+        Runnable stop = () -> {
+            mConnected = false;
+            stopSession(mLostConnection);
+        };
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            stop.run();
+        } else {
+            mMainHandler.post(stop);
+        }
+    }
+
     private void releaseSession() {
         if (mSession != null) {
-            sPlatformToken = null;
-            mSession.release();
+            // Clear sPlatformToken before releasing so UI drops the dead token.
+            MediaSession session = mSession;
             mSession = null;
+            setPlatformToken(null);
+            session.release();
+        }
+    }
+
+    private static void setPlatformToken(@Nullable android.media.session.MediaSession.Token token) {
+        sPlatformToken = token;
+        for (Consumer<android.media.session.MediaSession.Token> listener : sTokenListeners) {
+            listener.accept(token);
         }
     }
 
@@ -235,8 +290,18 @@ public class MediaSessionController {
         return sPlatformToken;
     }
 
+    public static void addPlatformTokenListener(
+            Consumer<android.media.session.MediaSession.Token> listener) {
+        sTokenListeners.addIfAbsent(listener);
+    }
+
+    public static void removePlatformTokenListener(
+            Consumer<android.media.session.MediaSession.Token> listener) {
+        sTokenListeners.remove(listener);
+    }
+
     private void updateNotification() {
-        if (mSession != null) {
+        if (!mReleased && mSession != null) {
             mNotification.update(mSession);
         }
     }
