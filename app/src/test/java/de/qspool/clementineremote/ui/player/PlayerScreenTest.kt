@@ -91,7 +91,6 @@ class PlayerScreenTest {
                     onVolume = { done += "volume $it" },
                     onStop = { done += "stop" },
                     onLove = { done += "love" },
-                    onBan = { done += "ban" },
                     controls = {},
                 )
             }
@@ -159,12 +158,10 @@ class PlayerScreenTest {
         compose.onNodeWithTag("btnLove").assertIsOn().performClick()
         compose.onNodeWithTag("btnPlayerMore").performClick()
         compose.onNodeWithTag("menuStop").performClick()
-        compose.onNodeWithTag("btnPlayerMore").performClick()
-        compose.onNodeWithTag("menuBan").performClick()
         compose.onNodeWithTag("btnCollapse").performClick()
 
         assertEquals(
-            listOf("lyrics", "details", "queue", "download", "love", "stop", "ban", "collapse"),
+            listOf("lyrics", "details", "queue", "download", "love", "stop", "collapse"),
             done)
     }
 
@@ -190,13 +187,12 @@ class PlayerScreenTest {
     }
 
     @Test
-    fun withoutLastFmNeitherLovesNorBans() {
+    fun withoutLastFmHidesLoveButton() {
         showPlayer(lastFm = false)
 
         compose.onNodeWithTag("btnLove").assertDoesNotExist()
         compose.onNodeWithTag("btnPlayerMore").performClick()
         compose.onNodeWithTag("menuStop").assertIsDisplayed()
-        compose.onNodeWithTag("menuBan").assertDoesNotExist()
     }
 
     @Test

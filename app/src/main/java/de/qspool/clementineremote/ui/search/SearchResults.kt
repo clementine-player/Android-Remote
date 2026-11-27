@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
@@ -21,9 +21,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -140,11 +143,30 @@ private fun Sections(
     val resources = LocalResources.current
     val top = sections.top
     val topSection = SearchSection.entries.firstOrNull { it.items(sections).firstOrNull() == top }
+    // Deduplicate LazyColumn keys per section because tracks/stations can share metadata or URLs.
+    val sectionKeys = remember(sections) {
+        SearchSection.entries.associateWith { section ->
+            val all = section.items(sections)
+            val shown = if (top != null && all.firstOrNull() == top) all.drop(1) else all
+            val displayItems = shown.take(SHOWN)
+            val seen = HashMap<String, Int>(displayItems.size)
+            displayItems.map { result ->
+                val base = "${section.name}/${result.url.ifEmpty { result.selection.joinToString("\u0000") }}"
+                val occurrence = seen[base] ?: 0
+                seen[base] = occurrence + 1
+                if (occurrence == 0) base else "$base#$occurrence"
+            }
+        }
+    }
     LazyColumn(modifier.fillMaxSize().testTag("${tag}Sections")) {
         if (top != null && topSection != null) {
             item(key = "top") { Header(stringResource(R.string.search_top_result)) }
             item(key = "topItem") {
-                val item = remember(top) { top.toSongSelectItem(resources, topSection, icon, topMeta = true) }
+                // Include providerIcon in remember() because station icons arrive asynchronously after results.
+                val providerIcon = if (topSection == SearchSection.STATIONS) icon(top.source) else null
+                val item = remember(top, providerIcon) {
+                    top.toSongSelectItem(resources, topSection, icon, topMeta = true)
+                }
                 BrowseRow(
                     topSection.kind, item,
                     onClick = { onOpen(item) },
@@ -163,8 +185,15 @@ private fun Sections(
             item(key = section) {
                 Header(stringResource(section.title), seeAll = if (shown.size > SHOWN) ({ onSeeAll(section) }) else null)
             }
-            items(shown.take(SHOWN), key = { section to it.selection }) { result ->
-                val item = remember(result) { result.toSongSelectItem(resources, section, icon) }
+            val displayItems = shown.take(SHOWN)
+            val keysForSection = sectionKeys[section].orEmpty()
+            itemsIndexed(
+                displayItems,
+                key = { index, _ -> keysForSection[index] },
+            ) { _, result ->
+                // Re-resolve when providerIcon arrives so station tiles update from placeholders.
+                val providerIcon = if (section == SearchSection.STATIONS) icon(result.source) else null
+                val item = remember(result, providerIcon) { result.toSongSelectItem(resources, section, icon) }
                 BrowseRow(
                     section.kind, item,
                     onClick = { onOpen(item) },
@@ -214,10 +243,21 @@ private fun Page(
     tag: String,
     modifier: Modifier,
 ) {
-    var selection by remember(level) { mutableStateOf(emptySet<Int>()) }
+    // Preserve selection across rotation and drop stale indices if the result page shrinks.
+    var selection by rememberSaveable(
+        level.opened?.url,
+        level.opened?.listTitle,
+        level.items.size,
+        stateSaver = SearchSelectionSaver,
+    ) { mutableStateOf(emptySet()) }
     val selected = level.items.filterIndexed { index, _ -> index in selection }
+    LaunchedEffect(selected.isEmpty(), selection.isEmpty()) {
+        if (selection.isNotEmpty() && selected.isEmpty()) {
+            selection = emptySet()
+        }
+    }
     Column(modifier.fillMaxSize()) {
-        if (selection.isNotEmpty()) {
+        if (selected.isNotEmpty()) {
             BrowseSelectionBar(
                 count = selected.size,
                 onClear = { selection = emptySet() },
@@ -275,7 +315,7 @@ private fun Page(
             level,
             selection,
             onClick = { index, item ->
-                if (selection.isEmpty()) {
+                if (selected.isEmpty()) {
                     onOpen(item)
                 } else {
                     selection = if (index in selection) selection - index else selection + index
@@ -288,6 +328,11 @@ private fun Page(
         )
     }
 }
+
+private val SearchSelectionSaver = listSaver<Set<Int>, Int>(
+    save = { it.toList() },
+    restore = { it.toSet() },
+)
 
 /**
  * [this] as an item to show and open, in [section]: its second line says whose it is, or for the

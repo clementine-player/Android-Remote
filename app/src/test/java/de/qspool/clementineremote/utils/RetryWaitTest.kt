@@ -28,12 +28,14 @@ class RetryWaitTest {
         assertEquals("1 minute", describe(60))
         assertEquals("2 minutes", describe(61))
         assertEquals("43 minutes", describe(2560))
-        assertEquals("60 minutes", describe(3600))
+        assertEquals("59 minutes", describe(3540))
+        assertEquals("1 hour", describe(3600))
         assertEquals("2 hours", describe(3601))
     }
 
     @Test
     fun aWhileWhenClementineDoesntSay() {
         assertEquals("a while", describe(null))
+        assertEquals("a while", describe(0))
     }
 }

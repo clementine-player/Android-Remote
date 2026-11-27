@@ -1,6 +1,7 @@
 package de.qspool.clementineremote.ui.search
 
 import android.content.SharedPreferences
+import android.database.sqlite.SQLiteException
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,6 +23,7 @@ import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Song
 import de.qspool.clementineremote.ui.browse.SongBrowser
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -80,16 +82,67 @@ class SearchViewModel(
     /** The search whose results are shown. */
     private var searchId: Int? = null
 
+    /** Highest search ID seen so far, used to retire older IDs when a new search starts. */
+    private var maxSeenId = Int.MIN_VALUE
+
+    /** Cutoff below which late responses from superseded searches are discarded. */
+    private var retiredUpToId = Int.MIN_VALUE
+
+    /** IDs whose GlobalSearchStarted query didn't match the active query (late prior search). */
+    private val wrongQueryIds = HashSet<Int>()
+
+    /** Monotonic counter invalidating in-flight IO updates from earlier searches. */
+    private var searchGeneration = 0
+
+    private var updateJob: Job? = null
+
+    private var openJob: Job? = null
+
     private val listener = object : OnGlobalSearchResponseListener {
         override fun onStatusChanged(id: Int, status: GlobalSearchStatus) {
-            if (status == GlobalSearchStatus.GlobalSearchFinished) {
-                update(id, finished = true)
+            onStatusChanged(id, "", status)
+        }
+
+        // Marshal connection-thread callbacks onto Main so search state mutates single-threaded.
+        override fun onStatusChanged(id: Int, query: String, status: GlobalSearchStatus) {
+            viewModelScope.launch(Dispatchers.Main.immediate) {
+                handleStatusChanged(id, query, status)
             }
         }
 
         // Results show as they come; most searches find songs in the library quickly, and radio
         // streams slowly.
-        override fun onResultsReceived(id: Int) = update(id, finished = false)
+        override fun onResultsReceived(id: Int) {
+            viewModelScope.launch(Dispatchers.Main.immediate) {
+                handleResultsReceived(id)
+            }
+        }
+    }
+
+    private fun handleStatusChanged(id: Int, query: String, status: GlobalSearchStatus) {
+        maxSeenId = maxOf(maxSeenId, id)
+        if (id <= retiredUpToId) return
+        // Blacklist searches whose server query reveals they belong to an earlier search() call.
+        if (query.isNotEmpty() && query != _state.value.searchedFor) {
+            wrongQueryIds.add(id)
+            return
+        }
+        if (id in wrongQueryIds) return
+        val current = searchId
+        if (current != null && id != current) return
+        if (status == GlobalSearchStatus.GlobalSearchStarted) {
+            searchId = id
+        } else if (status == GlobalSearchStatus.GlobalSearchFinished) {
+            update(id, finished = true)
+        }
+    }
+
+    private fun handleResultsReceived(id: Int) {
+        maxSeenId = maxOf(maxSeenId, id)
+        if (id <= retiredUpToId || id in wrongQueryIds) return
+        val current = searchId
+        if (current != null && id != current) return
+        update(id, finished = false)
     }
 
     /** The sorting setting changes the order of an opened artist or album. */
@@ -119,6 +172,13 @@ class SearchViewModel(
         if (text.isEmpty()) {
             return
         }
+        // Retire all previously seen search IDs and cancel in-flight jobs so a late
+        // GlobalSearchFinished from a superseded search cannot latch searchId or stop this one.
+        searchGeneration++
+        updateJob?.cancel()
+        openJob?.cancel()
+        retiredUpToId = maxOf(retiredUpToId, maxSeenId)
+        wrongQueryIds.removeAll { it <= retiredUpToId }
         searchId = null
         _state.value = SearchState(searchedFor = text, searching = true)
         send(ClementineMessageFactory.buildGlobalSearch(text))
@@ -126,11 +186,26 @@ class SearchViewModel(
 
     /** Search [id] has more results, or has [finished]: shows them in sections. */
     internal fun update(id: Int, finished: Boolean) {
+        if (id <= retiredUpToId) {
+            return
+        }
+        maxSeenId = maxOf(maxSeenId, id)
         searchId = id
-        viewModelScope.launch {
+        // Cancel older IO parses and verify generation/searchId to block out-of-order overwrites.
+        val generation = searchGeneration
+        updateJob?.cancel()
+        updateJob = viewModelScope.launch {
             val query = _state.value.searchedFor.orEmpty()
-            val sections = withContext(io) { SearchSections.of(query, candidates(id)) }
-            if (searchId != id) {
+            val sections = withContext(io) {
+                val found = try {
+                    candidates(id)
+                } catch (_: SQLiteException) {
+                    // GlobalSearchDatabaseHelper can reset/clear concurrently on a new search.
+                    emptyList()
+                }
+                SearchSections.of(query, found)
+            }
+            if (searchId != id || searchGeneration != generation) {
                 return@launch
             }
             _state.update {
@@ -152,19 +227,32 @@ class SearchViewModel(
             return
         }
         val id = searchId ?: return
-        viewModelScope.launch {
-            val below = withContext(io) { SongBrowser { newQuery(id) }.level(item) }
-            _state.update { it.copy(results = it.results?.opened(below)) }
+        // Guard against double-tap duplicates and stale IO reads landing after seeAll/back/search.
+        val expected = _state.value.results ?: return
+        openJob?.cancel()
+        openJob = viewModelScope.launch {
+            val below = withContext(io) {
+                try {
+                    SongBrowser { newQuery(id) }.level(item)
+                } catch (_: SQLiteException) {
+                    null
+                }
+            } ?: return@launch
+            _state.update {
+                if (searchId == id && it.results === expected) it.copy(results = it.results.opened(below)) else it
+            }
         }
     }
 
     /** Shows all of [section]. */
     fun seeAll(section: SearchSection) {
+        openJob?.cancel()
         _state.update { it.copy(results = it.results?.seeAll(section)) }
     }
 
     /** Closes the page shown; false at the sections. */
     fun back(): Boolean {
+        openJob?.cancel()
         val results = _state.value.results?.back() ?: return false
         _state.update { it.copy(results = results) }
         return true
@@ -176,11 +264,17 @@ class SearchViewModel(
         viewModelScope.launch {
             val pages = _state.value.results?.pages ?: return@launch
             val reread = withContext(io) {
-                pages.map { page ->
-                    if (page is SearchPage.Opened) SearchPage.Opened(SongBrowser { newQuery(id) }.level(page.level.opened)) else page
+                try {
+                    pages.map { page ->
+                        if (page is SearchPage.Opened) SearchPage.Opened(SongBrowser { newQuery(id) }.level(page.level.opened)) else page
+                    }
+                } catch (_: SQLiteException) {
+                    null
                 }
+            } ?: return@launch
+            _state.update {
+                if (searchId == id) it.copy(results = it.results?.copy(pages = reread)) else it
             }
-            _state.update { it.copy(results = it.results?.copy(pages = reread)) }
         }
     }
 
@@ -192,7 +286,11 @@ class SearchViewModel(
         val id = searchId ?: return
         viewModelScope.launch {
             val songs = withContext(io) {
-                SongBrowser { newQuery(id) }.songs(items).mapNotNull { it.url?.let(songFromUrl) }
+                try {
+                    SongBrowser { newQuery(id) }.songs(items).mapNotNull { it.url?.let(songFromUrl) }
+                } catch (_: SQLiteException) {
+                    emptyList()
+                }
             }
             if (songs.isEmpty()) {
                 return@launch

@@ -87,7 +87,7 @@ class SettingsScreenTest {
     fun switchesShowTheirDefaultsAndWriteTheirKeys() {
         row(SharedPreferencesKeys.SP_KEY_USE_VOLUMEKEYS).assertIsOn().performClick().assertIsOff()
         assertFalse(preferences.getBoolean(SharedPreferencesKeys.SP_KEY_USE_VOLUMEKEYS, true))
-        row(SharedPreferencesKeys.SP_KEEP_SCREEN_ON).assertIsOn()
+        row(SharedPreferencesKeys.SP_KEEP_SCREEN_ON).assertIsOff()
         row(SharedPreferencesKeys.SP_WAKE_LOCK).assertIsOff()
     }
 
@@ -124,8 +124,12 @@ class SettingsScreenTest {
     @Test
     fun portMustBeOneClementineCanListenOn() {
         row(SharedPreferencesKeys.SP_KEY_PORT).performClick()
-        compose.onNodeWithTag("portField").performTextReplacement("80")
+        compose.onNodeWithTag("portField").performTextReplacement("0")
         compose.onNodeWithTag("btnPortOk").assertIsNotEnabled()
+        compose.onNodeWithTag("portField").performTextReplacement("65536")
+        compose.onNodeWithTag("btnPortOk").assertIsNotEnabled()
+        compose.onNodeWithTag("portField").performTextReplacement("80")
+        compose.onNodeWithTag("btnPortOk").assertIsEnabled()
         compose.onNodeWithTag("portField").performTextReplacement("5600")
         compose.onNodeWithTag("btnPortOk").performClick()
         assertEquals("5600", preferences.getString(SharedPreferencesKeys.SP_KEY_PORT, null))

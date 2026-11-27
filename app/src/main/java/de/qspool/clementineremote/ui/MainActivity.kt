@@ -37,6 +37,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.core.util.Consumer
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.R
 import de.qspool.clementineremote.SharedPreferencesKeys
@@ -49,6 +50,7 @@ import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementineMessageFactory
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType
+import de.qspool.clementineremote.backend.sync.PhonePlayer
 import de.qspool.clementineremote.ui.settings.ClementineSettings
 import de.qspool.clementineremote.ui.shell.AppShell
 import de.qspool.clementineremote.ui.shell.Destination
@@ -84,6 +86,11 @@ class MainActivity : ComponentActivity(), ShellActions {
     /** Whether to show the connect screen once disconnected, rather than leave the app. */
     private var openConnectScreen = true
 
+    // Sync mediaController whenever switching between Clementine and PhonePlayer swaps the token.
+    private val platformTokenListener = Consumer<android.media.session.MediaSession.Token?> { token ->
+        syncMediaController(token)
+    }
+
     @OptIn(ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -104,10 +111,11 @@ class MainActivity : ComponentActivity(), ShellActions {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         show(intent)
-        // Still playing what's on this phone, without Clementine, whatever opened it this time,
-        // such as the phone player's notification: otherwise onResume would close it, back to
-        // the connect screen.
-        if (onThisPhone()) {
+        // onThisPhone() reads the prior intent before setIntent() below. When a player
+        // notification reopens an offline phone session, keep playing locally; connecting clears it.
+        if (onThisPhone() && !Utilities.isRemoteConnected() &&
+            intent.hasExtra(ClementineMediaSessionNotification.EXTRA_NOTIFICATION_ID)
+        ) {
             intent.putExtra(EXTRA_ON_THIS_PHONE, true)
         }
         setIntent(intent)
@@ -138,7 +146,7 @@ class MainActivity : ComponentActivity(), ShellActions {
         super.onResume()
 
         // Keep the screen on if asked to in the settings.
-        if (App.getPreferences().getBoolean(SharedPreferencesKeys.SP_KEEP_SCREEN_ON, true) &&
+        if (App.getPreferences().getBoolean(SharedPreferencesKeys.SP_KEEP_SCREEN_ON, false) &&
             Utilities.isRemoteConnected()
         ) {
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -164,7 +172,11 @@ class MainActivity : ComponentActivity(), ShellActions {
 
         // The volume keys set Clementine's volume, if the settings say so: they go to the media
         // session, and Android shows its volume panel for Clementine.
-        val token = MediaSessionController.getPlatformToken()
+        syncMediaController(MediaSessionController.getPlatformToken())
+        MediaSessionController.addPlatformTokenListener(platformTokenListener)
+    }
+
+    private fun syncMediaController(token: android.media.session.MediaSession.Token?) {
         mediaController = if (token != null && usesVolumeKeys()) MediaController(this, token) else null
     }
 
@@ -173,15 +185,16 @@ class MainActivity : ComponentActivity(), ShellActions {
 
     override fun onPause() {
         super.onPause()
+        MediaSessionController.removePlatformTokenListener(platformTokenListener)
         App.ClementineConnection?.setUiHandler(null)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        // Disconnected: back to the connect screen, unless leaving.
+        // Disconnected: back to the connect screen, unless leaving or rotating.
         val connection = App.ClementineConnection
         val connected = connection != null && App.Clementine != null && connection.isConnected
-        if (!connected && openConnectScreen && !onThisPhone()) {
+        if (!isChangingConfigurations && !connected && openConnectScreen && !onThisPhone()) {
             Log.d(TAG, "onDestroy - disconnect")
             startActivity(
                 Intent(this, ConnectActivity::class.java)
@@ -195,20 +208,26 @@ class MainActivity : ComponentActivity(), ShellActions {
      * without Clementine, the phone's.
      */
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        if (mediaController == null && !shell.offline && usesVolumeKeys() && isVolumeKey(keyCode)) {
+        // Let PhonePlayer use Android's media stream even while connected to Clementine.
+        if (mediaController == null && !shell.offline && !PhonePlayer.isActive() &&
+            usesVolumeKeys() && isVolumeKey(keyCode)
+        ) {
             val step = App.getPreferences().getString(SharedPreferencesKeys.SP_VOLUME_INC, Clementine.DefaultVolumeInc)
                 ?.toIntOrNull() ?: Clementine.DefaultVolumeInc.toInt()
             val current = App.Clementine.volume
-            val volume = if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) current + step else current - step
+            // Clamp before sending so stepped keys never emit out-of-range volume messages.
+            val volume = (if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) current + step else current - step).coerceIn(0, 100)
             RemoteRepository.send(ClementineMessageFactory.buildVolumeMessage(volume))
-            makeToast(getString(R.string.playler_volume) + " " + volume.coerceIn(0, 100) + "%")
+            makeToast(getString(R.string.playler_volume) + " " + volume + "%")
             return true
         }
         return super.onKeyDown(keyCode, event)
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
-        if (mediaController == null && !shell.offline && usesVolumeKeys() && isVolumeKey(keyCode)) {
+        if (mediaController == null && !shell.offline && !PhonePlayer.isActive() &&
+            usesVolumeKeys() && isVolumeKey(keyCode)
+        ) {
             return true
         }
         return super.onKeyUp(keyCode, event)

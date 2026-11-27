@@ -61,7 +61,7 @@ internal fun fullTextQuery(text: String, columns: Set<String>): String =
 
 /**
  * A song from a row of [fields] browsed by (the last its title), then its artist and URL. Its
- * URL is kept as Clementine sent it; browsing decodes it.
+ * URL is kept as Clementine sent it.
  */
 private fun song(cursor: Cursor, fields: Int): SearchItem {
     val values = (0 until fields).map { cursor.getString(it).orEmpty() }

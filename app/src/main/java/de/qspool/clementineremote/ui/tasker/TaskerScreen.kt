@@ -4,10 +4,10 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
@@ -64,11 +64,17 @@ class TaskerViewModel : ViewModel() {
     var port by mutableStateOf("")
     var authCode by mutableStateOf("")
 
+    /** Bumped when saving finds the host blank, to show why. */
+    var hostErrors by mutableIntStateOf(0)
+
     /** Bumped when saving finds the port invalid, to show why. */
     var portErrors by mutableIntStateOf(0)
 
-    /** The port, if Clementine can listen on it. */
-    val validPort: Int? get() = port.toIntOrNull()?.takeIf { it in 1024..65535 }
+    /** Whether a host was entered. */
+    val validHost: Boolean get() = host.isNotBlank()
+
+    /** The port, in the valid TCP range 1..65535. */
+    val validPort: Int? get() = port.toIntOrNull()?.takeIf { it in 1..65535 }
 }
 
 /** The Tasker action's settings: what to do, and for Connect, where to. */
@@ -89,8 +95,9 @@ fun TaskerScreen(form: TaskerViewModel, onDone: () -> Unit) {
     ) { padding ->
         Column(
             Modifier.padding(padding)
+                // Scaffold padding already covers the navigation bar; consume it so imePadding() doesn't double it.
+                .consumeWindowInsets(padding)
                 .verticalScroll(rememberScrollState())
-                .navigationBarsPadding()
                 .imePadding()
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -116,17 +123,21 @@ fun TaskerScreen(form: TaskerViewModel, onDone: () -> Unit) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(top = 8.dp),
             )
+            // Only show validation errors for Connect so disabled fields clear when switching actions.
             val connecting = form.action == TaskerAction.CONNECT
+            val hostError = connecting && form.hostErrors > 0 && !form.validHost
             OutlinedTextField(
                 form.host,
                 onValueChange = { form.host = it.trim() },
                 label = { Text(stringResource(R.string.connectdialog_ip_hint)) },
                 singleLine = true,
                 enabled = connecting,
+                isError = hostError,
+                supportingText = if (hostError) ({ Text(stringResource(R.string.connectdialog_ip_hint)) }) else null,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
                 modifier = Modifier.fillMaxWidth().testTag("taskerIp"),
             )
-            val portError = form.portErrors > 0 && form.validPort == null
+            val portError = connecting && form.portErrors > 0 && form.validPort == null
             OutlinedTextField(
                 form.port,
                 onValueChange = { form.port = it.filter(Char::isDigit).take(5) },

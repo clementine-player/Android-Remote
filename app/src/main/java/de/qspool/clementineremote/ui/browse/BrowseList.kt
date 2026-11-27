@@ -154,7 +154,8 @@ internal fun BrowseRow(
 /** A tile for what an item groups; a search source shows its own icon, if Clementine sent one. */
 @Composable
 private fun Leading(kind: ItemKind, item: SongSelectItem) {
-    val icon = remember(item) { item.icon?.asImageBitmap() }
+    // Key on item.icon too because search provider icons can arrive after item creation.
+    val icon = remember(item, item.icon) { item.icon?.asImageBitmap() }
     val drawable = when (kind) {
         ItemKind.ARTIST -> R.drawable.ic_person
         ItemKind.ALBUM, ItemKind.YEAR -> R.drawable.ic_album

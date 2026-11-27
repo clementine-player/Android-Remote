@@ -57,13 +57,15 @@ class TaskerSettingsTest {
     }
 
     @Test
-    fun connectNeedsAPortClementineCanListenOn() {
+    fun connectNeedsValidHostAndPort() {
         val scenario = launch()
-        compose.onNodeWithTag("taskerPort").performScrollTo().performTextReplacement("80")
+        compose.onNodeWithTag("taskerIp").performScrollTo().performTextReplacement("   ")
+        compose.onNodeWithTag("taskerPort").performScrollTo().performTextReplacement("0")
         compose.onNodeWithTag("btnTaskerDone").performClick()
         // Still open, saying why.
         compose.onNodeWithText("Illegal Port!").assertExists()
 
+        compose.onNodeWithTag("taskerIp").performScrollTo().performTextReplacement("192.168.1.20")
         compose.onNodeWithTag("taskerPort").performTextReplacement("5600")
         compose.onNodeWithTag("btnTaskerDone").performClick()
         val result = scenario.result

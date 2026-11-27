@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import de.qspool.clementineremote.R
+import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 
 /**
@@ -57,12 +58,25 @@ import kotlin.math.roundToInt
  * the slider can't be taken for the seek bar; the phone's volume buttons set it too.
  */
 @Composable
-internal fun VolumeButton(volume: Int, onVolume: (Int) -> Unit, modifier: Modifier = Modifier) {
+internal fun VolumeButton(
+    volume: Int,
+    onVolume: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+    onPhone: Boolean = false,
+) {
     var open by rememberSaveable { mutableStateOf(false) }
-    // What was last asked of Clementine, shown until it answers with its volume.
+    val clampedVolume = volume.coerceIn(0, 100)
+    // What was last asked of Clementine, shown until it answers with its volume or times out.
     var asked by remember { mutableStateOf<Int?>(null) }
-    LaunchedEffect(volume) { asked = null }
-    val shown = asked ?: volume
+    LaunchedEffect(clampedVolume) { asked = null }
+    // Quantized hardware PhoneVolume steps can leave clampedVolume unchanged; expire asked on a timer.
+    LaunchedEffect(asked) {
+        if (asked != null) {
+            delay(ASKED_VOLUME_TIMEOUT_MILLIS)
+            asked = null
+        }
+    }
+    val shown = asked ?: clampedVolume
     fun set(percent: Int) {
         val clamped = percent.coerceIn(0, 100)
         if (clamped != shown) {
@@ -71,7 +85,10 @@ internal fun VolumeButton(volume: Int, onVolume: (Int) -> Unit, modifier: Modifi
         }
     }
 
-    val description = stringResource(R.string.player_volume_level, shown)
+    val description = stringResource(
+        if (onPhone) R.string.player_phone_volume_level else R.string.player_volume_level,
+        shown,
+    )
     Box(modifier) {
         Surface(
             onClick = { open = true },
@@ -147,7 +164,9 @@ internal fun VolumePanelContent(volume: Int, onVolume: (Int) -> Unit, modifier: 
 private fun VerticalSlider(volume: Int, onVolume: (Int) -> Unit) {
     val set by rememberUpdatedState(onVolume)
     val description = stringResource(R.string.connection_volume)
-    val filled = volume / 100f
+    // Clamp server volume before fillMaxHeight(filled), which throws outside 0f..1f.
+    val clamped = volume.coerceIn(0, 100)
+    val filled = (clamped / 100f).coerceIn(0f, 1f)
     Box(
         Modifier
             .size(width = 56.dp, height = 200.dp)
@@ -163,8 +182,8 @@ private fun VerticalSlider(volume: Int, onVolume: (Int) -> Unit) {
             }
             .semantics {
                 contentDescription = description
-                stateDescription = "$volume%"
-                progressBarRangeInfo = ProgressBarRangeInfo(volume.toFloat(), 0f..100f, steps = 0)
+                stateDescription = "$clamped%"
+                progressBarRangeInfo = ProgressBarRangeInfo(clamped.toFloat(), 0f..100f, steps = 0)
                 setProgress { target ->
                     set(target.roundToInt())
                     true
@@ -187,3 +206,6 @@ private fun VerticalSlider(volume: Int, onVolume: (Int) -> Unit) {
 
 /** What + and − change the volume by, in percent. */
 private const val STEP = 5
+
+/** Clears optimistic volume display if the server or quantized hardware step didn't emit a new value. */
+private const val ASKED_VOLUME_TIMEOUT_MILLIS = 1500L

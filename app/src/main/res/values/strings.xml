@@ -91,6 +91,8 @@
     <string name="player_details">Lyrics and details</string>
     <string name="player_download_song">Download song</string>
     <string name="player_volume_level">Clementine volume, %1$d%%</string>
+    <!-- Accessibility label for the volume slider when playing on the phone. %1$d is the percentage, 0 to 100. -->
+    <string name="player_phone_volume_level">Phone volume, %1$d%%</string>
     <string name="player_volume_up">Volume up</string>
     <string name="player_volume_down">Volume down</string>
     <string name="details_tab">Details</string>
@@ -216,7 +218,8 @@
     <string name="song_info_size">Size</string>
     <string name="song_info_filename">Filename</string>
     <string name="song_info_rating">Rating</string>
-    <string name="song_info_rated">Song rated $stars$ stars</string>
+    <!-- TalkBack announcement after rating a song. %1$s is the rating out of 5, such as 3 or 3.5. -->
+    <string name="song_info_rated">Song rated %1$s stars</string>
     <!-- TalkBack action on a rating star, rating the song half a star less, such as 3.5: the number is already written out. -->
     <string name="song_info_rate_half_stars">Rate %1$s stars</string>
 
@@ -229,7 +232,6 @@
 
     <string name="menu_settings">Settings</string>
     <string name="menu_search">Search</string>
-    <string name="menu_ban">Ban</string>
     <string name="menu_download">Download</string>
     <string name="menu_download_playlist">Download playlist</string>
 
@@ -242,10 +244,9 @@
 
     <string name="pref_volume_title">Use Volume Keys</string>
     <string name="pref_volume_summary">Use volume keys to control the volume of Clementine.</string>
-    <string name="pref_trackno_title">Show tracknumber</string>
-    <string name="pref_trackno_summary">Show or hide the tracknumber in the playlists.</string>
     <string name="pref_lastfm_title">Last.fm</string>
-    <string name="pref_lastfm_summary">Activate to love / ban tracks.</string>
+    <!-- Settings toggle subtitle under Last.fm. -->
+    <string name="pref_lastfm_summary">Show a button to love songs.</string>
     <string name="pref_lower_volume_title">Lower volume</string>
     <string name="pref_lower_volume_summary">Lower volume on incoming / outgoing call.</string>
     <string name="pref_call_volume_title">Call volume level</string>
@@ -322,9 +323,9 @@
     <string name="pref_dl_pl_save_own_dir_title">Save tracks in playlist folder</string>
     <string name="pref_dl_pl_save_own_dir_summary">Creates a playlist-named folder and saves tracks in there.</string>
     <string name="pref_dl_pl_artist_dir_title">Create artist subfolder</string>
-    <string name="pref_dl_pl_artist_dir_summary">Create a artist subfolder for each individual track.</string>
+    <string name="pref_dl_pl_artist_dir_summary">Create an artist subfolder for each individual track.</string>
     <string name="pref_dl_pl_album_dir_title">Create album subfolder</string>
-    <string name="pref_dl_pl_album_dir_summary">Create a album subfolder inside artist for each individual track.</string>
+    <string name="pref_dl_pl_album_dir_summary">Create an album subfolder inside artist for each individual track.</string>
 
     <string name="file_dialog_set_dir">Select directory</string>
     <string name="file_dialog_not_writable">Directory not writable</string>
@@ -399,7 +400,6 @@
 
 
     <string name="track_loved">Track loved &lt;3</string>
-    <string name="track_banned">Track banned :-(</string>
     <string name="permissions_required_title">Permissions required</string>
     <string name="permissions_intro">Android will ask for:</string>
     <string name="permission_local_network">Nearby devices: Clementine Remote finds and talks to Clementine on your local network.</string>

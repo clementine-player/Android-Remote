@@ -129,6 +129,9 @@ class InternetBrowser(private val send: (ClementineMessage) -> Unit) {
     /** The offset of the next page asked for the level shown, until it comes. */
     private var pageAsked: Int? = null
 
+    /** True after [refresh] until its offset-0 page arrives, so stale tail pages are discarded. */
+    private var refreshing = false
+
     /** What was put on the playlist, and how, until Clementine says how it went. */
     private val adding = ArrayDeque<Pair<List<String>, BrowseAddAction>>()
 
@@ -140,6 +143,7 @@ class InternetBrowser(private val send: (ClementineMessage) -> Unit) {
         this.supported = supported
         levels = listOf(InternetLevel())
         pageAsked = null
+        refreshing = false
         adding.clear()
         if (supported) {
             ask(shown)
@@ -150,6 +154,7 @@ class InternetBrowser(private val send: (ClementineMessage) -> Unit) {
     fun refresh() {
         if (supported) {
             pageAsked = null
+            refreshing = true
             ask(shown)
         }
     }
@@ -161,6 +166,7 @@ class InternetBrowser(private val send: (ClementineMessage) -> Unit) {
         }
         levels = levels + InternetLevel(opened = node)
         pageAsked = null
+        refreshing = false
         ask(shown)
     }
 
@@ -171,6 +177,7 @@ class InternetBrowser(private val send: (ClementineMessage) -> Unit) {
         }
         levels = levels.dropLast(1)
         pageAsked = null
+        refreshing = false
         ask(shown)
         return true
     }
@@ -226,7 +233,15 @@ class InternetBrowser(private val send: (ClementineMessage) -> Unit) {
             BrowseState.BROWSE_STATE_NEEDS_SETUP -> LevelStatus.NEEDS_SETUP
             else -> LevelStatus.READY
         }
-        val nodes = merge(level.nodes, response.offset, response.nodesList.map(InternetNode::of), response.totalCount)
+        // Discard pre-refresh tail pages only once the fresh offset-0 page arrives, so a shrunk
+        // list doesn't retain stale items past the first page.
+        val loaded = if (refreshing && response.offset == 0) {
+            refreshing = false
+            emptyList()
+        } else {
+            level.nodes
+        }
+        val nodes = merge(loaded, response.offset, response.nodesList.map(InternetNode::of), response.totalCount)
             ?: return
         levels = levels.dropLast(1) + level.copy(
             status = status,

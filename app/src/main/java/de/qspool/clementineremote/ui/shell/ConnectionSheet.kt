@@ -45,9 +45,12 @@ import androidx.compose.ui.unit.dp
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.R
 import de.qspool.clementineremote.SharedPreferencesKeys
+import de.qspool.clementineremote.backend.Clementine
 import de.qspool.clementineremote.backend.RemoteRepository
 import de.qspool.clementineremote.utils.Utilities
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
@@ -87,12 +90,13 @@ interface ConnectionActions {
 @Composable
 fun ConnectionSheet(actions: ConnectionActions, onDismiss: () -> Unit) {
     val context = LocalContext.current
-    // The uptime and traffic change by themselves, so they're read twice a second.
+    // The uptime and traffic change by themselves, so they're sampled off the composition pass.
+    // Seed non-IPC fields synchronously, then sample TrafficStats/TrafficRate on Default.
     val rate = remember { TrafficRate() }
-    val stats by produceState(readConnectionStats(context, rate)) {
+    val stats by produceState(remember(context) { initialConnectionStats(context) }) {
         while (true) {
+            value = withContext(Dispatchers.Default) { readConnectionStats(context, rate) }
             delay(STATS_INTERVAL_MILLIS)
-            value = readConnectionStats(context, rate)
         }
     }
     ModalBottomSheet(
@@ -209,18 +213,24 @@ private fun Item(icon: Int, title: Int, summary: Int?, tag: String, onClick: () 
     )
 }
 
-/** The connection now; [rate] keeps the traffic read lately, for how fast it's moving. */
-internal fun readConnectionStats(context: Context, rate: TrafficRate): ConnectionStats {
+/** Initial stats safe to read synchronously before the first background sample completes. */
+private fun initialConnectionStats(context: Context): ConnectionStats {
     val preferences = App.getPreferences()
     val ip = preferences.getString(SharedPreferencesKeys.SP_KEY_IP, "").orEmpty()
-    val port = preferences.getString(SharedPreferencesKeys.SP_KEY_PORT, "")?.toIntOrNull() ?: 0
-    // As Clementine names its computer; or else as the network does, or its address.
+    // Fall back to DefaultPort when unset or out of range instead of displaying port 0.
+    val port = preferences.getString(SharedPreferencesKeys.SP_KEY_PORT, "")
+        ?.toIntOrNull()?.takeIf { it in 1..65535 } ?: Clementine.DefaultPort
     val host = RemoteRepository.outputs.value.computerName
         ?: App.Clementine.hostname?.takeIf { it.isNotBlank() }
         ?: ip.ifBlank { context.getString(R.string.fragment_title_connection) }
     val version = App.Clementine.version ?: ""
-    val connection = App.ClementineConnection
-        ?: return ConnectionStats(host, ip, port, version, uptime = "", traffic = null)
+    return ConnectionStats(host, ip, port, version, uptime = "", traffic = null)
+}
+
+/** The connection now; [rate] keeps the traffic read lately, for how fast it's moving. */
+internal fun readConnectionStats(context: Context, rate: TrafficRate): ConnectionStats {
+    val base = initialConnectionStats(context)
+    val connection = App.ClementineConnection ?: return base
 
     val millis = System.currentTimeMillis() - connection.startTime
     val seconds = TimeUnit.MILLISECONDS.toSeconds(millis)
@@ -243,7 +253,7 @@ internal fun readConnectionStats(context: Context, rate: TrafficRate): Connectio
         val perSecond = rate.add(SystemClock.elapsedRealtime(), tx + rx)
         if (perSecond == null) totals else totals + " (" + Utilities.humanReadableBytes(perSecond, true) + "/s)"
     }
-    return ConnectionStats(host, ip, port, version, uptime, traffic)
+    return base.copy(uptime = uptime, traffic = traffic)
 }
 
 private const val STATS_INTERVAL_MILLIS = 500L

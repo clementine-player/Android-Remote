@@ -5,7 +5,6 @@ import android.provider.MediaStore
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -23,6 +22,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -43,6 +44,7 @@ import de.qspool.clementineremote.backend.downloader.DownloadVolume
 import de.qspool.clementineremote.backend.downloader.MediaStoreDownloadStorage
 import de.qspool.clementineremote.backend.library.LibraryQuery
 import de.qspool.clementineremote.ui.hints.Hints
+import kotlinx.coroutines.withContext
 
 /** What the settings do outside themselves. */
 interface SettingsActions {
@@ -79,7 +81,6 @@ internal fun SettingsScreen(
         Column(
             Modifier.padding(padding)
                 .verticalScroll(rememberScrollState())
-                .navigationBarsPadding()
                 .testTag("settingsList"),
         ) {
             PlayerSettings(store)
@@ -96,7 +97,6 @@ internal fun SettingsScreen(
 private fun PlayerSettings(store: PreferenceStore) {
     SettingsHeading(stringResource(R.string.pref_cat_player))
     booleanSetting(store, SharedPreferencesKeys.SP_KEY_USE_VOLUMEKEYS, true, R.string.pref_volume_title, R.string.pref_volume_summary)
-    booleanSetting(store, SharedPreferencesKeys.SP_SHOW_TRACKNO, true, R.string.pref_trackno_title, R.string.pref_trackno_summary)
     booleanSetting(store, SharedPreferencesKeys.SP_LASTFM, true, R.string.pref_lastfm_title, R.string.pref_lastfm_summary)
     val lowerVolume = booleanSetting(
         store, SharedPreferencesKeys.SP_LOWER_VOLUME, true, R.string.pref_lower_volume_title, R.string.pref_lower_volume_summary,
@@ -162,10 +162,22 @@ private fun DownloadSettings(store: PreferenceStore, downloadVolumes: List<Downl
         ) {}
         DownloadVolumeSetting(store, downloadVolumes)
     } else {
-        val folder = store.string(SharedPreferencesKeys.SP_DOWNLOAD_DIR, defaultDownloadDir())
+        val io = LocalFolderDispatcher.current
+        // Resolve the external storage path off the UI thread, and disable tapping until ready.
+        val defaultDir by produceState<String?>(null, defaultDownloadDir) {
+            value = withContext(io) { defaultDownloadDir() }
+        }
+        val savedDir = store.string(SharedPreferencesKeys.SP_DOWNLOAD_DIR, "")
+        val folder = savedDir.ifEmpty { defaultDir.orEmpty() }
+        val folderReady = savedDir.isNotEmpty() || defaultDir != null
         var choosing by rememberSaveable { mutableStateOf(false) }
-        ActionSetting(stringResource(R.string.pref_dl_dir), folder, SharedPreferencesKeys.SP_DOWNLOAD_DIR) {
-            choosing = true
+        ActionSetting(
+            stringResource(R.string.pref_dl_dir),
+            folder,
+            SharedPreferencesKeys.SP_DOWNLOAD_DIR,
+            enabled = folderReady,
+        ) {
+            if (folderReady) choosing = true
         }
         if (choosing) {
             DownloadFolderDialog(folder, onDismiss = { choosing = false }) {
@@ -235,11 +247,11 @@ private fun ConnectionSettings(store: PreferenceStore) {
     }
 }
 
-/** Asks for Clementine's port, which has to be one a user's program can listen on. */
+/** Asks for Clementine's port, in the valid TCP port range 1..65535. */
 @Composable
 private fun PortDialog(port: String, onDismiss: () -> Unit, onPort: (String) -> Unit) {
     var text by rememberSaveable { mutableStateOf(port) }
-    val valid = text.toIntOrNull() in 1024..65535
+    val valid = text.toIntOrNull() in 1..65535
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.pref_port_title)) },
@@ -268,8 +280,7 @@ private fun PortDialog(port: String, onDismiss: () -> Unit, onPort: (String) -> 
 @Composable
 private fun AdvancedSettings(store: PreferenceStore) {
     SettingsHeading(stringResource(R.string.pref_cat_advanced))
-    // On unless turned off, as the player and settings have always read it.
-    booleanSetting(store, SharedPreferencesKeys.SP_KEEP_SCREEN_ON, true, R.string.pref_keep_screen_on_title, R.string.pref_keep_screen_on_summary)
+    booleanSetting(store, SharedPreferencesKeys.SP_KEEP_SCREEN_ON, false, R.string.pref_keep_screen_on_title, R.string.pref_keep_screen_on_summary)
     booleanSetting(store, SharedPreferencesKeys.SP_WAKE_LOCK, false, R.string.pref_wake_lock_title, R.string.pref_wake_lock_summary)
     // Offered to Clementine when connecting, so a change applies from the next connection.
     booleanSetting(store, SharedPreferencesKeys.SP_RENDERER, true, R.string.pref_renderer, R.string.pref_renderer_summary)
@@ -284,7 +295,10 @@ private fun AdvancedSettings(store: PreferenceStore) {
 private fun AboutSettings(actions: SettingsActions) {
     SettingsHeading(stringResource(R.string.pref_cat_about))
     val context = LocalContext.current
-    val version = context.packageManager.getPackageInfo(context.packageName, 0).versionName
+    // Cache the PackageManager binder lookup across recompositions.
+    val version = remember(context) {
+        context.packageManager.getPackageInfo(context.packageName, 0).versionName.orEmpty()
+    }
     ActionSetting(
         stringResource(R.string.pref_version_title) + " " + version, stringResource(R.string.pref_version_summary),
         "pref_version",

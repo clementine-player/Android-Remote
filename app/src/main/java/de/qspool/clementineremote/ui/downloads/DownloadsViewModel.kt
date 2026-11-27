@@ -1,6 +1,7 @@
 package de.qspool.clementineremote.ui.downloads
 
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteException
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,6 +24,7 @@ import de.qspool.clementineremote.backend.sync.Syncer
 import de.qspool.clementineremote.utils.Utilities
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -106,16 +108,30 @@ class DownloadsViewModel(
         { songs, start, shuffle -> PhonePlayer.play(App.getApp(), songs, start, shuffle) },
 ) : ViewModel() {
 
-    init {
-        // What's kept shows before connecting, for the Clementine last connected.
-        refreshKept()
-    }
+    private var openJob: Job? = null
 
     private val _suggestions = MutableStateFlow(Suggestions())
 
     private val _opened = MutableStateFlow<OpenedRule?>(null)
 
     private val _browsing = MutableStateFlow<List<BrowsePage>>(emptyList())
+
+    init {
+        // What's kept shows before connecting, for the Clementine last connected.
+        refreshKept()
+        viewModelScope.launch {
+            // Refresh the currently opened rule's songs whenever background sync updates kept.
+            kept.collect {
+                val id = _opened.value?.ruleId ?: return@collect
+                openJob?.cancel()
+                openJob = viewModelScope.launch {
+                    val songs = withContext(io) { songsOf(id) }
+                    // Guard against out-of-order completion if the user closed or switched rules.
+                    if (_opened.value?.ruleId == id) _opened.value = OpenedRule(id, songs)
+                }
+            }
+        }
+    }
 
     /** What's open of the songs on this phone, by artist, album or song: the last one shows. */
     val browsing: StateFlow<List<BrowsePage>> = _browsing.asStateFlow()
@@ -138,14 +154,18 @@ class DownloadsViewModel(
 
     val state: StateFlow<DownloadsState> = flow {
         var onPhone = emptyList<DownloadedSong>()
-        // The finished downloads when the songs were last read; null until they are.
+        // The finished downloads and kept rules when the songs were last read; null until read.
         var finishedWhenRead: Set<Int>? = null
+        var keptWhenRead: List<Triple<Long, Int, Long>>? = null
         while (true) {
             val all = downloads().map(::download)
             val finished = all.filterNot { it.running }.map { it.id }.toSet()
-            if (finished != finishedWhenRead) {
+            // Re-scan stored files when Syncer's kept counts or sizes change, not just downloads.
+            val currentKept = kept.value.map { Triple(it.rule.id, it.songs, it.bytes) }
+            if (finished != finishedWhenRead || currentKept != keptWhenRead) {
                 onPhone = readOnPhone()
                 finishedWhenRead = finished
+                keptWhenRead = currentKept
             }
             emit(snapshot(all, onPhone))
             delay(REFRESH_MILLIS)
@@ -221,7 +241,12 @@ class DownloadsViewModel(
         val playlists = DownloadSuggestions.playlists(playlists())
         viewModelScope.launch {
             val (albums, mostPlayed) = withContext(io) {
-                library()?.use { DownloadSuggestions.albums(it) } ?: (emptyList<AlbumSuggestion>() to false)
+                try {
+                    library()?.use { DownloadSuggestions.albums(it) } ?: (emptyList<AlbumSuggestion>() to false)
+                } catch (_: SQLiteException) {
+                    // Library sync can swap or delete library.db concurrently while querying.
+                    emptyList<AlbumSuggestion>() to false
+                }
             }
             _suggestions.value = Suggestions(albums, mostPlayed, playlists)
         }
@@ -229,7 +254,13 @@ class DownloadsViewModel(
 
     fun download(album: AlbumSuggestion) {
         viewModelScope.launch {
-            val urls = withContext(io) { library()?.use { DownloadSuggestions.urls(it, album) }.orEmpty() }
+            val urls = withContext(io) {
+                try {
+                    library()?.use { DownloadSuggestions.urls(it, album) }.orEmpty()
+                } catch (_: SQLiteException) {
+                    emptyList()
+                }
+            }
             if (urls.isNotEmpty()) {
                 startDownload(ClementineMessageFactory.buildDownloadSongsMessage(DownloadItem.Urls, urls))
             }
@@ -250,7 +281,8 @@ class DownloadsViewModel(
     fun open(rule: KeptRule) {
         val id = rule.rule.id
         _opened.value = OpenedRule(id, null)
-        viewModelScope.launch {
+        openJob?.cancel()
+        openJob = viewModelScope.launch {
             val songs = withContext(io) { songsOf(id) }
             if (_opened.value?.ruleId == id) _opened.value = OpenedRule(id, songs)
         }
@@ -258,6 +290,7 @@ class DownloadsViewModel(
 
     /** Goes back from the songs of a rule. */
     fun close() {
+        openJob?.cancel()
         _opened.value = null
     }
 

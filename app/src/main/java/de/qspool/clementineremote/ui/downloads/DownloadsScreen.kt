@@ -17,8 +17,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,6 +36,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,6 +58,7 @@ import de.qspool.clementineremote.R
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.DownloadItem
 import de.qspool.clementineremote.backend.sync.KeptRule
 import de.qspool.clementineremote.ui.settings.ClementineSettings
+import de.qspool.clementineremote.ui.shell.isTablet
 import de.qspool.clementineremote.utils.Utilities
 
 /**
@@ -170,14 +174,22 @@ internal fun DownloadsContent(
     /** Opens an artist or album of the songs on this phone, listed by artist as the library is. */
     onBrowse: ((BrowsePage) -> Unit)? = null,
 ) {
-    // The finished download whose songs are being picked from.
-    var picking by remember { mutableStateOf<Download?>(null) }
+    // The finished download whose songs are being picked from, by id across rotation.
+    var pickingId by rememberSaveable { mutableStateOf<Int?>(null) }
+    val picking = state.finished.firstOrNull { it.id == pickingId }
+    val tablet = isTablet()
 
     LazyColumn(modifier.fillMaxSize().testTag("downloads")) {
         item {
             Column(Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)) {
                 Text(
-                    stringResource(if (onThisPhone) R.string.sync_on_this_phone else R.string.downloads_title),
+                    stringResource(
+                        when {
+                            !onThisPhone -> R.string.downloads_title
+                            tablet -> R.string.sync_on_this_tablet
+                            else -> R.string.sync_on_this_phone
+                        },
+                    ),
                     style = MaterialTheme.typography.headlineLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.semantics { heading() },
@@ -201,7 +213,7 @@ internal fun DownloadsContent(
         }
         keptOnPhone(kept, onSyncNow, onRemoveKept, onOpenKept)
         section(R.string.downloads_running, state.running, onCancel) {}
-        section(R.string.downloads_finished, state.finished, onCancel) { picking = it }
+        section(R.string.downloads_finished, state.finished, onCancel) { pickingId = it.id }
 
         if (state.wifiOnly) {
             item { WifiOnly(onChangeSettings) }
@@ -221,10 +233,11 @@ internal fun DownloadsContent(
 
     picking?.let { download ->
         AlertDialog(
-            onDismissRequest = { picking = null },
+            onDismissRequest = { pickingId = null },
             title = { Text(stringResource(R.string.downloaded_songs)) },
             text = {
-                Column {
+                // Scrollable so downloads with more than a screenful of tracks aren't clipped.
+                Column(Modifier.verticalScroll(rememberScrollState())) {
                     download.songs.forEachIndexed { index, song ->
                         Text(
                             "${song.artist} - ${song.title}",
@@ -232,7 +245,7 @@ internal fun DownloadsContent(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    picking = null
+                                    pickingId = null
                                     onPlay(download.songs, index)
                                 }
                                 .padding(vertical = 12.dp),
@@ -241,7 +254,7 @@ internal fun DownloadsContent(
                 }
             },
             confirmButton = {
-                TextButton(onClick = { picking = null }) { Text(stringResource(R.string.dialog_close)) }
+                TextButton(onClick = { pickingId = null }) { Text(stringResource(R.string.dialog_close)) }
             },
         )
     }

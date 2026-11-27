@@ -20,9 +20,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,6 +45,7 @@ import de.qspool.clementineremote.backend.sync.KeptRule
 import de.qspool.clementineremote.backend.sync.RefreshPolicy
 import de.qspool.clementineremote.backend.sync.RuleResult
 import de.qspool.clementineremote.utils.Utilities
+import kotlinx.coroutines.delay
 
 /** What's kept on this phone, for the downloads screen. */
 data class Kept(
@@ -89,7 +93,7 @@ private fun KeptRow(
     onOpen: (KeptRule) -> Unit,
 ) {
     var menu by remember { mutableStateOf(false) }
-    var confirming by remember { mutableStateOf(false) }
+    var confirming by rememberSaveable { mutableStateOf(false) }
     val title = kept.rule.title
     ListItem(
         headlineContent = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
@@ -169,26 +173,44 @@ private fun KeptRow(
  * last was, as of [now].
  */
 @Composable
-internal fun keptDetails(kept: KeptRule, running: Boolean, now: Long = System.currentTimeMillis()): String = when (val result = kept.result) {
-    is RuleResult.NeedsSetup -> result.message
-    RuleResult.Gone -> stringResource(R.string.sync_gone)
-    is RuleResult.Failed -> stringResource(R.string.sync_failed)
-    else -> when {
-        kept.downloading != null && running ->
-            pluralStringResource(R.plurals.sync_downloading, kept.downloading.total, kept.downloading.done, kept.downloading.total)
-        kept.songs == 0 && result == null && running -> stringResource(R.string.sync_preparing)
-        kept.songs == 0 && result == null -> stringResource(R.string.sync_waiting)
-        else -> listOfNotNull(
-            stringResource(
-                if (kept.rule.refreshPolicy == RefreshPolicy.NEVER) R.string.sync_kept_as_it_is else R.string.sync_every_connect
-            ),
-            if (kept.rule.refreshPolicy != RefreshPolicy.NEVER && kept.rule.lastSyncedAt > 0) {
-                updated(kept.rule.lastSyncedAt, now)
-            } else {
-                null
-            },
-            pluralStringResource(R.plurals.sync_songs_size, kept.songs, kept.songs, Utilities.humanReadableBytes(kept.bytes, true)),
-        ).joinToString(" · ")
+internal fun keptDetails(kept: KeptRule, running: Boolean, now: Long? = null): String {
+    // Tick once a minute only while a relative "Updated ..." label is shown; non-null [now] keeps tests deterministic.
+    val needsTick = now == null &&
+        kept.rule.refreshPolicy != RefreshPolicy.NEVER &&
+        kept.rule.lastSyncedAt > 0 &&
+        kept.songs > 0 &&
+        (kept.result == null || kept.result is RuleResult.Synced)
+    var currentNow by remember(kept.rule.lastSyncedAt) { mutableLongStateOf(System.currentTimeMillis()) }
+    LaunchedEffect(needsTick, kept.rule.lastSyncedAt) {
+        if (needsTick) {
+            while (true) {
+                delay(DateUtils.MINUTE_IN_MILLIS)
+                currentNow = System.currentTimeMillis()
+            }
+        }
+    }
+    val effectiveNow = now ?: currentNow
+    return when (val result = kept.result) {
+        is RuleResult.NeedsSetup -> result.message
+        RuleResult.Gone -> stringResource(R.string.sync_gone)
+        is RuleResult.Failed -> stringResource(R.string.sync_failed)
+        else -> when {
+            kept.downloading != null && running ->
+                pluralStringResource(R.plurals.sync_downloading, kept.downloading.total, kept.downloading.done, kept.downloading.total)
+            kept.songs == 0 && result == null && running -> stringResource(R.string.sync_preparing)
+            kept.songs == 0 && result == null -> stringResource(R.string.sync_waiting)
+            else -> listOfNotNull(
+                stringResource(
+                    if (kept.rule.refreshPolicy == RefreshPolicy.NEVER) R.string.sync_kept_as_it_is else R.string.sync_every_connect
+                ),
+                if (kept.rule.refreshPolicy != RefreshPolicy.NEVER && kept.rule.lastSyncedAt > 0) {
+                    updated(kept.rule.lastSyncedAt, effectiveNow)
+                } else {
+                    null
+                },
+                pluralStringResource(R.plurals.sync_songs_size, kept.songs, kept.songs, Utilities.humanReadableBytes(kept.bytes, true)),
+            ).joinToString(" · ")
+        }
     }
 }
 

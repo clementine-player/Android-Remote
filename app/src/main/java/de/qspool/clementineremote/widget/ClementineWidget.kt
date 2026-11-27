@@ -19,11 +19,17 @@ package de.qspool.clementineremote.widget
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
 import android.util.Log
 import androidx.core.content.edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -78,6 +84,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
@@ -91,14 +98,33 @@ class ClementineWidget : GlanceAppWidget() {
     override val sizeMode = SizeMode.Responsive(setOf(NARROW, WIDE))
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val host = App.getPreferences().getString(SharedPreferencesKeys.SP_KEY_IP, null)
         provideContent {
             val connection by RemoteRepository.connection.collectAsState()
             val nowPlaying by RemoteRepository.nowPlaying.collectAsState()
+            val host = rememberSavedHost(connection)
             GlanceTheme(colors = colors) {
                 WidgetContent(widgetState(connection, nowPlaying, host))
             }
         }
+    }
+
+    @Composable
+    private fun rememberSavedHost(connection: ConnectionStatus): String? {
+        val preferences = App.getPreferences()
+        // Read inside provideContent and re-read on connection/pref changes (including key == null on clear()).
+        var host by remember(connection) {
+            mutableStateOf(preferences.getString(SharedPreferencesKeys.SP_KEY_IP, null))
+        }
+        DisposableEffect(preferences) {
+            val listener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
+                if (key == SharedPreferencesKeys.SP_KEY_IP || key == null) {
+                    host = prefs.getString(SharedPreferencesKeys.SP_KEY_IP, null)
+                }
+            }
+            preferences.registerOnSharedPreferenceChangeListener(listener)
+            onDispose { preferences.unregisterOnSharedPreferenceChangeListener(listener) }
+        }
+        return host
     }
 
     override val previewSizeMode = SizeMode.Responsive(setOf(NARROW, WIDE))
@@ -157,11 +183,46 @@ class ClementineWidget : GlanceAppWidget() {
         /** The app version whose widget preview was last given to the picker. */
         private const val PREVIEW_VERSION = "widget_preview_version"
 
-        /** Redraws the widgets placed, if any, after the connection or the song changes. */
+        private val updateLock = Any()
+        private var updateRunning = false
+        private var updateAgain = false
+        private const val UPDATE_DEBOUNCE_MILLIS = 80L
+
+        /** Redraws the widgets placed, if any, coalescing rapid bursts into a single pass. */
         @JvmStatic
         fun update(context: Context) {
             val app = context.applicationContext
-            scope.launch { ClementineWidget().updateAll(app) }
+            // Debounce by UPDATE_DEBOUNCE_MILLIS and coalesce bursty updates, re-running once if
+            // another update arrives while updateAll() runs.
+            synchronized(updateLock) {
+                if (updateRunning) {
+                    updateAgain = true
+                    return
+                }
+                updateRunning = true
+                updateAgain = false
+            }
+            scope.launch {
+                try {
+                    while (true) {
+                        delay(UPDATE_DEBOUNCE_MILLIS)
+                        synchronized(updateLock) { updateAgain = false }
+                        ClementineWidget().updateAll(app)
+                        val more = synchronized(updateLock) {
+                            if (updateAgain) {
+                                true
+                            } else {
+                                updateRunning = false
+                                false
+                            }
+                        }
+                        if (!more) break
+                    }
+                } catch (t: Throwable) {
+                    synchronized(updateLock) { updateRunning = false }
+                    throw t
+                }
+            }
         }
     }
 }
@@ -187,7 +248,8 @@ internal sealed interface WidgetText {
 /** The widget for [connection] and [nowPlaying]; [host] is the last Clementine, if any. */
 internal fun widgetState(connection: ConnectionStatus, nowPlaying: NowPlaying, host: String?): WidgetState =
     when (connection) {
-        ConnectionStatus.CONNECTED -> {
+        // Treat RECONNECTED like CONNECTED after silent TCP drops.
+        ConnectionStatus.CONNECTED, ConnectionStatus.RECONNECTED -> {
             val song = nowPlaying.song
             WidgetState(
                 title = song?.title?.let { WidgetText.Plain(it) } ?: WidgetText.Resource(R.string.player_nosong),
@@ -199,7 +261,8 @@ internal fun widgetState(connection: ConnectionStatus, nowPlaying: NowPlaying, h
                 playing = nowPlaying.isPlaying,
             )
         }
-        ConnectionStatus.CONNECTING ->
+        // Treat RECONNECTING like CONNECTING after silent TCP drops.
+        ConnectionStatus.CONNECTING, ConnectionStatus.RECONNECTING ->
             WidgetState(WidgetText.Resource(R.string.connectdialog_connecting), null, WidgetTap.OPEN_CONNECT)
         ConnectionStatus.NO_CONNECTION -> WidgetState(
             WidgetText.Resource(R.string.widget_couldnt_connect),

@@ -80,6 +80,7 @@ class PlayerViewModel(
     private val send: (ClementineMessage) -> Unit = RemoteRepository::send,
     private val lyricsAnswers: StateFlow<Int> = RemoteRepository.lyricsAnswers,
     private val phone: PhonePlayback = PhonePlayerPlayback,
+    connectionStatus: StateFlow<ConnectionStatus> = RemoteRepository.connection,
 ) : ViewModel() {
 
     /** What the phone plays while the app plays from it; null otherwise. */
@@ -100,8 +101,13 @@ class PlayerViewModel(
      * something plays or is paused there), with what each plays; null when there's no choice.
      */
     val choices: StateFlow<PlayFromChoices?> =
-        combine(RemoteRepository.nowPlaying, RemoteRepository.connection, phone.nowPlaying, phone.playFrom) { clementine, connection, onPhone, from ->
-            if (connection == ConnectionStatus.CONNECTED && onPhone != null) PlayFromChoices(clementine, onPhone, from) else null
+        combine(RemoteRepository.nowPlaying, connectionStatus, phone.nowPlaying, phone.playFrom) { clementine, connection, onPhone, from ->
+            // Silent/auto reconnects emit RECONNECTED instead of CONNECTED; keep Play from available.
+            if ((connection == ConnectionStatus.CONNECTED || connection == ConnectionStatus.RECONNECTED) && onPhone != null) {
+                PlayFromChoices(clementine, onPhone, from)
+            } else {
+                null
+            }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     /** Switches where the app plays from, pausing the one it leaves. */
@@ -111,7 +117,7 @@ class PlayerViewModel(
 
     private val playingOnPhone: Boolean get() = followedNow != null
 
-    val connection: StateFlow<ConnectionStatus> = RemoteRepository.connection
+    val connection: StateFlow<ConnectionStatus> = connectionStatus
 
     /** The song lyrics were asked for, and how many answers Clementine had given then. */
     private data class Asked(val song: MySong, val answersBefore: Int)
@@ -144,7 +150,7 @@ class PlayerViewModel(
     /** The playlist Clementine plays from; null while the phone plays. */
     fun playingFrom(): String? = if (playingOnPhone) null else App.Clementine.playlistManager.activePlaylist?.name
 
-    /** Whether to offer loving and banning songs on Last.fm. */
+    /** Whether to offer loving songs on Last.fm. */
     fun lastFm(): Boolean = App.getPreferences().getBoolean(SharedPreferencesKeys.SP_LASTFM, true)
 
     fun playPause() = if (playingOnPhone) phone.playPause() else send(ClementineMessage.getMessage(MsgType.PLAYPAUSE))
@@ -156,7 +162,11 @@ class PlayerViewModel(
     fun stop() = if (playingOnPhone) phone.stop() else send(ClementineMessage.getMessage(MsgType.STOP))
 
     /** Toggles stopping once the current song ends. */
-    fun stopAfterCurrent() = send(ClementineMessage.getMessage(MsgType.STOP_AFTER))
+    fun stopAfterCurrent() {
+        // Ignore Clementine-only controls while following PhonePlayer so paused desktop isn't altered.
+        if (playingOnPhone) return
+        send(ClementineMessage.getMessage(MsgType.STOP_AFTER))
+    }
 
     /** Seeks, and shows the new position at once rather than when Clementine confirms it. */
     fun seekTo(seconds: Int) {
@@ -185,12 +195,14 @@ class PlayerViewModel(
     /** Moves to the next repeat mode, and returns it. */
     fun cycleRepeat(): Clementine.RepeatMode {
         if (playingOnPhone) {
-            phone.cycleRepeat()
-            return when (phone.nowPlaying.value?.repeat) {
+            // Compute the next mode before phone.cycleRepeat(), whose StateFlow update is async.
+            val next = when (phone.nowPlaying.value?.repeat) {
                 Clementine.RepeatMode.OFF -> Clementine.RepeatMode.PLAYLIST
                 Clementine.RepeatMode.PLAYLIST -> Clementine.RepeatMode.TRACK
                 else -> Clementine.RepeatMode.OFF
             }
+            phone.cycleRepeat()
+            return next
         }
         App.Clementine.nextRepeatMode()
         RemoteRepository.refresh()
@@ -200,24 +212,34 @@ class PlayerViewModel(
 
     /** Rates the current song, from 0 to 5 stars, and shows the rating at once. */
     fun rate(stars: Float) {
+        if (playingOnPhone) return
         val song = App.Clementine.currentSong ?: return
-        song.rating = stars / 5
+        // Copy MySong because it lacks an Object.equals override; mutating in place would be dropped by StateFlow.
+        val updated = MySong(song).apply { rating = stars / 5 }
+        App.Clementine.currentSong = updated
+        // Keep asked.song aligned with the copy so pending lyrics lookups stay in Loading.
+        asked.value?.let { if (it.song === song) asked.value = it.copy(song = updated) }
         RemoteRepository.refresh()
         send(ClementineMessageFactory.buildRateTrack(stars / 5))
     }
 
     /** Loves the current song on Last.fm; a song can be loved only once. */
     fun love() {
+        if (playingOnPhone) return
         val song = App.Clementine.currentSong ?: return
         if (!song.isLoved) {
+            // Replace with a copy for StateFlow emission and keep any pending lyrics request aligned.
+            val updated = MySong(song).apply { isLoved = true }
+            App.Clementine.currentSong = updated
+            asked.value?.let { if (it.song === song) asked.value = it.copy(song = updated) }
             send(ClementineMessage.getMessage(MsgType.LOVE))
-            song.isLoved = true
+            RemoteRepository.refresh()
         }
     }
 
-    /** Bans the current song on Last.fm. */
-    fun ban() = send(ClementineMessage.getMessage(MsgType.BAN))
-
     /** Sets Clementine's volume, from 0 to 100. */
-    fun setVolume(percent: Int) = send(ClementineMessageFactory.buildVolumeMessage(percent))
+    fun setVolume(percent: Int) {
+        if (playingOnPhone) return
+        send(ClementineMessageFactory.buildVolumeMessage(percent.coerceIn(0, 100)))
+    }
 }

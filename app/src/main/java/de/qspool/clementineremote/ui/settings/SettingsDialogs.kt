@@ -12,6 +12,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalResources
@@ -29,6 +31,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.dp
 import de.qspool.clementineremote.R
+import kotlinx.coroutines.withContext
 
 /** Who made the remote. */
 @Composable
@@ -79,8 +82,12 @@ internal fun LicenseDialog(onDismiss: () -> Unit) {
 @Composable
 internal fun OpenSourceDialog(onDismiss: () -> Unit) {
     val resources = LocalResources.current
-    val licenses = remember(resources) {
-        resources.openRawResource(R.raw.opensource).bufferedReader().use { parseLicenses(it.readText()) }
+    val io = LocalFolderDispatcher.current
+    // Read and regex-parse the raw HTML licenses resource off the main composition thread.
+    val licenses by produceState(emptyList<OpenSourceLicense>(), resources, io) {
+        value = withContext(io) {
+            resources.openRawResource(R.raw.opensource).bufferedReader().use { parseLicenses(it.readText()) }
+        }
     }
     val links = linkStyles()
     TextDialog(stringResource(R.string.pref_opensource), "openSourceDialog", onDismiss) {

@@ -16,8 +16,12 @@ import de.qspool.clementineremote.App
 import de.qspool.clementineremote.backend.Clementine
 import de.qspool.clementineremote.backend.database.DynamicSongQuery
 import de.qspool.clementineremote.backend.globalsearch.GlobalSearchDatabaseHelper
+import de.qspool.clementineremote.backend.globalsearch.GlobalSearchManager
 import de.qspool.clementineremote.backend.pb.ClementineMessage
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.GlobalSearchStatus
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.Message
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType
+import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.ResponseGlobalSearchStatus
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.SongMetadata
 import de.qspool.clementineremote.ui.browse.ItemKind
 import de.qspool.clementineremote.ui.theme.ClementineTheme
@@ -221,5 +225,102 @@ class SearchScreenTest {
             }
         }
         compose.onNodeWithTag("searchNoResults").assertIsDisplayed()
+    }
+
+    @Test
+    fun supersededResultlessSearchFinishedDoesNotStopNewSearch() {
+        val manager = GlobalSearchManager.getInstance()
+        val search = SearchViewModel(
+            send = {},
+            newQuery = { id -> TestQuery(id) },
+            candidates = { id -> open().use { globalSearchCandidates(it, id) } },
+            songFromUrl = { url -> SongMetadata.newBuilder().setFilename(url).setTitle(url).build() },
+            icon = { null },
+            io = Dispatchers.Unconfined,
+            listenToClementine = true,
+        )
+        try {
+            search.search("first")
+            manager.parseClementineMessage(
+                ClementineMessage(
+                    Message.newBuilder()
+                        .setType(MsgType.GLOBAL_SEARCH_STATUS)
+                        .setResponseGlobalSearchStatus(
+                            ResponseGlobalSearchStatus.newBuilder()
+                                .setId(1)
+                                .setStatus(GlobalSearchStatus.GlobalSearchStarted),
+                        )
+                        .build(),
+                ),
+            )
+            search.search("second")
+            manager.parseClementineMessage(
+                ClementineMessage(
+                    Message.newBuilder()
+                        .setType(MsgType.GLOBAL_SEARCH_STATUS)
+                        .setResponseGlobalSearchStatus(
+                            ResponseGlobalSearchStatus.newBuilder()
+                                .setId(1)
+                                .setStatus(GlobalSearchStatus.GlobalSearchFinished),
+                        )
+                        .build(),
+                ),
+            )
+            idle()
+            assertTrue(search.state.value.searching)
+            assertEquals("second", search.state.value.searchedFor)
+
+            // Even if "second" starts before "first"'s Started arrives, "first"'s late Started and
+            // Finished (carrying query="first") must not end "second".
+            manager.parseClementineMessage(
+                ClementineMessage(
+                    Message.newBuilder()
+                        .setType(MsgType.GLOBAL_SEARCH_STATUS)
+                        .setResponseGlobalSearchStatus(
+                            ResponseGlobalSearchStatus.newBuilder()
+                                .setId(2)
+                                .setQuery("second")
+                                .setStatus(GlobalSearchStatus.GlobalSearchStarted),
+                        )
+                        .build(),
+                ),
+            )
+            search.search("third")
+            manager.parseClementineMessage(
+                ClementineMessage(
+                    Message.newBuilder()
+                        .setType(MsgType.GLOBAL_SEARCH_STATUS)
+                        .setResponseGlobalSearchStatus(
+                            ResponseGlobalSearchStatus.newBuilder()
+                                .setId(3)
+                                .setQuery("second")
+                                .setStatus(GlobalSearchStatus.GlobalSearchStarted),
+                        )
+                        .build(),
+                ),
+            )
+            manager.parseClementineMessage(
+                ClementineMessage(
+                    Message.newBuilder()
+                        .setType(MsgType.GLOBAL_SEARCH_STATUS)
+                        .setResponseGlobalSearchStatus(
+                            ResponseGlobalSearchStatus.newBuilder()
+                                .setId(3)
+                                .setQuery("second")
+                                .setStatus(GlobalSearchStatus.GlobalSearchFinished),
+                        )
+                        .build(),
+                ),
+            )
+            idle()
+            assertTrue(search.state.value.searching)
+            assertEquals("third", search.state.value.searchedFor)
+        } finally {
+            // Reset the singleton so the registered test listener does not leak into other tests.
+            GlobalSearchManager::class.java.getDeclaredField("mInstance").apply {
+                isAccessible = true
+                set(null, null)
+            }
+        }
     }
 }

@@ -4,6 +4,7 @@ import android.os.Looper
 import androidx.lifecycle.viewModelScope
 import de.qspool.clementineremote.App
 import de.qspool.clementineremote.backend.Clementine
+import de.qspool.clementineremote.backend.ClementinePlayerConnection.ConnectionStatus
 import de.qspool.clementineremote.backend.RemoteRepository
 import de.qspool.clementineremote.backend.pb.ClementineMessage
 import de.qspool.clementineremote.backend.pb.ClementineRemoteProtocolBuffer.MsgType
@@ -13,6 +14,7 @@ import de.qspool.clementineremote.backend.sync.PlayFrom
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -131,5 +133,32 @@ class PlayerViewModelTest {
         assertEquals(song, player.nowPlaying.value.song)
         player.playPause()
         assertEquals(listOf(MsgType.PLAYPAUSE), sent)
+    }
+
+    @Test
+    fun choicesStayAvailableWhenReconnected() {
+        val phone = FakePhone()
+        val status = MutableStateFlow(ConnectionStatus.RECONNECTED)
+        val player = PlayerViewModel(
+            send = { message: ClementineMessage -> sent += message.messageType },
+            phone = phone,
+            connectionStatus = status,
+        )
+        // choices uses SharingStarted.WhileSubscribed, so keep a collector active while checking .value.
+        val collected = player.viewModelScope.launch { player.choices.collect {} }
+        try {
+            phone.nowPlaying.value = RemoteRepository.NowPlaying(
+                MySong().apply { title = "Phone Track" },
+                Clementine.State.PLAY,
+                0,
+                0,
+                Clementine.ShuffleMode.OFF,
+                Clementine.RepeatMode.OFF,
+            )
+            idle()
+            assertNotNull(player.choices.value)
+        } finally {
+            collected.cancel()
+        }
     }
 }

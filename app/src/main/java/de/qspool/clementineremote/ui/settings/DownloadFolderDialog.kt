@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -77,6 +78,7 @@ private fun Browser(folder: String, onOpen: (String) -> Unit, onChoose: (String)
     val scope = rememberCoroutineScope()
     val io = LocalFolderDispatcher.current
     var notWritable by rememberSaveable(folder) { mutableStateOf(false) }
+    var checking by remember { mutableStateOf(false) }
     val children by produceState<List<String>?>(null, folder) {
         value = withContext(io) { subfolders(File(folder)) }
     }
@@ -86,14 +88,22 @@ private fun Browser(folder: String, onOpen: (String) -> Unit, onChoose: (String)
         confirm = {
             TextButton(
                 onClick = {
+                    // Guard against double-taps launching overlapping writability disk checks.
+                    if (checking) return@TextButton
+                    checking = true
                     scope.launch {
-                        if (withContext(io) { isWritable(File(folder)) }) {
-                            onChoose(folder)
-                        } else {
-                            notWritable = true
+                        try {
+                            if (withContext(io) { isWritable(File(folder)) }) {
+                                onChoose(folder)
+                            } else {
+                                notWritable = true
+                            }
+                        } finally {
+                            checking = false
                         }
                     }
                 },
+                enabled = !checking,
                 modifier = Modifier.testTag("btnFolderSelect"),
             ) { Text(stringResource(R.string.file_dialog_set_dir)) }
         },
@@ -170,16 +180,13 @@ internal fun subfolders(folder: File): List<String> =
     folder.listFiles { file -> file.isDirectory && file.canRead() }.orEmpty().map { it.name }.sorted()
 
 /** Whether a file can be made in [folder]; the only sure test on external storage. */
-internal fun isWritable(folder: File): Boolean {
-    val probe = File(folder, "ClementineTestFile.CheckIfWritable")
-    return try {
-        if (probe.createNewFile()) {
-            probe.delete()
-        }
+internal fun isWritable(folder: File): Boolean =
+    // Use a unique temp file so preexisting files on disk aren't collided with or deleted.
+    try {
+        File.createTempFile(".clementine_check_", null, folder).delete()
         true
     } catch (_: IOException) {
         false
     }
-}
 
 private const val PARENT = ".."
